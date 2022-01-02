@@ -1,12 +1,15 @@
-#include "plugin.hpp"
+#include "Schweinesystem.h"
 
-Plugin* pluginInstance;
+#include "RandomWalk.h"
+
+Plugin* pluginInstance = nullptr;
 
 void init(Plugin* p)
 {
    pluginInstance = p;
 
    // Add modules here
+   Model* modelRandomWalk = createModel<RandomWalk, RandomWalkWidget>("RandomWalk");
    p->addModel(modelRandomWalk);
 
    // Any other plugin initialization may go here.
