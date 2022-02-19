@@ -38,7 +38,7 @@ RandomWalkWidget::RandomWalkWidget(RandomWalk* module)
    : ModuleWidget()
 {
    setModule(module);
-   setPanel(createPanel(asset::plugin(pluginInstance, "res/RandomWalk.svg")));
+   setPanel(createPanel(asset::plugin(Schweinesystem::instance(), "res/RandomWalk.svg")));
 
    // screws
    addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));

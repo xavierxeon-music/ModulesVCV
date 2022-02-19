@@ -1,7 +1,8 @@
 #ifndef RandomWalkH
 #define RandomWalkH
 
-#include "Schweinesystem.h"
+#include <rack.hpp>
+using namespace rack;
 
 struct RandomWalk : Module
 {

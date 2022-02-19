@@ -2,9 +2,22 @@
 #define SchweinesystemH
 
 #include <rack.hpp>
-using namespace rack;
+
+class Schweinesystem
+{
+public:
+   Schweinesystem(rack::Plugin* pluginInstance);
+
+public:
+   static rack::Plugin* instance();
+
+   template <typename Audio, typename Widget>
+   void addModule(const std::string& name);
+
+private:
+   static rack::Plugin* pluginInstance;
+};
 
 // global variable
-extern Plugin* pluginInstance;
 
 #endif // SchweinesystemH

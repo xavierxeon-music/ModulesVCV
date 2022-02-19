@@ -1,17 +1,30 @@
 #include "Schweinesystem.h"
 
+rack::Plugin* Schweinesystem::pluginInstance = nullptr;
+
+Schweinesystem::Schweinesystem(rack::Plugin* pluginInstance)
+{
+   Schweinesystem::pluginInstance = pluginInstance;
+}
+
+rack::Plugin* Schweinesystem::instance()
+{
+   return pluginInstance;
+}
+
+template <typename AudioClass, typename WidgetClass>
+void Schweinesystem::addModule(const std::string& name)
+{
+   rack::Model* model = rack::createModel<AudioClass, WidgetClass>(name);
+   pluginInstance->addModel(model);
+}
+
+// main funtion
+
 #include "RandomWalk.h"
 
-Plugin* pluginInstance = nullptr;
-
-void init(Plugin* p)
+void init(rack::Plugin* pluginInstance)
 {
-   pluginInstance = p;
-
-   // Add modules here
-   Model* modelRandomWalk = createModel<RandomWalk, RandomWalkWidget>("RandomWalk");
-   p->addModel(modelRandomWalk);
-
-   // Any other plugin initialization may go here.
-   // As an alternative, consider lazy-loading assets and lookup tables when your module is created to reduce startup times of Rack.
+   Schweinesystem myStuff(pluginInstance);
+   myStuff.addModule<RandomWalk, RandomWalkWidget>("RandomWalk");
 }
