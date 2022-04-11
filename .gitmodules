@@ -1,0 +1,3 @@
+[submodule "Rack"]
+	path = Rack
+	url = https://github.com/VCVRack/Rack
