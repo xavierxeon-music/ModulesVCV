@@ -4,9 +4,7 @@
 #include <rack.hpp>
 using namespace rack;
 
-using InitFunction = void (*)(int argc, char **argv);
-using LoopFunction = void (*)(int value);
-using TerminateFunction = void (*)();
+#include "../../LibBridge/Interface.h"
 
 class Bridge : public Module
 {
@@ -15,18 +13,19 @@ public:
    ~Bridge();
 
 public:
-   void process(const ProcessArgs &args) override;
+   void process(const ProcessArgs& args) override;
 
 private:
-   void *handle;
+   void* libHandle;
+   CreateFunction createFunction;
    InitFunction initFunction;
-   LoopFunction loopFunction;
+   ProcessFunction processFunction;
    TerminateFunction terminateFunction;
 };
 
 struct BridgeWidget : ModuleWidget
 {
-   BridgeWidget(Bridge *module);
+   BridgeWidget(Bridge* module);
 };
 
 #endif // BridgeH

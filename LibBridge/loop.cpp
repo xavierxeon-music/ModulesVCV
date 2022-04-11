@@ -1,26 +1,34 @@
 #include <QApplication>
 
-#define INIT_FUNCTION void init(int argc, char **argv)
-#define LOOP_FUNCTION void loop(int value)
-#define TERMINATE_FUNCTION void terminate()
+#include "Interface.h"
 
 #include "MainWidget.h"
 
-static QApplication *app = nullptr;
+static QApplication* app = nullptr;
 
 extern "C"
 {
-   INIT_FUNCTION
+   CREATE_FUNCTION
    {
-      app = new QApplication(argc, argv);
+      static int argc = 1;
+      static const char* argv = "VCV Rack2 Bridge Loader";
+      app = new QApplication(argc, const_cast<char**>(&argv));
 
-      MainWidget *mainWidget = new MainWidget();
+      MainWidget* mainWidget = new MainWidget();
       mainWidget->show();
    }
 
-   LOOP_FUNCTION
+   INIT_FUNCTION
    {
-      Q_UNUSED(value)
+      qDebug() << __FUNCTION__ << sampleRate;
+   }
+
+   PROCESS_FUNCTION
+   {
+      for (uint8_t index = 0; index < 8; index++)
+      {
+         output[index] = input[index];
+      }
       app->processEvents();
    }
 

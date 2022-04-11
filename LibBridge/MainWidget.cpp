@@ -1,6 +1,7 @@
 #include "MainWidget.h"
 
 #include <QAction>
+#include <QCloseEvent>
 #include <QMenu>
 #include <QMenuBar>
 
@@ -15,3 +16,7 @@ MainWidget::MainWidget()
    fileMenu->addAction("Load Library");
 }
 
+void MainWidget::closeEvent(QCloseEvent* ce)
+{
+   ce->ignore();
+}

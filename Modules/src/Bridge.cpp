@@ -8,7 +8,12 @@
 #include <iostream>
 
 Bridge::Bridge()
-    : Module()
+   : Module()
+   , libHandle(nullptr)
+   , createFunction(nullptr)
+   , initFunction(nullptr)
+   , processFunction(nullptr)
+   , terminateFunction(nullptr)
 {
    config(0, 8, 8, 0);
 
@@ -18,28 +23,29 @@ Bridge::Bridge()
       configOutput(index, "");
    }
 
+// TODO read brdige lib path from file
 #if defined(__APPLE__)
-   std::string libPath = std::string(getenv("HOME")) + "/tmp/LibChain/bin/libWidget.dylib";
+   std::string libPath = std::string(getenv("HOME")) + "/Documents/Rack2/plugins/Schweinesystem/libVCVRackBridge.dylib";
 #else
    std::string libPath = std::string(getenv("HOME")) + "/libWidget.so";
 #endif
    std::cout << libPath << std::endl;
 
-   handle = dlopen(libPath.c_str(), RTLD_LAZY);
-   if (!handle)
+   libHandle = dlopen(libPath.c_str(), RTLD_LAZY);
+   if (!libHandle)
    {
       std::cout << dlerror() << std::endl;
       return;
    }
 
-   initFunction = reinterpret_cast<InitFunction>(dlsym(handle, "init"));
-   loopFunction = reinterpret_cast<LoopFunction>(dlsym(handle, "loop"));
-   terminateFunction = reinterpret_cast<TerminateFunction>(dlsym(handle, "terminate"));
+   createFunction = reinterpret_cast<CreateFunction>(dlsym(libHandle, "create"));
+   initFunction = reinterpret_cast<InitFunction>(dlsym(libHandle, "init"));
+   processFunction = reinterpret_cast<ProcessFunction>(dlsym(libHandle, "process"));
+   terminateFunction = reinterpret_cast<TerminateFunction>(dlsym(libHandle, "terminate"));
 
-   if (initFunction && loopFunction && terminateFunction)
+   if (createFunction && initFunction && processFunction && terminateFunction)
    {
-      static char *appName = "VCV Rack2 Bridge";
-      initFunction(1, &appName);
+      createFunction();
    }
    else
    {
@@ -53,27 +59,38 @@ Bridge::~Bridge()
       terminateFunction();
 }
 
-void Bridge::process(const ProcessArgs &args)
+void Bridge::process(const ProcessArgs& args)
 {
-   if (!loopFunction)
+   if (!processFunction)
       return;
 
-   for (uint8_t index = 0; index < 8; index++)
+   static bool doneOnce = false;
+   if (!doneOnce)
    {
-      const float voltage = inputs[index].geVoltage();
+      if (initFunction)
+         initFunction(args.sampleRate);
+      doneOnce = true;
    }
 
-   loopFunction();
+   Buffer input;
+   Buffer output;
+   for (uint8_t index = 0; index < 8; index++)
+   {
+      input[index] = inputs[index].getVoltage();
+      output[index] = 0.0;
+   }
+
+   processFunction(input, output);
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      const float voltage = 0.0;
-      outputs[index].seetVoltage(voltage);
+      const float voltage = output[index];
+      outputs[index].setVoltage(voltage);
    }
 }
 
-BridgeWidget::BridgeWidget(Bridge *module)
-    : ModuleWidget()
+BridgeWidget::BridgeWidget(Bridge* module)
+   : ModuleWidget()
 {
    setModule(module);
    setPanel(createPanel(asset::plugin(Schweinesystem::instance(), "res/Bridge.svg")));

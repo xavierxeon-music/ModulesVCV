@@ -42,6 +42,14 @@ function _checkout {
    if [ "$BRANCH_CURRENT_TEST" != "$VERSION" ]
    then
       git switch $VERSION 
+
+      git-recursive-submodule-init
+
+      cd $SCRIPT_DIR/Rack/dep
+      make -j 16
+
+      cd $SCRIPT_DIR/Rack
+      make -j 16
    fi
 
    cd $CURRENT_DIR
