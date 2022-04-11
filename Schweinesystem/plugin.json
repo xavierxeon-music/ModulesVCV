@@ -1,23 +1,23 @@
 {
-  "slug": "Schweinesystem",
-  "name": "Schweinesystem",
-  "version": "2.0.0",
-  "license": "MIT",
-  "brand": "Schweinesystem",
-  "author": "Ralf Waspe",
-  "authorEmail": "rwaspe@me.com",
-  "authorUrl": "",
-  "pluginUrl": "",
-  "manualUrl": "",
-  "sourceUrl": "",
-  "donateUrl": "",
-  "changelogUrl": "",
-  "modules": [
-    {
-      "slug": "RandomWalk",
-      "name": "RandomWalk",
-      "description": "",
-      "tags": []
-    }
-  ]
+   "slug": "Schweinesystem",
+   "name": "Schweinesystem",
+   "version": "2.0.0",
+   "license": "MIT",
+   "brand": "Schweinesystem",
+   "author": "Ralf Waspe",
+   "authorEmail": "rwaspe@me.com",
+   "authorUrl": "",
+   "pluginUrl": "",
+   "manualUrl": "",
+   "sourceUrl": "",
+   "donateUrl": "",
+   "changelogUrl": "",
+   "modules": [
+      {
+         "slug": "Bridge",
+         "name": "Bridge",
+         "description": "Load a Qt library and do whatever you want",
+         "tags": []
+      }
+   ]
 }
