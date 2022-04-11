@@ -4,9 +4,16 @@ VERSION=2.1.0
 
 #####################################################3
 
-local SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"   
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"   
+(return 0 2>/dev/null) && THIS_SCRIPT_IS_SOURCED=1 || THIS_SCRIPT_IS_SOURCED=0
 
 function _set_rack_dir {
+
+   if [ 0 == $THIS_SCRIPT_IS_SOURCED ]
+   then
+      echo "you need to source this script"
+      return
+   fi
 
    local RACK_DIR_TEST=$(echo $RACK_DIR)
    if [ -z "$RACK_DIR_TEST" ]
@@ -19,10 +26,15 @@ function _set_rack_dir {
 
 function _checkout {
    
+   #git-recursive-submodule-init 
+
+   local CURRENT_DIR=$(pwd)
+
    cd $SCRIPT_DIR/Rack
-   local RANCH_EXIST_TEST=$(git branch -l | grep $VERSION)
+   local BRANCH_EXIST_TEST=$(git branch -l | grep $VERSION)
    if [ -z "$BRANCH_EXIST_TEST" ]
    then
+      echo "new branch"
       git checkout tags/v$VERSION -b $VERSION
    fi
 
@@ -31,6 +43,8 @@ function _checkout {
    then
       git switch $VERSION 
    fi
+
+   cd $CURRENT_DIR
 }
 
 function update_modules {
@@ -54,3 +68,4 @@ function update_modules {
 
 _set_rack_dir
 _checkout
+
