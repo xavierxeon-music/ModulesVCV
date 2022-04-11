@@ -12,7 +12,7 @@ MainWidget::MainWidget()
 
    QMenuBar* menuBar = new QMenuBar(this);
 
-   QMenu* fileMenu = menuBar->addMenu("File");
+   QMenu* fileMenu = menuBar->addMenu("Bridge");
    fileMenu->addAction("Load Library");
 }
 

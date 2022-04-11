@@ -4,7 +4,8 @@ VCVRackBridge::VCVRackBridge()
    : app(nullptr)
    , mainWidget(nullptr)
    , sampleRate(0.0)
-   , guiRefreshCounter(100)
+   , maxRefreshCounter(100)
+   , guiRefreshCounter(0)
 {
    static int argc = 1;
    static const char* argv = "VCV Rack2 Bridge Loader";
@@ -23,7 +24,7 @@ VCVRackBridge::~VCVRackBridge()
 void VCVRackBridge::init(const float& sampleRate)
 {
    this->sampleRate = sampleRate;
-   guiRefreshCounter.setMaxValue(sampleRate / 100);
+   maxRefreshCounter = sampleRate / 100; // every 10 ms
 }
 
 void VCVRackBridge::process(const Buffer& input, Buffer& output)
@@ -33,8 +34,12 @@ void VCVRackBridge::process(const Buffer& input, Buffer& output)
       output[index] = input[index];
    }
 
-   if (guiRefreshCounter.nextAndIsMaxValue())
+   guiRefreshCounter++;
+   if (maxRefreshCounter == guiRefreshCounter)
+   {
       app->processEvents();
+      guiRefreshCounter = 0;
+   }
 }
 
 static VCVRackBridge* bridge = nullptr;

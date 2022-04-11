@@ -93,7 +93,9 @@ BridgeWidget::BridgeWidget(Bridge* module)
    : ModuleWidget()
 {
    setModule(module);
-   setPanel(createPanel(asset::plugin(Schweinesystem::instance(), "res/Bridge.svg")));
+   std::string panelPath = asset::plugin(Schweinesystem::instance(), "res/Bridge.svg");
+   SvgPanel* mainPanel = createPanel(panelPath);
+   setPanel(mainPanel);
 
    const float inX = 8.5;
    const float outX = 22.5;

@@ -1,8 +1,6 @@
 TARGET = VCVRackBridge
 TEMPLATE = lib
 
-include($$PWD/../MusicTools/MusicTools.pri)
-
 QT += widgets svg
 DESTDIR = /Users/waspe/Documents/Rack2/plugins/Schweinesystem
 

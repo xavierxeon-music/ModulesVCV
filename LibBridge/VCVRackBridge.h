@@ -3,8 +3,6 @@
 
 #include <QApplication>
 
-#include <Tools/Counter.h>
-
 #include "Interface.h"
 #include "MainWidget.h"
 
@@ -23,7 +21,9 @@ private:
    MainWidget* mainWidget;
 
    float sampleRate;
-   Counter guiRefreshCounter;
+
+   uint16_t maxRefreshCounter;
+   uint16_t guiRefreshCounter;
 };
 
 #endif // NOT VCVRackBridgeH
