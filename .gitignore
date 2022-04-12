@@ -1,3 +1,2 @@
-**/build-*
-**/*.pro.user
-/bin
+**/.DS_Store
+**/__pycache__

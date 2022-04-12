@@ -14,9 +14,9 @@
    "changelogUrl": "",
    "modules": [
       {
-         "slug": "Bridge",
-         "name": "Bridge",
-         "description": "Load a Qt library and do whatever you want",
+         "slug": "DemoDummy",
+         "name": "DemoDummy",
+         "description": "",
          "tags": []
       }
    ]

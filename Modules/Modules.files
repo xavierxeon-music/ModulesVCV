@@ -1,6 +1,6 @@
-res/Bridge.afdesign
-res/Bridge.svg
-src/Bridge.cpp
-src/Bridge.h
+src/DemoDummy.cpp
+src/DemoDummyData.cpp
+src/DemoDummy.h
+src/DemoDummyData.h
 src/Schweinesystem.cpp
 src/Schweinesystem.h

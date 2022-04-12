@@ -50,23 +50,8 @@ function _checkout {
    cd $CURRENT_DIR
 }
 
-function update_modules {
-
-   if [ ! -f plugin.json ]
-   then
-      echo 'not a plugin dir'
-      return
-   fi
-
-   cd res
-   FILES=$(ls -1 *.svg)
-   cd ..
-
-   for FILE in $FILES
-   do
-      NAME=${FILE/.svg/}
-      $RACK_DIR/helper.py createmodule $NAME res/$NAME.svg tmp/$NAME.cpp
-   done
+function module {
+   $SCRIPT_DIR/Tools/module.py $@
 }
 
 _set_rack_dir

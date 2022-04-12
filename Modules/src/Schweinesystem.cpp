@@ -21,10 +21,10 @@ void Schweinesystem::addModule(const std::string& name)
 
 // main funtion
 
-#include "Bridge.h"
+#include "DemoDummy.h"
 
 void init(rack::Plugin* pluginInstance)
 {
    Schweinesystem myStuff(pluginInstance);
-   myStuff.addModule<Bridge, BridgeWidget>("Bridge");
+   myStuff.addModule<DemoDummy, DemoDummyWidget>("DemoDummy");
 }
