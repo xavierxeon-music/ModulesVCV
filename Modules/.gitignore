@@ -3,4 +3,5 @@
 /plugin.so
 /plugin.dylib
 /plugin.dll
-.DS_Store
+.qtc_clangd/
+Modules.creator.user

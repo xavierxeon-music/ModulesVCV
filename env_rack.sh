@@ -26,8 +26,6 @@ function _set_rack_dir {
 
 function _checkout {
    
-   #git-recursive-submodule-init 
-
    local CURRENT_DIR=$(pwd)
 
    cd $SCRIPT_DIR/Rack
@@ -42,13 +40,10 @@ function _checkout {
    if [ "$BRANCH_CURRENT_TEST" != "$VERSION" ]
    then
       git switch $VERSION 
-
-      git-recursive-submodule-init
-
-      cd $SCRIPT_DIR/Rack/dep
-      make -j 16
-
+      git submodule update --init --recursive
+   
       cd $SCRIPT_DIR/Rack
+      make dep -j 16
       make -j 16
    fi
 
