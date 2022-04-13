@@ -23,6 +23,7 @@ public:
 
 private:
    void setup();
+   void onExpanderChange(const ExpanderChangeEvent& e) override;
 
 private:
    dsp::BooleanTrigger gateTriggers[8];

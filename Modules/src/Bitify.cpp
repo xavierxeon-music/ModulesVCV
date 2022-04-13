@@ -29,6 +29,19 @@ Bitify::~Bitify()
 
 void Bitify::process(const ProcessArgs& args)
 {
+   static bool sl = (leftExpander.module != nullptr);
+   static bool sr = (rightExpander.module != nullptr);
+
+   bool tl = (leftExpander.module != nullptr);
+   bool tr = (rightExpander.module != nullptr);
+
+   if (sl != tl || sr != tr)
+   {
+      std::cout << tl << " " << tr << std::endl;
+      sl = tl;
+      sr = tr;
+   }
+
    const float voltageInput = inputs[Panel::AudioIn].getVoltage(); // from -5.0 V to + 5.0 V
    boolFieldIn = static_cast<uint8_t>(inputMapper(voltageInput));
 
@@ -83,4 +96,9 @@ void Bitify::process(const ProcessArgs& args)
    }
 
    outputs[Panel::AudioOut].setVoltage(voltageOutput);
+}
+
+void Bitify::onExpanderChange(const ExpanderChangeEvent& e)
+{
+   std::cout << (leftExpander.module != nullptr) << (rightExpander.module != nullptr);
 }
