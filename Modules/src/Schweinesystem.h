@@ -11,7 +11,7 @@ public:
 public:
    static rack::Plugin* instance();
 
-   template <typename Audio, typename Widget>
+   template <typename AudioClass, typename WidgetClass>
    void addModule(const std::string& name);
 
 private:

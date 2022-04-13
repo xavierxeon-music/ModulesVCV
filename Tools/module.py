@@ -5,7 +5,7 @@ import os
 import pathlib
 import shutil
 
-from lib import createPanel, addInkscpaeAtributes, getPanelComponents
+from lib import createPanel, getPanelComponents
 from lib import writeHeaders, writeSources
 
 scriptPath = os.path.realpath(__file__)
@@ -20,7 +20,6 @@ def updateModule(panelName):
     if not os.path.exists(panelFileName):
         print(f'no panel found with name {panelName}')
 
-    addInkscpaeAtributes(panelFileName)
     components = getPanelComponents(panelFileName)
     print(components)
 

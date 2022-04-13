@@ -21,10 +21,10 @@ void Schweinesystem::addModule(const std::string& name)
 
 // main funtion
 
-#include "DemoDummy.h"
+#include "Bitify.h"
 
 void init(rack::Plugin* pluginInstance)
 {
    Schweinesystem myStuff(pluginInstance);
-   myStuff.addModule<DemoDummy, DemoDummyWidget>("DemoDummy");
+   myStuff.addModule<Bitify, BitifyWidget>("Bitify");
 }

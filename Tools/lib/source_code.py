@@ -10,16 +10,19 @@ def _indent(level):
 
 def _addComponents(headerfile, components):
 
-    params = components['params']
-    inputs = components['inputs']
-    outputs = components['outputs']
-    lights = components['lights']
-    widgets = components['widgets']
+    params = components['param'] if components and 'param' in components else list()
+    latches = components['latch'] if components and 'latch' in components else list()
+    inputs = components['input'] if components and 'input' in components else list()
+    outputs = components['output'] if components and 'output' in components else list()
+    lights = components['light'] if components and 'light' in components else list()
 
     headerfile.write(_indent(1) + 'enum ParamId\n')
     headerfile.write(_indent(1) + '{\n')
     for param in params:
         name = param['name']
+        headerfile.write(_indent(2) + f'{name},\n')
+    for latch in latches:
+        name = latch['name']
         headerfile.write(_indent(2) + f'{name},\n')
     headerfile.write(_indent(2) + 'PARAMS_LEN\n')
     headerfile.write(_indent(1) + '};\n')
@@ -48,6 +51,9 @@ def _addComponents(headerfile, components):
     for light in lights:
         name = light['name']
         headerfile.write(_indent(2) + f'{name},\n')
+    for latch in latches:
+        name = latch['name']
+        headerfile.write(_indent(2) + f'Light_{name},\n')
     headerfile.write(_indent(2) + 'LIGHTS_LEN\n')
     headerfile.write(_indent(1) + '};\n')
     headerfile.write('\n')
@@ -80,8 +86,8 @@ def writeHeaders(modulesPath, panelName, components):
     _writeDataHeader(modulesPath, panelName, components)
 
     fileName = modulesPath + '/src/' + panelName + '.h'
-    # if os.path.exists(fileName):
-    #    return
+    if os.path.exists(fileName):
+        return
 
     with open(fileName, 'w') as headerfile:
         headerfile.write(f'#ifndef {panelName}H\n')
@@ -122,11 +128,11 @@ def _writeDataSource(modulesPath, panelName, components):
 
     fileName = modulesPath + '/src/' + panelName + 'Data.cpp'
 
-    params = components['params']
-    inputs = components['inputs']
-    outputs = components['outputs']
-    lights = components['lights']
-    widgets = components['widgets']
+    params = components['param'] if components and 'param' in components else list()
+    latches = components['latch'] if components and 'latch' in components else list()
+    inputs = components['input'] if components and 'input' in components else list()
+    outputs = components['output'] if components and 'output' in components else list()
+    lights = components['light'] if components and 'light' in components else list()
 
     with open(fileName, 'w') as sourcefile:
         sourcefile.write(f'#include "{panelName}.h"\n')
@@ -138,21 +144,31 @@ def _writeDataSource(modulesPath, panelName, components):
         sourcefile.write(f'void {panelName}::setup()\n')
         sourcefile.write('{\n')
         sourcefile.write(_indent(1) + 'config(Data::PARAMS_LEN, Data::INPUTS_LEN, Data::OUTPUTS_LEN, Data::LIGHTS_LEN);\n')
+
         if params:
             sourcefile.write('\n')
         for param in params:
             name = param['name']
-            sourcefile.write(_indent(1) + f'configParam(Data::{name}, 0.f, 1.f, 0.f, "");\n')
+            sourcefile.write(_indent(1) + f'configParam(Data::{name}, 0.f, 1.f, 0.f, "{name}");\n')
+
+        if latches:
+            sourcefile.write('\n')
+        for latch in latches:
+            name = latch['name']
+            sourcefile.write(_indent(1) + f'configButton(Data::{name}, "{name}");\n')
+
         if inputs:
             sourcefile.write('\n')
         for input in inputs:
             name = input['name']
-            sourcefile.write(_indent(1) + f'configInput(Data::{name}, "");\n')
+            sourcefile.write(_indent(1) + f'configInput(Data::{name}, "{name}");\n')
+
         if outputs:
             sourcefile.write('\n')
         for output in outputs:
             name = output['name']
-            sourcefile.write(_indent(1) + f'configOutput(Data::{name}, "");\n')
+            sourcefile.write(_indent(1) + f'configOutput(Data::{name}, "{name}");\n')
+
         if lights:
             sourcefile.write('\n')
         for light in lights:
@@ -167,34 +183,46 @@ def _writeDataSource(modulesPath, panelName, components):
         sourcefile.write(_indent(1) + f'std::string panelPath = asset::plugin(Schweinesystem::instance(), "res/{panelName}.svg");\n')
         sourcefile.write(_indent(1) + 'SvgPanel* mainPanel = createPanel(panelPath);\n')
         sourcefile.write(_indent(1) + 'setPanel(mainPanel);\n')
+
         if params:
             sourcefile.write('\n')
         for param in params:
             name = param['name']
-            cx = param['cx']
-            cy = param['cy']
-            sourcefile.write(_indent(1) + f'addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec({cx}, {cy})), module, {panelName}::Data::{name}));\n')
+            x = param['x']
+            y = param['y']
+            sourcefile.write(_indent(1) + f'addParam(createParamCentered<RoundBlackKnob>(Vec({x}, {y}), module, {panelName}::Data::{name}));\n')
+
+        if latches:
+            sourcefile.write('\n')
+        for latch in latches:
+            name = latch['name']
+            x = latch['x']
+            y = latch['y']
+            sourcefile.write(_indent(1) + f'addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec({x}, {y}), module, {panelName}::Data::{name}, {panelName}::Data::Light_{name}));\n')
+
         if inputs:
             sourcefile.write('\n')
         for input in inputs:
             name = input['name']
-            cx = input['cx']
-            cy = input['cy']
-            sourcefile.write(_indent(1) + f'addInput(createInputCentered<PJ301MPort>(mm2px(Vec({cx}, {cy})), module, {panelName}::Data::{name}));\n')
+            x = input['x']
+            y = input['y']
+            sourcefile.write(_indent(1) + f'addInput(createInputCentered<PJ301MPort>(Vec({x}, {y}), module, {panelName}::Data::{name}));\n')
+
         if outputs:
             sourcefile.write('\n')
         for output in outputs:
             name = output['name']
-            cx = output['cx']
-            cy = output['cy']
-            sourcefile.write(_indent(1) + f'addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec({cx}, {cy})), module, {panelName}::Data::{name}));\n')
+            x = output['x']
+            y = output['y']
+            sourcefile.write(_indent(1) + f'addOutput(createOutputCentered<PJ301MPort>(Vec({x}, {y}), module, {panelName}::Data::{name}));\n')
+
         if lights:
             sourcefile.write('\n')
         for light in lights:
             name = light['name']
-            cx = light['cx']
-            cy = light['cy']
-            sourcefile.write(_indent(1) + f'addChild(createLightCentered<MediumLight<RedLight>>(mm2px(Vec({cx}, {cy})), module, {panelName}::Data::{name}));\n')
+            x = light['x']
+            y = light['y']
+            sourcefile.write(_indent(1) + f'addChild(createLightCentered<MediumLight<RedLight>>(Vec({x}, {y}), module, {panelName}::Data::{name}));\n')
         sourcefile.write('}\n')
 
 
@@ -203,8 +231,8 @@ def writeSources(modulesPath, panelName, components):
     _writeDataSource(modulesPath, panelName, components)
 
     fileName = modulesPath + '/src/' + panelName + '.cpp'
-    # if os.path.exists(fileName):
-    #    return
+    if os.path.exists(fileName):
+        return
 
     with open(fileName, 'w') as sourcefile:
         sourcefile.write(f'#include "{panelName}.h"\n')
@@ -222,6 +250,8 @@ def writeSources(modulesPath, panelName, components):
         sourcefile.write(f'{panelName}::~{panelName}()\n')
         sourcefile.write('{\n')
         sourcefile.write('}\n')
+
+        sourcefile.write('\n')
 
         sourcefile.write(f'void {panelName}::process(const ProcessArgs& args)\n')
         sourcefile.write('{\n')

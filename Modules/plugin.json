@@ -14,9 +14,9 @@
    "changelogUrl": "",
    "modules": [
       {
-         "slug": "DemoDummy",
-         "name": "DemoDummy",
-         "description": "",
+         "slug": "Bitify",
+         "name": "Bitify",
+         "description": "Dezno & Lipsk Clone",
          "tags": []
       }
    ]

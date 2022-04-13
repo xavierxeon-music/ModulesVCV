@@ -1,6 +1,6 @@
-src/DemoDummy.cpp
-src/DemoDummyData.cpp
-src/DemoDummy.h
-src/DemoDummyData.h
+src/Bitify.cpp
+src/BitifyData.cpp
+src/Bitify.h
+src/BitifyData.h
 src/Schweinesystem.cpp
 src/Schweinesystem.h
