@@ -1,6 +1,6 @@
 src/Bitify.cpp
-src/BitifyData.cpp
+src/BitifyPanel.cpp
 src/Bitify.h
-src/BitifyData.h
+src/BitifyPanel.h
 src/Schweinesystem.cpp
 src/Schweinesystem.h

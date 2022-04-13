@@ -59,18 +59,18 @@ def _addComponents(headerfile, components):
     headerfile.write('\n')
 
 
-def _writeDataHeader(modulesPath, panelName, components):
+def _writePanelHeader(modulesPath, panelName, components):
 
-    fileName = modulesPath + '/src/' + panelName + 'Data.h'
+    fileName = modulesPath + '/src/' + panelName + 'Panel.h'
 
     with open(fileName, 'w') as headerfile:
-        headerfile.write(f'#ifndef {panelName}DataH\n')
-        headerfile.write(f'#define {panelName}DataH\n')
+        headerfile.write(f'#ifndef {panelName}PanelH\n')
+        headerfile.write(f'#define {panelName}PanelH\n')
         headerfile.write('\n')
         headerfile.write(f'#include "{panelName}.h"\n')
         headerfile.write('\n')
 
-        headerfile.write(f'struct {panelName}::Data\n')
+        headerfile.write(f'struct {panelName}::Panel\n')
         headerfile.write('{\n')
 
         _addComponents(headerfile, components)
@@ -78,12 +78,12 @@ def _writeDataHeader(modulesPath, panelName, components):
         headerfile.write('};\n')
 
         headerfile.write('\n')
-        headerfile.write(f'#endif // {panelName}DataH\n')
+        headerfile.write(f'#endif // {panelName}PanelH\n')
 
 
 def writeHeaders(modulesPath, panelName, components):
 
-    _writeDataHeader(modulesPath, panelName, components)
+    _writePanelHeader(modulesPath, panelName, components)
 
     fileName = modulesPath + '/src/' + panelName + '.h'
     if os.path.exists(fileName):
@@ -100,7 +100,7 @@ def writeHeaders(modulesPath, panelName, components):
         headerfile.write('{\n')
 
         headerfile.write('public:\n')
-        headerfile.write(_indent(1) + 'struct Data;\n')
+        headerfile.write(_indent(1) + 'struct Panel;\n')
         headerfile.write('\n')
 
         headerfile.write('public:\n')
@@ -124,9 +124,9 @@ def writeHeaders(modulesPath, panelName, components):
         headerfile.write(f'#endif // {panelName}H\n')
 
 
-def _writeDataSource(modulesPath, panelName, components):
+def _writePanelSource(modulesPath, panelName, components):
 
-    fileName = modulesPath + '/src/' + panelName + 'Data.cpp'
+    fileName = modulesPath + '/src/' + panelName + 'Panel.cpp'
 
     params = components['param'] if components and 'param' in components else list()
     latches = components['latch'] if components and 'latch' in components else list()
@@ -136,38 +136,38 @@ def _writeDataSource(modulesPath, panelName, components):
 
     with open(fileName, 'w') as sourcefile:
         sourcefile.write(f'#include "{panelName}.h"\n')
-        sourcefile.write(f'#include "{panelName}Data.h"\n')
+        sourcefile.write(f'#include "{panelName}Panel.h"\n')
         sourcefile.write('\n')
         sourcefile.write('#include "Schweinesystem.h"\n')
         sourcefile.write('\n')
 
         sourcefile.write(f'void {panelName}::setup()\n')
         sourcefile.write('{\n')
-        sourcefile.write(_indent(1) + 'config(Data::PARAMS_LEN, Data::INPUTS_LEN, Data::OUTPUTS_LEN, Data::LIGHTS_LEN);\n')
+        sourcefile.write(_indent(1) + 'config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);\n')
 
         if params:
             sourcefile.write('\n')
         for param in params:
             name = param['name']
-            sourcefile.write(_indent(1) + f'configParam(Data::{name}, 0.f, 1.f, 0.f, "{name}");\n')
+            sourcefile.write(_indent(1) + f'configParam(Panel::{name}, 0.f, 1.f, 0.f, "{name}");\n')
 
         if latches:
             sourcefile.write('\n')
         for latch in latches:
             name = latch['name']
-            sourcefile.write(_indent(1) + f'configButton(Data::{name}, "{name}");\n')
+            sourcefile.write(_indent(1) + f'configButton(Panel::{name}, "{name}");\n')
 
         if inputs:
             sourcefile.write('\n')
         for input in inputs:
             name = input['name']
-            sourcefile.write(_indent(1) + f'configInput(Data::{name}, "{name}");\n')
+            sourcefile.write(_indent(1) + f'configInput(Panel::{name}, "{name}");\n')
 
         if outputs:
             sourcefile.write('\n')
         for output in outputs:
             name = output['name']
-            sourcefile.write(_indent(1) + f'configOutput(Data::{name}, "{name}");\n')
+            sourcefile.write(_indent(1) + f'configOutput(Panel::{name}, "{name}");\n')
 
         if lights:
             sourcefile.write('\n')
@@ -190,7 +190,7 @@ def _writeDataSource(modulesPath, panelName, components):
             name = param['name']
             x = param['x']
             y = param['y']
-            sourcefile.write(_indent(1) + f'addParam(createParamCentered<RoundBlackKnob>(Vec({x}, {y}), module, {panelName}::Data::{name}));\n')
+            sourcefile.write(_indent(1) + f'addParam(createParamCentered<RoundBlackKnob>(Vec({x}, {y}), module, {panelName}::Panel::{name}));\n')
 
         if latches:
             sourcefile.write('\n')
@@ -198,7 +198,7 @@ def _writeDataSource(modulesPath, panelName, components):
             name = latch['name']
             x = latch['x']
             y = latch['y']
-            sourcefile.write(_indent(1) + f'addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec({x}, {y}), module, {panelName}::Data::{name}, {panelName}::Data::Light_{name}));\n')
+            sourcefile.write(_indent(1) + f'addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec({x}, {y}), module, {panelName}::Panel::{name}, {panelName}::Panel::Light_{name}));\n')
 
         if inputs:
             sourcefile.write('\n')
@@ -206,7 +206,7 @@ def _writeDataSource(modulesPath, panelName, components):
             name = input['name']
             x = input['x']
             y = input['y']
-            sourcefile.write(_indent(1) + f'addInput(createInputCentered<PJ301MPort>(Vec({x}, {y}), module, {panelName}::Data::{name}));\n')
+            sourcefile.write(_indent(1) + f'addInput(createInputCentered<PJ301MPort>(Vec({x}, {y}), module, {panelName}::Panel::{name}));\n')
 
         if outputs:
             sourcefile.write('\n')
@@ -214,7 +214,7 @@ def _writeDataSource(modulesPath, panelName, components):
             name = output['name']
             x = output['x']
             y = output['y']
-            sourcefile.write(_indent(1) + f'addOutput(createOutputCentered<PJ301MPort>(Vec({x}, {y}), module, {panelName}::Data::{name}));\n')
+            sourcefile.write(_indent(1) + f'addOutput(createOutputCentered<PJ301MPort>(Vec({x}, {y}), module, {panelName}::Panel::{name}));\n')
 
         if lights:
             sourcefile.write('\n')
@@ -222,13 +222,13 @@ def _writeDataSource(modulesPath, panelName, components):
             name = light['name']
             x = light['x']
             y = light['y']
-            sourcefile.write(_indent(1) + f'addChild(createLightCentered<MediumLight<RedLight>>(Vec({x}, {y}), module, {panelName}::Data::{name}));\n')
+            sourcefile.write(_indent(1) + f'addChild(createLightCentered<MediumLight<RedLight>>(Vec({x}, {y}), module, {panelName}::Panel::{name}));\n')
         sourcefile.write('}\n')
 
 
 def writeSources(modulesPath, panelName, components):
 
-    _writeDataSource(modulesPath, panelName, components)
+    _writePanelSource(modulesPath, panelName, components)
 
     fileName = modulesPath + '/src/' + panelName + '.cpp'
     if os.path.exists(fileName):
@@ -236,7 +236,7 @@ def writeSources(modulesPath, panelName, components):
 
     with open(fileName, 'w') as sourcefile:
         sourcefile.write(f'#include "{panelName}.h"\n')
-        sourcefile.write(f'#include "{panelName}Data.h"\n')
+        sourcefile.write(f'#include "{panelName}Panel.h"\n')
         sourcefile.write('\n')
 
         sourcefile.write(f'{panelName}::{panelName}()\n')

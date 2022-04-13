@@ -1,9 +1,9 @@
-#ifndef BitifyDataH
-#define BitifyDataH
+#ifndef BitifyPanelH
+#define BitifyPanelH
 
 #include "Bitify.h"
 
-struct Bitify::Data
+struct Bitify::Panel
 {
    enum ParamId
    {
@@ -70,4 +70,4 @@ struct Bitify::Data
 
 };
 
-#endif // BitifyDataH
+#endif // BitifyPanelH

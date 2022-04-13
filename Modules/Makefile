@@ -10,8 +10,18 @@ CXXFLAGS +=
 # Static libraries are fine, but they should be added to this plugin's build system.
 LDFLAGS +=
 
+FLAGS += \
+	-I$(RACK_DIR)/../MusicTools \
+	-I$(RACK_DIR)/../MusicTools/Include \
+
 # Add .cpp files to the build
-SOURCES += $(wildcard src/*.cpp)
+SOURCES += \
+	$(wildcard src/*.cpp) \
+	$(RACK_DIR)/../MusicTools/AbstractEffect.cpp \
+	$(RACK_DIR)/../MusicTools/AbstractOscilator.cpp \
+	$(RACK_DIR)/../MusicTools/Maths.cpp \
+	$(RACK_DIR)/../MusicTools/Note.cpp  
+
 
 # Add files to the ZIP package when running `make dist`
 # The compiled plugin and "plugin.json" are automatically added.

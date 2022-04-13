@@ -6,10 +6,13 @@ using namespace rack;
 
 #include "Schweinesystem.h"
 
+#include <Tools/BoolField.h>
+#include <Tools/Range.h>
+
 class Bitify : public Module
 {
 public:
-   struct Data;
+   struct Panel;
 
 public:
    Bitify();
@@ -24,6 +27,10 @@ private:
 private:
    dsp::BooleanTrigger gateTriggers[8];
    bool gates[8] = {};
+
+   BoolField8 boolFieldIn;
+   Range::Mapper inputMapper;
+   Range::Mapper outputMapper;
 };
 
 struct BitifyWidget : ModuleWidget
