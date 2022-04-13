@@ -16,6 +16,7 @@ static const std::vector<Panel::InputId> bitInId = {Panel::BitIn8, Panel::BitIn7
 Bitify::Bitify()
    : Module()
    , boolFieldIn()
+   , boolFieldOutLast()
    , inputMapper(-5.0, 5.0, 0.0, 255.0)
    , outputMapper(0.0, 255.0, -5.0, 5.0)
 {
@@ -32,7 +33,8 @@ void Bitify::process(const ProcessArgs& args)
    boolFieldIn = static_cast<uint8_t>(inputMapper(voltageInput));
 
    // do byte mainpulation
-   BoolField8 boolFieldOut;
+   BoolField8 boolFieldOut = 0;
+   BoolField8 lockMask = 0;
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -56,11 +58,29 @@ void Bitify::process(const ProcessArgs& args)
 
       // override value if bit in is patched -> this will lag one frame behind!
       if (inputs[bitInId.at(index)].isConnected())
+      {
          value = (inputs[bitInId.at(index)].getVoltage() > 3.0);
+      }
+      else // lock current value for future use and revert to last value
+      {
+         const bool futureValue = value;
+         value = boolFieldOutLast.get(index);
+
+         lockMask.set(index, true);
+         boolFieldOutLast.set(index, futureValue);
+      }
 
       boolFieldOut.set(index, value);
    }
 
    const float voltageOutput = outputMapper(static_cast<float>(boolFieldOut));
+
+   for (uint8_t index = 0; index < 8; index++)
+   {
+      const bool value = boolFieldOut.get(index);
+      if (!lockMask.get(index))
+         boolFieldOutLast.set(index, value);
+   }
+
    outputs[Panel::AudioOut].setVoltage(voltageOutput);
 }

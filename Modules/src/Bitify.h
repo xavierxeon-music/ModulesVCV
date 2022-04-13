@@ -28,7 +28,8 @@ private:
    dsp::BooleanTrigger gateTriggers[8];
    bool gates[8] = {};
 
-   BoolField8 boolFieldIn;
+   BoolField8 boolFieldIn; // freeze content on hold
+   BoolField8 boolFieldOutLast;
    Range::Mapper inputMapper;
    Range::Mapper outputMapper;
 };
