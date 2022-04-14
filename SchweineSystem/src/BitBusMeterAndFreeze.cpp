@@ -92,5 +92,4 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
       sendByteToBus(freezeBuffer);
 }
 
-Model* modelBitBusMeterAndFreeze = SchweineSystem::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze", SchweineSystem::Series::None);
-
+Model* modelBitBusMeterAndFreeze = SchweineSystem::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");

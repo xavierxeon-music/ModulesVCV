@@ -40,5 +40,4 @@ void BitBusCVOut::process(const ProcessArgs& args)
    outputs[Panel::CVOut].setVoltage(voltageOutput);
 }
 
-Model* modelBitBusCVOut = SchweineSystem::the()->addModule<BitBusCVOut, BitBusCVOutWidget>("BitBusCVOut", SchweineSystem::Series::None);
-
+Model* modelBitBusCVOut = SchweineSystem::the()->addModule<BitBusCVOut, BitBusCVOutWidget>("BitBusCVOut");

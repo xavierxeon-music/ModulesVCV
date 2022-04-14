@@ -55,5 +55,4 @@ void BitBusBitOut::process(const ProcessArgs& args)
       sendByteToBus(boolField);
 }
 
-Model* modelBitBusBitOut = SchweineSystem::the()->addModule<BitBusBitOut, BitBusBitOutWidget>("BitBusBitOut", SchweineSystem::Series::None);
-
+Model* modelBitBusBitOut = SchweineSystem::the()->addModule<BitBusBitOut, BitBusBitOutWidget>("BitBusBitOut");

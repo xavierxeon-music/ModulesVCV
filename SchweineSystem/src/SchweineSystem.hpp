@@ -4,10 +4,10 @@
 #include "SchweineSystem.h"
 
 template <typename AudioClass, typename WidgetClass>
-Model* SchweineSystem::addModule(const std::string& name, const Series series)
+Model* SchweineSystem::addModule(const std::string& name)
 {
    Model* model = createModel<AudioClass, WidgetClass>(name);
-   modelMap[series].push_back(model);
+   modelList.push_back(model);
    return model;
 }
 

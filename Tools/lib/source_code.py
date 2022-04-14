@@ -267,5 +267,5 @@ def writeSources(modulesPath, panelName, components):
         sourcefile.write('}\n')
         sourcefile.write('\n')
 
-        sourcefile.write(f'Model* model{panelName} = SchweineSystem::the()->addModule<{panelName}, {panelName}Widget>("{panelName}", SchweineSystem::Series::None);\n')
+        sourcefile.write(f'Model* model{panelName} = SchweineSystem::the()->addModule<{panelName}, {panelName}Widget>("{panelName}");\n')
         sourcefile.write('\n')

@@ -2,7 +2,7 @@
 
 SchweineSystem::SchweineSystem()
    : pluginInstance(nullptr)
-   , modelMap()
+   , modelList()
 {
 }
 
@@ -23,13 +23,8 @@ void init(Plugin* pluginInstance)
    SchweineSystem::the()->pluginInstance = pluginInstance;
 
    using ModelList = SchweineSystem::ModelList;
-   using ModelMap = SchweineSystem::ModelMap;
-   const ModelMap& modelMap = SchweineSystem::the()->modelMap;
+   const ModelList& modelList = SchweineSystem::the()->modelList;
 
-   for (ModelMap::const_iterator it = modelMap.cbegin(); it != modelMap.cend(); it++)
-   {
-      const ModelList& modelList = it->second;
-      for (Model* model : modelList)
-         pluginInstance->addModel(model);
-   }
+   for (Model* model : modelList)
+      pluginInstance->addModel(model);
 }

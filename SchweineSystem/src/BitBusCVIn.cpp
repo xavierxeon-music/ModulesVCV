@@ -43,5 +43,4 @@ void BitBusCVIn::process(const ProcessArgs& args)
    sendByteToBus(boolField);
 }
 
-Model* modelBitBusCVIn = SchweineSystem::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn", SchweineSystem::Series::None);
-
+Model* modelBitBusCVIn = SchweineSystem::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn");
