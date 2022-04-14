@@ -52,6 +52,15 @@
             "Binary",
             "Expander"
          ]
+      },
+      {
+         "slug": "BitBusMeterAndFreeze",
+         "name": "BitBus Meter And Freeze",
+         "description": "freeze all bits",
+         "tags": [
+            "Binary",
+            "Expander"
+         ]
       }
    ]
 }

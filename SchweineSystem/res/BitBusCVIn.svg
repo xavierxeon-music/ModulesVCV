@@ -66,7 +66,7 @@
         </g>
     </g>
     <g transform="matrix(1,0,0,1,-88.8763,137.758)">
-        <g transform="matrix(0.3556,0,0,72.8139,83.9261,-21717.6)">
+        <g transform="matrix(0.0888999,0,0,72.8139,132.639,-21717.6)">
             <rect x="13.921" y="296.737" width="168.729" height="3.935" style="fill:rgb(191,191,191);"/>
         </g>
         <g transform="matrix(0.298037,0,0,0.695794,89.7802,112.582)">
@@ -100,7 +100,7 @@
             <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
         </g>
         <g id="CVIn-input" serif:id="CVIn#input" transform="matrix(0.175002,0,0,0.175002,89.4367,-0.660999)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
+            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(204,204,204);"/>
         </g>
     </g>
     <g id="BusOut-light" serif:id="BusOut#light" transform="matrix(1,0,0,1,3.18651,10.8256)">

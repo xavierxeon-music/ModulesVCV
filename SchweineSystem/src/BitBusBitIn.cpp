@@ -33,22 +33,22 @@ void BitBusBitIn::process(const ProcessArgs& args)
 
    if (canReceiveBusMessage())
    {
-      lights[Panel::Green_BusIn].setBrightness(1.0);
+      lights[Panel::Blue_BusIn].setBrightness(1.0);
       boolFieldBus = getByteFromBus();
    }
    else
    {
-      lights[Panel::Green_BusIn].setBrightness(0.0);
+      lights[Panel::Blue_BusIn].setBrightness(0.0);
    }
 
    if (!canSendBusMessage())
    {
-      lights[Panel::Green_BusOut].setBrightness(0.0);
+      lights[Panel::Blue_BusOut].setBrightness(0.0);
       return;
    }
    else
    {
-      lights[Panel::Green_BusOut].setBrightness(1.0);
+      lights[Panel::Blue_BusOut].setBrightness(1.0);
    }
 
    BoolField8 boolField = 0;

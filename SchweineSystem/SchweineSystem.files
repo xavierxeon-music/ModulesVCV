@@ -29,3 +29,8 @@ src/BitBusBitOut.h
 src/BitBusBitOut.cpp
 src/BitBusBitOutPanel.h
 src/BitBusBitOutPanel.cpp
+
+src/BitBusMeterAndFreeze.h
+src/BitBusMeterAndFreeze.cpp
+src/BitBusMeterAndFreezePanel.h
+src/BitBusMeterAndFreezePanel.cpp

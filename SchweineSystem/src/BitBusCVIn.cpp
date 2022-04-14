@@ -27,11 +27,11 @@ void BitBusCVIn::process(const ProcessArgs& args)
 {
    if (!canSendBusMessage())
    {
-      lights[Panel::Green_BusOut].setBrightness(0.0);
+      lights[Panel::Blue_BusOut].setBrightness(0.0);
       return;
    }
 
-   lights[Panel::Green_BusOut].setBrightness(1.0);
+   lights[Panel::Blue_BusOut].setBrightness(1.0);
 
    BoolField8 boolField = 0;
    if (inputs[Panel::CVIn].isConnected())

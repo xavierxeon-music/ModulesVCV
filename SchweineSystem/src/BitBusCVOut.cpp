@@ -27,12 +27,12 @@ void BitBusCVOut::process(const ProcessArgs& args)
 {
    if (!canReceiveBusMessage())
    {
-      lights[Panel::Green_BusIn].setBrightness(0.0);
+      lights[Panel::Blue_BusIn].setBrightness(0.0);
       outputs[Panel::CVOut].setVoltage(0.0);
       return;
    }
 
-   lights[Panel::Green_BusIn].setBrightness(1.0);
+   lights[Panel::Blue_BusIn].setBrightness(1.0);
 
    BoolField8 boolField = getByteFromBus();
 
