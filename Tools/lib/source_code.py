@@ -50,10 +50,14 @@ def _addComponents(headerfile, components):
     headerfile.write(_indent(1) + '{\n')
     for light in lights:
         name = light['name']
-        headerfile.write(_indent(2) + f'{name},\n')
+        headerfile.write(_indent(2) + f'Red_{name},\n')
+        headerfile.write(_indent(2) + f'Green_{name},\n')
+        headerfile.write(_indent(2) + f'Blue_{name},\n')
     for latch in latches:
         name = latch['name']
-        headerfile.write(_indent(2) + f'Light_{name},\n')
+        headerfile.write(_indent(2) + f'Red_{name},\n')
+        headerfile.write(_indent(2) + f'Green_{name},\n')
+        headerfile.write(_indent(2) + f'Blue_{name},\n')
     headerfile.write(_indent(2) + 'LIGHTS_LEN\n')
     headerfile.write(_indent(1) + '};\n')
     headerfile.write('\n')
@@ -138,7 +142,7 @@ def _writePanelSource(modulesPath, panelName, components):
         sourcefile.write(f'#include "{panelName}.h"\n')
         sourcefile.write(f'#include "{panelName}Panel.h"\n')
         sourcefile.write('\n')
-        sourcefile.write('#include "Schweinesystem.h"\n')
+        sourcefile.write('#include "SchweineSystem.h"\n')
         sourcefile.write('\n')
 
         sourcefile.write(f'void {panelName}::setup()\n')
@@ -180,7 +184,7 @@ def _writePanelSource(modulesPath, panelName, components):
         sourcefile.write(f'{panelName}Widget::{panelName}Widget({panelName}* module)\n')
         sourcefile.write('{\n')
         sourcefile.write(_indent(1) + 'setModule(module);\n')
-        sourcefile.write(_indent(1) + f'std::string panelPath = asset::plugin(Schweinesystem::instance(), "res/{panelName}.svg");\n')
+        sourcefile.write(_indent(1) + f'std::string panelPath = asset::plugin(SchweineSystem::the()->instance(), "res/{panelName}.svg");\n')
         sourcefile.write(_indent(1) + 'SvgPanel* mainPanel = createPanel(panelPath);\n')
         sourcefile.write(_indent(1) + 'setPanel(mainPanel);\n')
 
@@ -198,7 +202,8 @@ def _writePanelSource(modulesPath, panelName, components):
             name = latch['name']
             x = latch['x']
             y = latch['y']
-            sourcefile.write(_indent(1) + f'addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec({x}, {y}), module, {panelName}::Panel::{name}, {panelName}::Panel::Light_{name}));\n')
+            sourcefile.write(
+                _indent(1) + f'addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec({x}, {y}), module, {panelName}::Panel::{name}, {panelName}::Panel::Red_{name}));\n')
 
         if inputs:
             sourcefile.write('\n')
@@ -222,8 +227,10 @@ def _writePanelSource(modulesPath, panelName, components):
             name = light['name']
             x = light['x']
             y = light['y']
-            sourcefile.write(_indent(1) + f'addChild(createLightCentered<MediumLight<RedLight>>(Vec({x}, {y}), module, {panelName}::Panel::{name}));\n')
+            sourcefile.write(_indent(1) + f'addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec({x}, {y}), module, {panelName}::Panel::{name}));\n')
+
         sourcefile.write('}\n')
+        sourcefile.write('\n')
 
 
 def writeSources(modulesPath, panelName, components):
@@ -237,6 +244,8 @@ def writeSources(modulesPath, panelName, components):
     with open(fileName, 'w') as sourcefile:
         sourcefile.write(f'#include "{panelName}.h"\n')
         sourcefile.write(f'#include "{panelName}Panel.h"\n')
+        sourcefile.write('\n')
+        sourcefile.write('#include "SchweineSystem.h"\n')
         sourcefile.write('\n')
 
         sourcefile.write(f'{panelName}::{panelName}()\n')
@@ -256,3 +265,7 @@ def writeSources(modulesPath, panelName, components):
         sourcefile.write(f'void {panelName}::process(const ProcessArgs& args)\n')
         sourcefile.write('{\n')
         sourcefile.write('}\n')
+        sourcefile.write('\n')
+
+        sourcefile.write(f'Model* model{panelName} = SchweineSystem::the()->addModule<{panelName}, {panelName}Widget>("{panelName}", SchweineSystem::Series::None);\n')
+        sourcefile.write('\n')

@@ -11,7 +11,8 @@ from lib import writeHeaders, writeSources
 scriptPath = os.path.realpath(__file__)
 scriptPath = os.path.dirname(scriptPath)
 
-modulesPath = os.path.abspath(scriptPath + '/../Modules')
+# TODO multiple module paths
+modulesPath = os.path.abspath(scriptPath + '/../SchweineSystem')
 
 
 def updateModule(panelName):

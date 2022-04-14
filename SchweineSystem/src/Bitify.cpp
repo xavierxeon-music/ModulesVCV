@@ -1,13 +1,13 @@
 #include "Bitify.h"
 #include "BitifyPanel.h"
 
-#include <iostream>
+#include "SchweineSystem.h"
 
 using Panel = Bitify::Panel;
 
 // ordered from LSB to MSB
 static const std::vector<Panel::ParamId> latchId = {Panel::FlipSwitch8, Panel::FlipSwitch7, Panel::FlipSwitch6, Panel::FlipSwitch5, Panel::FlipSwitch4, Panel::FlipSwitch3, Panel::FlipSwitch2, Panel::FlipSwitch1};
-static const std::vector<Panel::LightId> lightId = {Panel::Light_FlipSwitch8, Panel::Light_FlipSwitch7, Panel::Light_FlipSwitch6, Panel::Light_FlipSwitch5, Panel::Light_FlipSwitch4, Panel::Light_FlipSwitch3, Panel::Light_FlipSwitch2, Panel::Light_FlipSwitch1};
+static const std::vector<Panel::LightId> lightId = {Panel::Red_FlipSwitch8, Panel::Red_FlipSwitch7, Panel::Red_FlipSwitch6, Panel::Red_FlipSwitch5, Panel::Red_FlipSwitch4, Panel::Red_FlipSwitch3, Panel::Red_FlipSwitch2, Panel::Red_FlipSwitch1};
 
 static const std::vector<Panel::InputId> gateId = {Panel::GateIn8, Panel::GateIn7, Panel::GateIn6, Panel::GateIn5, Panel::GateIn4, Panel::GateIn3, Panel::GateIn2, Panel::GateIn1};
 static const std::vector<Panel::OutputId> bitOutId = {Panel::BitOut8, Panel::BitOut7, Panel::BitOut6, Panel::BitOut5, Panel::BitOut4, Panel::BitOut3, Panel::BitOut2, Panel::BitOut1};
@@ -29,19 +29,6 @@ Bitify::~Bitify()
 
 void Bitify::process(const ProcessArgs& args)
 {
-   static bool sl = (leftExpander.module != nullptr);
-   static bool sr = (rightExpander.module != nullptr);
-
-   bool tl = (leftExpander.module != nullptr);
-   bool tr = (rightExpander.module != nullptr);
-
-   if (sl != tl || sr != tr)
-   {
-      std::cout << tl << " " << tr << std::endl;
-      sl = tl;
-      sr = tr;
-   }
-
    const float voltageInput = inputs[Panel::AudioIn].getVoltage(); // from -5.0 V to + 5.0 V
    boolFieldIn = static_cast<uint8_t>(inputMapper(voltageInput));
 
@@ -54,7 +41,9 @@ void Bitify::process(const ProcessArgs& args)
       // gate latches
       if (gateTriggers[index].process(params[latchId.at(index)].getValue()))
          gates[index] ^= true;
-      lights[lightId.at(index)].setBrightness(gates[index]);
+      lights[lightId.at(index) + 0].setBrightness(gates[index]);
+      lights[lightId.at(index) + 1].setBrightness(gates[index]);
+      lights[lightId.at(index) + 2].setBrightness(gates[index]);
 
       bool toggle = false;
       if (inputs[gateId.at(index)].isConnected())
@@ -100,5 +89,7 @@ void Bitify::process(const ProcessArgs& args)
 
 void Bitify::onExpanderChange(const ExpanderChangeEvent& e)
 {
-   std::cout << (leftExpander.module != nullptr) << (rightExpander.module != nullptr);
+   std::cout << "onExpanderChange: " << (leftExpander.module != nullptr) << (rightExpander.module != nullptr) << std::endl;
 }
+
+Model* modelBitify = SchweineSystem::the()->addModule<Bitify, BitifyWidget>("Bitify", SchweineSystem::Series::None);

@@ -53,14 +53,14 @@ BitifyWidget::BitifyWidget(Bitify* module)
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec(34.89121546371889, 293.14856081), module, Bitify::Panel::FlipSwitch8, Bitify::Panel::Light_FlipSwitch8));
-   addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec(34.89121546371889, 257.96696081), module, Bitify::Panel::FlipSwitch7, Bitify::Panel::Light_FlipSwitch7));
-   addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec(34.89121546371889, 222.69356081), module, Bitify::Panel::FlipSwitch6, Bitify::Panel::Light_FlipSwitch6));
-   addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec(34.86793004951888, 187.48976081), module, Bitify::Panel::FlipSwitch5, Bitify::Panel::Light_FlipSwitch5));
-   addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec(34.84474457271888, 152.23936081), module, Bitify::Panel::FlipSwitch4, Bitify::Panel::Light_FlipSwitch4));
-   addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec(34.89121546371889, 117.01206081), module, Bitify::Panel::FlipSwitch3, Bitify::Panel::Light_FlipSwitch3));
-   addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec(34.89121546371889, 81.83126081), module, Bitify::Panel::FlipSwitch2, Bitify::Panel::Light_FlipSwitch2));
-   addParam(createLightParamCentered<VCVLightBezel<WhiteLight>>(Vec(34.89121546371889, 46.28986081), module, Bitify::Panel::FlipSwitch1, Bitify::Panel::Light_FlipSwitch1));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(34.89121546371889, 293.14856081), module, Bitify::Panel::FlipSwitch8, Bitify::Panel::Red_FlipSwitch8));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(34.89121546371889, 257.96696081), module, Bitify::Panel::FlipSwitch7, Bitify::Panel::Red_FlipSwitch7));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(34.89121546371889, 222.69356081), module, Bitify::Panel::FlipSwitch6, Bitify::Panel::Red_FlipSwitch6));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(34.86793004951888, 187.48976081), module, Bitify::Panel::FlipSwitch5, Bitify::Panel::Red_FlipSwitch5));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(34.84474457271888, 152.23936081), module, Bitify::Panel::FlipSwitch4, Bitify::Panel::Red_FlipSwitch4));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(34.89121546371889, 117.01206081), module, Bitify::Panel::FlipSwitch3, Bitify::Panel::Red_FlipSwitch3));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(34.89121546371889, 81.83126081), module, Bitify::Panel::FlipSwitch2, Bitify::Panel::Red_FlipSwitch2));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(34.89121546371889, 46.28986081), module, Bitify::Panel::FlipSwitch1, Bitify::Panel::Red_FlipSwitch1));
 
    addInput(createInputCentered<PJ301MPort>(Vec(152.702544858, 330.6573508099999), module, Bitify::Panel::AudioIn));
    addInput(createInputCentered<PJ301MPort>(Vec(57.194044858000005, 330.65735080999997), module, Bitify::Panel::Hold));
@@ -92,5 +92,3 @@ BitifyWidget::BitifyWidget(Bitify* module)
    addOutput(createOutputCentered<PJ301MPort>(Vec(121.16427469911886, 46.60415081), module, Bitify::Panel::BitOut1));
 }
 
-Model* modelBitify = SchweineSystem::the()->addModule<Bitify, BitifyWidget>("Bitify", SchweineSystem::Series::None);
-//Model* modelBitify = createModel<Bitify, BitifyWidget>("Bitify");

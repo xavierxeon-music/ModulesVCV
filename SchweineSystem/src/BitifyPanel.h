@@ -57,14 +57,30 @@ struct Bitify::Panel
 
    enum LightId
    {
-      Light_FlipSwitch8,
-      Light_FlipSwitch7,
-      Light_FlipSwitch6,
-      Light_FlipSwitch5,
-      Light_FlipSwitch4,
-      Light_FlipSwitch3,
-      Light_FlipSwitch2,
-      Light_FlipSwitch1,
+      Red_FlipSwitch8,
+      Green_FlipSwitch8,
+      Blue_FlipSwitch8,
+      Red_FlipSwitch7,
+      Green_FlipSwitch7,
+      Blue_FlipSwitch7,
+      Red_FlipSwitch6,
+      Green_FlipSwitch6,
+      Blue_FlipSwitch6,
+      Red_FlipSwitch5,
+      Green_FlipSwitch5,
+      Blue_FlipSwitch5,
+      Red_FlipSwitch4,
+      Green_FlipSwitch4,
+      Blue_FlipSwitch4,
+      Red_FlipSwitch3,
+      Green_FlipSwitch3,
+      Blue_FlipSwitch3,
+      Red_FlipSwitch2,
+      Green_FlipSwitch2,
+      Blue_FlipSwitch2,
+      Red_FlipSwitch1,
+      Green_FlipSwitch1,
+      Blue_FlipSwitch1,
       LIGHTS_LEN
    };
 
