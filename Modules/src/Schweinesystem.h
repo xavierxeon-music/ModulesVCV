@@ -1,23 +1,49 @@
-#ifndef SchweinesystemH
-#define SchweinesystemH
+#ifndef SchweineSystemH
+#define SchweineSystemH
+
+#include <iostream>
 
 #include <rack.hpp>
+using namespace rack;
 
-class Schweinesystem
+// the "main" function
+void init(Plugin* pluginInstance);
+
+class SchweineSystem
 {
 public:
-   Schweinesystem(rack::Plugin* pluginInstance);
+   enum class Series
+   {
+      None,
+      BitBus,
+      Mopher
+   };
+   using ModelList = std::vector<Model*>;
+   using ModelMap = std::map<Series, ModelList>;
 
 public:
-   static rack::Plugin* instance();
-
    template <typename AudioClass, typename WidgetClass>
-   void addModule(const std::string& name);
+   static Model* addModule(const std::string& name, const Series series = Series::None)
+   {
+      Model* model = createModel<AudioClass, WidgetClass>(name);
+      modelMap[series].push_back(model);
+
+      std::cout << "created model " << name << std::endl;
+
+      return model;
+   }
+
+public:
+   static Plugin* instance;
 
 private:
-   static rack::Plugin* pluginInstance;
+   friend void init(Plugin* pluginInstance);
+
+private:
+   static ModelMap modelMap;
 };
 
-// global variable
+// list of all models ?
+extern Model* modelBitify;
 
-#endif // SchweinesystemH
+#endif // SchweineSystemH

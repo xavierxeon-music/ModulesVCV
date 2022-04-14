@@ -1,30 +1,21 @@
-#include "Schweinesystem.h"
+#include "SchweineSystem.h"
 
-rack::Plugin* Schweinesystem::pluginInstance = nullptr;
+Plugin* SchweineSystem::instance = nullptr;
 
-Schweinesystem::Schweinesystem(rack::Plugin* pluginInstance)
+// the "main" function
+void init(Plugin* pluginInstance)
 {
-   Schweinesystem::pluginInstance = pluginInstance;
-}
+   using ModelList = SchweineSystem::ModelList;
+   using ModelMap = SchweineSystem::ModelMap;
 
-rack::Plugin* Schweinesystem::instance()
-{
-   return pluginInstance;
-}
+   SchweineSystem::instance = pluginInstance;
 
-template <typename AudioClass, typename WidgetClass>
-void Schweinesystem::addModule(const std::string& name)
-{
-   rack::Model* model = rack::createModel<AudioClass, WidgetClass>(name);
-   pluginInstance->addModel(model);
-}
+   std::cout << "init" << std::endl;
 
-// main funtion
-
-#include "Bitify.h"
-
-void init(rack::Plugin* pluginInstance)
-{
-   Schweinesystem myStuff(pluginInstance);
-   myStuff.addModule<Bitify, BitifyWidget>("Bitify");
+   for (ModelMap::const_iterator it = SchweineSystem::modelMap.cbegin(); it != SchweineSystem::modelMap.cend(); it++)
+   {
+      const ModelList& modelList = it->second;
+      for (Model* model : modelList)
+         pluginInstance->addModel(model);
+   }
 }

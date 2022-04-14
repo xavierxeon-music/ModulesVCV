@@ -49,7 +49,7 @@ void Bitify::setup()
 BitifyWidget::BitifyWidget(Bitify* module)
 {
    setModule(module);
-   std::string panelPath = asset::plugin(Schweinesystem::instance(), "res/Bitify.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::instance, "res/Bitify.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -91,3 +91,5 @@ BitifyWidget::BitifyWidget(Bitify* module)
    addOutput(createOutputCentered<PJ301MPort>(Vec(121.16427469911886, 81.83135081), module, Bitify::Panel::BitOut2));
    addOutput(createOutputCentered<PJ301MPort>(Vec(121.16427469911886, 46.60415081), module, Bitify::Panel::BitOut1));
 }
+
+Model* modelBitify = SchweineSystem::addModule<Bitify, BitifyWidget>("Bitify", SchweineSystem::Series::None);
