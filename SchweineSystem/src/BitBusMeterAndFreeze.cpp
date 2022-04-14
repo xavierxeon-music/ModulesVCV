@@ -29,6 +29,25 @@ void BitBusMeterAndFreeze::onAdd(const AddEvent& e)
    registerBusOutput();
 }
 
+json_t* BitBusMeterAndFreeze::dataToJson()
+{
+   json_t* rootJson = json_object();
+   json_object_set_new(rootJson, "freeze", json_boolean(freezeMode));
+
+   return rootJson;
+}
+
+void BitBusMeterAndFreeze::dataFromJson(json_t* rootJson)
+{
+   json_t* freezeJson = json_object_get(rootJson, "freeze");
+   if (freezeJson)
+   {
+      freezeMode = json_boolean_value(freezeJson);
+      lights[Panel::Blue_FlipFreeze].setBrightness(freezeMode);
+   }
+}
+
+
 void BitBusMeterAndFreeze::process(const ProcessArgs& args)
 {
    if (canSendBusMessage())

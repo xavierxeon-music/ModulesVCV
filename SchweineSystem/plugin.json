@@ -55,6 +55,16 @@
             "Binary",
             "Expander"
          ]
+      },
+      {
+         "slug": "BitBusNegate",
+         "name": "BitBus Negate",
+         "description": "Negate single bits",
+         "tags": [
+            "Binary",
+            "Expander",
+            "Utility'"
+         ]
       }
    ]
 }

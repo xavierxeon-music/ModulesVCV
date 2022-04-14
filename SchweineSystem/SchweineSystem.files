@@ -2,11 +2,6 @@ src/SchweineSystem.h
 src/SchweineSystem.hpp
 src/Schweinesystem.cpp
 
-src/Bitify.h
-src/Bitify.cpp
-src/BitifyPanel.h
-src/BitifyPanel.cpp
-
 src/BitBusCommon.h
 src/BitBusCommon.cpp
 
@@ -34,3 +29,8 @@ src/BitBusMeterAndFreeze.h
 src/BitBusMeterAndFreeze.cpp
 src/BitBusMeterAndFreezePanel.h
 src/BitBusMeterAndFreezePanel.cpp
+
+src/BitBusNegate.h
+src/BitBusNegate.cpp
+src/BitBusNegatePanel.h
+src/BitBusNegatePanel.cpp

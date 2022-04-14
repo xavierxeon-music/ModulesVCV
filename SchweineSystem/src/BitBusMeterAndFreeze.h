@@ -19,7 +19,6 @@ public:
 
 public:
    void process(const ProcessArgs& args) override;
-   void onAdd(const AddEvent& e) override;
 
 private:
    struct Average
@@ -32,6 +31,10 @@ private:
 
 private:
    void setup();
+
+   void onAdd(const AddEvent& e) override;
+   json_t* dataToJson() override;
+   void dataFromJson(json_t* rootJson) override;
 
 private:
    Average::List averageList;
