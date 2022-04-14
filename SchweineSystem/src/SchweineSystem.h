@@ -22,28 +22,26 @@ public:
    using ModelMap = std::map<Series, ModelList>;
 
 public:
+   static SchweineSystem* the();
+
    template <typename AudioClass, typename WidgetClass>
-   static Model* addModule(const std::string& name, const Series series = Series::None)
-   {
-      Model* model = createModel<AudioClass, WidgetClass>(name);
-      modelMap[series].push_back(model);
+   Model* addModule(const std::string& name, const Series series = Series::None);
 
-      std::cout << "created model " << name << std::endl;
-
-      return model;
-   }
-
-public:
-   static Plugin* instance;
+   Plugin* instance();
 
 private:
    friend void init(Plugin* pluginInstance);
 
 private:
-   static ModelMap modelMap;
+   SchweineSystem();
+
+private:
+   Plugin* pluginInstance;
+   ModelMap modelMap;
 };
 
-// list of all models ?
-extern Model* modelBitify;
+#ifndef SchweineSystemHPP
+#include "SchweineSystem.hpp"
+#endif // NOT SchweineSystemHPP
 
-#endif // SchweineSystemH
+#endif // NOT  SchweineSystemH

@@ -4,8 +4,6 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include "Schweinesystem.h"
-
 #include <Tools/BoolField.h>
 #include <Tools/Range.h>
 
