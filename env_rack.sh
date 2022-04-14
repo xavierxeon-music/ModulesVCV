@@ -54,6 +54,10 @@ function module {
    $SCRIPT_DIR/Tools/module.py $@
 }
 
+function travel_sync {
+   rsync -azhP --delete /Users/waspe/Documents/Rack2/plugins/Schweinesystem/ travel:/Users/waspe/Documents/Rack2/plugins/Schweinesystem/ 
+}
+
 _set_rack_dir
 _checkout
 

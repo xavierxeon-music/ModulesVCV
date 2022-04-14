@@ -14,12 +14,6 @@
    "changelogUrl": "",
    "modules": [
       {
-         "slug": "Bitify",
-         "name": "Bitify",
-         "description": "Derzno & Lipsk Clone",
-         "tags": []
-      },
-      {
          "slug": "BitBusCVIn",
          "name": "BitBus CV Input",
          "description": "turn CV intp 8 bits",

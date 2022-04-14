@@ -92,4 +92,4 @@ void Bitify::onExpanderChange(const ExpanderChangeEvent& e)
    std::cout << "onExpanderChange: " << (leftExpander.module != nullptr) << (rightExpander.module != nullptr) << std::endl;
 }
 
-Model* modelBitify = SchweineSystem::the()->addModule<Bitify, BitifyWidget>("Bitify", SchweineSystem::Series::None);
+//Model* modelBitify = SchweineSystem::the()->addModule<Bitify, BitifyWidget>("Bitify", SchweineSystem::Series::None);
