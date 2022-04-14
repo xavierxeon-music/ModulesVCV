@@ -8,20 +8,28 @@ BitBusCommon::ModelMap BitBusCommon::inputMap = BitBusCommon::ModelMap();
 BitBusCommon::BitBusCommon(Module* module)
    : module(module)
 {
-   module->rightExpander.producerMessage = new Message{};
-   module->rightExpander.consumerMessage = new Message{};
-
    module->leftExpander.producerMessage = new Message{};
    module->leftExpander.consumerMessage = new Message{};
+
+   module->rightExpander.producerMessage = new Message{};
+   module->rightExpander.consumerMessage = new Message{};
 }
 
 BitBusCommon::~BitBusCommon()
 {
-   module->rightExpander.producerMessage = nullptr;
-   module->rightExpander.consumerMessage = nullptr;
+   auto cleanUp = [&](Module::Expander& expander)
+   {
+      Message* busMessageProducer = reinterpret_cast<Message*>(expander.producerMessage);
+      delete busMessageProducer;
+      expander.producerMessage = nullptr;
 
-   module->leftExpander.producerMessage = nullptr;
-   module->leftExpander.consumerMessage = nullptr;
+      Message* busMessageConsumer = reinterpret_cast<Message*>(expander.consumerMessage);
+      delete busMessageConsumer;
+      expander.consumerMessage = nullptr;
+   };
+
+   cleanUp(module->leftExpander);
+   cleanUp(module->rightExpander);
 }
 
 void BitBusCommon::registerBusOutput()

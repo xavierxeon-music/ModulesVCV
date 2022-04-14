@@ -34,9 +34,9 @@ void BitBusCVOut::process(const ProcessArgs& args)
 
    lights[Panel::Green_BusIn].setBrightness(1.0);
 
-   BoolField8 boolFieldOut = getByteFromBus();
+   BoolField8 boolField = getByteFromBus();
 
-   const float voltageOutput = outputMapper(static_cast<float>(boolFieldOut));
+   const float voltageOutput = outputMapper(static_cast<float>(boolField));
    outputs[Panel::CVOut].setVoltage(voltageOutput);
 }
 

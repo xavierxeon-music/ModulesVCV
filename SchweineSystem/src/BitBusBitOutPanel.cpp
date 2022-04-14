@@ -25,15 +25,16 @@ BitBusBitOutWidget::BitBusBitOutWidget(BitBusBitOut* module)
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   addOutput(createOutputCentered<PJ301MPort>(Vec(35.826544858000005, 291.61075081), module, BitBusBitOut::Panel::BitOut8));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(35.826544858000005, 256.85925081), module, BitBusBitOut::Panel::BitOut7));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(35.826544858000005, 187.35645081), module, BitBusBitOut::Panel::BitOut6));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(35.826544858000005, 222.10785081), module, BitBusBitOut::Panel::BitOut5));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(35.826544858000005, 152.60505081), module, BitBusBitOut::Panel::BitOut4));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(35.826544858000005, 117.85365081), module, BitBusBitOut::Panel::BitOut3));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(35.826544858000005, 83.10225081), module, BitBusBitOut::Panel::BitOut2));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(35.826544858000005, 48.35075081000001), module, BitBusBitOut::Panel::BitOut1));
+   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 291.61075081), module, BitBusBitOut::Panel::BitOut8));
+   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 256.85925081), module, BitBusBitOut::Panel::BitOut7));
+   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 187.35645081), module, BitBusBitOut::Panel::BitOut6));
+   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 222.10785081), module, BitBusBitOut::Panel::BitOut5));
+   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 152.60505081), module, BitBusBitOut::Panel::BitOut4));
+   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 117.85365081), module, BitBusBitOut::Panel::BitOut3));
+   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 83.10225081), module, BitBusBitOut::Panel::BitOut2));
+   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 48.35075081000001), module, BitBusBitOut::Panel::BitOut1));
 
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(14.3535, 346.6866), module, BitBusBitOut::Panel::Red_BusIn));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(46.35351, 346.6866), module, BitBusBitOut::Panel::Red_BusOut));
 }
 

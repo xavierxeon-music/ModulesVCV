@@ -25,15 +25,16 @@ BitBusBitInWidget::BitBusBitInWidget(BitBusBitIn* module)
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244858000004, 291.05475081), module, BitBusBitIn::Panel::BitIn8));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244858000004, 256.30315081000003), module, BitBusBitIn::Panel::BitIn7));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244858000004, 186.80035081), module, BitBusBitIn::Panel::BitIn6));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244858000004, 221.55175081), module, BitBusBitIn::Panel::BitIn5));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244858000004, 152.04895081), module, BitBusBitIn::Panel::BitIn4));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244858000004, 117.29755081), module, BitBusBitIn::Panel::BitIn3));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244858000004, 82.54615081), module, BitBusBitIn::Panel::BitIn2));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244858000004, 47.79475081000001), module, BitBusBitIn::Panel::BitIn1));
+   addInput(createInputCentered<PJ301MPort>(Vec(30.000044857999995, 291.61075081), module, BitBusBitIn::Panel::BitIn8));
+   addInput(createInputCentered<PJ301MPort>(Vec(30.000044857999995, 256.85925081), module, BitBusBitIn::Panel::BitIn7));
+   addInput(createInputCentered<PJ301MPort>(Vec(30.000044857999995, 187.35645081), module, BitBusBitIn::Panel::BitIn6));
+   addInput(createInputCentered<PJ301MPort>(Vec(30.000044857999995, 222.10785081), module, BitBusBitIn::Panel::BitIn5));
+   addInput(createInputCentered<PJ301MPort>(Vec(30.000044857999995, 152.60505081), module, BitBusBitIn::Panel::BitIn4));
+   addInput(createInputCentered<PJ301MPort>(Vec(30.000044857999995, 117.85365081), module, BitBusBitIn::Panel::BitIn3));
+   addInput(createInputCentered<PJ301MPort>(Vec(30.000044857999995, 83.10225081), module, BitBusBitIn::Panel::BitIn2));
+   addInput(createInputCentered<PJ301MPort>(Vec(30.000044857999995, 48.35075081000001), module, BitBusBitIn::Panel::BitIn1));
 
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(45.35351, 346.6866), module, BitBusBitIn::Panel::Red_BusOut));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(14.3535, 346.6866), module, BitBusBitIn::Panel::Red_BusIn));
 }
 

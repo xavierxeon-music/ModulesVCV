@@ -3,8 +3,9 @@
 
 #include <rack.hpp>
 using namespace rack;
+#include "BitBusCommon.h"
 
-class BitBusBitIn : public Module
+class BitBusBitIn : public Module, public BitBusCommon
 {
 public:
    struct Panel;
@@ -18,6 +19,7 @@ public:
 
 private:
    void setup();
+   void onAdd(const AddEvent& e) override;
 };
 
 struct BitBusBitInWidget : ModuleWidget

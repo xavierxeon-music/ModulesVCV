@@ -33,9 +33,12 @@ struct BitBusBitIn::Panel
       Red_BusOut,
       Green_BusOut,
       Blue_BusOut,
+      Red_BusIn,
+      Green_BusIn,
+      Blue_BusIn,
       LIGHTS_LEN
    };
 
 };
 
-#endif // BitBusBitInPanelH
+#endif // NOT BitBusBitInPanelH

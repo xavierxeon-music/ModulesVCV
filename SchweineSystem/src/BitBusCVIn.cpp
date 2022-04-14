@@ -33,14 +33,14 @@ void BitBusCVIn::process(const ProcessArgs& args)
 
    lights[Panel::Green_BusOut].setBrightness(1.0);
 
-   BoolField8 boolFieldIn = 0;
+   BoolField8 boolField = 0;
    if (inputs[Panel::CVIn].isConnected())
    {
       const float voltageInput = inputs[Panel::CVIn].getVoltage(); // from -5.0 V to + 5.0 V
-      boolFieldIn = static_cast<uint8_t>(inputMapper(voltageInput));
+      boolField = static_cast<uint8_t>(inputMapper(voltageInput));
    }
 
-   sendByteToBus(boolFieldIn);
+   sendByteToBus(boolField);
 }
 
 Model* modelBitBusCVIn = SchweineSystem::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn", SchweineSystem::Series::None);
