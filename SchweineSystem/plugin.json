@@ -16,8 +16,42 @@
       {
          "slug": "Bitify",
          "name": "Bitify",
-         "description": "Dezno & Lipsk Clone",
+         "description": "Derzno & Lipsk Clone",
          "tags": []
+      },
+      {
+         "slug": "BitBusCVIn",
+         "name": "BitBus CV Input",
+         "description": "turn CV intp 8 bits",
+         "tags": [
+            "Binary"
+         ]
+      },
+      {
+         "slug": "BitBusCVOut",
+         "name": "BitBus CV Output",
+         "description": "turn 8 bits into CV",
+         "tags": [
+            "Binary",
+            "Expander"
+         ]
+      },
+      {
+         "slug": "BitBusBitIn",
+         "name": "BitBus Bit Input",
+         "description": "set 8 bits",
+         "tags": [
+            "Binary"
+         ]
+      },
+      {
+         "slug": "BitBusBitOut",
+         "name": "BitBus Bit Output",
+         "description": "get 8 bits",
+         "tags": [
+            "Binary",
+            "Expander"
+         ]
       }
    ]
 }

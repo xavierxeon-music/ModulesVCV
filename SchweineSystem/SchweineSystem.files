@@ -2,8 +2,30 @@ src/SchweineSystem.h
 src/SchweineSystem.hpp
 src/Schweinesystem.cpp
 
-src/Bitify.cpp
 src/Bitify.h
-src/BitifyPanel.cpp
+src/Bitify.cpp
 src/BitifyPanel.h
+src/BitifyPanel.cpp
 
+src/BitBusCommon.h
+src/BitBusCommon.cpp
+
+src/BitBusCVIn.h
+src/BitBusCVIn.cpp
+src/BitBusCVInPanel.h
+src/BitBusCVInPanel.cpp
+
+src/BitBusCVOut.h
+src/BitBusCVOut.cpp
+src/BitBusCVOutPanel.h
+src/BitBusCVOutPanel.cpp
+
+src/BitBusBitIn.h
+src/BitBusBitIn.cpp
+src/BitBusBitInPanel.h
+src/BitBusBitInPanel.cpp
+
+src/BitBusBitOut.h
+src/BitBusBitOut.cpp
+src/BitBusBitOutPanel.h
+src/BitBusBitOutPanel.cpp

@@ -1,0 +1,44 @@
+#include "BitBusCVOut.h"
+#include "BitBusCVOutPanel.h"
+
+#include <Tools/BoolField.h>
+
+#include "SchweineSystem.h"
+
+BitBusCVOut::BitBusCVOut()
+   : Module()
+   , BitBusCommon(this)
+   , outputMapper(0.0, 255.0, -5.0, 5.0)
+{
+   setup();
+}
+
+void BitBusCVOut::onAdd(const AddEvent& e)
+{
+   (void)e;
+   registerBusInput();
+}
+
+BitBusCVOut::~BitBusCVOut()
+{
+}
+
+void BitBusCVOut::process(const ProcessArgs& args)
+{
+   if (!canReceiveBusMessage())
+   {
+      lights[Panel::Green_BusIn].setBrightness(0.0);
+      outputs[Panel::CVOut].setVoltage(0.0);
+      return;
+   }
+
+   lights[Panel::Green_BusIn].setBrightness(1.0);
+
+   BoolField8 boolFieldOut = getByteFromBus();
+
+   const float voltageOutput = outputMapper(static_cast<float>(boolFieldOut));
+   outputs[Panel::CVOut].setVoltage(voltageOutput);
+}
+
+Model* modelBitBusCVOut = SchweineSystem::the()->addModule<BitBusCVOut, BitBusCVOutWidget>("BitBusCVOut", SchweineSystem::Series::None);
+

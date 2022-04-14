@@ -82,7 +82,7 @@ def _writePanelHeader(modulesPath, panelName, components):
         headerfile.write('};\n')
 
         headerfile.write('\n')
-        headerfile.write(f'#endif // {panelName}PanelH\n')
+        headerfile.write(f'#endif // NOT {panelName}PanelH\n')
 
 
 def writeHeaders(modulesPath, panelName, components):
@@ -125,7 +125,7 @@ def writeHeaders(modulesPath, panelName, components):
         headerfile.write(_indent(1) + f'{panelName}Widget({panelName}* module);\n')
         headerfile.write('};\n')
         headerfile.write('\n')
-        headerfile.write(f'#endif // {panelName}H\n')
+        headerfile.write(f'#endif // NOT {panelName}H\n')
 
 
 def _writePanelSource(modulesPath, panelName, components):
@@ -227,7 +227,7 @@ def _writePanelSource(modulesPath, panelName, components):
             name = light['name']
             x = light['x']
             y = light['y']
-            sourcefile.write(_indent(1) + f'addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec({x}, {y}), module, {panelName}::Panel::{name}));\n')
+            sourcefile.write(_indent(1) + f'addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec({x}, {y}), module, {panelName}::Panel::Red_{name}));\n')
 
         sourcefile.write('}\n')
         sourcefile.write('\n')
