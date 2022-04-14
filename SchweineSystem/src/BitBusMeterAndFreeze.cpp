@@ -1,8 +1,6 @@
 #include "BitBusMeterAndFreeze.h"
 #include "BitBusMeterAndFreezePanel.h"
 
-#include <Tools/BoolField.h>
-
 #include "SchweineSystem.h"
 
 using Panel = BitBusMeterAndFreeze::Panel;
@@ -12,6 +10,10 @@ static const std::vector<Panel::LightId> lightId = {Panel::Red_Bit8, Panel::Red_
 BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    : Module()
    , BitBusCommon(this)
+   , averageList()
+   , freezTrigger()
+   , freezeMode(false)
+   , sampleTrigger()
 {
    setup();
 }
@@ -45,14 +47,30 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
       boolField = getByteFromBus();
    }
 
+   bool freezeValue = params[Panel::GateFreeze].getValue();
+   if (inputs[Panel::GateFreeze].isConnected())
+      freezeValue = (inputs[Panel::GateFreeze].getVoltage() > 3.0);
+
+   if (freezTrigger.process(freezeValue))
+      freezeMode ^= true;
+   lights[Panel::Blue_FlipFreeze].setBrightness(freezeMode);
+
+   bool sampleValue = params[Panel::GateSample].getValue();
+   if (inputs[Panel::GateSample].isConnected())
+      sampleValue = (inputs[Panel::GateSample].getVoltage() > 3.0);
+
+   const bool sample = sampleTrigger.process(sampleValue);
+   if (!freezeMode || (freezeMode && sample))
+      freezeBuffer = boolField;
+
    for (uint8_t index = 0; index < 8; index++)
    {
-      const bool value = boolField.get(index);
-      lights[lightId.at(index)].setBrightness(value ? 1.0 : 0.0);
+      const bool value = freezeBuffer.get(index);
+      lights[lightId.at(index) + 1].setBrightness(value ? 1.0 : 0.0);
    }
 
    if (canSendBusMessage())
-      sendByteToBus(boolField);
+      sendByteToBus(freezeBuffer);
 }
 
 Model* modelBitBusMeterAndFreeze = SchweineSystem::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze", SchweineSystem::Series::None);
