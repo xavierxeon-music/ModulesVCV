@@ -7,8 +7,7 @@ void VCMCReceiver::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configButton(Panel::TestDown, "TestDown");
-   configButton(Panel::TestUp, "TestUp");
+   configButton(Panel::Connect, "Connect");
 
    configOutput(Panel::Reset, "Reset");
    configOutput(Panel::Clock, "Clock");
@@ -46,10 +45,9 @@ SvgPanel* VCMCReceiverWidget::setup(VCMCReceiver* module)
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(157.740002668, 306.41075080999997), module, VCMCReceiver::Panel::TestDown, VCMCReceiver::Panel::Red_TestDown));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(187.403002668, 306.41075080999997), module, VCMCReceiver::Panel::TestUp, VCMCReceiver::Panel::Red_TestUp));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(128.52810266799997, 346.14875080999997), module, VCMCReceiver::Panel::Connect, VCMCReceiver::Panel::Red_Connect));
 
-   addOutput(createOutputCentered<PJ301MPort>(Vec(60.162144858000005, 345.37097080999996), module, VCMCReceiver::Panel::Reset));
+   addOutput(createOutputCentered<PJ301MPort>(Vec(60.162144858000005, 346.14797081), module, VCMCReceiver::Panel::Reset));
    addOutput(createOutputCentered<PJ301MPort>(Vec(60.162144858000005, 306.51897081), module, VCMCReceiver::Panel::Clock));
    addOutput(createOutputCentered<PJ301MPort>(Vec(39.43334485800001, 262.57647381000004), module, VCMCReceiver::Panel::Channel8_Gate8_BitOut1));
    addOutput(createOutputCentered<PJ301MPort>(Vec(125.94934485800003, 263.16915081), module, VCMCReceiver::Panel::Channel8_Slider8_Output));
@@ -76,8 +74,6 @@ SvgPanel* VCMCReceiverWidget::setup(VCMCReceiver* module)
    addOutput(createOutputCentered<PJ301MPort>(Vec(125.94934485800003, 36.090250810000015), module, VCMCReceiver::Panel::Channel1_Slider1_Output));
    addOutput(createOutputCentered<PJ301MPort>(Vec(86.960594858, 36.090250810000015), module, VCMCReceiver::Panel::Channel1_CV1_Output));
 
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(187.404, 344.60186999999996), module, VCMCReceiver::Panel::Red_Connection2));
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(179.387, 344.60186999999996), module, VCMCReceiver::Panel::Red_Connection1));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(63.61860000000003, 262.576723), module, VCMCReceiver::Panel::Red_Channel8_Gate8_Status1));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(188.36114458249995, 269.0929), module, VCMCReceiver::Panel::Red_Channel8_Slider8_Status5));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(178.94864458250004, 269.0929), module, VCMCReceiver::Panel::Red_Channel8_Slider8_Status4));

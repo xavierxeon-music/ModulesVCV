@@ -7,8 +7,7 @@ struct VCMCReceiver::Panel
 {
    enum ParamId
    {
-      TestDown,
-      TestUp,
+      Connect,
       PARAMS_LEN
    };
 
@@ -50,12 +49,6 @@ struct VCMCReceiver::Panel
 
    enum LightId
    {
-      Red_Connection2,
-      Green_Connection2,
-      Blue_Connection2,
-      Red_Connection1,
-      Green_Connection1,
-      Blue_Connection1,
       Red_Channel8_Gate8_Status1,
       Green_Channel8_Gate8_Status1,
       Blue_Channel8_Gate8_Status1,
@@ -320,12 +313,9 @@ struct VCMCReceiver::Panel
       Red_Channel1_CV1_Status1,
       Green_Channel1_CV1_Status1,
       Blue_Channel1_CV1_Status1,
-      Red_TestDown,
-      Green_TestDown,
-      Blue_TestDown,
-      Red_TestUp,
-      Green_TestUp,
-      Blue_TestUp,
+      Red_Connect,
+      Green_Connect,
+      Blue_Connect,
       LIGHTS_LEN
    };
 

@@ -1,6 +1,9 @@
 #include "VCMCReceiver.h"
 #include "VCMCReceiverPanel.h"
 
+#include <Midi/MidiCommon.h>
+#include <Music/Note.h>
+
 #include "SchweineSystemLCDDisplay.h"
 #include "SchweineSystemMaster.h"
 
@@ -10,9 +13,13 @@ VCMCReceiver::VCMCReceiver()
    , lightMeterListCV(lights)
    , lightMeterListSlider(lights)
    , lightListGate(lights)
-   , downTrigger()
-   , upTrigger()
-
+   , connectionLight(lights)
+   , midiInput()
+   , midiTickCounter(0)
+   , doNotAdvanceTempo(false)
+   , tempo()
+   , clockTick()
+   , clockReset()
 {
    setup();
 
@@ -38,10 +45,12 @@ VCMCReceiver::VCMCReceiver()
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      lightMeterListCV[index]->setMaxValue(15);
-      lightMeterListCV[0]->setMeter(bpm);
+      lightMeterListCV[index]->setMaxValue(127);
       lightMeterListSlider[index]->setMaxValue(127);
    }
+
+   connectionLight.assign(Panel::Red_Connect);
+   connectToMidiDevice();
 }
 
 VCMCReceiver::~VCMCReceiver()
@@ -50,16 +59,96 @@ VCMCReceiver::~VCMCReceiver()
 
 void VCMCReceiver::process(const ProcessArgs& args)
 {
-   if (bpm > 0 && downTrigger.process(params[Panel::TestDown].getValue()))
+   midi::Message msg;
+   while (midiInput.tryPop(&msg, args.frame))
    {
-      bpm -= 1;
-      lightMeterListCV[0]->setMeter(bpm);
+      processMessage(msg);
    }
 
-   if (bpm < 15 && upTrigger.process(params[Panel::TestUp].getValue()))
+   if (doNotAdvanceTempo)
+      doNotAdvanceTempo = false;
+   else
+      tempo.advance(args.sampleRate);
+
+   bpm = tempo.getBeatsPerMinute();
+
+   outputs[Panel::Clock].setVoltage(clockTick.process(args.sampleTime) ? 10.f : 0.f);
+   outputs[Panel::Reset].setVoltage(clockReset.process(args.sampleTime) ? 10.f : 0.f);
+}
+void VCMCReceiver::processMessage(const midi::Message& msg)
+{
+   //std::cout << msg.getFrame() << " " << msg.toString().c_str() << std::endl;
+
+   const bool isSystemEvent = (0xF0 == (msg.bytes[0] & 0xF0));
+   if (!isSystemEvent)
    {
-      bpm += 1;
-      lightMeterListCV[0]->setMeter(bpm);
+      const Midi::Event event = static_cast<Midi::Event>(msg.bytes[0] & 0xF0);
+      const Midi::Channel channel = 1 + (msg.bytes[0] & 0x0F);
+
+      if (Midi::Event::NoteOn == event)
+      {
+         const Note note = Note::fromMidi(msg.bytes[1]);
+         const Midi::Velocity velocity = msg.bytes[2];
+
+         // TODO
+      }
+      else if (Midi::Event::NoteOff == event)
+      {
+         const Note note = Note::fromMidi(msg.bytes[1]);
+
+         // TODO
+      }
+      else if (Midi::Event::ControlChange == event)
+      {
+         const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(msg.bytes[1]);
+         const uint8_t value = msg.bytes[2];
+
+         // TODO
+      }
+   }
+   else
+   {
+      const Midi::Event event = static_cast<Midi::Event>(msg.bytes[0]);
+
+      if (Midi::Event::Clock == event)
+      {
+         if (0 == midiTickCounter)
+         {
+            tempo.clockTick();
+            clockTick.trigger();
+            doNotAdvanceTempo = true;
+         }
+
+         midiTickCounter++;
+         if (6 == midiTickCounter)
+            midiTickCounter = 0;
+      }
+      else if (Midi::Event::Start == event)
+      {
+         midiTickCounter = 0;
+         tempo.clockReset();
+         clockReset.trigger();
+         doNotAdvanceTempo = true;
+      }
+   }
+}
+
+void VCMCReceiver::connectToMidiDevice()
+{
+   static const std::string targetDeviceName = "Metropolix";
+   midiInput.reset();
+   connectionLight.setColor(SchweineSystem::Color{255, 0, 0});
+
+   for (const int& deviceId : midiInput.getDeviceIds())
+   {
+      const std::string deviceName = midiInput.getDeviceName(deviceId);
+      if (targetDeviceName == deviceName)
+      {
+         std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
+         midiInput.setDeviceId(deviceId);
+         connectionLight.setColor(SchweineSystem::Color{0, 255, 0});
+         return;
+      }
    }
 }
 
@@ -71,7 +160,7 @@ VCMCReceiverWidget::VCMCReceiverWidget(VCMCReceiver* module)
 
    SchweineSystem::LCDDisplay* bpmDisplay = new SchweineSystem::LCDDisplay();
    bpmDisplay->setPosition(90, 297);
-   if (module)
+   if (module) // will be zero in module browser
       bpmDisplay->setup(&(module->bpm), 3);
    bpmDisplay->setDigitColor(SchweineSystem::Color{0, 255, 255});
 
