@@ -24,8 +24,8 @@ def updateModule(panelName, subFolder):
     components = getPanelComponents(panelFileName)
     print(components)
 
-    writeHeaders(modulesPath, panelName, components)
-    writeSources(modulesPath, panelName, components)
+    writeHeaders(modulesPath, subFolder, panelName, components)
+    writeSources(modulesPath, subFolder, panelName, components)
 
 
 def gather():
@@ -57,10 +57,6 @@ def main():
     if args.gather:
         gather()
 
-    if args.folder:
-        global moduleName
-        moduleName = moduleName + '/' + args.folder
-
     if args.modulenames:
         for moduleName in args.modulenames:
             if args.panel:
@@ -68,7 +64,8 @@ def main():
                 panelFileName = modulesPath + '/res/' + moduleName + '.svg'
                 createPanel(panelFileName, hpWidth)
             elif args.update:
-                updateModule(moduleName)
+                subFolder = None if not args.folder else args.folder[0]
+                updateModule(moduleName, subFolder)
 
 
 if __name__ == '__main__':

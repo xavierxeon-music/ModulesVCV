@@ -63,9 +63,12 @@ def _addComponents(headerfile, components):
     headerfile.write('\n')
 
 
-def _writePanelHeader(modulesPath, panelName, components):
+def _writePanelHeader(modulesPath, subFolder, panelName, components):
 
-    fileName = modulesPath + '/src/' + panelName + 'Panel.h'
+    if subFolder:
+        fileName = modulesPath + '/src/' + subFolder + '/' + panelName + 'Panel.h'
+    else:
+        fileName = modulesPath + '/src/' + panelName + 'Panel.h'
 
     with open(fileName, 'w') as headerfile:
         headerfile.write(f'#ifndef {panelName}PanelH\n')
@@ -85,11 +88,14 @@ def _writePanelHeader(modulesPath, panelName, components):
         headerfile.write(f'#endif // NOT {panelName}PanelH\n')
 
 
-def writeHeaders(modulesPath, panelName, components):
+def writeHeaders(modulesPath, subFolder, panelName, components):
 
-    _writePanelHeader(modulesPath, panelName, components)
+    _writePanelHeader(modulesPath, subFolder, panelName, components)
 
-    fileName = modulesPath + '/src/' + panelName + '.h'
+    if subFolder:
+        fileName = modulesPath + '/src/' + subFolder + '/' + panelName + '.h'
+    else:
+        fileName = modulesPath + '/src/' + panelName + '.h'
     if os.path.exists(fileName):
         return
 
@@ -128,9 +134,12 @@ def writeHeaders(modulesPath, panelName, components):
         headerfile.write(f'#endif // NOT {panelName}H\n')
 
 
-def _writePanelSource(modulesPath, panelName, components):
+def _writePanelSource(modulesPath, subFolder, panelName, components):
 
-    fileName = modulesPath + '/src/' + panelName + 'Panel.cpp'
+    if subFolder:
+        fileName = modulesPath + '/src/' + subFolder + '/' + panelName + 'Panel.cpp'
+    else:
+        fileName = modulesPath + '/src/' + panelName + 'Panel.cpp'
 
     params = components['param'] if components and 'param' in components else list()
     latches = components['latch'] if components and 'latch' in components else list()
@@ -233,11 +242,14 @@ def _writePanelSource(modulesPath, panelName, components):
         sourcefile.write('\n')
 
 
-def writeSources(modulesPath, panelName, components):
+def writeSources(modulesPath, subFolder, panelName, components):
 
-    _writePanelSource(modulesPath, panelName, components)
+    _writePanelSource(modulesPath, subFolder, panelName, components)
 
-    fileName = modulesPath + '/src/' + panelName + '.cpp'
+    if subFolder:
+        fileName = modulesPath + '/src/' + subFolder + '/' + panelName + '.cpp'
+    else:
+        fileName = modulesPath + '/src/' + panelName + '.cpp'
     if os.path.exists(fileName):
         return
 
