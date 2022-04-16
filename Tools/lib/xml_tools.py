@@ -51,7 +51,6 @@ def getPanelComponents(panelFileName):
 
             del component['hierachy']
 
-    print(componentMap)
     return componentMap
 
 

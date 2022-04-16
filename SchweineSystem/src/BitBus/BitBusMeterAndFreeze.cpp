@@ -1,7 +1,7 @@
 #include "BitBusMeterAndFreeze.h"
 #include "BitBusMeterAndFreezePanel.h"
 
-#include "SchweineSystem.h"
+#include "SchweineSystemMaster.h"
 
 using Panel = BitBusMeterAndFreeze::Panel;
 
@@ -16,6 +16,9 @@ BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    , sampleTrigger()
 {
    setup();
+
+   busInIndicator.assign(Panel::Red_BusIn);
+   busOutIndicator.assign(Panel::Red_BusOut);
 }
 
 BitBusMeterAndFreeze::~BitBusMeterAndFreeze()
@@ -46,7 +49,6 @@ void BitBusMeterAndFreeze::dataFromJson(json_t* rootJson)
       lights[Panel::Blue_FlipFreeze].setBrightness(freezeMode);
    }
 }
-
 
 void BitBusMeterAndFreeze::process(const ProcessArgs& args)
 {
@@ -92,4 +94,4 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
       sendByteToBus(freezeBuffer);
 }
 
-Model* modelBitBusMeterAndFreeze = SchweineSystem::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");
+Model* modelBitBusMeterAndFreeze = SchweineSystem::Master::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");

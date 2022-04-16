@@ -58,13 +58,14 @@ def main():
         gather()
 
     if args.modulenames:
-        for moduleName in args.modulenames:
-            if args.panel:
-                hpWidth = args.panel[0]
+        if args.panel:
+            hpWidth = args.panel[0]
+            for moduleName in args.modulenames:
                 panelFileName = modulesPath + '/res/' + moduleName + '.svg'
                 createPanel(panelFileName, hpWidth)
-            elif args.update:
-                subFolder = None if not args.folder else args.folder[0]
+        elif args.update:
+            subFolder = None if not args.folder else args.folder[0]
+            for moduleName in args.modulenames:
                 updateModule(moduleName, subFolder)
 
 

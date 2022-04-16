@@ -3,7 +3,7 @@
 
 #include <Tools/BoolField.h>
 
-#include "SchweineSystem.h"
+#include "SchweineSystemMaster.h"
 
 BitBusCVOut::BitBusCVOut()
    : Module()
@@ -11,6 +11,8 @@ BitBusCVOut::BitBusCVOut()
    , outputMapper(0.0, 255.0, -5.0, 5.0)
 {
    setup();
+
+   busInIndicator.assign(Panel::Red_BusIn);
 }
 
 void BitBusCVOut::onAdd(const AddEvent& e)
@@ -27,12 +29,12 @@ void BitBusCVOut::process(const ProcessArgs& args)
 {
    if (!canReceiveBusMessage())
    {
-      lights[Panel::Blue_BusIn].setBrightness(0.0);
+      busInIndicator.setOff();
       outputs[Panel::CVOut].setVoltage(0.0);
       return;
    }
 
-   lights[Panel::Blue_BusIn].setBrightness(1.0);
+   busInIndicator.setOn();
 
    BoolField8 boolField = getByteFromBus();
 
@@ -40,4 +42,4 @@ void BitBusCVOut::process(const ProcessArgs& args)
    outputs[Panel::CVOut].setVoltage(voltageOutput);
 }
 
-Model* modelBitBusCVOut = SchweineSystem::the()->addModule<BitBusCVOut, BitBusCVOutWidget>("BitBusCVOut");
+Model* modelBitBusCVOut = SchweineSystem::Master::the()->addModule<BitBusCVOut, BitBusCVOutWidget>("BitBusCVOut");

@@ -1,7 +1,7 @@
-#include "BitBusNegate.h"
 #include "BitBusNegatePanel.h"
+#include "BitBusNegate.h"
 
-#include "SchweineSystem.h"
+#include "SchweineSystemMaster.h"
 
 void BitBusNegate::setup()
 {
@@ -24,13 +24,12 @@ void BitBusNegate::setup()
    configInput(Panel::Bit3_GateIn, "Bit3_GateIn");
    configInput(Panel::Bit2_GateIn, "Bit2_GateIn");
    configInput(Panel::Bit1_GateIn, "Bit1_GateIn");
-
 }
 
 BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
 {
    setModule(module);
-   std::string panelPath = asset::plugin(SchweineSystem::the()->instance(), "res/BitBusNegate.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBusNegate.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -55,4 +54,3 @@ BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(14.3535, 346.6866), module, BitBusNegate::Panel::Red_BusIn));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(75.3535, 346.6866), module, BitBusNegate::Panel::Red_BusOut));
 }
-

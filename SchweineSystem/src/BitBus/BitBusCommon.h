@@ -4,6 +4,8 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include "SchweineSystemLight.h"
+
 class BitBusCommon
 {
 public:
@@ -18,6 +20,10 @@ protected:
    void registerBusInput();
    bool canReceiveBusMessage(); // has module with bus input on the right and this module isregistered as bus output
    uint8_t getByteFromBus();
+
+protected:
+   SchweineSystem::Light busInIndicator;
+   SchweineSystem::Light busOutIndicator;
 
 private:
    using ModelMap = std::map<Model*, bool>;

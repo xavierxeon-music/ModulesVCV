@@ -5,6 +5,8 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
+#include "SchweineSystemCommon.h"
+#include "SchweineSystemLight.h"
 
 class BitBusNegate : public Module, public BitBusCommon
 {
@@ -26,6 +28,9 @@ private:
    void dataFromJson(json_t* rootJson) override;
 
 private:
+   SchweineSystem::Light::List lightList;
+   SchweineSystem::Param::List paramList;
+   SchweineSystem::Input::List gateList;
    dsp::BooleanTrigger gateTrigger[8];
    bool gates[8];
 };

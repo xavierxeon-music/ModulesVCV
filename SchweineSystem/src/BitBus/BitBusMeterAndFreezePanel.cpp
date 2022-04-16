@@ -1,7 +1,7 @@
-#include "BitBusMeterAndFreeze.h"
 #include "BitBusMeterAndFreezePanel.h"
+#include "BitBusMeterAndFreeze.h"
 
-#include "SchweineSystem.h"
+#include "SchweineSystemMaster.h"
 
 void BitBusMeterAndFreeze::setup()
 {
@@ -12,13 +12,12 @@ void BitBusMeterAndFreeze::setup()
 
    configInput(Panel::GateSample, "GateSample");
    configInput(Panel::GateFreeze, "GateFreeze");
-
 }
 
 BitBusMeterAndFreezeWidget::BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module)
 {
    setModule(module);
-   std::string panelPath = asset::plugin(SchweineSystem::the()->instance(), "res/BitBusMeterAndFreeze.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBusMeterAndFreeze.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -71,4 +70,3 @@ BitBusMeterAndFreezeWidget::BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* mod
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(14.3535, 346.6866), module, BitBusMeterAndFreeze::Panel::Red_BusIn));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(75.3535, 346.6866), module, BitBusMeterAndFreeze::Panel::Red_BusOut));
 }
-

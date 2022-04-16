@@ -34,7 +34,7 @@ private:
 };
 
 #ifndef SchweineSystemHPP
-#include "SchweineSystem.hpp"
+#include "SchweineSystemMaster.hpp"
 #endif // NOT SchweineSystemHPP
 
 #endif // NOT  SchweineSystemH

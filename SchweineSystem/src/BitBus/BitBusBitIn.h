@@ -5,6 +5,8 @@
 using namespace rack;
 #include "BitBusCommon.h"
 
+#include "SchweineSystemCommon.h"
+
 class BitBusBitIn : public Module, public BitBusCommon
 {
 public:
@@ -20,6 +22,9 @@ public:
 private:
    void setup();
    void onAdd(const AddEvent& e) override;
+
+private:
+   SchweineSystem::Input::List inputList;
 };
 
 struct BitBusBitInWidget : ModuleWidget

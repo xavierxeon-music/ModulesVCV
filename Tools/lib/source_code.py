@@ -151,7 +151,7 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
         sourcefile.write(f'#include "{panelName}.h"\n')
         sourcefile.write(f'#include "{panelName}Panel.h"\n')
         sourcefile.write('\n')
-        sourcefile.write('#include "SchweineSystem.h"\n')
+        sourcefile.write('#include "SchweineSystemMaster.h"\n')
         sourcefile.write('\n')
 
         sourcefile.write(f'void {panelName}::setup()\n')
@@ -193,7 +193,7 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
         sourcefile.write(f'{panelName}Widget::{panelName}Widget({panelName}* module)\n')
         sourcefile.write('{\n')
         sourcefile.write(_indent(1) + 'setModule(module);\n')
-        sourcefile.write(_indent(1) + f'std::string panelPath = asset::plugin(SchweineSystem::the()->instance(), "res/{panelName}.svg");\n')
+        sourcefile.write(_indent(1) + f'std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/{panelName}.svg");\n')
         sourcefile.write(_indent(1) + 'SvgPanel* mainPanel = createPanel(panelPath);\n')
         sourcefile.write(_indent(1) + 'setPanel(mainPanel);\n')
 
@@ -257,7 +257,7 @@ def writeSources(modulesPath, subFolder, panelName, components):
         sourcefile.write(f'#include "{panelName}.h"\n')
         sourcefile.write(f'#include "{panelName}Panel.h"\n')
         sourcefile.write('\n')
-        sourcefile.write('#include "SchweineSystem.h"\n')
+        sourcefile.write('#include "SchweineSystemMaster.h"\n')
         sourcefile.write('\n')
 
         sourcefile.write(f'{panelName}::{panelName}()\n')
@@ -279,5 +279,5 @@ def writeSources(modulesPath, subFolder, panelName, components):
         sourcefile.write('}\n')
         sourcefile.write('\n')
 
-        sourcefile.write(f'Model* model{panelName} = SchweineSystem::the()->addModule<{panelName}, {panelName}Widget>("{panelName}");\n')
+        sourcefile.write(f'Model* model{panelName} = SchweineSystem::Master::the()->addModule<{panelName}, {panelName}Widget>("{panelName}");\n')
         sourcefile.write('\n')

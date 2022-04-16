@@ -1,7 +1,7 @@
-#include "BitBusBitIn.h"
 #include "BitBusBitInPanel.h"
+#include "BitBusBitIn.h"
 
-#include "SchweineSystem.h"
+#include "SchweineSystemMaster.h"
 
 void BitBusBitIn::setup()
 {
@@ -15,13 +15,12 @@ void BitBusBitIn::setup()
    configInput(Panel::BitIn3, "BitIn3");
    configInput(Panel::BitIn2, "BitIn2");
    configInput(Panel::BitIn1, "BitIn1");
-
 }
 
 BitBusBitInWidget::BitBusBitInWidget(BitBusBitIn* module)
 {
    setModule(module);
-   std::string panelPath = asset::plugin(SchweineSystem::the()->instance(), "res/BitBusBitIn.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBusBitIn.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -37,4 +36,3 @@ BitBusBitInWidget::BitBusBitInWidget(BitBusBitIn* module)
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(45.35351, 346.6866), module, BitBusBitIn::Panel::Red_BusOut));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(14.3535, 346.6866), module, BitBusBitIn::Panel::Red_BusIn));
 }
-

@@ -3,20 +3,29 @@
 
 #include <Tools/BoolField.h>
 
-#include "SchweineSystem.h"
+#include "SchweineSystemMaster.h"
 
 using Panel = BitBusNegate::Panel;
-
-static const std::vector<Panel::LightId> lightId = {Panel::Red_Bit8_Latch, Panel::Red_Bit7_Latch, Panel::Red_Bit6_Latch, Panel::Red_Bit5_Latch, Panel::Red_Bit4_Latch, Panel::Red_Bit3_Latch, Panel::Red_Bit2_Latch, Panel::Red_Bit1_Latch};
-static const std::vector<Panel::InputId> gateId = {Panel::Bit8_GateIn, Panel::Bit7_GateIn, Panel::Bit6_GateIn, Panel::Bit5_GateIn, Panel::Bit4_GateIn, Panel::Bit3_GateIn, Panel::Bit2_GateIn, Panel::Bit1_GateIn};
 
 BitBusNegate::BitBusNegate()
    : Module()
    , BitBusCommon(this)
+   , lightList(lights)
+   , paramList(params)
+   , gateList(inputs)
    , gateTrigger()
    , gates{}
 {
    setup();
+
+   lightList.append({Panel::Red_Bit8_Latch, Panel::Red_Bit7_Latch, Panel::Red_Bit6_Latch, Panel::Red_Bit5_Latch, Panel::Red_Bit4_Latch, Panel::Red_Bit3_Latch, Panel::Red_Bit2_Latch, Panel::Red_Bit1_Latch});
+   for (uint8_t index = 0; index < 8; index++)
+      lightList[index]->setDefaultColor({0, 0, 255});
+
+   paramList.append({Panel::Bit8_Latch, Panel::Bit7_Latch, Panel::Bit6_Latch, Panel::Bit5_Latch, Panel::Bit4_Latch, Panel::Bit3_Latch, Panel::Bit2_Latch, Panel::Bit1_Latch});
+   gateList.append({Panel::Bit8_GateIn, Panel::Bit7_GateIn, Panel::Bit6_GateIn, Panel::Bit5_GateIn, Panel::Bit4_GateIn, Panel::Bit3_GateIn, Panel::Bit2_GateIn, Panel::Bit1_GateIn});
+   busInIndicator.assign(Panel::Red_BusIn);
+   busOutIndicator.assign(Panel::Red_BusOut);
 }
 
 BitBusNegate::~BitBusNegate()
@@ -53,37 +62,41 @@ void BitBusNegate::dataFromJson(json_t* rootJson)
          continue;
 
       gates[index] = json_boolean_value(negateJson);
-      lights[lightId.at(index) + 2].setBrightness(gates[index]);
+      lightList[index]->setOn();
    }
 }
 
 void BitBusNegate::process(const ProcessArgs& args)
 {
    if (canSendBusMessage())
-      lights[Panel::Blue_BusOut].setBrightness(1.0);
+      busOutIndicator.setOn();
    else
-      lights[Panel::Blue_BusOut].setBrightness(0.0);
+      busOutIndicator.setOff();
 
    BoolField8 boolField = 0;
    if (!canReceiveBusMessage())
    {
-      lights[Panel::Blue_BusIn].setBrightness(0.0);
+      busInIndicator.setOff();
    }
    else
    {
-      lights[Panel::Blue_BusIn].setBrightness(1.0);
+      busInIndicator.setOn();
       boolField = getByteFromBus();
    }
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      bool negateValue = params[gateId.at(index)].getValue();
-      if (inputs[gateId.at(index)].isConnected())
-         negateValue = (inputs[gateId.at(index)].getVoltage() > 3.0);
+      bool negateValue = paramList[index]->getValue();
+      if (gateList[index]->isConnected())
+         negateValue = (gateList[index]->getVoltage() > 3.0);
 
       if (gateTrigger[index].process(negateValue))
          gates[index] ^= true;
-      lights[lightId.at(index) + 2].setBrightness(gates[index]);
+
+      if (gates[index])
+         lightList[index]->setOn();
+      else
+         lightList[index]->setOff();
 
       if (gates[index]) // negate value
       {
@@ -97,4 +110,4 @@ void BitBusNegate::process(const ProcessArgs& args)
       sendByteToBus(boolField);
 }
 
-Model* modelBitBusNegate = SchweineSystem::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");
+Model* modelBitBusNegate = SchweineSystem::Master::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");

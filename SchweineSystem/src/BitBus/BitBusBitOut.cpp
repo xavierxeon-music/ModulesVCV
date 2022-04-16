@@ -3,17 +3,18 @@
 
 #include <Tools/BoolField.h>
 
-#include "SchweineSystem.h"
-
-using Panel = BitBusBitOut::Panel;
-
-static const std::vector<Panel::OutputId> outputId = {Panel::BitOut8, Panel::BitOut7, Panel::BitOut6, Panel::BitOut5, Panel::BitOut4, Panel::BitOut3, Panel::BitOut2, Panel::BitOut1};
+#include "SchweineSystemMaster.h"
 
 BitBusBitOut::BitBusBitOut()
    : Module()
    , BitBusCommon(this)
+   , outputList(outputs)
 {
    setup();
+
+   outputList.append({Panel::BitOut8, Panel::BitOut7, Panel::BitOut6, Panel::BitOut5, Panel::BitOut4, Panel::BitOut3, Panel::BitOut2, Panel::BitOut1});
+   busInIndicator.assign(Panel::Red_BusIn);
+   busOutIndicator.assign(Panel::Red_BusOut);
 }
 
 BitBusBitOut::~BitBusBitOut()
@@ -30,29 +31,29 @@ void BitBusBitOut::onAdd(const AddEvent& e)
 void BitBusBitOut::process(const ProcessArgs& args)
 {
    if (canSendBusMessage())
-      lights[Panel::Blue_BusOut].setBrightness(1.0);
+      busOutIndicator.setOn();
    else
-      lights[Panel::Blue_BusOut].setBrightness(0.0);
+      busOutIndicator.setOff();
 
    BoolField8 boolField = 0;
    if (!canReceiveBusMessage())
    {
-      lights[Panel::Blue_BusIn].setBrightness(0.0);
+      busInIndicator.setOff();
    }
    else
    {
-      lights[Panel::Blue_BusIn].setBrightness(1.0);
+      busInIndicator.setOn();
       boolField = getByteFromBus();
    }
 
    for (uint8_t index = 0; index < 8; index++)
    {
       const bool value = boolField.get(index);
-      outputs[outputId.at(index)].setVoltage(value ? 5.0 : 0.0);
+      outputList[index]->setVoltage(value ? 5.0 : 0.0);
    }
 
    if (canSendBusMessage())
       sendByteToBus(boolField);
 }
 
-Model* modelBitBusBitOut = SchweineSystem::the()->addModule<BitBusBitOut, BitBusBitOutWidget>("BitBusBitOut");
+Model* modelBitBusBitOut = SchweineSystem::Master::the()->addModule<BitBusBitOut, BitBusBitOutWidget>("BitBusBitOut");

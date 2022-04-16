@@ -5,6 +5,8 @@
 using namespace rack;
 #include "BitBusCommon.h"
 
+#include "SchweineSystemCommon.h"
+
 class BitBusBitOut : public Module, public BitBusCommon
 {
 public:
@@ -20,6 +22,9 @@ public:
 private:
    void setup();
    void onAdd(const AddEvent& e) override;
+
+private:
+   SchweineSystem::Output::List outputList;
 };
 
 struct BitBusBitOutWidget : ModuleWidget

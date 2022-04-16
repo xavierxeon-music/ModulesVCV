@@ -65,6 +65,14 @@
             "Expander",
             "Utility'"
          ]
+      },
+      {
+         "slug": "VCMCReceiver",
+         "name": "VCMC Receiver",
+         "description": "A unified midi interface to a VCMV module running my configuration",
+         "tags": [
+            "Midi"
+         ]
       }
    ]
 }

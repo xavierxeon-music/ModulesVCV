@@ -3,17 +3,18 @@
 
 #include <Tools/BoolField.h>
 
-#include "SchweineSystem.h"
-
-using Panel = BitBusBitIn::Panel;
-
-static const std::vector<Panel::InputId> inputId = {Panel::BitIn8, Panel::BitIn7, Panel::BitIn6, Panel::BitIn5, Panel::BitIn4, Panel::BitIn3, Panel::BitIn2, Panel::BitIn1};
+#include "SchweineSystemMaster.h"
 
 BitBusBitIn::BitBusBitIn()
    : Module()
    , BitBusCommon(this)
+   , inputList(inputs)
 {
    setup();
+
+   inputList.append({Panel::BitIn8, Panel::BitIn7, Panel::BitIn6, Panel::BitIn5, Panel::BitIn4, Panel::BitIn3, Panel::BitIn2, Panel::BitIn1});
+   busInIndicator.assign(Panel::Red_BusIn);
+   busOutIndicator.assign(Panel::Red_BusOut);
 }
 
 BitBusBitIn::~BitBusBitIn()
@@ -33,22 +34,22 @@ void BitBusBitIn::process(const ProcessArgs& args)
 
    if (canReceiveBusMessage())
    {
-      lights[Panel::Blue_BusIn].setBrightness(1.0);
+      busInIndicator.setOn();
       boolFieldBus = getByteFromBus();
    }
    else
    {
-      lights[Panel::Blue_BusIn].setBrightness(0.0);
+      busInIndicator.setOff();
    }
 
    if (!canSendBusMessage())
    {
-      lights[Panel::Blue_BusOut].setBrightness(0.0);
+      busOutIndicator.setOff();
       return;
    }
    else
    {
-      lights[Panel::Blue_BusOut].setBrightness(1.0);
+      busOutIndicator.setOn();
    }
 
    BoolField8 boolField = 0;
@@ -56,8 +57,8 @@ void BitBusBitIn::process(const ProcessArgs& args)
    for (uint8_t index = 0; index < 8; index++)
    {
       bool value = false;
-      if (inputs[inputId.at(index)].isConnected())
-         value = (inputs[inputId.at(index)].getVoltage() > 3.0);
+      if (inputList[index]->isConnected())
+         value = (inputList[index]->getVoltage() > 3.0);
       else
          value = boolFieldBus.get(index);
 
@@ -67,4 +68,4 @@ void BitBusBitIn::process(const ProcessArgs& args)
    sendByteToBus(boolField);
 }
 
-Model* modelBitBusBitIn = SchweineSystem::the()->addModule<BitBusBitIn, BitBusBitInWidget>("BitBusBitIn");
+Model* modelBitBusBitIn = SchweineSystem::Master::the()->addModule<BitBusBitIn, BitBusBitInWidget>("BitBusBitIn");
