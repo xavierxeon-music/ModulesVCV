@@ -7,8 +7,8 @@
 
 using Panel = BitBusNegate::Panel;
 
-static const std::vector<Panel::LightId> lightId = {Panel::Red_Latch8, Panel::Red_Latch7, Panel::Red_Latch6, Panel::Red_Latch5, Panel::Red_Latch4, Panel::Red_Latch3, Panel::Red_Latch2, Panel::Red_Latch1};
-static const std::vector<Panel::InputId> gateId = {Panel::GateIn8, Panel::GateIn7, Panel::GateIn6, Panel::GateIn5, Panel::GateIn4, Panel::GateIn3, Panel::GateIn2, Panel::GateIn1};
+static const std::vector<Panel::LightId> lightId = {Panel::Red_Bit8_Latch, Panel::Red_Bit7_Latch, Panel::Red_Bit6_Latch, Panel::Red_Bit5_Latch, Panel::Red_Bit4_Latch, Panel::Red_Bit3_Latch, Panel::Red_Bit2_Latch, Panel::Red_Bit1_Latch};
+static const std::vector<Panel::InputId> gateId = {Panel::Bit8_GateIn, Panel::Bit7_GateIn, Panel::Bit6_GateIn, Panel::Bit5_GateIn, Panel::Bit4_GateIn, Panel::Bit3_GateIn, Panel::Bit2_GateIn, Panel::Bit1_GateIn};
 
 BitBusNegate::BitBusNegate()
    : Module()

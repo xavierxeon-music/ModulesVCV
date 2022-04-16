@@ -37,6 +37,7 @@ def getPanelComponents(panelFileName):
 
     for componentList in componentMap.values():
         for component in componentList:
+            _compileFullName(component)
             hierachyList = component['hierachy']
             [x, y] = _compileCoordinates(hierachyList)
             if None == x or None == y:
@@ -50,7 +51,24 @@ def getPanelComponents(panelFileName):
 
             del component['hierachy']
 
+    print(componentMap)
     return componentMap
+
+
+def _compileFullName(component):
+
+    name = component['name']
+
+    hierachyList = component['hierachy']
+    for group in hierachyList[1:]:
+        groupId = group.get('id')
+        if None == groupId:
+            groupId = group.get('{http://www.serif.com/}id')
+        if None == groupId:
+            continue
+        name = groupId + '_' + name
+
+    component['name'] = name
 
 
 def _transform(group, x, y):

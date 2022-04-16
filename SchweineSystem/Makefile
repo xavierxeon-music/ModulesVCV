@@ -11,12 +11,14 @@ CXXFLAGS +=
 LDFLAGS +=
 
 FLAGS += \
+	-Isrc \
 	-I$(RACK_DIR)/../MusicTools \
 	-I$(RACK_DIR)/../MusicTools/Include \
 
 # Add .cpp files to the build
 SOURCES += \
 	$(wildcard src/*.cpp) \
+	$(wildcard src/BitBus/*.cpp) \
 	$(RACK_DIR)/../MusicTools/AbstractEffect.cpp \
 	$(RACK_DIR)/../MusicTools/AbstractOscilator.cpp \
 	$(RACK_DIR)/../MusicTools/Maths.cpp \

@@ -15,7 +15,7 @@ scriptPath = os.path.dirname(scriptPath)
 modulesPath = os.path.abspath(scriptPath + '/../SchweineSystem')
 
 
-def updateModule(panelName):
+def updateModule(panelName, subFolder):
 
     panelFileName = modulesPath + '/res/' + panelName + '.svg'
     if not os.path.exists(panelFileName):
@@ -45,9 +45,10 @@ def gather():
 def main():
 
     parser = argparse.ArgumentParser(description='do things with modules.')
-    parser.add_argument('modulename', metavar='MODULE', type=str, nargs='?', help='the module name')
+    parser.add_argument('modulenames', metavar='MODULES', type=str, nargs='+', help='lsit of module name')
     parser.add_argument('-g', '--gather', action='store_true', help='move all svg and afdesign files from desktop to the res folder')
     parser.add_argument('-p', '--panel', type=int, nargs=1, help='creates and empty SVG file with given HP')
+    parser.add_argument('-f', '--folder', type=str, nargs=1, help='sub folder into which to create C++ files')
     parser.add_argument('-u', '--update', action='store_true', help='update or create a module for an existing svg file')
 
     args = parser.parse_args()  # will quit here if help is called
@@ -56,12 +57,18 @@ def main():
     if args.gather:
         gather()
 
-    if args.panel and args.modulename:
-        hpWidth = args.panel[0]
-        panelFileName = modulesPath + '/res/' + args.modulename + '.svg'
-        createPanel(panelFileName, hpWidth)
-    elif args.update and args.modulename:
-        updateModule(args.modulename)
+    if args.folder:
+        global moduleName
+        moduleName = moduleName + '/' + args.folder
+
+    if args.modulenames:
+        for moduleName in args.modulenames:
+            if args.panel:
+                hpWidth = args.panel[0]
+                panelFileName = modulesPath + '/res/' + moduleName + '.svg'
+                createPanel(panelFileName, hpWidth)
+            elif args.update:
+                updateModule(moduleName)
 
 
 if __name__ == '__main__':

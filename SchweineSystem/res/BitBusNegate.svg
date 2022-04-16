@@ -69,77 +69,93 @@
         <g transform="matrix(0.7112,0,0,72.8139,48.976,-21717.6)">
             <rect x="13.921" y="296.737" width="168.729" height="3.935" style="fill:rgb(191,191,191);"/>
         </g>
-        <g id="Latch8-latch" serif:id="Latch8#latch" transform="matrix(0.23319,0,0,0.175002,66.387,120.54)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+        <g id="Bit8">
+            <g id="Latch-latch" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,120.54)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+            </g>
+            <g transform="matrix(3.30333,0,0,0.695794,-476.123,112.334)">
+                <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
+            </g>
+            <g id="GateIn-input" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,120.854)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
+            </g>
         </g>
-        <g transform="matrix(3.30333,0,0,0.695794,-476.123,112.334)">
-            <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
+        <g id="Bit7">
+            <g id="Latch-latch1" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,86.7884)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+            </g>
+            <g transform="matrix(3.30333,0,0,0.695794,-476.123,78.6945)">
+                <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
+            </g>
+            <g id="GateIn-input1" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,87.1026)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
+            </g>
         </g>
-        <g id="GateIn8-input" serif:id="GateIn8#input" transform="matrix(0.23319,0,0,0.175002,108.438,120.854)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
+        <g id="Bit6">
+            <g id="Latch-latch2" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,51.5037)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+            </g>
+            <g transform="matrix(3.30333,0,0,0.695794,-476.123,43.3266)">
+                <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
+            </g>
+            <g id="GateIn-input2" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,51.8179)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
+            </g>
         </g>
-        <g id="Latch7-latch" serif:id="Latch7#latch" transform="matrix(0.23319,0,0,0.175002,66.387,86.7884)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+        <g id="Bit5">
+            <g id="Latch-latch3" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,16.0181)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+            </g>
+            <g transform="matrix(3.30333,0,0,0.695794,-476.123,8.01938)">
+                <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
+            </g>
+            <g id="GateIn-input3" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,16.3323)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
+            </g>
         </g>
-        <g transform="matrix(3.30333,0,0,0.695794,-476.123,78.6945)">
-            <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
+        <g id="Bit4" opacity="0.4">
+            <g id="Latch-latch4" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-17.3335)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+            </g>
+            <g transform="matrix(3.30333,0,0,0.695794,-476.123,-25.4274)">
+                <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
+            </g>
+            <g id="GateIn-input4" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,-17.0193)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
+            </g>
         </g>
-        <g id="GateIn7-input" serif:id="GateIn7#input" transform="matrix(0.23319,0,0,0.175002,108.438,87.1026)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
+        <g id="Bit3">
+            <g id="Latch-latch5" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-52.1091)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+            </g>
+            <g transform="matrix(3.30333,0,0,0.695794,-476.123,-60.2029)">
+                <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
+            </g>
+            <g id="GateIn-input5" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,-51.7948)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
+            </g>
         </g>
-        <g id="Latch6-latch" serif:id="Latch6#latch" transform="matrix(0.23319,0,0,0.175002,66.387,51.5037)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+        <g id="Bit2">
+            <g id="Latch-latch6" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-86.47)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+            </g>
+            <g transform="matrix(3.30333,0,0,0.695794,-476.123,-94.5002)">
+                <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
+            </g>
+            <g id="GateIn-input6" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,-86.1558)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
+            </g>
         </g>
-        <g transform="matrix(3.30333,0,0,0.695794,-476.123,43.3266)">
-            <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
-        </g>
-        <g id="GateIn6-input" serif:id="GateIn6#input" transform="matrix(0.23319,0,0,0.175002,108.438,51.8179)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
-        </g>
-        <g id="Latch5-latch" serif:id="Latch5#latch" transform="matrix(0.23319,0,0,0.175002,66.387,16.0181)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
-        </g>
-        <g transform="matrix(3.30333,0,0,0.695794,-476.123,8.01938)">
-            <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
-        </g>
-        <g id="GateIn5-input" serif:id="GateIn5#input" transform="matrix(0.23319,0,0,0.175002,108.438,16.3323)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
-        </g>
-        <g id="Latch4-latch" serif:id="Latch4#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-17.3335)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
-        </g>
-        <g transform="matrix(3.30333,0,0,0.695794,-476.123,-25.4274)">
-            <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
-        </g>
-        <g id="GateIn4-input" serif:id="GateIn4#input" transform="matrix(0.23319,0,0,0.175002,108.438,-17.0193)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
-        </g>
-        <g id="Latch3-latch" serif:id="Latch3#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-52.1091)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
-        </g>
-        <g transform="matrix(3.30333,0,0,0.695794,-476.123,-60.2029)">
-            <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
-        </g>
-        <g id="GateIn3-input" serif:id="GateIn3#input" transform="matrix(0.23319,0,0,0.175002,108.438,-51.7948)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
-        </g>
-        <g id="Latch2-latch" serif:id="Latch2#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-86.47)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
-        </g>
-        <g transform="matrix(3.30333,0,0,0.695794,-476.123,-94.5002)">
-            <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
-        </g>
-        <g id="GateIn2-input" serif:id="GateIn2#input" transform="matrix(0.23319,0,0,0.175002,108.438,-86.1558)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
-        </g>
-        <g id="Latch1-latch" serif:id="Latch1#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-122.208)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
-        </g>
-        <g transform="matrix(3.30333,0,0,0.695794,-476.123,-130.158)">
-            <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
-        </g>
-        <g id="GateIn1-input" serif:id="GateIn1#input" transform="matrix(0.23319,0,0,0.175002,108.438,-121.893)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
+        <g id="Bit1">
+            <g id="Latch-latch7" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-122.208)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
+            </g>
+            <g transform="matrix(3.30333,0,0,0.695794,-476.123,-130.158)">
+                <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
+            </g>
+            <g id="GateIn-input7" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,-121.893)">
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
+            </g>
         </g>
     </g>
     <g id="BusIn-light" serif:id="BusIn#light" transform="matrix(1,0,0,1,-27.8135,10.8256)">
