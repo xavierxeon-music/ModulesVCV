@@ -38,8 +38,8 @@ BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
    addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 257.43015081), module, BitBusNegate::Panel::Bit7_Latch, BitBusNegate::Panel::Red_Bit7_Latch));
    addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 222.14545081), module, BitBusNegate::Panel::Bit6_Latch, BitBusNegate::Panel::Red_Bit6_Latch));
    addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 186.65985081000002), module, BitBusNegate::Panel::Bit5_Latch, BitBusNegate::Panel::Red_Bit5_Latch));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 153.30825081), module, BitBusNegate::Panel::Bit4_Latch, BitBusNegate::Panel::Red_Bit4_Latch));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 118.53265081), module, BitBusNegate::Panel::Bit3_Latch, BitBusNegate::Panel::Red_Bit3_Latch));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 118.53265081), module, BitBusNegate::Panel::Bit4_Latch, BitBusNegate::Panel::Red_Bit4_Latch));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132500052, 153.30825081), module, BitBusNegate::Panel::Bit3_Latch, BitBusNegate::Panel::Red_Bit3_Latch));
    addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 84.17175081), module, BitBusNegate::Panel::Bit2_Latch, BitBusNegate::Panel::Red_Bit2_Latch));
    addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 48.43375081000001), module, BitBusNegate::Panel::Bit1_Latch, BitBusNegate::Panel::Red_Bit1_Latch));
 
@@ -47,8 +47,8 @@ BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
    addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 257.74435081), module, BitBusNegate::Panel::Bit7_GateIn));
    addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 222.45965081), module, BitBusNegate::Panel::Bit6_GateIn));
    addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 186.97405081), module, BitBusNegate::Panel::Bit5_GateIn));
-   addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 153.62245081), module, BitBusNegate::Panel::Bit4_GateIn));
-   addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 118.84695081000001), module, BitBusNegate::Panel::Bit3_GateIn));
+   addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 118.84695081000001), module, BitBusNegate::Panel::Bit4_GateIn));
+   addInput(createInputCentered<PJ301MPort>(Vec(60.76937013250007, 153.62255081), module, BitBusNegate::Panel::Bit3_GateIn));
    addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 84.48595081), module, BitBusNegate::Panel::Bit2_GateIn));
    addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 48.748750810000004), module, BitBusNegate::Panel::Bit1_GateIn));
 

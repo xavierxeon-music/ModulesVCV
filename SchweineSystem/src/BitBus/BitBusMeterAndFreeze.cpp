@@ -5,7 +5,7 @@
 
 using Panel = BitBusMeterAndFreeze::Panel;
 
-static const std::vector<Panel::LightId> lightId = {Panel::Red_Bit8, Panel::Red_Bit7, Panel::Red_Bit6, Panel::Red_Bit5, Panel::Red_Bit4, Panel::Red_Bit3, Panel::Red_Bit2, Panel::Red_Bit1};
+static const std::vector<Panel::LightId> lightId = {Panel::Red_Bit8_Status1, Panel::Red_Bit7_Status1, Panel::Red_Bit6_Status1, Panel::Red_Bit5_Status1, Panel::Red_Bit4_Status1, Panel::Red_Bit3_Status1, Panel::Red_Bit2_Status1, Panel::Red_Bit1_Status1};
 
 BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    : Module()
