@@ -8,6 +8,10 @@ using namespace rack;
 #include <Tools/BoolField.h>
 #include <Tools/RingBuffer.h>
 
+#include "SchweineSystemLightMeter.h"
+
+static constexpr uint16_t AverageBufferSize = 4800;
+
 class BitBusMeterAndFreeze : public Module, public BitBusCommon
 {
 public:
@@ -33,7 +37,7 @@ private:
       uint16_t observe(const bool value);
 
    private:
-      RingBuffer<bool, 4800> buffer;
+      RingBuffer<bool, AverageBufferSize> buffer;
       uint16_t sum;
    };
 
@@ -46,10 +50,11 @@ private:
 
 private:
    Average::List averageList;
+   SchweineSystem::LightMeter::List lightMeterList;
    dsp::BooleanTrigger freezTrigger;
    bool freezeMode;
    BoolField8 freezeBuffer;
-   dsp::BooleanTrigger sampleTrigger;
+   dsp::BooleanTrigger sampleTrigger;     
 };
 
 struct BitBusMeterAndFreezeWidget : ModuleWidget

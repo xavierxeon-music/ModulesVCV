@@ -38,7 +38,7 @@ namespace SchweineSystem
       List(std::vector<rack::engine::Light>& fullList);
 
    public:
-      void append(std::vector<uint16_t> redIndexList);
+      void append(const std::vector<uint16_t>& redIndexList);
       Light* operator[](const uint16_t& index);
 
    private:

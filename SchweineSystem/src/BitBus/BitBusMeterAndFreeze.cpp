@@ -18,7 +18,7 @@ uint16_t BitBusMeterAndFreeze::Average::observe(const bool value)
    if (value)
       sum += 1;
 
-   if (0 > sum && oldValue)
+   if (0 < sum && oldValue)
       sum -= 1;
 
    return sum;
@@ -26,19 +26,27 @@ uint16_t BitBusMeterAndFreeze::Average::observe(const bool value)
 
 // meter and freeze
 
-using Panel = BitBusMeterAndFreeze::Panel;
-
-static const std::vector<Panel::LightId> lightId = {Panel::Red_Bit8_Status1, Panel::Red_Bit7_Status1, Panel::Red_Bit6_Status1, Panel::Red_Bit5_Status1, Panel::Red_Bit4_Status1, Panel::Red_Bit3_Status1, Panel::Red_Bit2_Status1, Panel::Red_Bit1_Status1};
-
 BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    : Module()
    , BitBusCommon(this)
    , averageList()
+   , lightMeterList(lights)
    , freezTrigger()
    , freezeMode(false)
    , sampleTrigger()
 {
    setup();
+
+   lightMeterList.append({{Panel::Red_Bit8_Status1, Panel::Red_Bit8_Status2, Panel::Red_Bit8_Status3, Panel::Red_Bit8_Status4, Panel::Red_Bit8_Status5},
+                          {Panel::Red_Bit7_Status1, Panel::Red_Bit7_Status2, Panel::Red_Bit7_Status3, Panel::Red_Bit7_Status4, Panel::Red_Bit7_Status5},
+                          {Panel::Red_Bit6_Status1, Panel::Red_Bit6_Status2, Panel::Red_Bit6_Status3, Panel::Red_Bit6_Status4, Panel::Red_Bit6_Status5},
+                          {Panel::Red_Bit5_Status1, Panel::Red_Bit5_Status2, Panel::Red_Bit5_Status3, Panel::Red_Bit5_Status4, Panel::Red_Bit5_Status5},
+                          {Panel::Red_Bit4_Status1, Panel::Red_Bit4_Status2, Panel::Red_Bit4_Status3, Panel::Red_Bit4_Status4, Panel::Red_Bit4_Status5},
+                          {Panel::Red_Bit3_Status1, Panel::Red_Bit3_Status2, Panel::Red_Bit3_Status3, Panel::Red_Bit3_Status4, Panel::Red_Bit3_Status5},
+                          {Panel::Red_Bit2_Status1, Panel::Red_Bit2_Status2, Panel::Red_Bit2_Status3, Panel::Red_Bit2_Status4, Panel::Red_Bit2_Status5},
+                          {Panel::Red_Bit1_Status1, Panel::Red_Bit1_Status2, Panel::Red_Bit1_Status3, Panel::Red_Bit1_Status4, Panel::Red_Bit1_Status5}});
+   for (uint8_t index = 0; index < 8; index++)
+      lightMeterList[index]->setMaxValue(AverageBufferSize);
 
    busInIndicator.assign(Panel::Red_BusIn);
    busOutIndicator.assign(Panel::Red_BusOut);
@@ -112,7 +120,7 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
       const bool value = freezeBuffer.get(index);
       const uint16_t sum = averageList[index].observe(value);
 
-      lights[lightId.at(index) + 1].setBrightness(value ? 1.0 : 0.0);
+      lightMeterList[index]->setMeter(sum);
    }
 
    if (canSendBusMessage())

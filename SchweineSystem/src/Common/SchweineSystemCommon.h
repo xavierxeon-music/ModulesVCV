@@ -19,7 +19,7 @@ namespace SchweineSystem
       explicit SubList(std::vector<ContentType>& fullList);
 
    public:
-      void append(std::vector<uint16_t> idList);
+      void append(const std::vector<uint16_t>& idList);
       ContentType* operator[](const uint16_t& index);
 
    private:

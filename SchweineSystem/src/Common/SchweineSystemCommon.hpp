@@ -10,7 +10,7 @@ SchweineSystem::SubList<ContentType>::SubList(std::vector<ContentType>& fullList
 }
 
 template <typename ContentType>
-void SchweineSystem::SubList<ContentType>::append(std::vector<uint16_t> idList)
+void SchweineSystem::SubList<ContentType>::append(const std::vector<uint16_t>& idList)
 {
    idMappingList.insert(idMappingList.end(), idList.begin(), idList.end());
 }

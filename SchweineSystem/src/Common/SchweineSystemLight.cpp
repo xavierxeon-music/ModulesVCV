@@ -51,7 +51,7 @@ SchweineSystem::Light::List::List(std::vector<rack::engine::Light>& fullList)
 {
 }
 
-void SchweineSystem::Light::List::append(std::vector<uint16_t> redIndexList)
+void SchweineSystem::Light::List::append(const std::vector<uint16_t>& redIndexList)
 {
    for (const uint16_t redIndex : redIndexList)
    {
