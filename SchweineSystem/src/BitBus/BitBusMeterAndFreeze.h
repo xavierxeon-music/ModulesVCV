@@ -21,12 +21,20 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   struct Average
+   class Average
    {
-      RingBuffer<bool, 4800> buffer;
-      uint16_t sum = 4800;
-
+   public:
       using List = Average[8];
+
+   public:
+      Average();
+
+   public:
+      uint16_t observe(const bool value);
+
+   private:
+      RingBuffer<bool, 4800> buffer;
+      uint16_t sum;
    };
 
 private:

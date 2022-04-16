@@ -3,6 +3,29 @@
 
 #include "SchweineSystemMaster.h"
 
+// average
+
+BitBusMeterAndFreeze::Average::Average()
+   : buffer()
+   , sum(0)
+{
+}
+
+uint16_t BitBusMeterAndFreeze::Average::observe(const bool value)
+{
+   const bool oldValue = buffer.add(value);
+
+   if (value)
+      sum += 1;
+
+   if (0 > sum && oldValue)
+      sum -= 1;
+
+   return sum;
+}
+
+// meter and freeze
+
 using Panel = BitBusMeterAndFreeze::Panel;
 
 static const std::vector<Panel::LightId> lightId = {Panel::Red_Bit8_Status1, Panel::Red_Bit7_Status1, Panel::Red_Bit6_Status1, Panel::Red_Bit5_Status1, Panel::Red_Bit4_Status1, Panel::Red_Bit3_Status1, Panel::Red_Bit2_Status1, Panel::Red_Bit1_Status1};
@@ -53,18 +76,18 @@ void BitBusMeterAndFreeze::dataFromJson(json_t* rootJson)
 void BitBusMeterAndFreeze::process(const ProcessArgs& args)
 {
    if (canSendBusMessage())
-      lights[Panel::Blue_BusOut].setBrightness(1.0);
+      busOutIndicator.setOn();
    else
-      lights[Panel::Blue_BusOut].setBrightness(0.0);
+      busOutIndicator.setOff();
 
    BoolField8 boolField = 0;
    if (!canReceiveBusMessage())
    {
-      lights[Panel::Blue_BusIn].setBrightness(0.0);
+      busInIndicator.setOff();
    }
    else
    {
-      lights[Panel::Blue_BusIn].setBrightness(1.0);
+      busInIndicator.setOn();
       boolField = getByteFromBus();
    }
 
@@ -87,6 +110,8 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
    for (uint8_t index = 0; index < 8; index++)
    {
       const bool value = freezeBuffer.get(index);
+      const uint16_t sum = averageList[index].observe(value);
+
       lights[lightId.at(index) + 1].setBrightness(value ? 1.0 : 0.0);
    }
 

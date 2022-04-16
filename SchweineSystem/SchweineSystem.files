@@ -8,9 +8,7 @@
 ./src/Common/SchweineSystemMaster.hpp
 ./src/Common/SchweineSystemOutput.cpp
 ./src/Common/SchweineSystemInput.cpp
-./src/Common/SchweineSystemLightStrip.cpp
 ./src/Common/SchweineSystemCommon.cpp
-./src/Common/SchweineSystemLightStrip.h
 ./src/Common/SchweineSystemOutput.h
 ./src/Common/SchweineSystemLight.cpp
 ./src/Common/SchweineSystemCommon.h
@@ -49,3 +47,5 @@
 ./src/VCMCReceiver.cpp
 ./src/VCMCReceiverPanel.h
 ./src/VCMCReceiver.h
+src/Common/SchweineSystemLightMeter.cpp
+src/Common/SchweineSystemLightMeter.h
