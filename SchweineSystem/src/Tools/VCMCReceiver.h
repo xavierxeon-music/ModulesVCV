@@ -16,13 +16,20 @@ public:
 public:
    void process(const ProcessArgs& args) override;
 
+public:
+   uint16_t bpm;
+
 private:
    void setup();
 };
 
-struct VCMCReceiverWidget : ModuleWidget
+class VCMCReceiverWidget : public ModuleWidget
 {
+public:
    VCMCReceiverWidget(VCMCReceiver* module);
+
+private:
+   SvgPanel* setup(VCMCReceiver* module);
 };
 
 #endif // NOT VCMCReceiverH

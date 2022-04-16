@@ -6,17 +6,21 @@
 ./src/VCMCReceiverPanel.cpp
 ./src/SchweineSystem.h
 ./src/Common/SchweineSystemMaster.hpp
+./src/Common/SchweineSystemLCDDisplay.h
 ./src/Common/SchweineSystemOutput.cpp
 ./src/Common/SchweineSystemInput.cpp
+./src/Common/SchweineSystemLCDDisplay.cpp
 ./src/Common/SchweineSystemCommon.cpp
 ./src/Common/SchweineSystemOutput.h
 ./src/Common/SchweineSystemLight.cpp
+./src/Common/SchweineSystemLightMeter.h
 ./src/Common/SchweineSystemCommon.h
 ./src/Common/SchweineSystemCommon.hpp
 ./src/Common/SchweineSystemMaster.h
 ./src/Common/SchweineSystemMaster.cpp
 ./src/Common/SchweineSystemLight.h
 ./src/Common/SchweineSystemInput.h
+./src/Common/SchweineSystemLightMeter.cpp
 ./src/BitBus/BitBusCommon.h
 ./src/BitBus/BitBusBitOutPanel.h
 ./src/BitBus/BitBusBitIn.cpp
@@ -47,5 +51,3 @@
 ./src/VCMCReceiver.cpp
 ./src/VCMCReceiverPanel.h
 ./src/VCMCReceiver.h
-src/Common/SchweineSystemLightMeter.cpp
-src/Common/SchweineSystemLightMeter.h

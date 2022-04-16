@@ -126,9 +126,13 @@ def writeHeaders(modulesPath, subFolder, panelName, components):
 
         headerfile.write('\n')
 
-        headerfile.write(f'struct {panelName}Widget : ModuleWidget\n')
+        headerfile.write(f'class {panelName}Widget : public ModuleWidget\n')
         headerfile.write('{\n')
+        headerfile.write('public:\n')
         headerfile.write(_indent(1) + f'{panelName}Widget({panelName}* module);\n')
+        headerfile.write('\n')
+        headerfile.write('private:\n')
+        headerfile.write(_indent(1) + f'SvgPanel* setup({panelName}* module);\n')
         headerfile.write('};\n')
         headerfile.write('\n')
         headerfile.write(f'#endif // NOT {panelName}H\n')
@@ -190,7 +194,7 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
 
         sourcefile.write('\n')
 
-        sourcefile.write(f'{panelName}Widget::{panelName}Widget({panelName}* module)\n')
+        sourcefile.write(f'SvgPanel* {panelName}Widget::setup({panelName}* module)\n')
         sourcefile.write('{\n')
         sourcefile.write(_indent(1) + 'setModule(module);\n')
         sourcefile.write(_indent(1) + f'std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/{panelName}.svg");\n')
@@ -238,6 +242,9 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
             y = light['y']
             sourcefile.write(_indent(1) + f'addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec({x}, {y}), module, {panelName}::Panel::Red_{name}));\n')
 
+        sourcefile.write('\n')
+        sourcefile.write(_indent(1) + 'return mainPanel;\n')
+
         sourcefile.write('}\n')
         sourcefile.write('\n')
 
@@ -276,6 +283,14 @@ def writeSources(modulesPath, subFolder, panelName, components):
 
         sourcefile.write(f'void {panelName}::process(const ProcessArgs& args)\n')
         sourcefile.write('{\n')
+        sourcefile.write('}\n')
+        sourcefile.write('\n')
+
+        sourcefile.write(f'{panelName}Widget::{panelName}Widget({panelName}* module)\n')
+        sourcefile.write(f': ModuleWidget()\n')
+        sourcefile.write('{\n')
+        sourcefile.write(_indent(1) + 'SvgPanel* mainPanel = setup(module);\n')
+        sourcefile.write(_indent(1) + '(void)mainPanel;\n')
         sourcefile.write('}\n')
         sourcefile.write('\n')
 
