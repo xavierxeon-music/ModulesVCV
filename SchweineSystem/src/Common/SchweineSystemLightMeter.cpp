@@ -33,6 +33,7 @@ void SchweineSystem::LightMeter::setMaxValue(const uint16_t& newMaxValue)
 void SchweineSystem::LightMeter::setMeter(const uint16_t& value)
 {
    const uint8_t meterValue = meterMapper(value);
+
    if (0 == meterValue)
    {
       for (uint8_t index = 0; index < NumberOfLights; index++)
@@ -44,16 +45,13 @@ void SchweineSystem::LightMeter::setMeter(const uint16_t& value)
       const uint8_t stageSocket = meterValue - (1 + numberOn);
       const uint8_t stage = stageSocket / NumberOfLights;
 
-      using StageColorMap = std::map<uint8_t, std::vector<Color>>;
-      static const StageColorMap stageColorMap = {{0, {Color{0, 0, 255}, Color{0, 0, 0}}}, {1, {Color{0, 255, 0}, Color{0, 0, 255}}}, {2, {Color{255, 0, 255}, Color{0, 255, 0}}}};
+      static const std::vector<Color> stageColorList = {Color{0, 0, 0}, Color{0, 0, 255}, Color{0, 255, 0}, Color{255, 255, 0}};
 
-      //std::cout << (uint16_t)meterValue << " " << (uint16_t)numberOn << " " << (uint16_t)stageSocket << " " << (uint16_t)stage << std::endl;
-
-      const Color onColor = stageColorMap.at(stage).at(0);
-      const Color offColor = stageColorMap.at(stage).at(1);
+      const Color onColor = stageColorList.at(stage + 1);
+      const Color offColor = stageColorList.at(stage);
       for (uint8_t index = 0; index < NumberOfLights; index++)
       {
-         if (index < numberOn)
+         if (index < numberOn + 1)
             meterLights[index]->setColor(onColor);
          else
             meterLights[index]->setColor(offColor);

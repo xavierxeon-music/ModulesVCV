@@ -10,9 +10,10 @@ namespace SchweineSystem
    class LCDDisplay : public rack::TransparentWidget
    {
    public:
-      LCDDisplay(uint16_t& value, const uint8_t& numberOfDigits);
+      LCDDisplay();
 
    public:
+      void setup(uint16_t* value, const uint8_t& numberOfDigits);
       void setPosition(uint16_t x, uint16_t y);
       void setDigitColor(const Color& color);
 
@@ -24,8 +25,8 @@ namespace SchweineSystem
       std::string fontPath;
 
       NVGcolor digitColor;
-      const uint8_t numberOfDigits;
-      uint16_t& value;
+      uint8_t numberOfDigits;
+      uint16_t* value;
    };
 } // namespace SchweineSystem
 

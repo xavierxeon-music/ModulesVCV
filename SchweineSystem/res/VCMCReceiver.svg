@@ -89,7 +89,7 @@
         </g>
     </g>
     <g id="Channel8" transform="matrix(1,0,0,1,-97.8188,72.8729)">
-        <g id="Gate" transform="matrix(1,0,0,1,21.2991,-0.592177)">
+        <g id="Gate8" transform="matrix(1,0,0,1,21.2991,-0.592177)">
             <g id="BitOut1-output" serif:id="BitOut1#output" transform="matrix(0.175002,0,0,0.175002,92.3402,157.412)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -97,7 +97,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
+        <g id="Slider8" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -117,7 +117,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
+        <g id="CV8" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
             <g id="Output-output1" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,273.765,18.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -145,7 +145,7 @@
         </g>
     </g>
     <g id="Channel7" transform="matrix(1,0,0,1,-97.8188,40.433)">
-        <g id="Gate1" serif:id="Gate" transform="matrix(1,0,0,1,21.2991,-0.592177)">
+        <g id="Gate7" transform="matrix(1,0,0,1,21.2991,-0.592177)">
             <g id="BitOut1-output1" serif:id="BitOut1#output" transform="matrix(0.175002,0,0,0.175002,92.3402,157.412)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -153,7 +153,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="Slider1" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
+        <g id="Slider7" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output2" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -173,7 +173,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="CV1" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
+        <g id="CV7" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
             <g id="Output-output3" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,273.765,18.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -201,7 +201,7 @@
         </g>
     </g>
     <g id="Channel6" transform="matrix(1,0,0,1,-97.8188,7.99314)">
-        <g id="Gate2" serif:id="Gate" transform="matrix(1,0,0,1,21.2991,-0.592177)">
+        <g id="Gate6" transform="matrix(1,0,0,1,21.2991,-0.592177)">
             <g id="BitOut1-output2" serif:id="BitOut1#output" transform="matrix(0.175002,0,0,0.175002,92.3402,157.412)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -209,7 +209,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="Slider2" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
+        <g id="Slider6" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output4" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -229,7 +229,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="CV2" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
+        <g id="CV6" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
             <g id="Output-output5" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,273.765,18.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -257,7 +257,7 @@
         </g>
     </g>
     <g id="Channel5" transform="matrix(1,0,0,1,-97.8188,-24.4467)">
-        <g id="Gate3" serif:id="Gate" transform="matrix(1,0,0,1,21.2991,-0.592177)">
+        <g id="Gate5" transform="matrix(1,0,0,1,21.2991,-0.592177)">
             <g id="BitOut1-output3" serif:id="BitOut1#output" transform="matrix(0.175002,0,0,0.175002,92.3402,157.412)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -265,7 +265,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="Slider3" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
+        <g id="Slider5" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output6" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -285,7 +285,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="CV3" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
+        <g id="CV5" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
             <g id="Output-output7" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,273.765,18.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -313,7 +313,7 @@
         </g>
     </g>
     <g id="Channel4" transform="matrix(1,0,0,1,-97.8188,-56.8866)">
-        <g id="Gate4" serif:id="Gate" transform="matrix(1,0,0,1,21.2991,-0.592177)">
+        <g id="Gate4" transform="matrix(1,0,0,1,21.2991,-0.592177)">
             <g id="BitOut1-output4" serif:id="BitOut1#output" transform="matrix(0.175002,0,0,0.175002,92.3402,157.412)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -321,7 +321,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="Slider4" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
+        <g id="Slider4" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output8" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -341,7 +341,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="CV4" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
+        <g id="CV4" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
             <g id="Output-output9" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,273.765,18.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -369,7 +369,7 @@
         </g>
     </g>
     <g id="Channel3" transform="matrix(1,0,0,1,-97.8188,-89.3265)">
-        <g id="Gate5" serif:id="Gate" transform="matrix(1,0,0,1,21.2991,-0.592177)">
+        <g id="Gate3" transform="matrix(1,0,0,1,21.2991,-0.592177)">
             <g id="BitOut1-output5" serif:id="BitOut1#output" transform="matrix(0.175002,0,0,0.175002,92.3402,157.412)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -377,7 +377,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="Slider5" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
+        <g id="Slider3" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output10" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -397,7 +397,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="CV5" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
+        <g id="CV3" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
             <g id="Output-output11" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,273.765,18.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -425,7 +425,7 @@
         </g>
     </g>
     <g id="Channel2" transform="matrix(1,0,0,1,-97.8188,-121.766)">
-        <g id="Gate6" serif:id="Gate" transform="matrix(1,0,0,1,21.2991,-0.592177)">
+        <g id="Gate2" transform="matrix(1,0,0,1,21.2991,-0.592177)">
             <g id="BitOut1-output6" serif:id="BitOut1#output" transform="matrix(0.175002,0,0,0.175002,92.3402,157.412)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -433,7 +433,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="Slider6" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
+        <g id="Slider2" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output12" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -453,7 +453,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="CV6" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
+        <g id="CV2" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
             <g id="Output-output13" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,273.765,18.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -481,7 +481,7 @@
         </g>
     </g>
     <g id="Channel1" transform="matrix(1,0,0,1,-97.8188,-154.206)">
-        <g id="Gate7" serif:id="Gate" transform="matrix(1,0,0,1,21.2991,-0.592177)">
+        <g id="Gate1" transform="matrix(1,0,0,1,21.2991,-0.592177)">
             <g id="BitOut1-output7" serif:id="BitOut1#output" transform="matrix(0.175002,0,0,0.175002,92.3402,157.412)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -489,7 +489,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="Slider7" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
+        <g id="Slider1" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output14" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
@@ -509,7 +509,7 @@
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
-        <g id="CV7" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
+        <g id="CV1" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
             <g id="Output-output15" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,273.765,18.6545)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>

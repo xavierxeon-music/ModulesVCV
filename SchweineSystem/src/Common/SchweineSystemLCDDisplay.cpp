@@ -2,15 +2,21 @@
 
 #include "SchweineSystemMaster.h"
 
-SchweineSystem::LCDDisplay::LCDDisplay(uint16_t& value, const uint8_t& numberOfDigits)
+SchweineSystem::LCDDisplay::LCDDisplay()
    : rack::TransparentWidget()
    , font()
    , fontPath()
    , digitColor(nvgRGB(255, 255, 255))
-   , numberOfDigits(numberOfDigits)
-   , value(value)
+   , numberOfDigits(3)
+   , value(nullptr)
 {
    fontPath = std::string(rack::asset::plugin(Master::the()->instance(), "res/Segment14.ttf"));
+}
+
+void SchweineSystem::LCDDisplay::setup(uint16_t* value, const uint8_t& numberOfDigits)
+{
+   this->numberOfDigits = numberOfDigits;
+   this->value = value;
 }
 
 void SchweineSystem::LCDDisplay::setPosition(uint16_t x, uint16_t y)
@@ -42,7 +48,7 @@ void SchweineSystem::LCDDisplay::drawLayer(const DrawArgs& args, int layer)
 
    // the value
    nvgFillColor(args.vg, digitColor);
-   std::string valueString = std::to_string(value);
+   std::string valueString = value ? std::to_string(*value) : "666";
    while (valueString.length() < numberOfDigits)
       valueString = " " + valueString;
    nvgText(args.vg, 1, 1, valueString.c_str(), NULL);

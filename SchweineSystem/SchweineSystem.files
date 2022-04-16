@@ -3,7 +3,6 @@
 ./src/Tools/VCMCReceiver.cpp
 ./src/Tools/VCMCReceiverPanel.h
 ./src/Tools/VCMCReceiver.h
-./src/VCMCReceiverPanel.cpp
 ./src/SchweineSystem.h
 ./src/Common/SchweineSystemMaster.hpp
 ./src/Common/SchweineSystemLCDDisplay.h
@@ -48,6 +47,3 @@
 ./src/BitBus/BitBusBitOut.cpp
 ./src/BitBus/BitBusCVOutPanel.cpp
 ./src/SchweineSystem.cpp
-./src/VCMCReceiver.cpp
-./src/VCMCReceiverPanel.h
-./src/VCMCReceiver.h

@@ -4,6 +4,8 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include "SchweineSystemLightMeter.h"
+
 class VCMCReceiver : public Module
 {
 public:
@@ -21,6 +23,14 @@ public:
 
 private:
    void setup();
+
+private:
+   SchweineSystem::LightMeter::List lightMeterListCV;
+   SchweineSystem::LightMeter::List lightMeterListSlider;
+   SchweineSystem::Light::List lightListGate;
+
+   dsp::BooleanTrigger downTrigger;
+   dsp::BooleanTrigger upTrigger;
 };
 
 class VCMCReceiverWidget : public ModuleWidget
