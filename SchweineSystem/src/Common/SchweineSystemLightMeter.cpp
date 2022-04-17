@@ -45,7 +45,7 @@ void SchweineSystem::LightMeter::setMeter(const uint16_t& value)
       const uint8_t stageSocket = meterValue - (1 + numberOn);
       const uint8_t stage = stageSocket / NumberOfLights;
 
-      static const std::vector<Color> stageColorList = {Color{0, 0, 0}, Color{0, 0, 255}, Color{0, 255, 0}, Color{255, 255, 0}};
+      static const std::vector<Color> stageColorList = {Color{0, 0, 0}, Color{100, 0, 255}, Color{255, 255, 0}, Color{255, 0, 0}};
 
       const Color onColor = stageColorList.at(stage + 1);
       const Color offColor = stageColorList.at(stage);

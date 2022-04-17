@@ -45,7 +45,7 @@ def gather():
 def main():
 
     parser = argparse.ArgumentParser(description='do things with modules.')
-    parser.add_argument('modulenames', metavar='MODULES', type=str, nargs='+', help='lsit of module name')
+    parser.add_argument('modulenames', metavar='MODULES', type=str, nargs='?', help='lsit of module name')
     parser.add_argument('-g', '--gather', action='store_true', help='move all svg and afdesign files from desktop to the res folder')
     parser.add_argument('-p', '--panel', type=int, nargs=1, help='creates and empty SVG file with given HP')
     parser.add_argument('-f', '--folder', type=str, nargs=1, help='sub folder into which to create C++ files')
