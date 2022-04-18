@@ -1,9 +1,13 @@
 ./src/SchweineSystem.hpp
-./src/Tools/VCMCReceiverPanel.cpp
-./src/Tools/VCMCReceiver.cpp
-./src/Tools/VCMCReceiverPanel.h
-./src/Tools/VCMCReceiver.h
+./src/Hardware/VCMCReceiverPanel.cpp
+./src/Hardware/VCMCReceiver.cpp
+./src/Hardware/VCMCReceiverPanel.h
+./src/Hardware/VCMCReceiver.h
 ./src/SchweineSystem.h
+./src/Other/TimeLordServerPanel.h
+./src/Other/TimeLordServer.cpp
+./src/Other/TimeLordServer.h
+./src/Other/TimeLordServerPanel.cpp
 ./src/Common/SchweineSystemMaster.hpp
 ./src/Common/SchweineSystemLCDDisplay.h
 ./src/Common/SchweineSystemOutput.cpp

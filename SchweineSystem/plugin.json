@@ -73,6 +73,14 @@
          "tags": [
             "Midi"
          ]
+      },
+      {
+         "slug": "TimeLordServer",
+         "name": "Time Lord Server",
+         "description": "poly ramps in time and space",
+         "tags": [
+            "Utility"
+         ]
       }
    ]
 }

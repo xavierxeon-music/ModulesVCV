@@ -14,13 +14,15 @@ FLAGS += \
 	-Isrc/Common \
 	-I$(RACK_DIR)/../MusicTools \
 	-I$(RACK_DIR)/../MusicTools/Include \
+	-I$(RACK_DIR)/../MusicTools/RememberDummy \
 
 # Add .cpp files to the build
 SOURCES += \
 	$(wildcard src/BitBus/*.cpp) \
 	$(wildcard src/Common/*.cpp) \
+	$(wildcard src/Hardware/*.cpp) \
 	$(wildcard src/Morpher/*.cpp) \
-	$(wildcard src/Tools/*.cpp) \
+	$(wildcard src/Other/*.cpp) \
 	$(RACK_DIR)/../MusicTools/AbstractEffect.cpp \
 	$(RACK_DIR)/../MusicTools/AbstractOscilator.cpp \
 	$(RACK_DIR)/../MusicTools/Maths.cpp \
