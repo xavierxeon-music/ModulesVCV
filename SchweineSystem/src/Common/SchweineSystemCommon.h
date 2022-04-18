@@ -12,6 +12,8 @@ namespace SchweineSystem
       uint8_t blue;
    };
 
+   static const std::string midiInterfaceName = "MIDISPORT 2x2 Anniv B "; // space at end is not a mistake!
+
    template <typename ContentType>
    class SubList
    {

@@ -129,11 +129,14 @@ void VCMCReceiver::process(const ProcessArgs& args)
 }
 void VCMCReceiver::processMessage(const midi::Message& msg)
 {
-
    const bool isSystemEvent = (0xF0 == (msg.bytes[0] & 0xF0));
    if (!isSystemEvent)
    {
       const Midi::Event event = static_cast<Midi::Event>(msg.bytes[0] & 0xF0);
+      const Midi::Channel channel = 1 + (msg.bytes[0] & 0x0F);
+      if (Midi::Device::VCVRack != channel)
+         return;
+
       if (Midi::Event::NoteOn == event)
       {
          const uint8_t gateIndex = msg.bytes[1] - 60;
@@ -180,15 +183,13 @@ void VCMCReceiver::processMessage(const midi::Message& msg)
 
 void VCMCReceiver::connectToMidiDevice()
 {
-   static const std::string targetDeviceName = "VCMC";
-
    midiInput.reset();
    connectionLight.setColor(SchweineSystem::Color{255, 0, 0});
 
    for (const int& deviceId : midiInput.getDeviceIds())
    {
       const std::string deviceName = midiInput.getDeviceName(deviceId);
-      if (targetDeviceName == deviceName)
+      if (SchweineSystem::midiInterfaceName == deviceName)
       {
          //std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
          midiInput.setDeviceId(deviceId);
