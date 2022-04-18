@@ -11,7 +11,7 @@ VCMCReceiver::VCMCReceiver()
    : Module()
    , bpm(12)
    , midiInput()
-   , midiTickCounter(0)
+   , tickCounter(6)
    , doNotAdvanceTempo(false)
    , tempo()
    , clockTick()
@@ -161,20 +161,16 @@ void VCMCReceiver::processMessage(const midi::Message& msg)
 
       if (Midi::Event::Clock == event)
       {
-         if (0 == midiTickCounter)
+         if (0 == tickCounter.valueAndNext())
          {
             tempo.clockTick();
             clockTick.trigger();
             doNotAdvanceTempo = true;
          }
-
-         midiTickCounter++;
-         if (6 == midiTickCounter)
-            midiTickCounter = 0;
       }
       else if (Midi::Event::Start == event)
       {
-         midiTickCounter = 0;
+         tickCounter.reset();
          tempo.clockReset();
          clockReset.trigger();
          doNotAdvanceTempo = true;
@@ -185,6 +181,7 @@ void VCMCReceiver::processMessage(const midi::Message& msg)
 void VCMCReceiver::connectToMidiDevice()
 {
    static const std::string targetDeviceName = "VCMC";
+
    midiInput.reset();
    connectionLight.setColor(SchweineSystem::Color{255, 0, 0});
 
@@ -193,7 +190,7 @@ void VCMCReceiver::connectToMidiDevice()
       const std::string deviceName = midiInput.getDeviceName(deviceId);
       if (targetDeviceName == deviceName)
       {
-         std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
+         //std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
          midiInput.setDeviceId(deviceId);
          connectionLight.setColor(SchweineSystem::Color{0, 255, 0});
          return;

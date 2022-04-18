@@ -36,7 +36,7 @@ private:
 private:
    // tempo
    midi::InputQueue midiInput;
-   uint8_t midiTickCounter;
+   Counter tickCounter;
    bool doNotAdvanceTempo;
    Tempo tempo;
    dsp::PulseGenerator clockTick;
