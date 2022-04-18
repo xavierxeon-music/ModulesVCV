@@ -7,6 +7,11 @@ using namespace rack;
 #include <rtmidi/RtMidi.h>
 
 #include <Blocks/PolyRamp.h>
+#include <Music/Tempo.h>
+#include <Tools/Range.h>
+
+#include "SchweineSystemCommon.h"
+#include "SchweineSystemLightMeter.h"
 
 class TimeLordServer : public Module
 {
@@ -26,11 +31,22 @@ private:
 private:
    void setup();
    void dataFromInput(const Bytes& message);
-   static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
    static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
+   static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
+
+   json_t* dataToJson() override;
+   void dataFromJson(json_t* rootJson) override;
 
 private:
-   RtMidiIn input;
+   RtMidiIn midiInput;
+   static const std::string keys;
+   PolyRamp ramps[16];
+   dsp::BooleanTrigger clockTrigger;
+   dsp::BooleanTrigger resetTrigger;
+   Tempo tempo;
+   Range::Mapper cvMapper;
+   SchweineSystem::LightMeter::List lightMeterList;
+   SchweineSystem::Output::List outputList;
 };
 
 class TimeLordServerWidget : public ModuleWidget
