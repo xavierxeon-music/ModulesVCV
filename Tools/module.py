@@ -22,7 +22,8 @@ def updateModule(panelName, subFolder):
         print(f'no panel found with name {panelName}')
 
     components = getPanelComponents(panelFileName)
-    print(components)
+    for key, value in components.items():
+        print(key, len(value))
 
     writeHeaders(modulesPath, subFolder, panelName, components)
     writeSources(modulesPath, subFolder, panelName, components)

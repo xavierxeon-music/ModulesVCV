@@ -58,9 +58,11 @@ function _checkout {
       ln -s ../../3rdParty/ImpromptuModular ImpromptuModular      
       ln -s ../../SchweineSystem SchweineSystem
 
-      cd $SCRIPT_DIR/Fundamental
+      cd $SCRIPT_DIR/3rdParty/Fundamental
       make
-      make dist
+
+      cd $SCRIPT_DIR/3rdParty/ImpromptuModular
+      make
    fi
 
    cd $CURRENT_DIR

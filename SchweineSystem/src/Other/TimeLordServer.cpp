@@ -4,6 +4,7 @@
 #include <Midi/MidiCommon.h>
 #include <Tools/SevenBit.h>
 
+#include "SchweineSystemLCDDisplay.h"
 #include "SchweineSystemMaster.h"
 
 const std::string TimeLordServer::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -18,7 +19,8 @@ TimeLordServer::TimeLordServer()
    , cvMapper(0.0, 255.0, 0.0, 10.0)
    , lightMeterList(lights)
    , outputList(outputs)
-   , loadLightList(lights)
+   , rampDisplayList(this)
+   , bankDisplay(this, Panel::Value_Bank)
    , loadState(LoadState::Ready)
 {
    setup();
@@ -30,18 +32,7 @@ TimeLordServer::TimeLordServer()
                           {Panel::Red_Channel5_Status1, Panel::Red_Channel5_Status2, Panel::Red_Channel5_Status3, Panel::Red_Channel5_Status4, Panel::Red_Channel5_Status5},
                           {Panel::Red_Channel6_Status1, Panel::Red_Channel6_Status2, Panel::Red_Channel6_Status3, Panel::Red_Channel6_Status4, Panel::Red_Channel6_Status5},
                           {Panel::Red_Channel7_Status1, Panel::Red_Channel7_Status2, Panel::Red_Channel7_Status3, Panel::Red_Channel7_Status4, Panel::Red_Channel7_Status5},
-                          {Panel::Red_Channel8_Status1, Panel::Red_Channel8_Status2, Panel::Red_Channel8_Status3, Panel::Red_Channel8_Status4, Panel::Red_Channel8_Status5},
-                          {Panel::Red_Channel9_Status1, Panel::Red_Channel9_Status2, Panel::Red_Channel9_Status3, Panel::Red_Channel9_Status4, Panel::Red_Channel9_Status5},
-                          {Panel::Red_Channel10_Status1, Panel::Red_Channel10_Status2, Panel::Red_Channel10_Status3, Panel::Red_Channel10_Status4, Panel::Red_Channel10_Status5},
-                          {Panel::Red_Channel11_Status1, Panel::Red_Channel11_Status2, Panel::Red_Channel11_Status3, Panel::Red_Channel11_Status4, Panel::Red_Channel11_Status5},
-                          {Panel::Red_Channel12_Status1, Panel::Red_Channel12_Status2, Panel::Red_Channel12_Status3, Panel::Red_Channel12_Status4, Panel::Red_Channel12_Status5},
-                          {Panel::Red_Channel13_Status1, Panel::Red_Channel13_Status2, Panel::Red_Channel13_Status3, Panel::Red_Channel13_Status4, Panel::Red_Channel13_Status5},
-                          {Panel::Red_Channel14_Status1, Panel::Red_Channel14_Status2, Panel::Red_Channel14_Status3, Panel::Red_Channel14_Status4, Panel::Red_Channel14_Status5},
-                          {Panel::Red_Channel15_Status1, Panel::Red_Channel15_Status2, Panel::Red_Channel15_Status3, Panel::Red_Channel15_Status4, Panel::Red_Channel15_Status5},
-                          {Panel::Red_Channel16_Status1, Panel::Red_Channel16_Status2, Panel::Red_Channel16_Status3, Panel::Red_Channel16_Status4, Panel::Red_Channel16_Status5}});
-
-   for (uint8_t rampIndex = 0; rampIndex < 16; rampIndex++)
-      lightMeterList[rampIndex]->setMaxValue(255);
+                          {Panel::Red_Channel8_Status1, Panel::Red_Channel8_Status2, Panel::Red_Channel8_Status3, Panel::Red_Channel8_Status4, Panel::Red_Channel8_Status5}});
 
    outputList.append({Panel::Channel1_Output,
                       Panel::Channel2_Output,
@@ -50,17 +41,21 @@ TimeLordServer::TimeLordServer()
                       Panel::Channel5_Output,
                       Panel::Channel6_Output,
                       Panel::Channel7_Output,
-                      Panel::Channel8_Output,
-                      Panel::Channel9_Output,
-                      Panel::Channel10_Output,
-                      Panel::Channel11_Output,
-                      Panel::Channel12_Output,
-                      Panel::Channel13_Output,
-                      Panel::Channel14_Output,
-                      Panel::Channel15_Output,
-                      Panel::Channel16_Output});
+                      Panel::Channel8_Output});
 
-   loadLightList.append({Panel::Red_LoadA, Panel::Red_LoadB});
+   rampDisplayList.append({Panel::Value_Channel1_Display,
+                           Panel::Value_Channel2_Display,
+                           Panel::Value_Channel3_Display,
+                           Panel::Value_Channel4_Display,
+                           Panel::Value_Channel5_Display,
+                           Panel::Value_Channel6_Display,
+                           Panel::Value_Channel7_Display,
+                           Panel::Value_Channel8_Display});
+
+   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
+   {
+      lightMeterList[rampIndex]->setMaxValue(255);
+   }
 
    midiInput.openVirtualPort("TimeLordServer");
 
@@ -86,8 +81,14 @@ void TimeLordServer::process(const ProcessArgs& args)
    else
       tempo.advance(args.sampleRate);
 
-   for (uint8_t rampIndex = 0; rampIndex < 16; rampIndex++)
+   bankDisplay.setColor(SchweineSystem::Color{255, 255, 255});
+   bankDisplay.setValue(8);
+
+   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
+      rampDisplayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 100});
+      rampDisplayList[rampIndex]->setValue(20);
+
       PolyRamp* polyRamp = &ramps[rampIndex];
 
       if (isReset)
@@ -101,11 +102,6 @@ void TimeLordServer::process(const ProcessArgs& args)
 
       const float voltage = cvMapper(value);
       outputList[rampIndex]->setVoltage(voltage);
-   }
-
-   for (const uint8_t loadLightIndex : {0, 1})
-   {
-      loadLightList[loadLightIndex]->setColor(SchweineSystem::Color{50, 50, 0});
    }
 }
 
@@ -193,7 +189,7 @@ void TimeLordServer::midiError(RtMidiError::Type type, const std::string& errorT
 json_t* TimeLordServer::dataToJson()
 {
    json_t* rootJson = json_object();
-   for (uint8_t rampIndex = 0; rampIndex < 16; rampIndex++)
+   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       PolyRamp* polyRamp = &ramps[rampIndex];
 
@@ -230,7 +226,7 @@ json_t* TimeLordServer::dataToJson()
 
 void TimeLordServer::dataFromJson(json_t* rootJson)
 {
-   for (uint8_t rampIndex = 0; rampIndex < 16; rampIndex++)
+   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       PolyRamp* polyRamp = &ramps[rampIndex];
       polyRamp->clear();

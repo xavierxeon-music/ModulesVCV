@@ -12,6 +12,7 @@ using namespace rack;
 
 #include "SchweineSystemCommon.h"
 #include "SchweineSystemLightMeter.h"
+#include <SchweineSystemLCDDisplay.h>
 #include <SchweineSystemLight.h>
 
 class TimeLordServer : public Module
@@ -48,14 +49,16 @@ private:
 private:
    RtMidiIn midiInput;
    static const std::string keys;
-   PolyRamp ramps[16];
+   PolyRamp ramps[8];
    dsp::BooleanTrigger clockTrigger;
    dsp::BooleanTrigger resetTrigger;
    Tempo tempo;
    Range::Mapper cvMapper;
    SchweineSystem::LightMeter::List lightMeterList;
    SchweineSystem::Output::List outputList;
-   SchweineSystem::Light::List loadLightList;
+   SchweineSystem::LCDDisplay::Controller::List rampDisplayList;
+
+   SchweineSystem::LCDDisplay::Controller bankDisplay;
    LoadState loadState;
 };
 

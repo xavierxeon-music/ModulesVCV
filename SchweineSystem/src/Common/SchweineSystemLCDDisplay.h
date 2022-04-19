@@ -7,27 +7,60 @@
 
 namespace SchweineSystem
 {
-   class LCDDisplay : public rack::TransparentWidget
+   namespace LCDDisplay
    {
-   public:
-      LCDDisplay();
+      class Data
+      {
+      protected:
+         Data(rack::engine::Module* module, const uint16_t& valueParamId);
 
-   public:
-      void setup(uint16_t* value, const uint8_t& numberOfDigits);
-      void setPosition(uint16_t x, uint16_t y);
-      void setDigitColor(const Color& color);
+      protected:
+         rack::engine::Module* module;
+         const uint16_t valueParamId;
+      };
 
-   private:
-      void drawLayer(const DrawArgs& args, int layer) override;
+      class Controller : public Data
+      {
+      public:
+         class List;
 
-   private:
-      std::shared_ptr<rack::Font> font;
-      std::string fontPath;
+      public:
+         Controller(rack::engine::Module* module, const uint16_t& valueParamId);
 
-      NVGcolor digitColor;
-      uint8_t numberOfDigits;
-      uint16_t* value;
-   };
+      public:
+         void setValue(const uint16_t& value);
+         void setColor(const SchweineSystem::Color& color);
+      };
+
+      class Controller::List
+      {
+      public:
+         List(rack::engine::Module* module);
+         ~List();
+
+      public:
+         void append(const std::vector<uint16_t>& valueParamIdLists);
+         Controller* operator[](const uint16_t& index);
+
+      private:
+         rack::engine::Module* module;
+         std::vector<Controller*> instanceList;
+      };
+
+      class Widget : public rack::TransparentWidget, public Data
+      {
+      public:
+         Widget(rack::math::Vec pos, rack::engine::Module* module, const uint8_t& digitCount, const uint16_t& valueParamId);
+
+      private:
+         void drawLayer(const DrawArgs& args, int layer) override;
+
+      private:
+         std::shared_ptr<rack::Font> font;
+         std::string fontPath;
+         const uint8_t digitCount;
+      };
+   } // namespace LCDDisplay
 } // namespace SchweineSystem
 
 #endif // NOT SchweineSystemLCDDisplayH

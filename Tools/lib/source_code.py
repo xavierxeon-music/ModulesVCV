@@ -15,6 +15,7 @@ def _addComponents(headerfile, components):
     inputs = components['input'] if components and 'input' in components else list()
     outputs = components['output'] if components and 'output' in components else list()
     lights = components['light'] if components and 'light' in components else list()
+    displays = components['display'] if components and 'display' in components else list()
 
     headerfile.write(_indent(1) + 'enum ParamId\n')
     headerfile.write(_indent(1) + '{\n')
@@ -24,6 +25,10 @@ def _addComponents(headerfile, components):
     for latch in latches:
         name = latch['name']
         headerfile.write(_indent(2) + f'{name},\n')
+    for display in displays:
+        name = display['name']
+        headerfile.write(_indent(2) + f'Value_{name},\n')
+        headerfile.write(_indent(2) + f'RGB_{name},\n')
     headerfile.write(_indent(2) + 'PARAMS_LEN\n')
     headerfile.write(_indent(1) + '};\n')
     headerfile.write('\n')
@@ -150,12 +155,16 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
     inputs = components['input'] if components and 'input' in components else list()
     outputs = components['output'] if components and 'output' in components else list()
     lights = components['light'] if components and 'light' in components else list()
+    displays = components['display'] if components and 'display' in components else list()
 
     with open(fileName, 'w') as sourcefile:
         sourcefile.write(f'#include "{panelName}.h"\n')
         sourcefile.write(f'#include "{panelName}Panel.h"\n')
         sourcefile.write('\n')
         sourcefile.write('#include "SchweineSystemMaster.h"\n')
+        if displays:
+            sourcefile.write('#include "SchweineSystemLCDDisplay.h"\n')
+            sourcefile.write('#include <limits>\n')
         sourcefile.write('\n')
 
         sourcefile.write(f'void {panelName}::setup()\n')
@@ -167,6 +176,14 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
         for param in params:
             name = param['name']
             sourcefile.write(_indent(1) + f'configParam(Panel::{name}, 0.f, 1.f, 0.f, "{name}");\n')
+
+        if displays:
+            sourcefile.write('\n')
+        for display in displays:
+            name = display['name']
+            count = int(display['count'])
+            sourcefile.write(_indent(1) + f'configParam(Panel::Value_{name}, 0.f, {10**count}, 0.f, "");\n')
+            sourcefile.write(_indent(1) + f'configParam(Panel::RGB_{name}, 0.f, std::numeric_limits<float>::max(), 0.f, "");\n')
 
         if latches:
             sourcefile.write('\n')
@@ -186,10 +203,6 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
             name = output['name']
             sourcefile.write(_indent(1) + f'configOutput(Panel::{name}, "{name}");\n')
 
-        if lights:
-            sourcefile.write('\n')
-        for light in lights:
-            name = light['name']
         sourcefile.write('}\n')
 
         sourcefile.write('\n')
@@ -205,16 +218,16 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
             sourcefile.write('\n')
         for param in params:
             name = param['name']
-            x = param['x']
-            y = param['y']
+            x = param['cx']
+            y = param['cy']
             sourcefile.write(_indent(1) + f'addParam(createParamCentered<RoundBlackKnob>(Vec({x}, {y}), module, {panelName}::Panel::{name}));\n')
 
         if latches:
             sourcefile.write('\n')
         for latch in latches:
             name = latch['name']
-            x = latch['x']
-            y = latch['y']
+            x = latch['cx']
+            y = latch['cy']
             sourcefile.write(
                 _indent(1) + f'addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec({x}, {y}), module, {panelName}::Panel::{name}, {panelName}::Panel::Red_{name}));\n')
 
@@ -222,25 +235,34 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
             sourcefile.write('\n')
         for input in inputs:
             name = input['name']
-            x = input['x']
-            y = input['y']
+            x = input['cx']
+            y = input['cy']
             sourcefile.write(_indent(1) + f'addInput(createInputCentered<PJ301MPort>(Vec({x}, {y}), module, {panelName}::Panel::{name}));\n')
 
         if outputs:
             sourcefile.write('\n')
         for output in outputs:
             name = output['name']
-            x = output['x']
-            y = output['y']
+            x = output['cx']
+            y = output['cy']
             sourcefile.write(_indent(1) + f'addOutput(createOutputCentered<PJ301MPort>(Vec({x}, {y}), module, {panelName}::Panel::{name}));\n')
 
         if lights:
             sourcefile.write('\n')
         for light in lights:
             name = light['name']
-            x = light['x']
-            y = light['y']
+            x = light['cx']
+            y = light['cy']
             sourcefile.write(_indent(1) + f'addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec({x}, {y}), module, {panelName}::Panel::Red_{name}));\n')
+
+        if displays:
+            sourcefile.write('\n')
+        for display in displays:
+            name = display['name']
+            count = display['count']
+            x = display['rx']
+            y = display['ry']
+            sourcefile.write(_indent(1) + f'addChild(new SchweineSystem::LCDDisplay::Widget(Vec({x}, {y}), module, {count}, {panelName}::Panel::Value_{name}));\n')
 
         sourcefile.write('\n')
         sourcefile.write(_indent(1) + 'return mainPanel;\n')

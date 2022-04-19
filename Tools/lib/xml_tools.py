@@ -39,15 +39,19 @@ def getPanelComponents(panelFileName):
         for component in componentList:
             _compileFullName(component)
             hierachyList = component['hierachy']
-            [x, y] = _compileCoordinates(hierachyList)
-            if None == x or None == y:
-                component['x'] = None
-                component['y'] = None
+            [cx, cy, rx, ry] = _compileCoordinates(hierachyList)
+            if None == cx or None == cy:
+                component['cx'] = None
+                component['cy'] = None
+                component['rx'] = None
+                component['ry'] = None
             else:
                 for group in hierachyList:
-                    [x, y] = _transform(group, x, y)
-                component['x'] = x
-                component['y'] = y
+                    [cx, cy, rx, ry] = _transform(group, cx, cy, rx, ry)
+                component['cx'] = cx
+                component['cy'] = cy
+                component['rx'] = rx
+                component['ry'] = ry
 
             del component['hierachy']
 
@@ -70,13 +74,13 @@ def _compileFullName(component):
     component['name'] = name
 
 
-def _transform(group, x, y):
+def _transform(group, cx, cy, rx, ry):
 
     # see https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform
 
     transform = group.get('transform')
     if not transform:
-        return [x, y]
+        return [cx, cy, rx, ry]
 
     transform = transform.replace('matrix(', '')
     transform = transform.replace(')', '')
@@ -84,10 +88,12 @@ def _transform(group, x, y):
 
     coeff = [float(x) for x in coeff]
 
-    x = (coeff[0] * x) + (coeff[2] * y) + coeff[4]
-    y = (coeff[1] * x) + (coeff[3] * y) + coeff[5]
+    cx = (coeff[0] * cx) + (coeff[2] * cy) + coeff[4]
+    cy = (coeff[1] * cx) + (coeff[3] * cy) + coeff[5]
+    rx = (coeff[0] * rx) + (coeff[2] * ry) + coeff[4]
+    ry = (coeff[1] * rx) + (coeff[3] * ry) + coeff[5]
 
-    return [x, y]
+    return [cx, cy, rx, ry]
 
 
 def _compileComponentMap(root):
@@ -117,6 +123,11 @@ def _compileComponentMap(root):
             index = groupId.index('#')
             name = groupId[:index]
             typ = groupId[index + 1:]
+            count = 1
+            if '$' in typ:
+                index = typ.index('$')
+                count = typ[index+1:]
+                typ = typ[:index]
 
             if not typ in componentMap:
                 componentMap[typ] = list()
@@ -127,7 +138,7 @@ def _compileComponentMap(root):
                 hierachyList.append(parentGroup)
                 parentGroup = parentMap[parentGroup]
 
-            groupDict = {'name': name, 'hierachy': hierachyList}
+            groupDict = {'name': name, 'count': count, 'hierachy': hierachyList}
             componentMap[typ].append(groupDict)
 
     groupCrawl(root)
@@ -145,28 +156,28 @@ def _compileCoordinates(hierachtList):
         if '{http://www.w3.org/2000/svg}circle' == element.tag:
             cx = float(element.get('cx'))
             cy = float(element.get('cy'))
-            return [cx, cy]
+            return [cx, cy, cx, cy]
         elif '{http://www.w3.org/2000/svg}rect' == element.tag:
             rx = float(element.get('x'))
             ry = float(element.get('y'))
             width = float(element.get('width'))
             height = float(element.get('height'))
 
-            rx = rx + (0.5 * width)
-            ry = ry + (0.5 * height)
-            return [rx, ry]
+            cx = rx + (0.5 * width)
+            cy = ry + (0.5 * height)
+            return [cx, cy, rx, ry]
 
-        return [None, None]
+        return [None, None, None, None]
 
     element = hierachtList[0]
 
-    [x, y] = getCoordinate(element)
-    if None != x and None != y:
-        return [x, y]
+    [cx, cy, rx, ry] = getCoordinate(element)
+    if None != cx and None != cy:
+        return [cx, cy, rx, ry]
 
     for child in element:
-        [x, y] = getCoordinate(child)
-        if None != x and None != y:
-            return [x, y]
+        [cx, cy, rx, ry] = getCoordinate(child)
+        if None != cx and None != cy:
+            return [cx, cy, rx, ry]
 
     return [None, None]

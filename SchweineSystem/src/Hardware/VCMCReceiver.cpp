@@ -243,14 +243,6 @@ VCMCReceiverWidget::VCMCReceiverWidget(VCMCReceiver* module)
 {
    SvgPanel* mainPanel = setup(module);
    (void)mainPanel;
-
-   SchweineSystem::LCDDisplay* bpmDisplay = new SchweineSystem::LCDDisplay();
-   bpmDisplay->setPosition(90, 297);
-   if (module) // will be zero in module browser
-      bpmDisplay->setup(&(module->bpm), 3);
-   bpmDisplay->setDigitColor(SchweineSystem::Color{0, 255, 255});
-
-   addChild(bpmDisplay);
 }
 
 Model* modelVCMCReceiver = SchweineSystem::Master::the()->addModule<VCMCReceiver, VCMCReceiverWidget>("VCMCReceiver");
