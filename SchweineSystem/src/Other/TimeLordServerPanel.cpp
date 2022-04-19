@@ -56,6 +56,8 @@ SvgPanel* TimeLordServerWidget::setup(TimeLordServer* module)
    addOutput(createOutputCentered<PJ301MPort>(Vec(155.00044485799998, 24.172950809999985), module, TimeLordServer::Panel::Channel9_Output));
    addOutput(createOutputCentered<PJ301MPort>(Vec(97.646744858, 24.172950809999985), module, TimeLordServer::Panel::Channel1_Output));
 
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(42.80461630561056, 117.88366537652172), module, TimeLordServer::Panel::Red_LoadB));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(34.579328342410555, 117.88366537652172), module, TimeLordServer::Panel::Red_LoadA));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(166.17974458249995, 366.181), module, TimeLordServer::Panel::Red_Channel16_Status5));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(156.76724458250004, 366.181), module, TimeLordServer::Panel::Red_Channel16_Status4));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(147.35399458249998, 366.181), module, TimeLordServer::Panel::Red_Channel16_Status3));

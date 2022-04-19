@@ -40,6 +40,12 @@ struct TimeLordServer::Panel
 
    enum LightId
    {
+      Red_LoadB,
+      Green_LoadB,
+      Blue_LoadB,
+      Red_LoadA,
+      Green_LoadA,
+      Blue_LoadA,
       Red_Channel16_Status5,
       Green_Channel16_Status5,
       Blue_Channel16_Status5,

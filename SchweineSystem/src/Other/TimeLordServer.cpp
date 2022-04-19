@@ -18,6 +18,8 @@ TimeLordServer::TimeLordServer()
    , cvMapper(0.0, 255.0, 0.0, 10.0)
    , lightMeterList(lights)
    , outputList(outputs)
+   , loadLightList(lights)
+   , loadState(LoadState::Ready)
 {
    setup();
 
@@ -57,6 +59,8 @@ TimeLordServer::TimeLordServer()
                       Panel::Channel14_Output,
                       Panel::Channel15_Output,
                       Panel::Channel16_Output});
+
+   loadLightList.append({Panel::Red_LoadA, Panel::Red_LoadB});
 
    midiInput.openVirtualPort("TimeLordServer");
 
@@ -98,6 +102,11 @@ void TimeLordServer::process(const ProcessArgs& args)
       const float voltage = cvMapper(value);
       outputList[rampIndex]->setVoltage(voltage);
    }
+
+   for (const uint8_t loadLightIndex : {0, 1})
+   {
+      loadLightList[loadLightIndex]->setColor(SchweineSystem::Color{50, 50, 0});
+   }
 }
 
 void TimeLordServer::dataFromInput(const Bytes& message)
@@ -122,6 +131,7 @@ void TimeLordServer::dataFromInput(const Bytes& message)
    {
       const uint8_t value = message[2];
       buffer << value;
+      loadState = LoadState::Receive;
    }
    else if (Midi::ControllerMessage::RememberApply == controllerMessage)
    {
@@ -137,6 +147,7 @@ void TimeLordServer::dataFromInput(const Bytes& message)
       json_t* rootJson = json_loadb(cBuffer, data.size(), 0, &error);
 
       dataFromJson(rootJson);
+      loadState = LoadState::Apply;
    }
 }
 

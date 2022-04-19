@@ -4,3 +4,6 @@
 [submodule "MusicTools"]
 	path = MusicTools
 	url = https://github.com/xavierxeon-music/MusicTools.git
+[submodule "Fundamental"]
+	path = Fundamental
+	url = https://github.com/VCVRack/Fundamental.git

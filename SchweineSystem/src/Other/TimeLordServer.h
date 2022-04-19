@@ -12,6 +12,7 @@ using namespace rack;
 
 #include "SchweineSystemCommon.h"
 #include "SchweineSystemLightMeter.h"
+#include <SchweineSystemLight.h>
 
 class TimeLordServer : public Module
 {
@@ -27,6 +28,13 @@ public:
 
 private:
    using Bytes = std::vector<uint8_t>;
+
+   enum class LoadState
+   {
+      Ready,
+      Receive,
+      Apply
+   };
 
 private:
    void setup();
@@ -47,6 +55,8 @@ private:
    Range::Mapper cvMapper;
    SchweineSystem::LightMeter::List lightMeterList;
    SchweineSystem::Output::List outputList;
+   SchweineSystem::Light::List loadLightList;
+   LoadState loadState;
 };
 
 class TimeLordServerWidget : public ModuleWidget
