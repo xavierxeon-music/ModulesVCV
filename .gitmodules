@@ -5,5 +5,8 @@
 	path = MusicTools
 	url = https://github.com/xavierxeon-music/MusicTools.git
 [submodule "Fundamental"]
-	path = Fundamental
+	path = 3rdParty/Fundamental
 	url = https://github.com/VCVRack/Fundamental.git
+[submodule "3rdParty/ImpromptuModular"]
+	path = 3rdParty/ImpromptuModular
+	url = https://github.com/MarcBoule/ImpromptuModular.git

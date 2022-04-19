@@ -20,7 +20,7 @@ function _set_rack_dir {
    then
       
       export RACK_DIR=$SCRIPT_DIR/Rack
-      echo "export RACK_DIR=$SCRIPT_DIR/Rack" >> ~/.bashrc
+      echo "export RACK_DIR=$SCRIPT_DIR/Rack" >> ~/.profile
       echo "rack environment ready"
    fi
 }
@@ -54,7 +54,8 @@ function _checkout {
       make -j 16
 
       cd $SCRIPT_DIR/Rack/plugins
-      ln -s ../../Fundamental Fundamental      
+      ln -s ../../3rdParty/Fundamental Fundamental   
+      ln -s ../../3rdParty/ImpromptuModular ImpromptuModular      
       ln -s ../../SchweineSystem SchweineSystem
 
       cd $SCRIPT_DIR/Fundamental
