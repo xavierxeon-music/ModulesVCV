@@ -1,9 +1,9 @@
 {
-   "slug": "Schweinesystem",
-   "name": "Schweinesystem",
+   "slug": "SchweineSystem",
+   "name": "SchweineSystem",
    "version": "2.0.0",
    "license": "MIT",
-   "brand": "Schweinesystem",
+   "brand": "SchweineSystem",
    "author": "Ralf Waspe",
    "authorEmail": "rwaspe@me.com",
    "authorUrl": "",

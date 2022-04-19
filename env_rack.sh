@@ -20,6 +20,7 @@ function _set_rack_dir {
    then
       
       export RACK_DIR=$SCRIPT_DIR/Rack
+      echo "export RACK_DIR=$SCRIPT_DIR/Rack" >> ~/.bashrc
       echo "rack environment ready"
    fi
 }
@@ -27,6 +28,13 @@ function _set_rack_dir {
 function _checkout {
    
    local CURRENT_DIR=$(pwd)
+
+   if [ -f $SCRIPT_DIR/Rack/README.md ]
+   then
+      return
+   fi
+
+   git submodule update --init --recursive
 
    cd $SCRIPT_DIR/Rack
    local BRANCH_EXIST_TEST=$(git branch -l | grep $VERSION)
@@ -40,11 +48,18 @@ function _checkout {
    if [ "$BRANCH_CURRENT_TEST" != "$VERSION" ]
    then
       git switch $VERSION 
-      git submodule update --init --recursive
    
       cd $SCRIPT_DIR/Rack
       make dep -j 16
       make -j 16
+
+      cd $SCRIPT_DIR/Rack/plugins
+      ln -s ../../Fundamental Fundamental      
+      ln -s ../../SchweineSystem SchweineSystem
+
+      cd $SCRIPT_DIR/Fundamental
+      make
+      make dist
    fi
 
    cd $CURRENT_DIR
@@ -55,7 +70,7 @@ function module {
 }
 
 function travel_sync {
-   rsync -azhP --delete /Users/waspe/Documents/Rack2/plugins/Schweinesystem/ travel:/Users/waspe/Documents/Rack2/plugins/Schweinesystem/ 
+   rsync -azhP --delete /Users/waspe/Documents/Rack2/plugins/SchweineSystem/ travel:/Users/waspe/Documents/Rack2/plugins/SchweineSystem/ 
 }
 
 _set_rack_dir
