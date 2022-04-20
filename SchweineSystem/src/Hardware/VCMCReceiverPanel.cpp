@@ -2,10 +2,15 @@
 #include "VCMCReceiverPanel.h"
 
 #include "SchweineSystemMaster.h"
+#include "SchweineSystemLCDDisplay.h"
+#include <limits>
 
 void VCMCReceiver::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
+
+   configParam(Panel::Value_Clock, 0.f, 1000, 0.f, "");
+   configParam(Panel::RGB_Clock, 0.f, std::numeric_limits<float>::max(), 0.f, "");
 
    configButton(Panel::Connect, "Connect");
 
@@ -35,7 +40,6 @@ void VCMCReceiver::setup()
    configOutput(Panel::Channel1_Gate1_BitOut1, "Channel1_Gate1_BitOut1");
    configOutput(Panel::Channel1_Slider1_Output, "Channel1_Slider1_Output");
    configOutput(Panel::Channel1_CV1_Output, "Channel1_CV1_Output");
-
 }
 
 SvgPanel* VCMCReceiverWidget::setup(VCMCReceiver* module)
@@ -162,6 +166,8 @@ SvgPanel* VCMCReceiverWidget::setup(VCMCReceiver* module)
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(169.53539458249998, 29.57499999999999), module, VCMCReceiver::Panel::Red_Channel1_CV1_Status3));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(160.12214458249997, 29.57499999999999), module, VCMCReceiver::Panel::Red_Channel1_CV1_Status2));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(150.70889458249997, 29.57499999999999), module, VCMCReceiver::Panel::Red_Channel1_CV1_Status1));
+
+   addChild(new SchweineSystem::LCDDisplay::Widget(Vec(84.02935657, 292.30047920000004), module, 3, VCMCReceiver::Panel::Value_Clock));
 
    return mainPanel;
 }

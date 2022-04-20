@@ -3,6 +3,8 @@
 
 #include <rack.hpp>
 
+#include <Midi/MidiCommon.h>
+
 namespace SchweineSystem
 {
    struct Color
@@ -12,7 +14,11 @@ namespace SchweineSystem
       uint8_t blue;
    };
 
-   static const std::string midiInterfaceName = "MIDISPORT 2x2 Anniv B "; // space at end is not a mistake!
+   struct Common
+   {
+      using MidiInterfaceMap = std::map<Midi::Device::Channel, std::string>;
+      static const MidiInterfaceMap midiInterfaceMap;
+   };
 
    template <typename ContentType>
    class SubList

@@ -8,6 +8,7 @@ using namespace rack;
 #include <Tools/Counter.h>
 #include <Tools/Range.h>
 
+#include "SchweineSystemLCDDisplay.h"
 #include "SchweineSystemLightMeter.h"
 
 class VCMCReceiver : public Module
@@ -21,9 +22,6 @@ public:
 
 public:
    void process(const ProcessArgs& args) override;
-
-public:
-   uint16_t bpm;
 
 private:
    void setup();
@@ -40,8 +38,11 @@ private:
    bool doNotAdvanceTempo;
    Tempo tempo;
    dsp::PulseGenerator clockTick;
+   dsp::BooleanTrigger tickTrigger;
    dsp::PulseGenerator clockReset;
+   dsp::BooleanTrigger resetTrigger;
    SchweineSystem::Light connectionLight;
+   SchweineSystem::LCDDisplay::Controller tempoDisplay;
    // gates
    bool gates[8];
    SchweineSystem::Light::List lightListGate;

@@ -4,19 +4,22 @@
 #include <Midi/MidiCommon.h>
 #include <Music/Note.h>
 
+#include "SchweineSystemJson.h"
 #include "SchweineSystemLCDDisplay.h"
 #include "SchweineSystemMaster.h"
 
 VCMCReceiver::VCMCReceiver()
    : Module()
-   , bpm(12)
    , midiInput()
    , tickCounter(6)
    , doNotAdvanceTempo(false)
    , tempo()
    , clockTick()
+   , tickTrigger()
    , clockReset()
+   , resetTrigger()
    , connectionLight(lights)
+   , tempoDisplay(this, Panel::Value_Clock)
    , gates{false, false, false, false, false, false, false, false}
    , lightListGate(lights)
    , gateList(outputs)
@@ -78,6 +81,9 @@ VCMCReceiver::VCMCReceiver()
 
    connectionLight.assign(Panel::Red_Connect);
    connectToMidiDevice();
+
+   tempoDisplay.setColor(SchweineSystem::Color{100, 100, 255});
+   tempoDisplay.setValue(666);
 }
 
 VCMCReceiver::~VCMCReceiver()
@@ -91,16 +97,16 @@ void VCMCReceiver::process(const ProcessArgs& args)
 
    midi::Message msg;
    while (midiInput.tryPop(&msg, args.frame))
-   {
       processMessage(msg);
-   }
 
    if (doNotAdvanceTempo)
       doNotAdvanceTempo = false;
    else
-      tempo.advance(args.sampleRate);
+      ;
+   tempo.advance(args.sampleRate);
 
-   bpm = tempo.getBeatsPerMinute();
+   tempoDisplay.setColor(SchweineSystem::Color{100, 100, 255});
+   tempoDisplay.setValue(tempo.getBeatsPerMinute());
 
    outputs[Panel::Clock].setVoltage(clockTick.process(args.sampleTime) ? 10.f : 0.f);
    outputs[Panel::Reset].setVoltage(clockReset.process(args.sampleTime) ? 10.f : 0.f);
@@ -186,12 +192,17 @@ void VCMCReceiver::connectToMidiDevice()
    midiInput.reset();
    connectionLight.setColor(SchweineSystem::Color{255, 0, 0});
 
+   static const std::string targetDeviceName = SchweineSystem::Common::midiInterfaceMap.at(Midi::Device::VCVRack);
+   std::cout << targetDeviceName << std::endl;
+
    for (const int& deviceId : midiInput.getDeviceIds())
    {
       const std::string deviceName = midiInput.getDeviceName(deviceId);
-      if (SchweineSystem::midiInterfaceName == deviceName)
+      std::cout << deviceName << std::endl;
+
+      if (targetDeviceName == deviceName)
       {
-         //std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
+         std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
          midiInput.setDeviceId(deviceId);
          connectionLight.setColor(SchweineSystem::Color{0, 255, 0});
          return;
@@ -201,40 +212,40 @@ void VCMCReceiver::connectToMidiDevice()
 
 json_t* VCMCReceiver::dataToJson()
 {
-   json_t* rootJson = json_object();
+   using namespace SchweineSystem::Json;
+
+   Array gateArray;
+   Array cvArray;
+   Array sliderArray;
    for (uint8_t index = 0; index < 8; index++)
    {
-      const std::string gateKey = "gate" + std::to_string(index);
-      json_object_set_new(rootJson, gateKey.c_str(), json_boolean(gates[index]));
-
-      const std::string cvKey = "cv" + std::to_string(index);
-      json_object_set_new(rootJson, cvKey.c_str(), json_integer(cvValues[index]));
-
-      const std::string sliderKey = "slider" + std::to_string(index);
-      json_object_set_new(rootJson, sliderKey.c_str(), json_integer(sliderValues[index]));
+      gateArray.append(Value(gates[index]));
+      cvArray.append(Value(cvValues[index]));
+      sliderArray.append(Value(sliderValues[index]));
    }
 
-   return rootJson;
+   Object rootObject;
+   rootObject.set("gates", gateArray);
+   rootObject.set("cvs", cvArray);
+   rootObject.set("sliders", sliderArray);
+
+   return rootObject.toJson();
 }
 
 void VCMCReceiver::dataFromJson(json_t* rootJson)
 {
+   using namespace SchweineSystem::Json;
+
+   Object rootObject(rootJson);
+   Array gateArray = rootObject.get("gates").toArray();
+   Array cvArray = rootObject.get("cvs").toArray();
+   Array sliderArray = rootObject.get("sliders").toArray();
+
    for (uint8_t index = 0; index < 8; index++)
    {
-      const std::string gateKey = "gate" + std::to_string(index);
-      json_t* gateJson = json_object_get(rootJson, gateKey.c_str());
-      if (gateJson)
-         gates[index] = json_boolean_value(gateJson);
-
-      const std::string cvKey = "cv" + std::to_string(index);
-      json_t* cvJson = json_object_get(rootJson, cvKey.c_str());
-      if (cvJson)
-         cvValues[index] = json_integer_value(cvJson);
-
-      const std::string sliderKey = "slider" + std::to_string(index);
-      json_t* sliderJson = json_object_get(rootJson, sliderKey.c_str());
-      if (sliderJson)
-         sliderValues[index] = json_integer_value(sliderJson);
+      gates[index] = gateArray.get(index).toBool();
+      cvValues[index] = cvArray.get(index).toInt();
+      sliderValues[index] = sliderArray.get(index).toInt();
    }
 }
 

@@ -8,6 +8,8 @@ struct VCMCReceiver::Panel
    enum ParamId
    {
       Connect,
+      Value_Clock,
+      RGB_Clock,
       PARAMS_LEN
    };
 

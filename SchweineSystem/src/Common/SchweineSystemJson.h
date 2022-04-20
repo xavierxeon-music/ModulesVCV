@@ -19,6 +19,7 @@ namespace SchweineSystem
          Value(json_t* value);
          Value(const bool& value);
          Value(const int64_t& value);
+         Value(const uint8_t& value);
          Value(const double& value);
          Value(const std::string& value);
 
@@ -41,10 +42,9 @@ namespace SchweineSystem
          Array(json_t* array = nullptr);
 
       public:
-         size_t size();
+         size_t size() const;
          void append(const Value& value);
-         Value get(const size_t& index);
-         std::vector<Value> asList() const;
+         Value get(const size_t& index) const;
       };
 
       class Object : public Value
@@ -54,8 +54,7 @@ namespace SchweineSystem
 
       public:
          void set(const std::string& key, const Value& value);
-         Value get(const std::string& key);
-         std::map<std::string, Value> asMap() const;
+         Value get(const std::string& key) const;
       };
 
    } // namespace Json

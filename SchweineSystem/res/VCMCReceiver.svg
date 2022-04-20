@@ -68,7 +68,7 @@
         <g id="Reset-output" serif:id="Reset#output" transform="matrix(0.175002,0,0,0.175002,113.639,312.136)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
-        <g transform="matrix(0.86967,0,0,1,10.6044,-0.0457408)">
+        <g id="Clock-display-3" serif:id="Clock#display$3" transform="matrix(0.86967,0,0,1,10.6044,-0.0457408)">
             <rect x="173.071" y="291.218" width="64.141" height="28.346" style="fill:rgb(13,13,13);"/>
         </g>
         <g id="Clock-output" serif:id="Clock#output" transform="matrix(0.175002,0,0,0.175002,113.639,272.507)">
