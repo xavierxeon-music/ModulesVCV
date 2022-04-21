@@ -39,6 +39,7 @@ private:
    Tempo tempo;
    dsp::PulseGenerator clockTick;
    dsp::BooleanTrigger tickTrigger;
+   dsp::BooleanTrigger tickOverrideTrigger;
    dsp::PulseGenerator clockReset;
    dsp::BooleanTrigger resetTrigger;
    SchweineSystem::Light connectionLight;

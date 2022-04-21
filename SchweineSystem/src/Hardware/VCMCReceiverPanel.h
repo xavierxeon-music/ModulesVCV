@@ -15,6 +15,7 @@ struct VCMCReceiver::Panel
 
    enum InputId
    {
+      ClockOverride,
       INPUTS_LEN
    };
 

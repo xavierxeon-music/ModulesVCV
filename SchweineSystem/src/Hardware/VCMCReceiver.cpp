@@ -16,6 +16,7 @@ VCMCReceiver::VCMCReceiver()
    , tempo()
    , clockTick()
    , tickTrigger()
+   , tickOverrideTrigger()
    , clockReset()
    , resetTrigger()
    , connectionLight(lights)
@@ -99,11 +100,21 @@ void VCMCReceiver::process(const ProcessArgs& args)
    while (midiInput.tryPop(&msg, args.frame))
       processMessage(msg);
 
+   const bool override = inputs[Panel::ClockOverride].isConnected();
+   if (override)
+   {
+      if (tickOverrideTrigger.process(inputs[Panel::ClockOverride].getVoltage() > 3.0))
+      {
+         tempo.clockTick();
+         clockTick.trigger();
+         doNotAdvanceTempo = true;
+      }
+   }
+
    if (doNotAdvanceTempo)
       doNotAdvanceTempo = false;
    else
-      ;
-   tempo.advance(args.sampleRate);
+      tempo.advance(args.sampleRate);
 
    tempoDisplay.setColor(SchweineSystem::Color{100, 100, 255});
    tempoDisplay.setValue(tempo.getBeatsPerMinute());
@@ -170,7 +181,8 @@ void VCMCReceiver::processMessage(const midi::Message& msg)
 
       if (Midi::Event::Clock == event)
       {
-         if (0 == tickCounter.valueAndNext())
+         const bool override = inputs[Panel::ClockOverride].isConnected();
+         if (!override && 0 == tickCounter.valueAndNext())
          {
             tempo.clockTick();
             clockTick.trigger();
