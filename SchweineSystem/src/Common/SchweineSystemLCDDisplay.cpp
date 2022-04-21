@@ -33,7 +33,6 @@ SchweineSystem::LCDDisplay::Controller::Controller(rack::engine::Module* module,
 void SchweineSystem::LCDDisplay::Controller::setValue(const uint16_t& value)
 {
    module->params[valueParamId].setValue(static_cast<float>(value));
-   const float fValue = module->params[valueParamId].getValue();
 }
 
 void SchweineSystem::LCDDisplay::Controller::setColor(const SchweineSystem::Color& color)
