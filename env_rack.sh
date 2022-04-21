@@ -30,5 +30,4 @@ function travel_sync {
 }
 
 _set_rack_dir
-_checkout
 

@@ -4,6 +4,7 @@
 #include <Midi/MidiCommon.h>
 #include <Tools/SevenBit.h>
 
+#include "SchweineSystemJson.h"
 #include "SchweineSystemLCDDisplay.h"
 #include "SchweineSystemMaster.h"
 
@@ -11,8 +12,8 @@ const std::string TimeLordServer::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 TimeLordServer::TimeLordServer()
    : Module()
-   , midiInput()
    , ramps{}
+   , midiInput()
    , clockTrigger()
    , resetTrigger()
    , tempo()
@@ -20,8 +21,15 @@ TimeLordServer::TimeLordServer()
    , lightMeterList(lights)
    , outputList(outputs)
    , rampDisplayList(this)
+   , displayMode(StageIndex)
+   , displayModeLightList(lights)
+   , displayTrigger()
+   , modeColors{SchweineSystem::Color{255, 0, 0}, SchweineSystem::Color{100, 100, 255}, SchweineSystem::Color{0, 255, 0}}
    , bankDisplay(this, Panel::Value_Bank)
-   , loadState(LoadState::Ready)
+   , bankIndex(0)
+   , bankTrigger()
+   , receiveState(false)
+   , applyPulse()
 {
    setup();
 
@@ -52,6 +60,12 @@ TimeLordServer::TimeLordServer()
                            Panel::Value_Channel7_Display,
                            Panel::Value_Channel8_Display});
 
+   displayModeLightList.append({Panel::Red_Division, Panel::Red_Stage, Panel::Red_Current});
+   for (uint8_t modeIndex = 0; modeIndex < 3; modeIndex++)
+   {
+      displayModeLightList[modeIndex]->setDefaultColor(modeColors[modeIndex]);
+   }
+
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       lightMeterList[rampIndex]->setMaxValue(255);
@@ -81,15 +95,51 @@ void TimeLordServer::process(const ProcessArgs& args)
    else
       tempo.advance(args.sampleRate);
 
-   bankDisplay.setColor(SchweineSystem::Color{255, 255, 255});
-   bankDisplay.setValue(8);
+   if (bankTrigger.process(params[Panel::BankUp].getValue()))
+   {
+      bankIndex++;
+      if (bankIndex >= 10)
+         bankIndex = 0;
+   }
+
+   if (receiveState)
+      bankDisplay.setColor(SchweineSystem::Color{255, 0, 0});
+   else if (applyPulse.process(args.sampleTime))
+      bankDisplay.setColor(SchweineSystem::Color{0, 255, 0});
+   else
+      bankDisplay.setColor(SchweineSystem::Color{255, 255, 0});
+
+   bankDisplay.setValue(bankIndex);
+
+   if (displayTrigger.process(params[Panel::Mode].getValue()))
+   {
+      if (Division == displayMode)
+         displayMode = StageCount;
+      else if (StageCount == displayMode)
+         displayMode = StageIndex;
+      else
+         displayMode = Division;
+   }
+
+   for (uint8_t modeIndex = 0; modeIndex < 3; modeIndex++)
+   {
+      if (modeIndex == displayMode)
+         displayModeLightList[modeIndex]->setOn();
+      else
+         displayModeLightList[modeIndex]->setOff();
+   }
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
-      rampDisplayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 100});
-      rampDisplayList[rampIndex]->setValue(20);
-
       PolyRamp* polyRamp = &ramps[rampIndex];
+
+      rampDisplayList[rampIndex]->setColor(modeColors[displayMode]);
+      if (Division == displayMode)
+         rampDisplayList[rampIndex]->setValue(polyRamp->getStepSize());
+      else if (StageCount == displayMode)
+         rampDisplayList[rampIndex]->setValue(polyRamp->getLength());
+      else
+         rampDisplayList[rampIndex]->setValue(polyRamp->getCurrentStageIndex());
 
       if (isReset)
          polyRamp->clockReset();
@@ -127,23 +177,25 @@ void TimeLordServer::dataFromInput(const Bytes& message)
    {
       const uint8_t value = message[2];
       buffer << value;
-      loadState = LoadState::Receive;
+      receiveState = true;
    }
    else if (Midi::ControllerMessage::RememberApply == controllerMessage)
    {
       const Bytes data = SevenBit::decode(buffer);
       buffer.clear();
 
-      for (uint8_t byte : data)
-         std::cout << (char)byte;
-      std::cout << std::endl;
+      receiveState = false;
+
+      const uint8_t value = message[2];
+      if (value != bankIndex)
+         return;
 
       json_error_t error;
       const char* cBuffer = (const char*)data.data();
       json_t* rootJson = json_loadb(cBuffer, data.size(), 0, &error);
 
       dataFromJson(rootJson);
-      loadState = LoadState::Apply;
+      applyPulse.trigger(2.0);
    }
 }
 
@@ -188,98 +240,85 @@ void TimeLordServer::midiError(RtMidiError::Type type, const std::string& errorT
 
 json_t* TimeLordServer::dataToJson()
 {
-   json_t* rootJson = json_object();
+   using namespace SchweineSystem::Json;
+
+   Object rootObject;
+   rootObject.set("bank", bankIndex);
+   rootObject.set("mode", static_cast<uint8_t>(displayMode));
+
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       PolyRamp* polyRamp = &ramps[rampIndex];
 
-      json_t* rampJson = json_object();
+      Object rampObject;
 
       const uint32_t length = polyRamp->getLength();
-      json_object_set_new(rampJson, "length", json_integer(length));
+      rampObject.set("length", json_integer(length));
 
       const uint8_t stepSize = static_cast<uint8_t>(polyRamp->getStepSize());
-      json_object_set_new(rampJson, "stepSize", json_integer(stepSize));
+      rampObject.set("stepSize", json_integer(stepSize));
 
       const bool loop = polyRamp->isLooping();
-      json_object_set_new(rampJson, "loop", json_boolean(loop));
+      rampObject.set("loop", json_boolean(loop));
 
-      json_t* stagesArrayJson = json_array();
+      Array stagesArray;
       for (uint8_t stageIndex = 0; stageIndex < polyRamp->stageCount(); stageIndex++)
       {
-         json_t* stageJson = json_object();
+         Object stageObject;
 
          const uint8_t stageLength = polyRamp->getStageLength(stageIndex);
-         json_object_set_new(stageJson, "length", json_integer(stageLength));
+         stageObject.set("length", json_integer(stageLength));
 
          const uint8_t startHeight = polyRamp->getStageStartHeight(stageIndex);
-         json_object_set_new(stageJson, "startHeight", json_integer(startHeight));
+         stageObject.set("startHeight", json_integer(startHeight));
 
-         json_array_append_new(stagesArrayJson, stageJson);
+         stagesArray.append(stageObject);
       }
-      json_object_set_new(rampJson, "stages", stagesArrayJson);
+      rampObject.set("stages", stagesArray);
 
-      json_object_set_new(rootJson, keys.substr(rampIndex, 1).c_str(), rampJson);
+      rootObject.set(keys.substr(rampIndex, 1), rampObject);
    }
-   return rootJson;
+
+   return rootObject.toJson();
 }
 
 void TimeLordServer::dataFromJson(json_t* rootJson)
 {
+   using namespace SchweineSystem::Json;
+
+   Object rootObject(rootJson);
+   bankIndex = rootObject.get("bank").toInt();
+   displayMode = static_cast<DisplayMode>(rootObject.get("mode").toInt());
+
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       PolyRamp* polyRamp = &ramps[rampIndex];
       polyRamp->clear();
 
-      json_t* rampJson = json_object_get(rootJson, keys.substr(rampIndex, 1).c_str());
-      if (!rampJson)
-         continue;
+      Object rampObject = rootObject.get(keys.substr(rampIndex, 1)).toObject();
 
-      json_t* lengthJson = json_object_get(rampJson, "length");
-      if (lengthJson)
-      {
-         const uint32_t length = json_integer_value(lengthJson);
-         polyRamp->setLength(length, true);
-      }
+      const uint32_t length = rampObject.get("length").toInt();
+      polyRamp->setLength(length);
 
-      json_t* stepSizeJson = json_object_get(rampJson, "stepSize");
-      if (stepSizeJson)
-      {
-         const Tempo::Division stepSize = static_cast<Tempo::Division>(json_integer_value(stepSizeJson));
-         polyRamp->setStepSize(stepSize);
-      }
+      const uint8_t stepSize = rampObject.get("stepSize").toInt();
+      polyRamp->setStepSize(static_cast<Tempo::Division>(stepSize));
 
-      json_t* loopJson = json_object_get(rampJson, "loop");
-      if (loopJson)
-      {
-         const bool loop = json_boolean_value(loopJson);
-         polyRamp->setLooping(loop);
-      }
+      const bool loop = rampObject.get("loop").toBool();
+      polyRamp->setLooping(loop);
 
-      json_t* stagesArrayObject = json_object_get(rampJson, "stages");
-      if (!stagesArrayObject)
-         continue;
-
-      const uint8_t stageCount = json_array_size(stagesArrayObject);
+      Array stagesArray = rampObject.get("stages").toArray();
+      const uint8_t stageCount = stagesArray.size();
       polyRamp->addStage(0, stageCount);
 
       for (uint8_t stageIndex = 0; stageIndex < stageCount; stageIndex++)
       {
-         json_t* stageJson = json_array_get(stagesArrayObject, stageIndex);
+         Object stageObject = stagesArray.get(stageIndex).toObject();
 
-         json_t* stageLengthJson = json_object_get(stageJson, "length");
-         if (stageLengthJson)
-         {
-            const uint8_t stageLength = json_integer_value(stageLengthJson);
-            polyRamp->setStageLength(stageIndex, stageLength);
-         }
+         const uint8_t stageLength = stageObject.get("length").toInt();
+         polyRamp->setStageLength(stageIndex, stageLength);
 
-         json_t* stageHeightJson = json_object_get(stageJson, "startHeight");
-         if (stageHeightJson)
-         {
-            const uint8_t startHeight = json_integer_value(stageHeightJson);
-            polyRamp->setStageStartHeight(stageIndex, startHeight);
-         }
+         const uint8_t startHeight = stageObject.get("startHeight").toInt();
+         polyRamp->setStageStartHeight(stageIndex, startHeight);
       }
    }
 }

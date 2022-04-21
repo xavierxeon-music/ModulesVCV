@@ -81,6 +81,14 @@
          "tags": [
             "Utility"
          ]
+      },
+      {
+         "slug": "ClockTool",
+         "name": "Clock Tool",
+         "description": "measure bpm and get divisions",
+         "tags": [
+            "Utility"
+         ]
       }
    ]
 }

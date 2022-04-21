@@ -30,11 +30,11 @@ public:
 private:
    using Bytes = std::vector<uint8_t>;
 
-   enum class LoadState
+   enum DisplayMode
    {
-      Ready,
-      Receive,
-      Apply
+      Division,
+      StageCount,
+      StageIndex
    };
 
 private:
@@ -47,19 +47,29 @@ private:
    void dataFromJson(json_t* rootJson) override;
 
 private:
-   RtMidiIn midiInput;
-   static const std::string keys;
    PolyRamp ramps[8];
+   static const std::string keys;
+
+   RtMidiIn midiInput;
    dsp::BooleanTrigger clockTrigger;
    dsp::BooleanTrigger resetTrigger;
    Tempo tempo;
+
    Range::Mapper cvMapper;
    SchweineSystem::LightMeter::List lightMeterList;
    SchweineSystem::Output::List outputList;
+
    SchweineSystem::LCDDisplay::Controller::List rampDisplayList;
+   DisplayMode displayMode;
+   SchweineSystem::Light::List displayModeLightList;
+   dsp::BooleanTrigger displayTrigger;
+   SchweineSystem::Color modeColors[3];
 
    SchweineSystem::LCDDisplay::Controller bankDisplay;
-   LoadState loadState;
+   uint8_t bankIndex;
+   dsp::BooleanTrigger bankTrigger;
+   bool receiveState;
+   dsp::PulseGenerator applyPulse;
 };
 
 class TimeLordServerWidget : public ModuleWidget
