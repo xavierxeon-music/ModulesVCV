@@ -1,9 +1,5 @@
 #!/bin/bash
 
-VERSION=2.1.0
-
-#####################################################3
-
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"   
 (return 0 2>/dev/null) && THIS_SCRIPT_IS_SOURCED=1 || THIS_SCRIPT_IS_SOURCED=0
 
@@ -23,49 +19,6 @@ function _set_rack_dir {
       echo "export RACK_DIR=$SCRIPT_DIR/Rack" >> ~/.profile
       echo "rack environment ready"
    fi
-}
-
-function _checkout {
-   
-   local CURRENT_DIR=$(pwd)
-
-   if [ -f $SCRIPT_DIR/Rack/README.md ]
-   then
-      return
-   fi
-
-   git submodule update --init --recursive
-
-   cd $SCRIPT_DIR/Rack
-   local BRANCH_EXIST_TEST=$(git branch -l | grep $VERSION)
-   if [ -z "$BRANCH_EXIST_TEST" ]
-   then
-      echo "new branch"
-      git checkout tags/v$VERSION -b $VERSION
-   fi
-
-   local BRANCH_CURRENT_TEST=$(git branch --show-current)
-   if [ "$BRANCH_CURRENT_TEST" != "$VERSION" ]
-   then
-      git switch $VERSION 
-   
-      cd $SCRIPT_DIR/Rack
-      make dep -j 16
-      make -j 16
-
-      cd $SCRIPT_DIR/Rack/plugins
-      ln -s ../../3rdParty/Fundamental Fundamental   
-      ln -s ../../3rdParty/ImpromptuModular ImpromptuModular      
-      ln -s ../../SchweineSystem SchweineSystem
-
-      cd $SCRIPT_DIR/3rdParty/Fundamental
-      make
-
-      cd $SCRIPT_DIR/3rdParty/ImpromptuModular
-      make
-   fi
-
-   cd $CURRENT_DIR
 }
 
 function module {
