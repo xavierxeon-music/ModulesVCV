@@ -75,8 +75,8 @@
          ]
       },
       {
-         "slug": "TimeLordServer",
-         "name": "Time Lord Server",
+         "slug": "TimeLord",
+         "name": "Time Lord",
          "description": "poly ramps in time and space",
          "tags": [
             "Utility"

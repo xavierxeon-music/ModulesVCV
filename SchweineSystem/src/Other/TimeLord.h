@@ -1,5 +1,5 @@
-#ifndef TimeLordServerH
-#define TimeLordServerH
+#ifndef TimeLordH
+#define TimeLordH
 
 #include <rack.hpp>
 using namespace rack;
@@ -15,14 +15,14 @@ using namespace rack;
 #include <SchweineSystemLCDDisplay.h>
 #include <SchweineSystemLight.h>
 
-class TimeLordServer : public Module
+class TimeLord : public Module
 {
 public:
    struct Panel;
 
 public:
-   TimeLordServer();
-   ~TimeLordServer();
+   TimeLord();
+   ~TimeLord();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -37,11 +37,28 @@ private:
       StageIndex
    };
 
+   class Majordomo
+   {
+   public:
+      static void hello(TimeLord* server);
+      static void bye(TimeLord* server);
+
+   private:
+      Majordomo();
+      void start();
+      void stop();
+      static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
+      static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
+
+   private:
+      static Majordomo* me;
+      RtMidiIn midiInput;
+      std::vector<TimeLord*> instanceList;
+   };
+
 private:
    void setup();
-   void dataFromInput(const Bytes& message);
-   static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
-   static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
+   void dataFromMidiInput(const Bytes& message);
 
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
@@ -50,7 +67,6 @@ private:
    PolyRamp ramps[8];
    static const std::string keys;
 
-   RtMidiIn midiInput;
    dsp::BooleanTrigger clockTrigger;
    dsp::BooleanTrigger resetTrigger;
    Tempo tempo;
@@ -72,13 +88,13 @@ private:
    dsp::PulseGenerator applyPulse;
 };
 
-class TimeLordServerWidget : public ModuleWidget
+class TimeLordWidget : public ModuleWidget
 {
 public:
-   TimeLordServerWidget(TimeLordServer* module);
+   TimeLordWidget(TimeLord* module);
 
 private:
-   SvgPanel* setup(TimeLordServer* module);
+   SvgPanel* setup(TimeLord* module);
 };
 
-#endif // NOT TimeLordServerH
+#endif // NOT TimeLordH

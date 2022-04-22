@@ -1,9 +1,9 @@
-#ifndef TimeLordServerPanelH
-#define TimeLordServerPanelH
+#ifndef TimeLordPanelH
+#define TimeLordPanelH
 
-#include "TimeLordServer.h"
+#include "TimeLord.h"
 
-struct TimeLordServer::Panel
+struct TimeLord::Panel
 {
    enum ParamId
    {
@@ -189,7 +189,6 @@ struct TimeLordServer::Panel
       Blue_Mode,
       LIGHTS_LEN
    };
-
 };
 
-#endif // NOT TimeLordServerPanelH
+#endif // NOT TimeLordPanelH

@@ -4,10 +4,10 @@
 ./src/Hardware/VCMCReceiverPanel.h
 ./src/Hardware/VCMCReceiver.h
 ./src/SchweineSystem.h
-./src/Other/TimeLordServerPanel.h
-./src/Other/TimeLordServer.cpp
-./src/Other/TimeLordServer.h
-./src/Other/TimeLordServerPanel.cpp
+./src/Other/TimeLordPanel.h
+./src/Other/TimeLord.cpp
+./src/Other/TimeLord.h
+./src/Other/TimeLordPanel.cpp
 ./src/Common/SchweineSystemMaster.hpp
 ./src/Common/SchweineSystemLCDDisplay.h
 ./src/Common/SchweineSystemOutput.cpp
