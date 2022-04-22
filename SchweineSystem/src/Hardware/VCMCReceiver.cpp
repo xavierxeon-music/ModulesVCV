@@ -20,7 +20,7 @@ VCMCReceiver::VCMCReceiver()
    , clockReset()
    , resetTrigger()
    , connectionLight(lights)
-   , tempoDisplay(this, Panel::Value_Clock)
+   , tempoDisplay(this, Panel::Value_Clock, Panel::Red_Clock)
    , gates{false, false, false, false, false, false, false, false}
    , lightListGate(lights)
    , gateList(outputs)
@@ -116,7 +116,6 @@ void VCMCReceiver::process(const ProcessArgs& args)
    else
       tempo.advance(args.sampleRate);
 
-   tempoDisplay.setColor(SchweineSystem::Color{100, 100, 255});
    tempoDisplay.setValue(tempo.getBeatsPerMinute());
 
    outputs[Panel::Clock].setVoltage(clockTick.process(args.sampleTime) ? 10.f : 0.f);
@@ -210,7 +209,7 @@ void VCMCReceiver::connectToMidiDevice()
    for (const int& deviceId : midiInput.getDeviceIds())
    {
       const std::string deviceName = midiInput.getDeviceName(deviceId);
-      std::cout << deviceName << std::endl;
+      // std::cout << deviceName << std::endl;
 
       if (targetDeviceName == deviceName)
       {

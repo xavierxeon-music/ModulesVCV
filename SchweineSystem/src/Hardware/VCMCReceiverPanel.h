@@ -9,7 +9,6 @@ struct VCMCReceiver::Panel
    {
       Connect,
       Value_Clock,
-      RGB_Clock,
       PARAMS_LEN
    };
 
@@ -319,6 +318,9 @@ struct VCMCReceiver::Panel
       Red_Connect,
       Green_Connect,
       Blue_Connect,
+      Red_Clock,
+      Green_Clock,
+      Blue_Clock,
       LIGHTS_LEN
    };
 

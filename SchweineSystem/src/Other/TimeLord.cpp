@@ -115,7 +115,7 @@ TimeLord::TimeLord()
    , displayModeLightList(lights)
    , displayTrigger()
    , modeColors{SchweineSystem::Color{255, 0, 0}, SchweineSystem::Color{100, 100, 255}, SchweineSystem::Color{0, 255, 0}}
-   , bankDisplay(this, Panel::Value_Bank)
+   , bankDisplay(this, Panel::Value_Bank_Display, Panel::Red_Bank_Display)
    , bankIndex(0)
    , bankTrigger()
    , receiveState(false)
@@ -142,14 +142,14 @@ TimeLord::TimeLord()
                       Panel::Channel7_Output,
                       Panel::Channel8_Output});
 
-   rampDisplayList.append({Panel::Value_Channel1_Display,
-                           Panel::Value_Channel2_Display,
-                           Panel::Value_Channel3_Display,
-                           Panel::Value_Channel4_Display,
-                           Panel::Value_Channel5_Display,
-                           Panel::Value_Channel6_Display,
-                           Panel::Value_Channel7_Display,
-                           Panel::Value_Channel8_Display});
+   rampDisplayList.append({{Panel::Value_Channel1_Display, Panel::Red_Channel1_Display},
+                           {Panel::Value_Channel2_Display, Panel::Red_Channel2_Display},
+                           {Panel::Value_Channel3_Display, Panel::Red_Channel3_Display},
+                           {Panel::Value_Channel4_Display, Panel::Red_Channel4_Display},
+                           {Panel::Value_Channel5_Display, Panel::Red_Channel5_Display},
+                           {Panel::Value_Channel6_Display, Panel::Red_Channel6_Display},
+                           {Panel::Value_Channel7_Display, Panel::Red_Channel7_Display},
+                           {Panel::Value_Channel8_Display, Panel::Red_Channel8_Display}});
 
    displayModeLightList.append({Panel::Red_Division, Panel::Red_Stage, Panel::Red_Current});
    for (uint8_t modeIndex = 0; modeIndex < 3; modeIndex++)
@@ -180,7 +180,7 @@ void TimeLord::process(const ProcessArgs& args)
    else
       tempo.advance(args.sampleRate);
 
-   if (bankTrigger.process(params[Panel::BankUp].getValue()))
+   if (bankTrigger.process(params[Panel::Bank_Up].getValue()))
    {
       bankIndex++;
       if (bankIndex >= 10)

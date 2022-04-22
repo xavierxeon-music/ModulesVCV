@@ -2,31 +2,19 @@
 
 #include "SchweineSystemMaster.h"
 
-static union
-{
-   float value;
-   struct
-   {
-      uint8_t alpha;
-      uint8_t red;
-      uint8_t green;
-      uint8_t blue;
-   };
-} convert;
-
 // data
 
-SchweineSystem::LCDDisplay::Data::Data(rack::engine::Module* module, const uint16_t& valueParamId)
+SchweineSystem::LCDDisplay::Data::Data(rack::engine::Module* module, const uint16_t& valueParamId, const uint16_t& redLightId)
    : module(module)
    , valueParamId(valueParamId)
+   , redLightId(redLightId)
 {
-   convert.alpha = 0;
 }
 
 // controller
 
-SchweineSystem::LCDDisplay::Controller::Controller(rack::engine::Module* module, const uint16_t& valueParamId)
-   : Data(module, valueParamId)
+SchweineSystem::LCDDisplay::Controller::Controller(rack::engine::Module* module, const uint16_t& valueParamId, const uint16_t& redLightId)
+   : Data(module, valueParamId, redLightId)
 {
 }
 
@@ -37,11 +25,14 @@ void SchweineSystem::LCDDisplay::Controller::setValue(const uint16_t& value)
 
 void SchweineSystem::LCDDisplay::Controller::setColor(const SchweineSystem::Color& color)
 {
-   convert.red = color.red;
-   convert.green = color.green;
-   convert.blue = color.blue;
+   const float red = static_cast<float>(color.red) / 255.0;
+   module->lights[redLightId + 0].setBrightness(red);
 
-   module->params[valueParamId + 1].setValue(convert.value);
+   const float green = static_cast<float>(color.green) / 255.0;
+   module->lights[redLightId + 1].setBrightness(green);
+
+   const float blue = static_cast<float>(color.blue) / 255.0;
+   module->lights[redLightId + 2].setBrightness(blue);
 }
 
 // controller list
@@ -57,11 +48,11 @@ SchweineSystem::LCDDisplay::Controller::List::~List()
       delete instance;
 }
 
-void SchweineSystem::LCDDisplay::Controller::List::append(const std::vector<uint16_t>& valueParamIdLists)
+void SchweineSystem::LCDDisplay::Controller::List::append(const ParamMap& paramMap)
 {
-   for (const uint16_t& valueParamId : valueParamIdLists)
+   for (ParamMap::const_iterator it = paramMap.cbegin(); it != paramMap.cend(); it++)
    {
-      Controller* controller = new Controller(module, valueParamId);
+      Controller* controller = new Controller(module, it->first, it->second);
       instanceList.push_back(controller);
    }
 }
@@ -73,9 +64,9 @@ SchweineSystem::LCDDisplay::Controller* SchweineSystem::LCDDisplay::Controller::
 
 // widget
 
-SchweineSystem::LCDDisplay::Widget::Widget(rack::math::Vec pos, rack::engine::Module* module, const uint8_t& digitCount, const uint16_t& valueParamId)
+SchweineSystem::LCDDisplay::Widget::Widget(rack::math::Vec pos, rack::engine::Module* module, const uint8_t& digitCount, const uint16_t& valueParamId, const uint16_t& redLightId)
    : rack::TransparentWidget()
-   , Data(module, valueParamId)
+   , Data(module, valueParamId, redLightId)
    , font()
    , fontPath()
    , digitCount(digitCount)
@@ -101,8 +92,11 @@ void SchweineSystem::LCDDisplay::Widget::drawLayer(const DrawArgs& args, int lay
       if (!module)
          return nvgRGB(255, 25, 255);
 
-      convert.value = module->params[valueParamId + 1].getValue();
-      return nvgRGB(convert.red, convert.green, convert.blue);
+      const float red = 255.0 * module->lights[redLightId + 0].getBrightness();
+      const float green = 255.0 * module->lights[redLightId + 1].getBrightness();
+      const float blue = 255.0 * module->lights[redLightId + 2].getBrightness();
+
+      return nvgRGB(red, green, blue);
    }();
 
    std::string placeholder = std::string(digitCount, '~');
@@ -113,7 +107,7 @@ void SchweineSystem::LCDDisplay::Widget::drawLayer(const DrawArgs& args, int lay
          return std::string("");
 
       const float fValue = module->params[valueParamId].getValue();
-      const uint8_t value = static_cast<uint8_t>(fValue);
+      const uint16_t value = static_cast<uint16_t>(fValue);
 
       return std::to_string(value);
    }();

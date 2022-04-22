@@ -28,7 +28,6 @@ def _addComponents(headerfile, components):
     for display in displays:
         name = display['name']
         headerfile.write(_indent(2) + f'Value_{name},\n')
-        headerfile.write(_indent(2) + f'RGB_{name},\n')
     headerfile.write(_indent(2) + 'PARAMS_LEN\n')
     headerfile.write(_indent(1) + '};\n')
     headerfile.write('\n')
@@ -60,6 +59,11 @@ def _addComponents(headerfile, components):
         headerfile.write(_indent(2) + f'Blue_{name},\n')
     for latch in latches:
         name = latch['name']
+        headerfile.write(_indent(2) + f'Red_{name},\n')
+        headerfile.write(_indent(2) + f'Green_{name},\n')
+        headerfile.write(_indent(2) + f'Blue_{name},\n')
+    for display in displays:
+        name = display['name']
         headerfile.write(_indent(2) + f'Red_{name},\n')
         headerfile.write(_indent(2) + f'Green_{name},\n')
         headerfile.write(_indent(2) + f'Blue_{name},\n')
@@ -182,8 +186,7 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
         for display in displays:
             name = display['name']
             count = int(display['count'])
-            sourcefile.write(_indent(1) + f'configParam(Panel::Value_{name}, 0.f, {10**count}, 0.f, "");\n')
-            sourcefile.write(_indent(1) + f'configParam(Panel::RGB_{name}, 0.f, std::numeric_limits<float>::max(), 0.f, "");\n')
+            sourcefile.write(_indent(1) + f'configParam(Panel::Value_{name}, 0.f, {10**count}, 0.f, "");\n')           
 
         if latches:
             sourcefile.write('\n')
@@ -262,7 +265,7 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
             count = display['count']
             x = display['rx']
             y = display['ry']
-            sourcefile.write(_indent(1) + f'addChild(new SchweineSystem::LCDDisplay::Widget(Vec({x}, {y}), module, {count}, {panelName}::Panel::Value_{name}));\n')
+            sourcefile.write(_indent(1) + f'addChild(new SchweineSystem::LCDDisplay::Widget(Vec({x}, {y}), module, {count}, {panelName}::Panel::Value_{name}, {panelName}::Panel::Red_{name}));\n')
 
         sourcefile.write('\n')
         sourcefile.write(_indent(1) + 'return mainPanel;\n')

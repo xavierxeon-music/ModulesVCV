@@ -164,11 +164,11 @@
             </g>
         </g>
     </g>
-    <g>
-        <g id="BankUp-latch" serif:id="BankUp#latch" transform="matrix(0.174892,0,0,0.175002,14.3508,220.617)">
+    <g id="Bank">
+        <g id="Up-latch" serif:id="Up#latch" transform="matrix(0.174892,0,0,0.175002,14.3508,220.617)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(102,126,153);"/>
         </g>
-        <g id="Bank-display-1" serif:id="Bank#display$1" transform="matrix(0.375033,0,0,1.02078,-3.73013,144.503)">
+        <g id="Display-display-1" serif:id="Display#display$1" transform="matrix(0.375033,0,0,1.02078,-3.73013,144.503)">
             <rect x="87.136" y="70.02" width="47.996" height="23.511" style="fill:rgb(19,19,19);"/>
         </g>
     </g>
