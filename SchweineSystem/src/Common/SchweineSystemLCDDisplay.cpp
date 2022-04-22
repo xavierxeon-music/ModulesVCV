@@ -18,7 +18,7 @@ SchweineSystem::LCDDisplay::Controller::Controller(rack::engine::Module* module,
 {
 }
 
-void SchweineSystem::LCDDisplay::Controller::setValue(const uint16_t& value)
+void SchweineSystem::LCDDisplay::Controller::setValue(const uint32_t& value)
 {
    module->params[valueParamId].setValue(static_cast<float>(value));
 }
@@ -107,7 +107,7 @@ void SchweineSystem::LCDDisplay::Widget::drawLayer(const DrawArgs& args, int lay
          return std::string("");
 
       const float fValue = module->params[valueParamId].getValue();
-      const uint16_t value = static_cast<uint16_t>(fValue);
+      const uint32_t value = static_cast<uint32_t>(fValue); // use 32 bit to avoid buffer overflow
 
       return std::to_string(value);
    }();

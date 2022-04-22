@@ -4,9 +4,8 @@
 #include <Midi/MidiCommon.h>
 #include <Tools/SevenBit.h>
 
-#include "SchweineSystemJson.h"
-#include "SchweineSystemLCDDisplay.h"
-#include "SchweineSystemMaster.h"
+#include <SchweineSystemLCDDisplay.h>
+#include <SchweineSystemMaster.h>
 
 // receiver
 
@@ -104,6 +103,7 @@ const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 TimeLord::TimeLord()
    : Module()
    , ramps{}
+   , midiBuffer()
    , clockTrigger()
    , resetTrigger()
    , tempo()
@@ -242,8 +242,6 @@ void TimeLord::process(const ProcessArgs& args)
 
 void TimeLord::dataFromMidiInput(const Bytes& message)
 {
-   static Bytes buffer;
-
    const bool isSystemEvent = (0xF0 == (message[0] & 0xF0));
    if (isSystemEvent)
       return;
@@ -261,13 +259,13 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
    if (Midi::ControllerMessage::RememberBlock == controllerMessage)
    {
       const uint8_t value = message[2];
-      buffer << value;
+      midiBuffer << value;
       receiveState = true;
    }
    else if (Midi::ControllerMessage::RememberApply == controllerMessage)
    {
-      const Bytes data = SevenBit::decode(buffer);
-      buffer.clear();
+      const Bytes data = SevenBit::decode(midiBuffer);
+      midiBuffer.clear();
 
       receiveState = false;
 
@@ -275,11 +273,18 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       if (value != bankIndex)
          return;
 
-      json_error_t error;
       const char* cBuffer = (const char*)data.data();
+      /*
+      for (uint8_t byte : data)
+         std::cout << byte;
+      std::cout << std::endl;
+      */
+      json_error_t error;
       json_t* rootJson = json_loadb(cBuffer, data.size(), 0, &error);
 
-      dataFromJson(rootJson);
+      SchweineSystem::Json::Object rootObject(rootJson);
+      loadInternal(rootObject);
+
       applyPulse.trigger(2.0);
    }
 }
@@ -335,6 +340,13 @@ void TimeLord::dataFromJson(json_t* rootJson)
    Object rootObject(rootJson);
    bankIndex = rootObject.get("bank").toInt();
    displayMode = static_cast<DisplayMode>(rootObject.get("mode").toInt());
+
+   loadInternal(rootObject);
+}
+
+void TimeLord::loadInternal(const SchweineSystem::Json::Object& rootObject)
+{
+   using namespace SchweineSystem::Json;
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {

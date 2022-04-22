@@ -10,10 +10,11 @@ using namespace rack;
 #include <Music/Tempo.h>
 #include <Tools/Range.h>
 
-#include "SchweineSystemCommon.h"
-#include "SchweineSystemLightMeter.h"
+#include <SchweineSystemCommon.h>
+#include <SchweineSystemJson.h>
 #include <SchweineSystemLCDDisplay.h>
 #include <SchweineSystemLight.h>
+#include <SchweineSystemLightMeter.h>
 
 class TimeLord : public Module
 {
@@ -62,10 +63,12 @@ private:
 
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
+   void loadInternal(const SchweineSystem::Json::Object& rootObject);
 
 private:
    PolyRamp ramps[8];
    static const std::string keys;
+   Bytes midiBuffer;
 
    dsp::BooleanTrigger clockTrigger;
    dsp::BooleanTrigger resetTrigger;

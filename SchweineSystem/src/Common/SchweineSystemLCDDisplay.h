@@ -29,7 +29,7 @@ namespace SchweineSystem
          Controller(rack::engine::Module* module, const uint16_t& valueParamId, const uint16_t& redLightId);
 
       public:
-         void setValue(const uint16_t& value);
+         void setValue(const uint32_t& value);
          void setColor(const SchweineSystem::Color& color);
       };
 
