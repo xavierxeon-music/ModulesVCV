@@ -221,9 +221,10 @@ void TimeLord::process(const ProcessArgs& args)
       PolyRamp* polyRamp = &ramps[rampIndex];
 
       rampDisplayList[rampIndex]->setColor(modeColors[displayMode]);
+
       if (Division == displayMode)
          rampDisplayList[rampIndex]->setValue(polyRamp->getStepSize());
-      else if (StageCount == displayMode)
+      else if (Length == displayMode)
          rampDisplayList[rampIndex]->setValue(polyRamp->getLength());
       else if (StageCount == displayMode)
          rampDisplayList[rampIndex]->setValue(polyRamp->getStageCount());
@@ -278,11 +279,14 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
          return;
 
       const char* cBuffer = (const char*)data.data();
-      /*
-      for (uint8_t byte : data)
-         std::cout << byte;
-      std::cout << std::endl;
-      */
+      auto printIncomingData = [&]()
+      {
+         for (uint8_t byte : data)
+            std::cout << byte;
+         std::cout << std::endl;
+      };
+      printIncomingData();
+
       json_error_t error;
       json_t* rootJson = json_loadb(cBuffer, data.size(), 0, &error);
 
@@ -308,13 +312,13 @@ json_t* TimeLord::dataToJson()
       Object rampObject;
 
       const uint32_t length = polyRamp->getLength();
-      rampObject.set("length", json_integer(length));
+      rampObject.set("length", Value(length));
 
       const uint8_t stepSize = static_cast<uint8_t>(polyRamp->getStepSize());
-      rampObject.set("stepSize", json_integer(stepSize));
+      rampObject.set("stepSize", Value(stepSize));
 
       const bool loop = polyRamp->isLooping();
-      rampObject.set("loop", json_boolean(loop));
+      rampObject.set("loop", Value(loop));
 
       Array stagesArray;
       for (uint8_t stageIndex = 0; stageIndex < polyRamp->getStageCount(); stageIndex++)
@@ -322,10 +326,10 @@ json_t* TimeLord::dataToJson()
          Object stageObject;
 
          const uint8_t stageLength = polyRamp->getStageLength(stageIndex);
-         stageObject.set("length", json_integer(stageLength));
+         stageObject.set("length", Value(stageLength));
 
          const uint8_t startHeight = polyRamp->getStageStartHeight(stageIndex);
-         stageObject.set("startHeight", json_integer(startHeight));
+         stageObject.set("startHeight", Value(startHeight));
 
          stagesArray.append(stageObject);
       }

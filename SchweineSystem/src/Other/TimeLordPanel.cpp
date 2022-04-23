@@ -19,8 +19,8 @@ void TimeLord::setup()
    configParam(Panel::Value_Channel2_Display, 0.f, 1000, 0.f, "");
    configParam(Panel::Value_Channel1_Display, 0.f, 1000, 0.f, "");
 
-   configButton(Panel::Bank_Up, "Bank_Up");
    configButton(Panel::Mode, "Mode");
+   configButton(Panel::Bank_Up, "Bank_Up");
 
    configInput(Panel::Reset, "Reset");
    configInput(Panel::Clock, "Clock");
@@ -42,8 +42,8 @@ SvgPanel* TimeLordWidget::setup(TimeLord* module)
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(37.948802668, 253.50075081), module, TimeLord::Panel::Bank_Up, TimeLord::Panel::Red_Bank_Up));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(38.110399668, 118.60179081), module, TimeLord::Panel::Mode, TimeLord::Panel::Red_Mode));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(38.700342668, 247.47255081), module, TimeLord::Panel::Mode, TimeLord::Panel::Red_Mode));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(38.227227668, 117.31075081), module, TimeLord::Panel::Bank_Up, TimeLord::Panel::Red_Bank_Up));
 
    addInput(createInputCentered<PJ301MPort>(Vec(38.691244858000005, 344.74015081), module, TimeLord::Panel::Reset));
    addInput(createInputCentered<PJ301MPort>(Vec(38.691144858, 298.64460081), module, TimeLord::Panel::Clock));
@@ -57,10 +57,10 @@ SvgPanel* TimeLordWidget::setup(TimeLord* module)
    addOutput(createOutputCentered<PJ301MPort>(Vec(155.00044485799998, 69.92675080999999), module, TimeLord::Panel::Channel2_Output));
    addOutput(createOutputCentered<PJ301MPort>(Vec(155.00044485799998, 24.172750809999968), module, TimeLord::Panel::Channel1_Output));
 
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(38.557422, 96.32053999999998), module, TimeLord::Panel::Red_Current));
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(38.557422, 72.71063999999997), module, TimeLord::Panel::Red_Count));
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(38.395817, 48.59073999999998), module, TimeLord::Panel::Red_Length));
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(38.39581699999998, 24.470839999999978), module, TimeLord::Panel::Red_Division));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(39.147365, 225.19129999999998), module, TimeLord::Panel::Red_Current));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(39.147365, 201.58139999999997), module, TimeLord::Panel::Red_Count));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(38.98576, 177.46149999999997), module, TimeLord::Panel::Red_Length));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(38.98575999999998, 153.34159999999997), module, TimeLord::Panel::Red_Division));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(166.17974458249995, 366.1809999999999), module, TimeLord::Panel::Red_Channel8_Status5));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(156.76724458250004, 366.1809999999999), module, TimeLord::Panel::Red_Channel8_Status4));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(147.35399458249998, 366.1809999999999), module, TimeLord::Panel::Red_Channel8_Status3));
@@ -102,7 +102,7 @@ SvgPanel* TimeLordWidget::setup(TimeLord* module)
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(137.94074458249997, 45.904999999999944), module, TimeLord::Panel::Red_Channel1_Status2));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(128.52749458249997, 45.904999999999944), module, TimeLord::Panel::Red_Channel1_Status1));
 
-   addChild(new SchweineSystem::LCDDisplay::Widget(Vec(28.948745487999997, 215.9780156), module, 1, TimeLord::Panel::Value_Bank_Display, TimeLord::Panel::Red_Bank_Display));
+   addChild(new SchweineSystem::LCDDisplay::Widget(Vec(29.227170487999995, 79.7880156), module, 1, TimeLord::Panel::Value_Bank_Display, TimeLord::Panel::Red_Bank_Display));
    addChild(new SchweineSystem::LCDDisplay::Widget(Vec(86.99789936, 332.8730156), module, 3, TimeLord::Panel::Value_Channel8_Display, TimeLord::Panel::Red_Channel8_Display));
    addChild(new SchweineSystem::LCDDisplay::Widget(Vec(86.99789936, 287.1190156), module, 3, TimeLord::Panel::Value_Channel7_Display, TimeLord::Panel::Red_Channel7_Display));
    addChild(new SchweineSystem::LCDDisplay::Widget(Vec(86.99789936, 241.36531559999997), module, 3, TimeLord::Panel::Value_Channel6_Display, TimeLord::Panel::Red_Channel6_Display));

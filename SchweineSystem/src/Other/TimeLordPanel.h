@@ -7,8 +7,8 @@ struct TimeLord::Panel
 {
    enum ParamId
    {
-      Bank_Up,
       Mode,
+      Bank_Up,
       Value_Bank_Display,
       Value_Channel8_Display,
       Value_Channel7_Display,
@@ -175,12 +175,12 @@ struct TimeLord::Panel
       Red_Channel1_Status1,
       Green_Channel1_Status1,
       Blue_Channel1_Status1,
-      Red_Bank_Up,
-      Green_Bank_Up,
-      Blue_Bank_Up,
       Red_Mode,
       Green_Mode,
       Blue_Mode,
+      Red_Bank_Up,
+      Green_Bank_Up,
+      Blue_Bank_Up,
       Red_Bank_Display,
       Green_Bank_Display,
       Blue_Bank_Display,

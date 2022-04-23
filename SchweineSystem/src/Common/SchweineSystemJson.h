@@ -20,6 +20,8 @@ namespace SchweineSystem
          Value(const bool& value);
          Value(const int64_t& value);
          Value(const uint8_t& value);
+         Value(const uint16_t& value);
+         Value(const uint32_t& value);
          Value(const double& value);
          Value(const std::string& value);
 

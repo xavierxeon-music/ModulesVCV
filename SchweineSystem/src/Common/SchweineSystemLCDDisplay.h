@@ -36,14 +36,20 @@ namespace SchweineSystem
       class Controller::List
       {
       public:
-         using ParamMap = std::map<uint16_t, uint16_t>; // valueParam, redLight
+         struct Params
+         {
+            uint16_t valueParamId;
+            uint16_t redLightId;
+
+            using List = std::vector<Params>;
+         };
 
       public:
          List(rack::engine::Module* module);
          ~List();
 
       public:
-         void append(const ParamMap& paramMap);
+         void append(const Params::List& paramsList);
          Controller* operator[](const uint16_t& index);
 
       private:

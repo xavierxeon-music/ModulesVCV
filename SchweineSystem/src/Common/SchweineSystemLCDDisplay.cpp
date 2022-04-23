@@ -48,11 +48,11 @@ SchweineSystem::LCDDisplay::Controller::List::~List()
       delete instance;
 }
 
-void SchweineSystem::LCDDisplay::Controller::List::append(const ParamMap& paramMap)
+void SchweineSystem::LCDDisplay::Controller::List::append(const Params::List& paramsList)
 {
-   for (ParamMap::const_iterator it = paramMap.cbegin(); it != paramMap.cend(); it++)
+   for (const Params& params : paramsList)
    {
-      Controller* controller = new Controller(module, it->first, it->second);
+      Controller* controller = new Controller(module, params.valueParamId, params.redLightId);
       instanceList.push_back(controller);
    }
 }

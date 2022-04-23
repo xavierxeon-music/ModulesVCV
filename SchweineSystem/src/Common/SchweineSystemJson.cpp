@@ -22,6 +22,16 @@ SchweineSystem::Json::Value::Value(const uint8_t& value)
 {
 }
 
+SchweineSystem::Json::Value::Value(const uint16_t& value)
+   : json(json_integer(value))
+{
+}
+
+SchweineSystem::Json::Value::Value(const uint32_t& value)
+   : json(json_integer(value))
+{
+}
+
 SchweineSystem::Json::Value::Value(const double& value)
    : json(json_real(value))
 {
