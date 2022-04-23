@@ -36,7 +36,7 @@ void DoepferQuad::process(const ProcessArgs& args)
 
    for (ChannelStore::Map::iterator it = channelMap.begin(); it != channelMap.end(); it++)
    {
-      const Midi::Channel midiChannel = (it->first - 1);
+      const Midi::Channel& midiChannel = it->first;
       ChannelStore& channelStore = it->second;
 
       const float noteVoltage = inputs[channelStore.inputIdList[0]].getVoltage();
@@ -49,13 +49,15 @@ void DoepferQuad::process(const ProcessArgs& args)
       if (note != channelStore.prevNote || velocity != channelStore.prevVelocity)
       {
          midi::Message offMessage;
-         offMessage.bytes[0] = Midi::Event::NoteOff & midiChannel;
+         offMessage.setSize(3);
+         offMessage.bytes[0] = Midi::Event::NoteOff | (midiChannel - 1);
          offMessage.bytes[1] = channelStore.prevNote;
          offMessage.bytes[2] = 0;
          midiOutput.sendMessage(offMessage);
 
          midi::Message onMessage;
-         onMessage.bytes[0] = Midi::Event::NoteOn & midiChannel;
+         onMessage.setSize(3);
+         onMessage.bytes[0] = Midi::Event::NoteOn | (midiChannel - 1);
          onMessage.bytes[1] = note;
          onMessage.bytes[2] = velocity;
          midiOutput.sendMessage(onMessage);
@@ -69,11 +71,12 @@ void DoepferQuad::process(const ProcessArgs& args)
 
       if (controllerValue != channelStore.prevControllerValue)
       {
-         midi::Message message;
-         message.bytes[0] = Midi::Event::ControlChange & midiChannel;
-         message.bytes[1] = Midi::ControllerMessage::User01;
-         message.bytes[2] = controllerValue;
-         midiOutput.sendMessage(message);
+         midi::Message controllerMessage;
+         controllerMessage.setSize(3);
+         controllerMessage.bytes[0] = Midi::Event::ControlChange | (midiChannel - 1);
+         controllerMessage.bytes[1] = Midi::ControllerMessage::User01;
+         controllerMessage.bytes[2] = controllerValue;
+         midiOutput.sendMessage(controllerMessage);
 
          channelStore.prevControllerValue = controllerValue;
       }

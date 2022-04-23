@@ -1,9 +1,9 @@
-#ifndef TimeLordPanelH
-#define TimeLordPanelH
+#ifndef TestPanelH
+#define TestPanelH
 
-#include "TimeLord.h"
+#include "Test.h"
 
-struct TimeLord::Panel
+struct Test::Panel
 {
    enum ParamId
    {
@@ -228,7 +228,6 @@ struct TimeLord::Panel
    };
 
    Panel();
-
 };
 
-#endif // NOT TimeLordPanelH
+#endif // NOT TestPanelH

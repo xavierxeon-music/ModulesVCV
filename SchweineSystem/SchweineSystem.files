@@ -13,7 +13,11 @@
 ./src/Hardware/VCMCReceiver.h
 ./src/SchweineSystem.h
 ./src/Other/TimeLord.h
+./src/Other/TestPanel.h
 ./src/Other/TimeLordPanel.cpp
+./src/Other/Test.cpp
+./src/Other/Test.h
+./src/Other/TestPanel.cpp
 ./src/Other/TimeLordPanel.h
 ./src/Other/TimeLord.cpp
 ./src/Common/SchweineSystemMaster.hpp

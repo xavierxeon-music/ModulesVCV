@@ -4,6 +4,7 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <Midi/MidiCommon.h>
 #include <Tools/Range.h>
 
 #include <SchweineSystemCommon.h>
@@ -29,7 +30,7 @@ private:
       uint8_t prevVelocity = 127;
       uint8_t prevControllerValue = 0;
 
-      using Map = std::map<uint8_t, ChannelStore>;
+      using Map = std::map<Midi::Channel, ChannelStore>;
    };
 
 private:

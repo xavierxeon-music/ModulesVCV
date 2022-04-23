@@ -6,7 +6,7 @@ import pathlib
 import shutil
 
 from lib import createPanel, getPanelComponents
-from lib import writeHeaders, writeSources
+from lib import Headers, Sources
 
 scriptPath = os.path.realpath(__file__)
 scriptPath = os.path.dirname(scriptPath)
@@ -15,18 +15,22 @@ scriptPath = os.path.dirname(scriptPath)
 modulesPath = os.path.abspath(scriptPath + '/../SchweineSystem')
 
 
-def updateModule(panelName, subFolder):
+def updateModule(moduleName, subFolder):
 
-    panelFileName = modulesPath + '/res/' + panelName + '.svg'
+    panelFileName = modulesPath + '/res/' + moduleName + '.svg'
     if not os.path.exists(panelFileName):
-        print(f'no panel found with name {panelName}')
+        print(f'no panel found with name {moduleName}')
 
+    print(moduleName)
     components = getPanelComponents(panelFileName)
     for key, value in components.items():
-        print(key, len(value))
+        print(f'* {key} x {len(value)}')
 
-    writeHeaders(modulesPath, subFolder, panelName, components)
-    writeSources(modulesPath, subFolder, panelName, components)
+    headers = Headers(modulesPath, subFolder, moduleName, components)
+    headers.write()
+
+    sources = Sources(modulesPath, subFolder, moduleName, components)
+    sources.write()
 
 
 def gather():
