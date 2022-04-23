@@ -1,8 +1,8 @@
 #include "TimeLord.h"
 #include "TimeLordPanel.h"
 
-#include "SchweineSystemMaster.h"
-#include "SchweineSystemLCDDisplay.h"
+#include <SchweineSystemMaster.h>
+#include <SchweineSystemLCDDisplay.h>
 #include <limits>
 
 void TimeLord::setup()
@@ -43,7 +43,7 @@ SvgPanel* TimeLordWidget::setup(TimeLord* module)
    setPanel(mainPanel);
 
    addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(37.948802668, 253.50075081), module, TimeLord::Panel::Bank_Up, TimeLord::Panel::Red_Bank_Up));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(37.312002668, 98.47925081), module, TimeLord::Panel::Mode, TimeLord::Panel::Red_Mode));
+   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(38.110399668, 118.60179081), module, TimeLord::Panel::Mode, TimeLord::Panel::Red_Mode));
 
    addInput(createInputCentered<PJ301MPort>(Vec(38.691244858000005, 344.74015081), module, TimeLord::Panel::Reset));
    addInput(createInputCentered<PJ301MPort>(Vec(38.691144858, 298.64460081), module, TimeLord::Panel::Clock));
@@ -57,9 +57,10 @@ SvgPanel* TimeLordWidget::setup(TimeLord* module)
    addOutput(createOutputCentered<PJ301MPort>(Vec(155.00044485799998, 69.92675080999999), module, TimeLord::Panel::Channel2_Output));
    addOutput(createOutputCentered<PJ301MPort>(Vec(155.00044485799998, 24.172750809999968), module, TimeLord::Panel::Channel1_Output));
 
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(37.75902, 76.19799999999998), module, TimeLord::Panel::Red_Current));
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(37.75902, 53.95279999999998), module, TimeLord::Panel::Red_Stage));
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(37.75901999999998, 31.707599999999978), module, TimeLord::Panel::Red_Division));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(38.557422, 96.32053999999998), module, TimeLord::Panel::Red_Current));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(38.557422, 72.71063999999997), module, TimeLord::Panel::Red_Count));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(38.395817, 48.59073999999998), module, TimeLord::Panel::Red_Length));
+   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(38.39581699999998, 24.470839999999978), module, TimeLord::Panel::Red_Division));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(166.17974458249995, 366.1809999999999), module, TimeLord::Panel::Red_Channel8_Status5));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(156.76724458250004, 366.1809999999999), module, TimeLord::Panel::Red_Channel8_Status4));
    addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(147.35399458249998, 366.1809999999999), module, TimeLord::Panel::Red_Channel8_Status3));

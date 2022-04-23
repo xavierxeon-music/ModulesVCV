@@ -114,7 +114,7 @@ TimeLord::TimeLord()
    , displayMode(StageIndex)
    , displayModeLightList(lights)
    , displayTrigger()
-   , modeColors{SchweineSystem::Color{255, 0, 0}, SchweineSystem::Color{100, 100, 255}, SchweineSystem::Color{0, 255, 0}}
+   , modeColors{SchweineSystem::Color{255, 0, 0}, SchweineSystem::Color{50, 50, 255}, SchweineSystem::Color{255, 255, 0}, SchweineSystem::Color{0, 255, 0}}
    , bankDisplay(this, Panel::Value_Bank_Display, Panel::Red_Bank_Display)
    , bankIndex(0)
    , bankTrigger()
@@ -151,8 +151,8 @@ TimeLord::TimeLord()
                            {Panel::Value_Channel7_Display, Panel::Red_Channel7_Display},
                            {Panel::Value_Channel8_Display, Panel::Red_Channel8_Display}});
 
-   displayModeLightList.append({Panel::Red_Division, Panel::Red_Stage, Panel::Red_Current});
-   for (uint8_t modeIndex = 0; modeIndex < 3; modeIndex++)
+   displayModeLightList.append({Panel::Red_Division, Panel::Red_Length, Panel::Red_Count, Panel::Red_Current});
+   for (uint8_t modeIndex = 0; modeIndex < 4; modeIndex++)
    {
       displayModeLightList[modeIndex]->setDefaultColor(modeColors[modeIndex]);
    }
@@ -199,6 +199,8 @@ void TimeLord::process(const ProcessArgs& args)
    if (displayTrigger.process(params[Panel::Mode].getValue()))
    {
       if (Division == displayMode)
+         displayMode = Length;
+      else if (Length == displayMode)
          displayMode = StageCount;
       else if (StageCount == displayMode)
          displayMode = StageIndex;
@@ -206,7 +208,7 @@ void TimeLord::process(const ProcessArgs& args)
          displayMode = Division;
    }
 
-   for (uint8_t modeIndex = 0; modeIndex < 3; modeIndex++)
+   for (uint8_t modeIndex = 0; modeIndex < 4; modeIndex++)
    {
       if (modeIndex == displayMode)
          displayModeLightList[modeIndex]->setOn();
@@ -223,6 +225,8 @@ void TimeLord::process(const ProcessArgs& args)
          rampDisplayList[rampIndex]->setValue(polyRamp->getStepSize());
       else if (StageCount == displayMode)
          rampDisplayList[rampIndex]->setValue(polyRamp->getLength());
+      else if (StageCount == displayMode)
+         rampDisplayList[rampIndex]->setValue(polyRamp->getStageCount());
       else
          rampDisplayList[rampIndex]->setValue(polyRamp->getCurrentStageIndex());
 
@@ -313,7 +317,7 @@ json_t* TimeLord::dataToJson()
       rampObject.set("loop", json_boolean(loop));
 
       Array stagesArray;
-      for (uint8_t stageIndex = 0; stageIndex < polyRamp->stageCount(); stageIndex++)
+      for (uint8_t stageIndex = 0; stageIndex < polyRamp->getStageCount(); stageIndex++)
       {
          Object stageObject;
 

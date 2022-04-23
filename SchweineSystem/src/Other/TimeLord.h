@@ -34,6 +34,7 @@ private:
    enum DisplayMode
    {
       Division,
+      Length,
       StageCount,
       StageIndex
    };
@@ -82,7 +83,7 @@ private:
    DisplayMode displayMode;
    SchweineSystem::Light::List displayModeLightList;
    dsp::BooleanTrigger displayTrigger;
-   SchweineSystem::Color modeColors[3];
+   SchweineSystem::Color modeColors[4];
 
    SchweineSystem::LCDDisplay::Controller bankDisplay;
    uint8_t bankIndex;
