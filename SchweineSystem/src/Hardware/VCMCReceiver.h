@@ -8,8 +8,9 @@ using namespace rack;
 #include <Tools/Counter.h>
 #include <Tools/Range.h>
 
-#include "SchweineSystemLCDDisplay.h"
-#include "SchweineSystemLightMeter.h"
+#include <SchweineSystemLCDDisplay.h>
+#include <SchweineSystemLight.h>
+#include <SchweineSystemLightMeter.h>
 
 class VCMCReceiver : public Module
 {
@@ -32,8 +33,12 @@ private:
    void dataFromJson(json_t* rootJson) override;
 
 private:
-   // tempo
+   // midi
    midi::InputQueue midiInput;
+   dsp::BooleanTrigger connectTrigger;
+   Range::Mapper ccValueToVoltage;
+   SchweineSystem::Light connectionLight;
+   // tempo
    Counter tickCounter;
    bool doNotAdvanceTempo;
    Tempo tempo;
@@ -42,7 +47,6 @@ private:
    dsp::BooleanTrigger tickOverrideTrigger;
    dsp::PulseGenerator clockReset;
    dsp::BooleanTrigger resetTrigger;
-   SchweineSystem::Light connectionLight;
    SchweineSystem::LCDDisplay::Controller tempoDisplay;
    // gates
    bool gates[8];
@@ -56,9 +60,6 @@ private:
    uint8_t sliderValues[8];
    SchweineSystem::LightMeter::List lightMeterListSlider;
    SchweineSystem::Output::List sliderOutputList;
-   // general
-   dsp::BooleanTrigger connectTrigger;
-   Range::Mapper ccValueToVoltage;
 };
 
 class VCMCReceiverWidget : public ModuleWidget

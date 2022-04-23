@@ -4,13 +4,16 @@
 #include <Midi/MidiCommon.h>
 #include <Music/Note.h>
 
-#include "SchweineSystemJson.h"
-#include "SchweineSystemLCDDisplay.h"
-#include "SchweineSystemMaster.h"
+#include <SchweineSystemJson.h>
+#include <SchweineSystemLCDDisplay.h>
+#include <SchweineSystemMaster.h>
 
 VCMCReceiver::VCMCReceiver()
    : Module()
    , midiInput()
+   , connectTrigger()
+   , ccValueToVoltage(0.0, 127, 0, 10.0)
+   , connectionLight(lights)
    , tickCounter(6)
    , doNotAdvanceTempo(false)
    , tempo()
@@ -19,7 +22,6 @@ VCMCReceiver::VCMCReceiver()
    , tickOverrideTrigger()
    , clockReset()
    , resetTrigger()
-   , connectionLight(lights)
    , tempoDisplay(this, Panel::Value_Clock, Panel::Red_Clock)
    , gates{false, false, false, false, false, false, false, false}
    , lightListGate(lights)
@@ -29,8 +31,6 @@ VCMCReceiver::VCMCReceiver()
    , cvOutputList(outputs)
    , lightMeterListSlider(lights)
    , sliderOutputList(outputs)
-   , connectTrigger()
-   , ccValueToVoltage(0.0, 127, 0, 10.0)
 {
    setup();
 

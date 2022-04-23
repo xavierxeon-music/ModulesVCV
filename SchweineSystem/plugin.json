@@ -83,11 +83,19 @@
          ]
       },
       {
-         "slug": "ClockTool",
-         "name": "Clock Tool",
-         "description": "measure bpm and get divisions",
+         "slug": "DoepferQuad",
+         "name": "Doepfer Quad",
+         "description": "Send cv via a Doepfer A-190-5 interface (as a 12 channel cv source)",
          "tags": [
-            "Utility"
+            "Midi"
+         ]
+      },
+      {
+         "slug": "FlameCC",
+         "name": "Flamme CC",
+         "description": "Send cv via a Flame u16MCC  interface",
+         "tags": [
+            "Midi"
          ]
       }
    ]

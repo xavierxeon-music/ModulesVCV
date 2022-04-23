@@ -165,9 +165,9 @@ def _writePanelSource(modulesPath, subFolder, panelName, components):
         sourcefile.write(f'#include "{panelName}.h"\n')
         sourcefile.write(f'#include "{panelName}Panel.h"\n')
         sourcefile.write('\n')
-        sourcefile.write('#include "SchweineSystemMaster.h"\n')
+        sourcefile.write('#include <SchweineSystemMaster.h>\n')
         if displays:
-            sourcefile.write('#include "SchweineSystemLCDDisplay.h"\n')
+            sourcefile.write('#include <SchweineSystemLCDDisplay.h>\n')
             sourcefile.write('#include <limits>\n')
         sourcefile.write('\n')
 
@@ -289,7 +289,7 @@ def writeSources(modulesPath, subFolder, panelName, components):
         sourcefile.write(f'#include "{panelName}.h"\n')
         sourcefile.write(f'#include "{panelName}Panel.h"\n')
         sourcefile.write('\n')
-        sourcefile.write('#include "SchweineSystemMaster.h"\n')
+        sourcefile.write('#include <SchweineSystemMaster.h>\n')
         sourcefile.write('\n')
 
         sourcefile.write(f'{panelName}::{panelName}()\n')
