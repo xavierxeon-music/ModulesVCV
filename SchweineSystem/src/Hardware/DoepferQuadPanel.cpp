@@ -3,6 +3,11 @@
 
 #include <SchweineSystemMaster.h>
 
+DoepferQuad::Panel::Panel()
+{
+};
+
+
 void DoepferQuad::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
@@ -30,20 +35,20 @@ SvgPanel* DoepferQuadWidget::setup(DoepferQuad* module)
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(57.76700266799999, 359.48755080999996), module, DoepferQuad::Panel::Connect, DoepferQuad::Panel::Red_Connect));
+   makeButton(this, Vec(57.77, 359.49), DoepferQuad::Panel::Connect, DoepferQuad::Panel::Red_Connect);
 
-   addInput(createInputCentered<PJ301MPort>(Vec(65.82681485799999, 328.13175080999997), module, DoepferQuad::Panel::Channel4_In3));
-   addInput(createInputCentered<PJ301MPort>(Vec(65.82681485799999, 295.73575081), module, DoepferQuad::Panel::Channel4_In2));
-   addInput(createInputCentered<PJ301MPort>(Vec(65.82681485799999, 263.34005081), module, DoepferQuad::Panel::Channel4_In1));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244857999997, 328.07175081), module, DoepferQuad::Panel::Channel3_In3));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244857999997, 295.67575080999995), module, DoepferQuad::Panel::Channel3_In2));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244857999997, 263.28005081), module, DoepferQuad::Panel::Channel3_In1));
-   addInput(createInputCentered<PJ301MPort>(Vec(65.82681485799999, 217.61455081), module, DoepferQuad::Panel::Channel2_In3));
-   addInput(createInputCentered<PJ301MPort>(Vec(65.82681485799999, 185.21855080999998), module, DoepferQuad::Panel::Channel2_In2));
-   addInput(createInputCentered<PJ301MPort>(Vec(65.82681485799999, 152.82285081), module, DoepferQuad::Panel::Channel2_In1));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244857999997, 217.55455081), module, DoepferQuad::Panel::Channel1_In3));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244857999997, 185.15855080999998), module, DoepferQuad::Panel::Channel1_In2));
-   addInput(createInputCentered<PJ301MPort>(Vec(24.173244857999997, 152.76285081), module, DoepferQuad::Panel::Channel1_In1));
+   makeInput(this, Vec(65.83, 328.13),  DoepferQuad::Panel::Channel4_In3);
+   makeInput(this, Vec(65.83, 295.74),  DoepferQuad::Panel::Channel4_In2);
+   makeInput(this, Vec(65.83, 263.34),  DoepferQuad::Panel::Channel4_In1);
+   makeInput(this, Vec(24.17, 328.07),  DoepferQuad::Panel::Channel3_In3);
+   makeInput(this, Vec(24.17, 295.68),  DoepferQuad::Panel::Channel3_In2);
+   makeInput(this, Vec(24.17, 263.28),  DoepferQuad::Panel::Channel3_In1);
+   makeInput(this, Vec(65.83, 217.61),  DoepferQuad::Panel::Channel2_In3);
+   makeInput(this, Vec(65.83, 185.22),  DoepferQuad::Panel::Channel2_In2);
+   makeInput(this, Vec(65.83, 152.82),  DoepferQuad::Panel::Channel2_In1);
+   makeInput(this, Vec(24.17, 217.55),  DoepferQuad::Panel::Channel1_In3);
+   makeInput(this, Vec(24.17, 185.16),  DoepferQuad::Panel::Channel1_In2);
+   makeInput(this, Vec(24.17, 152.76),  DoepferQuad::Panel::Channel1_In1);
 
    return mainPanel;
 }

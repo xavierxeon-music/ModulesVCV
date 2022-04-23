@@ -3,6 +3,8 @@
 
 #include "DoepferQuad.h"
 
+#include <SchweineSystemCommon.h>
+
 struct DoepferQuad::Panel
 {
    enum ParamId
@@ -41,6 +43,7 @@ struct DoepferQuad::Panel
       LIGHTS_LEN
    };
 
+   Panel();
 };
 
 #endif // NOT DoepferQuadPanelH

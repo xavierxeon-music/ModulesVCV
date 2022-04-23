@@ -78,14 +78,6 @@
             <circle cx="77.421" cy="80.232" r="19.592" style="fill:none;stroke:rgb(193,193,193);stroke-width:1px;"/>
         </g>
     </g>
-    <g>
-        <g id="Turn-knob" serif:id="Turn#knob" transform="matrix(0.174892,0,0,0.175002,47.4356,150.334)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(102,126,153);"/>
-        </g>
-        <g id="Strip-meter-5" serif:id="Strip#meter$5" transform="matrix(0.197558,0,0,0.0493894,-0.757743,357.292)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(140,140,140);"/>
-        </g>
-    </g>
     <g transform="matrix(1,0,0,1,-108.815,-8.32405)">
         <g transform="matrix(1,0,0,1,10.2544,8.04445)">
             <g id="Reset-input" serif:id="Reset#input" transform="matrix(0.175002,0,0,0.175002,113.639,312.136)">

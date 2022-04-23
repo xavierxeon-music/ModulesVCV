@@ -47,4 +47,10 @@ namespace SchweineSystem
    };
 } // namespace SchweineSystem
 
+inline void makeLight(rack::ModuleWidget* widget, rack::math::Vec pos, int firstLightId)
+{
+   rack::Widget* childWidget = rack::createLightCentered<rack::MediumLight<rack::RedGreenBlueLight>>(pos, widget->getModule(), firstLightId);
+   widget->addChild(childWidget);
+}
+
 #endif // NOT SchweineSystemLightH

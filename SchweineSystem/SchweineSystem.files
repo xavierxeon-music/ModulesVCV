@@ -30,8 +30,10 @@
 ./src/Common/SchweineSystemOutput.h
 ./src/Common/SchweineSystemLight.cpp
 ./src/Common/SchweineSystemLightMeter.h
+./src/Common/SchweineSystemMeter.cpp
 ./src/Common/SchweineSystemCommon.h
 ./src/Common/SchweineSystemCommon.hpp
+./src/Common/SchweineSystemMeter.h
 ./src/Common/SchweineSystemMaster.h
 ./src/Common/SchweineSystemMaster.cpp
 ./src/Common/SchweineSystemLight.h

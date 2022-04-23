@@ -29,6 +29,9 @@ class Headers(Common):
         for knob in self.knobs:
             name = knob['name']
             line(2, f'Knob_{name},')
+        for meter in self.meters:
+            name = meter['name']
+            line(2, f'Value_{name},')
         line(2, 'PARAMS_LEN')
         line(1, '};')
         line(0)
@@ -64,13 +67,6 @@ class Headers(Common):
             line(2, f'Red_{name},')
             line(2, f'Green_{name},')
             line(2, f'Blue_{name},')
-        for meter in self.meters:
-            name = meter['name']
-            count = int(meter['count'])
-            for index in range(count):
-                line(2, f'Red_Segment{index+1}_{name},')
-                line(2, f'Green_Segment{index+1}_{name},')
-                line(2, f'Blue_Segment{index+1}_{name},')
         for button in self.buttons:
             name = button['name']
             line(2, f'Red_{name},')
@@ -97,6 +93,15 @@ class Headers(Common):
             line(0, f'#define {self.moduleName}PanelH')
             line(0)
             line(0, f'#include "{self.moduleName}.h"')
+            line(0)
+
+            line(0, '#include <SchweineSystemCommon.h>')
+            if self.displays:
+                line(0, '#include <SchweineSystemLCDDisplay.h>')
+            if self.lights:
+                line(0, '#include <SchweineSystemLight.h>')
+            if self.meters:
+                line(0, '#include <SchweineSystemMeter.h>')
             line(0)
 
             line(0, f'struct {self.moduleName}::Panel')

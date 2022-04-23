@@ -52,6 +52,30 @@ namespace SchweineSystem
 
 } // namespace SchweineSystem
 
+inline void makeButton(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId, int firstLightId)
+{
+   rack::app::ParamWidget* paramWidget = rack::createLightParamCentered<rack::VCVLightBezel<rack::RedGreenBlueLight>>(pos, widget->getModule(), paramId, firstLightId);
+   widget->addParam(paramWidget);
+}
+
+inline void makeKnob(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId)
+{
+   rack::app::ParamWidget* paramWidget = rack::createParamCentered<rack::RoundSmallBlackKnob>(pos, widget->getModule(), paramId);
+   widget->addParam(paramWidget);
+}
+
+inline void makeInput(rack::ModuleWidget* widget, rack::math::Vec pos, int inputId)
+{
+   rack::app::PortWidget* portWidget = rack::createInputCentered<rack::PJ301MPort>(pos, widget->getModule(), inputId);
+   widget->addInput(portWidget);
+}
+
+inline void makeOutput(rack::ModuleWidget* widget, rack::math::Vec pos, int outputId)
+{
+   rack::app::PortWidget* portWidget = rack::createOutputCentered<rack::PJ301MPort>(pos, widget->getModule(), outputId);
+   widget->addOutput(portWidget);
+}
+
 #ifndef SchweineSystemCommonHPP
 #include "SchweineSystemCommon.hpp"
 #endif // NOT SchweineSystemCommonHPP

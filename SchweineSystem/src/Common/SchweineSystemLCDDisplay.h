@@ -9,18 +9,7 @@ namespace SchweineSystem
 {
    namespace LCDDisplay
    {
-      class Data
-      {
-      protected:
-         Data(rack::engine::Module* module, const uint16_t& valueParamId, const uint16_t& redLightId);
-
-      protected:
-         rack::engine::Module* module;
-         const uint16_t valueParamId;
-         const uint16_t redLightId;
-      };
-
-      class Controller : public Data
+      class Controller
       {
       public:
          class List;
@@ -31,6 +20,11 @@ namespace SchweineSystem
       public:
          void setValue(const uint32_t& value);
          void setColor(const SchweineSystem::Color& color);
+
+      private:
+         rack::engine::Module* module;
+         const uint16_t valueParamId;
+         const uint16_t redLightId;
       };
 
       class Controller::List
@@ -57,7 +51,7 @@ namespace SchweineSystem
          std::vector<Controller*> instanceList;
       };
 
-      class Widget : public rack::TransparentWidget, public Data
+      class Widget : public rack::TransparentWidget
       {
       public:
          Widget(rack::math::Vec pos, rack::engine::Module* module, const uint8_t& digitCount, const uint16_t& valueParamId, const uint16_t& redLightId);
@@ -66,11 +60,20 @@ namespace SchweineSystem
          void drawLayer(const DrawArgs& args, int layer) override;
 
       private:
+         rack::engine::Module* module;
+         const uint8_t digitCount;
+         const uint16_t valueParamId;
+         const uint16_t redLightId;
          std::shared_ptr<rack::Font> font;
          std::string fontPath;
-         const uint8_t digitCount;
       };
    } // namespace LCDDisplay
 } // namespace SchweineSystem
+
+inline void makeDisplay(rack::ModuleWidget* widget, rack::math::Vec pos, int digitCount, int paramId, int firstLightId)
+{
+   rack::Widget* displayWidget = new SchweineSystem::LCDDisplay::Widget(pos, widget->getModule(), digitCount, paramId, firstLightId);
+   widget->addChild(displayWidget);
+}
 
 #endif // NOT SchweineSystemLCDDisplayH

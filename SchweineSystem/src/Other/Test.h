@@ -4,6 +4,8 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <SchweineSystemMeter.h>
+
 class Test : public Module
 {
 public:
@@ -21,6 +23,7 @@ private:
 
 private:
    Panel* panel;
+   SchweineSystem::Meter::Controller meter;
 };
 
 class TestWidget : public ModuleWidget

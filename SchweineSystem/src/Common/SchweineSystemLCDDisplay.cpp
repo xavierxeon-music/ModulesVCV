@@ -2,19 +2,12 @@
 
 #include "SchweineSystemMaster.h"
 
-// data
-
-SchweineSystem::LCDDisplay::Data::Data(rack::engine::Module* module, const uint16_t& valueParamId, const uint16_t& redLightId)
-   : module(module)
-   , valueParamId(valueParamId)
-   , redLightId(redLightId)
-{
-}
-
 // controller
 
 SchweineSystem::LCDDisplay::Controller::Controller(rack::engine::Module* module, const uint16_t& valueParamId, const uint16_t& redLightId)
-   : Data(module, valueParamId, redLightId)
+   : module(module)
+   , valueParamId(valueParamId)
+   , redLightId(redLightId)
 {
 }
 
@@ -66,10 +59,12 @@ SchweineSystem::LCDDisplay::Controller* SchweineSystem::LCDDisplay::Controller::
 
 SchweineSystem::LCDDisplay::Widget::Widget(rack::math::Vec pos, rack::engine::Module* module, const uint8_t& digitCount, const uint16_t& valueParamId, const uint16_t& redLightId)
    : rack::TransparentWidget()
-   , Data(module, valueParamId, redLightId)
+   , module(module)
+   , digitCount(digitCount)
+   , valueParamId(valueParamId)
+   , redLightId(redLightId)
    , font()
    , fontPath()
-   , digitCount(digitCount)
 {
    fontPath = std::string(rack::asset::plugin(Master::the()->instance(), "res/Segment14.ttf"));
    box.pos = rack::math::Vec(pos.x + 2, pos.y + 20);
@@ -87,7 +82,7 @@ void SchweineSystem::LCDDisplay::Widget::drawLayer(const DrawArgs& args, int lay
    nvgFontFaceId(args.vg, font->handle);
    //nvgTextLetterSpacing(args.vg, 2.5);
 
-   NVGcolor digitColor = [&]
+   NVGcolor digitColor = [&]()
    {
       if (!module)
          return nvgRGB(255, 25, 255);
@@ -101,7 +96,7 @@ void SchweineSystem::LCDDisplay::Widget::drawLayer(const DrawArgs& args, int lay
 
    std::string placeholder = std::string(digitCount, '~');
 
-   std::string valueString = [&]
+   std::string valueString = [&]()
    {
       if (!module)
          return std::string("");
@@ -121,5 +116,5 @@ void SchweineSystem::LCDDisplay::Widget::drawLayer(const DrawArgs& args, int lay
 
    // the value
    nvgFillColor(args.vg, digitColor);
-   nvgText(args.vg, 1, 1, valueString.c_str(), NULL);
+   nvgText(args.vg, 1, 1, valueString.c_str(), nullptr);
 }

@@ -3,6 +3,10 @@
 
 #include "TimeLord.h"
 
+#include <SchweineSystemCommon.h>
+#include <SchweineSystemLCDDisplay.h>
+#include <SchweineSystemLight.h>
+
 struct TimeLord::Panel
 {
    enum ParamId
@@ -18,7 +22,6 @@ struct TimeLord::Panel
       Value_Channel3_Display,
       Value_Channel2_Display,
       Value_Channel1_Display,
-      Knob_Turn,
       PARAMS_LEN
    };
 
@@ -176,21 +179,6 @@ struct TimeLord::Panel
       Red_Channel1_Status1,
       Green_Channel1_Status1,
       Blue_Channel1_Status1,
-      Red_Segment1_Strip,
-      Green_Segment1_Strip,
-      Blue_Segment1_Strip,
-      Red_Segment2_Strip,
-      Green_Segment2_Strip,
-      Blue_Segment2_Strip,
-      Red_Segment3_Strip,
-      Green_Segment3_Strip,
-      Blue_Segment3_Strip,
-      Red_Segment4_Strip,
-      Green_Segment4_Strip,
-      Blue_Segment4_Strip,
-      Red_Segment5_Strip,
-      Green_Segment5_Strip,
-      Blue_Segment5_Strip,
       Red_Mode,
       Green_Mode,
       Blue_Mode,
@@ -228,7 +216,6 @@ struct TimeLord::Panel
    };
 
    Panel();
-
 };
 
 #endif // NOT TimeLordPanelH
