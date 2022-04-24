@@ -6,7 +6,7 @@
 // meter and freeze
 
 BitBusMeterAndFreeze::BitBusMeterAndFreeze()
-   : Module()
+   : SchweineSystem::Module()
    , BitBusCommon(this)
    , lightList(lights)
    , freezTrigger()
@@ -15,20 +15,20 @@ BitBusMeterAndFreeze::BitBusMeterAndFreeze()
 {
    setup();
 
-   lightList.append({Panel::Red_Bit8_Status1,
-                     Panel::Red_Bit7_Status1,
-                     Panel::Red_Bit6_Status1,
-                     Panel::Red_Bit5_Status1,
-                     Panel::Red_Bit4_Status1,
-                     Panel::Red_Bit3_Status1,
-                     Panel::Red_Bit2_Status1,
-                     Panel::Red_Bit1_Status1});
+   lightList.append({Panel::RGB_Bit8_Status1,
+                     Panel::RGB_Bit7_Status1,
+                     Panel::RGB_Bit6_Status1,
+                     Panel::RGB_Bit5_Status1,
+                     Panel::RGB_Bit4_Status1,
+                     Panel::RGB_Bit3_Status1,
+                     Panel::RGB_Bit2_Status1,
+                     Panel::RGB_Bit1_Status1});
 
    for (uint8_t index = 0; index < 8; index++)
       lightList[index]->setDefaultColor(SchweineSystem::Color{0, 255, 0});
 
-   busInIndicator.assign(Panel::Red_BusIn);
-   busOutIndicator.assign(Panel::Red_BusOut);
+   busInIndicator.assign(Panel::RGB_BusIn);
+   busOutIndicator.assign(Panel::RGB_BusOut);
 }
 
 BitBusMeterAndFreeze::~BitBusMeterAndFreeze()
@@ -56,7 +56,7 @@ void BitBusMeterAndFreeze::dataFromJson(json_t* rootJson)
    if (freezeJson)
    {
       freezeMode = json_boolean_value(freezeJson);
-      lights[Panel::Blue_FlipFreeze].setBrightness(freezeMode);
+      lights[Panel::RGB_FlipFreeze + 2].setBrightness(freezeMode);
    }
 }
 
@@ -84,7 +84,7 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
 
    if (freezTrigger.process(freezeValue))
       freezeMode ^= true;
-   lights[Panel::Blue_FlipFreeze].setBrightness(freezeMode);
+   lights[Panel::RGB_FlipFreeze + 2].setBrightness(freezeMode);
 
    bool sampleValue = params[Panel::GateSample].getValue();
    if (inputs[Panel::GateSample].isConnected())
@@ -108,10 +108,9 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
 }
 
 BitBusMeterAndFreezeWidget::BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module)
-   : ModuleWidget()
+   : SchweineSystem::ModuleWidget(module)
 {
-   SvgPanel* mainPanel = setup(module);
-   (void)mainPanel;
+   setup();
 }
 
 Model* modelBitBusMeterAndFreeze = SchweineSystem::Master::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");

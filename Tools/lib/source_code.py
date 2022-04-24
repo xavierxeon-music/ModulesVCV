@@ -74,7 +74,15 @@ class Sources(Common):
             name = button['name']
             x = button['cx']
             y = button['cy']
-            line(1, f'makeButton(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {self.moduleName}::Panel::RGB_{name});')
+            line(1, f'makeButton(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name});')
+
+        if self.ledbuttons:
+            line(0)
+        for ledbutton in self.ledbuttons:
+            name = ledbutton['name']
+            x = ledbutton['cx']
+            y = ledbutton['cy']
+            line(1, f'makeLEDButton(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {self.moduleName}::Panel::RGB_{name});')
 
         if self.knobs:
             line(0)

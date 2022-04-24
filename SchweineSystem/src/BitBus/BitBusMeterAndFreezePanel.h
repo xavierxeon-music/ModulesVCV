@@ -10,65 +10,56 @@ struct BitBusMeterAndFreeze::Panel
 {
    enum ParamId
    {
-      FlipSample,
-      FlipFreeze,
-      PARAMS_LEN
+      // buttons
+      // ledbuttons
+      FlipSample = 0,
+      FlipFreeze = 1,
+      // knobs
+      PARAMS_LEN = 2
+   };
+
+   enum DisplayId
+   {
+      DISPLAYS_LEN = 0
+   };
+
+   enum MeterId
+   {
+      METERS_LEN = 0
    };
 
    enum InputId
    {
-      GateSample,
-      GateFreeze,
-      INPUTS_LEN
+      GateSample = 0,
+      GateFreeze = 1,
+      INPUTS_LEN = 2
    };
 
    enum OutputId
    {
-      OUTPUTS_LEN
+      OUTPUTS_LEN = 0
    };
 
    enum LightId
    {
-      Red_Bit8_Status1,
-      Green_Bit8_Status1,
-      Blue_Bit8_Status1,
-      Red_Bit7_Status1,
-      Green_Bit7_Status1,
-      Blue_Bit7_Status1,
-      Red_Bit6_Status1,
-      Green_Bit6_Status1,
-      Blue_Bit6_Status1,
-      Red_Bit5_Status1,
-      Green_Bit5_Status1,
-      Blue_Bit5_Status1,
-      Red_Bit4_Status1,
-      Green_Bit4_Status1,
-      Blue_Bit4_Status1,
-      Red_Bit3_Status1,
-      Green_Bit3_Status1,
-      Blue_Bit3_Status1,
-      Red_Bit2_Status1,
-      Green_Bit2_Status1,
-      Blue_Bit2_Status1,
-      Red_Bit1_Status1,
-      Green_Bit1_Status1,
-      Blue_Bit1_Status1,
-      Red_BusIn,
-      Green_BusIn,
-      Blue_BusIn,
-      Red_BusOut,
-      Green_BusOut,
-      Blue_BusOut,
-      Red_FlipSample,
-      Green_FlipSample,
-      Blue_FlipSample,
-      Red_FlipFreeze,
-      Green_FlipFreeze,
-      Blue_FlipFreeze,
-      LIGHTS_LEN
+      // leds
+      RGB_Bit8_Status1 = 0,
+      RGB_Bit7_Status1 = 3,
+      RGB_Bit6_Status1 = 6,
+      RGB_Bit5_Status1 = 9,
+      RGB_Bit4_Status1 = 12,
+      RGB_Bit3_Status1 = 15,
+      RGB_Bit2_Status1 = 18,
+      RGB_Bit1_Status1 = 21,
+      RGB_BusIn = 24,
+      RGB_BusOut = 27,
+      // buttons
+      RGB_FlipSample = 30,
+      RGB_FlipFreeze = 33,
+      // displays
+      LIGHTS_LEN = 36
    };
 
-   Panel();
 };
 
 #endif // NOT BitBusMeterAndFreezePanelH

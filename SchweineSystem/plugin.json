@@ -97,12 +97,6 @@
          "tags": [
             "Midi"
          ]
-      },
-      {
-         "slug": "Test",
-         "name": "Test",
-         "description": "test gui things",
-         "tags": []
       }
    ]
 }

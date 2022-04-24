@@ -8,8 +8,10 @@ using namespace rack;
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemLight.h>
+#include <SchweineSystemModule.h>
+#include <SchweineSystemModuleWidget.h>
 
-class FlameCC : public Module
+class FlameCC : public SchweineSystem::Module
 {
 public:
    struct Panel;
@@ -35,13 +37,13 @@ private:
    SchweineSystem::Input::List inputList;
 };
 
-class FlameCCWidget : public ModuleWidget
+class FlameCCWidget : public SchweineSystem::ModuleWidget
 {
 public:
    FlameCCWidget(FlameCC* module);
 
 private:
-   SvgPanel* setup(FlameCC* module);
+   void setup();
 };
 
 #endif // NOT FlameCCH

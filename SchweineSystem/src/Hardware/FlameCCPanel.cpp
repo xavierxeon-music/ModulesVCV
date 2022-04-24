@@ -7,8 +7,6 @@ void FlameCC::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configButton(Panel::Connect, "Connect");
-
    configInput(Panel::Row8_InB, "Row8_InB");
    configInput(Panel::Row8_InA, "Row8_InA");
    configInput(Panel::Row7_InB, "Row7_InB");
@@ -27,32 +25,29 @@ void FlameCC::setup()
    configInput(Panel::Row1_InA, "Row1_InA");
 }
 
-SvgPanel* FlameCCWidget::setup(FlameCC* module)
+void FlameCCWidget::setup()
 {
-   setModule(module);
    std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/FlameCC.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(57.76700266799999, 359.48755080999996), module, FlameCC::Panel::Connect, FlameCC::Panel::Red_Connect));
+   makeLEDButton(this, Vec(57.77, 359.49), FlameCC::Panel::Connect, FlameCC::Panel::RGB_Connect);
 
-   addInput(createInputCentered<PJ301MPort>(Vec(63.826944858000005, 327.95305081), module, FlameCC::Panel::Row8_InB));
-   addInput(createInputCentered<PJ301MPort>(Vec(26.172944858000008, 327.87905081), module, FlameCC::Panel::Row8_InA));
-   addInput(createInputCentered<PJ301MPort>(Vec(63.826944858000005, 290.65735080999997), module, FlameCC::Panel::Row7_InB));
-   addInput(createInputCentered<PJ301MPort>(Vec(26.172944858000008, 290.58335081), module, FlameCC::Panel::Row7_InA));
-   addInput(createInputCentered<PJ301MPort>(Vec(63.826944858000005, 253.36165080999996), module, FlameCC::Panel::Row6_InB));
-   addInput(createInputCentered<PJ301MPort>(Vec(26.172944858000008, 253.28765081), module, FlameCC::Panel::Row6_InA));
-   addInput(createInputCentered<PJ301MPort>(Vec(63.826944858000005, 216.06575080999994), module, FlameCC::Panel::Row5_InB));
-   addInput(createInputCentered<PJ301MPort>(Vec(26.172944858000008, 215.99175080999998), module, FlameCC::Panel::Row5_InA));
-   addInput(createInputCentered<PJ301MPort>(Vec(63.826944858000005, 178.76975080999995), module, FlameCC::Panel::Row4_InB));
-   addInput(createInputCentered<PJ301MPort>(Vec(26.172944858000008, 178.69575081), module, FlameCC::Panel::Row4_InA));
-   addInput(createInputCentered<PJ301MPort>(Vec(63.826944858000005, 141.47475080999996), module, FlameCC::Panel::Row3_InB));
-   addInput(createInputCentered<PJ301MPort>(Vec(26.172944858000008, 141.40075081), module, FlameCC::Panel::Row3_InA));
-   addInput(createInputCentered<PJ301MPort>(Vec(63.826944858000005, 104.17875080999997), module, FlameCC::Panel::Row2_InB));
-   addInput(createInputCentered<PJ301MPort>(Vec(26.172944858000008, 104.10475081000001), module, FlameCC::Panel::Row2_InA));
-   addInput(createInputCentered<PJ301MPort>(Vec(63.826944858000005, 66.88275080999995), module, FlameCC::Panel::Row1_InB));
-   addInput(createInputCentered<PJ301MPort>(Vec(26.172944858000008, 66.80875080999999), module, FlameCC::Panel::Row1_InA));
-
-   return mainPanel;
+   makeInput(this, Vec(63.83, 327.95),  FlameCC::Panel::Row8_InB);
+   makeInput(this, Vec(26.17, 327.88),  FlameCC::Panel::Row8_InA);
+   makeInput(this, Vec(63.83, 290.66),  FlameCC::Panel::Row7_InB);
+   makeInput(this, Vec(26.17, 290.58),  FlameCC::Panel::Row7_InA);
+   makeInput(this, Vec(63.83, 253.36),  FlameCC::Panel::Row6_InB);
+   makeInput(this, Vec(26.17, 253.29),  FlameCC::Panel::Row6_InA);
+   makeInput(this, Vec(63.83, 216.07),  FlameCC::Panel::Row5_InB);
+   makeInput(this, Vec(26.17, 215.99),  FlameCC::Panel::Row5_InA);
+   makeInput(this, Vec(63.83, 178.77),  FlameCC::Panel::Row4_InB);
+   makeInput(this, Vec(26.17, 178.70),  FlameCC::Panel::Row4_InA);
+   makeInput(this, Vec(63.83, 141.47),  FlameCC::Panel::Row3_InB);
+   makeInput(this, Vec(26.17, 141.40),  FlameCC::Panel::Row3_InA);
+   makeInput(this, Vec(63.83, 104.18),  FlameCC::Panel::Row2_InB);
+   makeInput(this, Vec(26.17, 104.10),  FlameCC::Panel::Row2_InA);
+   makeInput(this, Vec(63.83, 66.88),  FlameCC::Panel::Row1_InB);
+   makeInput(this, Vec(26.17, 66.81),  FlameCC::Panel::Row1_InA);
 }
 

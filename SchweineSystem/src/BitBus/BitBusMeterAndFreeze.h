@@ -8,11 +8,13 @@ using namespace rack;
 #include <Tools/BoolField.h>
 #include <Tools/RingBuffer.h>
 
-#include "SchweineSystemLight.h"
+#include <SchweineSystemLight.h>
+#include <SchweineSystemModule.h>
+#include <SchweineSystemModuleWidget.h>
 
 static constexpr uint16_t AverageBufferSize = 4800;
 
-class BitBusMeterAndFreeze : public Module, public BitBusCommon
+class BitBusMeterAndFreeze : public SchweineSystem::Module, public BitBusCommon
 {
 public:
    struct Panel;
@@ -39,13 +41,13 @@ private:
    dsp::BooleanTrigger sampleTrigger;     
 };
 
-class BitBusMeterAndFreezeWidget : public ModuleWidget
+class BitBusMeterAndFreezeWidget : public SchweineSystem::ModuleWidget
 {
 public:
    BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module);
 
 private:
-   SvgPanel* setup(BitBusMeterAndFreeze* module);
+   void setup();
 };
 
 #endif // NOT BitBusMeterAndFreezeH

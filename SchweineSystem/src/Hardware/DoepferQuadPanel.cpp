@@ -3,16 +3,9 @@
 
 #include <SchweineSystemMaster.h>
 
-DoepferQuad::Panel::Panel()
-{
-};
-
-
 void DoepferQuad::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
-
-   configButton(Panel::Connect, "Connect");
 
    configInput(Panel::Channel4_In3, "Channel4_In3");
    configInput(Panel::Channel4_In2, "Channel4_In2");
@@ -28,14 +21,13 @@ void DoepferQuad::setup()
    configInput(Panel::Channel1_In1, "Channel1_In1");
 }
 
-SvgPanel* DoepferQuadWidget::setup(DoepferQuad* module)
+void DoepferQuadWidget::setup()
 {
-   setModule(module);
    std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/DoepferQuad.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeButton(this, Vec(57.77, 359.49), DoepferQuad::Panel::Connect, DoepferQuad::Panel::Red_Connect);
+   makeLEDButton(this, Vec(57.77, 359.49), DoepferQuad::Panel::Connect, DoepferQuad::Panel::RGB_Connect);
 
    makeInput(this, Vec(65.83, 328.13),  DoepferQuad::Panel::Channel4_In3);
    makeInput(this, Vec(65.83, 295.74),  DoepferQuad::Panel::Channel4_In2);
@@ -49,7 +41,5 @@ SvgPanel* DoepferQuadWidget::setup(DoepferQuad* module)
    makeInput(this, Vec(24.17, 217.55),  DoepferQuad::Panel::Channel1_In3);
    makeInput(this, Vec(24.17, 185.16),  DoepferQuad::Panel::Channel1_In2);
    makeInput(this, Vec(24.17, 152.76),  DoepferQuad::Panel::Channel1_In1);
-
-   return mainPanel;
 }
 

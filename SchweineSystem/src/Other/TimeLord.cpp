@@ -238,12 +238,20 @@ void TimeLord::process(const ProcessArgs& args)
       else if (isClock)
          polyRamp->clockTick();
 
-      const float perentageToNextTick = tempo.getPercentage(Tempo::Division::Sixteenth);
-      const float value = polyRamp->getCurrentValue(perentageToNextTick);
-      lightMeterList[rampIndex]->setValue(value);
+      if (tempo.isRunningOrFirstTick())
+      {
+         const float perentageToNextTick = tempo.getPercentage(Tempo::Division::Sixteenth);
+         const float value = polyRamp->getCurrentValue(perentageToNextTick);
+         lightMeterList[rampIndex]->setValue(value);
 
-      const float voltage = cvMapper(value);
-      outputList[rampIndex]->setVoltage(voltage);
+         const float voltage = cvMapper(value);
+         outputList[rampIndex]->setVoltage(voltage);
+      }
+      else
+      {
+         lightMeterList[rampIndex]->setValue(0);
+         outputList[rampIndex]->setVoltage(0.0);
+      }
    }
 }
 
@@ -259,7 +267,17 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       return;
 
    if (Midi::Event::ControlChange != event)
+   {
+      if (Midi::Event::NoteOn == event)
+         std::cout << " note on" << std::endl;
+      else if (Midi::Event::NoteOff == event)
+         std::cout << " note off" << std::endl;
+      else
+         std::cout << " ???" << (uint16_t)event << std::endl;
+
+      std::cout << (uint16_t)message[1] << " " << (uint16_t)message[2] << std::endl;
       return;
+   }
 
    const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(message[1]);
 

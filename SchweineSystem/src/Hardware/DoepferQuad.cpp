@@ -4,7 +4,7 @@
 #include <SchweineSystemMaster.h>
 
 DoepferQuad::DoepferQuad()
-   : Module()
+   : SchweineSystem::Module()
    , midiOutput()
    , connectTrigger()
    , voltageToCcValue(0.0, 10.0, 0.0, 127.0)
@@ -13,7 +13,7 @@ DoepferQuad::DoepferQuad()
 {
    setup();
 
-   connectionLight.assign(Panel::Red_Connect);
+   connectionLight.assign(Panel::RGB_Connect);
    connectToMidiDevice();
 
    channelMap[Midi::Device::DopeferQuad1].inputIdList = {Panel::Channel1_In1, Panel::Channel1_In2, Panel::Channel1_In3};
@@ -31,7 +31,7 @@ void DoepferQuad::process(const ProcessArgs& args)
    if (connectTrigger.process(params[Panel::Connect].getValue() > 3.0))
       connectToMidiDevice();
 
-   if (-1 == midiOutput.getDeviceId()) // not connected
+   if (!midiOutput.isPortOpen()) // not connected
       return;
 
    for (ChannelStore::Map::iterator it = channelMap.begin(); it != channelMap.end(); it++)
@@ -39,53 +39,61 @@ void DoepferQuad::process(const ProcessArgs& args)
       const Midi::Channel& midiChannel = it->first;
       ChannelStore& channelStore = it->second;
 
-      const float noteVoltage = inputs[channelStore.inputIdList[0]].getVoltage();
-      uint8_t note = static_cast<uint8_t>(voltageToCcValue(noteVoltage));
-
-      const float velocityVoltage = inputs[channelStore.inputIdList[1]].getVoltage();
-      const bool velocityConnected = inputs[channelStore.inputIdList[1]].isConnected();
-      uint8_t velocity = velocityConnected ? static_cast<uint8_t>(voltageToCcValue(velocityVoltage)) : 127;
-
-      if (note != channelStore.prevNote || velocity != channelStore.prevVelocity)
+      if (1 < channelStore.sendNote)
       {
-         midi::Message offMessage;
-         offMessage.setSize(3);
-         offMessage.bytes[0] = Midi::Event::NoteOff | (midiChannel - 1);
-         offMessage.bytes[1] = channelStore.prevNote;
-         offMessage.bytes[2] = 0;
-         midiOutput.sendMessage(offMessage);
+         channelStore.sendNote--;
+      }
+      else if (1 == channelStore.sendNote)
+      {
+         channelStore.sendNote = 0;
 
-         midi::Message onMessage;
-         onMessage.setSize(3);
-         onMessage.bytes[0] = Midi::Event::NoteOn | (midiChannel - 1);
-         onMessage.bytes[1] = note;
-         onMessage.bytes[2] = velocity;
-         midiOutput.sendMessage(onMessage);
+         std::vector<unsigned char> onMessage(3);
+         onMessage[0] = (Midi::Event::NoteOn | (midiChannel - 1));
+         onMessage[1] = channelStore.note;
+         onMessage[2] = channelStore.velocity;
+         midiOutput.sendMessage(&onMessage);
+      }
+      else
+      {
+         const float noteVoltage = inputs[channelStore.inputIdList[0]].getVoltage();
+         uint8_t note = static_cast<uint8_t>(voltageToCcValue(noteVoltage)) + 24;
 
-         channelStore.prevNote = note;
-         channelStore.prevVelocity = velocity;
+         const float velocityVoltage = inputs[channelStore.inputIdList[1]].getVoltage();
+         const bool velocityConnected = inputs[channelStore.inputIdList[1]].isConnected();
+         uint8_t velocity = velocityConnected ? static_cast<uint8_t>(voltageToCcValue(velocityVoltage)) : 127;
+
+         if (note != channelStore.note || velocity != channelStore.velocity)
+         {
+            std::vector<unsigned char> offMessage(3);
+            offMessage[0] = (Midi::Event::NoteOff | (midiChannel - 1));
+            offMessage[1] = channelStore.note;
+            offMessage[2] = 64;
+            midiOutput.sendMessage(&offMessage);
+
+            channelStore.sendNote = 200;
+            channelStore.note = note;
+            channelStore.velocity = velocity;
+         }
       }
 
       const float controllerVoltage = inputs[channelStore.inputIdList[2]].getVoltage();
       uint8_t controllerValue = static_cast<uint8_t>(voltageToCcValue(controllerVoltage));
 
-      if (controllerValue != channelStore.prevControllerValue)
+      if (controllerValue != channelStore.controllerValue)
       {
-         midi::Message controllerMessage;
-         controllerMessage.setSize(3);
-         controllerMessage.bytes[0] = Midi::Event::ControlChange | (midiChannel - 1);
-         controllerMessage.bytes[1] = Midi::ControllerMessage::User01;
-         controllerMessage.bytes[2] = controllerValue;
-         midiOutput.sendMessage(controllerMessage);
+         std::vector<unsigned char> controllerMessage(3);
+         controllerMessage[0] = (Midi::Event::ControlChange | (midiChannel - 1));
+         controllerMessage[1] = Midi::ControllerMessage::User01;
+         controllerMessage[2] = controllerValue;
+         midiOutput.sendMessage(&controllerMessage);
 
-         channelStore.prevControllerValue = controllerValue;
+         channelStore.controllerValue = controllerValue;
       }
    }
 }
 
 void DoepferQuad::connectToMidiDevice()
 {
-   midiOutput.reset();
    connectionLight.setColor(SchweineSystem::Color{255, 0, 0});
 
    static const std::string targetDeviceName = SchweineSystem::Common::midiInterfaceMap.at(Midi::Device::DopeferQuad1);
@@ -97,23 +105,23 @@ void DoepferQuad::connectToMidiDevice()
       {
          const Midi::Channel midiChannel = (it->first - 1);
 
-         midi::Message message;
-         message.bytes[0] = Midi::Event::ControlChange & midiChannel;
-         message.bytes[1] = Midi::ControllerMessage::AllNotesOff;
-         message.bytes[2] = 0;
-         midiOutput.sendMessage(message);
+         std::vector<unsigned char> message(3);
+         message[0] = Midi::Event::ControlChange & midiChannel;
+         message[1] = Midi::ControllerMessage::AllNotesOff;
+         message[2] = 0;
+         midiOutput.sendMessage(&message);
       }
    };
 
-   for (const int& deviceId : midiOutput.getDeviceIds())
+   for (unsigned int port = 0; port < midiOutput.getPortCount(); port++)
    {
-      const std::string deviceName = midiOutput.getDeviceName(deviceId);
-      // std::cout << deviceName << std::endl;
+      const std::string deviceName = midiOutput.getPortName(port);
+      //std::cout << deviceName << std::endl;
 
       if (targetDeviceName == deviceName)
       {
-         std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
-         midiOutput.setDeviceId(deviceId);
+         std::cout << "connected to " << deviceName << " @ " << port << std::endl;
+         midiOutput.openPort(port);
          connectionLight.setColor(SchweineSystem::Color{0, 255, 0});
          sendAllNotesOff();
          return;
@@ -122,10 +130,9 @@ void DoepferQuad::connectToMidiDevice()
 }
 
 DoepferQuadWidget::DoepferQuadWidget(DoepferQuad* module)
-: ModuleWidget()
+   : SchweineSystem::ModuleWidget(module)
 {
-   SvgPanel* mainPanel = setup(module);
-   (void)mainPanel;
+   setup();
 }
 
 Model* modelDoepferQuad = SchweineSystem::Master::the()->addModule<DoepferQuad, DoepferQuadWidget>("DoepferQuad");

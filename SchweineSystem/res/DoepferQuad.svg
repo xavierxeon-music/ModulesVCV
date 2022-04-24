@@ -5,7 +5,7 @@
         <rect x="3.221" y="80.923" width="55.335" height="99.408" style="fill:rgb(235,235,235);"/>
     </g>
     <g transform="matrix(1,0,0,1,-118.395,13.3388)">
-        <g id="Connect-button" serif:id="Connect#button" transform="matrix(0.174892,0,0,0.175002,152.564,313.265)">
+        <g id="Connect-ledbutton" serif:id="Connect#ledbutton" transform="matrix(0.174892,0,0,0.175002,152.564,313.265)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
         </g>
         <g transform="matrix(1,0,0,1,46.7861,231.117)">

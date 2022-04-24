@@ -26,6 +26,11 @@ class Headers(Common):
             name = button['name']
             line(2, f'{name} = {counter},')
             counter += 1
+        line(2, '// ledbuttons')
+        for ledbutton in self.ledbuttons:
+            name = ledbutton['name']
+            line(2, f'{name} = {counter},')
+            counter += 1
         line(2, '// knobs')
         for knob in self.knobs:
             name = knob['name']
@@ -96,22 +101,16 @@ class Headers(Common):
         for light in self.lights:
             name = light['name']
             line(2, f'RGB_{name} = {counter},')
-            #line(2, f'Green_{name},')
-            #line(2, f'Blue_{name},')
             counter += 3
         line(2, '// buttons')
-        for button in self.buttons:
-            name = button['name']
+        for ledbutton in self.ledbuttons:
+            name = ledbutton['name']
             line(2, f'RGB_{name} = {counter},')
-            #line(2, f'Green_{name},')
-            #line(2, f'Blue_{name},')
             counter += 3
         line(2, '// displays')
         for display in self.displays:
             name = display['name']
             line(2, f'RGB_{name} = {counter},')
-            #line(2, f'Green_{name},')
-            #line(2, f'Blue_{name},')
             counter += 3
         line(2, f'LIGHTS_LEN = {counter}')
         line(1, '};')

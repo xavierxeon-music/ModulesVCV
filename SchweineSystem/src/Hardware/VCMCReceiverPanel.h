@@ -13,6 +13,7 @@ struct VCMCReceiver::Panel
    enum ParamId
    {
       // buttons
+      // ledbuttons
       Connect = 0,
       // knobs
       PARAMS_LEN = 1

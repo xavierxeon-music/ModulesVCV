@@ -18,6 +18,7 @@ class Common:
         self.displays = components['display'] if components and 'display' in components else list()
         self.inputs = components['input'] if components and 'input' in components else list()
         self.knobs = components['knob'] if components and 'knob' in components else list()
+        self.ledbuttons = components['ledbutton'] if components and 'ledbutton' in components else list()
         self.lights = components['light'] if components and 'light' in components else list()
         self.meters = components['meter'] if components and 'meter' in components else list()
         self.outputs = components['output'] if components and 'output' in components else list()

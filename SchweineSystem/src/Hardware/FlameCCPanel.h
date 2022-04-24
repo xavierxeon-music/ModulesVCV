@@ -3,46 +3,62 @@
 
 #include "FlameCC.h"
 
+#include <SchweineSystemCommon.h>
+
 struct FlameCC::Panel
 {
    enum ParamId
    {
-      Connect,
-      PARAMS_LEN
+      // buttons
+      // ledbuttons
+      Connect = 0,
+      // knobs
+      PARAMS_LEN = 1
+   };
+
+   enum DisplayId
+   {
+      DISPLAYS_LEN = 0
+   };
+
+   enum MeterId
+   {
+      METERS_LEN = 0
    };
 
    enum InputId
    {
-      Row8_InB,
-      Row8_InA,
-      Row7_InB,
-      Row7_InA,
-      Row6_InB,
-      Row6_InA,
-      Row5_InB,
-      Row5_InA,
-      Row4_InB,
-      Row4_InA,
-      Row3_InB,
-      Row3_InA,
-      Row2_InB,
-      Row2_InA,
-      Row1_InB,
-      Row1_InA,
-      INPUTS_LEN
+      Row8_InB = 0,
+      Row8_InA = 1,
+      Row7_InB = 2,
+      Row7_InA = 3,
+      Row6_InB = 4,
+      Row6_InA = 5,
+      Row5_InB = 6,
+      Row5_InA = 7,
+      Row4_InB = 8,
+      Row4_InA = 9,
+      Row3_InB = 10,
+      Row3_InA = 11,
+      Row2_InB = 12,
+      Row2_InA = 13,
+      Row1_InB = 14,
+      Row1_InA = 15,
+      INPUTS_LEN = 16
    };
 
    enum OutputId
    {
-      OUTPUTS_LEN
+      OUTPUTS_LEN = 0
    };
 
    enum LightId
    {
-      Red_Connect,
-      Green_Connect,
-      Blue_Connect,
-      LIGHTS_LEN
+      // leds
+      // buttons
+      RGB_Connect = 0,
+      // displays
+      LIGHTS_LEN = 3
    };
 
 };

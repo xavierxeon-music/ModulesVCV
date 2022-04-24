@@ -13,8 +13,9 @@ struct TimeLord::Panel
    enum ParamId
    {
       // buttons
-      Mode = 0,
-      Bank_Up = 1,
+      Bank_Up = 0,
+      Mode = 1,
+      // ledbuttons
       // knobs
       PARAMS_LEN = 2
    };
@@ -74,19 +75,17 @@ struct TimeLord::Panel
       RGB_Length = 6,
       RGB_Division = 9,
       // buttons
-      RGB_Mode = 12,
-      RGB_Bank_Up = 15,
       // displays
-      RGB_Bank_Display = 18,
-      RGB_Channel8_Display = 21,
-      RGB_Channel7_Display = 24,
-      RGB_Channel6_Display = 27,
-      RGB_Channel5_Display = 30,
-      RGB_Channel4_Display = 33,
-      RGB_Channel3_Display = 36,
-      RGB_Channel2_Display = 39,
-      RGB_Channel1_Display = 42,
-      LIGHTS_LEN = 45
+      RGB_Bank_Display = 12,
+      RGB_Channel8_Display = 15,
+      RGB_Channel7_Display = 18,
+      RGB_Channel6_Display = 21,
+      RGB_Channel5_Display = 24,
+      RGB_Channel4_Display = 27,
+      RGB_Channel3_Display = 30,
+      RGB_Channel2_Display = 33,
+      RGB_Channel1_Display = 36,
+      LIGHTS_LEN = 39
    };
 
 };

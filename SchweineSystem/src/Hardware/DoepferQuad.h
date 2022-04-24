@@ -4,13 +4,17 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <rtmidi/RtMidi.h>
+
 #include <Midi/MidiCommon.h>
 #include <Tools/Range.h>
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemLight.h>
+#include <SchweineSystemModule.h>
+#include <SchweineSystemModuleWidget.h>
 
-class DoepferQuad : public Module
+class DoepferQuad : public SchweineSystem::Module
 {
 public:
    struct Panel;
@@ -26,9 +30,10 @@ private:
    struct ChannelStore
    {
       std::vector<uint16_t> inputIdList;
-      uint8_t prevNote = 0;
-      uint8_t prevVelocity = 127;
-      uint8_t prevControllerValue = 0;
+      uint8_t note = 0;
+      uint8_t velocity = 127;
+      uint8_t controllerValue = 0;
+      uint8_t sendNote = 0;
 
       using Map = std::map<Midi::Channel, ChannelStore>;
    };
@@ -38,7 +43,7 @@ private:
    void connectToMidiDevice();
 
 private:
-   midi::Output midiOutput;
+   RtMidiOut midiOutput;
    dsp::BooleanTrigger connectTrigger;
    Range::Mapper voltageToCcValue;
    SchweineSystem::Light connectionLight;
@@ -46,13 +51,13 @@ private:
    ChannelStore::Map channelMap;
 };
 
-class DoepferQuadWidget : public ModuleWidget
+class DoepferQuadWidget : public SchweineSystem::ModuleWidget
 {
 public:
    DoepferQuadWidget(DoepferQuad* module);
 
 private:
-   SvgPanel* setup(DoepferQuad* module);
+   void setup();
 };
 
 #endif // NOT DoepferQuadH

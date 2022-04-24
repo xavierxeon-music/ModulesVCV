@@ -74,10 +74,12 @@ void SchweineSystem::LightMeter::Widget::drawLayer(const DrawArgs& args, int lay
       return static_cast<uint8_t>(meterMapper(fValue));
    }();
 
-   auto drawSegment = [&](float x, uint8_t colorIndex)
+   auto drawSegment = [&](const uint8_t index, const uint8_t colorIndex)
    {
+      const float y = 1 + (5.0 * (segmentCount - 1 - index));
+
       nvgBeginPath(args.vg);
-      nvgRect(args.vg, x, 1, 4, 6);
+      nvgRect(args.vg, 1, y, 4, 4);
 
       //nvgFillColor(args.vg, stageColorList[colorIndex]);
 
@@ -86,19 +88,17 @@ void SchweineSystem::LightMeter::Widget::drawLayer(const DrawArgs& args, int lay
 
       const NVGcolor darkColor = nvgLerpRGBA(stageColorList[colorIndex], black, 0.4);
       const NVGcolor lightColor = nvgLerpRGBA(stageColorList[colorIndex], white, 0.4);
-      const NVGpaint gradiant = nvgLinearGradient(args.vg, x + 2, 0, x + 2, 6, lightColor, darkColor);
+      const NVGpaint gradiant = nvgLinearGradient(args.vg, 2, y, 2, y + 4, lightColor, darkColor);
       nvgFillPaint(args.vg, gradiant);
 
       nvgFill(args.vg);
-
    };
 
    if (0 == meterValue)
    {
       for (uint8_t index = 0; index < segmentCount; index++)
       {
-         const float x = 1 + (5.0 * index);
-         drawSegment(x, 0);
+         drawSegment(index, 0);
       }
    }
    else
@@ -109,11 +109,10 @@ void SchweineSystem::LightMeter::Widget::drawLayer(const DrawArgs& args, int lay
 
       for (uint8_t index = 0; index < segmentCount; index++)
       {
-         const float x = 1 + (5.0 * index);
          if (index < numberOn + 1)
-            drawSegment(x, stage + 1);
+            drawSegment(index, stage + 1);
          else
-            drawSegment(x, stage);
+            drawSegment(index, stage);
       }
    }
 }

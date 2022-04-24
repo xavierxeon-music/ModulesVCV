@@ -6,7 +6,7 @@
 #include "SchweineSystemMaster.h"
 
 FlameCC::FlameCC()
-   : Module()
+   : SchweineSystem::Module()
    , midiOutput()
    , connectTrigger()
    , voltageToCcValue(0.0, 10.0, 0.0, 127.0)
@@ -32,7 +32,7 @@ FlameCC::FlameCC()
                      Panel::Row7_InB,
                      Panel::Row8_InB});
 
-   connectionLight.assign(Panel::Red_Connect);
+   connectionLight.assign(Panel::RGB_Connect);
    connectToMidiDevice();
 }
 
@@ -86,10 +86,9 @@ void FlameCC::connectToMidiDevice()
 }
 
 FlameCCWidget::FlameCCWidget(FlameCC* module)
-: ModuleWidget()
+   : SchweineSystem::ModuleWidget(module)
 {
-   SvgPanel* mainPanel = setup(module);
-   (void)mainPanel;
+   setup();
 }
 
 Model* modelFlameCC = SchweineSystem::Master::the()->addModule<FlameCC, FlameCCWidget>("FlameCC");
