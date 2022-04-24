@@ -64,7 +64,7 @@ void SchweineSystem::LightMeter::Widget::drawLayer(const DrawArgs& args, int lay
    if (layer != 1)
       return;
 
-   static const std::vector<NVGcolor> stageColorList = {nvgRGB(0, 0, 0), nvgRGB(100, 100, 255), nvgRGB(255, 255, 100), nvgRGB(255, 100, 100)};
+   static const std::vector<NVGcolor> stageColorList = {nvgRGB(0, 0, 0), nvgRGB(0, 150, 255), nvgRGB(255, 255, 0), nvgRGB(255, 50, 50)};
 
    const uint8_t meterValue = [&]() -> uint8_t
    {
