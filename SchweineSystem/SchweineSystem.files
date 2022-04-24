@@ -18,6 +18,7 @@
 ./src/Other/TimeLord.cpp
 ./src/Common/SchweineSystemMaster.hpp
 ./src/Common/SchweineSystemLCDDisplay.h
+./src/Common/SchweineSystemMidiOutput.cpp
 ./src/Common/SchweineSystemModule.cpp
 ./src/Common/SchweineSystemOutput.cpp
 ./src/Common/SchweineSystemInput.cpp
@@ -35,6 +36,7 @@
 ./src/Common/SchweineSystemMaster.cpp
 ./src/Common/SchweineSystemLight.h
 ./src/Common/SchweineSystemModule.h
+./src/Common/SchweineSystemMidiOutput.h
 ./src/Common/SchweineSystemJson.cpp
 ./src/Common/SchweineSystemInput.h
 ./src/Common/SchweineSystemLightMeter.cpp

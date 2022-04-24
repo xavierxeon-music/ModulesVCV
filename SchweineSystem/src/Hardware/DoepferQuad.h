@@ -4,17 +4,15 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <rtmidi/RtMidi.h>
-
-#include <Midi/MidiCommon.h>
 #include <Tools/Range.h>
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemLight.h>
+#include <SchweineSystemMidiOutput.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
-class DoepferQuad : public SchweineSystem::Module
+class DoepferQuad : public SchweineSystem::Module, private SchweineSystem::MidiOutput
 {
 public:
    struct Panel;
@@ -33,7 +31,7 @@ private:
       uint8_t note = 24;
       uint8_t velocity = 64;
       uint8_t controllerValue = 0;
-      bool sendNote = true;
+      bool requestSendNote = false;
 
       using Map = std::map<Midi::Channel, ChannelStore>;
    };
@@ -43,7 +41,6 @@ private:
    void connectToMidiDevice();
 
 private:
-   RtMidiOut midiOutput;
    dsp::BooleanTrigger connectTrigger;
    Range::Mapper voltageToNote;
    Range::Mapper voltageToCcValue;
