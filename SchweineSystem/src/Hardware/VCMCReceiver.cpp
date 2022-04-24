@@ -9,7 +9,7 @@
 #include <SchweineSystemMaster.h>
 
 VCMCReceiver::VCMCReceiver()
-   : Module()
+   : SchweineSystem::Module()
    , midiInput()
    , connectTrigger()
    , ccValueToVoltage(0.0, 127, 0, 10.0)
@@ -22,7 +22,7 @@ VCMCReceiver::VCMCReceiver()
    , tickOverrideTrigger()
    , clockReset()
    , resetTrigger()
-   , tempoDisplay(this, Panel::Value_Clock, Panel::Red_Clock)
+   , tempoDisplay(this, Panel::Text_Clock, Panel::RGB_Clock)
    , gates{false, false, false, false, false, false, false, false}
    , lightListGate(lights)
    , gateList(outputs)
@@ -34,14 +34,14 @@ VCMCReceiver::VCMCReceiver()
 {
    setup();
 
-   lightListGate.append({Panel::Red_Channel1_Gate7_Status1,
-                         Panel::Red_Channel2_Gate6_Status1,
-                         Panel::Red_Channel3_Gate5_Status1,
-                         Panel::Red_Channel4_Gate4_Status1,
-                         Panel::Red_Channel5_Gate3_Status1,
-                         Panel::Red_Channel6_Gate2_Status1,
-                         Panel::Red_Channel7_Gate1_Status1,
-                         Panel::Red_Channel8_Gate_Status1});
+   lightListGate.append({Panel::RGB_Channel1_Gate7_Status1,
+                         Panel::RGB_Channel2_Gate6_Status1,
+                         Panel::RGB_Channel3_Gate5_Status1,
+                         Panel::RGB_Channel4_Gate4_Status1,
+                         Panel::RGB_Channel5_Gate3_Status1,
+                         Panel::RGB_Channel6_Gate2_Status1,
+                         Panel::RGB_Channel7_Gate1_Status1,
+                         Panel::RGB_Channel8_Gate_Status1});
 
    gateList.append({Panel::Channel1_Gate7_BitOut1,
                     Panel::Channel2_Gate6_BitOut1,
@@ -94,11 +94,11 @@ VCMCReceiver::VCMCReceiver()
       lightMeterListSlider[index]->setMaxValue(127);
    }
 
-   connectionLight.assign(Panel::Red_Connect);
+   connectionLight.assign(Panel::RGB_Connect);
    connectToMidiDevice();
 
    tempoDisplay.setColor(SchweineSystem::Color{100, 100, 255});
-   tempoDisplay.setValue(666);
+   tempoDisplay.setText("???");
 }
 
 VCMCReceiver::~VCMCReceiver()
@@ -130,7 +130,7 @@ void VCMCReceiver::process(const ProcessArgs& args)
    else
       tempo.advance(args.sampleRate);
 
-   tempoDisplay.setValue(tempo.getBeatsPerMinute());
+   tempoDisplay.setText(std::to_string(tempo.getBeatsPerMinute()));
 
    outputs[Panel::Clock].setVoltage(clockTick.process(args.sampleTime) ? 10.f : 0.f);
    outputs[Panel::Reset].setVoltage(clockReset.process(args.sampleTime) ? 10.f : 0.f);
@@ -275,11 +275,9 @@ void VCMCReceiver::dataFromJson(json_t* rootJson)
 }
 
 VCMCReceiverWidget::VCMCReceiverWidget(VCMCReceiver* module)
-   : ModuleWidget()
+   : SchweineSystem::ModuleWidget(module)
 {
-   SvgPanel* mainPanel = setup(module);
-   (void)mainPanel;
+   setup();
 }
 
 Model* modelVCMCReceiver = SchweineSystem::Master::the()->addModule<VCMCReceiver, VCMCReceiverWidget>("VCMCReceiver");
-

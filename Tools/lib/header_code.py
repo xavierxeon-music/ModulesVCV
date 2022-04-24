@@ -18,66 +18,102 @@ class Headers(Common):
 
     def _addParamIds(self, line):
 
+        counter = 0
         line(1, 'enum ParamId')
         line(1, '{')
+        line(2, '// buttons')
         for button in self.buttons:
             name = button['name']
-            line(2, f'{name},')
-        for display in self.displays:
-            name = display['name']
-            line(2, f'Value_{name},')
+            line(2, f'{name} = {counter},')
+            counter += 1
+        line(2, '// knobs')
         for knob in self.knobs:
             name = knob['name']
-            line(2, f'Knob_{name},')
+            line(2, f'Knob_{name} = {counter},')
+            counter += 1
+        line(2, f'PARAMS_LEN = {counter}')
+        line(1, '};')
+        line(0)
+
+    def _addDisplayIds(self, line):
+
+        counter = 0
+        line(1, 'enum DisplayId')
+        line(1, '{')
+        for display in self.displays:
+            name = display['name']
+            line(2, f'Text_{name} = {counter},')
+            counter += 1
+        line(2, f'DISPLAYS_LEN = {counter}')
+        line(1, '};')
+        line(0)
+
+    def _addMeterIds(self, line):
+
+        counter = 0
+        line(1, 'enum MeterId')
+        line(1, '{')
         for meter in self.meters:
             name = meter['name']
-            line(2, f'Value_{name},')
-        line(2, 'PARAMS_LEN')
+            line(2, f'Value_{name} = {counter},')
+            counter += 1
+        line(2, f'METERS_LEN = {counter}')
         line(1, '};')
         line(0)
 
     def _addInputIds(self, line):
 
+        counter = 0
         line(1, 'enum InputId')
         line(1, '{')
         for input in self.inputs:
             name = input['name']
-            line(2, f'{name},')
-        line(2, 'INPUTS_LEN')
+            line(2, f'{name} = {counter},')
+            counter += 1
+        line(2, f'INPUTS_LEN = {counter}')
         line(1, '};')
         line(0)
 
     def _addOutputIds(self, line):
 
+        counter = 0
         line(1, 'enum OutputId')
         line(1, '{')
         for output in self.outputs:
             name = output['name']
-            line(2, f'{name},')
-        line(2, 'OUTPUTS_LEN')
+            line(2, f'{name} = {counter},')
+            counter += 1
+        line(2, f'OUTPUTS_LEN = {counter}')
         line(1, '};')
         line(0)
 
     def _addLightIds(self, line):
 
+        counter = 0
         line(1, 'enum LightId')
         line(1, '{')
+        line(2, '// leds')
         for light in self.lights:
             name = light['name']
-            line(2, f'Red_{name},')
-            line(2, f'Green_{name},')
-            line(2, f'Blue_{name},')
+            line(2, f'RGB_{name} = {counter},')
+            #line(2, f'Green_{name},')
+            #line(2, f'Blue_{name},')
+            counter += 3
+        line(2, '// buttons')
         for button in self.buttons:
             name = button['name']
-            line(2, f'Red_{name},')
-            line(2, f'Green_{name},')
-            line(2, f'Blue_{name},')
+            line(2, f'RGB_{name} = {counter},')
+            #line(2, f'Green_{name},')
+            #line(2, f'Blue_{name},')
+            counter += 3
+        line(2, '// displays')
         for display in self.displays:
             name = display['name']
-            line(2, f'Red_{name},')
-            line(2, f'Green_{name},')
-            line(2, f'Blue_{name},')
-        line(2, 'LIGHTS_LEN')
+            line(2, f'RGB_{name} = {counter},')
+            #line(2, f'Green_{name},')
+            #line(2, f'Blue_{name},')
+            counter += 3
+        line(2, f'LIGHTS_LEN = {counter}')
         line(1, '};')
         line(0)
 
@@ -108,11 +144,12 @@ class Headers(Common):
             line(0, '{')
 
             self._addParamIds(line)
+            self._addDisplayIds(line)
+            self._addMeterIds(line)
             self._addInputIds(line)
             self._addOutputIds(line)
             self._addLightIds(line)
 
-            line(1, 'Panel();')
             line(0, '};')
 
             line(0)
@@ -123,7 +160,7 @@ class Headers(Common):
         fileName = self.compileFileName('.h')
 
         if os.path.exists(fileName):
-            print(f'header {fileName} already exists')
+            print(f'header {self.moduleName}.h already exists')
             return
 
         with open(fileName, 'w') as headerfile:
@@ -136,35 +173,34 @@ class Headers(Common):
             line(0, '#include <rack.hpp>')
             line(0, 'using namespace rack;')
             line(0)
+            line(0, '#include <SchweineSystemModule.h>')
+            line(0, '#include <SchweineSystemModuleWidget.h>')
+            line(0)
 
-            line(0, f'class {self.moduleName} : public Module')
+            line(0, f'class {self.moduleName} : public SchweineSystem::Module')
             line(0, '{')
             line(0, 'public:')
             line(1, 'struct Panel;')
             line(0)
             line(0, 'public:')
             line(1, f'{self.moduleName}();')
-            line(1, f'~{self.moduleName}();')
             line(0)
             line(0, 'public:')
             line(1, 'void process(const ProcessArgs& args) override;')
             line(0)
             line(0, 'private:')
             line(1, 'void setup();')
-            line(0)
-            line(0, 'private:')
-            line(1, 'Panel* panel;')
             line(0, '};')
 
             line(0)
 
-            line(0, f'class {self.moduleName}Widget : public ModuleWidget')
+            line(0, f'class {self.moduleName}Widget : public SchweineSystem::ModuleWidget')
             line(0, '{')
             line(0, 'public:')
             line(1, f'{self.moduleName}Widget({self.moduleName}* module);')
             line(0)
             line(0, 'private:')
-            line(1, f'SvgPanel* setup({self.moduleName}* module);')
+            line(1, 'void setup();')
             line(0, '};')
             line(0)
             line(0, f'#endif // NOT {self.moduleName}H')

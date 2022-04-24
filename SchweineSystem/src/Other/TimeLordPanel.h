@@ -12,99 +12,83 @@ struct TimeLord::Panel
 {
    enum ParamId
    {
-      Mode,
-      Bank_Up,
-      Value_Bank_Display,
-      Value_Channel8_Display,
-      Value_Channel7_Display,
-      Value_Channel6_Display,
-      Value_Channel5_Display,
-      Value_Channel4_Display,
-      Value_Channel3_Display,
-      Value_Channel2_Display,
-      Value_Channel1_Display,
-      Value_Channel8_Strip,
-      Value_Channel7_Strip,
-      Value_Channel6_Strip,
-      Value_Channel5_Strip,
-      Value_Channel4_Strip,
-      Value_Channel3_Strip,
-      Value_Channel2_Strip,
-      Value_Channel1_Strip,
-      PARAMS_LEN
+      // buttons
+      Mode = 0,
+      Bank_Up = 1,
+      // knobs
+      PARAMS_LEN = 2
+   };
+
+   enum DisplayId
+   {
+      Text_Bank_Display = 0,
+      Text_Channel8_Display = 1,
+      Text_Channel7_Display = 2,
+      Text_Channel6_Display = 3,
+      Text_Channel5_Display = 4,
+      Text_Channel4_Display = 5,
+      Text_Channel3_Display = 6,
+      Text_Channel2_Display = 7,
+      Text_Channel1_Display = 8,
+      DISPLAYS_LEN = 9
+   };
+
+   enum MeterId
+   {
+      Value_Channel8_Strip = 0,
+      Value_Channel7_Strip = 1,
+      Value_Channel6_Strip = 2,
+      Value_Channel5_Strip = 3,
+      Value_Channel4_Strip = 4,
+      Value_Channel3_Strip = 5,
+      Value_Channel2_Strip = 6,
+      Value_Channel1_Strip = 7,
+      METERS_LEN = 8
    };
 
    enum InputId
    {
-      Reset,
-      Clock,
-      INPUTS_LEN
+      Reset = 0,
+      Clock = 1,
+      INPUTS_LEN = 2
    };
 
    enum OutputId
    {
-      Channel8_Output,
-      Channel7_Output,
-      Channel6_Output,
-      Channel5_Output,
-      Channel4_Output,
-      Channel3_Output,
-      Channel2_Output,
-      Channel1_Output,
-      OUTPUTS_LEN
+      Channel8_Output = 0,
+      Channel7_Output = 1,
+      Channel6_Output = 2,
+      Channel5_Output = 3,
+      Channel4_Output = 4,
+      Channel3_Output = 5,
+      Channel2_Output = 6,
+      Channel1_Output = 7,
+      OUTPUTS_LEN = 8
    };
 
    enum LightId
    {
-      Red_Current,
-      Green_Current,
-      Blue_Current,
-      Red_Count,
-      Green_Count,
-      Blue_Count,
-      Red_Length,
-      Green_Length,
-      Blue_Length,
-      Red_Division,
-      Green_Division,
-      Blue_Division,
-      Red_Mode,
-      Green_Mode,
-      Blue_Mode,
-      Red_Bank_Up,
-      Green_Bank_Up,
-      Blue_Bank_Up,
-      Red_Bank_Display,
-      Green_Bank_Display,
-      Blue_Bank_Display,
-      Red_Channel8_Display,
-      Green_Channel8_Display,
-      Blue_Channel8_Display,
-      Red_Channel7_Display,
-      Green_Channel7_Display,
-      Blue_Channel7_Display,
-      Red_Channel6_Display,
-      Green_Channel6_Display,
-      Blue_Channel6_Display,
-      Red_Channel5_Display,
-      Green_Channel5_Display,
-      Blue_Channel5_Display,
-      Red_Channel4_Display,
-      Green_Channel4_Display,
-      Blue_Channel4_Display,
-      Red_Channel3_Display,
-      Green_Channel3_Display,
-      Blue_Channel3_Display,
-      Red_Channel2_Display,
-      Green_Channel2_Display,
-      Blue_Channel2_Display,
-      Red_Channel1_Display,
-      Green_Channel1_Display,
-      Blue_Channel1_Display,
-      LIGHTS_LEN
+      // leds
+      RGB_Current = 0,
+      RGB_Count = 3,
+      RGB_Length = 6,
+      RGB_Division = 9,
+      // buttons
+      RGB_Mode = 12,
+      RGB_Bank_Up = 15,
+      // displays
+      RGB_Bank_Display = 18,
+      RGB_Channel8_Display = 21,
+      RGB_Channel7_Display = 24,
+      RGB_Channel6_Display = 27,
+      RGB_Channel5_Display = 30,
+      RGB_Channel4_Display = 33,
+      RGB_Channel3_Display = 36,
+      RGB_Channel2_Display = 39,
+      RGB_Channel1_Display = 42,
+      LIGHTS_LEN = 45
    };
 
-   Panel();
 };
 
 #endif // NOT TimeLordPanelH

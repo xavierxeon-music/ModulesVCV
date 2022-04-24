@@ -109,10 +109,10 @@
         </g>
         <g id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
             <g id="Strip-meter-5" serif:id="Strip#meter$5" transform="matrix(0.214021,0,0,0.0493894,374.152,50.4856)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(140,140,140);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
         </g>
         <g id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
@@ -141,10 +141,10 @@
         </g>
         <g id="Slider1" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output2" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
             <g id="Strip-meter-52" serif:id="Strip#meter$5" transform="matrix(0.214021,0,0,0.0493894,374.152,50.4856)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(140,140,140);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
         </g>
         <g id="CV1" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
@@ -173,10 +173,10 @@
         </g>
         <g id="Slider2" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output4" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
             <g id="Strip-meter-54" serif:id="Strip#meter$5" transform="matrix(0.214021,0,0,0.0493894,374.152,50.4856)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(140,140,140);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
         </g>
         <g id="CV2" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
@@ -205,10 +205,10 @@
         </g>
         <g id="Slider3" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output6" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
             <g id="Strip-meter-56" serif:id="Strip#meter$5" transform="matrix(0.214021,0,0,0.0493894,374.152,50.4856)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(140,140,140);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
         </g>
         <g id="CV3" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
@@ -237,10 +237,10 @@
         </g>
         <g id="Slider4" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output8" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
             <g id="Strip-meter-58" serif:id="Strip#meter$5" transform="matrix(0.214021,0,0,0.0493894,374.152,50.4856)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(140,140,140);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
         </g>
         <g id="CV4" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
@@ -269,10 +269,10 @@
         </g>
         <g id="Slider5" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output10" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
             <g id="Strip-meter-510" serif:id="Strip#meter$5" transform="matrix(0.214021,0,0,0.0493894,374.152,50.4856)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(140,140,140);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
         </g>
         <g id="CV5" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
@@ -301,10 +301,10 @@
         </g>
         <g id="Slider6" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output12" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
             <g id="Strip-meter-512" serif:id="Strip#meter$5" transform="matrix(0.214021,0,0,0.0493894,374.152,50.4856)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(140,140,140);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
         </g>
         <g id="CV6" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">
@@ -333,10 +333,10 @@
         </g>
         <g id="Slider7" serif:id="Slider" transform="matrix(0.75,0,0,1,-44.1572,137.758)">
             <g id="Output-output14" serif:id="Output#output" transform="matrix(0.233336,0,0,0.175002,325.75,19.6545)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
             <g id="Strip-meter-514" serif:id="Strip#meter$5" transform="matrix(0.214021,0,0,0.0493894,374.152,50.4856)">
-                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(140,140,140);"/>
+                <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(153,102,102);"/>
             </g>
         </g>
         <g id="CV7" serif:id="CV" transform="matrix(0.75,0,0,1,-44.1572,138.758)">

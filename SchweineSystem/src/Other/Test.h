@@ -4,35 +4,31 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SchweineSystemLightMeter.h>
+#include <SchweineSystemModule.h>
+#include <SchweineSystemModuleWidget.h>
 
-class Test : public Module
+class Test : public SchweineSystem::Module
 {
 public:
    struct Panel;
 
 public:
    Test();
-   ~Test();
 
 public:
    void process(const ProcessArgs& args) override;
 
 private:
    void setup();
-
-private:
-   Panel* panel;
-   SchweineSystem::LightMeter::Controller meter;
 };
 
-class TestWidget : public ModuleWidget
+class TestWidget : public SchweineSystem::ModuleWidget
 {
 public:
    TestWidget(Test* module);
 
 private:
-   SvgPanel* setup(Test* module);
+   void setup();
 };
 
 #endif // NOT TestH

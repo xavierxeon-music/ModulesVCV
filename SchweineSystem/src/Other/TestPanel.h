@@ -12,39 +12,47 @@ struct Test::Panel
 {
    enum ParamId
    {
-      Channel1_Up,
-      Value_Channel1_Display,
-      Value_Channel1_Strip,
-      PARAMS_LEN
+      // buttons
+      Channel1_Up = 0,
+      // knobs
+      PARAMS_LEN = 1
+   };
+
+   enum DisplayId
+   {
+      Text_Channel1_Display = 0,
+      DISPLAYS_LEN = 1
+   };
+
+   enum MeterId
+   {
+      Value_Channel1_Strip = 0,
+      METERS_LEN = 1
    };
 
    enum InputId
    {
-      Channel1_Input,
-      INPUTS_LEN
+      Channel1_Input = 0,
+      INPUTS_LEN = 1
    };
 
    enum OutputId
    {
-      Channel1_Output,
-      OUTPUTS_LEN
+      Channel1_Output = 0,
+      OUTPUTS_LEN = 1
    };
 
    enum LightId
    {
-      Red_Channel1_Division,
-      Green_Channel1_Division,
-      Blue_Channel1_Division,
-      Red_Channel1_Up,
-      Green_Channel1_Up,
-      Blue_Channel1_Up,
-      Red_Channel1_Display,
-      Green_Channel1_Display,
-      Blue_Channel1_Display,
-      LIGHTS_LEN
+      // leds
+      RGB_Channel1_Division = 0,
+      // buttons
+      RGB_Channel1_Up = 3,
+      // displays
+      RGB_Channel1_Display = 6,
+      LIGHTS_LEN = 9
    };
 
-   Panel();
 };
 
 #endif // NOT TestPanelH

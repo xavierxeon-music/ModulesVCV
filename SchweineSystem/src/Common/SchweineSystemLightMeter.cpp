@@ -2,10 +2,10 @@
 
 // controller
 
-SchweineSystem::LightMeter::Controller::Controller(rack::engine::Module* module, const uint16_t& valueParamId)
+SchweineSystem::LightMeter::Controller::Controller(Module* module, const uint16_t& valueId)
    : module(module)
-   , valueParamId(valueParamId)
-   , valueMapper(0.0, 1.0, 0.0, 1.0)
+   , valueId(valueId)
+   , valueMapper(0.0, 1.0, 0.0, 100.0)
 {
 }
 
@@ -16,13 +16,12 @@ void SchweineSystem::LightMeter::Controller::setMaxValue(const uint16_t& newMaxV
 
 void SchweineSystem::LightMeter::Controller::setValue(const uint32_t& value)
 {
-   const float fValue = valueMapper(value);
-   module->params[valueParamId].setValue(fValue);
+   module->values[valueId] = valueMapper(value);
 }
 
 // controller list
 
-SchweineSystem::LightMeter::Controller::List::List(rack::engine::Module* module)
+SchweineSystem::LightMeter::Controller::List::List(Module* module)
    : module(module)
 {
 }
@@ -33,11 +32,11 @@ SchweineSystem::LightMeter::Controller::List::~List()
       delete instance;
 }
 
-void SchweineSystem::LightMeter::Controller::List::append(const std::vector<uint16_t>& paramIdList)
+void SchweineSystem::LightMeter::Controller::List::append(const std::vector<uint16_t>& valueIdList)
 {
-   for (const uint16_t& valueParamId : paramIdList)
+   for (const uint16_t& valueId : valueIdList)
    {
-      Controller* controller = new Controller(module, valueParamId);
+      Controller* controller = new Controller(module, valueId);
       instanceList.push_back(controller);
    }
 }
@@ -49,12 +48,12 @@ SchweineSystem::LightMeter::Controller* SchweineSystem::LightMeter::Controller::
 
 // widget
 
-SchweineSystem::LightMeter::Widget::Widget(rack::math::Vec pos, rack::engine::Module* module, const uint8_t& segmentCount, const uint16_t& valueParamId)
+SchweineSystem::LightMeter::Widget::Widget(rack::math::Vec pos, Module* module, const uint8_t& segmentCount, const uint16_t& valueId)
    : rack::TransparentWidget()
    , module(module)
-   , valueParamId(valueParamId)
+   , valueId(valueId)
    , segmentCount(segmentCount)
-   , meterMapper(0.0, 1.0, 0.0, 3.0 * segmentCount)
+   , meterMapper(0.0, 100.0, 0.0, 3.0 * segmentCount)
 {
    box.pos = rack::math::Vec(pos.x, pos.y);
 }
@@ -71,7 +70,7 @@ void SchweineSystem::LightMeter::Widget::drawLayer(const DrawArgs& args, int lay
       if (!module)
          return 13;
 
-      const float fValue = module->params[valueParamId].getValue();
+      const float fValue = module->values[valueId];
       return static_cast<uint8_t>(meterMapper(fValue));
    }();
 

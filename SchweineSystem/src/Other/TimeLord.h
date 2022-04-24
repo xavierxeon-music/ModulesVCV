@@ -15,8 +15,10 @@ using namespace rack;
 #include <SchweineSystemLCDDisplay.h>
 #include <SchweineSystemLight.h>
 #include <SchweineSystemLightMeter.h>
+#include <SchweineSystemModule.h>
+#include <SchweineSystemModuleWidget.h>
 
-class TimeLord : public Module
+class TimeLord : public SchweineSystem::Module
 {
 public:
    struct Panel;
@@ -92,13 +94,13 @@ private:
    dsp::PulseGenerator applyPulse;
 };
 
-class TimeLordWidget : public ModuleWidget
+class TimeLordWidget : public SchweineSystem::ModuleWidget
 {
 public:
    TimeLordWidget(TimeLord* module);
 
 private:
-   SvgPanel* setup(TimeLord* module);
+   void setup();
 };
 
 #endif // NOT TimeLordH

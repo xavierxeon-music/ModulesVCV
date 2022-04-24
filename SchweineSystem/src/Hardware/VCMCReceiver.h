@@ -11,8 +11,10 @@ using namespace rack;
 #include <SchweineSystemLCDDisplay.h>
 #include <SchweineSystemLight.h>
 #include <SchweineSystemLightMeter.h>
+#include <SchweineSystemModule.h>
+#include <SchweineSystemModuleWidget.h>
 
-class VCMCReceiver : public Module
+class VCMCReceiver : public SchweineSystem::Module
 {
 public:
    struct Panel;
@@ -62,13 +64,13 @@ private:
    SchweineSystem::Output::List sliderOutputList;
 };
 
-class VCMCReceiverWidget : public ModuleWidget
+class VCMCReceiverWidget : public SchweineSystem::ModuleWidget
 {
 public:
    VCMCReceiverWidget(VCMCReceiver* module);
 
 private:
-   SvgPanel* setup(VCMCReceiver* module);
+   void setup();
 };
 
 #endif // NOT VCMCReceiverH

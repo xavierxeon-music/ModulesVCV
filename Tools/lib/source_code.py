@@ -16,25 +16,11 @@ class Sources(Common):
         self._writePanelSource()
         self._writeModuleSource()
 
-    def _addPanelConstructor(self, line):
-
-        line(0, f'{self.moduleName}::Panel::Panel()')
-        line(0, '{')
-        line(0, '};')
-        line(0)
-
     def _addModuleSetup(self, line):
 
         line(0, f'void {self.moduleName}::setup()')
         line(0, '{')
         line(1, 'config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);')
-
-        if self.displays:
-            line(0)
-        for display in self.displays:
-            name = display['name']
-            count = int(display['count'])
-            line(1, f'configParam(Panel::Value_{name}, 0.f, {10**count}, 0.f, "");')
 
         if self.buttons:
             line(0)
@@ -60,13 +46,24 @@ class Sources(Common):
             name = output['name']
             line(1, f'configOutput(Panel::{name}, "{name}");')
 
+        if self.displays:
+            line(0)
+        for display in self.displays:
+            name = display['name']
+            line(1, f'configDisplay(Panel::Text_{name}, "{name}");')
+
+        if self.meters:
+            line(0)
+        for meter in self.meters:
+            name = meter['name']
+            line(1, f'configMeter(Panel::Value_{name}, "{name}");')
+
         line(0, '}')
 
     def _addWidgetSetup(self, line):
 
-        line(0, f'SvgPanel* {self.moduleName}Widget::setup({self.moduleName}* module)')
+        line(0, f'void {self.moduleName}Widget::setup()')
         line(0, '{')
-        line(1, 'setModule(module);')
         line(1, f'std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/{self.moduleName}.svg");')
         line(1, 'SvgPanel* mainPanel = createPanel(panelPath);')
         line(1, 'setPanel(mainPanel);')
@@ -77,7 +74,7 @@ class Sources(Common):
             name = button['name']
             x = button['cx']
             y = button['cy']
-            line(1, f'makeButton(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {self.moduleName}::Panel::Red_{name});')
+            line(1, f'makeButton(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {self.moduleName}::Panel::RGB_{name});')
 
         if self.knobs:
             line(0)
@@ -109,7 +106,16 @@ class Sources(Common):
             name = light['name']
             x = light['cx']
             y = light['cy']
-            line(1, f'makeLight(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::Red_{name});')
+            line(1, f'makeLight(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::RGB_{name});')
+
+        if self.displays:
+            line(0)
+        for display in self.displays:
+            name = display['name']
+            count = display['count']
+            x = display['rx']
+            y = display['ry']
+            line(1, f'makeDisplay(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Text_{name}, {self.moduleName}::Panel::RGB_{name});')
 
         if self.meters:
             line(0)
@@ -119,18 +125,6 @@ class Sources(Common):
             x = meter['rx']
             y = meter['ry']
             line(1, f'makeMeter(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Value_{name});')
-
-        if self.displays:
-            line(0)
-        for display in self.displays:
-            name = display['name']
-            count = display['count']
-            x = display['rx']
-            y = display['ry']
-            line(1, f'makeDisplay(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Value_{name}, {self.moduleName}::Panel::Red_{name});')
-
-        line(0)
-        line(1, 'return mainPanel;')
 
         line(0, '}')
 
@@ -150,9 +144,6 @@ class Sources(Common):
                 line(0, '#include <limits>')
             line(0)
 
-            self._addPanelConstructor(line)
-            line(0)
-
             self._addModuleSetup(line)
             line(0)
 
@@ -164,7 +155,7 @@ class Sources(Common):
         fileName = self.compileFileName('.cpp')
 
         if os.path.exists(fileName):
-            print(f'source {fileName} already exists')
+            print(f'source {self.moduleName}.cpp already exists')
             return
 
         with open(fileName, 'w') as sourcefile:
@@ -178,18 +169,9 @@ class Sources(Common):
             line(0)
 
             line(0, f'{self.moduleName}::{self.moduleName}()')
-            line(1, ': Module()')
-            line(1, ', panel(nullptr)')
+            line(1, ': SchweineSystem::Module()')
             line(0, '{')
-            line(1, 'panel = new Panel();')
             line(1, 'setup();')
-            line(0, '}')
-
-            line(0)
-
-            line(0, f'{self.moduleName}::~{self.moduleName}()')
-            line(0, '{')
-            line(1, 'delete panel;')
             line(0, '}')
 
             line(0)
@@ -200,10 +182,9 @@ class Sources(Common):
             line(0)
 
             line(0, f'{self.moduleName}Widget::{self.moduleName}Widget({self.moduleName}* module)')
-            line(0, f': ModuleWidget()')
+            line(0, f': SchweineSystem::ModuleWidget(module)')
             line(0, '{')
-            line(1, 'SvgPanel* mainPanel = setup(module);')
-            line(1, '(void)mainPanel;')
+            line(1, 'setup();')
             line(0, '}')
             line(0)
 

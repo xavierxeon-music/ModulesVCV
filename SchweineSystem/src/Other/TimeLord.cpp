@@ -4,7 +4,6 @@
 #include <Midi/MidiCommon.h>
 #include <Tools/SevenBit.h>
 
-#include <SchweineSystemLCDDisplay.h>
 #include <SchweineSystemMaster.h>
 
 // receiver
@@ -101,7 +100,7 @@ void TimeLord::Majordomo::midiError(RtMidiError::Type type, const std::string& e
 const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 TimeLord::TimeLord()
-   : Module()
+   : SchweineSystem::Module()
    , ramps{}
    , midiBuffer()
    , clockTrigger()
@@ -115,7 +114,7 @@ TimeLord::TimeLord()
    , displayModeLightList(lights)
    , displayTrigger()
    , modeColors{SchweineSystem::Color{255, 0, 0}, SchweineSystem::Color{50, 50, 255}, SchweineSystem::Color{255, 255, 0}, SchweineSystem::Color{0, 255, 0}}
-   , bankDisplay(this, Panel::Value_Bank_Display, Panel::Red_Bank_Display)
+   , bankDisplay(this, Panel::Text_Bank_Display, Panel::RGB_Bank_Display)
    , bankIndex(0)
    , bankTrigger()
    , receiveState(false)
@@ -142,16 +141,19 @@ TimeLord::TimeLord()
                       Panel::Channel7_Output,
                       Panel::Channel8_Output});
 
-   rampDisplayList.append({{Panel::Value_Channel1_Display, Panel::Red_Channel1_Display},
-                           {Panel::Value_Channel2_Display, Panel::Red_Channel2_Display},
-                           {Panel::Value_Channel3_Display, Panel::Red_Channel3_Display},
-                           {Panel::Value_Channel4_Display, Panel::Red_Channel4_Display},
-                           {Panel::Value_Channel5_Display, Panel::Red_Channel5_Display},
-                           {Panel::Value_Channel6_Display, Panel::Red_Channel6_Display},
-                           {Panel::Value_Channel7_Display, Panel::Red_Channel7_Display},
-                           {Panel::Value_Channel8_Display, Panel::Red_Channel8_Display}});
+   rampDisplayList.append({{Panel::Text_Channel1_Display, Panel::RGB_Channel1_Display},
+                           {Panel::Text_Channel2_Display, Panel::RGB_Channel2_Display},
+                           {Panel::Text_Channel3_Display, Panel::RGB_Channel3_Display},
+                           {Panel::Text_Channel4_Display, Panel::RGB_Channel4_Display},
+                           {Panel::Text_Channel5_Display, Panel::RGB_Channel5_Display},
+                           {Panel::Text_Channel6_Display, Panel::RGB_Channel6_Display},
+                           {Panel::Text_Channel7_Display, Panel::RGB_Channel7_Display},
+                           {Panel::Text_Channel8_Display, Panel::RGB_Channel8_Display}});
 
-   displayModeLightList.append({Panel::Red_Division, Panel::Red_Length, Panel::Red_Count, Panel::Red_Current});
+   displayModeLightList.append({Panel::RGB_Division,
+                                Panel::RGB_Length,
+                                Panel::RGB_Count,
+                                Panel::RGB_Current});
    for (uint8_t modeIndex = 0; modeIndex < 4; modeIndex++)
    {
       displayModeLightList[modeIndex]->setDefaultColor(modeColors[modeIndex]);
@@ -194,7 +196,7 @@ void TimeLord::process(const ProcessArgs& args)
    else
       bankDisplay.setColor(SchweineSystem::Color{255, 255, 0});
 
-   bankDisplay.setValue(bankIndex);
+   bankDisplay.setText(std::to_string(bankIndex));
 
    if (displayTrigger.process(params[Panel::Mode].getValue()))
    {
@@ -223,13 +225,13 @@ void TimeLord::process(const ProcessArgs& args)
       rampDisplayList[rampIndex]->setColor(modeColors[displayMode]);
 
       if (Division == displayMode)
-         rampDisplayList[rampIndex]->setValue(polyRamp->getStepSize());
+         rampDisplayList[rampIndex]->setText(Tempo::getName(polyRamp->getStepSize()));
       else if (Length == displayMode)
-         rampDisplayList[rampIndex]->setValue(polyRamp->getLength());
+         rampDisplayList[rampIndex]->setText(std::to_string(polyRamp->getLength()));
       else if (StageCount == displayMode)
-         rampDisplayList[rampIndex]->setValue(polyRamp->getStageCount());
+         rampDisplayList[rampIndex]->setText(std::to_string(polyRamp->getStageCount()));
       else
-         rampDisplayList[rampIndex]->setValue(polyRamp->getCurrentStageIndex());
+         rampDisplayList[rampIndex]->setText(std::to_string(polyRamp->getCurrentStageIndex()));
 
       if (isReset)
          polyRamp->clockReset();
@@ -388,12 +390,10 @@ void TimeLord::loadInternal(const SchweineSystem::Json::Object& rootObject)
       }
    }
 }
-
 TimeLordWidget::TimeLordWidget(TimeLord* module)
-   : ModuleWidget()
+   : SchweineSystem::ModuleWidget(module)
 {
-   SvgPanel* mainPanel = setup(module);
-   (void)mainPanel;
+   setup();
 }
 
 Model* modelTimeLord = SchweineSystem::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");

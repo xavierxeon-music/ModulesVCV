@@ -4,6 +4,8 @@
 #include <rack.hpp>
 
 #include "SchweineSystemCommon.h"
+#include "SchweineSystemModule.h"
+#include "SchweineSystemModuleWidget.h"
 
 namespace SchweineSystem
 {
@@ -15,16 +17,16 @@ namespace SchweineSystem
          class List;
 
       public:
-         Controller(rack::engine::Module* module, const uint16_t& valueParamId, const uint16_t& redLightId);
+         Controller(Module* module, const uint16_t& textId, const uint16_t& rgbId);
 
       public:
-         void setValue(const uint32_t& value);
+         void setText(const std::string& text);
          void setColor(const SchweineSystem::Color& color);
 
       private:
-         rack::engine::Module* module;
-         const uint16_t valueParamId;
-         const uint16_t redLightId;
+         Module* module;
+         const uint16_t textId;
+         const uint16_t rgbId;
       };
 
       class Controller::List
@@ -39,7 +41,7 @@ namespace SchweineSystem
          };
 
       public:
-         List(rack::engine::Module* module);
+         List(Module* module);
          ~List();
 
       public:
@@ -47,32 +49,32 @@ namespace SchweineSystem
          Controller* operator[](const uint16_t& index);
 
       private:
-         rack::engine::Module* module;
+         Module* module;
          std::vector<Controller*> instanceList;
       };
 
       class Widget : public rack::TransparentWidget
       {
       public:
-         Widget(rack::math::Vec pos, rack::engine::Module* module, const uint8_t& digitCount, const uint16_t& valueParamId, const uint16_t& redLightId);
+         Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& textId, const uint16_t& rgbId);
 
       private:
          void drawLayer(const DrawArgs& args, int layer) override;
 
       private:
-         rack::engine::Module* module;
+         Module* module;
          const uint8_t digitCount;
-         const uint16_t valueParamId;
-         const uint16_t redLightId;
+         const uint16_t textId;
+         const uint16_t rgbId;
          std::shared_ptr<rack::Font> font;
          std::string fontPath;
       };
    } // namespace LCDDisplay
 } // namespace SchweineSystem
 
-inline void makeDisplay(rack::ModuleWidget* widget, rack::math::Vec pos, int digitCount, int paramId, int firstLightId)
+inline void makeDisplay(SchweineSystem::ModuleWidget* widget, rack::math::Vec pos, const uint8_t& digitCount, const uint16_t& textId, const uint16_t& rgbId)
 {
-   rack::Widget* displayWidget = new SchweineSystem::LCDDisplay::Widget(pos, widget->getModule(), digitCount, paramId, firstLightId);
+   rack::Widget* displayWidget = new SchweineSystem::LCDDisplay::Widget(pos, widget->getSchweineModule(), digitCount, textId, rgbId);
    widget->addChild(displayWidget);
 }
 

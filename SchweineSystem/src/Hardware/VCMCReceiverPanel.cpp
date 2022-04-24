@@ -4,16 +4,9 @@
 #include <SchweineSystemMaster.h>
 #include <limits>
 
-VCMCReceiver::Panel::Panel()
-{
-};
-
-
 void VCMCReceiver::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
-
-   configParam(Panel::Value_Clock, 0.f, 1000, 0.f, "");
 
    configButton(Panel::Connect, "Connect");
 
@@ -45,16 +38,34 @@ void VCMCReceiver::setup()
    configOutput(Panel::Channel1_Gate7_BitOut1, "Channel1_Gate7_BitOut1");
    configOutput(Panel::Channel1_Slider7_Output, "Channel1_Slider7_Output");
    configOutput(Panel::Channel1_CV7_Output, "Channel1_CV7_Output");
+
+   configDisplay(Panel::Text_Clock, "Clock");
+
+   configMeter(Panel::Value_Channel8_Slider_Strip, "Channel8_Slider_Strip");
+   configMeter(Panel::Value_Channel8_CV_Strip, "Channel8_CV_Strip");
+   configMeter(Panel::Value_Channel7_Slider1_Strip, "Channel7_Slider1_Strip");
+   configMeter(Panel::Value_Channel7_CV1_Strip, "Channel7_CV1_Strip");
+   configMeter(Panel::Value_Channel6_Slider2_Strip, "Channel6_Slider2_Strip");
+   configMeter(Panel::Value_Channel6_CV2_Strip, "Channel6_CV2_Strip");
+   configMeter(Panel::Value_Channel5_Slider3_Strip, "Channel5_Slider3_Strip");
+   configMeter(Panel::Value_Channel5_CV3_Strip, "Channel5_CV3_Strip");
+   configMeter(Panel::Value_Channel4_Slider4_Strip, "Channel4_Slider4_Strip");
+   configMeter(Panel::Value_Channel4_CV4_Strip, "Channel4_CV4_Strip");
+   configMeter(Panel::Value_Channel3_Slider5_Strip, "Channel3_Slider5_Strip");
+   configMeter(Panel::Value_Channel3_CV5_Strip, "Channel3_CV5_Strip");
+   configMeter(Panel::Value_Channel2_Slider6_Strip, "Channel2_Slider6_Strip");
+   configMeter(Panel::Value_Channel2_CV6_Strip, "Channel2_CV6_Strip");
+   configMeter(Panel::Value_Channel1_Slider7_Strip, "Channel1_Slider7_Strip");
+   configMeter(Panel::Value_Channel1_CV7_Strip, "Channel1_CV7_Strip");
 }
 
-SvgPanel* VCMCReceiverWidget::setup(VCMCReceiver* module)
+void VCMCReceiverWidget::setup()
 {
-   setModule(module);
    std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/VCMCReceiver.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeButton(this, Vec(115.60, 332.70), VCMCReceiver::Panel::Connect, VCMCReceiver::Panel::Red_Connect);
+   makeButton(this, Vec(115.60, 332.70), VCMCReceiver::Panel::Connect, VCMCReceiver::Panel::RGB_Connect);
 
    makeInput(this, Vec(52.34, 298.84),  VCMCReceiver::Panel::ClockOverride);
 
@@ -85,14 +96,16 @@ SvgPanel* VCMCReceiverWidget::setup(VCMCReceiver* module)
    makeOutput(this, Vec(117.69, 36.09), VCMCReceiver::Panel::Channel1_Slider7_Output);
    makeOutput(this, Vec(78.70, 36.09), VCMCReceiver::Panel::Channel1_CV7_Output);
 
-   makeLight(this, Vec(55.36, 259.13), VCMCReceiver::Panel::Red_Channel8_Gate_Status1);
-   makeLight(this, Vec(55.36, 227.19), VCMCReceiver::Panel::Red_Channel7_Gate1_Status1);
-   makeLight(this, Vec(55.36, 195.24), VCMCReceiver::Panel::Red_Channel6_Gate2_Status1);
-   makeLight(this, Vec(55.36, 163.29), VCMCReceiver::Panel::Red_Channel5_Gate3_Status1);
-   makeLight(this, Vec(55.36, 131.34), VCMCReceiver::Panel::Red_Channel4_Gate4_Status1);
-   makeLight(this, Vec(55.36, 99.39), VCMCReceiver::Panel::Red_Channel3_Gate5_Status1);
-   makeLight(this, Vec(55.36, 67.45), VCMCReceiver::Panel::Red_Channel2_Gate6_Status1);
-   makeLight(this, Vec(55.36, 35.50), VCMCReceiver::Panel::Red_Channel1_Gate7_Status1);
+   makeLight(this, Vec(55.36, 259.13), VCMCReceiver::Panel::RGB_Channel8_Gate_Status1);
+   makeLight(this, Vec(55.36, 227.19), VCMCReceiver::Panel::RGB_Channel7_Gate1_Status1);
+   makeLight(this, Vec(55.36, 195.24), VCMCReceiver::Panel::RGB_Channel6_Gate2_Status1);
+   makeLight(this, Vec(55.36, 163.29), VCMCReceiver::Panel::RGB_Channel5_Gate3_Status1);
+   makeLight(this, Vec(55.36, 131.34), VCMCReceiver::Panel::RGB_Channel4_Gate4_Status1);
+   makeLight(this, Vec(55.36, 99.39), VCMCReceiver::Panel::RGB_Channel3_Gate5_Status1);
+   makeLight(this, Vec(55.36, 67.45), VCMCReceiver::Panel::RGB_Channel2_Gate6_Status1);
+   makeLight(this, Vec(55.36, 35.50), VCMCReceiver::Panel::RGB_Channel1_Gate7_Status1);
+
+   makeDisplay(this, Vec(109.07, 286.95), 3, VCMCReceiver::Panel::Text_Clock, VCMCReceiver::Panel::RGB_Clock);
 
    makeMeter(this, Vec(139.04, 262.95), 5, VCMCReceiver::Panel::Value_Channel8_Slider_Strip);
    makeMeter(this, Vec(139.04, 251.31), 5, VCMCReceiver::Panel::Value_Channel8_CV_Strip);
@@ -110,9 +123,5 @@ SvgPanel* VCMCReceiverWidget::setup(VCMCReceiver* module)
    makeMeter(this, Vec(139.04, 59.63), 5, VCMCReceiver::Panel::Value_Channel2_CV6_Strip);
    makeMeter(this, Vec(139.04, 39.32), 5, VCMCReceiver::Panel::Value_Channel1_Slider7_Strip);
    makeMeter(this, Vec(139.04, 27.68), 5, VCMCReceiver::Panel::Value_Channel1_CV7_Strip);
-
-   makeDisplay(this, Vec(109.07, 286.95), 3, VCMCReceiver::Panel::Value_Clock, VCMCReceiver::Panel::Red_Clock);
-
-   return mainPanel;
 }
 
