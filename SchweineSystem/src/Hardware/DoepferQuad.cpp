@@ -7,6 +7,7 @@ DoepferQuad::DoepferQuad()
    : SchweineSystem::Module()
    , midiOutput()
    , connectTrigger()
+   , voltageToNote(0.0, 10.0, 24.0, 127.0)
    , voltageToCcValue(0.0, 10.0, 0.0, 127.0)
    , connectionLight(lights)
    , channelMap()
@@ -39,13 +40,9 @@ void DoepferQuad::process(const ProcessArgs& args)
       const Midi::Channel& midiChannel = it->first;
       ChannelStore& channelStore = it->second;
 
-      if (1 < channelStore.sendNote)
+      if (channelStore.sendNote)
       {
-         channelStore.sendNote--;
-      }
-      else if (1 == channelStore.sendNote)
-      {
-         channelStore.sendNote = 0;
+         channelStore.sendNote = false;
 
          std::vector<unsigned char> onMessage(3);
          onMessage[0] = (Midi::Event::NoteOn | (midiChannel - 1));
@@ -56,11 +53,11 @@ void DoepferQuad::process(const ProcessArgs& args)
       else
       {
          const float noteVoltage = inputs[channelStore.inputIdList[0]].getVoltage();
-         uint8_t note = static_cast<uint8_t>(voltageToCcValue(noteVoltage)) + 24;
+         uint8_t note = static_cast<uint8_t>(voltageToNote(noteVoltage));
 
          const float velocityVoltage = inputs[channelStore.inputIdList[1]].getVoltage();
          const bool velocityConnected = inputs[channelStore.inputIdList[1]].isConnected();
-         uint8_t velocity = velocityConnected ? static_cast<uint8_t>(voltageToCcValue(velocityVoltage)) : 127;
+         uint8_t velocity = velocityConnected ? static_cast<uint8_t>(voltageToCcValue(velocityVoltage)) : 64;
 
          if (note != channelStore.note || velocity != channelStore.velocity)
          {
@@ -70,7 +67,7 @@ void DoepferQuad::process(const ProcessArgs& args)
             offMessage[2] = 64;
             midiOutput.sendMessage(&offMessage);
 
-            channelStore.sendNote = 200;
+            channelStore.sendNote = true;
             channelStore.note = note;
             channelStore.velocity = velocity;
          }

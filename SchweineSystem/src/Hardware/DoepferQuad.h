@@ -30,10 +30,10 @@ private:
    struct ChannelStore
    {
       std::vector<uint16_t> inputIdList;
-      uint8_t note = 0;
-      uint8_t velocity = 127;
+      uint8_t note = 24;
+      uint8_t velocity = 64;
       uint8_t controllerValue = 0;
-      uint8_t sendNote = 0;
+      bool sendNote = true;
 
       using Map = std::map<Midi::Channel, ChannelStore>;
    };
@@ -45,6 +45,7 @@ private:
 private:
    RtMidiOut midiOutput;
    dsp::BooleanTrigger connectTrigger;
+   Range::Mapper voltageToNote;
    Range::Mapper voltageToCcValue;
    SchweineSystem::Light connectionLight;
 
