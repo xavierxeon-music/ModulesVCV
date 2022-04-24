@@ -101,7 +101,7 @@ class Headers(Common):
             if self.lights:
                 line(0, '#include <SchweineSystemLight.h>')
             if self.meters:
-                line(0, '#include <SchweineSystemMeter.h>')
+                line(0, '#include <SchweineSystemLightMeter.h>')
             line(0)
 
             line(0, f'struct {self.moduleName}::Panel')

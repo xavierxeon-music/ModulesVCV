@@ -27,52 +27,66 @@ VCMCReceiver::VCMCReceiver()
    , lightListGate(lights)
    , gateList(outputs)
    , cvValues{0, 0, 0, 0, 0, 0, 0, 0}
-   , lightMeterListCV(lights)
+   , lightMeterListCV(this)
    , cvOutputList(outputs)
-   , lightMeterListSlider(lights)
+   , lightMeterListSlider(this)
    , sliderOutputList(outputs)
 {
    setup();
 
-   lightListGate.append({Panel::Red_Channel1_Gate1_Status1,
-                         Panel::Red_Channel2_Gate2_Status1,
-                         Panel::Red_Channel3_Gate3_Status1,
+   lightListGate.append({Panel::Red_Channel1_Gate7_Status1,
+                         Panel::Red_Channel2_Gate6_Status1,
+                         Panel::Red_Channel3_Gate5_Status1,
                          Panel::Red_Channel4_Gate4_Status1,
-                         Panel::Red_Channel5_Gate5_Status1,
-                         Panel::Red_Channel6_Gate6_Status1,
-                         Panel::Red_Channel7_Gate7_Status1,
-                         Panel::Red_Channel8_Gate8_Status1});
+                         Panel::Red_Channel5_Gate3_Status1,
+                         Panel::Red_Channel6_Gate2_Status1,
+                         Panel::Red_Channel7_Gate1_Status1,
+                         Panel::Red_Channel8_Gate_Status1});
 
-   gateList.append({Panel::Channel1_Gate1_BitOut1,
-                    Panel::Channel2_Gate2_BitOut1,
-                    Panel::Channel3_Gate3_BitOut1,
+   gateList.append({Panel::Channel1_Gate7_BitOut1,
+                    Panel::Channel2_Gate6_BitOut1,
+                    Panel::Channel3_Gate5_BitOut1,
                     Panel::Channel4_Gate4_BitOut1,
-                    Panel::Channel5_Gate5_BitOut1,
-                    Panel::Channel6_Gate6_BitOut1,
-                    Panel::Channel7_Gate7_BitOut1,
-                    Panel::Channel8_Gate8_BitOut1});
+                    Panel::Channel5_Gate3_BitOut1,
+                    Panel::Channel6_Gate2_BitOut1,
+                    Panel::Channel7_Gate1_BitOut1,
+                    Panel::Channel8_Gate_BitOut1});
 
-   lightMeterListCV.append({{Panel::Red_Channel1_CV1_Status1, Panel::Red_Channel1_CV1_Status2, Panel::Red_Channel1_CV1_Status3, Panel::Red_Channel1_CV1_Status4, Panel::Red_Channel1_CV1_Status5},
-                            {Panel::Red_Channel2_CV2_Status1, Panel::Red_Channel2_CV2_Status2, Panel::Red_Channel2_CV2_Status3, Panel::Red_Channel2_CV2_Status4, Panel::Red_Channel2_CV2_Status5},
-                            {Panel::Red_Channel3_CV3_Status1, Panel::Red_Channel3_CV3_Status2, Panel::Red_Channel3_CV3_Status3, Panel::Red_Channel3_CV3_Status4, Panel::Red_Channel3_CV3_Status5},
-                            {Panel::Red_Channel4_CV4_Status1, Panel::Red_Channel4_CV4_Status2, Panel::Red_Channel4_CV4_Status3, Panel::Red_Channel4_CV4_Status4, Panel::Red_Channel4_CV4_Status5},
-                            {Panel::Red_Channel5_CV5_Status1, Panel::Red_Channel5_CV5_Status2, Panel::Red_Channel5_CV5_Status3, Panel::Red_Channel5_CV5_Status4, Panel::Red_Channel5_CV5_Status5},
-                            {Panel::Red_Channel6_CV6_Status1, Panel::Red_Channel6_CV6_Status2, Panel::Red_Channel6_CV6_Status3, Panel::Red_Channel6_CV6_Status4, Panel::Red_Channel6_CV6_Status5},
-                            {Panel::Red_Channel7_CV7_Status1, Panel::Red_Channel7_CV7_Status2, Panel::Red_Channel7_CV7_Status3, Panel::Red_Channel7_CV7_Status4, Panel::Red_Channel7_CV7_Status5},
-                            {Panel::Red_Channel8_CV8_Status1, Panel::Red_Channel8_CV8_Status2, Panel::Red_Channel8_CV8_Status3, Panel::Red_Channel8_CV8_Status4, Panel::Red_Channel8_CV8_Status5}});
+   lightMeterListCV.append({Panel::Value_Channel1_CV7_Strip,
+                            Panel::Value_Channel2_CV6_Strip,
+                            Panel::Value_Channel3_CV5_Strip,
+                            Panel::Value_Channel4_CV4_Strip,
+                            Panel::Value_Channel5_CV3_Strip,
+                            Panel::Value_Channel6_CV2_Strip,
+                            Panel::Value_Channel7_CV1_Strip,
+                            Panel::Value_Channel8_CV_Strip});
 
-   cvOutputList.append({Panel::Channel1_CV1_Output, Panel::Channel2_CV2_Output, Panel::Channel3_CV3_Output, Panel::Channel4_CV4_Output, Panel::Channel5_CV5_Output, Panel::Channel6_CV6_Output, Panel::Channel7_CV7_Output, Panel::Channel8_CV8_Output});
+   cvOutputList.append({Panel::Channel1_CV7_Output,
+                        Panel::Channel2_CV6_Output,
+                        Panel::Channel3_CV5_Output,
+                        Panel::Channel4_CV4_Output,
+                        Panel::Channel5_CV3_Output,
+                        Panel::Channel6_CV2_Output,
+                        Panel::Channel7_CV1_Output,
+                        Panel::Channel8_CV_Output});
 
-   lightMeterListSlider.append({{Panel::Red_Channel1_Slider1_Status1, Panel::Red_Channel1_Slider1_Status2, Panel::Red_Channel1_Slider1_Status3, Panel::Red_Channel1_Slider1_Status4, Panel::Red_Channel1_Slider1_Status5},
-                                {Panel::Red_Channel2_Slider2_Status1, Panel::Red_Channel2_Slider2_Status2, Panel::Red_Channel2_Slider2_Status3, Panel::Red_Channel2_Slider2_Status4, Panel::Red_Channel2_Slider2_Status5},
-                                {Panel::Red_Channel3_Slider3_Status1, Panel::Red_Channel3_Slider3_Status2, Panel::Red_Channel3_Slider3_Status3, Panel::Red_Channel3_Slider3_Status4, Panel::Red_Channel3_Slider3_Status5},
-                                {Panel::Red_Channel4_Slider4_Status1, Panel::Red_Channel4_Slider4_Status2, Panel::Red_Channel4_Slider4_Status3, Panel::Red_Channel4_Slider4_Status4, Panel::Red_Channel4_Slider4_Status5},
-                                {Panel::Red_Channel5_Slider5_Status1, Panel::Red_Channel5_Slider5_Status2, Panel::Red_Channel5_Slider5_Status3, Panel::Red_Channel5_Slider5_Status4, Panel::Red_Channel5_Slider5_Status5},
-                                {Panel::Red_Channel6_Slider6_Status1, Panel::Red_Channel6_Slider6_Status2, Panel::Red_Channel6_Slider6_Status3, Panel::Red_Channel6_Slider6_Status4, Panel::Red_Channel6_Slider6_Status5},
-                                {Panel::Red_Channel7_Slider7_Status1, Panel::Red_Channel7_Slider7_Status2, Panel::Red_Channel7_Slider7_Status3, Panel::Red_Channel7_Slider7_Status4, Panel::Red_Channel7_Slider7_Status5},
-                                {Panel::Red_Channel8_Slider8_Status1, Panel::Red_Channel8_Slider8_Status2, Panel::Red_Channel8_Slider8_Status3, Panel::Red_Channel8_Slider8_Status4, Panel::Red_Channel8_Slider8_Status5}});
+   lightMeterListSlider.append({Panel::Value_Channel1_Slider7_Strip,
+                                Panel::Value_Channel2_Slider6_Strip,
+                                Panel::Value_Channel3_Slider5_Strip,
+                                Panel::Value_Channel4_Slider4_Strip,
+                                Panel::Value_Channel5_Slider3_Strip,
+                                Panel::Value_Channel6_Slider2_Strip,
+                                Panel::Value_Channel7_Slider1_Strip,
+                                Panel::Value_Channel8_Slider_Strip});
 
-   sliderOutputList.append({Panel::Channel1_Slider1_Output, Panel::Channel2_Slider2_Output, Panel::Channel3_Slider3_Output, Panel::Channel4_Slider4_Output, Panel::Channel5_Slider5_Output, Panel::Channel6_Slider6_Output, Panel::Channel7_Slider7_Output, Panel::Channel8_Slider8_Output});
+   sliderOutputList.append({Panel::Channel1_Slider7_Output,
+                            Panel::Channel2_Slider6_Output,
+                            Panel::Channel3_Slider5_Output,
+                            Panel::Channel4_Slider4_Output,
+                            Panel::Channel5_Slider3_Output,
+                            Panel::Channel6_Slider2_Output,
+                            Panel::Channel7_Slider1_Output,
+                            Panel::Channel8_Slider_Output});
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -134,11 +148,11 @@ void VCMCReceiver::process(const ProcessArgs& args)
          gateList[index]->setVoltage(0.0);
       }
 
-      lightMeterListCV[index]->setMeter(cvValues[index]);
+      lightMeterListCV[index]->setValue(cvValues[index]);
       const float cvVoltage = ccValueToVoltage(cvValues[index]);
       cvOutputList[index]->setVoltage(cvVoltage);
 
-      lightMeterListSlider[index]->setMeter(sliderValues[index]);
+      lightMeterListSlider[index]->setValue(sliderValues[index]);
       const float sliderVoltage = ccValueToVoltage(sliderValues[index]);
       sliderOutputList[index]->setVoltage(sliderVoltage);
    }

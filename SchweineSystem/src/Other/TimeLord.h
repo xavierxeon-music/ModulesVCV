@@ -76,7 +76,7 @@ private:
    Tempo tempo;
 
    Range::Mapper cvMapper;
-   SchweineSystem::LightMeter::List lightMeterList;
+   SchweineSystem::LightMeter::Controller::List lightMeterList;
    SchweineSystem::Output::List outputList;
 
    SchweineSystem::LCDDisplay::Controller::List rampDisplayList;

@@ -6,7 +6,7 @@
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemLCDDisplay.h>
 #include <SchweineSystemLight.h>
-#include <SchweineSystemMeter.h>
+#include <SchweineSystemLightMeter.h>
 
 struct Test::Panel
 {

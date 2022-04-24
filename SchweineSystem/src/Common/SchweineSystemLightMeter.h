@@ -5,50 +5,67 @@
 
 #include <Tools/Range.h>
 
-#include "SchweineSystemLight.h"
-
-// TODO make templates with variable number of lights
-static constexpr uint8_t NumberOfLights = 5;
+#include "SchweineSystemCommon.h"
 
 namespace SchweineSystem
 {
-   class LightMeter
+   namespace LightMeter
    {
-   public:
-      using RedIndexList = std::vector<uint16_t>;
+      class Controller
+      {
+      public:
+         class List;
 
-   public:
-      class List;
+      public:
+         Controller(rack::engine::Module* module, const uint16_t& valueParamId);
 
-   public:
-      LightMeter(std::vector<rack::engine::Light>& fullList);
-      ~LightMeter();
+      public:
+         void setMaxValue(const uint16_t& newMaxValue);
+         void setValue(const uint32_t& value);
 
-   public:
-      void assign(const RedIndexList& redIndexList);
-      void setMaxValue(const uint16_t& newMaxValue);
-      void setMeter(const uint16_t& value);
+      private:
+         rack::engine::Module* module;
+         const uint16_t valueParamId;
+         Range::Mapper valueMapper;
+      };
 
-   private:
-      Light* meterLights[NumberOfLights];
-      Range::Mapper meterMapper;
-   };
+      class Controller::List
+      {
+      public:
+         List(rack::engine::Module* module);
+         ~List();
 
-   class LightMeter::List
-   {
-   public:
-      List(std::vector<rack::engine::Light>& fullList);
-      ~List();
+      public:
+         void append(const std::vector<uint16_t>& paramIdList);
+         Controller* operator[](const uint16_t& index);
 
-   public:
-      void append(const std::vector<RedIndexList>& redIndexLists);
-      LightMeter* operator[](const uint16_t& index);
+      private:
+         rack::engine::Module* module;
+         std::vector<Controller*> instanceList;
+      };
 
-   private:
-      std::vector<rack::engine::Light>& fullList;
-      std::vector<LightMeter*> instanceList;
-   };
+      class Widget : public rack::TransparentWidget
+      {
+      public:
+      public:
+         Widget(rack::math::Vec pos, rack::engine::Module* module, const uint8_t& segmentCount, const uint16_t& valueParamId);
 
+      private:
+         void drawLayer(const DrawArgs& args, int layer) override;
+
+      private:
+         rack::engine::Module* module;
+         const uint16_t valueParamId;
+         const uint8_t segmentCount;
+         Range::Mapper meterMapper;
+      };
+   } // namespace Meter
 } // namespace SchweineSystem
+
+inline void makeMeter(rack::ModuleWidget* widget, rack::math::Vec pos, int digitCount, int paramId)
+{
+   rack::Widget* meterWidget = new SchweineSystem::LightMeter::Widget(pos, widget->getModule(), digitCount, paramId);
+   widget->addChild(meterWidget);
+}
 
 #endif // NOT SchweineSystemLightMeterH

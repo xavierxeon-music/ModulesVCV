@@ -54,11 +54,11 @@ private:
    SchweineSystem::Output::List gateList;
    // cv
    uint8_t cvValues[8];
-   SchweineSystem::LightMeter::List lightMeterListCV;
+   SchweineSystem::LightMeter::Controller::List lightMeterListCV;
    SchweineSystem::Output::List cvOutputList;
    // sliders
    uint8_t sliderValues[8];
-   SchweineSystem::LightMeter::List lightMeterListSlider;
+   SchweineSystem::LightMeter::Controller::List lightMeterListSlider;
    SchweineSystem::Output::List sliderOutputList;
 };
 

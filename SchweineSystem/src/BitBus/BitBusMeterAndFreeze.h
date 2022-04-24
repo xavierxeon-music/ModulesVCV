@@ -8,7 +8,7 @@ using namespace rack;
 #include <Tools/BoolField.h>
 #include <Tools/RingBuffer.h>
 
-#include "SchweineSystemLightMeter.h"
+#include "SchweineSystemLight.h"
 
 static constexpr uint16_t AverageBufferSize = 4800;
 
@@ -25,23 +25,6 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   class Average
-   {
-   public:
-      using List = Average[8];
-
-   public:
-      Average();
-
-   public:
-      uint16_t observe(const bool value);
-
-   private:
-      RingBuffer<bool, AverageBufferSize> buffer;
-      uint16_t sum;
-   };
-
-private:
    void setup();
 
    void onAdd(const AddEvent& e) override;
@@ -49,17 +32,20 @@ private:
    void dataFromJson(json_t* rootJson) override;
 
 private:
-   Average::List averageList;
-   SchweineSystem::LightMeter::List lightMeterList;
+   SchweineSystem::Light::List lightList;
    dsp::BooleanTrigger freezTrigger;
    bool freezeMode;
    BoolField8 freezeBuffer;
    dsp::BooleanTrigger sampleTrigger;     
 };
 
-struct BitBusMeterAndFreezeWidget : ModuleWidget
+class BitBusMeterAndFreezeWidget : public ModuleWidget
 {
+public:
    BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module);
+
+private:
+   SvgPanel* setup(BitBusMeterAndFreeze* module);
 };
 
 #endif // NOT BitBusMeterAndFreezeH

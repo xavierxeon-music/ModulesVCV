@@ -108,7 +108,7 @@ TimeLord::TimeLord()
    , resetTrigger()
    , tempo()
    , cvMapper(0.0, 255.0, 0.0, 10.0)
-   , lightMeterList(lights)
+   , lightMeterList(this)
    , outputList(outputs)
    , rampDisplayList(this)
    , displayMode(StageIndex)
@@ -124,14 +124,14 @@ TimeLord::TimeLord()
    setup();
    Majordomo::hello(this);
 
-   lightMeterList.append({{Panel::Red_Channel1_Status1, Panel::Red_Channel1_Status2, Panel::Red_Channel1_Status3, Panel::Red_Channel1_Status4, Panel::Red_Channel1_Status5},
-                          {Panel::Red_Channel2_Status1, Panel::Red_Channel2_Status2, Panel::Red_Channel2_Status3, Panel::Red_Channel2_Status4, Panel::Red_Channel2_Status5},
-                          {Panel::Red_Channel3_Status1, Panel::Red_Channel3_Status2, Panel::Red_Channel3_Status3, Panel::Red_Channel3_Status4, Panel::Red_Channel3_Status5},
-                          {Panel::Red_Channel4_Status1, Panel::Red_Channel4_Status2, Panel::Red_Channel4_Status3, Panel::Red_Channel4_Status4, Panel::Red_Channel4_Status5},
-                          {Panel::Red_Channel5_Status1, Panel::Red_Channel5_Status2, Panel::Red_Channel5_Status3, Panel::Red_Channel5_Status4, Panel::Red_Channel5_Status5},
-                          {Panel::Red_Channel6_Status1, Panel::Red_Channel6_Status2, Panel::Red_Channel6_Status3, Panel::Red_Channel6_Status4, Panel::Red_Channel6_Status5},
-                          {Panel::Red_Channel7_Status1, Panel::Red_Channel7_Status2, Panel::Red_Channel7_Status3, Panel::Red_Channel7_Status4, Panel::Red_Channel7_Status5},
-                          {Panel::Red_Channel8_Status1, Panel::Red_Channel8_Status2, Panel::Red_Channel8_Status3, Panel::Red_Channel8_Status4, Panel::Red_Channel8_Status5}});
+   lightMeterList.append({Panel::Value_Channel1_Strip,
+                          Panel::Value_Channel2_Strip,
+                          Panel::Value_Channel3_Strip,
+                          Panel::Value_Channel4_Strip,
+                          Panel::Value_Channel5_Strip,
+                          Panel::Value_Channel6_Strip,
+                          Panel::Value_Channel7_Strip,
+                          Panel::Value_Channel8_Strip});
 
    outputList.append({Panel::Channel1_Output,
                       Panel::Channel2_Output,
@@ -238,7 +238,7 @@ void TimeLord::process(const ProcessArgs& args)
 
       const float perentageToNextTick = tempo.getPercentage(Tempo::Division::Sixteenth);
       const float value = polyRamp->getCurrentValue(perentageToNextTick);
-      lightMeterList[rampIndex]->setMeter(value);
+      lightMeterList[rampIndex]->setValue(value);
 
       const float voltage = cvMapper(value);
       outputList[rampIndex]->setVoltage(voltage);

@@ -1,89 +1,120 @@
 #include "SchweineSystemLightMeter.h"
 
-#include <iostream>
+// controller
 
-SchweineSystem::LightMeter::LightMeter(std::vector<rack::engine::Light>& fullList)
-   : meterLights()
-   , meterMapper(0, 3 * NumberOfLights, 0, 3 * NumberOfLights)
-{
-   for (uint8_t index = 0; index < NumberOfLights; index++)
-      meterLights[index] = new Light(fullList);
-}
-
-SchweineSystem::LightMeter::~LightMeter()
-{
-   for (uint8_t index = 0; index < NumberOfLights; index++)
-      delete meterLights[index];
-}
-
-void SchweineSystem::LightMeter::assign(const RedIndexList& redIndexList)
-{
-   if (NumberOfLights != redIndexList.size())
-      return;
-
-   for (uint8_t index = 0; index < NumberOfLights; index++)
-      meterLights[index]->assign(redIndexList[index]);
-}
-
-void SchweineSystem::LightMeter::setMaxValue(const uint16_t& newMaxValue)
-{
-   meterMapper.setMaxInput(newMaxValue);
-}
-
-void SchweineSystem::LightMeter::setMeter(const uint16_t& value)
-{
-   const uint8_t meterValue = meterMapper(value);
-
-   if (0 == meterValue)
-   {
-      for (uint8_t index = 0; index < NumberOfLights; index++)
-         meterLights[index]->setOff();
-   }
-   else
-   {
-      const uint8_t numberOn = (meterValue - 1) % NumberOfLights;
-      const uint8_t stageSocket = meterValue - (1 + numberOn);
-      const uint8_t stage = stageSocket / NumberOfLights;
-
-      static const std::vector<Color> stageColorList = {Color{0, 0, 0}, Color{100, 0, 255}, Color{255, 255, 0}, Color{255, 0, 0}};
-
-      const Color onColor = stageColorList.at(stage + 1);
-      const Color offColor = stageColorList.at(stage);
-      for (uint8_t index = 0; index < NumberOfLights; index++)
-      {
-         if (index < numberOn + 1)
-            meterLights[index]->setColor(onColor);
-         else
-            meterLights[index]->setColor(offColor);
-      }
-   }
-}
-
-// list
-
-SchweineSystem::LightMeter::List::List(std::vector<rack::engine::Light>& fullList)
-   : fullList(fullList)
-   , instanceList()
+SchweineSystem::LightMeter::Controller::Controller(rack::engine::Module* module, const uint16_t& valueParamId)
+   : module(module)
+   , valueParamId(valueParamId)
+   , valueMapper(0.0, 1.0, 0.0, 1.0)
 {
 }
 
-SchweineSystem::LightMeter::List::~List()
+void SchweineSystem::LightMeter::Controller::setMaxValue(const uint16_t& newMaxValue)
 {
-   for (LightMeter* instance : instanceList)
+   valueMapper.setMaxInput(newMaxValue);
+}
+
+void SchweineSystem::LightMeter::Controller::setValue(const uint32_t& value)
+{
+   const float fValue = valueMapper(value);
+   module->params[valueParamId].setValue(fValue);
+}
+
+// controller list
+
+SchweineSystem::LightMeter::Controller::List::List(rack::engine::Module* module)
+   : module(module)
+{
+}
+
+SchweineSystem::LightMeter::Controller::List::~List()
+{
+   for (Controller* instance : instanceList)
       delete instance;
 }
 
-void SchweineSystem::LightMeter::List::append(const std::vector<RedIndexList>& redIndexLists)
+void SchweineSystem::LightMeter::Controller::List::append(const std::vector<uint16_t>& paramIdList)
 {
-   for (const RedIndexList& redIndexList : redIndexLists)
+   for (const uint16_t& valueParamId : paramIdList)
    {
-      LightMeter* lightMeter = new LightMeter(fullList);
-      lightMeter->assign(redIndexList);
-      instanceList.push_back(lightMeter);
+      Controller* controller = new Controller(module, valueParamId);
+      instanceList.push_back(controller);
    }
 }
 
-SchweineSystem::LightMeter* SchweineSystem::LightMeter::List::operator[](const uint16_t& index)
+SchweineSystem::LightMeter::Controller* SchweineSystem::LightMeter::Controller::List::operator[](const uint16_t& index)
 {
    return instanceList[index];
+}
+
+// widget
+
+SchweineSystem::LightMeter::Widget::Widget(rack::math::Vec pos, rack::engine::Module* module, const uint8_t& segmentCount, const uint16_t& valueParamId)
+   : rack::TransparentWidget()
+   , module(module)
+   , valueParamId(valueParamId)
+   , segmentCount(segmentCount)
+   , meterMapper(0.0, 1.0, 0.0, 3.0 * segmentCount)
+{
+   box.pos = rack::math::Vec(pos.x, pos.y);
+}
+
+void SchweineSystem::LightMeter::Widget::drawLayer(const DrawArgs& args, int layer)
+{
+   if (layer != 1)
+      return;
+
+   static const std::vector<NVGcolor> stageColorList = {nvgRGB(0, 0, 0), nvgRGB(100, 100, 255), nvgRGB(255, 255, 100), nvgRGB(255, 100, 100)};
+
+   const uint8_t meterValue = [&]() -> uint8_t
+   {
+      if (!module)
+         return 13;
+
+      const float fValue = module->params[valueParamId].getValue();
+      return static_cast<uint8_t>(meterMapper(fValue));
+   }();
+
+   auto drawSegment = [&](float x, uint8_t colorIndex)
+   {
+      nvgBeginPath(args.vg);
+      nvgRect(args.vg, x, 1, 4, 6);
+
+      //nvgFillColor(args.vg, stageColorList[colorIndex]);
+
+      static const NVGcolor black = nvgRGB(0, 0, 0);
+      static const NVGcolor white = nvgRGB(255, 255, 255);
+
+      const NVGcolor darkColor = nvgLerpRGBA(stageColorList[colorIndex], black, 0.4);
+      const NVGcolor lightColor = nvgLerpRGBA(stageColorList[colorIndex], white, 0.4);
+      const NVGpaint gradiant = nvgLinearGradient(args.vg, x + 2, 0, x + 2, 6, lightColor, darkColor);
+      nvgFillPaint(args.vg, gradiant);
+
+      nvgFill(args.vg);
+
+   };
+
+   if (0 == meterValue)
+   {
+      for (uint8_t index = 0; index < segmentCount; index++)
+      {
+         const float x = 1 + (5.0 * index);
+         drawSegment(x, 0);
+      }
+   }
+   else
+   {
+      const uint8_t numberOn = (meterValue - 1) % segmentCount;
+      const uint8_t stageSocket = meterValue - (1 + numberOn);
+      const uint8_t stage = stageSocket / segmentCount;
+
+      for (uint8_t index = 0; index < segmentCount; index++)
+      {
+         const float x = 1 + (5.0 * index);
+         if (index < numberOn + 1)
+            drawSegment(x, stage + 1);
+         else
+            drawSegment(x, stage);
+      }
+   }
 }
