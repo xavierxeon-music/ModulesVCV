@@ -47,9 +47,11 @@ ln -s ../../3rdParty/ImpromptuModular ImpromptuModular
 ln -s ../../SchweineSystem SchweineSystem
 
 cd $SCRIPT_DIR/3rdParty/Fundamental
+git switch v2
 make
 
 cd $SCRIPT_DIR/3rdParty/ImpromptuModular
+git switch master
 make
 
 cd $CURRENT_DIR
