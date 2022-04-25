@@ -90,7 +90,8 @@ class Sources(Common):
             name = knob['name']
             x = knob['cx']
             y = knob['cy']
-            line(1, f'makeKnob(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::Knob_{name});')
+            size = knob['count']
+            line(1, f'makeKnob(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::Knob_{name}, {size});')
 
         if self.inputs:
             line(0)

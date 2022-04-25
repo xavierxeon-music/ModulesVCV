@@ -13,9 +13,17 @@
 ./src/Hardware/VCMCReceiver.h
 ./src/SchweineSystem.h
 ./src/Other/TimeLord.h
+./src/Other/Equalizer.cpp
+./src/Other/Select.cpp
 ./src/Other/TimeLordPanel.cpp
+./src/Other/EqualizerPanel.cpp
 ./src/Other/TimeLordPanel.h
+./src/Other/SelectPanel.h
 ./src/Other/TimeLord.cpp
+./src/Other/SelectPanel.cpp
+./src/Other/Equalizer.h
+./src/Other/Select.h
+./src/Other/EqualizerPanel.h
 ./src/Common/SchweineSystemMaster.hpp
 ./src/Common/SchweineSystemLCDDisplay.h
 ./src/Common/SchweineSystemMidiOutput.cpp

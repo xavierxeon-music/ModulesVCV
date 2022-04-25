@@ -84,7 +84,7 @@
       },
       {
          "slug": "DoepferQuad",
-         "name": "Doepfer Quad",
+         "name": "Doepfer Quad Sender",
          "description": "Send cv via a Doepfer A-190-5 interface (as a 12 channel cv source)",
          "tags": [
             "Midi"
@@ -92,10 +92,26 @@
       },
       {
          "slug": "FlameCC",
-         "name": "Flamme CC",
+         "name": "Flamme CC Sender",
          "description": "Send cv via a Flame u16MCC  interface",
          "tags": [
             "Midi"
+         ]
+      },
+      {
+         "slug": "Select",
+         "name": "Select",
+         "description": "Create CV to slect bank index",
+         "tags": [
+            "Utility"
+         ]
+      },
+      {
+         "slug": "Equalizer",
+         "name": "Equalizer",
+         "description": "Single band EQ based on a state variable filter",
+         "tags": [
+            "EQ"
          ]
       }
    ]

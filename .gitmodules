@@ -10,3 +10,6 @@
 [submodule "3rdParty/ImpromptuModular"]
 	path = 3rdParty/ImpromptuModular
 	url = https://github.com/MarcBoule/ImpromptuModular.git
+[submodule "3rdParty/BogaudioModules"]
+	path = 3rdParty/BogaudioModules
+	url = https://github.com/bogaudio/BogaudioModules

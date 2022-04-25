@@ -44,6 +44,7 @@ make -j 16
 cd $SCRIPT_DIR/Rack/plugins
 ln -s ../../3rdParty/Fundamental Fundamental   
 ln -s ../../3rdParty/ImpromptuModular ImpromptuModular      
+ln -s ../../3rdParty/BogaudioModules BogaudioModules      
 ln -s ../../SchweineSystem SchweineSystem
 
 cd $SCRIPT_DIR/3rdParty/Fundamental
@@ -51,6 +52,10 @@ git switch v2
 make
 
 cd $SCRIPT_DIR/3rdParty/ImpromptuModular
+git switch master
+make
+
+cd $SCRIPT_DIR/3rdParty/BogaudioModules
 git switch master
 make
 
