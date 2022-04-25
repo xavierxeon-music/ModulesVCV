@@ -14,9 +14,9 @@ struct Equalizer::Panel
       // ledbuttons
       Frequency_Quantize = 0,
       // knobs
-      Knob_Drive_Knob = 1,
-      Knob_Resonance_Knob = 2,
-      Knob_Frequency_Knob = 3,
+      Knob_Smooth_Value = 1,
+      Knob_Amount_Value = 2,
+      Knob_Frequency_Value = 3,
       PARAMS_LEN = 4
    };
 
@@ -35,8 +35,8 @@ struct Equalizer::Panel
    {
       AudioInput = 0,
       Freqeuncy = 1,
-      Resonance = 2,
-      Drive = 3,
+      Amount = 2,
+      Smooth = 3,
       INPUTS_LEN = 4
    };
 

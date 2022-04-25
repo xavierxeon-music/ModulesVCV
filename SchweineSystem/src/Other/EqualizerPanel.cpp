@@ -8,14 +8,14 @@ void Equalizer::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configParam(Panel::Knob_Drive_Knob, -1.f, 1.f, 0.f, "");
-   configParam(Panel::Knob_Resonance_Knob, -1.f, 1.f, 0.f, "");
-   configParam(Panel::Knob_Frequency_Knob, -1.f, 1.f, 0.f, "");
+   configParam(Panel::Knob_Smooth_Value, -1.f, 1.f, 0.f, "");
+   configParam(Panel::Knob_Amount_Value, -1.f, 1.f, 0.f, "");
+   configParam(Panel::Knob_Frequency_Value, -1.f, 1.f, 0.f, "");
 
    configInput(Panel::AudioInput, "AudioInput");
    configInput(Panel::Freqeuncy, "Freqeuncy");
-   configInput(Panel::Resonance, "Resonance");
-   configInput(Panel::Drive, "Drive");
+   configInput(Panel::Amount, "Amount");
+   configInput(Panel::Smooth, "Smooth");
 
    configOutput(Panel::AudioOutput, "AudioOutput");
 
@@ -30,14 +30,14 @@ void EqualizerWidget::setup()
 
    makeLEDButton(this, Vec(73.84, 43.31), Equalizer::Panel::Frequency_Quantize, Equalizer::Panel::RGB_Frequency_Quantize);
 
-   makeKnob(this, Vec(41.23, 244.17), Equalizer::Panel::Knob_Drive_Knob, 2);
-   makeKnob(this, Vec(63.52, 187.89), Equalizer::Panel::Knob_Resonance_Knob, 2);
-   makeKnob(this, Vec(52.50, 117.62), Equalizer::Panel::Knob_Frequency_Knob, 3);
+   makeKnob(this, Vec(41.23, 244.17), Equalizer::Panel::Knob_Smooth_Value, 2);
+   makeKnob(this, Vec(63.52, 187.89), Equalizer::Panel::Knob_Amount_Value, 2);
+   makeKnob(this, Vec(52.50, 117.62), Equalizer::Panel::Knob_Frequency_Value, 3);
 
    makeInput(this, Vec(24.17, 355.83),  Equalizer::Panel::AudioInput);
    makeInput(this, Vec(24.17, 308.71),  Equalizer::Panel::Freqeuncy);
-   makeInput(this, Vec(52.50, 308.71),  Equalizer::Panel::Resonance);
-   makeInput(this, Vec(80.83, 308.71),  Equalizer::Panel::Drive);
+   makeInput(this, Vec(52.50, 308.71),  Equalizer::Panel::Amount);
+   makeInput(this, Vec(80.83, 308.71),  Equalizer::Panel::Smooth);
 
    makeOutput(this, Vec(80.83, 355.83), Equalizer::Panel::AudioOutput);
 

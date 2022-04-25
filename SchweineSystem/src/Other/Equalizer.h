@@ -4,6 +4,8 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <Effect/StateVariableFilter.h>
+
 #include <SchweineSystemLCDDisplay.h>
 #include <SchweineSystemLight.h>
 #include <SchweineSystemModule.h>
@@ -22,8 +24,10 @@ public:
 
 private:
    void setup();
+   void onSampleRateChange(const SampleRateChangeEvent& e) override;
 
 private:
+   StateVariableFilter filter;
    bool asNote;
    dsp::BooleanTrigger quantiseTrigger;
    SchweineSystem::Light quantiseLight;
