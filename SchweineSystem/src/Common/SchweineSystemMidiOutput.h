@@ -25,6 +25,9 @@ namespace SchweineSystem
       void sendNoteOff(const Midi::Channel& channel, const Note& note);
       void sendControllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value);
 
+   protected:
+      void sendMessage(const std::vector<uint8_t>& message);
+
    private:
       const std::string targetDeviceName;
       RtMidiOut midiOutput;

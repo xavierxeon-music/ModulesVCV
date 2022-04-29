@@ -7,11 +7,12 @@
 
 FlameCC::FlameCC()
    : SchweineSystem::Module()
-   , midiOutput()
+   , SchweineSystem::MidiOutput(Midi::Device::FlameCC)
    , connectTrigger()
-   , voltageToCcValue(0.0, 10.0, 0.0, 127.0)
+   , voltageToCcValue(0.0, 5.0, 0.0, 127.0)
    , connectionLight(lights)
    , inputList(inputs)
+   , controllerValueStore{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 {
    setup();
 
@@ -45,44 +46,62 @@ void FlameCC::process(const ProcessArgs& args)
    if (connectTrigger.process(params[Panel::Connect].getValue() > 3.0))
       connectToMidiDevice();
 
-   if (-1 == midiOutput.getDeviceId()) // not connected
+   if (!connected())
       return;
 
    for (uint8_t index = 0; index < 16; index++)
    {
       const float voltage = inputList[index]->getVoltage();
       const uint8_t controllerValue = static_cast<uint8_t>(voltageToCcValue(voltage));
-
-      midi::Message controllerMessage;
-      controllerMessage.setSize(3);
-      controllerMessage.bytes[0] = Midi::Event::ControlChange | (Midi::Device::FlameCC - 1);
-      controllerMessage.bytes[1] = Midi::ControllerMessage::User01;
-      controllerMessage.bytes[2] = controllerValue;
-      midiOutput.sendMessage(controllerMessage);
+      if (controllerValue != controllerValueStore[index])
+      {
+         const Midi::ControllerMessage message = static_cast<Midi::ControllerMessage>(Midi::ControllerMessage::User01 + index);
+         sendControllerChange(Midi::Device::FlameCC, message, controllerValue);
+         controllerValueStore[index] = controllerValue;
+      }
    }
 }
 
 void FlameCC::connectToMidiDevice()
 {
-   midiOutput.reset();
    connectionLight.setColor(SchweineSystem::Color{255, 0, 0});
 
-   static const std::string targetDeviceName = SchweineSystem::Common::midiInterfaceMap.at(Midi::Device::FlameCC);
-   std::cout << targetDeviceName << std::endl;
+   if (!open())
+      return;
 
-   for (const int& deviceId : midiOutput.getDeviceIds())
+   connectionLight.setColor(SchweineSystem::Color{0, 255, 0});
+
+   //sendSysEx();
+
+   for (uint8_t output = 0; output < 16; output++)
    {
-      const std::string deviceName = midiOutput.getDeviceName(deviceId);
-      // std::cout << deviceName << std::endl;
-
-      if (targetDeviceName == deviceName)
-      {
-         std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
-         midiOutput.setDeviceId(deviceId);
-         connectionLight.setColor(SchweineSystem::Color{0, 255, 0});
-         return;
-      }
+      const Note note = Note::fromMidi(41 + output); // note F2
+      sendNoteOn(Midi::Device::FlameCC, note, 127);
    }
+}
+
+void FlameCC::sendSysEx()
+{
+   std::vector<uint8_t> sysExMessage(38);
+
+   sysExMessage[0] = static_cast<uint8_t>(Midi::Event::System); // Exclusive Status
+   sysExMessage[1] = 0x7D;                                      // Header Flame module
+   sysExMessage[2] = 0x0B;                                      // Flame module “μ16MCC”
+   sysExMessage[3] = 0x01;                                      // version 1
+   sysExMessage[4] = 0x06;                                      // data type 1 (dump all data)
+
+   for (uint8_t index = 0; index < 16; index++)
+   {
+      // MIDI channels for CV 16 outputs (range: 00=channel 1 .. 0F=channel 16)
+      sysExMessage[5 + index] = (Midi::Device::FlameCC - 1);
+
+      // control change numbers for 15 outputs
+      const uint8_t message = static_cast<uint8_t>(Midi::ControllerMessage::User01) + index;
+      sysExMessage[21 + index] = message;
+   }
+
+   sysExMessage[37] = static_cast<uint8_t>(Midi::Event::SysExEnd); // End of Exclusive
+   sendMessage(sysExMessage);
 }
 
 FlameCCWidget::FlameCCWidget(FlameCC* module)

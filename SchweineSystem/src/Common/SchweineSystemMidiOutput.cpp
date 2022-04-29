@@ -87,3 +87,8 @@ void SchweineSystem::MidiOutput::sendControllerChange(const Midi::Channel& chann
    ccMessage[2] = value;
    midiOutput.sendMessage(&ccMessage);
 }
+
+void SchweineSystem::MidiOutput::sendMessage(const std::vector<uint8_t>& message)
+{
+   midiOutput.sendMessage(&message);
+}
