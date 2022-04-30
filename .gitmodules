@@ -2,7 +2,7 @@
 	path = Rack
 	url = https://github.com/VCVRack/Rack
 [submodule "MusicTools"]
-	path = MusicTools
+	path = SchweineSystem/src/_MusicTools
 	url = https://github.com/xavierxeon-music/MusicTools.git
 [submodule "Fundamental"]
 	path = 3rdParty/Fundamental
