@@ -1,9 +1,9 @@
-#include "TimeLord2.h"
-#include "TimeLord2Panel.h"
+#include "TimeLordPanel.h"
+#include "TimeLord.h"
 
 #include <SchweineSystemMaster.h>
 
-void TimeLord2::setup()
+void TimeLord::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
@@ -34,36 +34,36 @@ void TimeLord2::setup()
    configMeter(Panel::Value_Channel1_Strip, "Channel1_Strip");
 }
 
-void TimeLord2Widget::setup()
+void TimeLordWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/TimeLord2.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/TimeLord.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeButton(this, Vec(119.58, 304.71), TimeLord2::Panel::Bank_Up);
-   makeButton(this, Vec(55.38, 305.58), TimeLord2::Panel::Mode);
+   makeButton(this, Vec(119.58, 304.71), TimeLord::Panel::Bank_Up);
+   makeButton(this, Vec(55.38, 305.58), TimeLord::Panel::Mode);
 
-   makeInput(this, Vec(120.15, 344.83),  TimeLord2::Panel::Reset);
-   makeInput(this, Vec(55.15, 344.83),  TimeLord2::Panel::Clock);
+   makeInput(this, Vec(120.15, 344.83), TimeLord::Panel::Reset);
+   makeInput(this, Vec(55.15, 344.83), TimeLord::Panel::Clock);
 
-   makeOutput(this, Vec(117.41, 164.83), TimeLord2::Panel::Channel8_Output);
-   makeOutput(this, Vec(52.41, 164.83), TimeLord2::Panel::Channel7_Output);
-   makeOutput(this, Vec(117.41, 126.26), TimeLord2::Panel::Channel6_Output);
-   makeOutput(this, Vec(52.41, 126.26), TimeLord2::Panel::Channel5_Output);
-   makeOutput(this, Vec(117.41, 87.69), TimeLord2::Panel::Channel4_Output);
-   makeOutput(this, Vec(52.41, 87.69), TimeLord2::Panel::Channel3_Output);
-   makeOutput(this, Vec(117.41, 49.12), TimeLord2::Panel::Channel2_Output);
-   makeOutput(this, Vec(52.41, 49.12), TimeLord2::Panel::Channel1_Output);
+   makeOutput(this, Vec(117.41, 164.83), TimeLord::Panel::Channel8_Output);
+   makeOutput(this, Vec(52.41, 164.83), TimeLord::Panel::Channel7_Output);
+   makeOutput(this, Vec(117.41, 126.26), TimeLord::Panel::Channel6_Output);
+   makeOutput(this, Vec(52.41, 126.26), TimeLord::Panel::Channel5_Output);
+   makeOutput(this, Vec(117.41, 87.69), TimeLord::Panel::Channel4_Output);
+   makeOutput(this, Vec(52.41, 87.69), TimeLord::Panel::Channel3_Output);
+   makeOutput(this, Vec(117.41, 49.12), TimeLord::Panel::Channel2_Output);
+   makeOutput(this, Vec(52.41, 49.12), TimeLord::Panel::Channel1_Output);
 
-   makeDisplay(this, Vec(10.00, 222.19), TimeLord2::Panel::Pixels_Display);
+   makeDisplay(this, Vec(10.00, 222.19), TimeLord::Panel::Pixels_Display);
 
-   makeMeter(this, Vec(92.29, 151.83), 5, TimeLord2::Panel::Value_Channel8_Strip);
-   makeMeter(this, Vec(27.29, 151.83), 5, TimeLord2::Panel::Value_Channel7_Strip);
-   makeMeter(this, Vec(92.29, 113.26), 5, TimeLord2::Panel::Value_Channel6_Strip);
-   makeMeter(this, Vec(27.29, 113.26), 5, TimeLord2::Panel::Value_Channel5_Strip);
-   makeMeter(this, Vec(92.29, 74.69), 5, TimeLord2::Panel::Value_Channel4_Strip);
-   makeMeter(this, Vec(27.29, 74.69), 5, TimeLord2::Panel::Value_Channel3_Strip);
-   makeMeter(this, Vec(92.29, 36.12), 5, TimeLord2::Panel::Value_Channel2_Strip);
-   makeMeter(this, Vec(27.29, 36.12), 5, TimeLord2::Panel::Value_Channel1_Strip);
+   makeMeter(this, Vec(92.29, 151.83), 5, TimeLord::Panel::Value_Channel8_Strip);
+   makeMeter(this, Vec(27.29, 151.83), 5, TimeLord::Panel::Value_Channel7_Strip);
+   makeMeter(this, Vec(92.29, 113.26), 5, TimeLord::Panel::Value_Channel6_Strip);
+   makeMeter(this, Vec(27.29, 113.26), 5, TimeLord::Panel::Value_Channel5_Strip);
+   makeMeter(this, Vec(92.29, 74.69), 5, TimeLord::Panel::Value_Channel4_Strip);
+   makeMeter(this, Vec(27.29, 74.69), 5, TimeLord::Panel::Value_Channel3_Strip);
+   makeMeter(this, Vec(92.29, 36.12), 5, TimeLord::Panel::Value_Channel2_Strip);
+   makeMeter(this, Vec(27.29, 36.12), 5, TimeLord::Panel::Value_Channel1_Strip);
 }
 

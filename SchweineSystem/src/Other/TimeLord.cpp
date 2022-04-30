@@ -1,5 +1,5 @@
-#include "TimeLord2.h"
-#include "TimeLord2Panel.h"
+#include "TimeLord.h"
+#include "TimeLordPanel.h"
 
 #include <Midi/MidiCommon.h>
 #include <Tools/SevenBit.h>
@@ -8,9 +8,9 @@
 
 // majordomo
 
-TimeLord2::Majordomo* TimeLord2::Majordomo::me = nullptr;
+TimeLord::Majordomo* TimeLord::Majordomo::me = nullptr;
 
-void TimeLord2::Majordomo::hello(TimeLord2* server)
+void TimeLord::Majordomo::hello(TimeLord* server)
 {
    if (!me)
       me = new Majordomo();
@@ -21,12 +21,12 @@ void TimeLord2::Majordomo::hello(TimeLord2* server)
    me->instanceList.push_back(server);
 }
 
-void TimeLord2::Majordomo::bye(TimeLord2* server)
+void TimeLord::Majordomo::bye(TimeLord* server)
 {
    if (!me)
       me = new Majordomo();
 
-   std::vector<TimeLord2*>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
+   std::vector<TimeLord*>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
    if (it != me->instanceList.end())
       me->instanceList.erase(it);
 
@@ -34,13 +34,13 @@ void TimeLord2::Majordomo::bye(TimeLord2* server)
       me->stop();
 }
 
-TimeLord2::Majordomo::Majordomo()
+TimeLord::Majordomo::Majordomo()
    : midiInput()
    , instanceList()
 {
 }
 
-void TimeLord2::Majordomo::start()
+void TimeLord::Majordomo::start()
 {
    midiInput.openVirtualPort("TimeLord");
 
@@ -49,12 +49,12 @@ void TimeLord2::Majordomo::start()
    midiInput.ignoreTypes(false, false, false); // do not ignore anything
 }
 
-void TimeLord2::Majordomo::stop()
+void TimeLord::Majordomo::stop()
 {
    midiInput.closePort();
 }
 
-void TimeLord2::Majordomo::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
+void TimeLord::Majordomo::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
 {
    (void)timeStamp;
 
@@ -70,7 +70,7 @@ void TimeLord2::Majordomo::midiReceive(double timeStamp, std::vector<unsigned ch
       if (0 == buffer.size())
          return;
 
-      for (TimeLord2* lord : me->instanceList)
+      for (TimeLord* lord : me->instanceList)
          lord->dataFromMidiInput(buffer);
       buffer.clear();
    };
@@ -87,7 +87,7 @@ void TimeLord2::Majordomo::midiReceive(double timeStamp, std::vector<unsigned ch
    maybeProcessBuffer();
 }
 
-void TimeLord2::Majordomo::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
+void TimeLord::Majordomo::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
 {
    if (me != userData)
       return;
@@ -97,9 +97,9 @@ void TimeLord2::Majordomo::midiError(RtMidiError::Type type, const std::string& 
 
 // lord
 
-const std::string TimeLord2::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-TimeLord2::TimeLord2()
+TimeLord::TimeLord()
    : SchweineSystem::Module()
    , ramps{}
    , midiBuffer()
@@ -145,12 +145,12 @@ TimeLord2::TimeLord2()
    }
 }
 
-TimeLord2::~TimeLord2()
+TimeLord::~TimeLord()
 {
    Majordomo::bye(this);
 }
 
-void TimeLord2::process(const ProcessArgs& args)
+void TimeLord::process(const ProcessArgs& args)
 {
    bool isClock = clockTrigger.process(inputs[Panel::Clock].getVoltage() > 3.0);
    bool isReset = resetTrigger.process(inputs[Panel::Reset].getVoltage() > 3.0);
@@ -209,7 +209,7 @@ void TimeLord2::process(const ProcessArgs& args)
    }
 }
 
-void TimeLord2::updateDisplays()
+void TimeLord::updateDisplays()
 {
    displayController.fill();
 
@@ -255,7 +255,7 @@ void TimeLord2::updateDisplays()
    }
 }
 
-void TimeLord2::dataFromMidiInput(const Bytes& message)
+void TimeLord::dataFromMidiInput(const Bytes& message)
 {
    const bool isSystemEvent = (0xF0 == (message[0] & 0xF0));
    if (isSystemEvent)
@@ -317,7 +317,7 @@ void TimeLord2::dataFromMidiInput(const Bytes& message)
    }
 }
 
-json_t* TimeLord2::dataToJson()
+json_t* TimeLord::dataToJson()
 {
    using namespace SchweineSystem::Json;
 
@@ -361,7 +361,7 @@ json_t* TimeLord2::dataToJson()
    return rootObject.toJson();
 }
 
-void TimeLord2::dataFromJson(json_t* rootJson)
+void TimeLord::dataFromJson(json_t* rootJson)
 {
    using namespace SchweineSystem::Json;
 
@@ -372,7 +372,7 @@ void TimeLord2::dataFromJson(json_t* rootJson)
    loadInternal(rootObject);
 }
 
-void TimeLord2::loadInternal(const SchweineSystem::Json::Object& rootObject)
+void TimeLord::loadInternal(const SchweineSystem::Json::Object& rootObject)
 {
    using namespace SchweineSystem::Json;
 
@@ -411,10 +411,10 @@ void TimeLord2::loadInternal(const SchweineSystem::Json::Object& rootObject)
 
 // widget
 
-TimeLord2Widget::TimeLord2Widget(TimeLord2* module)
+TimeLordWidget::TimeLordWidget(TimeLord* module)
    : SchweineSystem::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelTimeLord2 = SchweineSystem::Master::the()->addModule<TimeLord2, TimeLord2Widget>("TimeLord2");
+Model* modelTimeLord = SchweineSystem::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");

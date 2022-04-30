@@ -131,10 +131,12 @@
          ]
       },
       {
-         "slug": "TimeLord2",
-         "name": "TimeLord2",
-         "description": "",
-         "tags": []
+         "slug": "TimeLordChronicle",
+         "name": "Time Lord Chronicle",
+         "description": "show voltage value as time lord values",
+         "tags": [
+            "Utility"
+         ]
       }
    ]
 }

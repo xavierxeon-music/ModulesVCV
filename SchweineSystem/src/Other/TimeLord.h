@@ -1,5 +1,5 @@
-#ifndef TimeLord2H
-#define TimeLord2H
+#ifndef TimeLordH
+#define TimeLordH
 
 #include <rack.hpp>
 using namespace rack;
@@ -17,14 +17,14 @@ using namespace rack;
 #include <SchweineSystemModuleWidget.h>
 #include <SchweineSystemOLEDDisplay.h>
 
-class TimeLord2 : public SchweineSystem::Module
+class TimeLord : public SchweineSystem::Module
 {
 public:
    struct Panel;
 
 public:
-   TimeLord2();
-   ~TimeLord2();
+   TimeLord();
+   ~TimeLord();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -44,8 +44,8 @@ private:
    class Majordomo
    {
    public:
-      static void hello(TimeLord2* server);
-      static void bye(TimeLord2* server);
+      static void hello(TimeLord* server);
+      static void bye(TimeLord* server);
 
    private:
       Majordomo();
@@ -57,7 +57,7 @@ private:
    private:
       static Majordomo* me;
       RtMidiIn midiInput;
-      std::vector<TimeLord2*> instanceList;
+      std::vector<TimeLord*> instanceList;
    };
 
 private:
@@ -93,13 +93,13 @@ private:
    SchweineSystem::OLEDDisplay::Controller displayController;
 };
 
-class TimeLord2Widget : public SchweineSystem::ModuleWidget
+class TimeLordWidget : public SchweineSystem::ModuleWidget
 {
 public:
-   TimeLord2Widget(TimeLord2* module);
+   TimeLordWidget(TimeLord* module);
 
 private:
    void setup();
 };
 
-#endif // NOT TimeLord2H
+#endif // NOT TimeLordH

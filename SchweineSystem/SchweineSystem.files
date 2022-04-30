@@ -17,9 +17,9 @@
 ./src/_Common/SchweineSystemMidiOutput.h
 ./src/SchweineSystem.h
 ./src/Other/TimeLord.h
-./src/Other/TimeLord2Panel.h
+./src/Other/TimeLordChroniclePanel.h
+./src/Other/TimeLordChronicle.h
 ./src/Other/GateLatchPanel.h
-./src/Other/TimeLord2.h
 ./src/Other/TimeLordPanel.h
 ./src/Other/HalfVoltPanel.h
 ./src/Other/GateLatch.h
@@ -135,12 +135,12 @@
 ./src/_Common/SchweineSystemOLEDDisplay.cpp
 ./src/_Common/SchweineSystemJson.cpp
 ./src/_Common/SchweineSystemLightMeter.cpp
+./src/Other/TimeLordChronicle.cpp
 ./src/Other/Equalizer.cpp
 ./src/Other/Select.cpp
 ./src/Other/TimeLordPanel.cpp
-./src/Other/TimeLord2.cpp
-./src/Other/TimeLord2Panel.cpp
 ./src/Other/EqualizerPanel.cpp
+./src/Other/TimeLordChroniclePanel.cpp
 ./src/Other/HalfVolt.cpp
 ./src/Other/GateLatchPanel.cpp
 ./src/Other/GateLatch.cpp

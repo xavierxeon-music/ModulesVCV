@@ -1,13 +1,13 @@
-#ifndef TimeLord2PanelH
-#define TimeLord2PanelH
+#ifndef TimeLordPanelH
+#define TimeLordPanelH
 
-#include "TimeLord2.h"
+#include "TimeLord.h"
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemOLEDDisplay.h>
 
-struct TimeLord2::Panel
+struct TimeLord::Panel
 {
    enum ParamId
    {
@@ -70,4 +70,4 @@ struct TimeLord2::Panel
 
 };
 
-#endif // NOT TimeLord2PanelH
+#endif // NOT TimeLordPanelH
