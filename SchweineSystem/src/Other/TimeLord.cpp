@@ -351,6 +351,9 @@ json_t* TimeLord::dataToJson()
          const uint8_t startHeight = polyRamp->getStageStartHeight(stageIndex);
          stageObject.set("startHeight", Value(startHeight));
 
+         const uint8_t endHeight = polyRamp->getStageEndHeight(stageIndex);
+         stageObject.set("endHeight", Value(endHeight));
+
          stagesArray.append(stageObject);
       }
       rampObject.set("stages", stagesArray);
@@ -405,6 +408,9 @@ void TimeLord::loadInternal(const SchweineSystem::Json::Object& rootObject)
 
          const uint8_t startHeight = stageObject.get("startHeight").toInt();
          polyRamp->setStageStartHeight(stageIndex, startHeight);
+
+         const uint8_t endHeight = stageObject.get("endHeight").toInt();
+         polyRamp->setStageEndHeight(stageIndex, endHeight);
       }
    }
 }
