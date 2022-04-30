@@ -4,6 +4,7 @@ import argparse
 import os
 import pathlib
 import shutil
+import json
 
 from lib import createPanel, getPanelComponents
 from lib import Headers, Sources
@@ -31,6 +32,26 @@ def updateModule(moduleName, subFolder):
 
     sources = Sources(modulesPath, subFolder, moduleName, components)
     sources.write()
+
+    with open(modulesPath + '/plugin.json', 'r') as infile:
+        content = json.load(infile)
+
+    for module in content['modules']:
+        slugName = module['slug']
+        if slugName == moduleName:
+            return
+
+    slugDict = {
+        'slog': moduleName,
+        'name': moduleName,
+        'description': str(),
+        'tags': list()
+    }
+
+    content['modules'].append(slugDict)
+
+    with open(modulesPath + '/plugin.json', 'w') as outfile:
+        json.dump(content, outfile, indent=3)
 
 
 def gather():

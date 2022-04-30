@@ -113,6 +113,22 @@
          "tags": [
             "EQ"
          ]
+      },
+      {
+         "slug": "GateLatch",
+         "name": "Gate To Latch",
+         "description": "Turn gates ot triggers into latches",
+         "tags": [
+            "Utility"
+         ]
+      },
+      {
+         "slug": "HalfVolt",
+         "name": "Half The Voltage",
+         "description": "Halves all incoming voltages, e.g from +/- 10 V to +/- 5 V",
+         "tags": [
+            "Utility"
+         ]
       }
    ]
 }

@@ -16,17 +16,15 @@ FLAGS += \
 	-Isrc/_MusicTools/Include \
 	-Isrc/_MusicTools/RememberDummy \
 
+
 # Add .cpp files to the build
 SOURCES += \
 	$(wildcard src/BitBus/*.cpp) \
-	$(wildcard src/Common/*.cpp) \
 	$(wildcard src/Hardware/*.cpp) \
 	$(wildcard src/Morpher/*.cpp) \
 	$(wildcard src/Other/*.cpp) \
-	src/_MusicTools/AbstractEffect.cpp \
-	src/_MusicTools/AbstractOscilator.cpp \
-	src/_MusicTools/Maths.cpp \
-	src/_MusicTools/Note.cpp  
+	$(wildcard src/_Common/*.cpp) \
+	$(wildcard src/_MusicTools/*.cpp) \
 
 
 # Add files to the ZIP package when running `make dist`
