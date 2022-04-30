@@ -52,6 +52,12 @@ class Sources(Common):
             name = display['name']
             line(1, f'configDisplay(Panel::Text_{name}, "{name}");')
 
+        if self.oleds:
+            line(0)
+        for oled in self.oleds:
+            name = oled['name']
+            line(1, f'configPixels(Panel::Pixels_{name}, "{name}");')
+
         if self.meters:
             line(0)
         for meter in self.meters:
@@ -125,6 +131,14 @@ class Sources(Common):
             x = display['rx']
             y = display['ry']
             line(1, f'makeDisplay(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Text_{name}, {self.moduleName}::Panel::RGB_{name});')
+
+        if self.oleds:
+            line(0)
+        for oled in self.oleds:
+            name = oled['name']
+            x = oled['rx']
+            y = oled['ry']
+            line(1, f'makeDisplay(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::Pixels_{name});')
 
         if self.meters:
             line(0)

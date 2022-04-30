@@ -13,3 +13,11 @@ SchweineSystem::Module* SchweineSystem::ModuleWidget::getSchweineModule() const
 {
    return schweineModule;
 }
+
+void SchweineSystem::ModuleWidget::draw(const DrawArgs& args)
+{
+   if (schweineModule)
+      schweineModule->updateDisplays();
+
+   rack::ModuleWidget::draw(args);
+}

@@ -15,6 +15,9 @@ namespace SchweineSystem
    public:
       Module* getSchweineModule() const;
 
+   public:
+      void draw(const DrawArgs& args) override;
+
    protected:
       Module* schweineModule;
    };

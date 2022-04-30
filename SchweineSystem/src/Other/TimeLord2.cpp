@@ -1,16 +1,16 @@
-#include "TimeLord.h"
-#include "TimeLordPanel.h"
+#include "TimeLord2.h"
+#include "TimeLord2Panel.h"
 
 #include <Midi/MidiCommon.h>
 #include <Tools/SevenBit.h>
 
 #include <SchweineSystemMaster.h>
 
-// receiver
+// majordomo
 
-TimeLord::Majordomo* TimeLord::Majordomo::me = nullptr;
+TimeLord2::Majordomo* TimeLord2::Majordomo::me = nullptr;
 
-void TimeLord::Majordomo::hello(TimeLord* server)
+void TimeLord2::Majordomo::hello(TimeLord2* server)
 {
    if (!me)
       me = new Majordomo();
@@ -21,12 +21,12 @@ void TimeLord::Majordomo::hello(TimeLord* server)
    me->instanceList.push_back(server);
 }
 
-void TimeLord::Majordomo::bye(TimeLord* server)
+void TimeLord2::Majordomo::bye(TimeLord2* server)
 {
    if (!me)
       me = new Majordomo();
 
-   std::vector<TimeLord*>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
+   std::vector<TimeLord2*>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
    if (it != me->instanceList.end())
       me->instanceList.erase(it);
 
@@ -34,13 +34,13 @@ void TimeLord::Majordomo::bye(TimeLord* server)
       me->stop();
 }
 
-TimeLord::Majordomo::Majordomo()
+TimeLord2::Majordomo::Majordomo()
    : midiInput()
    , instanceList()
 {
 }
 
-void TimeLord::Majordomo::start()
+void TimeLord2::Majordomo::start()
 {
    midiInput.openVirtualPort("TimeLord");
 
@@ -49,12 +49,12 @@ void TimeLord::Majordomo::start()
    midiInput.ignoreTypes(false, false, false); // do not ignore anything
 }
 
-void TimeLord::Majordomo::stop()
+void TimeLord2::Majordomo::stop()
 {
    midiInput.closePort();
 }
 
-void TimeLord::Majordomo::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
+void TimeLord2::Majordomo::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
 {
    (void)timeStamp;
 
@@ -70,8 +70,8 @@ void TimeLord::Majordomo::midiReceive(double timeStamp, std::vector<unsigned cha
       if (0 == buffer.size())
          return;
 
-      for (TimeLord* server : me->instanceList)
-         server->dataFromMidiInput(buffer);
+      for (TimeLord2* lord : me->instanceList)
+         lord->dataFromMidiInput(buffer);
       buffer.clear();
    };
 
@@ -87,7 +87,7 @@ void TimeLord::Majordomo::midiReceive(double timeStamp, std::vector<unsigned cha
    maybeProcessBuffer();
 }
 
-void TimeLord::Majordomo::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
+void TimeLord2::Majordomo::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
 {
    if (me != userData)
       return;
@@ -95,11 +95,11 @@ void TimeLord::Majordomo::midiError(RtMidiError::Type type, const std::string& e
    std::cout << "MIDI ERROR: " << type << ",  " << errorText << std::endl;
 }
 
-// server
+// lord
 
-const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const std::string TimeLord2::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-TimeLord::TimeLord()
+TimeLord2::TimeLord2()
    : SchweineSystem::Module()
    , ramps{}
    , midiBuffer()
@@ -109,16 +109,14 @@ TimeLord::TimeLord()
    , cvMapper(0.0, 255.0, 0.0, 10.0)
    , lightMeterList(this)
    , outputList(outputs)
-   , rampDisplayList(this)
    , displayMode(StageIndex)
-   , displayModeLightList(lights)
    , displayTrigger()
-   , modeColors{SchweineSystem::Color{255, 0, 0}, SchweineSystem::Color{50, 50, 255}, SchweineSystem::Color{255, 255, 0}, SchweineSystem::Color{0, 255, 0}}
-   , bankDisplay(this, Panel::Text_Bank_Display, Panel::RGB_Bank_Display)
    , bankIndex(0)
    , bankTrigger()
-   , receiveState(false)
-   , applyPulse()
+   , dataReceive(false)
+   , dataApply(false)
+   , dataAppliedPulse()
+   , displayController(this, Panel::Pixels_Display)
 {
    setup();
    Majordomo::hello(this);
@@ -141,36 +139,18 @@ TimeLord::TimeLord()
                       Panel::Channel7_Output,
                       Panel::Channel8_Output});
 
-   rampDisplayList.append({{Panel::Text_Channel1_Display, Panel::RGB_Channel1_Display},
-                           {Panel::Text_Channel2_Display, Panel::RGB_Channel2_Display},
-                           {Panel::Text_Channel3_Display, Panel::RGB_Channel3_Display},
-                           {Panel::Text_Channel4_Display, Panel::RGB_Channel4_Display},
-                           {Panel::Text_Channel5_Display, Panel::RGB_Channel5_Display},
-                           {Panel::Text_Channel6_Display, Panel::RGB_Channel6_Display},
-                           {Panel::Text_Channel7_Display, Panel::RGB_Channel7_Display},
-                           {Panel::Text_Channel8_Display, Panel::RGB_Channel8_Display}});
-
-   displayModeLightList.append({Panel::RGB_Division,
-                                Panel::RGB_Length,
-                                Panel::RGB_Count,
-                                Panel::RGB_Current});
-   for (uint8_t modeIndex = 0; modeIndex < 4; modeIndex++)
-   {
-      displayModeLightList[modeIndex]->setDefaultColor(modeColors[modeIndex]);
-   }
-
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       lightMeterList[rampIndex]->setMaxValue(255);
    }
 }
 
-TimeLord::~TimeLord()
+TimeLord2::~TimeLord2()
 {
    Majordomo::bye(this);
 }
 
-void TimeLord::process(const ProcessArgs& args)
+void TimeLord2::process(const ProcessArgs& args)
 {
    bool isClock = clockTrigger.process(inputs[Panel::Clock].getVoltage() > 3.0);
    bool isReset = resetTrigger.process(inputs[Panel::Reset].getVoltage() > 3.0);
@@ -189,14 +169,7 @@ void TimeLord::process(const ProcessArgs& args)
          bankIndex = 0;
    }
 
-   if (receiveState)
-      bankDisplay.setColor(SchweineSystem::Color{255, 0, 0});
-   else if (applyPulse.process(args.sampleTime))
-      bankDisplay.setColor(SchweineSystem::Color{0, 255, 0});
-   else
-      bankDisplay.setColor(SchweineSystem::Color{255, 255, 0});
-
-   bankDisplay.setText(std::to_string(bankIndex));
+   dataApply = dataAppliedPulse.process(args.sampleTime);
 
    if (displayTrigger.process(params[Panel::Mode].getValue()))
    {
@@ -210,28 +183,9 @@ void TimeLord::process(const ProcessArgs& args)
          displayMode = Division;
    }
 
-   for (uint8_t modeIndex = 0; modeIndex < 4; modeIndex++)
-   {
-      if (modeIndex == displayMode)
-         displayModeLightList[modeIndex]->setOn();
-      else
-         displayModeLightList[modeIndex]->setOff();
-   }
-
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       PolyRamp* polyRamp = &ramps[rampIndex];
-
-      rampDisplayList[rampIndex]->setColor(modeColors[displayMode]);
-
-      if (Division == displayMode)
-         rampDisplayList[rampIndex]->setText(Tempo::getName(polyRamp->getStepSize()));
-      else if (Length == displayMode)
-         rampDisplayList[rampIndex]->setText(std::to_string(polyRamp->getLength()));
-      else if (StageCount == displayMode)
-         rampDisplayList[rampIndex]->setText(std::to_string(polyRamp->getStageCount()));
-      else
-         rampDisplayList[rampIndex]->setText(std::to_string(polyRamp->getCurrentStageIndex()));
 
       if (isReset)
          polyRamp->clockReset();
@@ -255,7 +209,53 @@ void TimeLord::process(const ProcessArgs& args)
    }
 }
 
-void TimeLord::dataFromMidiInput(const Bytes& message)
+void TimeLord2::updateDisplays()
+{
+   displayController.fill();
+
+   displayController.drawRect(0, 0, 127, 10, true);
+
+   if (dataReceive)
+      displayController.writeText(5, 25, "?", SchweineSystem::OLEDDisplay::Font::Huge, true);
+   else if (dataApply)
+      displayController.writeText(5, 25, "@", SchweineSystem::OLEDDisplay::Font::Huge, true);
+   else
+      displayController.writeText(5, 25, std::to_string(bankIndex), SchweineSystem::OLEDDisplay::Font::Huge, true);
+
+   if (Division == displayMode)
+      displayController.writeText(30, 1, "Division", SchweineSystem::OLEDDisplay::Font::Normal, false);
+   else if (Length == displayMode)
+      displayController.writeText(30, 1, "Length", SchweineSystem::OLEDDisplay::Font::Normal, false);
+   else if (StageCount == displayMode)
+      displayController.writeText(30, 1, "Stage Count", SchweineSystem::OLEDDisplay::Font::Normal, false);
+   else
+      displayController.writeText(30, 1, "Current Stage", SchweineSystem::OLEDDisplay::Font::Normal, false);
+
+   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
+   {
+      PolyRamp* polyRamp = &ramps[rampIndex];
+
+      const bool even = (0 == (rampIndex % 2));
+      const uint8_t x = even ? 30 : 80;
+
+      const uint8_t yIndex = even ? rampIndex / 2 : (rampIndex - 1) / 2;
+      const uint8_t y = 14 + yIndex * 13;
+
+      std::string text = std::to_string(rampIndex + 1) + ": ";
+      if (Division == displayMode)
+         text += Tempo::getName(polyRamp->getStepSize());
+      else if (Length == displayMode)
+         text += std::to_string(polyRamp->getLength());
+      else if (StageCount == displayMode)
+         text += std::to_string(polyRamp->getStageCount());
+      else
+         text += std::to_string(polyRamp->getCurrentStageIndex());
+
+      displayController.writeText(x, y, text, SchweineSystem::OLEDDisplay::Font::Normal, true);
+   }
+}
+
+void TimeLord2::dataFromMidiInput(const Bytes& message)
 {
    const bool isSystemEvent = (0xF0 == (message[0] & 0xF0));
    if (isSystemEvent)
@@ -285,14 +285,14 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
    {
       const uint8_t value = message[2];
       midiBuffer << value;
-      receiveState = true;
+      dataReceive = true;
    }
    else if (Midi::ControllerMessage::RememberApply == controllerMessage)
    {
       const Bytes data = SevenBit::decode(midiBuffer);
       midiBuffer.clear();
 
-      receiveState = false;
+      dataReceive = false;
 
       const uint8_t value = message[2];
       if (value != bankIndex)
@@ -313,11 +313,11 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       SchweineSystem::Json::Object rootObject(rootJson);
       loadInternal(rootObject);
 
-      applyPulse.trigger(2.0);
+      dataAppliedPulse.trigger(2.0);
    }
 }
 
-json_t* TimeLord::dataToJson()
+json_t* TimeLord2::dataToJson()
 {
    using namespace SchweineSystem::Json;
 
@@ -361,7 +361,7 @@ json_t* TimeLord::dataToJson()
    return rootObject.toJson();
 }
 
-void TimeLord::dataFromJson(json_t* rootJson)
+void TimeLord2::dataFromJson(json_t* rootJson)
 {
    using namespace SchweineSystem::Json;
 
@@ -372,7 +372,7 @@ void TimeLord::dataFromJson(json_t* rootJson)
    loadInternal(rootObject);
 }
 
-void TimeLord::loadInternal(const SchweineSystem::Json::Object& rootObject)
+void TimeLord2::loadInternal(const SchweineSystem::Json::Object& rootObject)
 {
    using namespace SchweineSystem::Json;
 
@@ -411,10 +411,10 @@ void TimeLord::loadInternal(const SchweineSystem::Json::Object& rootObject)
 
 // widget
 
-TimeLordWidget::TimeLordWidget(TimeLord* module)
+TimeLord2Widget::TimeLord2Widget(TimeLord2* module)
    : SchweineSystem::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelTimeLord = SchweineSystem::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");
+Model* modelTimeLord2 = SchweineSystem::Master::the()->addModule<TimeLord2, TimeLord2Widget>("TimeLord2");

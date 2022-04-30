@@ -42,7 +42,7 @@ def updateModule(moduleName, subFolder):
             return
 
     slugDict = {
-        'slog': moduleName,
+        'slug': moduleName,
         'name': moduleName,
         'description': str(),
         'tags': list()

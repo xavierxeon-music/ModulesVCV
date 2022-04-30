@@ -45,9 +45,15 @@ class Headers(Common):
         counter = 0
         line(1, 'enum DisplayId')
         line(1, '{')
+        line(2, '// lcd')
         for display in self.displays:
             name = display['name']
             line(2, f'Text_{name} = {counter},')
+            counter += 1
+        line(2, '// oled')
+        for oled in self.oleds:
+            name = oled['name']
+            line(2, f'Pixels_{name} = {counter},')
             counter += 1
         line(2, f'DISPLAYS_LEN = {counter}')
         line(1, '};')
@@ -137,6 +143,8 @@ class Headers(Common):
                 line(0, '#include <SchweineSystemLight.h>')
             if self.meters:
                 line(0, '#include <SchweineSystemLightMeter.h>')
+            if self.oleds:
+                line(0, '#include <SchweineSystemOLEDDisplay.h>')
             line(0)
 
             line(0, f'struct {self.moduleName}::Panel')

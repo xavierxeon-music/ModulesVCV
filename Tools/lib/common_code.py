@@ -21,6 +21,7 @@ class Common:
         self.ledbuttons = components['ledbutton'] if components and 'ledbutton' in components else list()
         self.lights = components['light'] if components and 'light' in components else list()
         self.meters = components['meter'] if components and 'meter' in components else list()
+        self.oleds = components['oled'] if components and 'oled' in components else list()
         self.outputs = components['output'] if components and 'output' in components else list()
 
     def compileFileName(self, rest):
