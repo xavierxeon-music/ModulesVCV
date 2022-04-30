@@ -1,5 +1,5 @@
-src/Common
-../MusicTools/Include
-../MusicTools/RememberDummy
+src/_Common
+src/_MusicTools/Include
+src/_MusicTools/RememberDummy
 ../Rack/include
 ../Rack/dep/include

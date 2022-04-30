@@ -11,10 +11,10 @@ CXXFLAGS +=
 LDFLAGS +=
 
 FLAGS += \
-	-Isrc/Common \
-	-I$(RACK_DIR)/../MusicTools \
-	-I$(RACK_DIR)/../MusicTools/Include \
-	-I$(RACK_DIR)/../MusicTools/RememberDummy \
+	-Isrc/_Common \
+	-Isrc/_MusicTools \
+	-Isrc/_MusicTools/Include \
+	-Isrc/_MusicTools/RememberDummy \
 
 # Add .cpp files to the build
 SOURCES += \
@@ -23,10 +23,10 @@ SOURCES += \
 	$(wildcard src/Hardware/*.cpp) \
 	$(wildcard src/Morpher/*.cpp) \
 	$(wildcard src/Other/*.cpp) \
-	$(RACK_DIR)/../MusicTools/AbstractEffect.cpp \
-	$(RACK_DIR)/../MusicTools/AbstractOscilator.cpp \
-	$(RACK_DIR)/../MusicTools/Maths.cpp \
-	$(RACK_DIR)/../MusicTools/Note.cpp  
+	src/_MusicTools/AbstractEffect.cpp \
+	src/_MusicTools/AbstractOscilator.cpp \
+	src/_MusicTools/Maths.cpp \
+	src/_MusicTools/Note.cpp  
 
 
 # Add files to the ZIP package when running `make dist`
