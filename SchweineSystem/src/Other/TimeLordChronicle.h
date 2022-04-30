@@ -4,6 +4,11 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <Tools/Range.h>
+
+#include <SchweineSystemCommon.h>
+#include <SchweineSystemLCDDisplay.h>
+#include <SchweineSystemLightMeter.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
@@ -20,6 +25,12 @@ public:
 
 private:
    void setup();
+
+private:
+   SchweineSystem::Input::List inputList;
+   SchweineSystem::LightMeter::Controller::List lightMeterList;
+   SchweineSystem::LCDDisplay::Controller::List displayList;
+   Range::Mapper voltageToValue;
 };
 
 class TimeLordChronicleWidget : public SchweineSystem::ModuleWidget
