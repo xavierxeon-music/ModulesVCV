@@ -1,14 +1,13 @@
-#ifndef TimeLordPanelH
-#define TimeLordPanelH
+#ifndef TimeLord2PanelH
+#define TimeLord2PanelH
 
-#include "TimeLord.h"
+#include "TimeLord2.h"
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLCDDisplay.h>
-#include <SchweineSystemLight.h>
 #include <SchweineSystemLightMeter.h>
+#include <SchweineSystemOLEDDisplay.h>
 
-struct TimeLord::Panel
+struct TimeLord2::Panel
 {
    enum ParamId
    {
@@ -22,16 +21,10 @@ struct TimeLord::Panel
 
    enum DisplayId
    {
-      Text_Bank_Display = 0,
-      Text_Channel8_Display = 1,
-      Text_Channel7_Display = 2,
-      Text_Channel6_Display = 3,
-      Text_Channel5_Display = 4,
-      Text_Channel4_Display = 5,
-      Text_Channel3_Display = 6,
-      Text_Channel2_Display = 7,
-      Text_Channel1_Display = 8,
-      DISPLAYS_LEN = 9
+      // lcd
+      // oled
+      Pixels_Display = 0,
+      DISPLAYS_LEN = 1
    };
 
    enum MeterId
@@ -70,24 +63,11 @@ struct TimeLord::Panel
    enum LightId
    {
       // leds
-      RGB_Current = 0,
-      RGB_Count = 3,
-      RGB_Length = 6,
-      RGB_Division = 9,
       // buttons
       // displays
-      RGB_Bank_Display = 12,
-      RGB_Channel8_Display = 15,
-      RGB_Channel7_Display = 18,
-      RGB_Channel6_Display = 21,
-      RGB_Channel5_Display = 24,
-      RGB_Channel4_Display = 27,
-      RGB_Channel3_Display = 30,
-      RGB_Channel2_Display = 33,
-      RGB_Channel1_Display = 36,
-      LIGHTS_LEN = 39
+      LIGHTS_LEN = 0
    };
 
 };
 
-#endif // NOT TimeLordPanelH
+#endif // NOT TimeLord2PanelH

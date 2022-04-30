@@ -1,5 +1,5 @@
-#ifndef TimeLordH
-#define TimeLordH
+#ifndef TimeLord2H
+#define TimeLord2H
 
 #include <rack.hpp>
 using namespace rack;
@@ -12,23 +12,23 @@ using namespace rack;
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemJson.h>
-#include <SchweineSystemLCDDisplay.h>
-#include <SchweineSystemLight.h>
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
+#include <SchweineSystemOLEDDisplay.h>
 
-class TimeLord : public SchweineSystem::Module
+class TimeLord2 : public SchweineSystem::Module
 {
 public:
    struct Panel;
 
 public:
-   TimeLord();
-   ~TimeLord();
+   TimeLord2();
+   ~TimeLord2();
 
 public:
    void process(const ProcessArgs& args) override;
+   void updateDisplays() override;
 
 private:
    using Bytes = std::vector<uint8_t>;
@@ -44,8 +44,8 @@ private:
    class Majordomo
    {
    public:
-      static void hello(TimeLord* server);
-      static void bye(TimeLord* server);
+      static void hello(TimeLord2* server);
+      static void bye(TimeLord2* server);
 
    private:
       Majordomo();
@@ -57,7 +57,7 @@ private:
    private:
       static Majordomo* me;
       RtMidiIn midiInput;
-      std::vector<TimeLord*> instanceList;
+      std::vector<TimeLord2*> instanceList;
    };
 
 private:
@@ -81,26 +81,25 @@ private:
    SchweineSystem::LightMeter::Controller::List lightMeterList;
    SchweineSystem::Output::List outputList;
 
-   SchweineSystem::LCDDisplay::Controller::List rampDisplayList;
    DisplayMode displayMode;
-   SchweineSystem::Light::List displayModeLightList;
    dsp::BooleanTrigger displayTrigger;
-   SchweineSystem::Color modeColors[4];
 
-   SchweineSystem::LCDDisplay::Controller bankDisplay;
    uint8_t bankIndex;
    dsp::BooleanTrigger bankTrigger;
-   bool receiveState;
-   dsp::PulseGenerator applyPulse;
+   bool dataReceive;
+   bool dataApply;
+   dsp::PulseGenerator dataAppliedPulse;
+
+   SchweineSystem::OLEDDisplay::Controller displayController;
 };
 
-class TimeLordWidget : public SchweineSystem::ModuleWidget
+class TimeLord2Widget : public SchweineSystem::ModuleWidget
 {
 public:
-   TimeLordWidget(TimeLord* module);
+   TimeLord2Widget(TimeLord2* module);
 
 private:
    void setup();
 };
 
-#endif // NOT TimeLordH
+#endif // NOT TimeLord2H
