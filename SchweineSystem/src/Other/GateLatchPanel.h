@@ -19,6 +19,8 @@ struct GateLatch::Panel
 
    enum DisplayId
    {
+      // lcd
+      // oled
       DISPLAYS_LEN = 0
    };
 
