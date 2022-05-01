@@ -7,6 +7,14 @@ VERSION=2.1.0
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"   
 CURRENT_DIR=$(pwd)
 
+OS_TEST=$(uname)
+if [ "$OS_TEST" == " Darwin" ]
+then
+   brew install git wget cmake autoconf automake libtool jq python zstd
+else
+   sudo apt install unzip git gdb curl cmake libx11-dev libglu1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev zlib1g-dev libasound2-dev libgtk2.0-dev libgtk-3-dev libjack-jackd2-dev jq zstd libpulse-dev
+fi
+
 
 RACK_DIR_TEST=$(echo $RACK_DIR)
 if [ -z "$RACK_DIR_TEST" ]
