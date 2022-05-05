@@ -214,22 +214,34 @@ void TimeLord::updateDisplays()
    displayController.fill();
 
    displayController.drawRect(0, 0, 127, 10, true);
-
-   if (dataReceive)
-      displayController.writeText(5, 25, "?", SchweineSystem::OLEDDisplay::Font::Huge, true);
-   else if (dataApply)
-      displayController.writeText(5, 25, "@", SchweineSystem::OLEDDisplay::Font::Huge, true);
-   else
-      displayController.writeText(5, 25, std::to_string(bankIndex), SchweineSystem::OLEDDisplay::Font::Huge, true);
+   displayController.setColor(SchweineSystem::Color{0, 0, 0});
 
    if (Division == displayMode)
-      displayController.writeText(30, 1, "Division", SchweineSystem::OLEDDisplay::Font::Normal, false);
+      displayController.writeText(30, 1, "Division", SchweineSystem::OLEDDisplay::Font::Normal);
    else if (Length == displayMode)
-      displayController.writeText(30, 1, "Length", SchweineSystem::OLEDDisplay::Font::Normal, false);
+      displayController.writeText(30, 1, "Length", SchweineSystem::OLEDDisplay::Font::Normal);
    else if (StageCount == displayMode)
-      displayController.writeText(30, 1, "Stage Count", SchweineSystem::OLEDDisplay::Font::Normal, false);
+      displayController.writeText(30, 1, "Stage Count", SchweineSystem::OLEDDisplay::Font::Normal);
    else
-      displayController.writeText(30, 1, "Current Stage", SchweineSystem::OLEDDisplay::Font::Normal, false);
+      displayController.writeText(30, 1, "Current Stage", SchweineSystem::OLEDDisplay::Font::Normal);
+
+   if (dataReceive)
+   {
+      displayController.setColor(SchweineSystem::Color{255, 255, 255});
+      displayController.writeText(5, 25, "?", SchweineSystem::OLEDDisplay::Font::Huge);
+   }
+   else if (dataApply)
+   {
+      displayController.setColor(SchweineSystem::Color{255, 255, 255});
+      displayController.writeText(5, 25, "@", SchweineSystem::OLEDDisplay::Font::Huge);
+   }
+   else
+   {
+      displayController.setColor(SchweineSystem::Color{255, 255, 255});
+      displayController.writeText(5, 25, std::to_string(bankIndex), SchweineSystem::OLEDDisplay::Font::Huge);
+   }
+
+   displayController.setColor(SchweineSystem::Color{255, 255, 255});
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
@@ -251,7 +263,7 @@ void TimeLord::updateDisplays()
       else
          text += std::to_string(polyRamp->getCurrentStageIndex());
 
-      displayController.writeText(x, y, text, SchweineSystem::OLEDDisplay::Font::Normal, true);
+      displayController.writeText(x, y, text, SchweineSystem::OLEDDisplay::Font::Normal);
    }
 }
 

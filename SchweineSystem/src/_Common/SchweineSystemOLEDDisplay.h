@@ -44,7 +44,7 @@ namespace SchweineSystem
          void drawPixel(const uint8_t x, const uint8_t y);
          void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
          void drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill);
-         void writeText(const uint8_t x, const uint8_t y, const std::string& text, const Font& font, const Alignment& alignment);
+         void writeText(const uint8_t x, const uint8_t y, const std::string& text, const Font& font, const Alignment& alignment = Alignment::Left);
 
       private:
          Module* module;
