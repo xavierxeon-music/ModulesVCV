@@ -61,7 +61,7 @@ void SchweineSystem::MidiOutput::sendNoteOn(const Midi::Channel& channel, const 
    onMessage[0] = (Midi::Event::NoteOn | (channel - 1));
    onMessage[1] = note.midiValue;
    onMessage[2] = velocity;
-   midiOutput.sendMessage(&onMessage);
+   sendMessage(onMessage);
 }
 
 void SchweineSystem::MidiOutput::sendNoteOff(const Midi::Channel& channel, const Note& note)
@@ -73,7 +73,7 @@ void SchweineSystem::MidiOutput::sendNoteOff(const Midi::Channel& channel, const
    offMessage[0] = (Midi::Event::NoteOff | (channel - 1));
    offMessage[1] = note.midiValue;
    offMessage[2] = 64;
-   midiOutput.sendMessage(&offMessage);
+   sendMessage(offMessage);
 }
 
 void SchweineSystem::MidiOutput::sendControllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
@@ -85,7 +85,7 @@ void SchweineSystem::MidiOutput::sendControllerChange(const Midi::Channel& chann
    ccMessage[0] = (Midi::Event::ControlChange | (channel - 1));
    ccMessage[1] = controllerMessage;
    ccMessage[2] = value;
-   midiOutput.sendMessage(&ccMessage);
+   sendMessage(ccMessage);
 }
 
 void SchweineSystem::MidiOutput::sendMessage(const std::vector<uint8_t>& message)

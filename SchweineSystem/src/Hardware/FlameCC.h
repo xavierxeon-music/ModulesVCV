@@ -19,7 +19,6 @@ public:
 
 public:
    FlameCC();
-   ~FlameCC();
 
 public:
    void process(const ProcessArgs& args) override;

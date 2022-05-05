@@ -11,6 +11,8 @@ namespace SchweineSystem
 {
    namespace LCDDisplay
    {
+      // 16 with per digit + 2 margin
+      // 24 height
       class Controller
       {
       public:

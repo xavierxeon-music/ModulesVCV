@@ -1,6 +1,8 @@
+./src/Hardware/KeyStepPanel.h
 ./src/Hardware/DoepferQuad.h
 ./src/Hardware/DoepferQuadPanel.h
 ./src/Hardware/FlameCCPanel.h
+./src/Hardware/KeyStep.h
 ./src/Hardware/FlameCC.h
 ./src/Hardware/VCMCReceiverPanel.h
 ./src/Hardware/VCMCReceiver.h
@@ -121,6 +123,8 @@
 ./src/Hardware/FlameCCPanel.cpp
 ./src/Hardware/DoepferQuadPanel.cpp
 ./src/Hardware/VCMCReceiverPanel.cpp
+./src/Hardware/KeyStep.cpp
+./src/Hardware/KeyStepPanel.cpp
 ./src/Hardware/VCMCReceiver.cpp
 ./src/Hardware/DoepferQuad.cpp
 ./src/Hardware/FlameCC.cpp

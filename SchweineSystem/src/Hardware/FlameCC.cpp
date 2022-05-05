@@ -37,10 +37,6 @@ FlameCC::FlameCC()
    connectToMidiDevice();
 }
 
-FlameCC::~FlameCC()
-{
-}
-
 void FlameCC::process(const ProcessArgs& args)
 {
    if (connectTrigger.process(params[Panel::Connect].getValue() > 3.0))
