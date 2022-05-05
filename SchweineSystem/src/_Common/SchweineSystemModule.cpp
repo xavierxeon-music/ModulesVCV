@@ -23,7 +23,8 @@ void SchweineSystem::Module::configMeter(const uint16_t& valueId, std::string na
    values[valueId] = 0.0;
 }
 
-void SchweineSystem::Module::configPixels(const uint16_t& valueId, std::string name, const uint16_t& size)
+void SchweineSystem::Module::configPixels(const uint16_t& valueId, const uint8_t& width, const uint8_t& height, std::string name)
 {
-   pixels[valueId] = new uint8_t[size];
+   const uint16_t size = width * height;
+   pixels[valueId] = new Color[size];
 }

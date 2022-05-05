@@ -116,7 +116,7 @@ TimeLord::TimeLord()
    , dataReceive(false)
    , dataApply(false)
    , dataAppliedPulse()
-   , displayController(this, Panel::Pixels_Display)
+   , displayController(this, Panel::Pixels_Display, 128, 64)
 {
    setup();
    Majordomo::hello(this);

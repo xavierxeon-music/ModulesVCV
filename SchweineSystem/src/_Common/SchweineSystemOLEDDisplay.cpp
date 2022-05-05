@@ -881,33 +881,39 @@ static uint16_t compileIndex(const uint8_t x, const uint8_t y)
 
 // comntroller
 
-SchweineSystem::OLEDDisplay::Controller::Controller(Module* module, const uint16_t& pixelId)
+SchweineSystem::OLEDDisplay::Controller::Controller(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
    : module(module)
    , pixelId(pixelId)
-   , cursorX(0)
-   , cursorY(0)
+   , width(width)
+   , height(height)
+   , color(Color{255, 255, 255})
 {
 }
 
-void SchweineSystem::OLEDDisplay::Controller::fill(bool on)
+void SchweineSystem::OLEDDisplay::Controller::setColor(const Color& newColor)
+{
+   color = newColor;
+}
+
+void SchweineSystem::OLEDDisplay::Controller::fill(const Color& fillColor)
 {
    if (!module)
       return;
 
-   for (uint16_t index = 0; index < 128 * 64; index++)
-      module->pixels[pixelId][index] = on;
+   for (uint16_t index = 0; index < width * height; index++)
+      module->pixels[pixelId][index] = fillColor;
 }
 
-void SchweineSystem::OLEDDisplay::Controller::drawPixel(const uint8_t x, const uint8_t y, bool on)
+void SchweineSystem::OLEDDisplay::Controller::drawPixel(const uint8_t x, const uint8_t y)
 {
    if (!module)
       return;
 
    const uint16_t index = compileIndex(x, y);
-   module->pixels[pixelId][index] = on;
+   module->pixels[pixelId][index] = color;
 }
 
-void SchweineSystem::OLEDDisplay::Controller::drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool on)
+void SchweineSystem::OLEDDisplay::Controller::drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
 {
    const int16_t deltaX = abs((int16_t)x2 - (int16_t)x1);
    const int16_t deltaY = abs((int16_t)y2 - (int16_t)y1);
@@ -916,11 +922,11 @@ void SchweineSystem::OLEDDisplay::Controller::drawLine(uint8_t x1, uint8_t y1, u
 
    int16_t error = deltaX - deltaY;
 
-   drawPixel(x2, y2, on);
+   drawPixel(x2, y2);
 
    while ((x1 != x2) || (y1 != y2))
    {
-      drawPixel(x1, y1, on);
+      drawPixel(x1, y1);
       const int16_t error2 = error * 2;
       if (error2 > -deltaY)
       {
@@ -936,7 +942,7 @@ void SchweineSystem::OLEDDisplay::Controller::drawLine(uint8_t x1, uint8_t y1, u
    }
 }
 
-void SchweineSystem::OLEDDisplay::Controller::drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill, bool on)
+void SchweineSystem::OLEDDisplay::Controller::drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill)
 {
    if (fill)
    {
@@ -944,28 +950,64 @@ void SchweineSystem::OLEDDisplay::Controller::drawRect(uint8_t x1, uint8_t y1, u
       {
          for (uint8_t y = y1; y <= y2; y++)
          {
-            drawPixel(x, y, on);
+            drawPixel(x, y);
          }
       }
    }
    else
    {
-      drawLine(x1, y1, x2, y1, on);
-      drawLine(x2, y1, x2, y2, on);
-      drawLine(x2, y2, x1, y2, on);
-      drawLine(x1, y2, x1, y1, on);
+      drawLine(x1, y1, x2, y1);
+      drawLine(x2, y1, x2, y2);
+      drawLine(x2, y2, x1, y2);
+      drawLine(x1, y2, x1, y1);
    }
 }
 
-void SchweineSystem::OLEDDisplay::Controller::writeText(const uint8_t x, const uint8_t y, const std::string& text, const Font& font, bool on)
+void SchweineSystem::OLEDDisplay::Controller::writeText(const uint8_t x, const uint8_t y, const std::string& text, const Font& font, const Alignment& alignment)
 {
-   setCursor(x, y);
+   uint8_t cursorX = x;
+   uint8_t cursorY = y;
+
+   const uint8_t textWidth = text.size() * font.width;
+   if (Alignment::Right == alignment)
+      cursorX = x - textWidth;
+   else if (Alignment::Center == alignment)
+      cursorX = x - (textWidth / 2);
+
+   auto writeChar = [&](char ch) -> char
+   {
+      // Check if character is valid
+      if (ch < 32 || ch > 126)
+         return 0;
+
+      // Check remaining space on current line
+      if (width < (cursorX + font.width) || height < (cursorY + font.height))
+         return 0; // Not enough space on current line
+
+      // Use the font to write
+      for (uint8_t i = 0; i < font.height; i++)
+      {
+         const uint32_t blockIndex = (ch - 32) * font.height + i;
+         const uint32_t block = font.data[blockIndex];
+         for (uint8_t j = 0; j < font.width; j++)
+         {
+            if ((block << j) & 0x8000)
+               drawPixel(cursorX + j, (cursorY + i));
+         }
+      }
+
+      // The current space is now taken
+      cursorX += font.width;
+
+      // Return written char for validation
+      return ch;
+   };
 
    // Write until null-byte
    const char* str = text.c_str();
    while (*str)
    {
-      if (writeChar(*str, font, on) != *str)
+      if (writeChar(*str) != *str)
       {
          // Char could not be written
          return;
@@ -976,69 +1018,14 @@ void SchweineSystem::OLEDDisplay::Controller::writeText(const uint8_t x, const u
    }
 }
 
-uint8_t SchweineSystem::OLEDDisplay::Controller::compileLeftX(const uint8_t x, const std::string& text, const Font& font, const Alignment& alignment)
-{
-   const uint8_t textWidth = text.size() * font.width;
-
-   uint8_t xLeft = x;
-   if (Alignment::Right == alignment)
-      xLeft = x - textWidth;
-   else if (Alignment::Center == alignment)
-      xLeft = x - (textWidth / 2);
-
-   return xLeft;
-}
-
-void SchweineSystem::OLEDDisplay::Controller::setCursor(uint8_t x, uint8_t y)
-{
-   cursorX = x;
-   cursorY = y;
-}
-
-char SchweineSystem::OLEDDisplay::Controller::writeChar(char ch, Font font, bool on)
-{
-   // Check if character is valid
-   if (ch < 32 || ch > 126)
-      return 0;
-
-   // Check remaining space on current line
-   if (128 < (cursorX + font.width) || 64 < (cursorY + font.height))
-   {
-      // Not enough space on current line
-      return 0;
-   }
-
-   // Use the font to write
-   for (uint8_t i = 0; i < font.height; i++)
-   {
-      const uint32_t blockIndex = (ch - 32) * font.height + i;
-      const uint32_t block = font.data[blockIndex];
-      for (uint8_t j = 0; j < font.width; j++)
-      {
-         if ((block << j) & 0x8000)
-         {
-            drawPixel(cursorX + j, (cursorY + i), on);
-         }
-         else
-         {
-            drawPixel(cursorX + j, (cursorY + i), !on);
-         }
-      }
-   }
-
-   // The current space is now taken
-   setCursor(cursorX + font.width, cursorY);
-
-   // Return written char for validation
-   return ch;
-}
-
 // widget
 
-SchweineSystem::OLEDDisplay::Widget::Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId)
+SchweineSystem::OLEDDisplay::Widget::Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
    : rack::TransparentWidget()
    , module(module)
    , pixelId(pixelId)
+   , width(width)
+   , height(height)
 {
    box.pos = rack::math::Vec(pos.x, pos.y);
 }
@@ -1048,25 +1035,25 @@ void SchweineSystem::OLEDDisplay::Widget::drawLayer(const DrawArgs& args, int la
    if (layer != 1)
       return;
 
-   static const NVGcolor black = nvgRGB(0, 0, 0);
-   static const NVGcolor white = nvgRGB(255, 255, 255);
-
-   for (uint8_t x = 0; x < 128; x++)
+   for (uint8_t x = 0; x < width; x++)
    {
-      for (uint8_t y = 0; y < 64; y++)
+      for (uint8_t y = 0; y < height; y++)
       {
-         const uint16_t index = compileIndex(x, y);
-         const bool on = module ? module->pixels[pixelId][index] : (x == y);
+         const NVGcolor color = [&]() -> NVGcolor
+         {
+            if (!module)
+               return nvgRGB(0, 0, 255);
+
+            const uint16_t index = compileIndex(x, y);
+            const Color sColor = module->pixels[pixelId][index];
+
+            return nvgRGB(sColor.red, sColor.green, sColor.red);
+         }();
 
          nvgBeginPath(args.vg);
          //nvgRect(args.vg, x + 1, y + 1, 1, 1);
          nvgRoundedRect(args.vg, x + 1, y + 1, 1, 1, 1);
-
-         if (on)
-            nvgFillColor(args.vg, white);
-         else
-            nvgFillColor(args.vg, black);
-
+         nvgFillColor(args.vg, color);
          nvgFill(args.vg);
       }
    }

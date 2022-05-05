@@ -3,14 +3,16 @@
 
 #include <rack.hpp>
 
+#include <SchweineSystemCommon.h>
+
 namespace SchweineSystem
 {
    class Module : public rack::Module
    {
-   public:      
+   public:
       using TextMap = std::map<uint16_t, std::string>;
       using ValueMap = std::map<uint16_t, float>;
-      using PixelMap = std::map<uint16_t, uint8_t*>;
+      using PixelMap = std::map<uint16_t, Color*>;
 
    public:
       Module();
@@ -26,7 +28,7 @@ namespace SchweineSystem
    protected:
       void configDisplay(const uint16_t& textId, std::string name = "");
       void configMeter(const uint16_t& valueId, std::string name = "");
-      void configPixels(const uint16_t& valueId, std::string name = "", const uint16_t& size = 128 * 64);
+      void configPixels(const uint16_t& valueId, const uint8_t& width, const uint8_t& height, std::string name = "");
    };
 } // namespace SchweineSystem
 

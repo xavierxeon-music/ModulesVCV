@@ -26,6 +26,7 @@ def updateModule(moduleName, subFolder):
     components = getPanelComponents(panelFileName)
     for key, value in components.items():
         print(f'* {key} x {len(value)}')
+        #print(value)
 
     headers = Headers(modulesPath, subFolder, moduleName, components)
     headers.write()

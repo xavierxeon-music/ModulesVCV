@@ -56,7 +56,9 @@ class Sources(Common):
             line(0)
         for oled in self.oleds:
             name = oled['name']
-            line(1, f'configPixels(Panel::Pixels_{name}, "{name}");')
+            count = oled['count']
+            width, height = count.split('x')
+            line(1, f'configPixels(Panel::Pixels_{name}, {width}, {height}, "{name}");')
 
         if self.meters:
             line(0)
@@ -138,13 +140,15 @@ class Sources(Common):
             name = oled['name']
             x = oled['rx']
             y = oled['ry']
-            line(1, f'makeDisplay(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::Pixels_{name});')
+            count = oled['count']
+            width, height = count.split('x')
+            line(1, f'makeDisplay(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::Pixels_{name}, {width}, {height});')
 
         if self.meters:
             line(0)
         for meter in self.meters:
             name = meter['name']
-            count = int(meter['count'])
+            count = meter['count']
             x = meter['rx']
             y = meter['ry']
             line(1, f'makeMeter(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Value_{name});')
