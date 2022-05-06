@@ -11,6 +11,7 @@ KeyStep::KeyStep()
    , inputList(inputs)
    , patterns{0, 0, 0, 0}
    , inputMapper(0, 10, 0, 15)
+   , channelSwitch(CvSwitch::ChannelCount::Sixteen)
    , displayList(this)
    , downButtonList(params)
    , upButtonList(params)
@@ -81,7 +82,8 @@ void KeyStep::process(const ProcessArgs& args)
       else
       {
          const float voltage = inputList[channel]->getVoltage();
-         newPattern = static_cast<uint8_t>(inputMapper(voltage));
+         //newPattern = static_cast<uint8_t>(inputMapper(voltage));
+         newPattern = channelSwitch.index(voltage);
       }
 
       if (patterns[channel] == newPattern)
@@ -132,7 +134,7 @@ void KeyStep::updateDisplay(uint8_t channel)
 // widget
 
 KeyStepWidget::KeyStepWidget(KeyStep* module)
-: SchweineSystem::ModuleWidget(module)
+   : SchweineSystem::ModuleWidget(module)
 {
    setup();
 }

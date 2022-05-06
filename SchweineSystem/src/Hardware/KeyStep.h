@@ -4,6 +4,7 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <Blocks/CvSwitch.h>
 #include <Tools/Range.h>
 
 #include <SchweineSystemCommon.h>
@@ -38,6 +39,7 @@ private:
    SchweineSystem::Input::List inputList;
    uint8_t patterns[4];
    Range::Mapper inputMapper;
+   CvSwitch channelSwitch;
    // manual pattern
    SchweineSystem::LCDDisplay::Controller::List displayList;
    SchweineSystem::Param::List downButtonList;
