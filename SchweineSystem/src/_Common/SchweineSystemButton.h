@@ -7,12 +7,10 @@
 
 namespace SchweineSystem
 {
-   class Module;
-
    class Button
    {
    public:
-      class List;
+      using List = ElementList<Button>;
 
    public:
       Button(Module* module, const uint16_t& paramIndex = 0);
@@ -27,21 +25,6 @@ namespace SchweineSystem
       uint16_t paramIndex;
       rack::dsp::BooleanTrigger trigger;
    };
-
-   class Button::List
-   {
-   public:
-      List(Module* module);
-
-   public:
-      void append(const std::vector<uint16_t>& paramIndexList);
-      Button* operator[](const uint16_t& index);
-
-   private:
-      Module* module;
-      std::vector<Button> instanceList;
-   };
-
 } // namespace SchweineSystem
 
 #endif // NOT SchweineSystemButtonH

@@ -6,7 +6,7 @@
 #include <Midi/MidiCommon.h>
 
 namespace SchweineSystem
-{
+{   
    struct Color
    {
       uint8_t red;
@@ -19,6 +19,25 @@ namespace SchweineSystem
       using MidiInterfaceMap = std::map<Midi::Device::Channel, std::string>;
       static const MidiInterfaceMap midiInterfaceMap;
    };
+
+   class Module;
+
+   template <typename ElementType>
+   class ElementList
+   {
+   public:
+      ElementList(Module* module);
+
+   public:
+      void append(const std::vector<uint16_t>& indexList);
+      ElementType* operator[](const uint16_t& index);
+
+   private:
+      Module* module;
+      std::vector<ElementType> instanceList;
+   };
+
+   // ************************************************
 
    template <typename ContentType>
    class SubList
@@ -49,6 +68,8 @@ namespace SchweineSystem
    {
       using List = SubList<rack::engine::Output>;
    }
+
+   // ************************************************
 
 } // namespace SchweineSystem
 

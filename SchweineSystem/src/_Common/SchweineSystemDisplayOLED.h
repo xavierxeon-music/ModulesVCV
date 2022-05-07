@@ -51,7 +51,7 @@ namespace SchweineSystem
          const uint16_t pixelId;
          const uint8_t width;
          const uint8_t height;
-         Color color;
+         NVGcolor color;
       };
 
       class Widget : public rack::TransparentWidget

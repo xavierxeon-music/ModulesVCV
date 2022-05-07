@@ -36,6 +36,7 @@ private:
 private:
    // midi
    SchweineSystem::ButtonLED connect;
+   SchweineSystem::Switch midiChannelSwitch;
    // patterns
    SchweineSystem::Input::List inputList;
    uint8_t patterns[4];

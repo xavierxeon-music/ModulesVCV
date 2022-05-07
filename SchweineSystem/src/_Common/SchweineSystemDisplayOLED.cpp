@@ -886,13 +886,13 @@ SchweineSystem::DisplayOLED::Controller::Controller(Module* module, const uint16
    , pixelId(pixelId)
    , width(width)
    , height(height)
-   , color(Color{255, 255, 255})
+   , color(nvgRGB(255, 255, 255))
 {
 }
 
 void SchweineSystem::DisplayOLED::Controller::setColor(const Color& newColor)
 {
-   color = newColor;
+   color = nvgRGB(newColor.red, newColor.green, newColor.red);
 }
 
 void SchweineSystem::DisplayOLED::Controller::fill(const Color& fillColor)
@@ -900,8 +900,10 @@ void SchweineSystem::DisplayOLED::Controller::fill(const Color& fillColor)
    if (!module)
       return;
 
+   NVGcolor color = nvgRGB(fillColor.red, fillColor.green, fillColor.red);
+
    for (uint16_t index = 0; index < width * height; index++)
-      module->pixels[pixelId][index] = fillColor;
+      module->pixels[pixelId][index] = color;
 }
 
 void SchweineSystem::DisplayOLED::Controller::drawPixel(const uint8_t x, const uint8_t y)
@@ -1045,9 +1047,7 @@ void SchweineSystem::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int la
                return nvgRGB(0, 0, 255);
 
             const uint16_t index = compileIndex(x, y);
-            const Color sColor = module->pixels[pixelId][index];
-
-            return nvgRGB(sColor.red, sColor.green, sColor.red);
+            return module->pixels[pixelId][index];
          }();
 
          nvgBeginPath(args.vg);

@@ -3,6 +3,31 @@
 
 #include "SchweineSystemCommon.h"
 
+template <typename ElementType>
+SchweineSystem::ElementList<ElementType>::ElementList(Module* module)
+   : module(module)
+   , instanceList()
+{
+}
+
+template <typename ElementType>
+void SchweineSystem::ElementList<ElementType>::append(const std::vector<uint16_t>& paramIndexList)
+{
+   for (const uint16_t paramIndex : paramIndexList)
+   {
+      ElementType element(module, paramIndex);
+      instanceList.push_back(element);
+   }
+}
+
+template <typename ElementType>
+ElementType* SchweineSystem::ElementList<ElementType>::operator[](const uint16_t& index)
+{
+   return &instanceList[index];
+}
+
+// ************************************************
+
 template <typename ContentType>
 SchweineSystem::SubList<ContentType>::SubList(std::vector<ContentType>& fullList)
    : fullList(fullList)

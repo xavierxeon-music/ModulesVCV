@@ -3,8 +3,6 @@
 
 #include <rack.hpp>
 
-#include <SchweineSystemCommon.h>
-
 namespace SchweineSystem
 {
    class Module : public rack::Module
@@ -12,7 +10,7 @@ namespace SchweineSystem
    public:
       using TextMap = std::map<uint16_t, std::string>;
       using ValueMap = std::map<uint16_t, float>;
-      using PixelMap = std::map<uint16_t, Color*>;
+      using PixelMap = std::map<uint16_t, NVGcolor*>;
 
    public:
       Module();

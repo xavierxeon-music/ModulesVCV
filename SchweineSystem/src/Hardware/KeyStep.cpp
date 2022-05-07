@@ -7,6 +7,7 @@ KeyStep::KeyStep()
    : SchweineSystem::Module()
    , SchweineSystem::MidiOutput(Midi::Device::KeyStep1)
    , connect(this, Panel::Connect, Panel::RGB_Connect)
+   , midiChannelSwitch(this, Panel::Channel1_Drums)
    , inputList(inputs)
    , patterns{0, 0, 0, 0}
    , channelSwitch(CvSwitch::ChannelCount::Sixteen)
@@ -106,7 +107,11 @@ void KeyStep::connectToMidiDevice()
 
 void KeyStep::sendProgramChange(uint8_t channel)
 {
-   const Midi::Channel midiChannel = Midi::Device::KeyStep1 + channel;
+   Midi::Channel midiChannel = Midi::Device::KeyStep1 + channel;
+   if (0 == channel && midiChannelSwitch.isOn())
+      midiChannel = Midi::Device::DrumTrigger;
+
+   std::cout << (uint16_t)midiChannel << std::endl;
 
    std::vector<unsigned char> progChangeMessage(2);
    progChangeMessage[0] = (Midi::Event::ProgrammChange | (midiChannel - 1));

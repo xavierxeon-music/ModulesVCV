@@ -26,5 +26,5 @@ void SchweineSystem::Module::configMeter(const uint16_t& valueId, std::string na
 void SchweineSystem::Module::configPixels(const uint16_t& valueId, const uint8_t& width, const uint8_t& height, std::string name)
 {
    const uint16_t size = width * height;
-   pixels[valueId] = new Color[size];
+   pixels[valueId] = new NVGcolor[size];
 }
