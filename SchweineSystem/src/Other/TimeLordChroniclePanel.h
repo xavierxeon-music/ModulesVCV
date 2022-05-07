@@ -4,7 +4,7 @@
 #include "TimeLordChronicle.h"
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLCDDisplay.h>
+#include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemLightMeter.h>
 
 struct TimeLordChronicle::Panel

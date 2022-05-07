@@ -118,10 +118,10 @@
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
     </g>
-    <g id="BusIn-light" serif:id="BusIn#light" transform="matrix(1,0,0,1,-27.8135,10.8256)">
+    <g id="BusIn-led" serif:id="BusIn#led" transform="matrix(1,0,0,1,-27.8135,10.8256)">
         <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
     </g>
-    <g id="BusOut-light" serif:id="BusOut#light" transform="matrix(1,0,0,1,4.18651,10.8256)">
+    <g id="BusOut-led" serif:id="BusOut#led" transform="matrix(1,0,0,1,4.18651,10.8256)">
         <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
     </g>
     <g>

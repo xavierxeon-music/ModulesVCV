@@ -10,7 +10,7 @@ FlameCC::FlameCC()
    , SchweineSystem::MidiOutput(Midi::Device::FlameCC)
    , connectTrigger()
    , voltageToCcValue(0.0, 5.0, 0.0, 127.0)
-   , connectionLight(lights)
+   , connectionLight(this)
    , inputList(inputs)
    , controllerValueStore{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 {

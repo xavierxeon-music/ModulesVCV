@@ -55,7 +55,7 @@ void TimeLordWidget::setup()
    makeOutput(this, Vec(117.41, 49.12), TimeLord::Panel::Channel2_Output);
    makeOutput(this, Vec(52.41, 49.12), TimeLord::Panel::Channel1_Output);
 
-   makeDisplay(this, Vec(10.00, 222.19), TimeLord::Panel::Pixels_Display, 128, 64);
+   makeOLED(this, Vec(10.00, 222.19), TimeLord::Panel::Pixels_Display, 128, 64);
 
    makeMeter(this, Vec(92.29, 151.83), 5, TimeLord::Panel::Value_Channel8_Strip);
    makeMeter(this, Vec(27.29, 151.83), 5, TimeLord::Panel::Value_Channel7_Strip);

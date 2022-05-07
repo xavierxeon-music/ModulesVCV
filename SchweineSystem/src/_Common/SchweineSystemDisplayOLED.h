@@ -1,5 +1,5 @@
-#ifndef SchweineSystemOLEDDisplayH
-#define SchweineSystemOLEDDisplayH
+#ifndef SchweineSystemDisplayOLEDH
+#define SchweineSystemDisplayOLEDH
 
 #include <rack.hpp>
 
@@ -11,7 +11,7 @@ namespace SchweineSystem
 {
    // 1 pixel margin on all sides, hence size is (width + 2) by (height + 2)
    // default colors are white on black background
-   namespace OLEDDisplay
+   namespace DisplayOLED
    {
       struct Font
       {
@@ -68,13 +68,13 @@ namespace SchweineSystem
          const uint8_t width;
          const uint8_t height;
       };
-   }; // namespace OLEDDisplay
+   }; // namespace DisplayOLED
 } // namespace SchweineSystem
 
-inline void makeDisplay(SchweineSystem::ModuleWidget* widget, rack::math::Vec pos, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
+inline void makeOLED(SchweineSystem::ModuleWidget* widget, rack::math::Vec pos, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
 {
-   rack::Widget* displayWidget = new SchweineSystem::OLEDDisplay::Widget(pos, widget->getSchweineModule(), pixelId, width, height);
+   rack::Widget* displayWidget = new SchweineSystem::DisplayOLED::Widget(pos, widget->getSchweineModule(), pixelId, width, height);
    widget->addChild(displayWidget);
 }
 
-#endif // NOT SchweineSystemOLEDDisplayH
+#endif // NOT SchweineSystemDisplayOLEDH

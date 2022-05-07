@@ -7,7 +7,7 @@ using namespace rack;
 #include <Tools/Range.h>
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLight.h>
+#include <SchweineSystemLED.h>
 #include <SchweineSystemMidiOutput.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
@@ -32,7 +32,7 @@ private:
    // midi
    dsp::BooleanTrigger connectTrigger;
    Range::Mapper voltageToCcValue;
-   SchweineSystem::Light connectionLight;
+   SchweineSystem::LED connectionLight;
    // outputs
    SchweineSystem::Input::List inputList;
    uint8_t controllerValueStore[16];

@@ -19,10 +19,10 @@ void Select::setup()
 
    configOutput(Panel::Output, "Output");
 
-   configDisplay(Panel::Text_Current_Display, "Current_Display");
-   configDisplay(Panel::Text_Max_Display, "Max_Display");
-   configDisplay(Panel::Text_Min_Display, "Min_Display");
-   configDisplay(Panel::Text_Total_Display, "Total_Display");
+   configText(Panel::Text_Current_Display, "Current_Display");
+   configText(Panel::Text_Max_Display, "Max_Display");
+   configText(Panel::Text_Min_Display, "Min_Display");
+   configText(Panel::Text_Total_Display, "Total_Display");
 }
 
 void SelectWidget::setup()
@@ -42,9 +42,9 @@ void SelectWidget::setup()
 
    makeOutput(this, Vec(50.83, 355.83), Select::Panel::Output);
 
-   makeDisplay(this, Vec(20.50, 201.48), 2, Select::Panel::Text_Current_Display, Select::Panel::RGB_Current_Display);
-   makeDisplay(this, Vec(30.80, 143.46), 2, Select::Panel::Text_Max_Display, Select::Panel::RGB_Max_Display);
-   makeDisplay(this, Vec(30.80, 100.62), 2, Select::Panel::Text_Min_Display, Select::Panel::RGB_Min_Display);
-   makeDisplay(this, Vec(30.80, 46.68), 2, Select::Panel::Text_Total_Display, Select::Panel::RGB_Total_Display);
+   makeLCD(this, Vec(20.50, 201.48), 2, Select::Panel::Text_Current_Display, Select::Panel::RGB_Current_Display);
+   makeLCD(this, Vec(30.80, 143.46), 2, Select::Panel::Text_Max_Display, Select::Panel::RGB_Max_Display);
+   makeLCD(this, Vec(30.80, 100.62), 2, Select::Panel::Text_Min_Display, Select::Panel::RGB_Min_Display);
+   makeLCD(this, Vec(30.80, 46.68), 2, Select::Panel::Text_Total_Display, Select::Panel::RGB_Total_Display);
 }
 

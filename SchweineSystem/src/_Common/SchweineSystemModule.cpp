@@ -13,7 +13,7 @@ void SchweineSystem::Module::updateDisplays()
    // do nothing
 }
 
-void SchweineSystem::Module::configDisplay(const uint16_t& textId, std::string name)
+void SchweineSystem::Module::configText(const uint16_t& textId, std::string name)
 {
    texts[textId] = std::string();
 }

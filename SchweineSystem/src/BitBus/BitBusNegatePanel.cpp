@@ -1,20 +1,11 @@
-#include "BitBusNegatePanel.h"
 #include "BitBusNegate.h"
+#include "BitBusNegatePanel.h"
 
-#include "SchweineSystemMaster.h"
+#include <SchweineSystemMaster.h>
 
 void BitBusNegate::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
-
-   configButton(Panel::Bit8_Latch, "Bit8_Latch");
-   configButton(Panel::Bit7_Latch, "Bit7_Latch");
-   configButton(Panel::Bit6_Latch, "Bit6_Latch");
-   configButton(Panel::Bit5_Latch, "Bit5_Latch");
-   configButton(Panel::Bit4_Latch, "Bit4_Latch");
-   configButton(Panel::Bit3_Latch, "Bit3_Latch");
-   configButton(Panel::Bit2_Latch, "Bit2_Latch");
-   configButton(Panel::Bit1_Latch, "Bit1_Latch");
 
    configInput(Panel::Bit8_GateIn, "Bit8_GateIn");
    configInput(Panel::Bit7_GateIn, "Bit7_GateIn");
@@ -26,31 +17,31 @@ void BitBusNegate::setup()
    configInput(Panel::Bit1_GateIn, "Bit1_GateIn");
 }
 
-BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
+void BitBusNegateWidget::setup()
 {
-   setModule(module);
    std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBusNegate.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 291.18175081000004), module, BitBusNegate::Panel::Bit8_Latch, BitBusNegate::Panel::Red_Bit8_Latch));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 257.43015081), module, BitBusNegate::Panel::Bit7_Latch, BitBusNegate::Panel::Red_Bit7_Latch));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 222.14545081), module, BitBusNegate::Panel::Bit6_Latch, BitBusNegate::Panel::Red_Bit6_Latch));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 186.65985081000002), module, BitBusNegate::Panel::Bit5_Latch, BitBusNegate::Panel::Red_Bit5_Latch));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 118.53265081), module, BitBusNegate::Panel::Bit4_Latch, BitBusNegate::Panel::Red_Bit4_Latch));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132500052, 153.30825081), module, BitBusNegate::Panel::Bit3_Latch, BitBusNegate::Panel::Red_Bit3_Latch));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 84.17175081), module, BitBusNegate::Panel::Bit2_Latch, BitBusNegate::Panel::Red_Bit2_Latch));
-   addParam(createLightParamCentered<VCVLightBezel<RedGreenBlueLight>>(Vec(29.231120132499996, 48.43375081000001), module, BitBusNegate::Panel::Bit1_Latch, BitBusNegate::Panel::Red_Bit1_Latch));
+   makeLEDButton(this, Vec(29.23, 291.18), BitBusNegate::Panel::Bit8_Latch, BitBusNegate::Panel::RGB_Bit8_Latch);
+   makeLEDButton(this, Vec(29.23, 257.43), BitBusNegate::Panel::Bit7_Latch, BitBusNegate::Panel::RGB_Bit7_Latch);
+   makeLEDButton(this, Vec(29.23, 222.15), BitBusNegate::Panel::Bit6_Latch, BitBusNegate::Panel::RGB_Bit6_Latch);
+   makeLEDButton(this, Vec(29.23, 186.66), BitBusNegate::Panel::Bit5_Latch, BitBusNegate::Panel::RGB_Bit5_Latch);
+   makeLEDButton(this, Vec(29.23, 118.53), BitBusNegate::Panel::Bit4_Latch, BitBusNegate::Panel::RGB_Bit4_Latch);
+   makeLEDButton(this, Vec(29.23, 153.31), BitBusNegate::Panel::Bit3_Latch, BitBusNegate::Panel::RGB_Bit3_Latch);
+   makeLEDButton(this, Vec(29.23, 84.17), BitBusNegate::Panel::Bit2_Latch, BitBusNegate::Panel::RGB_Bit2_Latch);
+   makeLEDButton(this, Vec(29.23, 48.43), BitBusNegate::Panel::Bit1_Latch, BitBusNegate::Panel::RGB_Bit1_Latch);
 
-   addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 291.49575081), module, BitBusNegate::Panel::Bit8_GateIn));
-   addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 257.74435081), module, BitBusNegate::Panel::Bit7_GateIn));
-   addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 222.45965081), module, BitBusNegate::Panel::Bit6_GateIn));
-   addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 186.97405081), module, BitBusNegate::Panel::Bit5_GateIn));
-   addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 118.84695081000001), module, BitBusNegate::Panel::Bit4_GateIn));
-   addInput(createInputCentered<PJ301MPort>(Vec(60.76937013250007, 153.62255081), module, BitBusNegate::Panel::Bit3_GateIn));
-   addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 84.48595081), module, BitBusNegate::Panel::Bit2_GateIn));
-   addInput(createInputCentered<PJ301MPort>(Vec(60.769370132500015, 48.748750810000004), module, BitBusNegate::Panel::Bit1_GateIn));
+   makeInput(this, Vec(60.77, 291.50),  BitBusNegate::Panel::Bit8_GateIn);
+   makeInput(this, Vec(60.77, 257.74),  BitBusNegate::Panel::Bit7_GateIn);
+   makeInput(this, Vec(60.77, 222.46),  BitBusNegate::Panel::Bit6_GateIn);
+   makeInput(this, Vec(60.77, 186.97),  BitBusNegate::Panel::Bit5_GateIn);
+   makeInput(this, Vec(60.77, 118.85),  BitBusNegate::Panel::Bit4_GateIn);
+   makeInput(this, Vec(60.77, 153.62),  BitBusNegate::Panel::Bit3_GateIn);
+   makeInput(this, Vec(60.77, 84.49),  BitBusNegate::Panel::Bit2_GateIn);
+   makeInput(this, Vec(60.77, 48.75),  BitBusNegate::Panel::Bit1_GateIn);
 
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(14.3535, 346.6866), module, BitBusNegate::Panel::Red_BusIn));
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(75.3535, 346.6866), module, BitBusNegate::Panel::Red_BusOut));
+   makeLED(this, Vec(14.35, 346.69), BitBusNegate::Panel::RGB_BusIn);
+   makeLED(this, Vec(75.35, 346.69), BitBusNegate::Panel::RGB_BusOut);
 }
+

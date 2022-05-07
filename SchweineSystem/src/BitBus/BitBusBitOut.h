@@ -1,13 +1,13 @@
 #ifndef BitBusBitOutH
 #define BitBusBitOutH
 
-#include <rack.hpp>
-using namespace rack;
 #include "BitBusCommon.h"
+#include <SchweineSystemModule.h>
+#include <SchweineSystemModuleWidget.h>
 
-#include "SchweineSystemCommon.h"
+#include <SchweineSystemCommon.h>
 
-class BitBusBitOut : public Module, public BitBusCommon
+class BitBusBitOut : public SchweineSystem::Module, public BitBusCommon
 {
 public:
    struct Panel;
@@ -27,9 +27,15 @@ private:
    SchweineSystem::Output::List outputList;
 };
 
-struct BitBusBitOutWidget : ModuleWidget
+// widget
+
+class BitBusBitOutWidget : public SchweineSystem::ModuleWidget
 {
+public:
    BitBusBitOutWidget(BitBusBitOut* module);
+
+private:
+   void setup();
 };
 
 #endif // BitBusBitOutH

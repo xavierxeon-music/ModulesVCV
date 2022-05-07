@@ -1,13 +1,14 @@
 #include "BitBusCommon.h"
 
-#include "SchweineSystemMaster.h"
+#include <SchweineSystemMaster.h>
+#include <SchweineSystemModule.h>
 
 BitBusCommon::ModelMap BitBusCommon::outputMap = BitBusCommon::ModelMap();
 BitBusCommon::ModelMap BitBusCommon::inputMap = BitBusCommon::ModelMap();
 
-BitBusCommon::BitBusCommon(Module* module)
-   : busInIndicator(module->lights)
-   , busOutIndicator(module->lights)
+BitBusCommon::BitBusCommon(SchweineSystem::Module* module)
+   : busInIndicator(module)
+   , busOutIndicator(module)
    , module(module)
 {
    module->leftExpander.producerMessage = new Message{};

@@ -6,15 +6,15 @@
 #include "SchweineSystemMaster.h"
 
 BitBusBitIn::BitBusBitIn()
-   : Module()
+   : SchweineSystem::Module()
    , BitBusCommon(this)
    , inputList(inputs)
 {
    setup();
 
    inputList.append({Panel::BitIn8, Panel::BitIn7, Panel::BitIn6, Panel::BitIn5, Panel::BitIn4, Panel::BitIn3, Panel::BitIn2, Panel::BitIn1});
-   busInIndicator.assign(Panel::Red_BusIn);
-   busOutIndicator.assign(Panel::Red_BusOut);
+   busInIndicator.assign(Panel::RGB_BusIn);
+   busOutIndicator.assign(Panel::RGB_BusOut);
 }
 
 BitBusBitIn::~BitBusBitIn()
@@ -66,6 +66,14 @@ void BitBusBitIn::process(const ProcessArgs& args)
    }
 
    sendByteToBus(boolField);
+}
+
+// widget
+
+BitBusBitInWidget::BitBusBitInWidget(BitBusBitIn* module)
+   : SchweineSystem::ModuleWidget(module)
+{
+   setup();
 }
 
 Model* modelBitBusBitIn = SchweineSystem::Master::the()->addModule<BitBusBitIn, BitBusBitInWidget>("BitBusBitIn");

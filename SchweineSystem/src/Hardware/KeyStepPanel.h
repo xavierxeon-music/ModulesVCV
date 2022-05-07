@@ -4,7 +4,6 @@
 #include "KeyStep.h"
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLCDDisplay.h>
 
 struct KeyStep::Panel
 {
@@ -19,10 +18,12 @@ struct KeyStep::Panel
       Channel2_Down = 5,
       Channel1_Up = 6,
       Channel1_Down = 7,
+      // switches
+      Channel1_Drums = 8,
       // ledbuttons
-      Connect = 8,
+      Connect = 9,
       // knobs
-      PARAMS_LEN = 9
+      PARAMS_LEN = 10
    };
 
    enum DisplayId
@@ -58,9 +59,9 @@ struct KeyStep::Panel
    enum LightId
    {
       // leds
-      // buttons
+      // ledbuttons
       RGB_Connect = 0,
-      // displays
+      // lcds
       RGB_Channel4_Pattern = 3,
       RGB_Channel3_Pattern = 6,
       RGB_Channel2_Pattern = 9,

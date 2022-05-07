@@ -4,7 +4,7 @@
 #include "Select.h"
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLCDDisplay.h>
+#include <SchweineSystemDisplayLCD.h>
 
 struct Select::Panel
 {

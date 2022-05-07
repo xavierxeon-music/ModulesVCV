@@ -9,7 +9,7 @@ Equalizer::Equalizer()
    , filter()
    , asNote(false)
    , quantiseTrigger()
-   , quantiseLight(lights)
+   , quantiseLight(this)
    , frequencyDisplay(this, Panel::Text_Frequency_Display, Panel::RGB_Frequency_Display)
 
 {

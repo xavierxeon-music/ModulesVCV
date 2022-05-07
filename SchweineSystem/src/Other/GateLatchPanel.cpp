@@ -56,13 +56,13 @@ void GateLatchWidget::setup()
    makeOutput(this, Vec(65.83, 99.24), GateLatch::Panel::Row2_Out);
    makeOutput(this, Vec(65.83, 63.81), GateLatch::Panel::Row1_Out);
 
-   makeLight(this, Vec(45.00, 311.85), GateLatch::Panel::RGB_Row8_Status1);
-   makeLight(this, Vec(45.00, 276.41), GateLatch::Panel::RGB_Row7_Status1);
-   makeLight(this, Vec(45.00, 240.98), GateLatch::Panel::RGB_Row6_Status1);
-   makeLight(this, Vec(45.00, 205.55), GateLatch::Panel::RGB_Row5_Status1);
-   makeLight(this, Vec(45.00, 170.11), GateLatch::Panel::RGB_Row4_Status1);
-   makeLight(this, Vec(45.00, 134.68), GateLatch::Panel::RGB_Row3_Status1);
-   makeLight(this, Vec(45.00, 99.24), GateLatch::Panel::RGB_Row2_Status1);
-   makeLight(this, Vec(45.00, 63.81), GateLatch::Panel::RGB_Row1_Status1);
+   makeLED(this, Vec(45.00, 311.85), GateLatch::Panel::RGB_Row8_Status1);
+   makeLED(this, Vec(45.00, 276.41), GateLatch::Panel::RGB_Row7_Status1);
+   makeLED(this, Vec(45.00, 240.98), GateLatch::Panel::RGB_Row6_Status1);
+   makeLED(this, Vec(45.00, 205.55), GateLatch::Panel::RGB_Row5_Status1);
+   makeLED(this, Vec(45.00, 170.11), GateLatch::Panel::RGB_Row4_Status1);
+   makeLED(this, Vec(45.00, 134.68), GateLatch::Panel::RGB_Row3_Status1);
+   makeLED(this, Vec(45.00, 99.24), GateLatch::Panel::RGB_Row2_Status1);
+   makeLED(this, Vec(45.00, 63.81), GateLatch::Panel::RGB_Row1_Status1);
 }
 

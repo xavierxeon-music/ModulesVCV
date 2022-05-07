@@ -6,8 +6,8 @@ using namespace rack;
 
 #include <Effect/StateVariableFilter.h>
 
-#include <SchweineSystemLCDDisplay.h>
-#include <SchweineSystemLight.h>
+#include <SchweineSystemDisplayLCD.h>
+#include <SchweineSystemLED.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
@@ -30,8 +30,8 @@ private:
    StateVariableFilter filter;
    bool asNote;
    dsp::BooleanTrigger quantiseTrigger;
-   SchweineSystem::Light quantiseLight;
-   SchweineSystem::LCDDisplay::Controller frequencyDisplay;
+   SchweineSystem::LED quantiseLight;
+   SchweineSystem::DisplayLCD::Controller frequencyDisplay;
 };
 
 class EqualizerWidget : public SchweineSystem::ModuleWidget

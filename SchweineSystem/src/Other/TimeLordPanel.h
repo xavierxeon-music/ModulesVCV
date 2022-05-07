@@ -5,7 +5,7 @@
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemLightMeter.h>
-#include <SchweineSystemOLEDDisplay.h>
+#include <SchweineSystemDisplayOLED.h>
 
 struct TimeLord::Panel
 {

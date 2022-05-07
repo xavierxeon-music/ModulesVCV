@@ -1,4 +1,4 @@
-#include "SchweineSystemOLEDDisplay.h"
+#include "SchweineSystemDisplayOLED.h"
 
 // fonts
 
@@ -869,10 +869,10 @@ static const uint16_t Font6x8[] = {
    0x4000, 0xa800, 0x1000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, // ~
 };
 
-SchweineSystem::OLEDDisplay::Font SchweineSystem::OLEDDisplay::Font::Small = {6, 8, Font6x8};
-SchweineSystem::OLEDDisplay::Font SchweineSystem::OLEDDisplay::Font::Normal = {7, 10, Font7x10};
-SchweineSystem::OLEDDisplay::Font SchweineSystem::OLEDDisplay::Font::Large = {11, 18, Font11x18};
-SchweineSystem::OLEDDisplay::Font SchweineSystem::OLEDDisplay::Font::Huge = {16, 26, Font16x26};
+SchweineSystem::DisplayOLED::Font SchweineSystem::DisplayOLED::Font::Small = {6, 8, Font6x8};
+SchweineSystem::DisplayOLED::Font SchweineSystem::DisplayOLED::Font::Normal = {7, 10, Font7x10};
+SchweineSystem::DisplayOLED::Font SchweineSystem::DisplayOLED::Font::Large = {11, 18, Font11x18};
+SchweineSystem::DisplayOLED::Font SchweineSystem::DisplayOLED::Font::Huge = {16, 26, Font16x26};
 
 static uint16_t compileIndex(const uint8_t x, const uint8_t y)
 {
@@ -881,7 +881,7 @@ static uint16_t compileIndex(const uint8_t x, const uint8_t y)
 
 // comntroller
 
-SchweineSystem::OLEDDisplay::Controller::Controller(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
+SchweineSystem::DisplayOLED::Controller::Controller(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
    : module(module)
    , pixelId(pixelId)
    , width(width)
@@ -890,12 +890,12 @@ SchweineSystem::OLEDDisplay::Controller::Controller(Module* module, const uint16
 {
 }
 
-void SchweineSystem::OLEDDisplay::Controller::setColor(const Color& newColor)
+void SchweineSystem::DisplayOLED::Controller::setColor(const Color& newColor)
 {
    color = newColor;
 }
 
-void SchweineSystem::OLEDDisplay::Controller::fill(const Color& fillColor)
+void SchweineSystem::DisplayOLED::Controller::fill(const Color& fillColor)
 {
    if (!module)
       return;
@@ -904,7 +904,7 @@ void SchweineSystem::OLEDDisplay::Controller::fill(const Color& fillColor)
       module->pixels[pixelId][index] = fillColor;
 }
 
-void SchweineSystem::OLEDDisplay::Controller::drawPixel(const uint8_t x, const uint8_t y)
+void SchweineSystem::DisplayOLED::Controller::drawPixel(const uint8_t x, const uint8_t y)
 {
    if (!module)
       return;
@@ -913,7 +913,7 @@ void SchweineSystem::OLEDDisplay::Controller::drawPixel(const uint8_t x, const u
    module->pixels[pixelId][index] = color;
 }
 
-void SchweineSystem::OLEDDisplay::Controller::drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
+void SchweineSystem::DisplayOLED::Controller::drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
 {
    const int16_t deltaX = abs((int16_t)x2 - (int16_t)x1);
    const int16_t deltaY = abs((int16_t)y2 - (int16_t)y1);
@@ -942,7 +942,7 @@ void SchweineSystem::OLEDDisplay::Controller::drawLine(uint8_t x1, uint8_t y1, u
    }
 }
 
-void SchweineSystem::OLEDDisplay::Controller::drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill)
+void SchweineSystem::DisplayOLED::Controller::drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill)
 {
    if (fill)
    {
@@ -963,7 +963,7 @@ void SchweineSystem::OLEDDisplay::Controller::drawRect(uint8_t x1, uint8_t y1, u
    }
 }
 
-void SchweineSystem::OLEDDisplay::Controller::writeText(const uint8_t x, const uint8_t y, const std::string& text, const Font& font, const Alignment& alignment)
+void SchweineSystem::DisplayOLED::Controller::writeText(const uint8_t x, const uint8_t y, const std::string& text, const Font& font, const Alignment& alignment)
 {
    uint8_t cursorX = x;
    uint8_t cursorY = y;
@@ -1020,7 +1020,7 @@ void SchweineSystem::OLEDDisplay::Controller::writeText(const uint8_t x, const u
 
 // widget
 
-SchweineSystem::OLEDDisplay::Widget::Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
+SchweineSystem::DisplayOLED::Widget::Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
    : rack::TransparentWidget()
    , module(module)
    , pixelId(pixelId)
@@ -1030,7 +1030,7 @@ SchweineSystem::OLEDDisplay::Widget::Widget(rack::math::Vec pos, Module* module,
    box.pos = rack::math::Vec(pos.x, pos.y);
 }
 
-void SchweineSystem::OLEDDisplay::Widget::drawLayer(const DrawArgs& args, int layer)
+void SchweineSystem::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
 {
    if (layer != 1)
       return;

@@ -4,7 +4,7 @@
 #include "GateLatch.h"
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLight.h>
+#include <SchweineSystemLED.h>
 
 struct GateLatch::Panel
 {

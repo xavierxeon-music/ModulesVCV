@@ -4,13 +4,14 @@
 #include "BitBusMeterAndFreeze.h"
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLight.h>
+#include <SchweineSystemLED.h>
 
 struct BitBusMeterAndFreeze::Panel
 {
    enum ParamId
    {
       // buttons
+      // switches
       // ledbuttons
       FlipSample = 0,
       FlipFreeze = 1,
@@ -20,6 +21,8 @@ struct BitBusMeterAndFreeze::Panel
 
    enum DisplayId
    {
+      // lcd
+      // oled
       DISPLAYS_LEN = 0
    };
 
@@ -53,10 +56,10 @@ struct BitBusMeterAndFreeze::Panel
       RGB_Bit1_Status1 = 21,
       RGB_BusIn = 24,
       RGB_BusOut = 27,
-      // buttons
+      // ledbuttons
       RGB_FlipSample = 30,
       RGB_FlipFreeze = 33,
-      // displays
+      // lcds
       LIGHTS_LEN = 36
    };
 

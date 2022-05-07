@@ -5,7 +5,7 @@
 #include <Music/Note.h>
 
 #include <SchweineSystemJson.h>
-#include <SchweineSystemLCDDisplay.h>
+#include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemMaster.h>
 
 VCMCReceiver::VCMCReceiver()
@@ -13,7 +13,7 @@ VCMCReceiver::VCMCReceiver()
    , midiInput()
    , connectTrigger()
    , ccValueToVoltage(0.0, 127, 0, 10.0)
-   , connectionLight(lights)
+   , connectionLight(this)
    , tickCounter(6)
    , doNotAdvanceTempo(false)
    , tempo()
@@ -24,7 +24,7 @@ VCMCReceiver::VCMCReceiver()
    , resetTrigger()
    , tempoDisplay(this, Panel::Text_Clock, Panel::RGB_Clock)
    , gates{false, false, false, false, false, false, false, false}
-   , lightListGate(lights)
+   , lightListGate(this)
    , gateList(outputs)
    , cvValues{0, 0, 0, 0, 0, 0, 0, 0}
    , lightMeterListCV(this)

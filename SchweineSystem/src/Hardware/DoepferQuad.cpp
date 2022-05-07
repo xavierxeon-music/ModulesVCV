@@ -9,7 +9,7 @@ DoepferQuad::DoepferQuad()
    , connectTrigger()
    , voltageToNote(0.0, 10.0, 24.0, 127.0)
    , voltageToCcValue(0.0, 10.0, 0.0, 127.0)
-   , connectionLight(lights)
+   , connectionLight(this)
    , channelMap()
 {
    setup();
@@ -88,6 +88,8 @@ void DoepferQuad::connectToMidiDevice()
       sendControllerChange(midiChannel, Midi::ControllerMessage::AllNotesOff, 0);
    }
 }
+
+// widget
 
 DoepferQuadWidget::DoepferQuadWidget(DoepferQuad* module)
    : SchweineSystem::ModuleWidget(module)

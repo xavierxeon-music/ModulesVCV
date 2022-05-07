@@ -8,7 +8,7 @@ GateLatch::GateLatch()
    : SchweineSystem::Module()
    , inputList(inputs)
    , outputList(outputs)
-   , lightList(lights)
+   , lightList(this)
    , triggers{}
    , activity{}
    , latches{false, false, false, false, false, false, false, false}

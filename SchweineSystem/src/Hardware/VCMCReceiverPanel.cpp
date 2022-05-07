@@ -37,7 +37,7 @@ void VCMCReceiver::setup()
    configOutput(Panel::Channel1_Slider7_Output, "Channel1_Slider7_Output");
    configOutput(Panel::Channel1_CV7_Output, "Channel1_CV7_Output");
 
-   configDisplay(Panel::Text_Clock, "Clock");
+   configText(Panel::Text_Clock, "Clock");
 
    configMeter(Panel::Value_Channel8_Slider_Strip, "Channel8_Slider_Strip");
    configMeter(Panel::Value_Channel8_CV_Strip, "Channel8_CV_Strip");
@@ -94,16 +94,16 @@ void VCMCReceiverWidget::setup()
    makeOutput(this, Vec(115.52, 52.03), VCMCReceiver::Panel::Channel1_Slider7_Output);
    makeOutput(this, Vec(74.36, 52.03), VCMCReceiver::Panel::Channel1_CV7_Output);
 
-   makeLight(this, Vec(53.38, 274.65), VCMCReceiver::Panel::RGB_Channel8_Gate_Status1);
-   makeLight(this, Vec(54.02, 242.85), VCMCReceiver::Panel::RGB_Channel7_Gate1_Status1);
-   makeLight(this, Vec(54.02, 211.04), VCMCReceiver::Panel::RGB_Channel6_Gate2_Status1);
-   makeLight(this, Vec(54.02, 179.24), VCMCReceiver::Panel::RGB_Channel5_Gate3_Status1);
-   makeLight(this, Vec(54.02, 147.44), VCMCReceiver::Panel::RGB_Channel4_Gate4_Status1);
-   makeLight(this, Vec(54.02, 115.64), VCMCReceiver::Panel::RGB_Channel3_Gate5_Status1);
-   makeLight(this, Vec(54.02, 83.83), VCMCReceiver::Panel::RGB_Channel2_Gate6_Status1);
-   makeLight(this, Vec(54.02, 52.03), VCMCReceiver::Panel::RGB_Channel1_Gate7_Status1);
+   makeLED(this, Vec(53.38, 274.65), VCMCReceiver::Panel::RGB_Channel8_Gate_Status1);
+   makeLED(this, Vec(54.02, 242.85), VCMCReceiver::Panel::RGB_Channel7_Gate1_Status1);
+   makeLED(this, Vec(54.02, 211.04), VCMCReceiver::Panel::RGB_Channel6_Gate2_Status1);
+   makeLED(this, Vec(54.02, 179.24), VCMCReceiver::Panel::RGB_Channel5_Gate3_Status1);
+   makeLED(this, Vec(54.02, 147.44), VCMCReceiver::Panel::RGB_Channel4_Gate4_Status1);
+   makeLED(this, Vec(54.02, 115.64), VCMCReceiver::Panel::RGB_Channel3_Gate5_Status1);
+   makeLED(this, Vec(54.02, 83.83), VCMCReceiver::Panel::RGB_Channel2_Gate6_Status1);
+   makeLED(this, Vec(54.02, 52.03), VCMCReceiver::Panel::RGB_Channel1_Gate7_Status1);
 
-   makeDisplay(this, Vec(58.10, 343.59), 3, VCMCReceiver::Panel::Text_Clock, VCMCReceiver::Panel::RGB_Clock);
+   makeLCD(this, Vec(58.10, 343.59), 3, VCMCReceiver::Panel::Text_Clock, VCMCReceiver::Panel::RGB_Clock);
 
    makeMeter(this, Vec(131.70, 261.65), 5, VCMCReceiver::Panel::Value_Channel8_Slider_Strip);
    makeMeter(this, Vec(90.54, 261.65), 5, VCMCReceiver::Panel::Value_Channel8_CV_Strip);

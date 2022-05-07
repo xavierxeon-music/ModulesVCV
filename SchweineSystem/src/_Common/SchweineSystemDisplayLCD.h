@@ -1,5 +1,5 @@
-#ifndef SchweineSystemLCDDisplayH
-#define SchweineSystemLCDDisplayH
+#ifndef SchweineSystemDisplayLCDH
+#define SchweineSystemDisplayLCDH
 
 #include <rack.hpp>
 
@@ -9,7 +9,7 @@
 
 namespace SchweineSystem
 {
-   namespace LCDDisplay
+   namespace DisplayLCD
    {
       // 16 with per digit + 2 margin
       // 24 height
@@ -71,13 +71,13 @@ namespace SchweineSystem
          std::shared_ptr<rack::Font> font;
          std::string fontPath;
       };
-   } // namespace LCDDisplay
+   } // namespace DisplayLCD
 } // namespace SchweineSystem
 
-inline void makeDisplay(SchweineSystem::ModuleWidget* widget, rack::math::Vec pos, const uint8_t& digitCount, const uint16_t& textId, const uint16_t& rgbId)
+inline void makeLCD(SchweineSystem::ModuleWidget* widget, rack::math::Vec pos, const uint8_t& digitCount, const uint16_t& textId, const uint16_t& rgbId)
 {
-   rack::Widget* displayWidget = new SchweineSystem::LCDDisplay::Widget(pos, widget->getSchweineModule(), digitCount, textId, rgbId);
+   rack::Widget* displayWidget = new SchweineSystem::DisplayLCD::Widget(pos, widget->getSchweineModule(), digitCount, textId, rgbId);
    widget->addChild(displayWidget);
 }
 
-#endif // NOT SchweineSystemLCDDisplayH
+#endif // NOT SchweineSystemDisplayLCDH

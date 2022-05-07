@@ -4,12 +4,17 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include "SchweineSystemLight.h"
+#include "SchweineSystemLED.h"
+
+namespace SchweineSystem
+{
+   class Module;
+}
 
 class BitBusCommon
 {
 public:
-   BitBusCommon(Module* module);
+   BitBusCommon(SchweineSystem::Module* module);
    virtual ~BitBusCommon();
 
 protected:
@@ -22,8 +27,8 @@ protected:
    uint8_t getByteFromBus();
 
 protected:
-   SchweineSystem::Light busInIndicator;
-   SchweineSystem::Light busOutIndicator;
+   SchweineSystem::LED busInIndicator;
+   SchweineSystem::LED busOutIndicator;
 
 private:
    using ModelMap = std::map<Model*, bool>;
@@ -38,7 +43,7 @@ private:
 private:
    static ModelMap outputMap;
    static ModelMap inputMap;
-   Module* module;
+   SchweineSystem::Module* module;
 };
 
 #endif // NOT BitBusCommonH

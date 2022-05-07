@@ -6,13 +6,13 @@
 #include "SchweineSystemMaster.h"
 
 BitBusCVIn::BitBusCVIn()
-   : Module()
+   : SchweineSystem::Module()
    , BitBusCommon(this)
    , inputMapper(-5.0, 5.0, 0.0, 255.0)
 {
    setup();
 
-   busOutIndicator.assign(Panel::Red_BusOut);
+   busOutIndicator.assign(Panel::RGB_BusOut);
 }
 
 void BitBusCVIn::onAdd(const AddEvent& e)
@@ -43,6 +43,14 @@ void BitBusCVIn::process(const ProcessArgs& args)
    }
 
    sendByteToBus(boolField);
+}
+
+// widget
+
+BitBusCVInWidget::BitBusCVInWidget(BitBusCVIn* module)
+   : SchweineSystem::ModuleWidget(module)
+{
+   setup();
 }
 
 Model* modelBitBusCVIn = SchweineSystem::Master::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn");

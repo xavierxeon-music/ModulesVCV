@@ -8,7 +8,7 @@
 BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    : SchweineSystem::Module()
    , BitBusCommon(this)
-   , lightList(lights)
+   , lightList(this)
    , freezTrigger()
    , freezeMode(false)
    , sampleTrigger()

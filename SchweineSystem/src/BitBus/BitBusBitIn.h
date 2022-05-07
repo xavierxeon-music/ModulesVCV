@@ -1,13 +1,13 @@
 #ifndef BitBusBitInH
 #define BitBusBitInH
 
-#include <rack.hpp>
-using namespace rack;
 #include "BitBusCommon.h"
+#include <SchweineSystemModule.h>
+#include <SchweineSystemModuleWidget.h>
 
-#include "SchweineSystemCommon.h"
+#include <SchweineSystemCommon.h>
 
-class BitBusBitIn : public Module, public BitBusCommon
+class BitBusBitIn : public SchweineSystem::Module, public BitBusCommon
 {
 public:
    struct Panel;
@@ -27,9 +27,13 @@ private:
    SchweineSystem::Input::List inputList;
 };
 
-struct BitBusBitInWidget : ModuleWidget
+class BitBusBitInWidget : public SchweineSystem::ModuleWidget
 {
+public:
    BitBusBitInWidget(BitBusBitIn* module);
+
+private:
+   void setup();
 };
 
 #endif // BitBusBitInH

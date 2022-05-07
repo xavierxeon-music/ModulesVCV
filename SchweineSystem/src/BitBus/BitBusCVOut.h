@@ -1,13 +1,14 @@
 #ifndef BitBusCVOutH
 #define BitBusCVOutH
 
-#include <rack.hpp>
-using namespace rack;
 #include "BitBusCommon.h"
+#include <SchweineSystemModule.h>
+#include <SchweineSystemModuleWidget.h>
 
 #include <Tools/Range.h>
 
-class BitBusCVOut : public Module, public BitBusCommon
+
+class BitBusCVOut : public SchweineSystem::Module, public BitBusCommon
 {
 public:
    struct Panel;
@@ -27,9 +28,13 @@ private:
    Range::Mapper outputMapper;
 };
 
-struct BitBusCVOutWidget : ModuleWidget
+class BitBusCVOutWidget : public SchweineSystem::ModuleWidget
 {
+public:
    BitBusCVOutWidget(BitBusCVOut* module);
+
+private:
+   void setup();
 };
 
 #endif // BitBusCVOutH

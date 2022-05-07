@@ -26,6 +26,11 @@ class Headers(Common):
             name = button['name']
             line(2, f'{name} = {counter},')
             counter += 1
+        line(2, '// switches')
+        for switch in self.switches:
+            name = switch['name']
+            line(2, f'{name} = {counter},')
+            counter += 1
         line(2, '// ledbuttons')
         for ledbutton in self.ledbuttons:
             name = ledbutton['name']
@@ -46,8 +51,8 @@ class Headers(Common):
         line(1, 'enum DisplayId')
         line(1, '{')
         line(2, '// lcd')
-        for display in self.displays:
-            name = display['name']
+        for lcd in self.lcds:
+            name = lcd['name']
             line(2, f'Text_{name} = {counter},')
             counter += 1
         line(2, '// oled')
@@ -104,18 +109,18 @@ class Headers(Common):
         line(1, 'enum LightId')
         line(1, '{')
         line(2, '// leds')
-        for light in self.lights:
-            name = light['name']
+        for led in self.leds:
+            name = led['name']
             line(2, f'RGB_{name} = {counter},')
             counter += 3
-        line(2, '// buttons')
+        line(2, '// ledbuttons')
         for ledbutton in self.ledbuttons:
             name = ledbutton['name']
             line(2, f'RGB_{name} = {counter},')
             counter += 3
-        line(2, '// displays')
-        for display in self.displays:
-            name = display['name']
+        line(2, '// lcds')
+        for lcd in self.lcds:
+            name = lcd['name']
             line(2, f'RGB_{name} = {counter},')
             counter += 3
         line(2, f'LIGHTS_LEN = {counter}')
@@ -137,14 +142,14 @@ class Headers(Common):
             line(0)
 
             line(0, '#include <SchweineSystemCommon.h>')
-            if self.displays:
-                line(0, '#include <SchweineSystemLCDDisplay.h>')
-            if self.lights:
-                line(0, '#include <SchweineSystemLight.h>')
+            if self.oleds:
+                line(0, '#include <SchweineSystemDisplayLCD.h>')
+            if self.leds:
+                line(0, '#include <SchweineSystemLED.h>')
             if self.meters:
                 line(0, '#include <SchweineSystemLightMeter.h>')
             if self.oleds:
-                line(0, '#include <SchweineSystemOLEDDisplay.h>')
+                line(0, '#include <SchweineSystemDisplayOLED.h>')
             line(0)
 
             line(0, f'struct {self.moduleName}::Panel')
@@ -199,6 +204,8 @@ class Headers(Common):
             line(1, 'void setup();')
             line(0, '};')
 
+            line(0)
+            line(0, '// widget')
             line(0)
 
             line(0, f'class {self.moduleName}Widget : public SchweineSystem::ModuleWidget')

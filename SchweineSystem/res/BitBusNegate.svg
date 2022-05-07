@@ -70,7 +70,7 @@
             <rect x="13.921" y="296.737" width="168.729" height="3.935" style="fill:rgb(191,191,191);"/>
         </g>
         <g id="Bit8">
-            <g id="Latch-latch" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,120.54)">
+            <g id="Latch-ledbutton" serif:id="Latch#ledbutton" transform="matrix(0.23319,0,0,0.175002,66.387,120.54)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
             </g>
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,112.334)">
@@ -81,7 +81,7 @@
             </g>
         </g>
         <g id="Bit7">
-            <g id="Latch-latch1" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,86.7884)">
+            <g id="Latch-ledbutton1" serif:id="Latch#ledbutton" transform="matrix(0.23319,0,0,0.175002,66.387,86.7884)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
             </g>
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,78.6945)">
@@ -92,7 +92,7 @@
             </g>
         </g>
         <g id="Bit6">
-            <g id="Latch-latch2" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,51.5037)">
+            <g id="Latch-ledbutton2" serif:id="Latch#ledbutton" transform="matrix(0.23319,0,0,0.175002,66.387,51.5037)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
             </g>
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,43.3266)">
@@ -103,7 +103,7 @@
             </g>
         </g>
         <g id="Bit5">
-            <g id="Latch-latch3" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,16.0181)">
+            <g id="Latch-ledbutton3" serif:id="Latch#ledbutton" transform="matrix(0.23319,0,0,0.175002,66.387,16.0181)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
             </g>
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,8.01938)">
@@ -114,7 +114,7 @@
             </g>
         </g>
         <g id="Bit4">
-            <g id="Latch-latch4" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-52.1091)">
+            <g id="Latch-ledbutton4" serif:id="Latch#ledbutton" transform="matrix(0.23319,0,0,0.175002,66.387,-52.1091)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
             </g>
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,-60.2029)">
@@ -125,7 +125,7 @@
             </g>
         </g>
         <g id="Bit3" transform="matrix(1,0,0,1,7.81597e-14,34.7756)">
-            <g id="Latch-latch5" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-52.1091)">
+            <g id="Latch-ledbutton5" serif:id="Latch#ledbutton" transform="matrix(0.23319,0,0,0.175002,66.387,-52.1091)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
             </g>
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,-60.2029)">
@@ -136,7 +136,7 @@
             </g>
         </g>
         <g id="Bit2">
-            <g id="Latch-latch6" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-86.47)">
+            <g id="Latch-ledbutton6" serif:id="Latch#ledbutton" transform="matrix(0.23319,0,0,0.175002,66.387,-86.47)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
             </g>
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,-94.5002)">
@@ -147,7 +147,7 @@
             </g>
         </g>
         <g id="Bit1">
-            <g id="Latch-latch7" serif:id="Latch#latch" transform="matrix(0.23319,0,0,0.175002,66.387,-122.208)">
+            <g id="Latch-ledbutton7" serif:id="Latch#ledbutton" transform="matrix(0.23319,0,0,0.175002,66.387,-122.208)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(191,191,191);"/>
             </g>
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,-130.158)">
@@ -158,10 +158,10 @@
             </g>
         </g>
     </g>
-    <g id="BusIn-light" serif:id="BusIn#light" transform="matrix(1,0,0,1,-27.8135,10.8256)">
+    <g id="BusIn-led" serif:id="BusIn#led" transform="matrix(1,0,0,1,-27.8135,10.8256)">
         <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
     </g>
-    <g id="BusOut-light" serif:id="BusOut#light" transform="matrix(1,0,0,1,33.1865,10.8256)">
+    <g id="BusOut-led" serif:id="BusOut#led" transform="matrix(1,0,0,1,33.1865,10.8256)">
         <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
     </g>
     <g transform="matrix(1,0,0,1,15,0)">

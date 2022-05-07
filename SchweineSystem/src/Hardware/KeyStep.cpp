@@ -6,17 +6,13 @@
 KeyStep::KeyStep()
    : SchweineSystem::Module()
    , SchweineSystem::MidiOutput(Midi::Device::KeyStep1)
-   , connectTrigger()
-   , connectionLight(lights)
+   , connect(this, Panel::Connect, Panel::RGB_Connect)
    , inputList(inputs)
    , patterns{0, 0, 0, 0}
-   , inputMapper(0, 10, 0, 15)
    , channelSwitch(CvSwitch::ChannelCount::Sixteen)
    , displayList(this)
-   , downButtonList(params)
-   , upButtonList(params)
-   , downTriggers{}
-   , upTriggers{}
+   , downButtonList(this)
+   , upButtonList(this)
 {
    setup();
 
@@ -46,13 +42,12 @@ KeyStep::KeyStep()
       updateDisplay(channel);
    }
 
-   connectionLight.assign(Panel::RGB_Connect);
    connectToMidiDevice();
 }
 
 void KeyStep::process(const ProcessArgs& args)
 {
-   if (connectTrigger.process(params[Panel::Connect].getValue() > 3.0))
+   if (connect.isTriggered())
       connectToMidiDevice();
 
    for (uint8_t channel = 0; channel < 4; channel++)
@@ -61,17 +56,14 @@ void KeyStep::process(const ProcessArgs& args)
 
       if (!inputList[channel]->isConnected())
       {
-         const bool downPressed = downButtonList[channel]->getValue();
-         const bool upPressed = upButtonList[channel]->getValue();
-
-         if (downTriggers[channel].process(downPressed))
+         if (downButtonList[channel]->isTriggered())
          {
             if (0 == newPattern)
                newPattern = 15;
             else
                newPattern--;
          }
-         else if (upTriggers[channel].process(upPressed))
+         else if (upButtonList[channel]->isTriggered())
          {
             if (15 == newPattern)
                newPattern = 0;
@@ -82,7 +74,6 @@ void KeyStep::process(const ProcessArgs& args)
       else
       {
          const float voltage = inputList[channel]->getVoltage();
-         //newPattern = static_cast<uint8_t>(inputMapper(voltage));
          newPattern = channelSwitch.index(voltage);
       }
 
@@ -99,12 +90,12 @@ void KeyStep::process(const ProcessArgs& args)
 
 void KeyStep::connectToMidiDevice()
 {
-   connectionLight.setColor(SchweineSystem::Color{255, 0, 0});
+   connect.setColor(SchweineSystem::Color{255, 0, 0});
 
    if (!open())
       return;
 
-   connectionLight.setColor(SchweineSystem::Color{0, 255, 0});
+   connect.setColor(SchweineSystem::Color{0, 255, 0});
 
    for (uint8_t channel = 0; channel < 4; channel++)
    {

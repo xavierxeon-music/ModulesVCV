@@ -1,7 +1,7 @@
-#include "BitBusBitOutPanel.h"
 #include "BitBusBitOut.h"
+#include "BitBusBitOutPanel.h"
 
-#include "SchweineSystemMaster.h"
+#include <SchweineSystemMaster.h>
 
 void BitBusBitOut::setup()
 {
@@ -17,22 +17,22 @@ void BitBusBitOut::setup()
    configOutput(Panel::BitOut1, "BitOut1");
 }
 
-BitBusBitOutWidget::BitBusBitOutWidget(BitBusBitOut* module)
+void BitBusBitOutWidget::setup()
 {
-   setModule(module);
    std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBusBitOut.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 291.61075081), module, BitBusBitOut::Panel::BitOut8));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 256.85925081), module, BitBusBitOut::Panel::BitOut7));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 187.35645081), module, BitBusBitOut::Panel::BitOut6));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 222.10785081), module, BitBusBitOut::Panel::BitOut5));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 152.60505081), module, BitBusBitOut::Panel::BitOut4));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 117.85365081), module, BitBusBitOut::Panel::BitOut3));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 83.10225081), module, BitBusBitOut::Panel::BitOut2));
-   addOutput(createOutputCentered<PJ301MPort>(Vec(30.000044857999995, 48.35075081000001), module, BitBusBitOut::Panel::BitOut1));
+   makeOutput(this, Vec(30.00, 291.61), BitBusBitOut::Panel::BitOut8);
+   makeOutput(this, Vec(30.00, 256.86), BitBusBitOut::Panel::BitOut7);
+   makeOutput(this, Vec(30.00, 187.36), BitBusBitOut::Panel::BitOut6);
+   makeOutput(this, Vec(30.00, 222.11), BitBusBitOut::Panel::BitOut5);
+   makeOutput(this, Vec(30.00, 152.61), BitBusBitOut::Panel::BitOut4);
+   makeOutput(this, Vec(30.00, 117.85), BitBusBitOut::Panel::BitOut3);
+   makeOutput(this, Vec(30.00, 83.10), BitBusBitOut::Panel::BitOut2);
+   makeOutput(this, Vec(30.00, 48.35), BitBusBitOut::Panel::BitOut1);
 
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(14.3535, 346.6866), module, BitBusBitOut::Panel::Red_BusIn));
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(46.35351, 346.6866), module, BitBusBitOut::Panel::Red_BusOut));
+   makeLED(this, Vec(14.35, 346.69), BitBusBitOut::Panel::RGB_BusIn);
+   makeLED(this, Vec(46.35, 346.69), BitBusBitOut::Panel::RGB_BusOut);
 }
+

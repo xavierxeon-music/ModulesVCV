@@ -19,7 +19,7 @@ void Equalizer::setup()
 
    configOutput(Panel::AudioOutput, "AudioOutput");
 
-   configDisplay(Panel::Text_Frequency_Display, "Frequency_Display");
+   configText(Panel::Text_Frequency_Display, "Frequency_Display");
 }
 
 void EqualizerWidget::setup()
@@ -41,6 +41,6 @@ void EqualizerWidget::setup()
 
    makeOutput(this, Vec(80.83, 355.83), Equalizer::Panel::AudioOutput);
 
-   makeDisplay(this, Vec(11.50, 57.49), 5, Equalizer::Panel::Text_Frequency_Display, Equalizer::Panel::RGB_Frequency_Display);
+   makeLCD(this, Vec(11.50, 57.49), 5, Equalizer::Panel::Text_Frequency_Display, Equalizer::Panel::RGB_Frequency_Display);
 }
 

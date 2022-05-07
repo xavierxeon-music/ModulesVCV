@@ -4,8 +4,8 @@
 #include "VCMCReceiver.h"
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLCDDisplay.h>
-#include <SchweineSystemLight.h>
+#include <SchweineSystemDisplayLCD.h>
+#include <SchweineSystemLED.h>
 #include <SchweineSystemLightMeter.h>
 
 struct VCMCReceiver::Panel

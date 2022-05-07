@@ -1,7 +1,7 @@
-#include "BitBusCVOutPanel.h"
 #include "BitBusCVOut.h"
+#include "BitBusCVOutPanel.h"
 
-#include "SchweineSystemMaster.h"
+#include <SchweineSystemMaster.h>
 
 void BitBusCVOut::setup()
 {
@@ -10,14 +10,14 @@ void BitBusCVOut::setup()
    configOutput(Panel::CVOut, "CVOut");
 }
 
-BitBusCVOutWidget::BitBusCVOutWidget(BitBusCVOut* module)
+void BitBusCVOutWidget::setup()
 {
-   setModule(module);
    std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBusCVOut.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   addOutput(createOutputCentered<PJ301MPort>(Vec(35.826544858000005, 169.98075181000002), module, BitBusCVOut::Panel::CVOut));
+   makeOutput(this, Vec(35.83, 169.98), BitBusCVOut::Panel::CVOut);
 
-   addChild(createLightCentered<MediumLight<RedGreenBlueLight>>(Vec(14.3535, 346.6866), module, BitBusCVOut::Panel::Red_BusIn));
+   makeLED(this, Vec(14.35, 346.69), BitBusCVOut::Panel::RGB_BusIn);
 }
+

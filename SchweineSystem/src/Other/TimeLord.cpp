@@ -217,28 +217,28 @@ void TimeLord::updateDisplays()
    displayController.setColor(SchweineSystem::Color{0, 0, 0});
 
    if (Division == displayMode)
-      displayController.writeText(30, 1, "Division", SchweineSystem::OLEDDisplay::Font::Normal);
+      displayController.writeText(30, 1, "Division", SchweineSystem::DisplayOLED::Font::Normal);
    else if (Length == displayMode)
-      displayController.writeText(30, 1, "Length", SchweineSystem::OLEDDisplay::Font::Normal);
+      displayController.writeText(30, 1, "Length", SchweineSystem::DisplayOLED::Font::Normal);
    else if (StageCount == displayMode)
-      displayController.writeText(30, 1, "Stage Count", SchweineSystem::OLEDDisplay::Font::Normal);
+      displayController.writeText(30, 1, "Stage Count", SchweineSystem::DisplayOLED::Font::Normal);
    else
-      displayController.writeText(30, 1, "Current Stage", SchweineSystem::OLEDDisplay::Font::Normal);
+      displayController.writeText(30, 1, "Current Stage", SchweineSystem::DisplayOLED::Font::Normal);
 
    if (dataReceive)
    {
       displayController.setColor(SchweineSystem::Color{255, 255, 255});
-      displayController.writeText(5, 25, "?", SchweineSystem::OLEDDisplay::Font::Huge);
+      displayController.writeText(5, 25, "?", SchweineSystem::DisplayOLED::Font::Huge);
    }
    else if (dataApply)
    {
       displayController.setColor(SchweineSystem::Color{255, 255, 255});
-      displayController.writeText(5, 25, "@", SchweineSystem::OLEDDisplay::Font::Huge);
+      displayController.writeText(5, 25, "@", SchweineSystem::DisplayOLED::Font::Huge);
    }
    else
    {
       displayController.setColor(SchweineSystem::Color{255, 255, 255});
-      displayController.writeText(5, 25, std::to_string(bankIndex), SchweineSystem::OLEDDisplay::Font::Huge);
+      displayController.writeText(5, 25, std::to_string(bankIndex), SchweineSystem::DisplayOLED::Font::Huge);
    }
 
    displayController.setColor(SchweineSystem::Color{255, 255, 255});
@@ -263,7 +263,7 @@ void TimeLord::updateDisplays()
       else
          text += std::to_string(polyRamp->getCurrentStageIndex());
 
-      displayController.writeText(x, y, text, SchweineSystem::OLEDDisplay::Font::Normal);
+      displayController.writeText(x, y, text, SchweineSystem::DisplayOLED::Font::Normal);
    }
 }
 

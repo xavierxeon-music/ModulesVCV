@@ -8,8 +8,8 @@ using namespace rack;
 #include <Tools/Counter.h>
 #include <Tools/Range.h>
 
-#include <SchweineSystemLCDDisplay.h>
-#include <SchweineSystemLight.h>
+#include <SchweineSystemDisplayLCD.h>
+#include <SchweineSystemLED.h>
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
@@ -39,7 +39,7 @@ private:
    midi::InputQueue midiInput;
    dsp::BooleanTrigger connectTrigger;
    Range::Mapper ccValueToVoltage;
-   SchweineSystem::Light connectionLight;
+   SchweineSystem::LED connectionLight;
    // tempo
    Counter tickCounter;
    bool doNotAdvanceTempo;
@@ -49,10 +49,10 @@ private:
    dsp::BooleanTrigger tickOverrideTrigger;
    dsp::PulseGenerator clockReset;
    dsp::BooleanTrigger resetTrigger;
-   SchweineSystem::LCDDisplay::Controller tempoDisplay;
+   SchweineSystem::DisplayLCD::Controller tempoDisplay;
    // gates
    bool gates[8];
-   SchweineSystem::Light::List lightListGate;
+   SchweineSystem::LED::List lightListGate;
    SchweineSystem::Output::List gateList;
    // cv
    uint8_t cvValues[8];

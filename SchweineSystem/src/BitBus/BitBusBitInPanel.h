@@ -3,40 +3,58 @@
 
 #include "BitBusBitIn.h"
 
+#include <SchweineSystemCommon.h>
+#include <SchweineSystemLED.h>
+
 struct BitBusBitIn::Panel
 {
    enum ParamId
    {
-      PARAMS_LEN
+      // buttons
+      // switches
+      // ledbuttons
+      // knobs
+      PARAMS_LEN = 0
+   };
+
+   enum DisplayId
+   {
+      // lcd
+      // oled
+      DISPLAYS_LEN = 0
+   };
+
+   enum MeterId
+   {
+      METERS_LEN = 0
    };
 
    enum InputId
    {
-      BitIn8,
-      BitIn7,
-      BitIn6,
-      BitIn5,
-      BitIn4,
-      BitIn3,
-      BitIn2,
-      BitIn1,
-      INPUTS_LEN
+      BitIn8 = 0,
+      BitIn7 = 1,
+      BitIn6 = 2,
+      BitIn5 = 3,
+      BitIn4 = 4,
+      BitIn3 = 5,
+      BitIn2 = 6,
+      BitIn1 = 7,
+      INPUTS_LEN = 8
    };
 
    enum OutputId
    {
-      OUTPUTS_LEN
+      OUTPUTS_LEN = 0
    };
 
    enum LightId
    {
-      Red_BusOut,
-      Green_BusOut,
-      Blue_BusOut,
-      Red_BusIn,
-      Green_BusIn,
-      Blue_BusIn,
-      LIGHTS_LEN
+      // leds
+      RGB_BusOut = 0,
+      RGB_BusIn = 3,
+      // ledbuttons
+      // lcds
+      LIGHTS_LEN = 6
    };
 
 };

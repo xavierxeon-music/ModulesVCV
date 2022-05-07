@@ -17,14 +17,14 @@ void TimeLordChronicle::setup()
    configInput(Panel::Channel2_Input, "Channel2_Input");
    configInput(Panel::Channel1_Input, "Channel1_Input");
 
-   configDisplay(Panel::Text_Channel8_Display, "Channel8_Display");
-   configDisplay(Panel::Text_Channel7_Display, "Channel7_Display");
-   configDisplay(Panel::Text_Channel6_Display, "Channel6_Display");
-   configDisplay(Panel::Text_Channel5_Display, "Channel5_Display");
-   configDisplay(Panel::Text_Channel4_Display, "Channel4_Display");
-   configDisplay(Panel::Text_Channel3_Display, "Channel3_Display");
-   configDisplay(Panel::Text_Channel2_Display, "Channel2_Display");
-   configDisplay(Panel::Text_Channel1_Display, "Channel1_Display");
+   configText(Panel::Text_Channel8_Display, "Channel8_Display");
+   configText(Panel::Text_Channel7_Display, "Channel7_Display");
+   configText(Panel::Text_Channel6_Display, "Channel6_Display");
+   configText(Panel::Text_Channel5_Display, "Channel5_Display");
+   configText(Panel::Text_Channel4_Display, "Channel4_Display");
+   configText(Panel::Text_Channel3_Display, "Channel3_Display");
+   configText(Panel::Text_Channel2_Display, "Channel2_Display");
+   configText(Panel::Text_Channel1_Display, "Channel1_Display");
 
    configMeter(Panel::Value_Channel8_Strip, "Channel8_Strip");
    configMeter(Panel::Value_Channel7_Strip, "Channel7_Strip");
@@ -51,14 +51,14 @@ void TimeLordChronicleWidget::setup()
    makeInput(this, Vec(35.08, 109.50),  TimeLordChronicle::Panel::Channel2_Input);
    makeInput(this, Vec(35.08, 73.03),  TimeLordChronicle::Panel::Channel1_Input);
 
-   makeDisplay(this, Vec(60.00, 316.37), 3, TimeLordChronicle::Panel::Text_Channel8_Display, TimeLordChronicle::Panel::RGB_Channel8_Display);
-   makeDisplay(this, Vec(60.00, 279.89), 3, TimeLordChronicle::Panel::Text_Channel7_Display, TimeLordChronicle::Panel::RGB_Channel7_Display);
-   makeDisplay(this, Vec(60.00, 243.41), 3, TimeLordChronicle::Panel::Text_Channel6_Display, TimeLordChronicle::Panel::RGB_Channel6_Display);
-   makeDisplay(this, Vec(60.00, 206.94), 3, TimeLordChronicle::Panel::Text_Channel5_Display, TimeLordChronicle::Panel::RGB_Channel5_Display);
-   makeDisplay(this, Vec(60.00, 170.46), 3, TimeLordChronicle::Panel::Text_Channel4_Display, TimeLordChronicle::Panel::RGB_Channel4_Display);
-   makeDisplay(this, Vec(60.00, 133.98), 3, TimeLordChronicle::Panel::Text_Channel3_Display, TimeLordChronicle::Panel::RGB_Channel3_Display);
-   makeDisplay(this, Vec(60.00, 97.50), 3, TimeLordChronicle::Panel::Text_Channel2_Display, TimeLordChronicle::Panel::RGB_Channel2_Display);
-   makeDisplay(this, Vec(60.00, 61.03), 3, TimeLordChronicle::Panel::Text_Channel1_Display, TimeLordChronicle::Panel::RGB_Channel1_Display);
+   makeLCD(this, Vec(60.00, 316.37), 3, TimeLordChronicle::Panel::Text_Channel8_Display, TimeLordChronicle::Panel::RGB_Channel8_Display);
+   makeLCD(this, Vec(60.00, 279.89), 3, TimeLordChronicle::Panel::Text_Channel7_Display, TimeLordChronicle::Panel::RGB_Channel7_Display);
+   makeLCD(this, Vec(60.00, 243.41), 3, TimeLordChronicle::Panel::Text_Channel6_Display, TimeLordChronicle::Panel::RGB_Channel6_Display);
+   makeLCD(this, Vec(60.00, 206.94), 3, TimeLordChronicle::Panel::Text_Channel5_Display, TimeLordChronicle::Panel::RGB_Channel5_Display);
+   makeLCD(this, Vec(60.00, 170.46), 3, TimeLordChronicle::Panel::Text_Channel4_Display, TimeLordChronicle::Panel::RGB_Channel4_Display);
+   makeLCD(this, Vec(60.00, 133.98), 3, TimeLordChronicle::Panel::Text_Channel3_Display, TimeLordChronicle::Panel::RGB_Channel3_Display);
+   makeLCD(this, Vec(60.00, 97.50), 3, TimeLordChronicle::Panel::Text_Channel2_Display, TimeLordChronicle::Panel::RGB_Channel2_Display);
+   makeLCD(this, Vec(60.00, 61.03), 3, TimeLordChronicle::Panel::Text_Channel1_Display, TimeLordChronicle::Panel::RGB_Channel1_Display);
 
    makeMeter(this, Vec(51.31, 315.37), 5, TimeLordChronicle::Panel::Value_Channel8_Strip);
    makeMeter(this, Vec(51.31, 278.89), 5, TimeLordChronicle::Panel::Value_Channel7_Strip);

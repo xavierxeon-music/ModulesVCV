@@ -5,7 +5,7 @@
 using namespace rack;
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLight.h>
+#include <SchweineSystemLED.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
@@ -28,7 +28,7 @@ private:
 private:
    SchweineSystem::Input::List inputList;
    SchweineSystem::Output::List outputList;
-   SchweineSystem::Light::List lightList;
+   SchweineSystem::LED::List lightList;
 
    dsp::BooleanTrigger triggers[8];
    dsp::PulseGenerator activity[8];

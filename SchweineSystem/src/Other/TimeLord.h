@@ -15,7 +15,7 @@ using namespace rack;
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
-#include <SchweineSystemOLEDDisplay.h>
+#include <SchweineSystemDisplayOLED.h>
 
 class TimeLord : public SchweineSystem::Module
 {
@@ -90,7 +90,7 @@ private:
    bool dataApply;
    dsp::PulseGenerator dataAppliedPulse;
 
-   SchweineSystem::OLEDDisplay::Controller displayController;
+   SchweineSystem::DisplayOLED::Controller displayController;
 };
 
 class TimeLordWidget : public SchweineSystem::ModuleWidget

@@ -5,14 +5,16 @@
 using namespace rack;
 
 #include <Blocks/CvSwitch.h>
-#include <Tools/Range.h>
 
+#include <SchweineSystemButton.h>
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLCDDisplay.h>
-#include <SchweineSystemLight.h>
+#include <SchweineSystemDisplayLCD.h>
+#include <SchweineSystemLED.h>
 #include <SchweineSystemMidiOutput.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
+#include <SchweineSystemSwitch.h>
 
 class KeyStep : public SchweineSystem::Module, private SchweineSystem::MidiOutput
 {
@@ -33,19 +35,15 @@ private:
 
 private:
    // midi
-   dsp::BooleanTrigger connectTrigger;
-   SchweineSystem::Light connectionLight;
+   SchweineSystem::ButtonLED connect;
    // patterns
    SchweineSystem::Input::List inputList;
    uint8_t patterns[4];
-   Range::Mapper inputMapper;
    CvSwitch channelSwitch;
    // manual pattern
-   SchweineSystem::LCDDisplay::Controller::List displayList;
-   SchweineSystem::Param::List downButtonList;
-   SchweineSystem::Param::List upButtonList;
-   dsp::BooleanTrigger downTriggers[4];
-   dsp::BooleanTrigger upTriggers[4];
+   SchweineSystem::DisplayLCD::Controller::List displayList;
+   SchweineSystem::Button::List downButtonList;
+   SchweineSystem::Button::List upButtonList;
 };
 
 class KeyStepWidget : public SchweineSystem::ModuleWidget

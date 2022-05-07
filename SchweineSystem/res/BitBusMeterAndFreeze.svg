@@ -95,49 +95,49 @@
         </g>
         <g transform="matrix(1.33333,0,0,1,21.081,-182.392)">
             <g id="Bit8">
-                <circle id="Status1-light" serif:id="Status1#light" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
+                <circle id="Status1-led" serif:id="Status1#led" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
         <g transform="matrix(1.33333,0,0,1,21.0789,-216.032)">
             <g id="Bit7">
-                <circle id="Status1-light1" serif:id="Status1#light" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
+                <circle id="Status1-led1" serif:id="Status1#led" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
         <g transform="matrix(1.33333,0,0,1,21.0789,-251.4)">
             <g id="Bit6">
-                <circle id="Status1-light2" serif:id="Status1#light" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
+                <circle id="Status1-led2" serif:id="Status1#led" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
         <g transform="matrix(1.33328,0.00917786,-0.0122371,0.999958,25.1934,-287.252)">
             <g id="Bit5">
-                <circle id="Status1-light3" serif:id="Status1#light" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
+                <circle id="Status1-led3" serif:id="Status1#led" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
         <g transform="matrix(1.33333,0,0,1,21.081,-320.153)">
             <g id="Bit4">
-                <circle id="Status1-light4" serif:id="Status1#light" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
+                <circle id="Status1-led4" serif:id="Status1#led" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
         <g transform="matrix(1.33333,0,0,1,21.081,-354.929)">
             <g id="Bit3">
-                <circle id="Status1-light5" serif:id="Status1#light" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
+                <circle id="Status1-led5" serif:id="Status1#led" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
         <g transform="matrix(1.33333,0,0,1,21.081,-389.226)">
             <g id="Bit2">
-                <circle id="Status1-light6" serif:id="Status1#light" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
+                <circle id="Status1-led6" serif:id="Status1#led" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
         <g transform="matrix(1.33333,0,0,1,21.081,-424.884)">
             <g id="Bit1">
-                <circle id="Status1-light7" serif:id="Status1#light" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
+                <circle id="Status1-led7" serif:id="Status1#led" cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
     </g>
-    <g id="BusIn-light" serif:id="BusIn#light" transform="matrix(1,0,0,1,-27.8135,10.8256)">
+    <g id="BusIn-led" serif:id="BusIn#led" transform="matrix(1,0,0,1,-27.8135,10.8256)">
         <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
     </g>
-    <g id="BusOut-light" serif:id="BusOut#light" transform="matrix(1,0,0,1,18.1865,10.8256)">
+    <g id="BusOut-led" serif:id="BusOut#led" transform="matrix(1,0,0,1,18.1865,10.8256)">
         <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
     </g>
     <g transform="matrix(1,0,0,1,-40.578,26.5989)">

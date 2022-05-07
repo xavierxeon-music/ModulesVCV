@@ -3,18 +3,18 @@
 
 #include <Tools/BoolField.h>
 
-#include "SchweineSystemMaster.h"
+#include <SchweineSystemMaster.h>
 
 BitBusBitOut::BitBusBitOut()
-   : Module()
+   : SchweineSystem::Module()
    , BitBusCommon(this)
    , outputList(outputs)
 {
    setup();
 
    outputList.append({Panel::BitOut8, Panel::BitOut7, Panel::BitOut6, Panel::BitOut5, Panel::BitOut4, Panel::BitOut3, Panel::BitOut2, Panel::BitOut1});
-   busInIndicator.assign(Panel::Red_BusIn);
-   busOutIndicator.assign(Panel::Red_BusOut);
+   busInIndicator.assign(Panel::RGB_BusIn);
+   busOutIndicator.assign(Panel::RGB_BusOut);
 }
 
 BitBusBitOut::~BitBusBitOut()
@@ -54,6 +54,14 @@ void BitBusBitOut::process(const ProcessArgs& args)
 
    if (canSendBusMessage())
       sendByteToBus(boolField);
+}
+
+// widget
+
+BitBusBitOutWidget::BitBusBitOutWidget(BitBusBitOut* module)
+   : SchweineSystem::ModuleWidget(module)
+{
+   setup();
 }
 
 Model* modelBitBusBitOut = SchweineSystem::Master::the()->addModule<BitBusBitOut, BitBusBitOutWidget>("BitBusBitOut");

@@ -28,6 +28,20 @@ class Sources(Common):
             name = button['name']
             line(1, f'configButton(Panel::{name}, "{name}");')
 
+        if self.switches:
+            line(0)
+        for switch in self.switches:
+            name = switch['name']
+            line(1, f'configSwitch(Panel::{name}, 0.0f, 1.0f, 0.0f, "{name}");')
+
+        if self.ledbuttons:
+            line(0)
+        for ledbutton in self.ledbuttons:
+            name = ledbutton['name']
+            x = ledbutton['cx']
+            y = ledbutton['cy']
+            line(1, f'configButton(Panel::{name}, "{name}");')
+
         if self.knobs:
             line(0)
         for knob in self.knobs:
@@ -46,11 +60,11 @@ class Sources(Common):
             name = output['name']
             line(1, f'configOutput(Panel::{name}, "{name}");')
 
-        if self.displays:
+        if self.lcds:
             line(0)
-        for display in self.displays:
-            name = display['name']
-            line(1, f'configDisplay(Panel::Text_{name}, "{name}");')
+        for lcd in self.lcds:
+            name = lcd['name']
+            line(1, f'configText(Panel::Text_{name}, "{name}");')
 
         if self.oleds:
             line(0)
@@ -83,6 +97,14 @@ class Sources(Common):
             x = button['cx']
             y = button['cy']
             line(1, f'makeButton(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name});')
+
+        if self.switches:
+            line(0)
+        for switch in self.switches:
+            name = switch['name']
+            x = switch['cx']
+            y = switch['cy']
+            line(1, f'makeSwitch(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name});')
 
         if self.ledbuttons:
             line(0)
@@ -117,22 +139,22 @@ class Sources(Common):
             y = output['cy']
             line(1, f'makeOutput(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name});')
 
-        if self.lights:
+        if self.leds:
             line(0)
-        for light in self.lights:
-            name = light['name']
-            x = light['cx']
-            y = light['cy']
-            line(1, f'makeLight(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::RGB_{name});')
+        for led in self.leds:
+            name = led['name']
+            x = led['cx']
+            y = led['cy']
+            line(1, f'makeLED(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::RGB_{name});')
 
-        if self.displays:
+        if self.lcds:
             line(0)
-        for display in self.displays:
-            name = display['name']
-            count = display['count']
-            x = display['rx']
-            y = display['ry']
-            line(1, f'makeDisplay(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Text_{name}, {self.moduleName}::Panel::RGB_{name});')
+        for lcd in self.lcds:
+            name = lcd['name']
+            count = lcd['count']
+            x = lcd['rx']
+            y = lcd['ry']
+            line(1, f'makeLCD(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Text_{name}, {self.moduleName}::Panel::RGB_{name});')
 
         if self.oleds:
             line(0)
@@ -142,7 +164,7 @@ class Sources(Common):
             y = oled['ry']
             count = oled['count']
             width, height = count.split('x')
-            line(1, f'makeDisplay(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::Pixels_{name}, {width}, {height});')
+            line(1, f'makeOLED(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::Pixels_{name}, {width}, {height});')
 
         if self.meters:
             line(0)
@@ -167,7 +189,7 @@ class Sources(Common):
             line(0, f'#include "{self.moduleName}Panel.h"')
             line(0)
             line(0, '#include <SchweineSystemMaster.h>')
-            if self.displays:
+            if self.lcds:
                 line(0, '#include <limits>')
             line(0)
 
@@ -201,6 +223,8 @@ class Sources(Common):
             line(1, 'setup();')
             line(0, '}')
 
+            line(0)
+            line(0, '// widget')
             line(0)
 
             line(0, f'void {self.moduleName}::process(const ProcessArgs& args)')

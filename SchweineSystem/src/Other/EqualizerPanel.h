@@ -4,7 +4,7 @@
 #include "Equalizer.h"
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLCDDisplay.h>
+#include <SchweineSystemDisplayLCD.h>
 
 struct Equalizer::Panel
 {

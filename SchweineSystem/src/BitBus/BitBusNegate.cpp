@@ -4,13 +4,14 @@
 #include <Tools/BoolField.h>
 
 #include "SchweineSystemMaster.h"
+#include "SchweineSystemModule.h"
 
 using Panel = BitBusNegate::Panel;
 
 BitBusNegate::BitBusNegate()
-   : Module()
+   : SchweineSystem::Module()
    , BitBusCommon(this)
-   , lightList(lights)
+   , lightList(this)
    , paramList(params)
    , gateList(inputs)
    , gateTrigger()
@@ -18,14 +19,38 @@ BitBusNegate::BitBusNegate()
 {
    setup();
 
-   lightList.append({Panel::Red_Bit8_Latch, Panel::Red_Bit7_Latch, Panel::Red_Bit6_Latch, Panel::Red_Bit5_Latch, Panel::Red_Bit4_Latch, Panel::Red_Bit3_Latch, Panel::Red_Bit2_Latch, Panel::Red_Bit1_Latch});
+   lightList.append({Panel::RGB_Bit8_Latch,
+                     Panel::RGB_Bit7_Latch,
+                     Panel::RGB_Bit6_Latch,
+                     Panel::RGB_Bit5_Latch,
+                     Panel::RGB_Bit4_Latch,
+                     Panel::RGB_Bit3_Latch,
+                     Panel::RGB_Bit2_Latch,
+                     Panel::RGB_Bit1_Latch});
+
    for (uint8_t index = 0; index < 8; index++)
       lightList[index]->setDefaultColor({0, 0, 255});
 
-   paramList.append({Panel::Bit8_Latch, Panel::Bit7_Latch, Panel::Bit6_Latch, Panel::Bit5_Latch, Panel::Bit4_Latch, Panel::Bit3_Latch, Panel::Bit2_Latch, Panel::Bit1_Latch});
-   gateList.append({Panel::Bit8_GateIn, Panel::Bit7_GateIn, Panel::Bit6_GateIn, Panel::Bit5_GateIn, Panel::Bit4_GateIn, Panel::Bit3_GateIn, Panel::Bit2_GateIn, Panel::Bit1_GateIn});
-   busInIndicator.assign(Panel::Red_BusIn);
-   busOutIndicator.assign(Panel::Red_BusOut);
+   paramList.append({Panel::Bit8_Latch,
+                     Panel::Bit7_Latch,
+                     Panel::Bit6_Latch,
+                     Panel::Bit5_Latch,
+                     Panel::Bit4_Latch,
+                     Panel::Bit3_Latch,
+                     Panel::Bit2_Latch,
+                     Panel::Bit1_Latch});
+
+   gateList.append({Panel::Bit8_GateIn,
+                    Panel::Bit7_GateIn,
+                    Panel::Bit6_GateIn,
+                    Panel::Bit5_GateIn,
+                    Panel::Bit4_GateIn,
+                    Panel::Bit3_GateIn,
+                    Panel::Bit2_GateIn,
+                    Panel::Bit1_GateIn});
+
+   busInIndicator.assign(Panel::RGB_BusIn);
+   busOutIndicator.assign(Panel::RGB_BusOut);
 }
 
 BitBusNegate::~BitBusNegate()
@@ -108,6 +133,14 @@ void BitBusNegate::process(const ProcessArgs& args)
 
    if (canSendBusMessage())
       sendByteToBus(boolField);
+}
+
+// widget
+
+BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
+   : SchweineSystem::ModuleWidget(module)
+{
+   setup();
 }
 
 Model* modelBitBusNegate = SchweineSystem::Master::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");

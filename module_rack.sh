@@ -3,7 +3,7 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"   
 (return 0 2>/dev/null) && THIS_SCRIPT_IS_SOURCED=1 || THIS_SCRIPT_IS_SOURCED=0
 
-function _set_rack_dir {
+function _init_module {
 
    if [ 0 == $THIS_SCRIPT_IS_SOURCED ]
    then
@@ -25,9 +25,5 @@ function module {
    $SCRIPT_DIR/Tools/module.py $@
 }
 
-function travel_sync {
-   rsync -azhP --delete /Users/waspe/Documents/Rack2/plugins/SchweineSystem/ travel:/Users/waspe/Documents/Rack2/plugins/SchweineSystem/ 
-}
-
-_set_rack_dir
+_init_module
 

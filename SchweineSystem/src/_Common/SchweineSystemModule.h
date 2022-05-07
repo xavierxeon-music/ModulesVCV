@@ -26,7 +26,7 @@ namespace SchweineSystem
       PixelMap pixels;
 
    protected:
-      void configDisplay(const uint16_t& textId, std::string name = "");
+      void configText(const uint16_t& textId, std::string name = "");
       void configMeter(const uint16_t& valueId, std::string name = "");
       void configPixels(const uint16_t& valueId, const uint8_t& width, const uint8_t& height, std::string name = "");
    };

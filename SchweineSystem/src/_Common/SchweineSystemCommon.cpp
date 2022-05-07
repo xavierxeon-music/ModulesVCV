@@ -11,7 +11,7 @@ const SchweineSystem::Common::MidiInterfaceMap SchweineSystem::Common::midiInter
    {Midi::Device::KeyStep3, "ESI M4U eX Port 6"},
    {Midi::Device::KeyStep4, "ESI M4U eX Port 6"},
    {Midi::Device::Daisy, "ESI M4U eX Port 4"},
-   {Midi::Device::BlackTrigger, ""},
+   {Midi::Device::DrumTrigger, "ESI M4U eX Port 5"},
    {Midi::Device::VCVRack, "ESI M4U eX Port 6"},
    {Midi::Device::FlameCC, "ESI M4U eX Port 7"},
    {Midi::Device::BitBox, "ESI M4U eX Port 4"},

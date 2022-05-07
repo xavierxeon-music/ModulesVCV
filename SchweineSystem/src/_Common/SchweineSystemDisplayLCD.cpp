@@ -1,22 +1,22 @@
-#include "SchweineSystemLCDDisplay.h"
+#include "SchweineSystemDisplayLCD.h"
 
 #include "SchweineSystemMaster.h"
 
 // controller
 
-SchweineSystem::LCDDisplay::Controller::Controller(Module* module, const uint16_t& textId, const uint16_t& rgbId)
+SchweineSystem::DisplayLCD::Controller::Controller(Module* module, const uint16_t& textId, const uint16_t& rgbId)
    : module(module)
    , textId(textId)
    , rgbId(rgbId)
 {
 }
 
-void SchweineSystem::LCDDisplay::Controller::setText(const std::string& text)
+void SchweineSystem::DisplayLCD::Controller::setText(const std::string& text)
 {
    module->texts[textId] = text;
 }
 
-void SchweineSystem::LCDDisplay::Controller::setColor(const SchweineSystem::Color& color)
+void SchweineSystem::DisplayLCD::Controller::setColor(const SchweineSystem::Color& color)
 {
    const float red = static_cast<float>(color.red) / 255.0;
    module->lights[rgbId + 0].setBrightness(red);
@@ -30,18 +30,18 @@ void SchweineSystem::LCDDisplay::Controller::setColor(const SchweineSystem::Colo
 
 // controller list
 
-SchweineSystem::LCDDisplay::Controller::List::List(Module* module)
+SchweineSystem::DisplayLCD::Controller::List::List(Module* module)
    : module(module)
 {
 }
 
-SchweineSystem::LCDDisplay::Controller::List::~List()
+SchweineSystem::DisplayLCD::Controller::List::~List()
 {
    for (Controller* instance : instanceList)
       delete instance;
 }
 
-void SchweineSystem::LCDDisplay::Controller::List::append(const Params::List& paramsList)
+void SchweineSystem::DisplayLCD::Controller::List::append(const Params::List& paramsList)
 {
    for (const Params& params : paramsList)
    {
@@ -50,14 +50,14 @@ void SchweineSystem::LCDDisplay::Controller::List::append(const Params::List& pa
    }
 }
 
-SchweineSystem::LCDDisplay::Controller* SchweineSystem::LCDDisplay::Controller::List::operator[](const uint16_t& index)
+SchweineSystem::DisplayLCD::Controller* SchweineSystem::DisplayLCD::Controller::List::operator[](const uint16_t& index)
 {
    return instanceList[index];
 }
 
 // widget
 
-SchweineSystem::LCDDisplay::Widget::Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& textId, const uint16_t& rgbId)
+SchweineSystem::DisplayLCD::Widget::Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& textId, const uint16_t& rgbId)
    : rack::TransparentWidget()
    , module(module)
    , digitCount(digitCount)
@@ -70,7 +70,7 @@ SchweineSystem::LCDDisplay::Widget::Widget(rack::math::Vec pos, Module* module, 
    box.pos = rack::math::Vec(pos.x + 2, pos.y + 20);
 }
 
-void SchweineSystem::LCDDisplay::Widget::drawLayer(const DrawArgs& args, int layer)
+void SchweineSystem::DisplayLCD::Widget::drawLayer(const DrawArgs& args, int layer)
 {
    if (layer != 1)
       return;

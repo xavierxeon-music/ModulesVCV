@@ -7,7 +7,7 @@ using namespace rack;
 #include <Tools/Range.h>
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemLCDDisplay.h>
+#include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
@@ -29,7 +29,7 @@ private:
 private:
    SchweineSystem::Input::List inputList;
    SchweineSystem::LightMeter::Controller::List lightMeterList;
-   SchweineSystem::LCDDisplay::Controller::List displayList;
+   SchweineSystem::DisplayLCD::Controller::List displayList;
    Range::Mapper voltageToValue;
 };
 
