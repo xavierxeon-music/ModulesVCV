@@ -131,16 +131,14 @@
          ]
       },
       {
-         "slug": "TimeLordChronicle",
-         "name": "Time Lord Chronicle",
-         "description": "show voltage value as time lord values",
-         "tags": [
-            "Utility"
-         ]
-      },
-      {
          "slug": "KeyStep",
          "name": "KeyStep",
+         "description": "",
+         "tags": []
+      },
+      {
+         "slug": "BarCounter",
+         "name": "BarCounter",
          "description": "",
          "tags": []
       }

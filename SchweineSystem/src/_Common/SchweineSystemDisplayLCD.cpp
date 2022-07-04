@@ -50,7 +50,7 @@ void SchweineSystem::DisplayLCD::Controller::List::append(const Params::List& pa
    }
 }
 
-SchweineSystem::DisplayLCD::Controller* SchweineSystem::DisplayLCD::Controller::List::operator[](const uint16_t& index)
+SchweineSystem::DisplayLCD::Controller* SchweineSystem::DisplayLCD::Controller::List::operator[](const uint8_t& index)
 {
    return instanceList[index];
 }

@@ -48,7 +48,7 @@ namespace SchweineSystem
 
       public:
          void append(const Params::List& paramsList);
-         Controller* operator[](const uint16_t& index);
+         Controller* operator[](const uint8_t& index);
 
       private:
          Module* module;

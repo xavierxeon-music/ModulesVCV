@@ -19,10 +19,8 @@ VCMCReceiver::VCMCReceiver()
    , tempo()
    , clockTick()
    , tickTrigger()
-   , tickOverrideTrigger()
    , clockReset()
    , resetTrigger()
-   , tempoDisplay(this, Panel::Text_Clock, Panel::RGB_Clock)
    , gates{false, false, false, false, false, false, false, false}
    , lightListGate(this)
    , gateList(outputs)
@@ -96,9 +94,6 @@ VCMCReceiver::VCMCReceiver()
 
    connectionLight.assign(Panel::RGB_Connect);
    connectToMidiDevice();
-
-   tempoDisplay.setColor(SchweineSystem::Color{100, 100, 255});
-   tempoDisplay.setText("???");
 }
 
 VCMCReceiver::~VCMCReceiver()
@@ -114,23 +109,10 @@ void VCMCReceiver::process(const ProcessArgs& args)
    while (midiInput.tryPop(&msg, args.frame))
       processMessage(msg);
 
-   const bool override = inputs[Panel::ClockOverride].isConnected();
-   if (override)
-   {
-      if (tickOverrideTrigger.process(inputs[Panel::ClockOverride].getVoltage() > 3.0))
-      {
-         tempo.clockTick();
-         clockTick.trigger();
-         doNotAdvanceTempo = true;
-      }
-   }
-
    if (doNotAdvanceTempo)
       doNotAdvanceTempo = false;
    else
       tempo.advance(args.sampleRate);
-
-   tempoDisplay.setText(std::to_string(tempo.getBeatsPerMinute()));
 
    outputs[Panel::Clock].setVoltage(clockTick.process(args.sampleTime) ? 10.f : 0.f);
    outputs[Panel::Reset].setVoltage(clockReset.process(args.sampleTime) ? 10.f : 0.f);
@@ -194,8 +176,7 @@ void VCMCReceiver::processMessage(const midi::Message& msg)
 
       if (Midi::Event::Clock == event)
       {
-         const bool override = inputs[Panel::ClockOverride].isConnected();
-         if (!override && 0 == tickCounter.valueAndNext())
+         if (0 == tickCounter.valueAndNext())
          {
             tempo.clockTick();
             clockTick.trigger();

@@ -46,10 +46,8 @@ private:
    Tempo tempo;
    dsp::PulseGenerator clockTick;
    dsp::BooleanTrigger tickTrigger;
-   dsp::BooleanTrigger tickOverrideTrigger;
    dsp::PulseGenerator clockReset;
    dsp::BooleanTrigger resetTrigger;
-   SchweineSystem::DisplayLCD::Controller tempoDisplay;
    // gates
    bool gates[8];
    SchweineSystem::LED::List lightListGate;

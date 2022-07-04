@@ -26,6 +26,8 @@
 ./src/Other/TimeLordChroniclePanel.h
 ./src/Other/TimeLordChronicle.h
 ./src/Other/GateLatchPanel.h
+./src/Other/BarCounter.h
+./src/Other/BarCounterPanel.h
 ./src/Other/TimeLordPanel.h
 ./src/Other/HalfVoltPanel.h
 ./src/Other/GateLatch.h
@@ -154,7 +156,9 @@
 ./src/Other/EqualizerPanel.cpp
 ./src/Other/TimeLordChroniclePanel.cpp
 ./src/Other/HalfVolt.cpp
+./src/Other/BarCounter.cpp
 ./src/Other/GateLatchPanel.cpp
+./src/Other/BarCounterPanel.cpp
 ./src/Other/GateLatch.cpp
 ./src/Other/HalfVoltPanel.cpp
 ./src/Other/TimeLord.cpp

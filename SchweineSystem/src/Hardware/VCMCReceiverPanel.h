@@ -4,7 +4,6 @@
 #include "VCMCReceiver.h"
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemLED.h>
 #include <SchweineSystemLightMeter.h>
 
@@ -13,6 +12,7 @@ struct VCMCReceiver::Panel
    enum ParamId
    {
       // buttons
+      // switches
       // ledbuttons
       Connect = 0,
       // knobs
@@ -21,8 +21,9 @@ struct VCMCReceiver::Panel
 
    enum DisplayId
    {
-      Text_Clock = 0,
-      DISPLAYS_LEN = 1
+      // lcd
+      // oled
+      DISPLAYS_LEN = 0
    };
 
    enum MeterId
@@ -48,8 +49,7 @@ struct VCMCReceiver::Panel
 
    enum InputId
    {
-      ClockOverride = 0,
-      INPUTS_LEN = 1
+      INPUTS_LEN = 0
    };
 
    enum OutputId
@@ -94,11 +94,10 @@ struct VCMCReceiver::Panel
       RGB_Channel3_Gate5_Status1 = 15,
       RGB_Channel2_Gate6_Status1 = 18,
       RGB_Channel1_Gate7_Status1 = 21,
-      // buttons
+      // ledbuttons
       RGB_Connect = 24,
-      // displays
-      RGB_Clock = 27,
-      LIGHTS_LEN = 30
+      // lcds
+      LIGHTS_LEN = 27
    };
 
 };

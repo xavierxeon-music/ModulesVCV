@@ -106,6 +106,9 @@ TimeLord::TimeLord()
    , clockTrigger()
    , resetTrigger()
    , tempo()
+   , inputList(inputs)
+   , displayList(this)
+   , voltageToValue(0.0, 10.0, 0, 255)
    , cvMapper(0.0, 255.0, 0.0, 10.0)
    , lightMeterList(this)
    , outputList(outputs)
@@ -121,14 +124,23 @@ TimeLord::TimeLord()
    setup();
    Majordomo::hello(this);
 
-   lightMeterList.append({Panel::Value_Channel1_Strip,
-                          Panel::Value_Channel2_Strip,
-                          Panel::Value_Channel3_Strip,
-                          Panel::Value_Channel4_Strip,
-                          Panel::Value_Channel5_Strip,
-                          Panel::Value_Channel6_Strip,
-                          Panel::Value_Channel7_Strip,
-                          Panel::Value_Channel8_Strip});
+   inputList.append({Panel::Channel1_Pass,
+                     Panel::Channel2_Pass,
+                     Panel::Channel3_Pass,
+                     Panel::Channel4_Pass,
+                     Panel::Channel5_Pass,
+                     Panel::Channel6_Pass,
+                     Panel::Channel7_Pass,
+                     Panel::Channel8_Pass});
+
+   displayList.append({{Panel::Text_Channel1_Value, Panel::RGB_Channel1_Value},
+                       {Panel::Text_Channel2_Value, Panel::RGB_Channel2_Value},
+                       {Panel::Text_Channel3_Value, Panel::RGB_Channel3_Value},
+                       {Panel::Text_Channel4_Value, Panel::RGB_Channel4_Value},
+                       {Panel::Text_Channel5_Value, Panel::RGB_Channel5_Value},
+                       {Panel::Text_Channel6_Value, Panel::RGB_Channel6_Value},
+                       {Panel::Text_Channel7_Value, Panel::RGB_Channel7_Value},
+                       {Panel::Text_Channel8_Value, Panel::RGB_Channel8_Value}});
 
    outputList.append({Panel::Channel1_Output,
                       Panel::Channel2_Output,
@@ -139,9 +151,20 @@ TimeLord::TimeLord()
                       Panel::Channel7_Output,
                       Panel::Channel8_Output});
 
+   lightMeterList.append({Panel::Value_Channel1_Strip,
+                          Panel::Value_Channel2_Strip,
+                          Panel::Value_Channel3_Strip,
+                          Panel::Value_Channel4_Strip,
+                          Panel::Value_Channel5_Strip,
+                          Panel::Value_Channel6_Strip,
+                          Panel::Value_Channel7_Strip,
+                          Panel::Value_Channel8_Strip});
+
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       lightMeterList[rampIndex]->setMaxValue(255);
+      displayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 0});
+      displayList[rampIndex]->setText("ABC");
    }
 }
 
@@ -152,8 +175,9 @@ TimeLord::~TimeLord()
 
 void TimeLord::process(const ProcessArgs& args)
 {
-   bool isClock = clockTrigger.process(inputs[Panel::Clock].getVoltage() > 3.0);
-   bool isReset = resetTrigger.process(inputs[Panel::Reset].getVoltage() > 3.0);
+   const bool isClock = clockTrigger.process(inputs[Panel::Clock].getVoltage() > 3.0);
+   const bool isReset = resetTrigger.process(inputs[Panel::Reset].getVoltage() > 3.0);
+   const bool passThrough = (inputs[Panel::Pass].getVoltage() > 2.0);
 
    if (isReset)
       tempo.clockReset();
@@ -162,7 +186,7 @@ void TimeLord::process(const ProcessArgs& args)
    else
       tempo.advance(args.sampleRate);
 
-   if (bankTrigger.process(params[Panel::Bank_Up].getValue()))
+   if (bankTrigger.process(params[Panel::BankUp].getValue()))
    {
       bankIndex++;
       if (bankIndex >= 10)
@@ -192,19 +216,37 @@ void TimeLord::process(const ProcessArgs& args)
       else if (isClock)
          polyRamp->clockTick();
 
-      if (tempo.isRunningOrFirstTick())
+      if (passThrough)
       {
-         const float perentageToNextTick = tempo.getPercentage(Tempo::Division::Sixteenth);
-         const float value = polyRamp->getCurrentValue(perentageToNextTick);
-         lightMeterList[rampIndex]->setValue(value);
+         float voltage = inputList[rampIndex]->getVoltage();
+         if (0 > voltage)
+            voltage = 0.0;
 
-         const float voltage = cvMapper(value);
-         outputList[rampIndex]->setVoltage(voltage);
+         outputList[rampIndex]->setVoltage(0.0);
+
+         const uint8_t value = voltageToValue(voltage);
+         displayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 0});
+         displayList[rampIndex]->setText(std::to_string(value));
       }
       else
       {
-         lightMeterList[rampIndex]->setValue(0);
-         outputList[rampIndex]->setVoltage(0.0);
+         displayList[rampIndex]->setColor(SchweineSystem::Color{0, 0, 0});
+         displayList[rampIndex]->setText("");
+
+         if (tempo.isRunningOrFirstTick())
+         {
+            const float perentageToNextTick = tempo.getPercentage(Tempo::Division::Sixteenth);
+            const float value = polyRamp->getCurrentValue(perentageToNextTick);
+            lightMeterList[rampIndex]->setValue(value);
+
+            const float voltage = cvMapper(value);
+            outputList[rampIndex]->setVoltage(voltage);
+         }
+         else
+         {
+            lightMeterList[rampIndex]->setValue(0);
+            outputList[rampIndex]->setVoltage(0.0);
+         }
       }
    }
 }

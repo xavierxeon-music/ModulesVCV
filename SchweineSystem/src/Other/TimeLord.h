@@ -11,11 +11,12 @@ using namespace rack;
 #include <Tools/Range.h>
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemDisplayLCD.h>
+#include <SchweineSystemDisplayOLED.h>
 #include <SchweineSystemJson.h>
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
-#include <SchweineSystemDisplayOLED.h>
 
 class TimeLord : public SchweineSystem::Module
 {
@@ -73,14 +74,22 @@ private:
    static const std::string keys;
    Bytes midiBuffer;
 
+   // clock
    dsp::BooleanTrigger clockTrigger;
    dsp::BooleanTrigger resetTrigger;
    Tempo tempo;
 
+   // input
+   SchweineSystem::Input::List inputList;
+   SchweineSystem::DisplayLCD::Controller::List displayList;
+   Range::Mapper voltageToValue;
+
+   // outpt
    Range::Mapper cvMapper;
    SchweineSystem::LightMeter::Controller::List lightMeterList;
    SchweineSystem::Output::List outputList;
 
+   // display
    DisplayMode displayMode;
    dsp::BooleanTrigger displayTrigger;
 
