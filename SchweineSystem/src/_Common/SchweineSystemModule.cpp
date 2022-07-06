@@ -1,5 +1,123 @@
 #include "SchweineSystemModule.h"
 
+// majordomo
+
+SchweineSystem::Module::Majordomo* SchweineSystem::Module::Majordomo::me = nullptr;
+SchweineSystem::Module::Queue SchweineSystem::Module::Majordomo::sendBuffer = SchweineSystem::Module::Queue();
+
+void SchweineSystem::Module::Majordomo::hello(SchweineSystem::Module* server)
+{
+   if (!me)
+      me = new Majordomo();
+
+   if (0 == me->instanceList.size())
+      me->start();
+
+   me->instanceList.push_back(server);
+}
+
+void SchweineSystem::Module::Majordomo::bye(SchweineSystem::Module* server)
+{
+   if (!me)
+      me = new Majordomo();
+
+   std::vector<SchweineSystem::Module*>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
+   if (it != me->instanceList.end())
+      me->instanceList.erase(it);
+
+   if (0 == me->instanceList.size())
+      me->stop();
+}
+
+void SchweineSystem::Module::Majordomo::send(const Queue& messages)
+{
+   if (!me)
+      return;
+
+   sendBuffer.insert(sendBuffer.end(), messages.begin(), messages.end());
+}
+
+void SchweineSystem::Module::Majordomo::process()
+{
+   if (!me)
+      return;
+
+   if (sendBuffer.empty())
+      return;
+
+   const Bytes bytes = sendBuffer.front();
+   sendBuffer.pop_front();
+
+   me->midiOutput.sendMessage(&bytes);
+}
+
+SchweineSystem::Module::Majordomo::Majordomo()
+   : midiInput()
+   , midiOutput()
+   , instanceList()
+{
+}
+
+void SchweineSystem::Module::Majordomo::start()
+{
+   midiInput.openVirtualPort("Majordomo");
+
+   midiInput.setErrorCallback(&Majordomo::midiError);
+   midiInput.setCallback(&Majordomo::midiReceive, this);
+   midiInput.ignoreTypes(false, false, false); // do not ignore anything
+
+   midiOutput.openVirtualPort("Majordomo");
+   midiOutput.setErrorCallback(&Majordomo::midiError);
+}
+
+void SchweineSystem::Module::Majordomo::stop()
+{
+   midiInput.closePort();
+}
+
+void SchweineSystem::Module::Majordomo::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
+{
+   (void)timeStamp;
+
+   if (me != userData)
+      return;
+
+   if (!message)
+      return;
+
+   static Bytes buffer;
+   auto maybeProcessBuffer = [&]()
+   {
+      if (0 == buffer.size())
+         return;
+
+      for (Module* module : me->instanceList)
+         module->dataFromMidiInput(buffer);
+      buffer.clear();
+   };
+
+   static const uint8_t mask = 0x80;
+   for (const uint8_t byte : *message)
+   {
+      const uint8_t test = byte & mask;
+      if (test == mask) // new message start
+         maybeProcessBuffer();
+
+      buffer.push_back(byte);
+   }
+   maybeProcessBuffer();
+}
+
+void SchweineSystem::Module::Majordomo::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
+{
+   if (me != userData)
+      return;
+
+   std::cout << "MIDI ERROR: " << type << ",  " << errorText << std::endl;
+}
+
+// module
+
 SchweineSystem::Module::Module()
    : rack::Module()
    , texts()
@@ -27,4 +145,9 @@ void SchweineSystem::Module::configPixels(const uint16_t& valueId, const uint8_t
 {
    const uint16_t size = width * height;
    pixels[valueId] = new NVGcolor[size];
+}
+
+void SchweineSystem::Module::dataFromMidiInput(const Bytes& message)
+{
+   (void)message;
 }

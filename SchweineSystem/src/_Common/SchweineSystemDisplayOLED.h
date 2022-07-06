@@ -32,7 +32,22 @@ namespace SchweineSystem
          Right
       };
 
-      class Controller
+      class PixelThing
+      {
+      public:
+         PixelThing(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height);
+
+      protected:
+         uint16_t compileIndex(const uint8_t x, const uint8_t y) const;
+
+      protected:
+         Module* module;
+         const uint16_t pixelId;
+         const uint8_t width;
+         const uint8_t height;
+      };
+
+      class Controller : public PixelThing
       {
       public:
          Controller(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height);
@@ -47,26 +62,16 @@ namespace SchweineSystem
          void writeText(const uint8_t x, const uint8_t y, const std::string& text, const Font& font, const Alignment& alignment = Alignment::Left);
 
       private:
-         Module* module;
-         const uint16_t pixelId;
-         const uint8_t width;
-         const uint8_t height;
          NVGcolor color;
       };
 
-      class Widget : public rack::TransparentWidget
+      class Widget : public rack::TransparentWidget, public PixelThing
       {
       public:
          Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height);
 
       private:
          void drawLayer(const DrawArgs& args, int layer) override;
-
-      private:
-         Module* module;
-         const uint16_t pixelId;
-         const uint8_t width;
-         const uint8_t height;
       };
    }; // namespace DisplayOLED
 } // namespace SchweineSystem

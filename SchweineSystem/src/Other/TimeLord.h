@@ -4,8 +4,6 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <rtmidi/RtMidi.h>
-
 #include <Blocks/PolyRamp.h>
 #include <Music/Tempo.h>
 #include <Tools/Range.h>
@@ -32,8 +30,6 @@ public:
    void updateDisplays() override;
 
 private:
-   using Bytes = std::vector<uint8_t>;
-
    enum DisplayMode
    {
       Division,
@@ -42,28 +38,12 @@ private:
       StageIndex
    };
 
-   class Majordomo
-   {
-   public:
-      static void hello(TimeLord* server);
-      static void bye(TimeLord* server);
-
-   private:
-      Majordomo();
-      void start();
-      void stop();
-      static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
-      static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
-
-   private:
-      static Majordomo* me;
-      RtMidiIn midiInput;
-      std::vector<TimeLord*> instanceList;
-   };
-
 private:
    void setup();
-   void dataFromMidiInput(const Bytes& message);
+
+   void setOutputs(bool isReset, bool isClock, bool passThrough);
+   void upload();
+   void dataFromMidiInput(const Bytes& message) override;
 
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
@@ -84,22 +64,28 @@ private:
    SchweineSystem::DisplayLCD::Controller::List displayList;
    Range::Mapper voltageToValue;
 
+   // upload
+   dsp::BooleanTrigger uploadTrigger;
+   bool uploadData;
+
    // outpt
-   Range::Mapper cvMapper;
+   Range::Mapper valueToVoltage;
    SchweineSystem::LightMeter::Controller::List lightMeterList;
    SchweineSystem::Output::List outputList;
 
    // display
    DisplayMode displayMode;
    dsp::BooleanTrigger displayTrigger;
+   SchweineSystem::DisplayOLED::Controller displayController;
 
+   // bank
    uint8_t bankIndex;
    dsp::BooleanTrigger bankTrigger;
    bool dataReceive;
    bool dataApply;
    dsp::PulseGenerator dataAppliedPulse;
+   SchweineSystem::DisplayLCD::Controller bankDisplay;
 
-   SchweineSystem::DisplayOLED::Controller displayController;
 };
 
 class TimeLordWidget : public SchweineSystem::ModuleWidget

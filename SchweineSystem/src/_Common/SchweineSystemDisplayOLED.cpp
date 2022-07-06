@@ -874,18 +874,25 @@ SchweineSystem::DisplayOLED::Font SchweineSystem::DisplayOLED::Font::Normal = {7
 SchweineSystem::DisplayOLED::Font SchweineSystem::DisplayOLED::Font::Large = {11, 18, Font11x18};
 SchweineSystem::DisplayOLED::Font SchweineSystem::DisplayOLED::Font::Huge = {16, 26, Font16x26};
 
-static uint16_t compileIndex(const uint8_t x, const uint8_t y)
+// pixel thing
+
+SchweineSystem::DisplayOLED::PixelThing::PixelThing(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
+   : module(module)
+   , pixelId(pixelId)
+   , width(width)
+   , height(height)
 {
-   return x + (128 * y);
+}
+
+uint16_t SchweineSystem::DisplayOLED::PixelThing::compileIndex(const uint8_t x, const uint8_t y) const
+{
+   return x + (width * y);
 }
 
 // comntroller
 
 SchweineSystem::DisplayOLED::Controller::Controller(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
-   : module(module)
-   , pixelId(pixelId)
-   , width(width)
-   , height(height)
+   : PixelThing(module, pixelId, width, height)
    , color(nvgRGB(255, 255, 255))
 {
 }
@@ -1024,10 +1031,7 @@ void SchweineSystem::DisplayOLED::Controller::writeText(const uint8_t x, const u
 
 SchweineSystem::DisplayOLED::Widget::Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
    : rack::TransparentWidget()
-   , module(module)
-   , pixelId(pixelId)
-   , width(width)
-   , height(height)
+   , PixelThing(module, pixelId, width, height)
 {
    box.pos = rack::math::Vec(pos.x, pos.y);
 }

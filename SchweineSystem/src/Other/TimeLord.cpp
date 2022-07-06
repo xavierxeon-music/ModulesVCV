@@ -6,94 +6,6 @@
 
 #include <SchweineSystemMaster.h>
 
-// majordomo
-
-TimeLord::Majordomo* TimeLord::Majordomo::me = nullptr;
-
-void TimeLord::Majordomo::hello(TimeLord* server)
-{
-   if (!me)
-      me = new Majordomo();
-
-   if (0 == me->instanceList.size())
-      me->start();
-
-   me->instanceList.push_back(server);
-}
-
-void TimeLord::Majordomo::bye(TimeLord* server)
-{
-   if (!me)
-      me = new Majordomo();
-
-   std::vector<TimeLord*>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
-   if (it != me->instanceList.end())
-      me->instanceList.erase(it);
-
-   if (0 == me->instanceList.size())
-      me->stop();
-}
-
-TimeLord::Majordomo::Majordomo()
-   : midiInput()
-   , instanceList()
-{
-}
-
-void TimeLord::Majordomo::start()
-{
-   midiInput.openVirtualPort("TimeLord");
-
-   midiInput.setErrorCallback(&Majordomo::midiError);
-   midiInput.setCallback(&Majordomo::midiReceive, this);
-   midiInput.ignoreTypes(false, false, false); // do not ignore anything
-}
-
-void TimeLord::Majordomo::stop()
-{
-   midiInput.closePort();
-}
-
-void TimeLord::Majordomo::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
-{
-   (void)timeStamp;
-
-   if (me != userData)
-      return;
-
-   if (!message)
-      return;
-
-   static Bytes buffer;
-   auto maybeProcessBuffer = [&]()
-   {
-      if (0 == buffer.size())
-         return;
-
-      for (TimeLord* lord : me->instanceList)
-         lord->dataFromMidiInput(buffer);
-      buffer.clear();
-   };
-
-   static const uint8_t mask = 0x80;
-   for (const uint8_t byte : *message)
-   {
-      const uint8_t test = byte & mask;
-      if (test == mask) // new message start
-         maybeProcessBuffer();
-
-      buffer.push_back(byte);
-   }
-   maybeProcessBuffer();
-}
-
-void TimeLord::Majordomo::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
-{
-   if (me != userData)
-      return;
-
-   std::cout << "MIDI ERROR: " << type << ",  " << errorText << std::endl;
-}
 
 // lord
 
@@ -103,23 +15,32 @@ TimeLord::TimeLord()
    : SchweineSystem::Module()
    , ramps{}
    , midiBuffer()
+   // clock
    , clockTrigger()
    , resetTrigger()
    , tempo()
+   // input
    , inputList(inputs)
    , displayList(this)
    , voltageToValue(0.0, 10.0, 0, 255)
-   , cvMapper(0.0, 255.0, 0.0, 10.0)
+   // upload
+   , uploadTrigger()
+   , uploadData(false)
+   // outout
+   , valueToVoltage(0.0, 255.0, 0.0, 10.0)
    , lightMeterList(this)
    , outputList(outputs)
+   // display
    , displayMode(StageIndex)
    , displayTrigger()
+   , displayController(this, Panel::Pixels_Display, 80, 120)
+   // bank
    , bankIndex(0)
    , bankTrigger()
    , dataReceive(false)
    , dataApply(false)
    , dataAppliedPulse()
-   , displayController(this, Panel::Pixels_Display, 128, 64)
+   , bankDisplay(this, Panel::Text_Bank, Panel::RGB_Bank)
 {
    setup();
    Majordomo::hello(this);
@@ -175,6 +96,8 @@ TimeLord::~TimeLord()
 
 void TimeLord::process(const ProcessArgs& args)
 {
+   Majordomo::process();
+
    const bool isClock = clockTrigger.process(inputs[Panel::Clock].getVoltage() > 3.0);
    const bool isReset = resetTrigger.process(inputs[Panel::Reset].getVoltage() > 3.0);
    const bool passThrough = (inputs[Panel::Pass].getVoltage() > 2.0);
@@ -193,8 +116,6 @@ void TimeLord::process(const ProcessArgs& args)
          bankIndex = 0;
    }
 
-   dataApply = dataAppliedPulse.process(args.sampleTime);
-
    if (displayTrigger.process(params[Panel::Mode].getValue()))
    {
       if (Division == displayMode)
@@ -207,47 +128,31 @@ void TimeLord::process(const ProcessArgs& args)
          displayMode = Division;
    }
 
-   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
+   dataApply = dataAppliedPulse.process(args.sampleTime);
+   if (dataReceive)
    {
-      PolyRamp* polyRamp = &ramps[rampIndex];
+      bankDisplay.setColor(SchweineSystem::Color{255, 255, 255});
+      bankDisplay.setText("?");
+   }
+   else if (dataApply)
+   {
+      bankDisplay.setColor(SchweineSystem::Color{255, 255, 255});
+      bankDisplay.setText("@");
+   }
+   else
+   {
+      bankDisplay.setColor(SchweineSystem::Color{255, 255, 255});
+      bankDisplay.setText(std::to_string(bankIndex));
+   }
 
-      if (isReset)
-         polyRamp->clockReset();
-      else if (isClock)
-         polyRamp->clockTick();
+   setOutputs(isReset, isClock, passThrough);
+
+   if (uploadTrigger.process(inputs[Panel::Upload].getVoltage() > 3.0) || uploadData)
+   {
+      uploadData = false;
 
       if (passThrough)
-      {
-         float voltage = inputList[rampIndex]->getVoltage();
-         if (0 > voltage)
-            voltage = 0.0;
-
-         outputList[rampIndex]->setVoltage(0.0);
-
-         const uint8_t value = voltageToValue(voltage);
-         displayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 0});
-         displayList[rampIndex]->setText(std::to_string(value));
-      }
-      else
-      {
-         displayList[rampIndex]->setColor(SchweineSystem::Color{0, 0, 0});
-         displayList[rampIndex]->setText("");
-
-         if (tempo.isRunningOrFirstTick())
-         {
-            const float perentageToNextTick = tempo.getPercentage(Tempo::Division::Sixteenth);
-            const float value = polyRamp->getCurrentValue(perentageToNextTick);
-            lightMeterList[rampIndex]->setValue(value);
-
-            const float voltage = cvMapper(value);
-            outputList[rampIndex]->setVoltage(voltage);
-         }
-         else
-         {
-            lightMeterList[rampIndex]->setValue(0);
-            outputList[rampIndex]->setVoltage(0.0);
-         }
-      }
+         upload();
    }
 }
 
@@ -255,33 +160,17 @@ void TimeLord::updateDisplays()
 {
    displayController.fill();
 
-   displayController.drawRect(0, 0, 127, 10, true);
+   displayController.drawRect(0, 0, 80, 10, true);
    displayController.setColor(SchweineSystem::Color{0, 0, 0});
 
    if (Division == displayMode)
-      displayController.writeText(30, 1, "Division", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(5, 1, "Division", SchweineSystem::DisplayOLED::Font::Normal);
    else if (Length == displayMode)
-      displayController.writeText(30, 1, "Length", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(5, 1, "Length", SchweineSystem::DisplayOLED::Font::Normal);
    else if (StageCount == displayMode)
-      displayController.writeText(30, 1, "Stage Count", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(5, 1, "Count", SchweineSystem::DisplayOLED::Font::Normal);
    else
-      displayController.writeText(30, 1, "Current Stage", SchweineSystem::DisplayOLED::Font::Normal);
-
-   if (dataReceive)
-   {
-      displayController.setColor(SchweineSystem::Color{255, 255, 255});
-      displayController.writeText(5, 25, "?", SchweineSystem::DisplayOLED::Font::Huge);
-   }
-   else if (dataApply)
-   {
-      displayController.setColor(SchweineSystem::Color{255, 255, 255});
-      displayController.writeText(5, 25, "@", SchweineSystem::DisplayOLED::Font::Huge);
-   }
-   else
-   {
-      displayController.setColor(SchweineSystem::Color{255, 255, 255});
-      displayController.writeText(5, 25, std::to_string(bankIndex), SchweineSystem::DisplayOLED::Font::Huge);
-   }
+      displayController.writeText(5, 1, "Current", SchweineSystem::DisplayOLED::Font::Normal);
 
    displayController.setColor(SchweineSystem::Color{255, 255, 255});
 
@@ -289,11 +178,8 @@ void TimeLord::updateDisplays()
    {
       PolyRamp* polyRamp = &ramps[rampIndex];
 
-      const bool even = (0 == (rampIndex % 2));
-      const uint8_t x = even ? 30 : 80;
-
-      const uint8_t yIndex = even ? rampIndex / 2 : (rampIndex - 1) / 2;
-      const uint8_t y = 14 + yIndex * 13;
+      const uint8_t x = 5;
+      const uint8_t y = 14 + rampIndex * 13;
 
       std::string text = std::to_string(rampIndex + 1) + ": ";
       if (Division == displayMode)
@@ -307,6 +193,108 @@ void TimeLord::updateDisplays()
 
       displayController.writeText(x, y, text, SchweineSystem::DisplayOLED::Font::Normal);
    }
+}
+
+void TimeLord::setOutputs(bool isReset, bool isClock, bool passThrough)
+{
+   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
+   {
+      PolyRamp* polyRamp = &ramps[rampIndex];
+
+      if (isReset)
+         polyRamp->clockReset();
+      else if (isClock)
+         polyRamp->clockTick();
+
+      if (passThrough)
+      {
+         float voltage = inputList[rampIndex]->getVoltage();
+         if (0 > voltage)
+         {
+            displayList[rampIndex]->setColor(SchweineSystem::Color{255, 0, 0});
+            voltage = 0.0;
+         }
+         else
+         {
+            displayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 0});
+         }
+
+         outputList[rampIndex]->setVoltage(voltage);
+
+         const uint8_t value = voltageToValue(voltage);
+         displayList[rampIndex]->setText(std::to_string(value));
+         lightMeterList[rampIndex]->setValue(value);
+      }
+      else
+      {
+         displayList[rampIndex]->setColor(SchweineSystem::Color{0, 0, 0});
+         displayList[rampIndex]->setText("");
+
+         if (tempo.isRunningOrFirstTick())
+         {
+            const float perentageToNextTick = tempo.getPercentage(Tempo::Division::Sixteenth);
+            const float value = polyRamp->getCurrentValue(perentageToNextTick);
+            lightMeterList[rampIndex]->setValue(value);
+
+            const float voltage = valueToVoltage(value);
+            outputList[rampIndex]->setVoltage(voltage);
+         }
+         else
+         {
+            lightMeterList[rampIndex]->setValue(0);
+            outputList[rampIndex]->setVoltage(0.0);
+         }
+      }
+   }
+}
+
+void TimeLord::upload()
+{
+   using namespace SchweineSystem::Json;
+
+   Array valueArray;
+   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
+   {
+      float voltage = inputList[rampIndex]->getVoltage();
+      if (0 > voltage)
+         voltage = 0.0;
+
+      const uint8_t value = voltageToValue(voltage);
+      valueArray.append(value);
+   }
+
+   Object uploadObject;
+   uploadObject.set("values", valueArray);
+   uploadObject.set("bankIndex", bankIndex);
+
+   Queue queue;
+   {
+      size_t size = json_dumpb(uploadObject.toJson(), NULL, 0, 0);
+      if (size == 0)
+         return;
+
+      char* buffer = new char[size];
+      size = json_dumpb(uploadObject.toJson(), buffer, size, 0);
+
+      for (size_t index = 0; index < size; index++)
+      {
+         Bytes message(3);
+         message[0] = (Midi::Event::ControlChange | (Midi::Device::VCVRack - 1));
+         message[1] = Midi::ControllerMessage::RememberBlock;
+         message[2] = buffer[index];
+         queue.push_back(message);
+      }
+
+      delete[] buffer;
+   }
+
+   Bytes message(3);
+   message[0] = (Midi::Event::ControlChange | (Midi::Device::VCVRack - 1));
+   message[1] = Midi::ControllerMessage::RememberApply;
+   message[2] = bankIndex;
+   queue.push_back(message);
+
+   Majordomo::send(queue);
 }
 
 void TimeLord::dataFromMidiInput(const Bytes& message)
@@ -368,6 +356,10 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       loadInternal(rootObject);
 
       dataAppliedPulse.trigger(2.0);
+   }
+   else if (Midi::ControllerMessage::RememberRequest == controllerMessage)
+   {
+      uploadData = true;
    }
 }
 
