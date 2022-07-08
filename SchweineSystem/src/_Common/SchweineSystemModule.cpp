@@ -10,23 +10,31 @@ void SchweineSystem::Module::Majordomo::hello(SchweineSystem::Module* server)
    if (!me)
       me = new Majordomo();
 
-   if (0 == me->instanceList.size())
-      me->start();
+   me->mutex.lock();
+   {
+      if (0 == me->instanceList.size())
+         me->start();
 
-   me->instanceList.push_back(server);
+      me->instanceList.push_back(server);
+   }
+   me->mutex.unlock();
 }
 
 void SchweineSystem::Module::Majordomo::bye(SchweineSystem::Module* server)
 {
    if (!me)
-      me = new Majordomo();
+      return;
 
-   std::vector<SchweineSystem::Module*>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
-   if (it != me->instanceList.end())
-      me->instanceList.erase(it);
+   me->mutex.lock();
+   {
+      std::vector<SchweineSystem::Module*>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
+      if (it != me->instanceList.end())
+         me->instanceList.erase(it);
 
-   if (0 == me->instanceList.size())
-      me->stop();
+      if (0 == me->instanceList.size())
+         me->stop();
+   }
+   me->mutex.unlock();
 }
 
 void SchweineSystem::Module::Majordomo::send(const Queue& messages)
@@ -34,7 +42,11 @@ void SchweineSystem::Module::Majordomo::send(const Queue& messages)
    if (!me)
       return;
 
-   sendBuffer.insert(sendBuffer.end(), messages.begin(), messages.end());
+   me->mutex.lock();
+   {
+      sendBuffer.insert(sendBuffer.end(), messages.begin(), messages.end());
+   }
+   me->mutex.unlock();
 }
 
 void SchweineSystem::Module::Majordomo::process()
@@ -42,17 +54,22 @@ void SchweineSystem::Module::Majordomo::process()
    if (!me)
       return;
 
-   if (sendBuffer.empty())
+   if (!me->mutex.try_lock())
       return;
 
-   const Bytes bytes = sendBuffer.front();
-   sendBuffer.pop_front();
+   if (!sendBuffer.empty())
+   {
+      const Bytes bytes = sendBuffer.front();
+      sendBuffer.pop_front();
 
-   me->midiOutput.sendMessage(&bytes);
+      me->midiOutput.sendMessage(&bytes);
+   }
+   me->mutex.unlock();
 }
 
 SchweineSystem::Module::Majordomo::Majordomo()
-   : midiInput()
+   : mutex()
+   , midiInput()
    , midiOutput()
    , instanceList()
 {

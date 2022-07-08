@@ -46,6 +46,7 @@ namespace SchweineSystem
 
       private:
          static Majordomo* me;
+         std::mutex mutex;
          RtMidiIn midiInput;
          RtMidiOut midiOutput;
          static Queue sendBuffer;
