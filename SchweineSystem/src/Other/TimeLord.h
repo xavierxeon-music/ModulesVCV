@@ -12,6 +12,7 @@ using namespace rack;
 #include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemDisplayOLED.h>
 #include <SchweineSystemJson.h>
+#include <SchweineSystemLED.h>
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
@@ -30,7 +31,7 @@ public:
    void updateDisplays() override;
 
 private:
-   enum DisplayMode
+   enum class DisplayMode
    {
       Division,
       Length,
@@ -38,21 +39,31 @@ private:
       StageIndex
    };
 
+   enum class OperationMode
+   {
+      Input,
+      Remote,
+      Internal
+   };
+
 private:
    void setup();
 
-   void setOutputs(bool isReset, bool isClock, bool passThrough);
-   void upload();
+   void setOutputs(bool isReset, bool isClock);
+   void setOperationLEDs();
    void dataFromMidiInput(const Bytes& message) override;
 
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
    void loadInternal(const SchweineSystem::Json::Object& rootObject);
 
+   void uploadToRemote();
+   void loadRemote(const SchweineSystem::Json::Object& rootObject);
+
 private:
    PolyRamp ramps[8];
    static const std::string keys;
-   Bytes midiBuffer;
+   Bytes rampBuffer;
 
    // clock
    dsp::BooleanTrigger clockTrigger;
@@ -82,10 +93,17 @@ private:
    uint8_t bankIndex;
    dsp::BooleanTrigger bankTrigger;
    bool dataReceive;
-   bool dataApply;
    dsp::PulseGenerator dataAppliedPulse;
    SchweineSystem::DisplayLCD::Controller bankDisplay;
 
+   // mode
+   OperationMode operationMode;
+   dsp::BooleanTrigger operationTrigger;
+   uint8_t remoteValues[8];
+   Bytes remoteBuffer;
+   SchweineSystem::LED modeInputLight;
+   SchweineSystem::LED modeRemoteLight;
+   SchweineSystem::LED modeInternalLight;
 };
 
 class TimeLordWidget : public SchweineSystem::ModuleWidget

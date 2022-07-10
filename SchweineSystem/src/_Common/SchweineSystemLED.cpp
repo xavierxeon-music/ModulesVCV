@@ -45,6 +45,14 @@ void SchweineSystem::LED::setOff()
    setColor({0, 0, 0});
 }
 
+void SchweineSystem::LED::setActive(bool on)
+{
+   if (on)
+      setOn();
+   else
+      setOff();
+}
+
 // list
 
 SchweineSystem::LED::List::List(Module* module)

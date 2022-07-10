@@ -5,6 +5,7 @@
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemDisplayLCD.h>
+#include <SchweineSystemLED.h>
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemDisplayOLED.h>
 
@@ -13,12 +14,13 @@ struct TimeLord::Panel
    enum ParamId
    {
       // buttons
-      BankUp = 0,
-      Mode = 1,
+      ModeManual = 0,
+      Display = 1,
+      BankUp = 2,
       // switches
       // ledbuttons
       // knobs
-      PARAMS_LEN = 2
+      PARAMS_LEN = 3
    };
 
    enum DisplayId
@@ -54,7 +56,7 @@ struct TimeLord::Panel
    enum InputId
    {
       Upload = 0,
-      Pass = 1,
+      ModeCV = 1,
       Reset = 2,
       Clock = 3,
       Channel8_Pass = 4,
@@ -84,18 +86,21 @@ struct TimeLord::Panel
    enum LightId
    {
       // leds
+      RGB_Internal_Status = 0,
+      RGB_Remote_Status = 3,
+      RGB_Input_Status = 6,
       // ledbuttons
       // lcds
-      RGB_Bank = 0,
-      RGB_Channel8_Value = 3,
-      RGB_Channel7_Value = 6,
-      RGB_Channel6_Value = 9,
-      RGB_Channel5_Value = 12,
-      RGB_Channel4_Value = 15,
-      RGB_Channel3_Value = 18,
-      RGB_Channel2_Value = 21,
-      RGB_Channel1_Value = 24,
-      LIGHTS_LEN = 27
+      RGB_Bank = 9,
+      RGB_Channel8_Value = 12,
+      RGB_Channel7_Value = 15,
+      RGB_Channel6_Value = 18,
+      RGB_Channel5_Value = 21,
+      RGB_Channel4_Value = 24,
+      RGB_Channel3_Value = 27,
+      RGB_Channel2_Value = 30,
+      RGB_Channel1_Value = 33,
+      LIGHTS_LEN = 36
    };
 
 };

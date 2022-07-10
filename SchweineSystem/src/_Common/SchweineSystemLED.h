@@ -26,6 +26,7 @@ namespace SchweineSystem
       void setDefaultColor(const Color& color);
       void setOn(); // set to default color
       void setOff();
+      void setActive(bool on);
 
    protected:
       Module* module;
