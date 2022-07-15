@@ -19,8 +19,9 @@ struct TimeLord::Panel
       BankUp = 2,
       // switches
       // ledbuttons
+      Silence = 3,
       // knobs
-      PARAMS_LEN = 3
+      PARAMS_LEN = 4
    };
 
    enum DisplayId
@@ -90,17 +91,18 @@ struct TimeLord::Panel
       RGB_Remote_Status = 3,
       RGB_Input_Status = 6,
       // ledbuttons
+      RGB_Silence = 9,
       // lcds
-      RGB_Bank = 9,
-      RGB_Channel8_Value = 12,
-      RGB_Channel7_Value = 15,
-      RGB_Channel6_Value = 18,
-      RGB_Channel5_Value = 21,
-      RGB_Channel4_Value = 24,
-      RGB_Channel3_Value = 27,
-      RGB_Channel2_Value = 30,
-      RGB_Channel1_Value = 33,
-      LIGHTS_LEN = 36
+      RGB_Bank = 12,
+      RGB_Channel8_Value = 15,
+      RGB_Channel7_Value = 18,
+      RGB_Channel6_Value = 21,
+      RGB_Channel5_Value = 24,
+      RGB_Channel4_Value = 27,
+      RGB_Channel3_Value = 30,
+      RGB_Channel2_Value = 33,
+      RGB_Channel1_Value = 36,
+      LIGHTS_LEN = 39
    };
 
 };

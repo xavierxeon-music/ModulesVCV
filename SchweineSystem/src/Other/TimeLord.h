@@ -8,6 +8,8 @@ using namespace rack;
 #include <Music/Tempo.h>
 #include <Tools/Range.h>
 
+#include <SchweineSystemButton.h>
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemDisplayOLED.h>
@@ -86,12 +88,12 @@ private:
 
    // display
    DisplayMode displayMode;
-   dsp::BooleanTrigger displayTrigger;
+   SchweineSystem::ButtonLED displayButton;
    SchweineSystem::DisplayOLED::Controller displayController;
 
    // bank
    uint8_t bankIndex;
-   dsp::BooleanTrigger bankTrigger;
+   SchweineSystem::Button bankButton;
    bool dataReceive;
    dsp::PulseGenerator dataAppliedPulse;
    SchweineSystem::DisplayLCD::Controller bankDisplay;
@@ -104,6 +106,10 @@ private:
    SchweineSystem::LED modeInputLight;
    SchweineSystem::LED modeRemoteLight;
    SchweineSystem::LED modeInternalLight;
+
+   // silence
+   bool silenceOnStop;
+   SchweineSystem::ButtonLED silenceButton;
 };
 
 class TimeLordWidget : public SchweineSystem::ModuleWidget
