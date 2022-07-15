@@ -11,31 +11,45 @@
 const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 TimeLord::TimeLord()
-    : SchweineSystem::Module(), ramps{}
-      // midi
-      ,
-      receive(MidiReceive::None), buffer()
-      // clock
-      ,
-      clockTrigger(), resetTrigger(), tempo()
-      // input
-      ,
-      inputList(inputs), displayList(this), voltageToValue(0.0, 10.0, 0, 255)
-      // upload
-      ,
-      uploadTrigger(), uploadData(false)
-      // outout
-      ,
-      valueToVoltage(0.0, 255.0, 0.0, 10.0), lightMeterList(this), outputList(outputs)
-      // display
-      ,
-      displayMode(DisplayMode::StageIndex), displayTrigger(), displayController(this, Panel::Pixels_Display, 80, 120)
-      // bank
-      ,
-      bankIndex(0), bankTrigger(), dataReceive(false), dataAppliedPulse(), bankDisplay(this, Panel::Text_Bank, Panel::RGB_Bank)
-      // mode
-      ,
-      operationMode(OperationMode::Input), operationTrigger(), remoteValues{0, 0, 0, 0, 0, 0, 0, 0}, remoteBuffer(), modeInputLight(this, Panel::RGB_Input_Status), modeRemoteLight(this, Panel::RGB_Remote_Status), modeInternalLight(this, Panel::RGB_Internal_Status)
+   : SchweineSystem::Module()
+   , ramps{}
+   // midi
+   , receive(MidiReceive::None)
+   , buffer()
+   // clock
+   , clockTrigger()
+   , resetTrigger()
+   , tempo()
+   // input
+   , inputList(inputs)
+   , displayList(this)
+   , voltageToValue(0.0, 10.0, 0, 255)
+   // upload
+   , uploadTrigger()
+   , uploadData(false)
+   // outout
+   , valueToVoltage(0.0, 255.0, 0.0, 10.0)
+   , lightMeterList(this)
+   , outputList(outputs)
+   // display
+   , displayMode(DisplayMode::StageIndex)
+   , displayButton(this, Panel::Display)
+   , displayController(this, Panel::Pixels_Display, 80, 120)
+   // bank
+   , bankIndex(0)
+   , bankButton(this, Panel::BankUp)
+   , dataAppliedPulse()
+   , bankDisplay(this, Panel::Text_Bank, Panel::RGB_Bank)
+   // mode
+   , operationMode(OperationMode::Input)
+   , operationTrigger()
+   , remoteValues{0, 0, 0, 0, 0, 0, 0, 0}
+   , modeInputLight(this, Panel::RGB_Input_Status)
+   , modeRemoteLight(this, Panel::RGB_Remote_Status)
+   , modeInternalLight(this, Panel::RGB_Internal_Status)
+   // silence
+   , silenceOnStop(false)
+   , silenceButton(this, Panel::Silence, Panel::RGB_Silence)
 {
    setup();
    Majordomo::hello(this);
@@ -83,6 +97,9 @@ TimeLord::TimeLord()
       displayList[rampIndex]->setText("ABC");
    }
 
+   silenceButton.setDefaultColor(SchweineSystem::Color{100, 100, 100});
+   silenceButton.setOn();
+
    modeInputLight.setDefaultColor(SchweineSystem::Color{255, 255, 0});
    modeRemoteLight.setDefaultColor(SchweineSystem::Color{0, 0, 255});
    modeInternalLight.setDefaultColor(SchweineSystem::Color{0, 255, 0});
@@ -94,10 +111,11 @@ TimeLord::~TimeLord()
    Majordomo::bye(this);
 }
 
-void TimeLord::process(const ProcessArgs &args)
+void TimeLord::process(const ProcessArgs& args)
 {
    Majordomo::process();
 
+   // clock
    const bool isClock = clockTrigger.process(inputs[Panel::Clock].getVoltage() > 3.0);
    const bool isReset = resetTrigger.process(inputs[Panel::Reset].getVoltage() > 3.0);
 
@@ -108,6 +126,7 @@ void TimeLord::process(const ProcessArgs &args)
    else
       tempo.advance(args.sampleRate);
 
+   // operation mode
    auto advanceOperationMode = [&]()
    {
       static const std::vector<OperationMode> order = {OperationMode::Input, OperationMode::Remote, OperationMode::Internal};
@@ -127,22 +146,29 @@ void TimeLord::process(const ProcessArgs &args)
    }
    setOperationLEDs();
 
-   if (bankTrigger.process(params[Panel::BankUp].getValue()))
-   {
-      bankIndex++;
-      if (bankIndex >= 10)
-         bankIndex = 0;
-   }
+   // silence
+   if (silenceButton.isTriggered())
+      silenceOnStop ^= true;
+   silenceButton.setActive(silenceOnStop);
 
-   if (displayTrigger.process(params[Panel::Display].getValue()))
+   // screen mode
+   if (displayButton.isTriggered())
    {
       static const std::vector<DisplayMode> order = {DisplayMode::Division, DisplayMode::Length, DisplayMode::StageCount, DisplayMode::StageIndex};
       Variable::Enum<DisplayMode> variable(displayMode, order, true);
       variable.increment();
    }
 
+   // bank display
+   if (bankButton.isTriggered())
+   {
+      bankIndex++;
+      if (bankIndex >= 10)
+         bankIndex = 0;
+   }
+
    const bool dataApply = dataAppliedPulse.process(args.sampleTime);
-   if (dataReceive)
+   if (MidiReceive::Remember == receive)
    {
       bankDisplay.setColor(SchweineSystem::Color{255, 255, 255});
       bankDisplay.setText("?");
@@ -158,8 +184,10 @@ void TimeLord::process(const ProcessArgs &args)
       bankDisplay.setText(std::to_string(bankIndex));
    }
 
+   // outputs
    setOutputs(isReset, isClock);
 
+   // maybe upload
    if (uploadTrigger.process(inputs[Panel::Upload].getVoltage() > 3.0) || uploadData)
    {
       uploadData = false;
@@ -192,7 +220,7 @@ void TimeLord::updateDisplays()
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
-      PolyRamp *polyRamp = &ramps[rampIndex];
+      PolyRamp* polyRamp = &ramps[rampIndex];
 
       const uint8_t x = 5;
       const uint8_t y = 16 + rampIndex * 13;
@@ -215,14 +243,9 @@ void TimeLord::setOutputs(bool isReset, bool isClock)
 {
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
-      PolyRamp *polyRamp = &ramps[rampIndex];
+      PolyRamp* polyRamp = &ramps[rampIndex];
 
-      if (isReset)
-         polyRamp->clockReset();
-      else if (isClock)
-         polyRamp->clockTick();
-
-      if (OperationMode::Input == operationMode)
+      auto inputMode = [&]()
       {
          float voltage = inputList[rampIndex]->getVoltage();
          if (0 > voltage)
@@ -235,24 +258,44 @@ void TimeLord::setOutputs(bool isReset, bool isClock)
             displayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 0});
          }
 
-         outputList[rampIndex]->setVoltage(voltage);
-
          const uint8_t value = voltageToValue(voltage);
-         displayList[rampIndex]->setText(std::to_string(value));
-         lightMeterList[rampIndex]->setValue(value);
-      }
-      else if (OperationMode::Remote == operationMode)
+
+         if (silenceOnStop && !tempo.isRunningOrFirstTick())
+         {
+            displayList[rampIndex]->setText("off");
+            lightMeterList[rampIndex]->setValue(0);
+            outputList[rampIndex]->setVoltage(0.0);
+         }
+         else
+         {
+            displayList[rampIndex]->setText(std::to_string(value));
+            lightMeterList[rampIndex]->setValue(value);
+            outputList[rampIndex]->setVoltage(voltage);
+         }
+      };
+
+      auto remoteMode = [&]()
       {
          displayList[rampIndex]->setColor(SchweineSystem::Color{0, 0, 255});
 
          const uint8_t value = remoteValues[rampIndex];
-         displayList[rampIndex]->setText(std::to_string(value));
-         lightMeterList[rampIndex]->setValue(value);
-
          const float voltage = valueToVoltage(value);
-         outputList[rampIndex]->setVoltage(voltage);
-      }
-      else
+
+         if (silenceOnStop && !tempo.isRunningOrFirstTick())
+         {
+            displayList[rampIndex]->setText("off");
+            lightMeterList[rampIndex]->setValue(0);
+            outputList[rampIndex]->setVoltage(0.0);
+         }
+         else
+         {
+            displayList[rampIndex]->setText(std::to_string(value));
+            lightMeterList[rampIndex]->setValue(value);
+            outputList[rampIndex]->setVoltage(voltage);
+         }
+      };
+
+      auto internalMode = [&]()
       {
          displayList[rampIndex]->setColor(SchweineSystem::Color{0, 0, 0});
          displayList[rampIndex]->setText("");
@@ -271,7 +314,19 @@ void TimeLord::setOutputs(bool isReset, bool isClock)
             lightMeterList[rampIndex]->setValue(0);
             outputList[rampIndex]->setVoltage(0.0);
          }
-      }
+      };
+
+      if (isReset)
+         polyRamp->clockReset();
+      else if (isClock)
+         polyRamp->clockTick();
+
+      if (OperationMode::Input == operationMode)
+         inputMode();
+      else if (OperationMode::Remote == operationMode)
+         remoteMode();
+      else
+         internalMode();
    }
 }
 
@@ -282,7 +337,7 @@ void TimeLord::setOperationLEDs()
    modeInternalLight.setActive(OperationMode::Internal == operationMode);
 }
 
-void TimeLord::dataFromMidiInput(const Bytes &message)
+void TimeLord::dataFromMidiInput(const Bytes& message)
 {
    const bool isSystemEvent = (0xF0 == (message[0] & 0xF0));
    if (isSystemEvent)
@@ -306,14 +361,12 @@ void TimeLord::dataFromMidiInput(const Bytes &message)
       return;
    }
 
-   const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(message[1]);
-
-   auto extractJsonAndClearBuffer = [&](Bytes &buffer)
+   auto extractJsonAndClearBuffer = [&]()
    {
       const Bytes data = SevenBit::decode(buffer);
       buffer.clear();
 
-      const char *cBuffer = (const char *)data.data();
+      const char* cBuffer = (const char*)data.data();
       auto printIncomingData = [&]()
       {
          for (uint8_t byte : data)
@@ -323,57 +376,69 @@ void TimeLord::dataFromMidiInput(const Bytes &message)
       printIncomingData();
 
       json_error_t error;
-      json_t *rootJson = json_loadb(cBuffer, data.size(), 0, &error);
+      json_t* rootJson = json_loadb(cBuffer, data.size(), 0, &error);
 
       SchweineSystem::Json::Object rootObject(rootJson);
       return rootObject;
    };
 
+   const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(message[1]);
+   const uint8_t value = message[2];
+
    if (Midi::ControllerMessage::RememberInit == controllerMessage)
    {
-   }
-   else if (Midi::ControllerMessage::RememberBlock == controllerMessage)
-   {
-      const uint8_t value = message[2];
-      rampBuffer << value;
-
-      dataReceive = true;
-   }
-   else if (Midi::ControllerMessage::RememberApply == controllerMessage)
-   {
-      SchweineSystem::Json::Object rootObject = extractJsonAndClearBuffer(rampBuffer);
-      dataReceive = false;
-
-      const uint8_t value = message[2];
       if (value != bankIndex)
          return;
 
-      loadInternal(rootObject);
+      buffer.clear();
+      receive = MidiReceive::Remember;
+   }
+   else if (Midi::ControllerMessage::RememberBlock == controllerMessage)
+   {
+      if (MidiReceive::Remember != receive)
+         return;
 
+      buffer << value;
+   }
+   else if (Midi::ControllerMessage::RememberApply == controllerMessage)
+   {
+      if (value != bankIndex || MidiReceive::Remember != receive)
+         return;
+
+      SchweineSystem::Json::Object rootObject = extractJsonAndClearBuffer();
+
+      loadInternal(rootObject);
+      receive = MidiReceive::None;
       dataAppliedPulse.trigger(2.0);
    }
    else if (Midi::ControllerMessage::DataInit == controllerMessage)
    {
-      // TODO
-   }
-   else if (Midi::ControllerMessage::DataBlock == controllerMessage)
-   {
-      const uint8_t value = message[2];
-      remoteBuffer << value;
-   }
-   else if (Midi::ControllerMessage::DataApply == controllerMessage)
-   {
-      SchweineSystem::Json::Object rootObject = extractJsonAndClearBuffer(remoteBuffer);
-
-      const uint8_t value = message[2];
       if (value != bankIndex)
          return;
 
+      buffer.clear();
+      receive = MidiReceive::Data;
+   }
+   else if (Midi::ControllerMessage::DataBlock == controllerMessage)
+   {
+      if (MidiReceive::Data != receive)
+         return;
+
+      buffer << value;
+   }
+   else if (Midi::ControllerMessage::DataApply == controllerMessage)
+   {
+      if (value != bankIndex || MidiReceive::Data != receive))
+         return;
+
+      SchweineSystem::Json::Object rootObject = extractJsonAndClearBuffer();
+
       loadRemote(rootObject);
+      receive = MidiReceive::None;
    }
 }
 
-json_t *TimeLord::dataToJson()
+json_t* TimeLord::dataToJson()
 {
    using namespace SchweineSystem::Json;
 
@@ -381,10 +446,11 @@ json_t *TimeLord::dataToJson()
    rootObject.set("bank", bankIndex);
    rootObject.set("display", static_cast<uint8_t>(displayMode));
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
+   rootObject.set("silence", silenceOnStop);
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
-      PolyRamp *polyRamp = &ramps[rampIndex];
+      PolyRamp* polyRamp = &ramps[rampIndex];
 
       Object rampObject;
 
@@ -421,7 +487,7 @@ json_t *TimeLord::dataToJson()
    return rootObject.toJson();
 }
 
-void TimeLord::dataFromJson(json_t *rootJson)
+void TimeLord::dataFromJson(json_t* rootJson)
 {
    using namespace SchweineSystem::Json;
 
@@ -429,17 +495,18 @@ void TimeLord::dataFromJson(json_t *rootJson)
    bankIndex = rootObject.get("bank").toInt();
    displayMode = static_cast<DisplayMode>(rootObject.get("display").toInt());
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
+   silenceOnStop = rootObject.get("silence").toBool();
 
    loadInternal(rootObject);
 }
 
-void TimeLord::loadInternal(const SchweineSystem::Json::Object &rootObject)
+void TimeLord::loadInternal(const SchweineSystem::Json::Object& rootObject)
 {
    using namespace SchweineSystem::Json;
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
-      PolyRamp *polyRamp = &ramps[rampIndex];
+      PolyRamp* polyRamp = &ramps[rampIndex];
       polyRamp->clear();
 
       Object rampObject = rootObject.get(keys.substr(rampIndex, 1)).toObject();
@@ -510,7 +577,7 @@ void TimeLord::uploadToRemote()
    if (size == 0)
       return;
 
-   char *buffer = new char[size];
+   char* buffer = new char[size];
    size = json_dumpb(uploadObject.toJson(), buffer, size, 0);
 
    for (size_t index = 0; index < size; index++)
@@ -525,7 +592,7 @@ void TimeLord::uploadToRemote()
    Majordomo::send(queue);
 }
 
-void TimeLord::loadRemote(const SchweineSystem::Json::Object &rootObject)
+void TimeLord::loadRemote(const SchweineSystem::Json::Object& rootObject)
 {
    using namespace SchweineSystem::Json;
 
@@ -543,10 +610,10 @@ void TimeLord::loadRemote(const SchweineSystem::Json::Object &rootObject)
 
 // widget
 
-TimeLordWidget::TimeLordWidget(TimeLord *module)
-    : SchweineSystem::ModuleWidget(module)
+TimeLordWidget::TimeLordWidget(TimeLord* module)
+   : SchweineSystem::ModuleWidget(module)
 {
    setup();
 }
 
-Model *modelTimeLord = SchweineSystem::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");
+Model* modelTimeLord = SchweineSystem::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");

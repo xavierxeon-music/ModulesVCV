@@ -20,6 +20,7 @@ namespace SchweineSystem
       void assign(const uint16_t& paramIndex, const uint16_t& rgbIndex);
       bool isTriggered();
 
+      using LED::setActive;
       using LED::setColor;
       using LED::setDefaultColor;
       using LED::setOff;

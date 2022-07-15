@@ -8,6 +8,8 @@ using namespace rack;
 #include <Music/Tempo.h>
 #include <Tools/Range.h>
 
+#include <SchweineSystemButton.h>
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemDisplayOLED.h>
@@ -27,7 +29,7 @@ public:
    ~TimeLord();
 
 public:
-   void process(const ProcessArgs &args) override;
+   void process(const ProcessArgs& args) override;
    void updateDisplays() override;
 
 private:
@@ -58,14 +60,14 @@ private:
 
    void setOutputs(bool isReset, bool isClock);
    void setOperationLEDs();
-   void dataFromMidiInput(const Bytes &message) override;
+   void dataFromMidiInput(const Bytes& message) override;
 
-   json_t *dataToJson() override;
-   void dataFromJson(json_t *rootJson) override;
-   void loadInternal(const SchweineSystem::Json::Object &rootObject);
+   json_t* dataToJson() override;
+   void dataFromJson(json_t* rootJson) override;
+   void loadInternal(const SchweineSystem::Json::Object& rootObject);
 
    void uploadToRemote();
-   void loadRemote(const SchweineSystem::Json::Object &rootObject);
+   void loadRemote(const SchweineSystem::Json::Object& rootObject);
 
 private:
    PolyRamp ramps[8];
@@ -96,12 +98,12 @@ private:
 
    // display
    DisplayMode displayMode;
-   dsp::BooleanTrigger displayTrigger;
+   SchweineSystem::ButtonLED displayButton;
    SchweineSystem::DisplayOLED::Controller displayController;
 
    // bank
    uint8_t bankIndex;
-   dsp::BooleanTrigger bankTrigger;
+   SchweineSystem::Button bankButton;
    dsp::PulseGenerator dataAppliedPulse;
    SchweineSystem::DisplayLCD::Controller bankDisplay;
 
@@ -112,12 +114,16 @@ private:
    SchweineSystem::LED modeInputLight;
    SchweineSystem::LED modeRemoteLight;
    SchweineSystem::LED modeInternalLight;
+
+   // silence
+   bool silenceOnStop;
+   SchweineSystem::ButtonLED silenceButton;
 };
 
 class TimeLordWidget : public SchweineSystem::ModuleWidget
 {
 public:
-   TimeLordWidget(TimeLord *module);
+   TimeLordWidget(TimeLord* module);
 
 private:
    void setup();
