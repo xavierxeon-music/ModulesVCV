@@ -27,7 +27,7 @@ public:
    ~TimeLord();
 
 public:
-   void process(const ProcessArgs& args) override;
+   void process(const ProcessArgs &args) override;
    void updateDisplays() override;
 
 private:
@@ -46,24 +46,34 @@ private:
       Internal
    };
 
+   enum class MidiReceive
+   {
+      None,
+      Remember,
+      Data
+   };
+
 private:
    void setup();
 
    void setOutputs(bool isReset, bool isClock);
    void setOperationLEDs();
-   void dataFromMidiInput(const Bytes& message) override;
+   void dataFromMidiInput(const Bytes &message) override;
 
-   json_t* dataToJson() override;
-   void dataFromJson(json_t* rootJson) override;
-   void loadInternal(const SchweineSystem::Json::Object& rootObject);
+   json_t *dataToJson() override;
+   void dataFromJson(json_t *rootJson) override;
+   void loadInternal(const SchweineSystem::Json::Object &rootObject);
 
    void uploadToRemote();
-   void loadRemote(const SchweineSystem::Json::Object& rootObject);
+   void loadRemote(const SchweineSystem::Json::Object &rootObject);
 
 private:
    PolyRamp ramps[8];
    static const std::string keys;
-   Bytes rampBuffer;
+
+   // midi
+   MidiReceive receive;
+   Bytes buffer;
 
    // clock
    dsp::BooleanTrigger clockTrigger;
@@ -92,7 +102,6 @@ private:
    // bank
    uint8_t bankIndex;
    dsp::BooleanTrigger bankTrigger;
-   bool dataReceive;
    dsp::PulseGenerator dataAppliedPulse;
    SchweineSystem::DisplayLCD::Controller bankDisplay;
 
@@ -100,7 +109,6 @@ private:
    OperationMode operationMode;
    dsp::BooleanTrigger operationTrigger;
    uint8_t remoteValues[8];
-   Bytes remoteBuffer;
    SchweineSystem::LED modeInputLight;
    SchweineSystem::LED modeRemoteLight;
    SchweineSystem::LED modeInternalLight;
@@ -109,7 +117,7 @@ private:
 class TimeLordWidget : public SchweineSystem::ModuleWidget
 {
 public:
-   TimeLordWidget(TimeLord* module);
+   TimeLordWidget(TimeLord *module);
 
 private:
    void setup();

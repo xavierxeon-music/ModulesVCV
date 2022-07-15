@@ -2,51 +2,47 @@
 
 // majordomo
 
-SchweineSystem::Module::Majordomo* SchweineSystem::Module::Majordomo::me = nullptr;
+SchweineSystem::Module::Majordomo *SchweineSystem::Module::Majordomo::me = nullptr;
 SchweineSystem::Module::Queue SchweineSystem::Module::Majordomo::sendBuffer = SchweineSystem::Module::Queue();
 
-void SchweineSystem::Module::Majordomo::hello(SchweineSystem::Module* server)
+using LockGuard = std::lock_guard<std::mutex>;
+
+void SchweineSystem::Module::Majordomo::hello(SchweineSystem::Module *server)
 {
    if (!me)
       me = new Majordomo();
 
-   me->mutex.lock();
-   {
-      if (0 == me->instanceList.size())
-         me->start();
+   const LockGuard lock(me->mutex);
 
-      me->instanceList.push_back(server);
-   }
-   me->mutex.unlock();
+   if (0 == me->instanceList.size())
+      me->start();
+
+   me->instanceList.push_back(server);
 }
 
-void SchweineSystem::Module::Majordomo::bye(SchweineSystem::Module* server)
+void SchweineSystem::Module::Majordomo::bye(SchweineSystem::Module *server)
 {
    if (!me)
       return;
 
-   me->mutex.lock();
-   {
-      std::vector<SchweineSystem::Module*>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
-      if (it != me->instanceList.end())
-         me->instanceList.erase(it);
+   const LockGuard lock(me->mutex);
 
-      if (0 == me->instanceList.size())
-         me->stop();
-   }
-   me->mutex.unlock();
+   std::vector<SchweineSystem::Module *>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
+   if (it != me->instanceList.end())
+      me->instanceList.erase(it);
+
+   if (0 == me->instanceList.size())
+      me->stop();
 }
 
-void SchweineSystem::Module::Majordomo::send(const Queue& messages)
+void SchweineSystem::Module::Majordomo::send(const Queue &messages)
 {
    if (!me)
       return;
 
-   me->mutex.lock();
-   {
-      sendBuffer.insert(sendBuffer.end(), messages.begin(), messages.end());
-   }
-   me->mutex.unlock();
+   const LockGuard lock(me->mutex);
+
+   sendBuffer.insert(sendBuffer.end(), messages.begin(), messages.end());
 }
 
 void SchweineSystem::Module::Majordomo::process()
@@ -54,7 +50,8 @@ void SchweineSystem::Module::Majordomo::process()
    if (!me)
       return;
 
-   if (!me->mutex.try_lock())
+   std::lock_guard<std::mutex> lock(me->mutex, std::try_to_lock);
+   if (!lock.owns_lock())
       return;
 
    if (!sendBuffer.empty())
@@ -64,14 +61,10 @@ void SchweineSystem::Module::Majordomo::process()
 
       me->midiOutput.sendMessage(&bytes);
    }
-   me->mutex.unlock();
 }
 
 SchweineSystem::Module::Majordomo::Majordomo()
-   : mutex()
-   , midiInput()
-   , midiOutput()
-   , instanceList()
+    : mutex(), midiInput(), midiOutput(), instanceList()
 {
 }
 
@@ -92,7 +85,7 @@ void SchweineSystem::Module::Majordomo::stop()
    midiInput.closePort();
 }
 
-void SchweineSystem::Module::Majordomo::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
+void SchweineSystem::Module::Majordomo::midiReceive(double timeStamp, std::vector<unsigned char> *message, void *userData)
 {
    (void)timeStamp;
 
@@ -108,7 +101,7 @@ void SchweineSystem::Module::Majordomo::midiReceive(double timeStamp, std::vecto
       if (0 == buffer.size())
          return;
 
-      for (Module* module : me->instanceList)
+      for (Module *module : me->instanceList)
          module->dataFromMidiInput(buffer);
       buffer.clear();
    };
@@ -125,7 +118,7 @@ void SchweineSystem::Module::Majordomo::midiReceive(double timeStamp, std::vecto
    maybeProcessBuffer();
 }
 
-void SchweineSystem::Module::Majordomo::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
+void SchweineSystem::Module::Majordomo::midiError(RtMidiError::Type type, const std::string &errorText, void *userData)
 {
    if (me != userData)
       return;
@@ -136,10 +129,7 @@ void SchweineSystem::Module::Majordomo::midiError(RtMidiError::Type type, const 
 // module
 
 SchweineSystem::Module::Module()
-   : rack::Module()
-   , texts()
-   , values()
-   , pixels()
+    : rack::Module(), texts(), values(), pixels()
 {
 }
 
@@ -148,23 +138,24 @@ void SchweineSystem::Module::updateDisplays()
    // do nothing
 }
 
-void SchweineSystem::Module::configText(const uint16_t& textId, std::string name)
+void SchweineSystem::Module::configText(const uint16_t &textId, std::string name)
 {
    texts[textId] = std::string();
 }
 
-void SchweineSystem::Module::configMeter(const uint16_t& valueId, std::string name)
+void SchweineSystem::Module::configMeter(const uint16_t &valueId, std::string name)
 {
    values[valueId] = 0.0;
 }
 
-void SchweineSystem::Module::configPixels(const uint16_t& valueId, const uint8_t& width, const uint8_t& height, std::string name)
+void SchweineSystem::Module::configPixels(const uint16_t &valueId, const uint8_t &width, const uint8_t &height, std::string name)
 {
    const uint16_t size = width * height;
    pixels[valueId] = new NVGcolor[size];
 }
 
-void SchweineSystem::Module::dataFromMidiInput(const Bytes& message)
+void SchweineSystem::Module::dataFromMidiInput(const Bytes &message)
 {
    (void)message;
+   // do nothing
 }

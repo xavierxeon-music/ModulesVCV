@@ -11,42 +11,31 @@
 const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 TimeLord::TimeLord()
-   : SchweineSystem::Module()
-   , ramps{}
-   , rampBuffer()
-   // clock
-   , clockTrigger()
-   , resetTrigger()
-   , tempo()
-   // input
-   , inputList(inputs)
-   , displayList(this)
-   , voltageToValue(0.0, 10.0, 0, 255)
-   // upload
-   , uploadTrigger()
-   , uploadData(false)
-   // outout
-   , valueToVoltage(0.0, 255.0, 0.0, 10.0)
-   , lightMeterList(this)
-   , outputList(outputs)
-   // display
-   , displayMode(DisplayMode::StageIndex)
-   , displayTrigger()
-   , displayController(this, Panel::Pixels_Display, 80, 120)
-   // bank
-   , bankIndex(0)
-   , bankTrigger()
-   , dataReceive(false)
-   , dataAppliedPulse()
-   , bankDisplay(this, Panel::Text_Bank, Panel::RGB_Bank)
-   // mode
-   , operationMode(OperationMode::Input)
-   , operationTrigger()
-   , remoteValues{0, 0, 0, 0, 0, 0, 0, 0}
-   , remoteBuffer()
-   , modeInputLight(this, Panel::RGB_Input_Status)
-   , modeRemoteLight(this, Panel::RGB_Remote_Status)
-   , modeInternalLight(this, Panel::RGB_Internal_Status)
+    : SchweineSystem::Module(), ramps{}
+      // midi
+      ,
+      receive(MidiReceive::None), buffer()
+      // clock
+      ,
+      clockTrigger(), resetTrigger(), tempo()
+      // input
+      ,
+      inputList(inputs), displayList(this), voltageToValue(0.0, 10.0, 0, 255)
+      // upload
+      ,
+      uploadTrigger(), uploadData(false)
+      // outout
+      ,
+      valueToVoltage(0.0, 255.0, 0.0, 10.0), lightMeterList(this), outputList(outputs)
+      // display
+      ,
+      displayMode(DisplayMode::StageIndex), displayTrigger(), displayController(this, Panel::Pixels_Display, 80, 120)
+      // bank
+      ,
+      bankIndex(0), bankTrigger(), dataReceive(false), dataAppliedPulse(), bankDisplay(this, Panel::Text_Bank, Panel::RGB_Bank)
+      // mode
+      ,
+      operationMode(OperationMode::Input), operationTrigger(), remoteValues{0, 0, 0, 0, 0, 0, 0, 0}, remoteBuffer(), modeInputLight(this, Panel::RGB_Input_Status), modeRemoteLight(this, Panel::RGB_Remote_Status), modeInternalLight(this, Panel::RGB_Internal_Status)
 {
    setup();
    Majordomo::hello(this);
@@ -105,7 +94,7 @@ TimeLord::~TimeLord()
    Majordomo::bye(this);
 }
 
-void TimeLord::process(const ProcessArgs& args)
+void TimeLord::process(const ProcessArgs &args)
 {
    Majordomo::process();
 
@@ -203,7 +192,7 @@ void TimeLord::updateDisplays()
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
-      PolyRamp* polyRamp = &ramps[rampIndex];
+      PolyRamp *polyRamp = &ramps[rampIndex];
 
       const uint8_t x = 5;
       const uint8_t y = 16 + rampIndex * 13;
@@ -226,7 +215,7 @@ void TimeLord::setOutputs(bool isReset, bool isClock)
 {
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
-      PolyRamp* polyRamp = &ramps[rampIndex];
+      PolyRamp *polyRamp = &ramps[rampIndex];
 
       if (isReset)
          polyRamp->clockReset();
@@ -293,7 +282,7 @@ void TimeLord::setOperationLEDs()
    modeInternalLight.setActive(OperationMode::Internal == operationMode);
 }
 
-void TimeLord::dataFromMidiInput(const Bytes& message)
+void TimeLord::dataFromMidiInput(const Bytes &message)
 {
    const bool isSystemEvent = (0xF0 == (message[0] & 0xF0));
    if (isSystemEvent)
@@ -319,12 +308,12 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
 
    const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(message[1]);
 
-   auto extractJsonAndClearBuffer = [&](Bytes& buffer)
+   auto extractJsonAndClearBuffer = [&](Bytes &buffer)
    {
       const Bytes data = SevenBit::decode(buffer);
       buffer.clear();
 
-      const char* cBuffer = (const char*)data.data();
+      const char *cBuffer = (const char *)data.data();
       auto printIncomingData = [&]()
       {
          for (uint8_t byte : data)
@@ -334,13 +323,16 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       printIncomingData();
 
       json_error_t error;
-      json_t* rootJson = json_loadb(cBuffer, data.size(), 0, &error);
+      json_t *rootJson = json_loadb(cBuffer, data.size(), 0, &error);
 
       SchweineSystem::Json::Object rootObject(rootJson);
       return rootObject;
    };
 
-   if (Midi::ControllerMessage::RememberBlock == controllerMessage)
+   if (Midi::ControllerMessage::RememberInit == controllerMessage)
+   {
+   }
+   else if (Midi::ControllerMessage::RememberBlock == controllerMessage)
    {
       const uint8_t value = message[2];
       rampBuffer << value;
@@ -360,9 +352,9 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
 
       dataAppliedPulse.trigger(2.0);
    }
-   else if (Midi::ControllerMessage::RememberRequest == controllerMessage)
+   else if (Midi::ControllerMessage::DataInit == controllerMessage)
    {
-      uploadData = true;
+      // TODO
    }
    else if (Midi::ControllerMessage::DataBlock == controllerMessage)
    {
@@ -381,7 +373,7 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
    }
 }
 
-json_t* TimeLord::dataToJson()
+json_t *TimeLord::dataToJson()
 {
    using namespace SchweineSystem::Json;
 
@@ -392,7 +384,7 @@ json_t* TimeLord::dataToJson()
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
-      PolyRamp* polyRamp = &ramps[rampIndex];
+      PolyRamp *polyRamp = &ramps[rampIndex];
 
       Object rampObject;
 
@@ -429,7 +421,7 @@ json_t* TimeLord::dataToJson()
    return rootObject.toJson();
 }
 
-void TimeLord::dataFromJson(json_t* rootJson)
+void TimeLord::dataFromJson(json_t *rootJson)
 {
    using namespace SchweineSystem::Json;
 
@@ -441,13 +433,13 @@ void TimeLord::dataFromJson(json_t* rootJson)
    loadInternal(rootObject);
 }
 
-void TimeLord::loadInternal(const SchweineSystem::Json::Object& rootObject)
+void TimeLord::loadInternal(const SchweineSystem::Json::Object &rootObject)
 {
    using namespace SchweineSystem::Json;
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
-      PolyRamp* polyRamp = &ramps[rampIndex];
+      PolyRamp *polyRamp = &ramps[rampIndex];
       polyRamp->clear();
 
       Object rampObject = rootObject.get(keys.substr(rampIndex, 1)).toObject();
@@ -501,36 +493,39 @@ void TimeLord::uploadToRemote()
    uploadObject.set("bankIndex", bankIndex);
 
    Queue queue;
+
+   const uint8_t firstByte = (Midi::Event::ControlChange | (Midi::Device::VCVRack - 1));
+   auto sendMessage = [&](const Midi::Event midiEvent, const uint8_t value)
    {
-      size_t size = json_dumpb(uploadObject.toJson(), NULL, 0, 0);
-      if (size == 0)
-         return;
+      Bytes message(3);
+      message[0] = firstByte;
+      message[1] = midiEvent;
+      message[2] = value;
+      queue.push_back(message);
+   };
 
-      char* buffer = new char[size];
-      size = json_dumpb(uploadObject.toJson(), buffer, size, 0);
+   sendMessage(Midi::ControllerMessage::DataInit, bankIndex);
 
-      for (size_t index = 0; index < size; index++)
-      {
-         Bytes message(3);
-         message[0] = (Midi::Event::ControlChange | (Midi::Device::VCVRack - 1));
-         message[1] = Midi::ControllerMessage::RememberBlock;
-         message[2] = buffer[index];
-         queue.push_back(message);
-      }
+   size_t size = json_dumpb(uploadObject.toJson(), NULL, 0, 0);
+   if (size == 0)
+      return;
 
-      delete[] buffer;
+   char *buffer = new char[size];
+   size = json_dumpb(uploadObject.toJson(), buffer, size, 0);
+
+   for (size_t index = 0; index < size; index++)
+   {
+      sendMessage(Midi::ControllerMessage::DataBlock, buffer[index]);
    }
 
-   Bytes message(3);
-   message[0] = (Midi::Event::ControlChange | (Midi::Device::VCVRack - 1));
-   message[1] = Midi::ControllerMessage::RememberApply;
-   message[2] = bankIndex;
-   queue.push_back(message);
+   delete[] buffer;
+
+   sendMessage(Midi::ControllerMessage::DataApply, bankIndex);
 
    Majordomo::send(queue);
 }
 
-void TimeLord::loadRemote(const SchweineSystem::Json::Object& rootObject)
+void TimeLord::loadRemote(const SchweineSystem::Json::Object &rootObject)
 {
    using namespace SchweineSystem::Json;
 
@@ -548,10 +543,10 @@ void TimeLord::loadRemote(const SchweineSystem::Json::Object& rootObject)
 
 // widget
 
-TimeLordWidget::TimeLordWidget(TimeLord* module)
-   : SchweineSystem::ModuleWidget(module)
+TimeLordWidget::TimeLordWidget(TimeLord *module)
+    : SchweineSystem::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelTimeLord = SchweineSystem::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");
+Model *modelTimeLord = SchweineSystem::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");
