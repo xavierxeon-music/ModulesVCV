@@ -385,6 +385,7 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
    const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(message[1]);
    const uint8_t value = message[2];
 
+   // ramps
    if (Midi::ControllerMessage::RememberInit == controllerMessage)
    {
       if (value != bankIndex)
@@ -411,6 +412,7 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       receive = MidiReceive::None;
       dataAppliedPulse.trigger(2.0);
    }
+   // values
    else if (Midi::ControllerMessage::DataInit == controllerMessage)
    {
       if (value != bankIndex)
@@ -428,7 +430,7 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
    }
    else if (Midi::ControllerMessage::DataApply == controllerMessage)
    {
-      if (value != bankIndex || MidiReceive::Data != receive))
+      if (value != bankIndex || MidiReceive::Data != receive)
          return;
 
       SchweineSystem::Json::Object rootObject = extractJsonAndClearBuffer();
@@ -562,7 +564,7 @@ void TimeLord::uploadToRemote()
    Queue queue;
 
    const uint8_t firstByte = (Midi::Event::ControlChange | (Midi::Device::VCVRack - 1));
-   auto sendMessage = [&](const Midi::Event midiEvent, const uint8_t value)
+   auto sendMessage = [&](const Midi::ControllerMessage midiEvent, const uint8_t value)
    {
       Bytes message(3);
       message[0] = firstByte;

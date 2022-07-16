@@ -50,8 +50,7 @@ void SchweineSystem::Module::Majordomo::process()
    if (!me)
       return;
 
-   std::lock_guard<std::mutex> lock(me->mutex, std::try_to_lock);
-   if (!lock.owns_lock())
+   if (!me->mutex.try_lock())
       return;
 
    if (!sendBuffer.empty())
@@ -61,6 +60,8 @@ void SchweineSystem::Module::Majordomo::process()
 
       me->midiOutput.sendMessage(&bytes);
    }
+
+   me->mutex.unlock();
 }
 
 SchweineSystem::Module::Majordomo::Majordomo()
