@@ -21,10 +21,9 @@ struct BarCounter::Panel
    enum DisplayId
    {
       // lcd
-      Text_Tempo = 0,
       // oled
-      Pixels_Display = 1,
-      DISPLAYS_LEN = 2
+      Pixels_Display = 0,
+      DISPLAYS_LEN = 1
    };
 
    enum MeterId
@@ -49,8 +48,7 @@ struct BarCounter::Panel
       // leds
       // ledbuttons
       // lcds
-      RGB_Tempo = 0,
-      LIGHTS_LEN = 3
+      LIGHTS_LEN = 0
    };
 
 };

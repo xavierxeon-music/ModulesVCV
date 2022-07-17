@@ -10,7 +10,6 @@
 ./src/_Common/SchweineSystemDisplayOLED.h
 ./src/_Common/SchweineSystemJson.h
 ./src/_Common/SchweineSystemModuleWidget.h
-./src/_Common/SchweineSystemOutput.h
 ./src/_Common/SchweineSystemLightMeter.h
 ./src/_Common/SchweineSystemCommon.h
 ./src/_Common/SchweineSystemButtonLED.h
@@ -20,11 +19,8 @@
 ./src/_Common/SchweineSystemSwitch.h
 ./src/_Common/SchweineSystemMidiOutput.h
 ./src/_Common/SchweineSystemLED.h
-./src/_Common/SchweineSystemInput.h
 ./src/SchweineSystem.h
 ./src/Other/TimeLord.h
-./src/Other/TimeLordChroniclePanel.h
-./src/Other/TimeLordChronicle.h
 ./src/Other/GateLatchPanel.h
 ./src/Other/BarCounter.h
 ./src/Other/BarCounterPanel.h
@@ -136,8 +132,6 @@
 ./src/Hardware/FlameCC.cpp
 ./src/_Common/SchweineSystemMidiOutput.cpp
 ./src/_Common/SchweineSystemModule.cpp
-./src/_Common/SchweineSystemOutput.cpp
-./src/_Common/SchweineSystemInput.cpp
 ./src/_Common/SchweineSystemSwitch.cpp
 ./src/_Common/SchweineSystemDisplayOLED.cpp
 ./src/_Common/SchweineSystemModuleWidget.cpp
@@ -149,12 +143,10 @@
 ./src/_Common/SchweineSystemDisplayLCD.cpp
 ./src/_Common/SchweineSystemJson.cpp
 ./src/_Common/SchweineSystemLightMeter.cpp
-./src/Other/TimeLordChronicle.cpp
 ./src/Other/Equalizer.cpp
 ./src/Other/Select.cpp
 ./src/Other/TimeLordPanel.cpp
 ./src/Other/EqualizerPanel.cpp
-./src/Other/TimeLordChroniclePanel.cpp
 ./src/Other/HalfVolt.cpp
 ./src/Other/BarCounter.cpp
 ./src/Other/GateLatchPanel.cpp

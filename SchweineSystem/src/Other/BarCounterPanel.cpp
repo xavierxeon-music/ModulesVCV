@@ -2,7 +2,6 @@
 #include "BarCounterPanel.h"
 
 #include <SchweineSystemMaster.h>
-#include <limits>
 
 void BarCounter::setup()
 {
@@ -11,9 +10,7 @@ void BarCounter::setup()
    configInput(Panel::Reset, "Reset");
    configInput(Panel::Clock, "Clock");
 
-   configText(Panel::Text_Tempo, "Tempo");
-
-   configPixels(Panel::Pixels_Display, 64, 128, "Display");
+   configPixels(Panel::Pixels_Display, 83, 170, "Display");
 }
 
 void BarCounterWidget::setup()
@@ -22,11 +19,9 @@ void BarCounterWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeInput(this, Vec(45.00, 345.45),  BarCounter::Panel::Reset);
-   makeInput(this, Vec(45.00, 296.32),  BarCounter::Panel::Clock);
+   makeInput(this, Vec(52.50, 344.93),  BarCounter::Panel::Reset);
+   makeInput(this, Vec(52.50, 295.80),  BarCounter::Panel::Clock);
 
-   makeLCD(this, Vec(17.11, 199.37), 3, BarCounter::Panel::Text_Tempo, BarCounter::Panel::RGB_Tempo);
-
-   makeOLED(this, Vec(12.00, 50.24), BarCounter::Panel::Pixels_Display, 64, 128);
+   makeOLED(this, Vec(10.00, 63.98), BarCounter::Panel::Pixels_Display, 83, 170);
 }
 

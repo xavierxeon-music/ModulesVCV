@@ -5,9 +5,9 @@
 using namespace rack;
 
 #include <Music/Tempo.h>
+#include <Music/TimeCode.h>
 #include <Tools/Counter.h>
 
-#include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemDisplayOLED.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
@@ -28,10 +28,13 @@ private:
    void setup();
 
 private:
-   SchweineSystem::DisplayOLED::Controller displayController;
    // tempo
+   dsp::BooleanTrigger clockTrigger;
+   dsp::BooleanTrigger resetTrigger;
    Tempo tempo;
-   SchweineSystem::DisplayLCD::Controller tempoController;
+   // time
+   TimeCode::Duration duration;
+   SchweineSystem::DisplayOLED::Controller displayController;
 };
 
 // widget
