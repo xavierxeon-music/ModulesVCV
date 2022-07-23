@@ -9,7 +9,6 @@ using namespace rack;
 #include <Tools/Range.h>
 
 #include <SchweineSystemButton.h>
-#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemDisplayOLED.h>
@@ -18,6 +17,7 @@ using namespace rack;
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
+#include <SchweineSystemSwitch.h>
 
 class TimeLord : public SchweineSystem::Module
 {
@@ -56,7 +56,7 @@ private:
    };
 
 private:
-   void setup();
+   void setup() override;
 
    void setOutputs(bool isReset, bool isClock);
    void setOperationLEDs();
@@ -98,7 +98,7 @@ private:
 
    // display
    DisplayMode displayMode;
-   SchweineSystem::ButtonLED displayButton;
+   SchweineSystem::Button displayButton;
    SchweineSystem::DisplayOLED::Controller displayController;
 
    // bank
@@ -116,8 +116,7 @@ private:
    SchweineSystem::LED modeInternalLight;
 
    // silence
-   bool silenceOnStop;
-   SchweineSystem::ButtonLED silenceButton;
+   SchweineSystem::Switch::List silenceSwitches;
 };
 
 class TimeLordWidget : public SchweineSystem::ModuleWidget

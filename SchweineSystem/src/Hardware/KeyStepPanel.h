@@ -44,11 +44,12 @@ struct KeyStep::Panel
 
    enum InputId
    {
-      Channel4_Select = 0,
-      Channel3_Select = 1,
-      Channel2_Select = 2,
-      Channel1_Select = 3,
-      INPUTS_LEN = 4
+      Reset = 0,
+      Channel4_Select = 1,
+      Channel3_Select = 2,
+      Channel2_Select = 3,
+      Channel1_Select = 4,
+      INPUTS_LEN = 5
    };
 
    enum OutputId

@@ -28,10 +28,14 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   void setup() override;
    void connectToMidiDevice();
    void sendProgramChange(uint8_t channel);
+   void sendClockReset();
    void updateDisplay(uint8_t channel);
+
+   json_t* dataToJson() override;
+   void dataFromJson(json_t* rootJson) override;
 
 private:
    // midi
@@ -45,6 +49,8 @@ private:
    SchweineSystem::DisplayLCD::Controller::List displayList;
    SchweineSystem::Button::List downButtonList;
    SchweineSystem::Button::List upButtonList;
+   // manual reset
+   dsp::BooleanTrigger resetTrigger;
 };
 
 class KeyStepWidget : public SchweineSystem::ModuleWidget

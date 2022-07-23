@@ -918,6 +918,9 @@ void SchweineSystem::DisplayOLED::Controller::drawPixel(const uint8_t x, const u
    if (!module)
       return;
 
+   if (x >= width || y >= height)
+      return;
+
    const uint16_t index = compileIndex(x, y);
    module->pixels[pixelId][index] = color;
 }
@@ -1055,8 +1058,7 @@ void SchweineSystem::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int la
          }();
 
          nvgBeginPath(args.vg);
-         //nvgRect(args.vg, x + 1, y + 1, 1, 1);
-         nvgRoundedRect(args.vg, x + 1, y + 1, 1, 1, 1);
+         nvgRoundedRect(args.vg, x + 1, y + 1, 1, 1, 0.4);
          nvgFillColor(args.vg, color);
          nvgFill(args.vg);
       }

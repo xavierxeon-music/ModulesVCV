@@ -20,7 +20,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   void setup() override;
 
 private:
    SchweineSystem::Input::List inputList;

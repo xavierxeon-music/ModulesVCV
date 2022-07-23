@@ -19,7 +19,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   void setup() override;
 };
 
 class SelectWidget : public SchweineSystem::ModuleWidget

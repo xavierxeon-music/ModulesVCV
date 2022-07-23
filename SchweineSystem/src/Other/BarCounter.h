@@ -25,7 +25,7 @@ public:
    void updateDisplays() override;
 
 private:
-   void setup();
+   void setup() override;
 
 private:
    // tempo

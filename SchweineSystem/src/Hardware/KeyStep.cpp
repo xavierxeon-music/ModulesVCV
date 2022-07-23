@@ -1,6 +1,7 @@
 #include "KeyStep.h"
 #include "KeyStepPanel.h"
 
+#include <SchweineSystemJson.h>
 #include <SchweineSystemMaster.h>
 
 KeyStep::KeyStep()
@@ -14,6 +15,7 @@ KeyStep::KeyStep()
    , displayList(this)
    , downButtonList(this)
    , upButtonList(this)
+   , resetTrigger()
 {
    setup();
 
@@ -50,6 +52,10 @@ void KeyStep::process(const ProcessArgs& args)
 {
    if (connect.isTriggered())
       connectToMidiDevice();
+
+   const bool isReset = resetTrigger.process(inputs[Panel::Reset].getVoltage() > 3.0);
+   if (isReset)
+      sendClockReset();
 
    for (uint8_t channel = 0; channel < 4; channel++)
    {
@@ -119,12 +125,53 @@ void KeyStep::sendProgramChange(uint8_t channel)
    sendMessage(progChangeMessage);
 }
 
+void KeyStep::sendClockReset()
+{
+   std::vector<unsigned char> startMessage(1);
+   startMessage[0] = Midi::Event::Start;
+   sendMessage(startMessage);
+}
+
 void KeyStep::updateDisplay(uint8_t channel)
 {
    std::string text = std::to_string(patterns[channel] + 1);
    if (1 == text.size())
       text = "0" + text;
    displayList[channel]->setText(text);
+}
+
+json_t* KeyStep::dataToJson()
+{
+   using namespace SchweineSystem::Json;
+
+   Array patternArray;
+   for (uint8_t channel = 0; channel < 4; channel++)
+      patternArray.append(Value(patterns[channel]));
+
+   Object rootObject;
+   rootObject.set("patterns", patternArray);
+   rootObject.set("channel1Mode", midiChannelSwitch.isOn());
+
+   return rootObject.toJson();
+}
+
+void KeyStep::dataFromJson(json_t* rootJson)
+{
+   using namespace SchweineSystem::Json;
+
+   Object rootObject(rootJson);
+
+   Array patternArray = rootObject.get("patterns").toArray();
+   for (uint8_t channel = 0; channel < 4; channel++)
+   {
+      patterns[channel] = patternArray.get(channel).toInt();
+      if (connected())
+         sendProgramChange(channel);
+      updateDisplay(channel);
+   }
+
+   const bool channel1Mode = rootObject.get("channel1Mode").toBool();
+   midiChannelSwitch.setState(channel1Mode);
 }
 
 // widget

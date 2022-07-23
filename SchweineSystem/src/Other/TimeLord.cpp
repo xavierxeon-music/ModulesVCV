@@ -34,7 +34,7 @@ TimeLord::TimeLord()
    // display
    , displayMode(DisplayMode::StageIndex)
    , displayButton(this, Panel::Display)
-   , displayController(this, Panel::Pixels_Display, 80, 120)
+   , displayController(this, Panel::Pixels_Display, 60, 120)
    // bank
    , bankIndex(0)
    , bankButton(this, Panel::BankUp)
@@ -48,8 +48,7 @@ TimeLord::TimeLord()
    , modeRemoteLight(this, Panel::RGB_Remote_Status)
    , modeInternalLight(this, Panel::RGB_Internal_Status)
    // silence
-   , silenceOnStop(false)
-   , silenceButton(this, Panel::Silence, Panel::RGB_Silence)
+   , silenceSwitches(this)
 {
    setup();
    Majordomo::hello(this);
@@ -90,15 +89,22 @@ TimeLord::TimeLord()
                           Panel::Value_Channel7_Strip,
                           Panel::Value_Channel8_Strip});
 
+   silenceSwitches.append({Panel::Channel1_Silence,
+                           Panel::Channel2_Silence,
+                           Panel::Channel3_Silence,
+                           Panel::Channel4_Silence,
+                           Panel::Channel5_Silence,
+                           Panel::Channel6_Silence,
+                           Panel::Channel7_Silence,
+                           Panel::Channel8_Silence});
+
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       lightMeterList[rampIndex]->setMaxValue(255);
       displayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 0});
       displayList[rampIndex]->setText("ABC");
+      silenceSwitches[rampIndex]->setState(true);
    }
-
-   silenceButton.setDefaultColor(SchweineSystem::Color{100, 100, 100});
-   silenceButton.setOn();
 
    modeInputLight.setDefaultColor(SchweineSystem::Color{255, 255, 0});
    modeRemoteLight.setDefaultColor(SchweineSystem::Color{0, 0, 255});
@@ -145,11 +151,6 @@ void TimeLord::process(const ProcessArgs& args)
          advanceOperationMode();
    }
    setOperationLEDs();
-
-   // silence
-   if (silenceButton.isTriggered())
-      silenceOnStop ^= true;
-   silenceButton.setActive(silenceOnStop);
 
    // screen mode
    if (displayButton.isTriggered())
@@ -204,11 +205,13 @@ void TimeLord::updateDisplays()
    if (OperationMode::Internal != operationMode)
       return;
 
-   displayController.drawRect(0, 0, 80, 10, true);
+   displayController.setColor(SchweineSystem::Color{255, 255, 255});
+   displayController.drawRect(0, 0, 60, 10, true);
+
    displayController.setColor(SchweineSystem::Color{0, 0, 0});
 
    if (DisplayMode::Division == displayMode)
-      displayController.writeText(5, 1, "Division", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(5, 1, "Step", SchweineSystem::DisplayOLED::Font::Normal);
    else if (DisplayMode::Length == displayMode)
       displayController.writeText(5, 1, "Length", SchweineSystem::DisplayOLED::Font::Normal);
    else if (DisplayMode::StageCount == displayMode)
@@ -260,7 +263,7 @@ void TimeLord::setOutputs(bool isReset, bool isClock)
 
          const uint8_t value = voltageToValue(voltage);
 
-         if (silenceOnStop && !tempo.isRunningOrFirstTick())
+         if (silenceSwitches[rampIndex]->isOn() && !tempo.isRunningOrFirstTick())
          {
             displayList[rampIndex]->setText("off");
             lightMeterList[rampIndex]->setValue(0);
@@ -281,7 +284,7 @@ void TimeLord::setOutputs(bool isReset, bool isClock)
          const uint8_t value = remoteValues[rampIndex];
          const float voltage = valueToVoltage(value);
 
-         if (silenceOnStop && !tempo.isRunningOrFirstTick())
+         if (silenceSwitches[rampIndex]->isOn() && !tempo.isRunningOrFirstTick())
          {
             displayList[rampIndex]->setText("off");
             lightMeterList[rampIndex]->setValue(0);
@@ -448,7 +451,8 @@ json_t* TimeLord::dataToJson()
    rootObject.set("bank", bankIndex);
    rootObject.set("display", static_cast<uint8_t>(displayMode));
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
-   rootObject.set("silence", silenceOnStop);
+
+   Array silenceArray;
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
@@ -464,6 +468,9 @@ json_t* TimeLord::dataToJson()
 
       const bool loop = polyRamp->isLooping();
       rampObject.set("loop", Value(loop));
+
+      bool silence = silenceSwitches[rampIndex]->isOn();
+      silenceArray.append(Value(silence));
 
       Array stagesArray;
       for (uint8_t stageIndex = 0; stageIndex < polyRamp->getStageCount(); stageIndex++)
@@ -486,6 +493,8 @@ json_t* TimeLord::dataToJson()
       rootObject.set(keys.substr(rampIndex, 1), rampObject);
    }
 
+   rootObject.set("silence", silenceArray);
+
    return rootObject.toJson();
 }
 
@@ -497,7 +506,13 @@ void TimeLord::dataFromJson(json_t* rootJson)
    bankIndex = rootObject.get("bank").toInt();
    displayMode = static_cast<DisplayMode>(rootObject.get("display").toInt());
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
-   silenceOnStop = rootObject.get("silence").toBool();
+
+   Array silenceArray = rootObject.get("silence").toArray();
+   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
+   {
+      bool silence = silenceArray.get(rampIndex).toBool();
+      silenceSwitches[rampIndex]->setState(silence);
+   }
 
    loadInternal(rootObject);
 }
