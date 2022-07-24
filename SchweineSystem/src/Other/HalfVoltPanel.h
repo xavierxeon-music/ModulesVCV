@@ -10,6 +10,7 @@ struct HalfVolt::Panel
    enum ParamId
    {
       // buttons
+      // switches
       // ledbuttons
       // knobs
       PARAMS_LEN = 0
@@ -17,6 +18,8 @@ struct HalfVolt::Panel
 
    enum DisplayId
    {
+      // lcd
+      // oled
       DISPLAYS_LEN = 0
    };
 
@@ -54,8 +57,8 @@ struct HalfVolt::Panel
    enum LightId
    {
       // leds
-      // buttons
-      // displays
+      // ledbuttons
+      // lcds
       LIGHTS_LEN = 0
    };
 

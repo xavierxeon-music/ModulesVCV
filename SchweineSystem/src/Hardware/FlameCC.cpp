@@ -3,7 +3,8 @@
 
 #include <Midi/MidiCommon.h>
 
-#include "SchweineSystemMaster.h"
+#include <SchweineSystemJson.h>
+#include <SchweineSystemMaster.h>
 
 FlameCC::FlameCC()
    : SchweineSystem::Module()
@@ -13,6 +14,7 @@ FlameCC::FlameCC()
    , connectionLight(this)
    , inputList(inputs)
    , controllerValueStore{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+   , fullVoltSwitchList(this)
 {
    setup();
 
@@ -33,6 +35,23 @@ FlameCC::FlameCC()
                      Panel::Row7_InB,
                      Panel::Row8_InB});
 
+   fullVoltSwitchList.append({Panel::Row1_HalfA,
+                              Panel::Row2_HalfA,
+                              Panel::Row3_HalfA,
+                              Panel::Row4_HalfA,
+                              Panel::Row5_HalfA,
+                              Panel::Row6_HalfA,
+                              Panel::Row7_HalfA,
+                              Panel::Row8_HalfA,
+                              Panel::Row1_HalfB,
+                              Panel::Row2_HalfB,
+                              Panel::Row3_HalfB,
+                              Panel::Row4_HalfB,
+                              Panel::Row5_HalfB,
+                              Panel::Row6_HalfB,
+                              Panel::Row7_HalfB,
+                              Panel::Row8_HalfB});
+
    connectionLight.assign(Panel::RGB_Connect);
    connectToMidiDevice();
 }
@@ -47,7 +66,10 @@ void FlameCC::process(const ProcessArgs& args)
 
    for (uint8_t index = 0; index < 16; index++)
    {
-      const float voltage = inputList[index]->getVoltage();
+      float voltage = inputList[index]->getVoltage();
+      if (fullVoltSwitchList[index]->isOff())
+         voltage *= 0.5;
+
       const uint8_t controllerValue = static_cast<uint8_t>(voltageToCcValue(voltage));
       if (controllerValue != controllerValueStore[index])
       {
@@ -99,6 +121,39 @@ void FlameCC::sendSysEx()
    sysExMessage[37] = static_cast<uint8_t>(Midi::Event::SysExEnd); // End of Exclusive
    sendMessage(sysExMessage);
 }
+
+json_t* FlameCC::dataToJson()
+{
+   using namespace SchweineSystem::Json;
+
+   Array fullVoltageArray;
+   for (uint8_t index = 0; index < 16; index++)
+   {
+      const bool on = fullVoltSwitchList[index]->isOn();
+      fullVoltageArray.append(Value(on));
+   }
+
+   Object rootObject;
+   rootObject.set("fullVoltage", fullVoltageArray);
+
+   return rootObject.toJson();
+}
+
+void FlameCC::dataFromJson(json_t* rootJson)
+{
+   using namespace SchweineSystem::Json;
+
+   Object rootObject(rootJson);
+
+   Array fullVoltageArray = rootObject.get("fullVoltage").toArray();
+   for (uint8_t index = 0; index < 16; index++)
+   {
+      const bool on = fullVoltageArray.get(index).toBool();
+      fullVoltSwitchList[index]->setState(on);
+   }
+}
+
+// widget
 
 FlameCCWidget::FlameCCWidget(FlameCC* module)
    : SchweineSystem::ModuleWidget(module)

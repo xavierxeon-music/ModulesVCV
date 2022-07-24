@@ -16,7 +16,8 @@ namespace SchweineSystem
    public:
       void assign(const uint16_t& paramIndex);
       void setState(bool on);
-      bool isOn();
+      bool isOn() const;
+      bool isOff() const;
 
    private:
       Module* module;

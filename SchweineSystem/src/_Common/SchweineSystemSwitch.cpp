@@ -19,8 +19,14 @@ void SchweineSystem::Switch::setState(bool on)
    module->params[paramIndex].setValue(value);
 }
 
-bool SchweineSystem::Switch::isOn()
+bool SchweineSystem::Switch::isOn() const
 {
    const bool on = module->params[paramIndex].getValue();
    return on;
+}
+
+bool SchweineSystem::Switch::isOff() const
+{
+   const bool on = module->params[paramIndex].getValue();
+   return !on;
 }

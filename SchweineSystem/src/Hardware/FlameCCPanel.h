@@ -10,14 +10,33 @@ struct FlameCC::Panel
    enum ParamId
    {
       // buttons
+      // switches
+      Row8_HalfB = 0,
+      Row8_HalfA = 1,
+      Row7_HalfB = 2,
+      Row7_HalfA = 3,
+      Row6_HalfB = 4,
+      Row6_HalfA = 5,
+      Row5_HalfB = 6,
+      Row5_HalfA = 7,
+      Row4_HalfB = 8,
+      Row4_HalfA = 9,
+      Row3_HalfB = 10,
+      Row3_HalfA = 11,
+      Row2_HalfB = 12,
+      Row2_HalfA = 13,
+      Row1_HalfB = 14,
+      Row1_HalfA = 15,
       // ledbuttons
-      Connect = 0,
+      Connect = 16,
       // knobs
-      PARAMS_LEN = 1
+      PARAMS_LEN = 17
    };
 
    enum DisplayId
    {
+      // lcd
+      // oled
       DISPLAYS_LEN = 0
    };
 
@@ -55,9 +74,9 @@ struct FlameCC::Panel
    enum LightId
    {
       // leds
-      // buttons
+      // ledbuttons
       RGB_Connect = 0,
-      // displays
+      // lcds
       LIGHTS_LEN = 3
    };
 

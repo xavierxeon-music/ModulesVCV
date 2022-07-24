@@ -11,6 +11,7 @@ using namespace rack;
 #include <SchweineSystemMidiOutput.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
+#include <SchweineSystemSwitch.h>
 
 class FlameCC : public SchweineSystem::Module, private SchweineSystem::MidiOutput
 {
@@ -24,9 +25,12 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   void setup() override;
    void connectToMidiDevice();
    void sendSysEx();
+
+   json_t* dataToJson() override;
+   void dataFromJson(json_t* rootJson) override;
 
 private:
    // midi
@@ -36,6 +40,8 @@ private:
    // outputs
    SchweineSystem::Input::List inputList;
    uint8_t controllerValueStore[16];
+   // half voltage
+   SchweineSystem::Switch::List fullVoltSwitchList;
 };
 
 class FlameCCWidget : public SchweineSystem::ModuleWidget
