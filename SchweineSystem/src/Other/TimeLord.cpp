@@ -369,7 +369,6 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       const Bytes data = SevenBit::decode(buffer);
       buffer.clear();
 
-      const char* cBuffer = (const char*)data.data();
       auto printIncomingData = [&]()
       {
          for (uint8_t byte : data)
@@ -378,10 +377,7 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       };
       printIncomingData();
 
-      json_error_t error;
-      json_t* rootJson = json_loadb(cBuffer, data.size(), 0, &error);
-
-      SchweineSystem::Json::Object rootObject(rootJson);
+      SchweineSystem::Json::Object rootObject(data);
       return rootObject;
    };
 
@@ -590,19 +586,9 @@ void TimeLord::uploadToRemote()
 
    sendMessage(Midi::ControllerMessage::DataInit, bankIndex);
 
-   size_t size = json_dumpb(uploadObject.toJson(), NULL, 0, 0);
-   if (size == 0)
-      return;
-
-   char* buffer = new char[size];
-   size = json_dumpb(uploadObject.toJson(), buffer, size, 0);
-
-   for (size_t index = 0; index < size; index++)
-   {
-      sendMessage(Midi::ControllerMessage::DataBlock, buffer[index]);
-   }
-
-   delete[] buffer;
+   const Bytes buffer = uploadObject.save();
+   for (const uint8_t& byte : buffer)
+      sendMessage(Midi::ControllerMessage::DataBlock, byte);
 
    sendMessage(Midi::ControllerMessage::DataApply, bankIndex);
 

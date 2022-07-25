@@ -53,10 +53,13 @@ namespace SchweineSystem
       {
       public:
          Object(json_t* object = nullptr);
+         Object(const Bytes& data);
 
       public:
          void set(const std::string& key, const Value& value);
          Value get(const std::string& key) const;
+
+         Bytes save() const;
       };
 
    } // namespace Json

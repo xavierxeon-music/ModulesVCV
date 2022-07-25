@@ -13,7 +13,6 @@ namespace SchweineSystem
       using TextMap = std::map<uint16_t, std::string>;
       using ValueMap = std::map<uint16_t, float>;
       using PixelMap = std::map<uint16_t, NVGcolor*>;
-      using Bytes = std::vector<uint8_t>;
       using Queue = std::list<Bytes>;
 
    public:

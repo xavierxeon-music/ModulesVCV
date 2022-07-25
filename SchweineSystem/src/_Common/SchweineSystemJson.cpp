@@ -1,5 +1,7 @@
 #include "SchweineSystemJson.h"
 
+#include <MusicTools.h>
+
 // value
 
 SchweineSystem::Json::Value::Value(json_t* value)
@@ -111,6 +113,13 @@ SchweineSystem::Json::Object::Object(json_t* object)
       json = json_object();
 }
 
+SchweineSystem::Json::Object::Object(const Bytes& data)
+   : Value(nullptr)
+{
+   json_error_t error;
+   json = json_loadb((const char*)data.data(), data.size(), 0, &error);
+}
+
 void SchweineSystem::Json::Object::set(const std::string& key, const Value& value)
 {
    json_object_set_new(json, key.c_str(), value.toJson());
@@ -119,4 +128,16 @@ void SchweineSystem::Json::Object::set(const std::string& key, const Value& valu
 SchweineSystem::Json::Value SchweineSystem::Json::Object::get(const std::string& key) const
 {
    return Value(json_object_get(json, key.c_str()));
+}
+
+Bytes SchweineSystem::Json::Object::save() const
+{
+   size_t size = json_dumpb(json, nullptr, 0, 0);
+   if (size == 0)
+      return Bytes();
+
+   Bytes buffer(size);
+   size = json_dumpb(json, (char*)buffer.data(), size, 0);
+
+   return buffer;
 }
