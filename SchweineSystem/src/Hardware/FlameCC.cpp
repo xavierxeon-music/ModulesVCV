@@ -103,10 +103,11 @@ void FlameCC::sendSysEx()
    std::vector<uint8_t> sysExMessage(38);
 
    sysExMessage[0] = static_cast<uint8_t>(Midi::Event::System); // Exclusive Status
-   sysExMessage[1] = 0x7D;                                      // Header Flame module
+   sysExMessage[1] = Midi::Manufacturer::EducationalUse;        // Header Flame module
    sysExMessage[2] = 0x0B;                                      // Flame module “μ16MCC”
    sysExMessage[3] = 0x01;                                      // version 1
-   sysExMessage[4] = 0x06;                                      // data type 1 (dump all data)
+
+   sysExMessage[4] = 0x06; // data type 1 (dump all data)
 
    for (uint8_t index = 0; index < 16; index++)
    {
@@ -162,4 +163,3 @@ FlameCCWidget::FlameCCWidget(FlameCC* module)
 }
 
 Model* modelFlameCC = SchweineSystem::Master::the()->addModule<FlameCC, FlameCCWidget>("FlameCC");
-
