@@ -6,6 +6,14 @@ VERSION=2.1.0
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"   
 CURRENT_DIR=$(pwd)
+(return 0 2>/dev/null) && THIS_SCRIPT_IS_SOURCED=1 || THIS_SCRIPT_IS_SOURCED=0
+
+if [ 1 == $THIS_SCRIPT_IS_SOURCED ]
+then
+   echo "you must not source this script"
+   return
+fi
+
 
 OS_TEST=$(uname)
 if [ "$OS_TEST" == " Darwin" ]
