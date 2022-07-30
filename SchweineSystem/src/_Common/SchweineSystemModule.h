@@ -5,6 +5,8 @@
 
 #include <rtmidi/RtMidi.h>
 
+#include <MusicTools.h>
+
 namespace SchweineSystem
 {
    class Module : public rack::Module

@@ -134,13 +134,26 @@
          "slug": "KeyStep",
          "name": "KeyStep",
          "description": "",
-         "tags": []
+         "tags": [
+            "Utility",
+            "Midi"
+         ]
       },
       {
          "slug": "BarCounter",
          "name": "BarCounter",
          "description": "",
-         "tags": []
+         "tags": [
+            "Utility"
+         ]
+      },
+      {
+         "slug": "Revoicer",
+         "name": "Revoicer",
+         "description": "",
+         "tags": [
+            "Noise"
+         ]
       }
    ]
 }

@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include <MusicTools.h>
+
 namespace SchweineSystem
 {
    namespace Json
