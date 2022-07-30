@@ -23,7 +23,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   void setup() override;
    void onSampleRateChange(const SampleRateChangeEvent& e) override;
 
 private:

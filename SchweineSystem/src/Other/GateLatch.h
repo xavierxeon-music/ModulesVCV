@@ -21,7 +21,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   void setup() override;
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
 

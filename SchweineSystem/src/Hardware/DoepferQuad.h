@@ -37,7 +37,7 @@ private:
    };
 
 private:
-   void setup();
+   void setup() override;
    void connectToMidiDevice();
 
 private:
