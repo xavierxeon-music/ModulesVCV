@@ -59,7 +59,6 @@ namespace SchweineSystem
       void configMeter(const uint16_t& valueId, std::string name = "");
       void configPixels(const uint16_t& valueId, const uint8_t& width, const uint8_t& height, std::string name = "");
       virtual void dataFromMidiInput(const Bytes& message);
-      virtual void setup() = 0;
    };
 } // namespace SchweineSystem
 

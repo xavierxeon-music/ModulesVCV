@@ -68,10 +68,23 @@ namespace SchweineSystem
       class Widget : public rack::TransparentWidget, public PixelThing
       {
       public:
+         using ClickedFunction = std::function<void(const float& x, const float& y)>;
+
+      public:
          Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height);
+
+      public:
+         template <typename ClassType>
+         void onClicked(ClassType* instance, void (ClassType::*functionPointer)(const float&, const float&));
+
+         static Widget* find(SchweineSystem::ModuleWidget* widget, const uint16_t& pixelId);
 
       private:
          void drawLayer(const DrawArgs& args, int layer) override;
+         void onButton(const rack::event::Button& buttonEvent) override;
+
+      private:
+         std::vector<ClickedFunction> clickedFunctionList;
       };
    }; // namespace DisplayOLED
 } // namespace SchweineSystem
@@ -81,5 +94,9 @@ inline void makeOLED(SchweineSystem::ModuleWidget* widget, rack::math::Vec pos, 
    rack::Widget* displayWidget = new SchweineSystem::DisplayOLED::Widget(pos, widget->getSchweineModule(), pixelId, width, height);
    widget->addChild(displayWidget);
 }
+
+#ifndef SchweineSystemDisplayOLEDHPP
+#include "SchweineSystemDisplayOLED.hpp"
+#endif // NOT SchweineSystemDisplayOLEDHPP
 
 #endif // NOT SchweineSystemDisplayOLEDH

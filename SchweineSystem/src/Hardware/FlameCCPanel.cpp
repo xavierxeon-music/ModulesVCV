@@ -46,7 +46,7 @@ void FlameCC::setup()
 
 void FlameCCWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/FlameCC.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Hardware/FlameCC.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

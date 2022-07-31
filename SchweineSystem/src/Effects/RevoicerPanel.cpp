@@ -20,7 +20,7 @@ void Revoicer::setup()
 
 void RevoicerWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Revoicer.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Effects/Revoicer.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

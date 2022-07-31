@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
-import re
+import os
 import xml.etree.ElementTree as et
 
 
-def createPanel(panelFileName, hpWidth):
+def createPanel(panelPath, moduleName, hpWidth):
+
+    os.makedirs(panelPath, exist_ok=True)
 
     height = 380
     width = 15 * hpWidth
@@ -24,6 +26,7 @@ def createPanel(panelFileName, hpWidth):
     # docType = '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">'
     et.indent(tree, space=" ", level=0)
 
+    panelFileName = panelPath + moduleName + '.svg'
     tree.write(panelFileName, encoding='UTF-8', xml_declaration=True, short_empty_elements=False)
 
 

@@ -27,7 +27,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup() override;
+   void setup();
    void processMessage(const midi::Message& msg);
    void connectToMidiDevice();
 

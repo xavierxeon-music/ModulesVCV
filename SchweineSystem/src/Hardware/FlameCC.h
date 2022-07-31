@@ -25,7 +25,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup() override;
+   void setup();
    void connectToMidiDevice();
    void sendSysEx();
 

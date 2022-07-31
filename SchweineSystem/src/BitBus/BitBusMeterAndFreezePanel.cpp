@@ -13,7 +13,7 @@ void BitBusMeterAndFreeze::setup()
 
 void BitBusMeterAndFreezeWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBusMeterAndFreeze.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBus/BitBusMeterAndFreeze.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

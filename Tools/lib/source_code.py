@@ -86,7 +86,10 @@ class Sources(Common):
 
         line(0, f'void {self.moduleName}Widget::setup()')
         line(0, '{')
-        line(1, f'std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/{self.moduleName}.svg");')
+        if self.subFolder:
+            line(1, f'std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/{self.subFolder}/{self.moduleName}.svg");')
+        else:
+            line(1, f'std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/{self.moduleName}.svg");')
         line(1, 'SvgPanel* mainPanel = createPanel(panelPath);')
         line(1, 'setPanel(mainPanel);')
 
@@ -223,13 +226,13 @@ class Sources(Common):
             line(1, 'setup();')
             line(0, '}')
 
-            line(0)
-            line(0, '// widget')
-            line(0)
-
             line(0, f'void {self.moduleName}::process(const ProcessArgs& args)')
             line(0, '{')
             line(0, '}')
+            line(0)
+
+            line(0)
+            line(0, '// widget')
             line(0)
 
             line(0, f'{self.moduleName}Widget::{self.moduleName}Widget({self.moduleName}* module)')

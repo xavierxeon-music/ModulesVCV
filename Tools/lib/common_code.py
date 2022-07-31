@@ -8,6 +8,7 @@ class Common:
     def __init__(self, modulesPath, subFolder, moduleName, components):
 
         self.moduleName = moduleName
+        self.subFolder = subFolder
 
         if subFolder:
             self._fileNameBase = modulesPath + '/src/' + subFolder + '/' + moduleName

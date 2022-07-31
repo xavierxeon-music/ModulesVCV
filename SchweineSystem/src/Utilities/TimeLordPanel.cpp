@@ -67,7 +67,7 @@ void TimeLord::setup()
 
 void TimeLordWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/TimeLord.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Utilities/TimeLord.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

@@ -28,7 +28,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup() override;
+   void setup();
    void connectToMidiDevice();
    void sendProgramChange(uint8_t channel);
    void sendClockReset();

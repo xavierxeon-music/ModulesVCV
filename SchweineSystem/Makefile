@@ -20,9 +20,11 @@ FLAGS += \
 # Add .cpp files to the build
 SOURCES += \
 	$(wildcard src/BitBus/*.cpp) \
+	$(wildcard src/Effects/*.cpp) \
 	$(wildcard src/Hardware/*.cpp) \
 	$(wildcard src/Morpher/*.cpp) \
-	$(wildcard src/Other/*.cpp) \
+	$(wildcard src/Synths/*.cpp) \
+	$(wildcard src/Utilities/*.cpp) \
 	$(wildcard src/_Common/*.cpp) \
 	$(wildcard src/_MusicTools/*.cpp) \
 

@@ -22,7 +22,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup() override;
+   void setup();
 
    void onAdd(const AddEvent& e) override;
    json_t* dataToJson() override;

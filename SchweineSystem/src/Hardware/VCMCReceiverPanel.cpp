@@ -56,7 +56,7 @@ void VCMCReceiver::setup()
 
 void VCMCReceiverWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/VCMCReceiver.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Hardware/VCMCReceiver.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

@@ -1035,8 +1035,24 @@ void SchweineSystem::DisplayOLED::Controller::writeText(const uint8_t x, const u
 SchweineSystem::DisplayOLED::Widget::Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
    : rack::TransparentWidget()
    , PixelThing(module, pixelId, width, height)
+   , clickedFunctionList()
 {
    box.pos = rack::math::Vec(pos.x, pos.y);
+}
+
+SchweineSystem::DisplayOLED::Widget* SchweineSystem::DisplayOLED::Widget::find(SchweineSystem::ModuleWidget* widget, const uint16_t& pixelId)
+{
+   for (rack::Widget* child : widget->children)
+   {
+      Widget* oled = dynamic_cast<Widget*>(child);
+      if (!oled)
+         continue;
+
+      if (oled->pixelId == pixelId)
+         return oled;
+   }
+
+   return nullptr;
 }
 
 void SchweineSystem::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
@@ -1062,5 +1078,21 @@ void SchweineSystem::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int la
          nvgFillColor(args.vg, color);
          nvgFill(args.vg);
       }
+   }
+}
+
+void SchweineSystem::DisplayOLED::Widget::onButton(const rack::event::Button& buttonEvent)
+{
+   if (0 > buttonEvent.pos.x || width <= buttonEvent.pos.x)
+      return;
+   if (0 > buttonEvent.pos.y || height <= buttonEvent.pos.y)
+      return;
+
+   if (GLFW_MOUSE_BUTTON_LEFT == buttonEvent.button && GLFW_PRESS == buttonEvent.action)
+   {
+      buttonEvent.consume(this);
+
+      for (ClickedFunction clickedFunction : clickedFunctionList)
+         clickedFunction(buttonEvent.pos.x, buttonEvent.pos.y);
    }
 }

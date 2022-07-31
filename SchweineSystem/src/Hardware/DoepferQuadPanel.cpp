@@ -23,7 +23,7 @@ void DoepferQuad::setup()
 
 void DoepferQuadWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/DoepferQuad.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Hardware/DoepferQuad.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

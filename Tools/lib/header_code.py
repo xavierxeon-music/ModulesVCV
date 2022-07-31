@@ -201,7 +201,7 @@ class Headers(Common):
             line(1, 'void process(const ProcessArgs& args) override;')
             line(0)
             line(0, 'private:')
-            line(1, 'void setup() override;')
+            line(1, 'void setup();')
             line(0, '};')
 
             line(0)

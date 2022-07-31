@@ -56,7 +56,7 @@ private:
    };
 
 private:
-   void setup() override;
+   void setup();
 
    void setOutputs(bool isReset, bool isClock);
    void setOperationLEDs();

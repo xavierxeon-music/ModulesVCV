@@ -35,7 +35,7 @@ void KeyStep::setup()
 
 void KeyStepWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/KeyStep.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Hardware/KeyStep.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

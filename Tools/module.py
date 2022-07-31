@@ -18,7 +18,13 @@ modulesPath = os.path.abspath(scriptPath + '/../SchweineSystem')
 
 def updateModule(moduleName, subFolder):
 
-    panelFileName = modulesPath + '/res/' + moduleName + '.svg'
+    if subFolder:
+        panelPath = modulesPath + '/res/' + subFolder + '/'
+    else:
+        panelPath = modulesPath + '/res/'
+
+    panelFileName = panelPath + moduleName + '.svg'
+
     if not os.path.exists(panelFileName):
         print(f'no panel found with name {moduleName}')
 
@@ -26,7 +32,14 @@ def updateModule(moduleName, subFolder):
     components = getPanelComponents(panelFileName)
     for key, value in components.items():
         print(f'* {key} x {len(value)}')
-        #print(value)
+        # print(value)
+
+    if subFolder:
+        sourcePath = modulesPath + '/src/' + subFolder + '/'
+    else:
+        sourcePath = modulesPath + '/src/'
+
+    os.makedirs(sourcePath, exist_ok=True)
 
     headers = Headers(modulesPath, subFolder, moduleName, components)
     headers.write()
@@ -55,7 +68,7 @@ def updateModule(moduleName, subFolder):
         json.dump(content, outfile, indent=3)
 
 
-def gather():
+def gather(subFolder):
 
     desktop = str(pathlib.Path.home()) + '/Desktop'
 
@@ -65,8 +78,10 @@ def gather():
         if not entry.name.endswith('.svg') and not entry.name.endswith('.afdesign'):
             continue
         print(entry.name)
-        #shutil.copy(entry.path, modulesPath + '/res/' + entry.name)
-        shutil.move(entry.path, modulesPath + '/res/' + entry.name)
+        if subFolder:
+            shutil.move(entry.path, modulesPath + '/res/' + subFolder + '/' + entry.name)
+        else:
+            shutil.move(entry.path, modulesPath + '/res/' + entry.name)
 
 
 def main():
@@ -80,18 +95,22 @@ def main():
 
     args = parser.parse_args()  # will quit here if help is called
 
+    subFolder = None if not args.folder else args.folder[0]
+
     # maybe gather
     if args.gather:
-        gather()
+        gather(subFolder)
 
     if args.modulenames:
         if args.panel:
             hpWidth = args.panel[0]
             for moduleName in args.modulenames:
-                panelFileName = modulesPath + '/res/' + moduleName + '.svg'
-                createPanel(panelFileName, hpWidth)
+                if subFolder:
+                    panelPath = modulesPath + '/res/' + subFolder + '/'
+                else:
+                    panelPath = modulesPath + '/res/'
+                createPanel(panelPath, moduleName, hpWidth)
         elif args.update:
-            subFolder = None if not args.folder else args.folder[0]
             for moduleName in args.modulenames:
                 updateModule(moduleName, subFolder)
 

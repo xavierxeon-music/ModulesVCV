@@ -21,9 +21,11 @@
 ./src/_Common/SchweineSystemLED.h
 ./src/SchweineSystem.h
 ./src/Utilities/TimeLord.h
+./src/Utilities/WavPlayer.h
 ./src/Utilities/GateLatchPanel.h
 ./src/Utilities/BarCounter.h
 ./src/Utilities/BarCounterPanel.h
+./src/Utilities/WavPlayerPanel.h
 ./src/Utilities/TimeLordPanel.h
 ./src/Utilities/GateLatch.h
 ./src/BitBus/BitBusCommon.h
@@ -81,7 +83,6 @@
 ./src/_MusicTools/Include/Sound/FunctionTable.h
 ./src/_MusicTools/Include/Sound/GateOscilator.h
 ./src/_MusicTools/Include/Sound/SoundMesh.h
-./src/_MusicTools/Include/Sound/AudioFile.h
 ./src/_MusicTools/Include/Sound/StandardTable.h
 ./src/_MusicTools/ffft/FFTRealFixLen.h
 ./src/_MusicTools/ffft/FFTReal.h
@@ -97,6 +98,7 @@
 ./src/_MusicTools/DoubleBuffer.h
 ./src/SchweineSystem.hpp
 ./src/_Common/SchweineSystemMaster.hpp
+./src/_Common/SchweineSystemDisplayOLED.hpp
 ./src/_Common/SchweineSystemCommon.hpp
 ./src/_MusicTools/Variable.hpp
 ./src/_MusicTools/BoolField.hpp
@@ -109,7 +111,6 @@
 ./src/_MusicTools/RememberDummy/Remember.hpp
 ./src/_MusicTools/RememberDummy/RememberArray.hpp
 ./src/_MusicTools/Revoice.hpp
-./src/_MusicTools/AudioFile.hpp
 ./src/_MusicTools/Counter.hpp
 ./src/_MusicTools/MidiInterfaceInput.hpp
 ./src/_MusicTools/Tempo.hpp
@@ -164,7 +165,9 @@
 ./src/_Common/SchweineSystemDisplayLCD.cpp
 ./src/_Common/SchweineSystemJson.cpp
 ./src/_Common/SchweineSystemLightMeter.cpp
+./src/Utilities/WavPlayerPanel.cpp
 ./src/Utilities/TimeLordPanel.cpp
+./src/Utilities/WavPlayer.cpp
 ./src/Utilities/BarCounter.cpp
 ./src/Utilities/GateLatchPanel.cpp
 ./src/Utilities/BarCounterPanel.cpp
@@ -191,3 +194,5 @@
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp
+src/_MusicTools/Include/Sound/Sample.h
+src/_MusicTools/Sample.hpp

@@ -24,7 +24,7 @@ public:
    void onSampleRateChange(const SampleRateChangeEvent& e) override;
 
 private:
-   void setup() override;
+   void setup();
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
 
