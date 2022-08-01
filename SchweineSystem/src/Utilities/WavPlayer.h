@@ -6,6 +6,8 @@ using namespace rack;
 
 #include <Sound/Sample.h>
 
+#include <SchweineSystemButton.h>
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemDisplayOLED.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
@@ -28,15 +30,24 @@ private:
    void load();
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
+   void onSampleRateChange(const SampleRateChangeEvent& event) override;
 
 private:
    SchweineSystem::DisplayOLED::Controller displayController;
+   Sample::Oscilator oscilator;
+   float sampleRate;
+
    // file
    std::string fileName;
-   Sample::Meta meta;
+
    // play
-   Data audio;
-   size_t playhead;
+   bool play;
+   SchweineSystem::ButtonLED playButton;
+   // reset
+   SchweineSystem::Button resetButton;
+   // loop
+   bool loop;
+   SchweineSystem::ButtonLED loopButton;
 };
 
 // widget

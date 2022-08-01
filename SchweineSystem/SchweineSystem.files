@@ -51,6 +51,7 @@
 ./src/_MusicTools/Include/Blocks/CvSwitch.h
 ./src/_MusicTools/Include/Abstract/AbstractEffect.h
 ./src/_MusicTools/Include/Abstract/AbstractOscilator.h
+./src/_MusicTools/Include/Abstract/AbstractSoundSource.h
 ./src/_MusicTools/Include/Music/TimeCode.h
 ./src/_MusicTools/Include/Music/Tempo.h
 ./src/_MusicTools/Include/Music/Note.h
@@ -83,6 +84,7 @@
 ./src/_MusicTools/Include/Sound/FunctionTable.h
 ./src/_MusicTools/Include/Sound/GateOscilator.h
 ./src/_MusicTools/Include/Sound/SoundMesh.h
+./src/_MusicTools/Include/Sound/Sample.h
 ./src/_MusicTools/Include/Sound/StandardTable.h
 ./src/_MusicTools/ffft/FFTRealFixLen.h
 ./src/_MusicTools/ffft/FFTReal.h
@@ -133,6 +135,7 @@
 ./src/_MusicTools/MidiTargetDoepferQuad.hpp
 ./src/_MusicTools/SquareSignal.hpp
 ./src/_MusicTools/MidiInterfaceOutput.hpp
+./src/_MusicTools/Sample.hpp
 ./src/_MusicTools/FunctionTable.hpp
 ./src/_MusicTools/MusicTools.hpp
 ./src/_MusicTools/Compressor.hpp
@@ -189,10 +192,9 @@
 ./src/SchweineSystem.cpp
 ./src/Effects/Revoicer.cpp
 ./src/Effects/RevoicerPanel.cpp
+./src/_MusicTools/AbstractSoundSource.cpp
 ./src/_MusicTools/Spectrum.cpp
 ./src/_MusicTools/AbstractEffect.cpp
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp
-src/_MusicTools/Include/Sound/Sample.h
-src/_MusicTools/Sample.hpp

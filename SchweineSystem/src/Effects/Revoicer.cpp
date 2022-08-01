@@ -9,7 +9,7 @@
 Revoicer::Revoicer()
    : SchweineSystem::Module()
    , numberOfVocices(16)
-   , internal(numberOfVocices)
+   , internal(numberOfVocices, Spectrum::Quality::Low)
    , upButton(this, Panel::Quality_Up)
    , downButton(this, Panel::Quality_Down)
    , controller(this, Panel::Text_Quality_Value, Panel::RGB_Quality_Value)
@@ -22,7 +22,7 @@ Revoicer::Revoicer()
 
 void Revoicer::process(const ProcessArgs& args)
 {
-   static const std::vector<uint8_t> voiceValues = {2, 4, 8, 16, 32};
+   static const std::vector<uint8_t> voiceValues = {0, 1, 2, 4, 8, 16, 32};
 
    Variable::Enum<uint8_t> var(numberOfVocices, voiceValues, true);
    if (upButton.isTriggered())
@@ -65,6 +65,8 @@ void Revoicer::dataFromJson(json_t* rootJson)
 
    Object rootObject(rootJson);
    numberOfVocices = rootObject.get("numberOfVocices").toInt();
+
+   internal.setNumberOfVoices(numberOfVocices);
    controller.setText(std::to_string(numberOfVocices));
 }
 
