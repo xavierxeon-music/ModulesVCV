@@ -8,8 +8,8 @@
 
 Revoicer::Revoicer()
    : SchweineSystem::Module()
-   , numberOfVocices(16)
-   , internal(numberOfVocices, Spectrum::Quality::Low)
+   , numberOfVoices(16)
+   , internal(numberOfVoices, Spectrum::Quality::Low)
    , upButton(this, Panel::Quality_Up)
    , downButton(this, Panel::Quality_Down)
    , controller(this, Panel::Text_Quality_Value, Panel::RGB_Quality_Value)
@@ -17,25 +17,25 @@ Revoicer::Revoicer()
    setup();
 
    controller.setColor(SchweineSystem::Color{0, 255, 255});
-   controller.setText(std::to_string(numberOfVocices));
+   controller.setText(std::to_string(numberOfVoices));
 }
 
 void Revoicer::process(const ProcessArgs& args)
 {
    static const std::vector<uint8_t> voiceValues = {0, 1, 2, 4, 8, 16, 32};
 
-   Variable::Enum<uint8_t> var(numberOfVocices, voiceValues, true);
+   Variable::Enum<uint8_t> var(numberOfVoices, voiceValues, true);
    if (upButton.isTriggered())
    {
       var.increment();
-      internal.setNumberOfVoices(numberOfVocices);
-      controller.setText(std::to_string(numberOfVocices));
+      internal.setNumberOfVoices(numberOfVoices);
+      controller.setText(std::to_string(numberOfVoices));
    }
    else if (downButton.isTriggered())
    {
       var.decrement();
-      internal.setNumberOfVoices(numberOfVocices);
-      controller.setText(std::to_string(numberOfVocices));
+      internal.setNumberOfVoices(numberOfVoices);
+      controller.setText(std::to_string(numberOfVoices));
    }
 
    const float inputValue = inputs[Panel::AudioInput].getVoltage();
@@ -54,7 +54,7 @@ json_t* Revoicer::dataToJson()
    using namespace SchweineSystem::Json;
 
    Object rootObject;
-   rootObject.set("numberOfVocices", Value(numberOfVocices));
+   rootObject.set("numberOfVoices", Value(numberOfVoices));
 
    return rootObject.toJson();
 }
@@ -64,10 +64,10 @@ void Revoicer::dataFromJson(json_t* rootJson)
    using namespace SchweineSystem::Json;
 
    Object rootObject(rootJson);
-   numberOfVocices = rootObject.get("numberOfVocices").toInt();
+   numberOfVoices = rootObject.get("numberOfVoices").toInt();
 
-   internal.setNumberOfVoices(numberOfVocices);
-   controller.setText(std::to_string(numberOfVocices));
+   internal.setNumberOfVoices(numberOfVoices);
+   controller.setText(std::to_string(numberOfVoices));
 }
 
 // widget

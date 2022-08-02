@@ -29,7 +29,7 @@ private:
    void dataFromJson(json_t* rootJson) override;
 
 private:
-   uint8_t numberOfVocices;
+   uint8_t numberOfVoices;
    Revoice internal;
    SchweineSystem::Button upButton;
    SchweineSystem::Button downButton;
