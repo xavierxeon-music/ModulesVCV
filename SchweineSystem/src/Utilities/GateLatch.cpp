@@ -34,14 +34,14 @@ GateLatch::GateLatch()
                       Panel::Row7_Out,
                       Panel::Row8_Out});
 
-   lightList.append({Panel::RGB_Row1_Status1,
-                     Panel::RGB_Row2_Status1,
-                     Panel::RGB_Row3_Status1,
-                     Panel::RGB_Row4_Status1,
-                     Panel::RGB_Row5_Status1,
-                     Panel::RGB_Row6_Status1,
-                     Panel::RGB_Row7_Status1,
-                     Panel::RGB_Row8_Status1});
+   lightList.append({Panel::RGB_Row1_Status,
+                     Panel::RGB_Row2_Status,
+                     Panel::RGB_Row3_Status,
+                     Panel::RGB_Row4_Status,
+                     Panel::RGB_Row5_Status,
+                     Panel::RGB_Row6_Status,
+                     Panel::RGB_Row7_Status,
+                     Panel::RGB_Row8_Status});
 }
 
 void GateLatch::process(const ProcessArgs& args)

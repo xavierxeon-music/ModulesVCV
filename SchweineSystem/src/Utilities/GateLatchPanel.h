@@ -4,6 +4,7 @@
 #include "GateLatch.h"
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemButton.h>
 #include <SchweineSystemLED.h>
 
 struct GateLatch::Panel
@@ -12,6 +13,7 @@ struct GateLatch::Panel
    {
       // buttons
       Reset_Button = 0,
+      // switches
       // ledbuttons
       // knobs
       PARAMS_LEN = 1
@@ -59,16 +61,16 @@ struct GateLatch::Panel
    enum LightId
    {
       // leds
-      RGB_Row8_Status1 = 0,
-      RGB_Row7_Status1 = 3,
-      RGB_Row6_Status1 = 6,
-      RGB_Row5_Status1 = 9,
-      RGB_Row4_Status1 = 12,
-      RGB_Row3_Status1 = 15,
-      RGB_Row2_Status1 = 18,
-      RGB_Row1_Status1 = 21,
-      // buttons
-      // displays
+      RGB_Row8_Status = 0,
+      RGB_Row7_Status = 3,
+      RGB_Row6_Status = 6,
+      RGB_Row5_Status = 9,
+      RGB_Row4_Status = 12,
+      RGB_Row3_Status = 15,
+      RGB_Row2_Status = 18,
+      RGB_Row1_Status = 21,
+      // ledbuttons
+      // lcds
       LIGHTS_LEN = 24
    };
 

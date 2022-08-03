@@ -142,14 +142,22 @@ class Headers(Common):
             line(0)
 
             line(0, '#include <SchweineSystemCommon.h>')
-            if self.oleds:
+            if self.buttons:
+                line(0, '#include <SchweineSystemButton.h>')
+            if self.knobs:
+                line(0, '#include <SchweineSystemKnob.h>')
+            if self.lcds:
                 line(0, '#include <SchweineSystemDisplayLCD.h>')
+            if self.ledbuttons:
+                line(0, '#include <SchweineSystemButtonLED.h>')
             if self.leds:
                 line(0, '#include <SchweineSystemLED.h>')
             if self.meters:
                 line(0, '#include <SchweineSystemLightMeter.h>')
             if self.oleds:
                 line(0, '#include <SchweineSystemDisplayOLED.h>')
+            if self.switches:
+                line(0, '#include <SchweineSystemDisplaySwitch.h>')
             line(0)
 
             line(0, f'struct {self.moduleName}::Panel')

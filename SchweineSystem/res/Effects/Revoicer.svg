@@ -4,7 +4,9 @@
     <g transform="matrix(1.19039,0,0,1.07627,-17.4109,-16.622)">
         <rect x="14.626" y="15.444" width="50.404" height="353.07" style="fill:rgb(242,242,242);"/>
     </g>
-    <path d="M34.994,286.472L42.239,286.472L30.329,313.281L18.419,286.472L25.828,286.472L25.828,88.038L34.994,88.038L34.994,286.472Z" style="fill:rgb(217,217,217);"/>
+    <g transform="matrix(1,0,0,1,-0.329245,-44.7495)">
+        <path d="M34.994,286.472L42.239,286.472L30.329,313.281L18.419,286.472L25.828,286.472L25.828,88.038L34.994,88.038L34.994,286.472Z" style="fill:rgb(217,217,217);"/>
+    </g>
     <g transform="matrix(1,0,0,1,-5.68661,33.6251)">
         <g id="AudioOutput-output" serif:id="AudioOutput#output" transform="matrix(0.175002,0,0,0.175002,12.7528,278.064)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
@@ -18,7 +20,7 @@
             <text x="89.198px" y="118.306px" style="font-family:'DINCondensed-Bold', 'DIN Condensed';font-weight:700;font-stretch:condensed;font-size:10px;">out</text>
         </g>
     </g>
-    <g transform="matrix(1,0,0,1,-5.68661,-174.707)">
+    <g transform="matrix(1,0,0,1,-5.68661,41.5849)">
         <g id="AudioInput-input" serif:id="AudioInput#input" transform="matrix(0.175002,0,0,0.175002,12.0738,225.875)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(217,217,217);"/>
         </g>
@@ -30,7 +32,7 @@
             <text x="89.198px" y="118.306px" style="font-family:'DINCondensed-Bold', 'DIN Condensed';font-weight:700;font-stretch:condensed;font-size:10px;">in</text>
         </g>
     </g>
-    <g id="Quality" transform="matrix(1,0,0,1,3.95343,97.5216)">
+    <g id="Quality" transform="matrix(1,0,0,1,3.95343,60.5216)">
         <g id="Down-button" serif:id="Down#button" transform="matrix(0.758898,0,0,0.758898,-15.8651,-110.944)">
             <circle cx="55.661" cy="308.513" r="7.929"/>
         </g>
