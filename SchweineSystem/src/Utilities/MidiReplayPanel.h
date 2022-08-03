@@ -4,6 +4,8 @@
 #include "MidiReplay.h"
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemButton.h>
+#include <SchweineSystemLED.h>
 #include <SchweineSystemDisplayOLED.h>
 
 struct MidiReplay::Panel
@@ -11,10 +13,11 @@ struct MidiReplay::Panel
    enum ParamId
    {
       // buttons
+      Display = 0,
       // switches
       // ledbuttons
       // knobs
-      PARAMS_LEN = 0
+      PARAMS_LEN = 1
    };
 
    enum DisplayId
@@ -34,7 +37,8 @@ struct MidiReplay::Panel
    {
       Reset = 0,
       Clock = 1,
-      INPUTS_LEN = 2
+      Play = 2,
+      INPUTS_LEN = 3
    };
 
    enum OutputId
@@ -48,9 +52,10 @@ struct MidiReplay::Panel
    enum LightId
    {
       // leds
+      RGB_PlayStatus = 0,
       // ledbuttons
       // lcds
-      LIGHTS_LEN = 0
+      LIGHTS_LEN = 3
    };
 
 };

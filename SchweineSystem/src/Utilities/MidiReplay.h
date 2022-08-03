@@ -4,6 +4,9 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <Music/Tempo.h>
+
+#include <SchweineSystemButton.h>
 #include <SchweineSystemDisplayOLED.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
@@ -18,12 +21,35 @@ public:
 
 public:
    void process(const ProcessArgs& args) override;
+   void updateDisplays() override;
+
+   void loadMidiFile(const std::string& newFileName);
+
+   json_t* dataToJson() override;
+   void dataFromJson(json_t* rootJson) override;
+
+private:
+   enum class DisplayMode
+   {
+      Overview,
+      Current
+   };
 
 private:
    void setup();
 
 private:
+   std::string fileName;
+
+   // display
+   DisplayMode displayMode;
+   SchweineSystem::Button displayButton;
    SchweineSystem::DisplayOLED::Controller displayController;
+
+   // clock
+   dsp::BooleanTrigger clockTrigger;
+   dsp::BooleanTrigger resetTrigger;
+   Tempo tempo;
 };
 
 // widget
@@ -35,6 +61,7 @@ public:
 
 private:
    void setup();
+   void displayClicked(const float& x, const float& y);
 };
 
 #endif // NOT MidiReplayH

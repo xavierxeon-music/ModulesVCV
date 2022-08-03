@@ -4,10 +4,12 @@
 #include <osdialog.h>
 
 #include <Midi/MidiCommon.h>
-#include <SchweineSystemMaster.h>
 #include <Tools/File.h>
 #include <Tools/SevenBit.h>
 #include <Tools/Variable.h>
+
+#include <SchweineSystemJson.h>
+#include <SchweineSystemMaster.h>
 
 // lord
 

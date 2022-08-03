@@ -7,7 +7,6 @@
 #include <SchweineSystemButton.h>
 #include <SchweineSystemButtonLED.h>
 #include <SchweineSystemDisplayOLED.h>
-#include <SchweineSystemSwitch.h>
 
 struct WavPlayer::Panel
 {
@@ -16,13 +15,11 @@ struct WavPlayer::Panel
       // buttons
       ManualReset = 0,
       // switches
-      LoopMode = 1,
-      PlayMode = 2,
       // ledbuttons
-      Loop = 3,
-      Play = 4,
+      Loop = 1,
+      Play = 2,
       // knobs
-      PARAMS_LEN = 5
+      PARAMS_LEN = 3
    };
 
    enum DisplayId
