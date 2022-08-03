@@ -1,6 +1,7 @@
 #include "BitBusNegate.h"
 #include "BitBusNegatePanel.h"
 
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemMaster.h>
 
 void BitBusNegate::setup()

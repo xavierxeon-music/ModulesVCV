@@ -2,6 +2,7 @@
 #include "WavPlayerPanel.h"
 
 #include <SchweineSystemMaster.h>
+#include <SchweineSystemSwitch.h>
 
 void WavPlayer::setup()
 {

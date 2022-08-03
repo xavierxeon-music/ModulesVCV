@@ -1,6 +1,7 @@
 #include "DoepferQuad.h"
 #include "DoepferQuadPanel.h"
 
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemMaster.h>
 
 void DoepferQuad::setup()

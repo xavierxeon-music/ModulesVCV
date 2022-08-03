@@ -56,4 +56,10 @@ namespace SchweineSystem
 
 } // namespace SchweineSystem
 
+inline void makeLEDButton(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId, int firstLightId)
+{
+   rack::app::ParamWidget* paramWidget = rack::createLightParamCentered<rack::VCVLightBezel<rack::RedGreenBlueLight>>(pos, widget->getModule(), paramId, firstLightId);
+   widget->addParam(paramWidget);
+}
+
 #endif // NOT SchweineSystemButtonLEDH

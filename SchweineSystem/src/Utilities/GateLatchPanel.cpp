@@ -1,6 +1,7 @@
 #include "GateLatch.h"
 #include "GateLatchPanel.h"
 
+#include <SchweineSystemButton.h>
 #include <SchweineSystemMaster.h>
 
 void GateLatch::setup()

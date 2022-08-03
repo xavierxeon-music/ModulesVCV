@@ -61,6 +61,7 @@
 ./src/_MusicTools/Include/Tools/Counter.h
 ./src/_MusicTools/Include/Tools/FastRandom.h
 ./src/_MusicTools/Include/Tools/SevenBit.h
+./src/_MusicTools/Include/Tools/File.h
 ./src/_MusicTools/Include/Tools/Variable.h
 ./src/_MusicTools/Include/Tools/SquareSignal.h
 ./src/_MusicTools/Include/Tools/Convert.h
@@ -117,6 +118,7 @@
 ./src/_MusicTools/MidiInterfaceInput.hpp
 ./src/_MusicTools/Tempo.hpp
 ./src/_MusicTools/Trapezoid.hpp
+./src/_MusicTools/File.hpp
 ./src/_MusicTools/PolyRamp.hpp
 ./src/_MusicTools/ffft/FFTRealSelect.hpp
 ./src/_MusicTools/ffft/OscSinCos.hpp

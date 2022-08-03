@@ -61,7 +61,7 @@ namespace SchweineSystem
          void set(const std::string& key, const Value& value);
          Value get(const std::string& key) const;
 
-         Bytes save() const;
+         Bytes toBytes() const;
       };
 
    } // namespace Json

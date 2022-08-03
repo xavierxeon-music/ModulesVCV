@@ -184,8 +184,9 @@ void WavPlayerWidget::displayClicked(const float& x, const float& y)
    if (!myModule)
       return;
 
-   char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Wav:wav"));
-   myModule->setWavFileName(std::string(path));
+   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Wav:wav"));
+   if (path)
+      myModule->setWavFileName(std::string(path));
 }
 
 Model* modelWavPlayer = SchweineSystem::Master::the()->addModule<WavPlayer, WavPlayerWidget>("WavPlayer");

@@ -56,21 +56,33 @@ SchweineSystem::Json::Array SchweineSystem::Json::Value::toArray()
 
 bool SchweineSystem::Json::Value::toBool() const
 {
+   if (!json)
+      return false;
+
    return json_boolean_value(json);
 }
 
 int64_t SchweineSystem::Json::Value::toInt() const
 {
+   if (!json)
+      return 0;
+
    return json_integer_value(json);
 }
 
 double SchweineSystem::Json::Value::toReal() const
 {
+   if (!json)
+      return 0.0;
+
    return json_real_value(json);
 }
 
 std::string SchweineSystem::Json::Value::toString() const
 {
+   if (!json)
+      return std::string();
+
    const char* test = json_string_value(json);
    return std::string(test);
 }
@@ -130,7 +142,7 @@ SchweineSystem::Json::Value SchweineSystem::Json::Object::get(const std::string&
    return Value(json_object_get(json, key.c_str()));
 }
 
-Bytes SchweineSystem::Json::Object::save() const
+Bytes SchweineSystem::Json::Object::toBytes() const
 {
    size_t size = json_dumpb(json, nullptr, 0, 0);
    if (size == 0)

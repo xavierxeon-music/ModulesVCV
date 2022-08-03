@@ -1,6 +1,7 @@
 #include "BitBusMeterAndFreeze.h"
 #include "BitBusMeterAndFreezePanel.h"
 
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemMaster.h>
 
 void BitBusMeterAndFreeze::setup()

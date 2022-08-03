@@ -1,8 +1,11 @@
 #include "TimeLord.h"
 #include "TimeLordPanel.h"
 
+#include <osdialog.h>
+
 #include <Midi/MidiCommon.h>
 #include <SchweineSystemMaster.h>
+#include <Tools/File.h>
 #include <Tools/SevenBit.h>
 #include <Tools/Variable.h>
 
@@ -12,6 +15,7 @@ const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 TimeLord::TimeLord()
    : SchweineSystem::Module()
+   , fileName()
    , ramps{}
    // midi
    , receive(MidiReceive::None)
@@ -242,6 +246,71 @@ void TimeLord::updateDisplays()
    }
 }
 
+void TimeLord::loadRamps(const std::string& newFileName)
+{
+   fileName = newFileName;
+
+   const Bytes data = File::load(fileName);
+   if (data.empty())
+      return;
+
+   using namespace SchweineSystem::Json;
+
+   auto loadContent = [&](const Object& contentObject)
+   {
+      for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
+      {
+         PolyRamp* polyRamp = &ramps[rampIndex];
+         polyRamp->clear();
+
+         Object rampObject = contentObject.get(keys.substr(rampIndex, 1)).toObject();
+
+         const uint32_t length = rampObject.get("length").toInt();
+         polyRamp->setLength(length);
+
+         const uint8_t stepSize = rampObject.get("stepSize").toInt();
+         polyRamp->setStepSize(static_cast<Tempo::Division>(stepSize));
+
+         const bool loop = rampObject.get("loop").toBool();
+         polyRamp->setLooping(loop);
+
+         Array stagesArray = rampObject.get("stages").toArray();
+         const uint8_t stageCount = stagesArray.size();
+         polyRamp->addStage(0, stageCount);
+
+         for (uint8_t stageIndex = 0; stageIndex < stageCount; stageIndex++)
+         {
+            Object stageObject = stagesArray.get(stageIndex).toObject();
+
+            const uint8_t stageLength = stageObject.get("length").toInt();
+            polyRamp->setStageLength(stageIndex, stageLength);
+
+            const uint8_t startHeight = stageObject.get("startHeight").toInt();
+            polyRamp->setStageStartHeight(stageIndex, startHeight);
+
+            const uint8_t endHeight = stageObject.get("endHeight").toInt();
+            polyRamp->setStageEndHeight(stageIndex, endHeight);
+         }
+      }
+   };
+
+   const Object rootObject(data);
+
+   const Array banksArray = rootObject.get("banks").toArray();
+   for (uint8_t bankCounter = 0; bankCounter < banksArray.size(); bankCounter++)
+   {
+      const Object bankObject = banksArray.get(bankCounter).toObject();
+
+      const uint8_t index = bankObject.get("index").toInt();
+      if (index != bankIndex)
+         continue;
+
+      Object contentObject = bankObject.get("content").toObject();
+      loadContent(contentObject);
+      break;
+   }
+}
+
 void TimeLord::setOutputs(bool isReset, bool isClock)
 {
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
@@ -407,7 +476,9 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
 
       SchweineSystem::Json::Object rootObject = extractJsonAndClearBuffer();
 
-      loadInternal(rootObject);
+      const std::string newFileName = rootObject.get("fileName").toString();
+      loadRamps(newFileName);
+
       receive = MidiReceive::None;
       dataAppliedPulse.trigger(2.0);
    }
@@ -434,7 +505,7 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
 
       SchweineSystem::Json::Object rootObject = extractJsonAndClearBuffer();
 
-      loadRemote(rootObject);
+      setFromRemote(rootObject);
       receive = MidiReceive::None;
    }
 }
@@ -452,44 +523,12 @@ json_t* TimeLord::dataToJson()
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
-      PolyRamp* polyRamp = &ramps[rampIndex];
-
-      Object rampObject;
-
-      const uint32_t length = polyRamp->getLength();
-      rampObject.set("length", Value(length));
-
-      const uint8_t stepSize = static_cast<uint8_t>(polyRamp->getStepSize());
-      rampObject.set("stepSize", Value(stepSize));
-
-      const bool loop = polyRamp->isLooping();
-      rampObject.set("loop", Value(loop));
-
       bool silence = silenceSwitches[rampIndex]->isOn();
       silenceArray.append(Value(silence));
-
-      Array stagesArray;
-      for (uint8_t stageIndex = 0; stageIndex < polyRamp->getStageCount(); stageIndex++)
-      {
-         Object stageObject;
-
-         const uint8_t stageLength = polyRamp->getStageLength(stageIndex);
-         stageObject.set("length", Value(stageLength));
-
-         const uint8_t startHeight = polyRamp->getStageStartHeight(stageIndex);
-         stageObject.set("startHeight", Value(startHeight));
-
-         const uint8_t endHeight = polyRamp->getStageEndHeight(stageIndex);
-         stageObject.set("endHeight", Value(endHeight));
-
-         stagesArray.append(stageObject);
-      }
-      rampObject.set("stages", stagesArray);
-
-      rootObject.set(keys.substr(rampIndex, 1), rampObject);
    }
 
    rootObject.set("silence", silenceArray);
+   rootObject.set("fileName", fileName);
 
    return rootObject.toJson();
 }
@@ -510,47 +549,8 @@ void TimeLord::dataFromJson(json_t* rootJson)
       silenceSwitches[rampIndex]->setState(silence);
    }
 
-   loadInternal(rootObject);
-}
-
-void TimeLord::loadInternal(const SchweineSystem::Json::Object& rootObject)
-{
-   using namespace SchweineSystem::Json;
-
-   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
-   {
-      PolyRamp* polyRamp = &ramps[rampIndex];
-      polyRamp->clear();
-
-      Object rampObject = rootObject.get(keys.substr(rampIndex, 1)).toObject();
-
-      const uint32_t length = rampObject.get("length").toInt();
-      polyRamp->setLength(length);
-
-      const uint8_t stepSize = rampObject.get("stepSize").toInt();
-      polyRamp->setStepSize(static_cast<Tempo::Division>(stepSize));
-
-      const bool loop = rampObject.get("loop").toBool();
-      polyRamp->setLooping(loop);
-
-      Array stagesArray = rampObject.get("stages").toArray();
-      const uint8_t stageCount = stagesArray.size();
-      polyRamp->addStage(0, stageCount);
-
-      for (uint8_t stageIndex = 0; stageIndex < stageCount; stageIndex++)
-      {
-         Object stageObject = stagesArray.get(stageIndex).toObject();
-
-         const uint8_t stageLength = stageObject.get("length").toInt();
-         polyRamp->setStageLength(stageIndex, stageLength);
-
-         const uint8_t startHeight = stageObject.get("startHeight").toInt();
-         polyRamp->setStageStartHeight(stageIndex, startHeight);
-
-         const uint8_t endHeight = stageObject.get("endHeight").toInt();
-         polyRamp->setStageEndHeight(stageIndex, endHeight);
-      }
-   }
+   const std::string newFileName = rootObject.get("fileName").toString();
+   loadRamps(newFileName);
 }
 
 void TimeLord::uploadToRemote()
@@ -586,7 +586,7 @@ void TimeLord::uploadToRemote()
 
    sendMessage(Midi::ControllerMessage::DataInit, bankIndex);
 
-   const Bytes buffer = uploadObject.save();
+   const Bytes buffer = uploadObject.toBytes();
    for (const uint8_t& byte : buffer)
       sendMessage(Midi::ControllerMessage::DataBlock, byte);
 
@@ -595,7 +595,7 @@ void TimeLord::uploadToRemote()
    Majordomo::send(queue);
 }
 
-void TimeLord::loadRemote(const SchweineSystem::Json::Object& rootObject)
+void TimeLord::setFromRemote(const SchweineSystem::Json::Object& rootObject)
 {
    using namespace SchweineSystem::Json;
 
@@ -617,6 +617,26 @@ TimeLordWidget::TimeLordWidget(TimeLord* module)
    : SchweineSystem::ModuleWidget(module)
 {
    setup();
+
+   using OLEDWidget = SchweineSystem::DisplayOLED::Widget;
+
+   OLEDWidget* oled = OLEDWidget::find(this, TimeLord::Panel::Pixels_Display);
+   if (oled)
+      oled->onClicked(this, &TimeLordWidget::displayClicked);
+}
+
+void TimeLordWidget::displayClicked(const float& x, const float& y)
+{
+   (void)x;
+   (void)y;
+
+   TimeLord* myModule = dynamic_cast<TimeLord*>(getSchweineModule());
+   if (!myModule)
+      return;
+
+   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Ramps:json"));
+   if (path)
+      myModule->loadRamps(std::string(path));
 }
 
 Model* modelTimeLord = SchweineSystem::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");

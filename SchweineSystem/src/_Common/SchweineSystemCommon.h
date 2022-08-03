@@ -73,24 +73,6 @@ namespace SchweineSystem
 
 } // namespace SchweineSystem
 
-inline void makeLEDButton(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId, int firstLightId)
-{
-   rack::app::ParamWidget* paramWidget = rack::createLightParamCentered<rack::VCVLightBezel<rack::RedGreenBlueLight>>(pos, widget->getModule(), paramId, firstLightId);
-   widget->addParam(paramWidget);
-}
-
-inline void makeButton(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId)
-{
-   rack::app::ParamWidget* paramWidget = rack::createParamCentered<rack::TL1105>(pos, widget->getModule(), paramId);
-   widget->addParam(paramWidget);
-}
-
-inline void makeSwitch(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId)
-{
-   rack::app::ParamWidget* paramWidget = rack::createParamCentered<rack::CKSS>(pos, widget->getModule(), paramId);
-   widget->addParam(paramWidget);
-}
-
 inline void makeKnob(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId, uint8_t size = 1)
 {
    rack::app::ParamWidget* paramWidget = nullptr;

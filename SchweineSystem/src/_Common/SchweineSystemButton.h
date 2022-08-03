@@ -27,4 +27,10 @@ namespace SchweineSystem
    };
 } // namespace SchweineSystem
 
+inline void makeButton(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId)
+{
+   rack::app::ParamWidget* paramWidget = rack::createParamCentered<rack::TL1105>(pos, widget->getModule(), paramId);
+   widget->addParam(paramWidget);
+}
+
 #endif // NOT SchweineSystemButtonH

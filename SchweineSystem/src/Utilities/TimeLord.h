@@ -32,6 +32,8 @@ public:
    void process(const ProcessArgs& args) override;
    void updateDisplays() override;
 
+   void loadRamps(const std::string& newFileName);
+
 private:
    enum class DisplayMode
    {
@@ -64,12 +66,12 @@ private:
 
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
-   void loadInternal(const SchweineSystem::Json::Object& rootObject);
 
    void uploadToRemote();
-   void loadRemote(const SchweineSystem::Json::Object& rootObject);
+   void setFromRemote(const SchweineSystem::Json::Object& rootObject);
 
 private:
+   std::string fileName;
    PolyRamp ramps[8];
    static const std::string keys;
 
@@ -126,6 +128,7 @@ public:
 
 private:
    void setup();
+   void displayClicked(const float& x, const float& y);
 };
 
 #endif // NOT TimeLordH

@@ -25,4 +25,10 @@ namespace SchweineSystem
    };
 } // namespace SchweineSystem
 
+inline void makeSwitch(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId)
+{
+   rack::app::ParamWidget* paramWidget = rack::createParamCentered<rack::CKSS>(pos, widget->getModule(), paramId);
+   widget->addParam(paramWidget);
+}
+
 #endif // NOT SchweineSystemSwitchH
