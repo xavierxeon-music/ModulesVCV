@@ -1,7 +1,6 @@
 #include "VCMCReceiver.h"
 #include "VCMCReceiverPanel.h"
 
-#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemMaster.h>
 
 void VCMCReceiver::setup()

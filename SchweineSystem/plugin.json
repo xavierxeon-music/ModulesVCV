@@ -138,7 +138,18 @@
          "slug": "WavPlayer",
          "name": "WavPlayer",
          "description": "",
-         "tags": []
+         "tags": [
+            "Oscillator"
+         ]
+      },
+      {
+         "slug": "MidiReplay",
+         "name": "MidiReplay",
+         "description": "",
+         "tags": [
+            "Midi",
+            "Polyphonic"
+         ]
       }
    ]
 }

@@ -1067,7 +1067,7 @@ void SchweineSystem::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int la
          const NVGcolor color = [&]() -> NVGcolor
          {
             if (!module)
-               return nvgRGB(0, 0, 255);
+               return nvgRGB(10, 10, 10);
 
             const uint16_t index = compileIndex(x, y);
             return module->pixels[pixelId][index];

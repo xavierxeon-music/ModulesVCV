@@ -1,12 +1,13 @@
 #include "DoepferQuad.h"
 #include "DoepferQuadPanel.h"
 
-#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemMaster.h>
 
 void DoepferQuad::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
+
+   configButton(Panel::Connect, "Connect");
 
    configInput(Panel::Channel4_In3, "Channel4_In3");
    configInput(Panel::Channel4_In2, "Channel4_In2");

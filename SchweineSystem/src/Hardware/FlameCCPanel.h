@@ -4,6 +4,8 @@
 #include "FlameCC.h"
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemButtonLED.h>
+#include <SchweineSystemSwitch.h>
 
 struct FlameCC::Panel
 {

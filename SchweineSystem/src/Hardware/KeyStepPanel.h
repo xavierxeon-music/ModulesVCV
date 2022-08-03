@@ -4,6 +4,10 @@
 #include "KeyStep.h"
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemButton.h>
+#include <SchweineSystemDisplayLCD.h>
+#include <SchweineSystemButtonLED.h>
+#include <SchweineSystemSwitch.h>
 
 struct KeyStep::Panel
 {

@@ -1,12 +1,12 @@
-#ifndef BarCounterPanelH
-#define BarCounterPanelH
+#ifndef MidiReplayPanelH
+#define MidiReplayPanelH
 
-#include "BarCounter.h"
+#include "MidiReplay.h"
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemDisplayOLED.h>
 
-struct BarCounter::Panel
+struct MidiReplay::Panel
 {
    enum ParamId
    {
@@ -39,7 +39,10 @@ struct BarCounter::Panel
 
    enum OutputId
    {
-      OUTPUTS_LEN = 0
+      Velocity = 0,
+      Gate = 1,
+      Pitch = 2,
+      OUTPUTS_LEN = 3
    };
 
    enum LightId
@@ -52,4 +55,4 @@ struct BarCounter::Panel
 
 };
 
-#endif // NOT BarCounterPanelH
+#endif // NOT MidiReplayPanelH

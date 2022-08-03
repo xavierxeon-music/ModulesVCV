@@ -1,12 +1,14 @@
 #include "BitBusMeterAndFreeze.h"
 #include "BitBusMeterAndFreezePanel.h"
 
-#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemMaster.h>
 
 void BitBusMeterAndFreeze::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
+
+   configButton(Panel::FlipSample, "FlipSample");
+   configButton(Panel::FlipFreeze, "FlipFreeze");
 
    configInput(Panel::GateSample, "GateSample");
    configInput(Panel::GateFreeze, "GateFreeze");

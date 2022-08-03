@@ -4,12 +4,14 @@
 #include "DoepferQuad.h"
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemButtonLED.h>
 
 struct DoepferQuad::Panel
 {
    enum ParamId
    {
       // buttons
+      // switches
       // ledbuttons
       Connect = 0,
       // knobs
@@ -18,6 +20,8 @@ struct DoepferQuad::Panel
 
    enum DisplayId
    {
+      // lcd
+      // oled
       DISPLAYS_LEN = 0
    };
 
@@ -51,9 +55,9 @@ struct DoepferQuad::Panel
    enum LightId
    {
       // leds
-      // buttons
+      // ledbuttons
       RGB_Connect = 0,
-      // displays
+      // lcds
       LIGHTS_LEN = 3
    };
 

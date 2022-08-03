@@ -2,16 +2,16 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 90 380" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
     <g transform="matrix(1.62646,0,0,3.82264,-5.23902,-309.338)">
-        <rect x="3.221" y="80.923" width="55.335" height="99.408" style="fill:rgb(242,242,242);"/>
+        <rect x="3.221" y="80.923" width="55.335" height="99.408" style="fill:rgb(102,126,153);"/>
     </g>
     <g id="Reset">
         <g id="Button-button" serif:id="Button#button" transform="matrix(0.174892,0,0,0.175002,42.2376,322.943)">
-            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(242,242,242);"/>
+            <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(102,126,153);"/>
         </g>
         <g id="Input-input" serif:id="Input#input" transform="matrix(0.175002,0,0,0.175002,0.38717,322.943)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(204,204,204);"/>
         </g>
-        <g transform="matrix(6.12323e-17,1,-1,6.12323e-17,402.827,306.152)">
+        <g transform="matrix(6.12323e-17,1,-1,6.12323e-17,399.827,306.152)">
             <g transform="matrix(1,0,0,1,-47.6179,240.795)">
                 <path d="M89.618,118.306L89.618,113.236L90.638,113.236L90.638,113.776C90.845,113.59 91.048,113.443 91.248,113.336C91.448,113.23 91.695,113.176 91.988,113.176L91.988,114.256C91.888,114.216 91.785,114.196 91.678,114.196C91.571,114.196 91.456,114.215 91.333,114.251C91.21,114.288 91.098,114.35 90.998,114.436C90.891,114.523 90.805,114.636 90.738,114.776C90.671,114.916 90.638,115.09 90.638,115.296L90.638,118.306L89.618,118.306Z" style="fill:rgb(5,5,5);fill-rule:nonzero;"/>
                 <path d="M95.348,116.156L93.328,116.156L93.328,116.846C93.328,117.006 93.373,117.13 93.463,117.216C93.553,117.303 93.675,117.346 93.828,117.346C94.021,117.346 94.15,117.29 94.213,117.176C94.276,117.063 94.315,116.95 94.328,116.836L95.348,116.836C95.348,117.283 95.211,117.643 94.938,117.916C94.805,118.056 94.645,118.166 94.458,118.246C94.271,118.326 94.061,118.366 93.828,118.366C93.508,118.366 93.236,118.3 93.013,118.166C92.79,118.033 92.618,117.856 92.498,117.636C92.425,117.503 92.375,117.35 92.348,117.176C92.321,117.003 92.308,116.813 92.308,116.606L92.308,114.936C92.308,114.73 92.321,114.54 92.348,114.366C92.375,114.193 92.425,114.04 92.498,113.906C92.618,113.686 92.79,113.51 93.013,113.376C93.236,113.243 93.508,113.176 93.828,113.176C94.061,113.176 94.273,113.216 94.463,113.296C94.653,113.376 94.815,113.486 94.948,113.626C95.215,113.926 95.348,114.303 95.348,114.756L95.348,116.156ZM93.328,115.356L94.328,115.356L94.328,114.776C94.328,114.583 94.283,114.438 94.193,114.341C94.103,114.245 93.981,114.196 93.828,114.196C93.675,114.196 93.553,114.245 93.463,114.341C93.373,114.438 93.328,114.583 93.328,114.776L93.328,115.356Z" style="fill:rgb(5,5,5);fill-rule:nonzero;"/>
@@ -173,22 +173,22 @@
             <text x="-39.144px" y="23.596px" style="font-family:'Luminari-Regular', 'Luminari';font-size:12px;">Gate</text>
             <text x="-39.144px" y="35.596px" style="font-family:'Luminari-Regular', 'Luminari';font-size:12px;">Latch</text>
         </g>
-        <g transform="matrix(0.0178906,0,0,0.0202937,-16.4047,10.0338)">
+        <g transform="matrix(0.0178906,0,0,0.0202937,-16.7622,10.0338)">
             <g transform="matrix(1,0,0,1,-143.343,98.6554)">
-                <ellipse cx="360.896" cy="293.762" rx="136.961" ry="230.443" style="fill:white;stroke:black;stroke-width:63.81px;"/>
+                <ellipse cx="360.896" cy="293.762" rx="136.961" ry="230.443" style="fill:rgb(102,126,153);stroke:black;stroke-width:63.81px;"/>
             </g>
             <g transform="matrix(1,0,0,1,445.551,98.6554)">
-                <ellipse cx="360.896" cy="293.762" rx="136.961" ry="230.443" style="fill:white;stroke:black;stroke-width:63.81px;"/>
+                <ellipse cx="360.896" cy="293.762" rx="136.961" ry="230.443" style="fill:rgb(102,126,153);stroke:black;stroke-width:63.81px;"/>
             </g>
             <g transform="matrix(1,0,0,1,-34.3236,-20.6488)">
-                <ellipse cx="546.324" cy="643.509" rx="431.408" ry="296.899" style="fill:white;stroke:black;stroke-width:63.81px;"/>
+                <ellipse cx="546.324" cy="643.509" rx="431.408" ry="296.899" style="fill:rgb(102,126,153);stroke:black;stroke-width:63.81px;"/>
             </g>
-            <circle cx="406.664" cy="569.758" r="105.336" style="fill:white;stroke:black;stroke-width:63.81px;"/>
+            <circle cx="406.664" cy="569.758" r="105.336" style="fill:rgb(102,126,153);stroke:black;stroke-width:63.81px;"/>
             <g transform="matrix(1,0,0,1,210.672,0)">
-                <circle cx="406.664" cy="569.758" r="105.336" style="fill:white;stroke:black;stroke-width:63.81px;"/>
+                <circle cx="406.664" cy="569.758" r="105.336" style="fill:rgb(102,126,153);stroke:black;stroke-width:63.81px;"/>
             </g>
             <g transform="matrix(1,0,0,1,-53.1856,50.0357)">
-                <ellipse cx="565.186" cy="671.455" rx="210.672" ry="98.631" style="fill:white;stroke:black;stroke-width:63.81px;"/>
+                <ellipse cx="565.186" cy="671.455" rx="210.672" ry="98.631" style="fill:rgb(102,126,153);stroke:black;stroke-width:63.81px;"/>
             </g>
             <g transform="matrix(51.2,0,0,45.1371,0.670978,88.9676)">
                 <path d="M12.057,13.791C12.057,13.668 11.958,13.568 11.835,13.568L8.139,13.568C8.016,13.568 7.916,13.668 7.916,13.791L7.916,14.236C7.916,14.359 8.016,14.458 8.139,14.458L11.835,14.458C11.958,14.458 12.057,14.359 12.057,14.236L12.057,13.791Z"/>

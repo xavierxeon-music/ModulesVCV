@@ -4,6 +4,7 @@
 #include "BitBusNegate.h"
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemLED.h>
 
 struct BitBusNegate::Panel

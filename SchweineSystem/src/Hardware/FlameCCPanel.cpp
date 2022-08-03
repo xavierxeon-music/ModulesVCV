@@ -1,7 +1,6 @@
 #include "FlameCC.h"
 #include "FlameCCPanel.h"
 
-#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemMaster.h>
 
 void FlameCC::setup()

@@ -157,7 +157,7 @@ class Headers(Common):
             if self.oleds:
                 line(0, '#include <SchweineSystemDisplayOLED.h>')
             if self.switches:
-                line(0, '#include <SchweineSystemDisplaySwitch.h>')
+                line(0, '#include <SchweineSystemSwitch.h>')
             line(0)
 
             line(0, f'struct {self.moduleName}::Panel')

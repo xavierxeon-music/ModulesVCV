@@ -4,6 +4,7 @@
 #include "BitBusMeterAndFreeze.h"
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemLED.h>
 
 struct BitBusMeterAndFreeze::Panel

@@ -26,7 +26,9 @@
 ./src/Utilities/BarCounter.h
 ./src/Utilities/BarCounterPanel.h
 ./src/Utilities/WavPlayerPanel.h
+./src/Utilities/MidiReplayPanel.h
 ./src/Utilities/TimeLordPanel.h
+./src/Utilities/MidiReplay.h
 ./src/Utilities/GateLatch.h
 ./src/BitBus/BitBusCommon.h
 ./src/BitBus/BitBusBitOutPanel.h
@@ -49,6 +51,7 @@
 ./src/_MusicTools/Include/Blocks/Trapezoid.h
 ./src/_MusicTools/Include/Blocks/PolyRamp.h
 ./src/_MusicTools/Include/Blocks/CvSwitch.h
+./src/_MusicTools/Include/Blocks/Replay.h
 ./src/_MusicTools/Include/Abstract/AbstractEffect.h
 ./src/_MusicTools/Include/Abstract/AbstractOscilator.h
 ./src/_MusicTools/Include/Abstract/AbstractSoundSource.h
@@ -71,6 +74,7 @@
 ./src/_MusicTools/Include/Midi/MidiTargetDoepferQuad.h
 ./src/_MusicTools/Include/Midi/MidiToolTempo.h
 ./src/_MusicTools/Include/Midi/MidiInterfaceOutput.h
+./src/_MusicTools/Include/Midi/MidiFileReader.h
 ./src/_MusicTools/Include/Midi/MidiInterfaceInput.h
 ./src/_MusicTools/Include/Midi/MidiCommon.h
 ./src/_MusicTools/Include/Midi/MidiTargetFlameCC.h
@@ -109,6 +113,7 @@
 ./src/_MusicTools/DoubleBuffer.hpp
 ./src/_MusicTools/FastRandom.hpp
 ./src/_MusicTools/MidiToolTempo.hpp
+./src/_MusicTools/Replay.hpp
 ./src/_MusicTools/GateOscilator.hpp
 ./src/_MusicTools/RememberDummy/RememberList.hpp
 ./src/_MusicTools/RememberDummy/Remember.hpp
@@ -145,6 +150,7 @@
 ./src/_MusicTools/Glide.hpp
 ./src/_MusicTools/MidiToolGate.hpp
 ./src/_MusicTools/Range.hpp
+./src/_MusicTools/MidiFileReader.hpp
 ./src/_MusicTools/CvSwitch.hpp
 ./src/_MusicTools/WaveTable.hpp
 ./src/_MusicTools/Convert.hpp
@@ -177,7 +183,9 @@
 ./src/Utilities/GateLatchPanel.cpp
 ./src/Utilities/BarCounterPanel.cpp
 ./src/Utilities/GateLatch.cpp
+./src/Utilities/MidiReplay.cpp
 ./src/Utilities/TimeLord.cpp
+./src/Utilities/MidiReplayPanel.cpp
 ./src/BitBus/BitBusBitIn.cpp
 ./src/BitBus/BitBusNegatePanel.cpp
 ./src/BitBus/BitBusNegate.cpp

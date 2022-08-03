@@ -4,8 +4,10 @@
 #include "WavPlayer.h"
 
 #include <SchweineSystemCommon.h>
-#include <SchweineSystemDisplayLCD.h>
+#include <SchweineSystemButton.h>
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemDisplayOLED.h>
+#include <SchweineSystemSwitch.h>
 
 struct WavPlayer::Panel
 {

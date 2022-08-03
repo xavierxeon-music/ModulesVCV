@@ -1,12 +1,20 @@
 #include "BitBusNegate.h"
 #include "BitBusNegatePanel.h"
 
-#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemMaster.h>
 
 void BitBusNegate::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
+
+   configButton(Panel::Bit8_Latch, "Bit8_Latch");
+   configButton(Panel::Bit7_Latch, "Bit7_Latch");
+   configButton(Panel::Bit6_Latch, "Bit6_Latch");
+   configButton(Panel::Bit5_Latch, "Bit5_Latch");
+   configButton(Panel::Bit4_Latch, "Bit4_Latch");
+   configButton(Panel::Bit3_Latch, "Bit3_Latch");
+   configButton(Panel::Bit2_Latch, "Bit2_Latch");
+   configButton(Panel::Bit1_Latch, "Bit1_Latch");
 
    configInput(Panel::Bit8_GateIn, "Bit8_GateIn");
    configInput(Panel::Bit7_GateIn, "Bit7_GateIn");
