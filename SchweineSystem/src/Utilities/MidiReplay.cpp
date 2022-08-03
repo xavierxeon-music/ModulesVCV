@@ -12,6 +12,8 @@
 MidiReplay::MidiReplay()
    : SchweineSystem::Module()
    , fileName()
+   , midiReplay()
+   , info{}
    // display
    , displayMode(DisplayMode::Overview)
    , displayButton(this, Panel::Display)
@@ -60,6 +62,25 @@ void MidiReplay::updateDisplays()
       displayController.writeText(1, 1, fileNameEnd, SchweineSystem::DisplayOLED::Font::Normal);
 
       displayController.setColor(SchweineSystem::Color{255, 255, 255});
+
+      displayController.writeText(1, 20, "bars: ", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(50, 35, std::to_string(info.barCounter), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
+
+      displayController.writeText(1, 70, "bpm: ", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(50, 85, std::to_string(info.bpm), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
+
+      displayController.writeText(1, 120, "length:", SchweineSystem::DisplayOLED::Font::Normal);
+
+      auto timeDisplay = [&]()
+      {
+         const std::string secondsText = std::to_string(info.seconds);
+
+         if (1 == secondsText.length())
+            return std::to_string(info.minutes) + ":0" + secondsText;
+
+         return std::to_string(info.minutes) + ":" + secondsText;
+      };
+      displayController.writeText(50, 135, timeDisplay(), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
    }
    else if (DisplayMode::Current == displayMode)
    {
@@ -75,6 +96,9 @@ void MidiReplay::loadMidiFile(const std::string& newFileName)
    const Bytes data = File::load(fileName);
    if (data.empty())
       return;
+
+   midiReplay.load(data);
+   info = midiReplay.compileInfo();
 }
 
 json_t* MidiReplay::dataToJson()

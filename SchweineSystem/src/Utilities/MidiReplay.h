@@ -4,6 +4,7 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <Midi/MidiFileReader.h>
 #include <Music/Tempo.h>
 
 #include <SchweineSystemButton.h>
@@ -40,6 +41,8 @@ private:
 
 private:
    std::string fileName;
+   Midi::FileReader midiReplay;
+   Replay::Info info;
 
    // display
    DisplayMode displayMode;
