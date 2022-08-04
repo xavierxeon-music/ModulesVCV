@@ -63,13 +63,13 @@ void MidiReplay::updateDisplays()
 
       displayController.setColor(SchweineSystem::Color{255, 255, 255});
 
-      displayController.writeText(1, 20, "bars: ", SchweineSystem::DisplayOLED::Font::Normal);
-      displayController.writeText(50, 35, std::to_string(info.barCounter), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
+      displayController.writeText(1, 15, "bpm: ", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(50, 25, std::to_string(info.bpm), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Center);
 
-      displayController.writeText(1, 70, "bpm: ", SchweineSystem::DisplayOLED::Font::Normal);
-      displayController.writeText(50, 85, std::to_string(info.bpm), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
+      displayController.writeText(1, 45, "bars: ", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(50, 55, std::to_string(info.barCounter), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Center);
 
-      displayController.writeText(1, 120, "length:", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(1, 75, "length:", SchweineSystem::DisplayOLED::Font::Normal);
 
       auto timeDisplay = [&]()
       {
@@ -80,7 +80,10 @@ void MidiReplay::updateDisplays()
 
          return std::to_string(info.minutes) + ":" + secondsText;
       };
-      displayController.writeText(50, 135, timeDisplay(), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
+      displayController.writeText(50, 88, timeDisplay(), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
+
+      displayController.writeText(1, 115, "tracks:", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(50, 128, std::to_string(info.numberOfTracks), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
    }
    else if (DisplayMode::Current == displayMode)
    {
@@ -96,6 +99,8 @@ void MidiReplay::loadMidiFile(const std::string& newFileName)
    const Bytes data = File::load(fileName);
    if (data.empty())
       return;
+
+   std::cout << fileName << std::endl;
 
    midiReplay.load(data);
    info = midiReplay.compileInfo();
