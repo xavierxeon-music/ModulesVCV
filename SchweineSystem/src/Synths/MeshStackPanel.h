@@ -1,11 +1,11 @@
-#ifndef MeshPathPanelH
-#define MeshPathPanelH
+#ifndef MeshStackPanelH
+#define MeshStackPanelH
 
-#include "MeshPath.h"
+#include "MeshStack.h"
 
 #include <SchweineSystemCommon.h>
 
-struct MeshPath::Panel
+struct MeshStack::Panel
 {
    enum ParamId
    {
@@ -30,12 +30,14 @@ struct MeshPath::Panel
 
    enum InputId
    {
-      INPUTS_LEN = 0
+      Pitch = 0,
+      INPUTS_LEN = 1
    };
 
    enum OutputId
    {
-      OUTPUTS_LEN = 0
+      Out = 0,
+      OUTPUTS_LEN = 1
    };
 
    enum LightId
@@ -48,4 +50,4 @@ struct MeshPath::Panel
 
 };
 
-#endif // NOT MeshPathPanelH
+#endif // NOT MeshStackPanelH

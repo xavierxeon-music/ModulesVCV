@@ -152,11 +152,12 @@
          ]
       },
       {
-         "slug": "MeshPath",
-         "name": "MeshPath",
+         "slug": "MeshStack",
+         "name": "MeshStack",
          "description": "",
          "tags": [
-            "Oscillator"
+            "Oscillator",
+            "Polyphonic"
          ]
       }
    ]
