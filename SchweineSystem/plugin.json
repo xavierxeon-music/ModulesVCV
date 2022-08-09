@@ -150,6 +150,12 @@
             "Midi",
             "Polyphonic"
          ]
+      },
+      {
+         "slug": "PictureMesh",
+         "name": "PictureMesh",
+         "description": "",
+         "tags": []
       }
    ]
 }

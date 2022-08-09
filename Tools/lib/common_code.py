@@ -5,15 +5,11 @@ import os
 
 class Common:
 
-    def __init__(self, modulesPath, subFolder, moduleName, components):
+    def __init__(self, sourcePath,  moduleName, panelFileName, components):
 
         self.moduleName = moduleName
-        self.subFolder = subFolder
-
-        if subFolder:
-            self._fileNameBase = modulesPath + '/src/' + subFolder + '/' + moduleName
-        else:
-            self._fileNameBase = modulesPath + '/src/' + moduleName
+        self.panelFileName = panelFileName
+        self._fileNameBase = sourcePath + '/' + moduleName
 
         self.buttons = components['button'] if components and 'button' in components else list()
         self.inputs = components['input'] if components and 'input' in components else list()

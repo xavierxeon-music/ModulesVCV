@@ -6,6 +6,10 @@ import xml.etree.ElementTree as et
 
 def createPanel(panelPath, moduleName, hpWidth):
 
+    if not moduleName:
+        print('create needs module name')
+        return
+
     os.makedirs(panelPath, exist_ok=True)
 
     height = 380

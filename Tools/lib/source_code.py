@@ -7,9 +7,9 @@ from .common_code import Common
 
 class Sources(Common):
 
-    def __init__(self, modulesPath, subFolder, moduleName, components):
+    def __init__(self, sourcePath, moduleName, panelFileName, components):
 
-        Common.__init__(self, modulesPath, subFolder, moduleName, components)
+        Common.__init__(self, sourcePath, moduleName, panelFileName, components)
 
     def write(self):
 
@@ -38,8 +38,6 @@ class Sources(Common):
             line(0)
         for ledbutton in self.ledbuttons:
             name = ledbutton['name']
-            x = ledbutton['cx']
-            y = ledbutton['cy']
             line(1, f'configButton(Panel::{name}, "{name}");')
 
         if self.knobs:
@@ -86,10 +84,7 @@ class Sources(Common):
 
         line(0, f'void {self.moduleName}Widget::setup()')
         line(0, '{')
-        if self.subFolder:
-            line(1, f'std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/{self.subFolder}/{self.moduleName}.svg");')
-        else:
-            line(1, f'std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/{self.moduleName}.svg");')
+        line(1, f'std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "{self.panelFileName}");')
         line(1, 'SvgPanel* mainPanel = createPanel(panelPath);')
         line(1, 'setPanel(mainPanel);')
 

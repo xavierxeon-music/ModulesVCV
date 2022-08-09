@@ -7,9 +7,9 @@ from .common_code import Common
 
 class Headers(Common):
 
-    def __init__(self, modulesPath, subFolder, moduleName, components):
+    def __init__(self,  sourcePath, moduleName, panelFileName, components):
 
-        Common.__init__(self, modulesPath, subFolder, moduleName, components)
+        Common.__init__(self,  sourcePath, moduleName, panelFileName, components)
 
     def write(self):
 
