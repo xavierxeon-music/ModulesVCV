@@ -9,6 +9,7 @@ using namespace rack;
 #include <Music/TimeCode.h>
 
 #include <SchweineSystemButton.h>
+#include <SchweineSystemButtonLED.h>
 #include <SchweineSystemDisplayOLED.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
@@ -34,7 +35,6 @@ private:
    enum class DisplayMode
    {
       Overview,
-      Tempo,
       Current
    };
 
@@ -55,6 +55,12 @@ private:
    dsp::BooleanTrigger clockTrigger;
    dsp::BooleanTrigger resetTrigger;
    Tempo tempo;
+
+   // cycle
+   SchweineSystem::ButtonLED loopButton;
+   bool isLooping;
+   bool atEnd;
+   dsp::PulseGenerator endPulse;
 
    // current position
    TimeCode::Duration duration;

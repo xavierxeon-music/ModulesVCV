@@ -18,33 +18,80 @@ MidiReplay::MidiReplay()
    // display
    , displayMode(DisplayMode::Overview)
    , displayButton(this, Panel::Display)
-   , displayController(this, Panel::Pixels_Display, 100, 170)
+   , displayController(this, Panel::Pixels_Display, 100, 135)
    // clock
    , clockTrigger()
    , resetTrigger()
    , tempo()
+   // cycle
+   , loopButton(this, Panel::Loop, Panel::RGB_Loop)
+   , isLooping(false)
+   , atEnd(false)
+   , endPulse()
+   // current
    , duration(0)
    , currentTick(0)
    , lastTick(0)
 {
    setup();
+
+   loopButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
 }
 void MidiReplay::process(const ProcessArgs& args)
 {
    // clock
    const bool isClock = clockTrigger.process(inputs[Panel::Clock].getVoltage() > 3.0);
    const bool isReset = resetTrigger.process(inputs[Panel::Reset].getVoltage() > 3.0);
+   const bool isPlay = inputs[Panel::Play].isConnected() ? (inputs[Panel::Play].getVoltage() > 3.0) : true;
+   atEnd = (lastTick > info.maxTick);
 
-   if (lastTick >= info.maxTick || isReset)
+   // screen mode
+   if (displayButton.isTriggered())
+   {
+      static const std::vector<DisplayMode> order = {DisplayMode::Overview, DisplayMode::Current};
+      Variable::Enum<DisplayMode> variable(displayMode, order, true);
+      variable.increment();
+   }
+
+   // loop
+
+   if (loopButton.isTriggered())
+   {
+      isLooping ^= true;
+      if (atEnd && isLooping)
+         atEnd = false;
+   }
+   loopButton.setActive(isLooping);
+
+   if (atEnd)
+      endPulse.trigger();
+
+   if (endPulse.process(args.sampleTime))
+      outputs[Panel::End]
+         .setVoltage(5.0);
+   else
+      outputs[Panel::End].setVoltage(0.0);
+
+   if (atEnd && isLooping)
    {
       duration = 0;
       currentTick = 0;
       lastTick = 0;
+   }
+
+   // clock
+   if (isReset)
+   {
+      duration = 0;
+      currentTick = 0;
+      lastTick = 0;
+
       tempo.clockReset();
    }
    else if (isClock)
    {
-      duration++;
+      if (isPlay && !atEnd)
+         duration++;
       tempo.clockTick();
    }
    else
@@ -52,14 +99,7 @@ void MidiReplay::process(const ProcessArgs& args)
       tempo.advance(args.sampleRate);
    }
 
-   // screen mode
-   if (displayButton.isTriggered())
-   {
-      static const std::vector<DisplayMode> order = {DisplayMode::Overview, DisplayMode::Tempo, DisplayMode::Current};
-      Variable::Enum<DisplayMode> variable(displayMode, order, true);
-      variable.increment();
-   }
-
+   // play
    currentTick = midiReplay.toTick(duration, tempo.getPercentage(Tempo::Sixteenth));
 
    if (lastTick >= currentTick)
@@ -135,78 +175,52 @@ void MidiReplay::updateDisplays()
    {
       displayController.setColor(SchweineSystem::Color{255, 255, 255});
       displayController.drawRect(0, 0, 99, 10, true);
+      displayController.drawRect(0, 34, 99, 43, true);
+      displayController.drawRect(0, 84, 99, 93, true);
 
       displayController.setColor(SchweineSystem::Color{0, 0, 0});
       const std::size_t posSlash = fileName.rfind("/");
       const std::string fileNameEnd = fileName.substr(1 + posSlash);
       displayController.writeText(1, 1, fileNameEnd, SchweineSystem::DisplayOLED::Font::Normal);
 
+      displayController.writeText(1, 35, " b a r s", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(1, 85, " t i m e", SchweineSystem::DisplayOLED::Font::Normal);
+
       displayController.setColor(SchweineSystem::Color{255, 255, 255});
 
-      displayController.writeText(1, 15, "bpm: ", SchweineSystem::DisplayOLED::Font::Normal);
-      displayController.writeText(50, 25, std::to_string(info.bpm), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Center);
+      const uint8_t bpm = tempo.getBeatsPerMinute();
+      displayController.writeText(1, 15, " " + std::to_string(bpm) + " bpm", SchweineSystem::DisplayOLED::Font::Small);
+      displayController.writeText(1, 25, " " + std::to_string(info.monophonicTrackIndexList.size()) + " tracks", SchweineSystem::DisplayOLED::Font::Small);
 
-      displayController.writeText(1, 45, "bars: ", SchweineSystem::DisplayOLED::Font::Normal);
-      displayController.writeText(50, 55, std::to_string(info.barCounter), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Center);
+      const TimeCode timeCodeReplay(duration);
+      displayController.writeText(50, 45, std::to_string(timeCodeReplay.bar), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Right);
+      const std::string replayRest = "." + std::to_string(timeCodeReplay.quarter) + "." + std::to_string(timeCodeReplay.tick);
+      displayController.writeText(50, 45 + 8, replayRest, SchweineSystem::DisplayOLED::Font::Normal, SchweineSystem::DisplayOLED::Alignment::Left);
 
-      displayController.writeText(1, 75, "length:", SchweineSystem::DisplayOLED::Font::Normal);
+      const TimeCode::Duration durationSequence = midiReplay.fromTick(info.maxTick);
+      const TimeCode timeCodeSequence(durationSequence);
+      displayController.writeText(50, 65, std::to_string(timeCodeSequence.bar), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Right);
+      const std::string sequyenceRest = "." + std::to_string(timeCodeSequence.quarter) + "." + std::to_string(timeCodeSequence.tick);
+      displayController.writeText(50, 65 + 8, sequyenceRest, SchweineSystem::DisplayOLED::Font::Normal, SchweineSystem::DisplayOLED::Alignment::Left);
 
-      auto timeDisplay = [&]()
+      auto timeDisplay = [&](const TimeCode::Duration duration)
       {
-         const std::string secondsText = std::to_string(info.seconds);
+         // time
+         const float secondsPerTick = 60.0 / (4.0 * bpm);
+         const uint32_t totalSeconds = static_cast<uint32_t>(duration * secondsPerTick);
+         const uint8_t seconds = totalSeconds % 60;
+         const uint32_t minutes = (totalSeconds - seconds) / 60;
+
+         const std::string secondsText = std::to_string(seconds);
 
          if (1 == secondsText.length())
-            return std::to_string(info.minutes) + ":0" + secondsText;
+            return std::to_string(minutes) + ":0" + secondsText;
 
-         return std::to_string(info.minutes) + ":" + secondsText;
+         return std::to_string(minutes) + ":" + secondsText;
       };
-      displayController.writeText(50, 88, timeDisplay(), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
 
-      displayController.writeText(1, 115, "mono tracks:", SchweineSystem::DisplayOLED::Font::Normal);
-      displayController.writeText(50, 128, std::to_string(info.monophonicTrackIndexList.size()), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
-   }
-   else if (DisplayMode::Tempo == displayMode)
-   {
-      displayController.drawRect(0, 0, 82, 10, true);
-      displayController.drawRect(0, 95, 82, 105, true);
-      displayController.drawRect(0, 135, 82, 145, true);
-
-      displayController.setColor(SchweineSystem::Color{0, 0, 0});
-      displayController.writeText(1, 1, "counter", SchweineSystem::DisplayOLED::Font::Normal);
-      displayController.writeText(1, 96, "tempo", SchweineSystem::DisplayOLED::Font::Normal);
-      displayController.writeText(1, 136, "time", SchweineSystem::DisplayOLED::Font::Normal);
-
-      displayController.setColor(SchweineSystem::Color{255, 255, 255});
-
-      TimeCode timeCode(duration);
-
-      // counter
-      displayController.writeText(1, 15, "bar", SchweineSystem::DisplayOLED::Font::Normal);
-      if (timeCode.bar < 1000)
-         displayController.writeText(41, 30, std::to_string(timeCode.bar), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
-      else
-         displayController.writeText(41, 30, "big", SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
-
-      displayController.writeText(1, 65, "rest", SchweineSystem::DisplayOLED::Font::Small);
-      const std::string rest = std::to_string(timeCode.quarter) + '.' + std::to_string(timeCode.tick);
-      displayController.writeText(41, 75, rest, SchweineSystem::DisplayOLED::Font::Normal, SchweineSystem::DisplayOLED::Alignment::Center);
-
-      // tempo
-      const uint8_t bpm = tempo.getBeatsPerMinute();
-      displayController.writeText(41, 110, std::to_string(bpm), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Center);
-
-      // time
-      const float secondsPerTick = 60.0 / (4.0 * bpm);
-      const uint32_t totalSeconds = static_cast<uint32_t>(duration * secondsPerTick);
-      const uint8_t seconds = totalSeconds % 60;
-      const uint32_t minutes = (totalSeconds - seconds) / 60;
-
-      std::string secondText = std::to_string(seconds);
-      if (seconds < 10)
-         secondText = "0" + secondText;
-
-      const std::string timeText = std::to_string(minutes) + ":" + secondText;
-      displayController.writeText(41, 150, timeText, SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Center);
+      displayController.writeText(50, 95, timeDisplay(duration), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Center);
+      displayController.writeText(50, 115, timeDisplay(durationSequence), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Center);
    }
    else if (DisplayMode::Current == displayMode)
    {
@@ -235,6 +249,7 @@ json_t* MidiReplay::dataToJson()
 
    Object rootObject;
    rootObject.set("fileName", fileName);
+   rootObject.set("loop", isLooping);
 
    return rootObject.toJson();
 }
@@ -246,6 +261,8 @@ void MidiReplay::dataFromJson(json_t* rootJson)
    Object rootObject(rootJson);
    const std::string newFileName = rootObject.get("fileName").toString();
    loadMidiFile(newFileName);
+
+   isLooping = rootObject.get("loop").toBool();
 }
 
 // widget
