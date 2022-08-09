@@ -1,11 +1,11 @@
-#ifndef PictureMeshPanelH
-#define PictureMeshPanelH
+#ifndef MeshPathPanelH
+#define MeshPathPanelH
 
-#include "PictureMesh.h"
+#include "MeshPath.h"
 
 #include <SchweineSystemCommon.h>
 
-struct PictureMesh::Panel
+struct MeshPath::Panel
 {
    enum ParamId
    {
@@ -48,4 +48,4 @@ struct PictureMesh::Panel
 
 };
 
-#endif // NOT PictureMeshPanelH
+#endif // NOT MeshPathPanelH

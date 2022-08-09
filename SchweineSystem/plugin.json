@@ -152,10 +152,12 @@
          ]
       },
       {
-         "slug": "PictureMesh",
-         "name": "PictureMesh",
+         "slug": "MeshPath",
+         "name": "MeshPath",
          "description": "",
-         "tags": []
+         "tags": [
+            "Oscillator"
+         ]
       }
    ]
 }

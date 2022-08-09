@@ -1,5 +1,5 @@
-#ifndef PictureMeshH
-#define PictureMeshH
+#ifndef MeshPathH
+#define MeshPathH
 
 #include <rack.hpp>
 using namespace rack;
@@ -7,13 +7,13 @@ using namespace rack;
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
-class PictureMesh : public SchweineSystem::Module
+class MeshPath : public SchweineSystem::Module
 {
 public:
    struct Panel;
 
 public:
-   PictureMesh();
+   MeshPath();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -24,13 +24,13 @@ private:
 
 // widget
 
-class PictureMeshWidget : public SchweineSystem::ModuleWidget
+class MeshPathWidget : public SchweineSystem::ModuleWidget
 {
 public:
-   PictureMeshWidget(PictureMesh* module);
+   MeshPathWidget(MeshPath* module);
 
 private:
    void setup();
 };
 
-#endif // NOT PictureMeshH
+#endif // NOT MeshPathH
