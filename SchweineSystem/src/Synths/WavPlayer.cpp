@@ -64,7 +64,7 @@ void WavPlayer::process(const ProcessArgs& args)
    const float valueLeft = oscilator.createSound();
    outputs[Panel::Left].setVoltage(valueLeft);
 
-   const float valueRight = oscilator.rightSound();
+   const float valueRight = oscilator.getSound();
    outputs[Panel::Right].setVoltage(valueRight);
 }
 
@@ -80,7 +80,7 @@ void WavPlayer::updateDisplays()
    displayController.writeText(1, 1, fileNameEnd, SchweineSystem::DisplayOLED::Font::Small);
 
    displayController.setColor(SchweineSystem::Color{0, 0, 0});
-   std::string message = oscilator.getMeta().stereo ? "2 ch" : "1 ch";
+   std::string message = std::to_string(oscilator.getMeta().noOfChannels) + " ch";
    message += " @ " + Convert::text(oscilator.getMeta().sampleRate / 1000.0, 1);
    displayController.writeText(1, 11, message, SchweineSystem::DisplayOLED::Font::Small);
 
@@ -88,7 +88,7 @@ void WavPlayer::updateDisplays()
 
    auto timeDisplay = [&](const size_t value)
    {
-      const size_t position = oscilator.getMeta().stereo ? value / 2 : value;
+      const size_t position = value / oscilator.getMeta().noOfChannels;
       const size_t totalSeconds = position / oscilator.getMeta().sampleRate;
 
       const uint8_t seconds = totalSeconds % 60;

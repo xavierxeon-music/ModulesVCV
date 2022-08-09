@@ -4,7 +4,7 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <Sound/Sample.h>
+#include <Sound/SampleOscilator.h>
 
 #include <SchweineSystemButton.h>
 #include <SchweineSystemButtonLED.h>

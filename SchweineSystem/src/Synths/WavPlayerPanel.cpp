@@ -25,7 +25,7 @@ void WavPlayer::setup()
 
 void WavPlayerWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Utilities/WavPlayer.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Synths/WavPlayer.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
