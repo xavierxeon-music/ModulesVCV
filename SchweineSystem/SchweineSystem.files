@@ -51,7 +51,6 @@
 ./src/_MusicTools/Include/Blocks/Trapezoid.h
 ./src/_MusicTools/Include/Blocks/PolyRamp.h
 ./src/_MusicTools/Include/Blocks/CvSwitch.h
-./src/_MusicTools/Include/Blocks/Replay.h
 ./src/_MusicTools/Include/Abstract/AbstractEffect.h
 ./src/_MusicTools/Include/Abstract/AbstractOscilator.h
 ./src/_MusicTools/Include/Abstract/AbstractSoundSource.h
@@ -74,7 +73,6 @@
 ./src/_MusicTools/Include/Midi/MidiTargetDoepferQuad.h
 ./src/_MusicTools/Include/Midi/MidiToolTempo.h
 ./src/_MusicTools/Include/Midi/MidiInterfaceOutput.h
-./src/_MusicTools/Include/Midi/MidiFileReader.h
 ./src/_MusicTools/Include/Midi/MidiInterfaceInput.h
 ./src/_MusicTools/Include/Midi/MidiCommon.h
 ./src/_MusicTools/Include/Midi/MidiTargetFlameCC.h
@@ -113,7 +111,6 @@
 ./src/_MusicTools/DoubleBuffer.hpp
 ./src/_MusicTools/FastRandom.hpp
 ./src/_MusicTools/MidiToolTempo.hpp
-./src/_MusicTools/Replay.hpp
 ./src/_MusicTools/GateOscilator.hpp
 ./src/_MusicTools/RememberDummy/RememberList.hpp
 ./src/_MusicTools/RememberDummy/Remember.hpp
@@ -150,7 +147,6 @@
 ./src/_MusicTools/Glide.hpp
 ./src/_MusicTools/MidiToolGate.hpp
 ./src/_MusicTools/Range.hpp
-./src/_MusicTools/MidiFileReader.hpp
 ./src/_MusicTools/CvSwitch.hpp
 ./src/_MusicTools/WaveTable.hpp
 ./src/_MusicTools/Convert.hpp
@@ -208,3 +204,7 @@
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp
+src/_MusicTools/Include/Blocks/Sequencer.h
+src/_MusicTools/Include/Midi/MidiFile.h
+src/_MusicTools/MidiFile.hpp
+src/_MusicTools/Sequencer.hpp

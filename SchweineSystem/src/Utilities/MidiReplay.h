@@ -4,8 +4,9 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <Midi/MidiFileReader.h>
+#include <Midi/MidiFile.h>
 #include <Music/Tempo.h>
+#include <Music/TimeCode.h>
 
 #include <SchweineSystemButton.h>
 #include <SchweineSystemDisplayOLED.h>
@@ -33,6 +34,7 @@ private:
    enum class DisplayMode
    {
       Overview,
+      Tempo,
       Current
    };
 
@@ -41,8 +43,8 @@ private:
 
 private:
    std::string fileName;
-   Midi::FileReader midiReplay;
-   Replay::Info info;
+   Sequencer midiReplay;
+   Sequencer::Info info;
 
    // display
    DisplayMode displayMode;
@@ -53,6 +55,11 @@ private:
    dsp::BooleanTrigger clockTrigger;
    dsp::BooleanTrigger resetTrigger;
    Tempo tempo;
+
+   // current position
+   TimeCode::Duration duration;
+   Sequencer::Tick currentTick;
+   Sequencer::Tick lastTick;
 };
 
 // widget
