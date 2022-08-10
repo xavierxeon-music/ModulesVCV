@@ -9,6 +9,7 @@
 ./src/_Common/SchweineSystemDisplayLCD.h
 ./src/_Common/SchweineSystemDisplayOLED.h
 ./src/_Common/SchweineSystemJson.h
+./src/_Common/SchweineSystemKnob.h
 ./src/_Common/SchweineSystemModuleWidget.h
 ./src/_Common/SchweineSystemLightMeter.h
 ./src/_Common/SchweineSystemCommon.h
@@ -181,6 +182,7 @@
 ./src/_Common/SchweineSystemCommon.cpp
 ./src/_Common/SchweineSystemButtonLED.cpp
 ./src/_Common/SchweineSystemButton.cpp
+./src/_Common/SchweineSystemKnob.cpp
 ./src/_Common/SchweineSystemLED.cpp
 ./src/_Common/SchweineSystemMaster.cpp
 ./src/_Common/SchweineSystemDisplayLCD.cpp

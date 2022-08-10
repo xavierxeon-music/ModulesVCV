@@ -4,6 +4,9 @@
     <g transform="matrix(5.42153,0,0,3.82264,-17.4634,-309.338)">
         <rect x="3.221" y="80.923" width="55.335" height="99.408" style="fill:rgb(102,126,153);"/>
     </g>
+    <g id="Mode-knob" serif:id="Mode#knob" transform="matrix(0.758898,0,0,0.758898,101.741,-112.244)">
+        <circle cx="55.661" cy="308.513" r="7.929"/>
+    </g>
     <g transform="matrix(1,0,0,1,123.857,-3.32089)">
         <g transform="matrix(1,0,0,1,43.2454,1.87477)">
             <text x="-39.144px" y="23.596px" style="font-family:'Luminari-Regular', 'Luminari';font-size:12px;">Mes<tspan x="-14.892px -7.428px " y="23.596px 23.596px ">hS</tspan>tack</text>
@@ -30,7 +33,7 @@
             </g>
         </g>
     </g>
-    <g transform="matrix(1,0,0,1,44.4345,-28.5402)">
+    <g transform="matrix(1,0,0,1,-25.2865,-27.7674)">
         <g id="Out-output" serif:id="Out#output" transform="matrix(0.175002,0,0,0.175002,57.2139,322.943)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
@@ -43,7 +46,7 @@
             <text x="89.198px" y="118.306px" style="font-family:'DINCondensed-Bold', 'DIN Condensed';font-weight:700;font-stretch:condensed;font-size:10px;fill:rgb(5,5,5);">out</text>
         </g>
     </g>
-    <g transform="matrix(1,0,0,1,1.77636e-15,27.4634)">
+    <g transform="matrix(1,0,0,1,-1.06581e-14,46.566)">
         <g id="Pitch-input" serif:id="Pitch#input" transform="matrix(0.175002,0,0,0.175002,31.9275,205.701)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(217,217,217);"/>
         </g>

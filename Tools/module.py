@@ -67,6 +67,9 @@ class Module:
             self._updateModule(name)
             return
 
+        for module in self._gatheredList:
+            self._updateModule(module)
+
         for module, data in self._modules.items():
             if not 'header_mtime' in data:
                 sourcePath = os.path.dirname(data['rc_path'])
@@ -125,6 +128,7 @@ class Module:
     def _gather(self):
 
         desktop = str(pathlib.Path.home()) + '/Desktop'
+        self._gatheredList = list()
 
         for entry in os.scandir(desktop):
             if not entry.is_file():
@@ -144,7 +148,10 @@ class Module:
             targetPath = os.path.dirname(targetPath)
             print(f'.... gather {name} -> {targetPath}')
 
+            gatheredList.append(name)
             shutil.move(entry.path, targetPath + '/' + entry.name)
+
+        return gatheredList
 
 
 def main():
@@ -168,27 +175,6 @@ def main():
     elif args.update:
         module = Module()
         module.update(args.module)
-
-    return
-
-    subFolder = None if not args.folder else args.folder[0]
-
-    # maybe gather
-    if args.gather:
-        gather(subFolder)
-
-    if args.modulenames:
-        if args.panel:
-            hpWidth = args.panel[0]
-            for moduleName in args.modulenames:
-                if subFolder:
-                    panelPath = modulesPath + '/res/' + subFolder + '/'
-                else:
-                    panelPath = modulesPath + '/res/'
-                createPanel(panelPath, moduleName, hpWidth)
-        elif args.update:
-            for moduleName in args.modulenames:
-                updateModule(moduleName, subFolder)
 
 
 if __name__ == '__main__':

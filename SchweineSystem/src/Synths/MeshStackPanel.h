@@ -4,6 +4,7 @@
 #include "MeshStack.h"
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemKnob.h>
 
 struct MeshStack::Panel
 {
@@ -13,7 +14,8 @@ struct MeshStack::Panel
       // switches
       // ledbuttons
       // knobs
-      PARAMS_LEN = 0
+      Knob_Mode = 0,
+      PARAMS_LEN = 1
    };
 
    enum DisplayId
