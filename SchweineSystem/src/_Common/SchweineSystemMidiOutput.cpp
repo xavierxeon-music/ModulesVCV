@@ -6,8 +6,6 @@ SchweineSystem::MidiOutput::MidiOutput(const std::string& targetDeviceName)
    : targetDeviceName(targetDeviceName)
    , midiOutput()
 {
-   std::cout << targetDeviceName << std::endl;
-
    open();
 }
 
@@ -26,7 +24,7 @@ bool SchweineSystem::MidiOutput::open()
    for (unsigned int port = 0; port < midiOutput.getPortCount(); port++)
    {
       const std::string deviceName = midiOutput.getPortName(port);
-      //std::cout << deviceName << std::endl;
+      std::cout << deviceName << std::endl;
 
       if (targetDeviceName == deviceName)
       {
@@ -57,6 +55,12 @@ void SchweineSystem::MidiOutput::sendNoteOn(const Midi::Channel& channel, const 
    if (!midiOutput.isPortOpen())
       return;
 
+   if (0 == channel || channel > 16)
+   {
+      std::cerr << "invalid midi channel" << std::endl;
+      return;
+   }
+
    std::vector<unsigned char> onMessage(3);
    onMessage[0] = (Midi::Event::NoteOn | (channel - 1));
    onMessage[1] = note.midiValue;
@@ -68,6 +72,12 @@ void SchweineSystem::MidiOutput::sendNoteOff(const Midi::Channel& channel, const
 {
    if (!midiOutput.isPortOpen())
       return;
+
+   if (0 == channel || channel > 16)
+   {
+      std::cerr << "invalid midi channel" << std::endl;
+      return;
+   }
 
    std::vector<unsigned char> offMessage(3);
    offMessage[0] = (Midi::Event::NoteOff | (channel - 1));
@@ -81,6 +91,12 @@ void SchweineSystem::MidiOutput::sendControllerChange(const Midi::Channel& chann
    if (!midiOutput.isPortOpen())
       return;
 
+   if (0 == channel || channel > 16)
+   {
+      std::cerr << "invalid midi channel" << std::endl;
+      return;
+   }
+
    std::vector<unsigned char> ccMessage(3);
    ccMessage[0] = (Midi::Event::ControlChange | (channel - 1));
    ccMessage[1] = controllerMessage;
@@ -90,5 +106,6 @@ void SchweineSystem::MidiOutput::sendControllerChange(const Midi::Channel& chann
 
 void SchweineSystem::MidiOutput::sendMessage(const std::vector<uint8_t>& message)
 {
-   midiOutput.sendMessage(&message);
+   //midiOutput.sendMessage(&message);
+   midiOutput.sendMessage(message.data(), message.size());
 }

@@ -9,9 +9,8 @@
 FlameCC::FlameCC()
    : SchweineSystem::Module()
    , SchweineSystem::MidiOutput(Midi::Device::FlameCC)
-   , connectTrigger()
+   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , voltageToCcValue(0.0, 5.0, 0.0, 127.0)
-   , connectionLight(this)
    , inputList(inputs)
    , controllerValueStore{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
    , fullVoltSwitchList(this)
@@ -52,13 +51,13 @@ FlameCC::FlameCC()
                               Panel::Row7_HalfB,
                               Panel::Row8_HalfB});
 
-   connectionLight.assign(Panel::RGB_Connect);
+   connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
    connectToMidiDevice();
 }
 
 void FlameCC::process(const ProcessArgs& args)
 {
-   if (connectTrigger.process(params[Panel::Connect].getValue() > 3.0))
+   if (connectionButton.isTriggered())
       connectToMidiDevice();
 
    if (!connected())
@@ -82,12 +81,17 @@ void FlameCC::process(const ProcessArgs& args)
 
 void FlameCC::connectToMidiDevice()
 {
-   connectionLight.setColor(SchweineSystem::Color{255, 0, 0});
+   if (connected())
+   {
+      connectionButton.setOn();
+      return;
+   }
 
+   connectionButton.setOff();
    if (!open())
       return;
 
-   connectionLight.setColor(SchweineSystem::Color{0, 255, 0});
+   connectionButton.setOn();
 
    //sendSysEx();
 

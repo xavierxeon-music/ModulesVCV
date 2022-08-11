@@ -39,7 +39,7 @@ private:
 
 private:
    // midi
-   SchweineSystem::ButtonLED connect;
+   SchweineSystem::ButtonLED connectionButton;
    SchweineSystem::Switch midiChannelSwitch;
    // patterns
    SchweineSystem::Input::List inputList;

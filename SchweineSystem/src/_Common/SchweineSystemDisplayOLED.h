@@ -43,14 +43,15 @@ namespace SchweineSystem
       protected:
          Module* module;
          const uint16_t pixelId;
-         const uint8_t width;
-         const uint8_t height;
+         uint8_t width;
+         uint8_t height;
       };
 
       class Controller : public PixelThing
       {
       public:
-         Controller(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height);
+         Controller(Module* module, const uint16_t& pixelId);
+         ~Controller();
 
       public:
          void fill(const Color& fillColor = Color{0, 0, 0}); // set all pixels to fill color
@@ -62,6 +63,12 @@ namespace SchweineSystem
          void writeText(const uint8_t x, const uint8_t y, const std::string& text, const Font& font, const Alignment& alignment = Alignment::Left);
 
       private:
+         friend class Widget;
+         using IdMap = std::map<const uint16_t, Controller*>;
+         using ControllerMap = std::map<Module*, IdMap>;
+
+      private:
+         static ControllerMap controllerMap;
          NVGcolor color;
       };
 
@@ -72,18 +79,25 @@ namespace SchweineSystem
 
       public:
          Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height);
+         ~Widget();
 
       public:
          template <typename ClassType>
          void onClicked(ClassType* instance, void (ClassType::*functionPointer)(const float&, const float&));
 
-         static Widget* find(SchweineSystem::ModuleWidget* widget, const uint16_t& pixelId);
+         static Widget* find(Module* module, const uint16_t& pixelId);
+
+      private:
+         friend class Controller;
+         using IdMap = std::map<const uint16_t, Widget*>;
+         using WidgetMap = std::map<Module*, IdMap>;
 
       private:
          void drawLayer(const DrawArgs& args, int layer) override;
          void onButton(const rack::event::Button& buttonEvent) override;
 
       private:
+         static WidgetMap widgetMap;
          std::vector<ClickedFunction> clickedFunctionList;
       };
    }; // namespace DisplayOLED

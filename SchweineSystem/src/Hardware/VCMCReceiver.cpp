@@ -11,9 +11,8 @@
 VCMCReceiver::VCMCReceiver()
    : SchweineSystem::Module()
    , midiInput()
-   , connectTrigger()
+   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , ccValueToVoltage(0.0, 127, 0, 10.0)
-   , connectionLight(this)
    , tickCounter(6)
    , doNotAdvanceTempo(false)
    , tempo()
@@ -92,7 +91,7 @@ VCMCReceiver::VCMCReceiver()
       lightMeterListSlider[index]->setMaxValue(127);
    }
 
-   connectionLight.assign(Panel::RGB_Connect);
+   connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
    connectToMidiDevice();
 }
 
@@ -102,7 +101,7 @@ VCMCReceiver::~VCMCReceiver()
 
 void VCMCReceiver::process(const ProcessArgs& args)
 {
-   if (connectTrigger.process(params[Panel::Connect].getValue() > 3.0))
+   if (connectionButton.isTriggered())
       connectToMidiDevice();
 
    midi::Message msg;
@@ -196,7 +195,7 @@ void VCMCReceiver::processMessage(const midi::Message& msg)
 void VCMCReceiver::connectToMidiDevice()
 {
    midiInput.reset();
-   connectionLight.setColor(SchweineSystem::Color{255, 0, 0});
+   connectionButton.setOff();
 
    static const std::string targetDeviceName = SchweineSystem::Common::midiInterfaceMap.at(Midi::Device::VCVRack);
    std::cout << targetDeviceName << std::endl;
@@ -210,7 +209,7 @@ void VCMCReceiver::connectToMidiDevice()
       {
          std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
          midiInput.setDeviceId(deviceId);
-         connectionLight.setColor(SchweineSystem::Color{0, 255, 0});
+         connectionButton.setOn();
          return;
       }
    }

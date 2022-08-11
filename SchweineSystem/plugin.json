@@ -159,6 +159,12 @@
             "Oscillator",
             "Polyphonic"
          ]
+      },
+      {
+         "slug": "RemoteScript",
+         "name": "RemoteScript",
+         "description": "",
+         "tags": []
       }
    ]
 }

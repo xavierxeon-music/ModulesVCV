@@ -891,10 +891,25 @@ uint16_t SchweineSystem::DisplayOLED::PixelThing::compileIndex(const uint8_t x, 
 
 // comntroller
 
-SchweineSystem::DisplayOLED::Controller::Controller(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
-   : PixelThing(module, pixelId, width, height)
+SchweineSystem::DisplayOLED::Controller::ControllerMap SchweineSystem::DisplayOLED::Controller::controllerMap = SchweineSystem::DisplayOLED::Controller::ControllerMap();
+
+SchweineSystem::DisplayOLED::Controller::Controller(Module* module, const uint16_t& pixelId)
+   : PixelThing(module, pixelId, 0, 0)
    , color(nvgRGB(255, 255, 255))
 {
+   controllerMap[module][pixelId] = this;
+
+   Widget* widget = Widget::find(module, pixelId);
+   if (widget)
+   {
+      this->width = widget->width;
+      this->height = widget->height;
+   }
+}
+
+SchweineSystem::DisplayOLED::Controller::~Controller()
+{
+   controllerMap[module][pixelId] = nullptr;
 }
 
 void SchweineSystem::DisplayOLED::Controller::setColor(const Color& newColor)
@@ -1032,27 +1047,51 @@ void SchweineSystem::DisplayOLED::Controller::writeText(const uint8_t x, const u
 
 // widget
 
+SchweineSystem::DisplayOLED::Widget::WidgetMap SchweineSystem::DisplayOLED::Widget::widgetMap = SchweineSystem::DisplayOLED::Widget::WidgetMap();
+
 SchweineSystem::DisplayOLED::Widget::Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
    : rack::TransparentWidget()
    , PixelThing(module, pixelId, width, height)
    , clickedFunctionList()
 {
    box.pos = rack::math::Vec(pos.x, pos.y);
+   widgetMap[module][pixelId] = this;
+
+   auto updateController = [&]()
+   {
+      if (Controller::controllerMap.find(module) == Controller::controllerMap.end())
+         return;
+
+      const Controller::IdMap& idMap = Controller::controllerMap.at(module);
+      if (idMap.find(pixelId) == idMap.end())
+         return;
+
+      Controller* controller = idMap.at(pixelId);
+      if (!controller)
+         return;
+
+      controller->width = width;
+      controller->height = height;
+   };
+
+   updateController();
 }
 
-SchweineSystem::DisplayOLED::Widget* SchweineSystem::DisplayOLED::Widget::find(SchweineSystem::ModuleWidget* widget, const uint16_t& pixelId)
+SchweineSystem::DisplayOLED::Widget::~Widget()
 {
-   for (rack::Widget* child : widget->children)
-   {
-      Widget* oled = dynamic_cast<Widget*>(child);
-      if (!oled)
-         continue;
+   widgetMap[module][pixelId] = nullptr;
+}
 
-      if (oled->pixelId == pixelId)
-         return oled;
-   }
+SchweineSystem::DisplayOLED::Widget* SchweineSystem::DisplayOLED::Widget::find(Module* module, const uint16_t& pixelId)
+{
+   if (widgetMap.find(module) == widgetMap.end())
+      return nullptr;
 
-   return nullptr;
+   const IdMap& idMap = widgetMap.at(module);
+   if (idMap.find(pixelId) == idMap.end())
+      return nullptr;
+
+   return idMap.at(pixelId);
 }
 
 void SchweineSystem::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)

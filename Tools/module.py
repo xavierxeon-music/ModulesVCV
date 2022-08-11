@@ -20,6 +20,7 @@ class Module:
     def __init__(self):
 
         self._modules = dict()
+        self._gatheredList = list()
 
         def buildResourceDict(path):
 
@@ -128,7 +129,6 @@ class Module:
     def _gather(self):
 
         desktop = str(pathlib.Path.home()) + '/Desktop'
-        self._gatheredList = list()
 
         for entry in os.scandir(desktop):
             if not entry.is_file():
@@ -148,10 +148,8 @@ class Module:
             targetPath = os.path.dirname(targetPath)
             print(f'.... gather {name} -> {targetPath}')
 
-            gatheredList.append(name)
+            self._gatheredList.append(name)
             shutil.move(entry.path, targetPath + '/' + entry.name)
-
-        return gatheredList
 
 
 def main():

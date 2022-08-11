@@ -7,7 +7,7 @@
 KeyStep::KeyStep()
    : SchweineSystem::Module()
    , SchweineSystem::MidiOutput(Midi::Device::KeyStep1)
-   , connect(this, Panel::Connect, Panel::RGB_Connect)
+   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , midiChannelSwitch(this, Panel::Channel1_Drums)
    , inputList(inputs)
    , patterns{0, 0, 0, 0}
@@ -45,12 +45,13 @@ KeyStep::KeyStep()
       updateDisplay(channel);
    }
 
+   connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
    connectToMidiDevice();
 }
 
 void KeyStep::process(const ProcessArgs& args)
 {
-   if (connect.isTriggered())
+   if (connectionButton.isTriggered())
       connectToMidiDevice();
 
    const bool isReset = resetTrigger.process(inputs[Panel::Reset].getVoltage() > 3.0);
@@ -97,12 +98,17 @@ void KeyStep::process(const ProcessArgs& args)
 
 void KeyStep::connectToMidiDevice()
 {
-   connect.setColor(SchweineSystem::Color{255, 0, 0});
+   if (connected())
+   {
+      connectionButton.setOn();
+      return;
+   }
 
+   connectionButton.setOff();
    if (!open())
       return;
 
-   connect.setColor(SchweineSystem::Color{0, 255, 0});
+   connectionButton.setOn();
 
    for (uint8_t channel = 0; channel < 4; channel++)
    {

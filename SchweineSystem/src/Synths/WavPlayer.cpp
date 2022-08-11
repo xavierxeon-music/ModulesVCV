@@ -10,7 +10,7 @@
 
 WavPlayer::WavPlayer()
    : SchweineSystem::Module()
-   , displayController(this, Panel::Pixels_Display, 83, 60)
+   , displayController(this, Panel::Pixels_Display)
    , oscilator(true)
    , sampleRate(APP->engine->getSampleRate())
    , fileName()
@@ -170,7 +170,7 @@ WavPlayerWidget::WavPlayerWidget(WavPlayer* module)
 
    using OLEDWidget = SchweineSystem::DisplayOLED::Widget;
 
-   OLEDWidget* oled = OLEDWidget::find(this, WavPlayer::Panel::Pixels_Display);
+   OLEDWidget* oled = OLEDWidget::find(module, WavPlayer::Panel::Pixels_Display);
    if (oled)
       oled->onClicked(this, &WavPlayerWidget::displayClicked);
 }

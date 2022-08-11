@@ -40,7 +40,7 @@ TimeLord::TimeLord()
    // display
    , displayMode(DisplayMode::StageIndex)
    , displayButton(this, Panel::Display)
-   , displayController(this, Panel::Pixels_Display, 60, 120)
+   , displayController(this, Panel::Pixels_Display)
    // bank
    , bankIndex(0)
    , bankButton(this, Panel::BankUp)
@@ -589,7 +589,8 @@ void TimeLord::uploadToRemote()
    sendMessage(Midi::ControllerMessage::DataInit, bankIndex);
 
    const Bytes buffer = uploadObject.toBytes();
-   for (const uint8_t& byte : buffer)
+   const Bytes data = SevenBit::encode(buffer);
+   for (const uint8_t& byte : data)
       sendMessage(Midi::ControllerMessage::DataBlock, byte);
 
    sendMessage(Midi::ControllerMessage::DataApply, bankIndex);
@@ -622,7 +623,7 @@ TimeLordWidget::TimeLordWidget(TimeLord* module)
 
    using OLEDWidget = SchweineSystem::DisplayOLED::Widget;
 
-   OLEDWidget* oled = OLEDWidget::find(this, TimeLord::Panel::Pixels_Display);
+   OLEDWidget* oled = OLEDWidget::find(module, TimeLord::Panel::Pixels_Display);
    if (oled)
       oled->onClicked(this, &TimeLordWidget::displayClicked);
 }

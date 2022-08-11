@@ -18,7 +18,7 @@ MidiReplay::MidiReplay()
    // display
    , displayMode(DisplayMode::Overview)
    , displayButton(this, Panel::Display)
-   , displayController(this, Panel::Pixels_Display, 100, 135)
+   , displayController(this, Panel::Pixels_Display)
    // clock
    , clockTrigger()
    , resetTrigger()
@@ -274,7 +274,7 @@ MidiReplayWidget::MidiReplayWidget(MidiReplay* module)
 
    using OLEDWidget = SchweineSystem::DisplayOLED::Widget;
 
-   OLEDWidget* oled = OLEDWidget::find(this, MidiReplay::Panel::Pixels_Display);
+   OLEDWidget* oled = OLEDWidget::find(module, MidiReplay::Panel::Pixels_Display);
    if (oled)
       oled->onClicked(this, &MidiReplayWidget::displayClicked);
 }

@@ -36,10 +36,8 @@ private:
    SchweineSystem::DisplayOLED::Controller displayController;
    Sample::Oscilator oscilator;
    float sampleRate;
-
    // file
    std::string fileName;
-
    // play
    bool play;
    SchweineSystem::ButtonLED playButton;

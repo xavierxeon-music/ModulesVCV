@@ -6,15 +6,14 @@
 DoepferQuad::DoepferQuad()
    : SchweineSystem::Module()
    , SchweineSystem::MidiOutput(Midi::Device::DopeferQuad1)
-   , connectTrigger()
+   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , voltageToNote(0.0, 10.0, 24.0, 127.0)
    , voltageToCcValue(0.0, 10.0, 0.0, 127.0)
-   , connectionLight(this)
    , channelMap()
 {
    setup();
 
-   connectionLight.assign(Panel::RGB_Connect);
+   connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
    connectToMidiDevice();
 
    channelMap[Midi::Device::DopeferQuad1].inputIdList = {Panel::Channel1_In1, Panel::Channel1_In2, Panel::Channel1_In3};
@@ -29,7 +28,7 @@ DoepferQuad::~DoepferQuad()
 
 void DoepferQuad::process(const ProcessArgs& args)
 {
-   if (connectTrigger.process(params[Panel::Connect].getValue() > 3.0))
+   if (connectionButton.isTriggered())
       connectToMidiDevice();
 
    if (!connected())
@@ -76,12 +75,17 @@ void DoepferQuad::process(const ProcessArgs& args)
 
 void DoepferQuad::connectToMidiDevice()
 {
-   connectionLight.setColor(SchweineSystem::Color{255, 0, 0});
+   if (connected())
+   {
+      connectionButton.setOn();
+      return;
+   }
 
+   connectionButton.setOff();
    if (!open())
       return;
 
-   connectionLight.setColor(SchweineSystem::Color{0, 255, 0});
+   connectionButton.setOn();
    for (ChannelStore::Map::iterator it = channelMap.begin(); it != channelMap.end(); it++)
    {
       const Midi::Channel midiChannel = it->first;

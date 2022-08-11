@@ -12,7 +12,7 @@ BarCounter::BarCounter()
    , tempo()
    // time
    , duration(0)
-   , displayController(this, Panel::Pixels_Display, 83, 170)
+   , displayController(this, Panel::Pixels_Display)
 {
    setup();
 }

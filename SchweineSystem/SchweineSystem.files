@@ -26,6 +26,7 @@
 ./src/Synths/WavPlayerPanel.h
 ./src/Synths/MeshStackPanel.h
 ./src/Utilities/TimeLord.h
+./src/Utilities/RemoteScript.h
 ./src/Utilities/GateLatchPanel.h
 ./src/Utilities/BarCounter.h
 ./src/Utilities/BarCounterPanel.h
@@ -33,6 +34,7 @@
 ./src/Utilities/TimeLordPanel.h
 ./src/Utilities/MidiReplay.h
 ./src/Utilities/GateLatch.h
+./src/Utilities/RemoteScriptPanel.h
 ./src/BitBus/BitBusCommon.h
 ./src/BitBus/BitBusBitOutPanel.h
 ./src/BitBus/BitBusMeterAndFreeze.h
@@ -192,7 +194,9 @@
 ./src/Synths/MeshStackPanel.cpp
 ./src/Synths/MeshStack.cpp
 ./src/Synths/WavPlayer.cpp
+./src/Utilities/RemoteScriptPanel.cpp
 ./src/Utilities/TimeLordPanel.cpp
+./src/Utilities/RemoteScript.cpp
 ./src/Utilities/BarCounter.cpp
 ./src/Utilities/GateLatchPanel.cpp
 ./src/Utilities/BarCounterPanel.cpp
