@@ -31,7 +31,7 @@ void GateLatch::setup()
 
 void GateLatchWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "/Users/waspe/GitHub/MusicProjects/ModulesVCV/SchweineSystem/res/Utilities/GateLatch.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Utilities/GateLatch.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

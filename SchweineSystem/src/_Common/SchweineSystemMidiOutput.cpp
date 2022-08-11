@@ -24,7 +24,7 @@ bool SchweineSystem::MidiOutput::open()
    for (unsigned int port = 0; port < midiOutput.getPortCount(); port++)
    {
       const std::string deviceName = midiOutput.getPortName(port);
-      std::cout << deviceName << std::endl;
+      //std::cout << deviceName << std::endl;
 
       if (targetDeviceName == deviceName)
       {

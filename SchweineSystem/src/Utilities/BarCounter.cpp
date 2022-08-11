@@ -56,10 +56,7 @@ void BarCounter::updateDisplays()
 
    // counter
    displayController.writeText(1, 15, "bar", SchweineSystem::DisplayOLED::Font::Normal);
-   if (timeCode.bar < 1000)
-      displayController.writeText(41, 30, std::to_string(timeCode.bar), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
-   else
-      displayController.writeText(41, 30, "big", SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
+   displayController.writeText(41, 30, std::to_string(timeCode.bar), SchweineSystem::DisplayOLED::Font::Huge, SchweineSystem::DisplayOLED::Alignment::Center);
 
    displayController.writeText(1, 65, "rest", SchweineSystem::DisplayOLED::Font::Small);
    const std::string rest = std::to_string(timeCode.quarter) + '.' + std::to_string(timeCode.tick);

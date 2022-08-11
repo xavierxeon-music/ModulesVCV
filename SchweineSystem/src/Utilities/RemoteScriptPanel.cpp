@@ -14,7 +14,7 @@ void RemoteScript::setup()
 
 void RemoteScriptWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "/Users/waspe/GitHub/MusicProjects/ModulesVCV/SchweineSystem/res/Utilities/RemoteScript.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Utilities/RemoteScript.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

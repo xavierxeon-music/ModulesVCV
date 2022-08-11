@@ -100,6 +100,7 @@ class Module:
             # print(value)
 
         sourcePath = self._modules[moduleName]['source_path']
+        panelFileName = panelFileName.replace(modulesPath + '/', '')
         headers = Headers(sourcePath, moduleName, panelFileName, components)
         headers.write()
 

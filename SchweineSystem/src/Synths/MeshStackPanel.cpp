@@ -7,7 +7,7 @@ void MeshStack::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configSwitch(Panel::Knob_Mode, 0.f, 3.f, 0.f, "", {"Unmuted", "Muted", "Soloed", "Soloed"});
+   configParam(Panel::Knob_Mode, -1.f, 1.f, 0.f, "");
 
    configInput(Panel::Pitch, "Pitch");
 
@@ -16,7 +16,7 @@ void MeshStack::setup()
 
 void MeshStackWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "/Users/waspe/GitHub/MusicProjects/ModulesVCV/SchweineSystem/res/Synths/MeshStack.svg");
+   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Synths/MeshStack.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
