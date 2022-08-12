@@ -132,6 +132,13 @@ SchweineSystem::Json::Object::Object(const Bytes& data)
    json = json_loadb((const char*)data.data(), data.size(), 0, &error);
 }
 
+SchweineSystem::Json::Object::Object(const std::string& data)
+   : Value(nullptr)
+{
+   json_error_t error;
+   json = json_loadb(data.data(), data.size(), 0, &error);
+}
+
 void SchweineSystem::Json::Object::set(const std::string& key, const Value& value)
 {
    json_object_set_new(json, key.c_str(), value.toJson());
@@ -152,4 +159,16 @@ Bytes SchweineSystem::Json::Object::toBytes() const
    size = json_dumpb(json, (char*)buffer.data(), size, 0);
 
    return buffer;
+}
+
+std::string SchweineSystem::Json::Object::toString() const
+{
+   size_t size = json_dumpb(json, nullptr, 0, 0);
+   if (size == 0)
+      return std::string();
+
+   Bytes buffer(size);
+   json_dumpb(json, (char*)buffer.data(), size, 0);
+
+   return std::string(buffer.begin(), buffer.end());
 }

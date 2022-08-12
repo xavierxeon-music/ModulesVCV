@@ -96,8 +96,8 @@ void RemoteScript::sendToRemote()
    sendControllerChange(1, Midi::ControllerMessage::DataInit, 0);
 
    const Bytes content = rootObject.toBytes();
-   const Bytes data = SevenBit::encode(content);
-   for (const uint8_t& byte : data)
+   const std::string data = SevenBit::encode(content);
+   for (const char& byte : data)
       sendControllerChange(1, Midi::ControllerMessage::DataBlock, byte);
 
    sendControllerChange(1, Midi::ControllerMessage::DataApply, 0);

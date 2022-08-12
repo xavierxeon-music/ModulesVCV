@@ -77,7 +77,7 @@ private:
 
    // midi
    MidiReceive receive;
-   Bytes buffer;
+   std::string buffer;
 
    // clock
    dsp::BooleanTrigger clockTrigger;

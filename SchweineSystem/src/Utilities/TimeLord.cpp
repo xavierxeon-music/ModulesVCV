@@ -469,7 +469,7 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       if (MidiReceive::Remember != receive)
          return;
 
-      buffer << value;
+      buffer += value;
    }
    else if (Midi::ControllerMessage::RememberApply == controllerMessage)
    {
@@ -498,7 +498,7 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       if (MidiReceive::Data != receive)
          return;
 
-      buffer << value;
+      buffer += value;
    }
    else if (Midi::ControllerMessage::DataApply == controllerMessage)
    {
@@ -589,8 +589,8 @@ void TimeLord::uploadToRemote()
    sendMessage(Midi::ControllerMessage::DataInit, bankIndex);
 
    const Bytes buffer = uploadObject.toBytes();
-   const Bytes data = SevenBit::encode(buffer);
-   for (const uint8_t& byte : data)
+   const std::string data = SevenBit::encode(buffer);
+   for (const char& byte : data)
       sendMessage(Midi::ControllerMessage::DataBlock, byte);
 
    sendMessage(Midi::ControllerMessage::DataApply, bankIndex);
