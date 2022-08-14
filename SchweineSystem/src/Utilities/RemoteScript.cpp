@@ -5,24 +5,35 @@
 
 #include <Tools/SevenBit.h>
 
-#include <SchweineSystemJson.h>
 #include <SchweineSystemMaster.h>
 
 RemoteScript::RemoteScript()
    : SchweineSystem::Module()
    , SchweineSystem::MidiOutput("Trittbrettfahrer")
-   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , displayController(this, Panel::Pixels_Display)
+   , restartButton(this, Panel::Restart)
+   , killButton(this, Panel::Kill)
+   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , fileName()
 {
    setup();
 
    connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
-   connectToMidiDevice();
+   connectToMidiDevice(); // will try to send start
+}
+
+RemoteScript::~RemoteScript()
+{
+   sendKill();
 }
 
 void RemoteScript::process(const ProcessArgs& args)
 {
+   if (restartButton.isTriggered())
+      sendStart();
+   if (killButton.isTriggered())
+      sendKill();
+
    if (connectionButton.isTriggered())
       connectToMidiDevice();
 }
@@ -42,7 +53,7 @@ void RemoteScript::updateDisplays()
 void RemoteScript::setScriptFileName(const std::string& newFileName)
 {
    fileName = newFileName;
-   sendToRemote();
+   sendStart();
 }
 
 void RemoteScript::connectToMidiDevice()
@@ -58,7 +69,7 @@ void RemoteScript::connectToMidiDevice()
       return;
 
    connectionButton.setOn();
-   sendToRemote();
+   sendStart();
 }
 
 json_t* RemoteScript::dataToJson()
@@ -79,23 +90,38 @@ void RemoteScript::dataFromJson(json_t* rootJson)
 
    fileName = rootObject.get("fileName").toString();
 
-   sendToRemote();
+   sendStart();
 }
 
-void RemoteScript::sendToRemote()
+void RemoteScript::sendStart()
+{
+   using namespace SchweineSystem::Json;
+
+   Object startObject;
+   startObject.set("action", Value(std::string("launch")));
+   startObject.set("fileName", Value(fileName));
+
+   sendToRemote(startObject);
+}
+
+void RemoteScript::sendKill()
+{
+   using namespace SchweineSystem::Json;
+
+   Object killObject;
+   killObject.set("action", Value(std::string("kill")));
+
+   sendToRemote(killObject);
+}
+
+void RemoteScript::sendToRemote(const SchweineSystem::Json::Object& object)
 {
    if (!connected())
       return;
 
-   using namespace SchweineSystem::Json;
-
-   Object rootObject;
-   rootObject.set("action", Value(std::string("launch")));
-   rootObject.set("fileName", Value(fileName));
-
    sendControllerChange(1, Midi::ControllerMessage::DataInit, 0);
 
-   const Bytes content = rootObject.toBytes();
+   const Bytes content = object.toBytes();
    const std::string data = SevenBit::encode(content);
    for (const char& byte : data)
       sendControllerChange(1, Midi::ControllerMessage::DataBlock, byte);

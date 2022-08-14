@@ -4,6 +4,7 @@
 #include "RemoteScript.h"
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemButton.h>
 #include <SchweineSystemButtonLED.h>
 #include <SchweineSystemDisplayOLED.h>
 
@@ -12,11 +13,13 @@ struct RemoteScript::Panel
    enum ParamId
    {
       // buttons
+      Kill = 0,
+      Restart = 1,
       // switches
       // ledbuttons
-      Connect = 0,
+      Connect = 2,
       // knobs
-      PARAMS_LEN = 1
+      PARAMS_LEN = 3
    };
 
    enum DisplayId

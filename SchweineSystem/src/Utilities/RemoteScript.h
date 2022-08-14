@@ -1,11 +1,14 @@
 #ifndef RemoteScriptH
 #define RemoteScriptH
 
+#include "SchweineSystemJson.h"
 #include <rack.hpp>
 using namespace rack;
 
+#include <SchweineSystemButton.h>
 #include <SchweineSystemButtonLED.h>
 #include <SchweineSystemDisplayOLED.h>
+#include <SchweineSystemJson.h>
 #include <SchweineSystemMidiOutput.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
@@ -17,6 +20,7 @@ public:
 
 public:
    RemoteScript();
+   ~RemoteScript();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -28,11 +32,15 @@ private:
    void connectToMidiDevice();
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
-   void sendToRemote();
+   void sendStart();
+   void sendKill();
+   void sendToRemote(const SchweineSystem::Json::Object& object);
 
 private:
-   SchweineSystem::ButtonLED connectionButton;
    SchweineSystem::DisplayOLED::Controller displayController;
+   SchweineSystem::Button restartButton;
+   SchweineSystem::Button killButton;
+   SchweineSystem::ButtonLED connectionButton;
 
    // file
    std::string fileName;
