@@ -7,11 +7,13 @@
 
 BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    : SchweineSystem::Module()
-   , BitBusCommon(this)
+   , SchweineSystem::Exapnder<BitBusMessage>(this)
    , lightList(this)
    , freezTrigger()
    , freezeMode(false)
    , sampleTrigger()
+   , busInIndicator(this, Panel::RGB_BusIn)
+   , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
 
@@ -27,19 +29,10 @@ BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    for (uint8_t index = 0; index < 8; index++)
       lightList[index]->setDefaultColor(SchweineSystem::Color{0, 255, 0});
 
-   busInIndicator.assign(Panel::RGB_BusIn);
-   busOutIndicator.assign(Panel::RGB_BusOut);
 }
 
 BitBusMeterAndFreeze::~BitBusMeterAndFreeze()
 {
-}
-
-void BitBusMeterAndFreeze::onAdd(const AddEvent& e)
-{
-   (void)e;
-   registerBusInput();
-   registerBusOutput();
 }
 
 json_t* BitBusMeterAndFreeze::dataToJson()
@@ -62,20 +55,20 @@ void BitBusMeterAndFreeze::dataFromJson(json_t* rootJson)
 
 void BitBusMeterAndFreeze::process(const ProcessArgs& args)
 {
-   if (canSendBusMessage())
+   if (hasExpanderToRight())
       busOutIndicator.setOn();
    else
       busOutIndicator.setOff();
 
    BoolField8 boolField = 0;
-   if (!canReceiveBusMessage())
+   if (!hasExpanderToLeft())
    {
       busInIndicator.setOff();
    }
    else
    {
       busInIndicator.setOn();
-      boolField = getByteFromBus();
+      boolField = receiveFromLeft().byte;
    }
 
    bool freezeValue = params[Panel::GateFreeze].getValue();
@@ -103,8 +96,8 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
          lightList[index]->setOff();
    }
 
-   if (canSendBusMessage())
-      sendByteToBus(freezeBuffer);
+   if (hasExpanderToRight())
+      sendToRight(BitBusMessage{freezeBuffer});
 }
 
 BitBusMeterAndFreezeWidget::BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module)

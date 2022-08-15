@@ -1,14 +1,20 @@
 #ifndef BitBusCVInH
 #define BitBusCVInH
 
+#include <rack.hpp>
+using namespace rack;
+
 #include "BitBusCommon.h"
+#include <SchweineSystemExapnder.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
 #include <Tools/Range.h>
 
+#include <SchweineSystemCommon.h>
+#include <SchweineSystemLED.h>
 
-class BitBusCVIn : public SchweineSystem::Module, public BitBusCommon
+class BitBusCVIn : public SchweineSystem::Module, public SchweineSystem::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -22,10 +28,11 @@ public:
 
 private:
    void setup();
-   void onAdd(const AddEvent& e) override;
 
 private:
    Range::Mapper inputMapper;
+
+   SchweineSystem::LED busOutIndicator;
 };
 
 // widget

@@ -1,15 +1,18 @@
 #ifndef BitBusNegateH
 #define BitBusNegateH
 
+#include <rack.hpp>
+using namespace rack;
 
 #include "BitBusCommon.h"
+#include <SchweineSystemExapnder.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemLED.h>
 
-class BitBusNegate : public SchweineSystem::Module, public BitBusCommon
+class BitBusNegate : public SchweineSystem::Module, public SchweineSystem::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -24,7 +27,6 @@ public:
 private:
    void setup();
 
-   void onAdd(const AddEvent& e) override;
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
 
@@ -34,6 +36,9 @@ private:
    SchweineSystem::Input::List gateList;
    dsp::BooleanTrigger gateTrigger[8];
    bool gates[8];
+
+   SchweineSystem::LED busInIndicator;
+   SchweineSystem::LED busOutIndicator;
 };
 
 // widget

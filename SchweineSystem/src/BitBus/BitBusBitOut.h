@@ -1,13 +1,19 @@
 #ifndef BitBusBitOutH
 #define BitBusBitOutH
 
+#include <rack.hpp>
+using namespace rack;
+
 #include "BitBusCommon.h"
+#include <SchweineSystemCommon.h>
+#include <SchweineSystemExapnder.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemLED.h>
 
-class BitBusBitOut : public SchweineSystem::Module, public BitBusCommon
+class BitBusBitOut : public SchweineSystem::Module, public SchweineSystem::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -21,10 +27,12 @@ public:
 
 private:
    void setup();
-   void onAdd(const AddEvent& e) override;
 
 private:
    SchweineSystem::Output::List outputList;
+
+   SchweineSystem::LED busInIndicator;
+   SchweineSystem::LED busOutIndicator;
 };
 
 // widget

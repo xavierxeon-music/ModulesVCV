@@ -10,12 +10,14 @@ using Panel = BitBusNegate::Panel;
 
 BitBusNegate::BitBusNegate()
    : SchweineSystem::Module()
-   , BitBusCommon(this)
+   , SchweineSystem::Exapnder<BitBusMessage>(this)
    , lightList(this)
    , paramList(params)
    , gateList(inputs)
    , gateTrigger()
    , gates{}
+   , busInIndicator(this, Panel::RGB_BusIn)
+   , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
 
@@ -48,20 +50,10 @@ BitBusNegate::BitBusNegate()
                     Panel::Bit3_GateIn,
                     Panel::Bit2_GateIn,
                     Panel::Bit1_GateIn});
-
-   busInIndicator.assign(Panel::RGB_BusIn);
-   busOutIndicator.assign(Panel::RGB_BusOut);
 }
 
 BitBusNegate::~BitBusNegate()
 {
-}
-
-void BitBusNegate::onAdd(const AddEvent& e)
-{
-   (void)e;
-   registerBusInput();
-   registerBusOutput();
 }
 
 json_t* BitBusNegate::dataToJson()
@@ -93,20 +85,20 @@ void BitBusNegate::dataFromJson(json_t* rootJson)
 
 void BitBusNegate::process(const ProcessArgs& args)
 {
-   if (canSendBusMessage())
+   if (hasExpanderToRight())
       busOutIndicator.setOn();
    else
       busOutIndicator.setOff();
 
    BoolField8 boolField = 0;
-   if (!canReceiveBusMessage())
+   if (!hasExpanderToLeft())
    {
       busInIndicator.setOff();
    }
    else
    {
       busInIndicator.setOn();
-      boolField = getByteFromBus();
+      boolField = receiveFromLeft().byte;
    }
 
    for (uint8_t index = 0; index < 8; index++)
@@ -131,8 +123,8 @@ void BitBusNegate::process(const ProcessArgs& args)
       }
    }
 
-   if (canSendBusMessage())
-      sendByteToBus(boolField);
+   if (hasExpanderToRight())
+      sendToRight(BitBusMessage {boolField});
 }
 
 // widget

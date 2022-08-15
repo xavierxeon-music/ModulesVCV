@@ -7,42 +7,36 @@
 
 BitBusBitIn::BitBusBitIn()
    : SchweineSystem::Module()
-   , BitBusCommon(this)
+   , SchweineSystem::Exapnder<BitBusMessage>(this)
    , inputList(inputs)
+   , busInIndicator(this, Panel::RGB_BusIn)
+   , busOutIndicator(this, Panel::RGB_BusOut)
+
 {
    setup();
 
    inputList.append({Panel::BitIn8, Panel::BitIn7, Panel::BitIn6, Panel::BitIn5, Panel::BitIn4, Panel::BitIn3, Panel::BitIn2, Panel::BitIn1});
-   busInIndicator.assign(Panel::RGB_BusIn);
-   busOutIndicator.assign(Panel::RGB_BusOut);
 }
 
 BitBusBitIn::~BitBusBitIn()
 {
 }
 
-void BitBusBitIn::onAdd(const AddEvent& e)
-{
-   (void)e;
-   registerBusInput();
-   registerBusOutput();
-}
-
 void BitBusBitIn::process(const ProcessArgs& args)
 {
    BoolField8 boolFieldBus = 0;
 
-   if (canReceiveBusMessage())
+   if (hasExpanderToLeft())
    {
       busInIndicator.setOn();
-      boolFieldBus = getByteFromBus();
+      boolFieldBus = receiveFromLeft().byte;
    }
    else
    {
       busInIndicator.setOff();
    }
 
-   if (!canSendBusMessage())
+   if (!hasExpanderToRight())
    {
       busOutIndicator.setOff();
       return;
@@ -65,7 +59,7 @@ void BitBusBitIn::process(const ProcessArgs& args)
       boolField.set(index, value);
    }
 
-   sendByteToBus(boolField);
+   sendToRight(BitBusMessage {boolField});
 }
 
 // widget

@@ -7,18 +7,13 @@
 
 BitBusCVIn::BitBusCVIn()
    : SchweineSystem::Module()
-   , BitBusCommon(this)
+   , SchweineSystem::Exapnder<BitBusMessage>(this)
    , inputMapper(-5.0, 5.0, 0.0, 255.0)
+   , busOutIndicator(this, Panel::RGB_BusOut)
+
 {
    setup();
 
-   busOutIndicator.assign(Panel::RGB_BusOut);
-}
-
-void BitBusCVIn::onAdd(const AddEvent& e)
-{
-   (void)e;
-   registerBusOutput();
 }
 
 BitBusCVIn::~BitBusCVIn()
@@ -27,7 +22,7 @@ BitBusCVIn::~BitBusCVIn()
 
 void BitBusCVIn::process(const ProcessArgs& args)
 {
-   if (!canSendBusMessage())
+   if (!hasExpanderToRight())
    {
       busOutIndicator.setOff();
       return;
@@ -42,7 +37,7 @@ void BitBusCVIn::process(const ProcessArgs& args)
       boolField = static_cast<uint8_t>(inputMapper(voltageInput));
    }
 
-   sendByteToBus(boolField);
+   sendToRight(BitBusMessage {boolField});
 }
 
 // widget

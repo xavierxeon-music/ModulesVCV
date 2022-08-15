@@ -1,18 +1,23 @@
 #ifndef BitBusMeterAndFreezeH
 #define BitBusMeterAndFreezeH
 
+#include <rack.hpp>
+using namespace rack;
+
 #include "BitBusCommon.h"
+#include <SchweineSystemExapnder.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
 #include <Tools/BoolField.h>
 #include <Tools/RingBuffer.h>
 
+#include <SchweineSystemCommon.h>
 #include <SchweineSystemLED.h>
 
 static constexpr uint16_t AverageBufferSize = 4800;
 
-class BitBusMeterAndFreeze : public SchweineSystem::Module, public BitBusCommon
+class BitBusMeterAndFreeze : public SchweineSystem::Module, public SchweineSystem::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -27,7 +32,6 @@ public:
 private:
    void setup();
 
-   void onAdd(const AddEvent& e) override;
    json_t* dataToJson() override;
    void dataFromJson(json_t* rootJson) override;
 
@@ -36,7 +40,10 @@ private:
    dsp::BooleanTrigger freezTrigger;
    bool freezeMode;
    BoolField8 freezeBuffer;
-   dsp::BooleanTrigger sampleTrigger;     
+   dsp::BooleanTrigger sampleTrigger;
+
+   SchweineSystem::LED busInIndicator;
+   SchweineSystem::LED busOutIndicator;
 };
 
 class BitBusMeterAndFreezeWidget : public SchweineSystem::ModuleWidget
