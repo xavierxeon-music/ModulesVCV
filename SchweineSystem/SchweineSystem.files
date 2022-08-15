@@ -10,6 +10,7 @@
 ./src/_Common/SchweineSystemDisplayOLED.h
 ./src/_Common/SchweineSystemJson.h
 ./src/_Common/SchweineSystemKnob.h
+./src/_Common/SchweineSystemBusModule.h
 ./src/_Common/SchweineSystemModuleWidget.h
 ./src/_Common/SchweineSystemLightMeter.h
 ./src/_Common/SchweineSystemCommon.h
@@ -114,6 +115,7 @@
 ./src/_MusicTools/DoubleBuffer.h
 ./src/SchweineSystem.hpp
 ./src/_Common/SchweineSystemMaster.hpp
+./src/_Common/SchweineSystemBusModule.hpp
 ./src/_Common/SchweineSystemDisplayOLED.hpp
 ./src/_Common/SchweineSystemCommon.hpp
 ./src/_MusicTools/Variable.hpp
