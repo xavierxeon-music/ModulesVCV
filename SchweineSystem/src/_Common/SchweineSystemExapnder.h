@@ -5,6 +5,11 @@
 
 namespace SchweineSystem
 {
+   struct Direction
+   {
+      bool left = false;
+      bool right = false;
+   };
 
    template <typename MessageType>
    class Exapnder
@@ -14,8 +19,11 @@ namespace SchweineSystem
       ~Exapnder();
 
    protected:
-      bool hasExpanderToLeft();
-      bool hasExpanderToRight();
+      void allowExpanderOnLeft();
+      void allowExpanderOnRight();
+
+      bool canCommunicatWithLeft();
+      bool canCommunicatWithRight();
 
       void sendToLeft(const MessageType& message);
       void sendToRight(const MessageType& message);
@@ -24,10 +32,10 @@ namespace SchweineSystem
       MessageType receiveFromRight();
 
    private:
-      using InstanceList = std::list<rack::Module*>;
+      using InstanceMap = std::map<rack::Module*, Direction>;
 
    private:
-      static InstanceList instanceList;
+      static InstanceMap instanceMap;
       Module* module;
    };
 } // namespace SchweineSystem

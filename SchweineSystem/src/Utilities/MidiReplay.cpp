@@ -12,6 +12,7 @@
 
 MidiReplay::MidiReplay()
    : SchweineSystem::Module()
+   , SchweineSystem::Exapnder<SchweineSystem::BusMidi>(this)
    , fileName()
    , midiReplay()
    , info{}
@@ -34,6 +35,8 @@ MidiReplay::MidiReplay()
    , lastTick(0)
 {
    setup();
+   allowExpanderOnLeft();
+   allowExpanderOnRight();
 
    loopButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
 }
@@ -117,6 +120,8 @@ void MidiReplay::process(const ProcessArgs& args)
    if (outputs[Panel::Velocity].getChannels() != noOfChannels)
       outputs[Panel::Velocity].setChannels(noOfChannels);
 
+   SchweineSystem::BusMidi busMessage;
+
    for (uint8_t index = 0; index < noOfChannels; index++)
    {
       if (index >= info.monophonicTrackIndexList.size())
@@ -132,12 +137,14 @@ void MidiReplay::process(const ProcessArgs& args)
          if (track.noteOffEventMap.find(tick) != track.noteOffEventMap.end())
          {
             const Sequencer::Track::NoteEvent::List& eventList = track.noteOffEventMap.at(tick);
+            mergeVectos(busMessage.offEventList, eventList);
             lastEvent = eventList.at(0);
             foundEvent = true;
          }
          if (track.noteOnEventMap.find(tick) != track.noteOnEventMap.end())
          {
             const Sequencer::Track::NoteEvent::List& eventList = track.noteOnEventMap.at(tick);
+            mergeVectos(busMessage.onEventList, eventList);
             lastEvent = eventList.at(0);
             foundEvent = true;
          }
@@ -165,6 +172,9 @@ void MidiReplay::process(const ProcessArgs& args)
    }
 
    lastTick = currentTick;
+
+   sendToLeft(busMessage);
+   sendToRight(busMessage);
 }
 
 void MidiReplay::updateDisplays()

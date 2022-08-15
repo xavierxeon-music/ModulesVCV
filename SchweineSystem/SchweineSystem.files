@@ -10,12 +10,14 @@
 ./src/_Common/SchweineSystemDisplayOLED.h
 ./src/_Common/SchweineSystemJson.h
 ./src/_Common/SchweineSystemKnob.h
+./src/_Common/SchweineSystemBusMidi.h
 ./src/_Common/SchweineSystemModuleWidget.h
 ./src/_Common/SchweineSystemLightMeter.h
 ./src/_Common/SchweineSystemCommon.h
 ./src/_Common/SchweineSystemButtonLED.h
 ./src/_Common/SchweineSystemMaster.h
 ./src/_Common/SchweineSystemButton.h
+./src/_Common/SchweineSystemExapnder.h
 ./src/_Common/SchweineSystemModule.h
 ./src/_Common/SchweineSystemSwitch.h
 ./src/_Common/SchweineSystemMidiOutput.h
@@ -113,6 +115,7 @@
 ./src/_MusicTools/ffft/FFTRealPassInverse.h
 ./src/_MusicTools/DoubleBuffer.h
 ./src/SchweineSystem.hpp
+./src/_Common/SchweineSystemExapnder.hpp
 ./src/_Common/SchweineSystemMaster.hpp
 ./src/_Common/SchweineSystemDisplayOLED.hpp
 ./src/_Common/SchweineSystemCommon.hpp
@@ -185,6 +188,7 @@
 ./src/_Common/SchweineSystemButtonLED.cpp
 ./src/_Common/SchweineSystemButton.cpp
 ./src/_Common/SchweineSystemKnob.cpp
+./src/_Common/SchweineSystemBusMidi.cpp
 ./src/_Common/SchweineSystemLED.cpp
 ./src/_Common/SchweineSystemMaster.cpp
 ./src/_Common/SchweineSystemDisplayLCD.cpp
@@ -226,5 +230,3 @@
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp
-src/_Common/SchweineSystemExapnder.h
-src/_Common/SchweineSystemExapnder.hpp

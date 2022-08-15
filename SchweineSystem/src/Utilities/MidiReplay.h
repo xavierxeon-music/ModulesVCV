@@ -11,10 +11,13 @@ using namespace rack;
 #include <SchweineSystemButton.h>
 #include <SchweineSystemButtonLED.h>
 #include <SchweineSystemDisplayOLED.h>
+#include <SchweineSystemExapnder.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
-class MidiReplay : public SchweineSystem::Module
+#include <SchweineSystemBusMidi.h>
+
+class MidiReplay : public SchweineSystem::Module, public SchweineSystem::Exapnder<SchweineSystem::BusMidi>
 {
 public:
    struct Panel;

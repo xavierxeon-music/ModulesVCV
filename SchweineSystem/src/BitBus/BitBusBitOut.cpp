@@ -14,6 +14,8 @@ BitBusBitOut::BitBusBitOut()
 
 {
    setup();
+   allowExpanderOnLeft();
+   allowExpanderOnRight();
 
    outputList.append({Panel::BitOut8, Panel::BitOut7, Panel::BitOut6, Panel::BitOut5, Panel::BitOut4, Panel::BitOut3, Panel::BitOut2, Panel::BitOut1});
 }
@@ -24,13 +26,13 @@ BitBusBitOut::~BitBusBitOut()
 
 void BitBusBitOut::process(const ProcessArgs& args)
 {
-   if (hasExpanderToRight())
+   if (canCommunicatWithRight())
       busOutIndicator.setOn();
    else
       busOutIndicator.setOff();
 
    BoolField8 boolField = 0;
-   if (!hasExpanderToLeft())
+   if (!canCommunicatWithLeft())
    {
       busInIndicator.setOff();
    }
@@ -46,7 +48,7 @@ void BitBusBitOut::process(const ProcessArgs& args)
       outputList[index]->setVoltage(value ? 5.0 : 0.0);
    }
 
-   if (hasExpanderToRight())
+   if (canCommunicatWithRight())
       sendToRight(BitBusMessage{boolField});
 }
 

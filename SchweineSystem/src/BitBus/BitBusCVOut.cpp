@@ -12,7 +12,7 @@ BitBusCVOut::BitBusCVOut()
    , busInIndicator(this, Panel::RGB_BusIn)
 {
    setup();
-
+   allowExpanderOnLeft();
 }
 
 BitBusCVOut::~BitBusCVOut()
@@ -21,7 +21,7 @@ BitBusCVOut::~BitBusCVOut()
 
 void BitBusCVOut::process(const ProcessArgs& args)
 {
-   if (!hasExpanderToLeft())
+   if (!canCommunicatWithLeft())
    {
       busInIndicator.setOff();
       outputs[Panel::CVOut].setVoltage(0.0);

@@ -20,6 +20,8 @@ BitBusNegate::BitBusNegate()
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
+   allowExpanderOnLeft();
+   allowExpanderOnRight();
 
    lightList.append({Panel::RGB_Bit8_Latch,
                      Panel::RGB_Bit7_Latch,
@@ -85,13 +87,13 @@ void BitBusNegate::dataFromJson(json_t* rootJson)
 
 void BitBusNegate::process(const ProcessArgs& args)
 {
-   if (hasExpanderToRight())
+   if (canCommunicatWithRight())
       busOutIndicator.setOn();
    else
       busOutIndicator.setOff();
 
    BoolField8 boolField = 0;
-   if (!hasExpanderToLeft())
+   if (!canCommunicatWithLeft())
    {
       busInIndicator.setOff();
    }
@@ -123,7 +125,7 @@ void BitBusNegate::process(const ProcessArgs& args)
       }
    }
 
-   if (hasExpanderToRight())
+   if (canCommunicatWithRight())
       sendToRight(BitBusMessage {boolField});
 }
 

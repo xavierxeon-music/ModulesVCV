@@ -13,7 +13,7 @@ BitBusCVIn::BitBusCVIn()
 
 {
    setup();
-
+   allowExpanderOnRight();
 }
 
 BitBusCVIn::~BitBusCVIn()
@@ -22,7 +22,7 @@ BitBusCVIn::~BitBusCVIn()
 
 void BitBusCVIn::process(const ProcessArgs& args)
 {
-   if (!hasExpanderToRight())
+   if (!canCommunicatWithRight())
    {
       busOutIndicator.setOff();
       return;

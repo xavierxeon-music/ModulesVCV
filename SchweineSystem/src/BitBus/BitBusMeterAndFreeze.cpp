@@ -16,6 +16,8 @@ BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
+   allowExpanderOnLeft();
+   allowExpanderOnRight();
 
    lightList.append({Panel::RGB_Bit8_Status1,
                      Panel::RGB_Bit7_Status1,
@@ -55,13 +57,13 @@ void BitBusMeterAndFreeze::dataFromJson(json_t* rootJson)
 
 void BitBusMeterAndFreeze::process(const ProcessArgs& args)
 {
-   if (hasExpanderToRight())
+   if (canCommunicatWithRight())
       busOutIndicator.setOn();
    else
       busOutIndicator.setOff();
 
    BoolField8 boolField = 0;
-   if (!hasExpanderToLeft())
+   if (!canCommunicatWithLeft())
    {
       busInIndicator.setOff();
    }
@@ -96,7 +98,7 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
          lightList[index]->setOff();
    }
 
-   if (hasExpanderToRight())
+   if (canCommunicatWithRight())
       sendToRight(BitBusMessage{freezeBuffer});
 }
 

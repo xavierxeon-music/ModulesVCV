@@ -4,13 +4,13 @@
 #include "SchweineSystemExapnder.h"
 
 template <typename MessageType>
-typename SchweineSystem::Exapnder<MessageType>::InstanceList SchweineSystem::Exapnder<MessageType>::instanceList;
+typename SchweineSystem::Exapnder<MessageType>::InstanceMap SchweineSystem::Exapnder<MessageType>::instanceMap;
 
 template <typename MessageType>
 SchweineSystem::Exapnder<MessageType>::Exapnder(Module* module)
    : module(module)
 {
-   instanceList.push_back(module);
+   instanceMap[module] = Direction{};
 
    module->leftExpander.producerMessage = new MessageType{};
    module->leftExpander.consumerMessage = new MessageType{};
@@ -22,7 +22,7 @@ SchweineSystem::Exapnder<MessageType>::Exapnder(Module* module)
 template <typename MessageType>
 SchweineSystem::Exapnder<MessageType>::~Exapnder()
 {
-   instanceList.remove(module);
+   instanceMap.erase(module);
 
    auto cleanUp = [&](Module::Expander& expander)
    {
@@ -40,27 +40,55 @@ SchweineSystem::Exapnder<MessageType>::~Exapnder()
 }
 
 template <typename MessageType>
-bool SchweineSystem::Exapnder<MessageType>::hasExpanderToLeft()
+void SchweineSystem::Exapnder<MessageType>::allowExpanderOnLeft()
 {
-   rack::Module* expanderModule = module->leftExpander.module;
-
-   InstanceList::const_iterator it = std::find(instanceList.cbegin(), instanceList.cend(), expanderModule);
-   return (it != instanceList.cend());
+   instanceMap[module].left = true;
 }
 
 template <typename MessageType>
-bool SchweineSystem::Exapnder<MessageType>::hasExpanderToRight()
+void SchweineSystem::Exapnder<MessageType>::allowExpanderOnRight()
 {
-   rack::Module* expanderModule = module->rightExpander.module;
+   instanceMap[module].right = true;
+}
 
-   InstanceList::const_iterator it = std::find(instanceList.cbegin(), instanceList.cend(), expanderModule);
-   return (it != instanceList.cend());
+template <typename MessageType>
+bool SchweineSystem::Exapnder<MessageType>::canCommunicatWithLeft()
+{
+   if (!instanceMap[module].left)
+      return false;
+
+   rack::Module* expanderModule = module->leftExpander.module;
+   if (!expanderModule)
+      return false;
+
+   typename InstanceMap::const_iterator itOther = instanceMap.find(expanderModule);
+   if (itOther == instanceMap.cend())
+      return false;
+
+   return itOther->second.right;
+}
+
+template <typename MessageType>
+bool SchweineSystem::Exapnder<MessageType>::canCommunicatWithRight()
+{
+   if (!instanceMap[module].right)
+      return false;
+
+   rack::Module* expanderModule = module->rightExpander.module;
+   if (!expanderModule)
+      return false;
+
+   typename InstanceMap::const_iterator itOther = instanceMap.find(expanderModule);
+   if (itOther == instanceMap.cend())
+      return false;
+
+   return itOther->second.left;
 }
 
 template <typename MessageType>
 void SchweineSystem::Exapnder<MessageType>::sendToLeft(const MessageType& message)
 {
-   if (!hasExpanderToLeft())
+   if (!canCommunicatWithLeft())
       return;
 
    rack::Module* expanderModule = module->leftExpander.module;
@@ -75,7 +103,7 @@ void SchweineSystem::Exapnder<MessageType>::sendToLeft(const MessageType& messag
 template <typename MessageType>
 void SchweineSystem::Exapnder<MessageType>::sendToRight(const MessageType& message)
 {
-   if (!hasExpanderToRight())
+   if (!canCommunicatWithRight())
       return;
 
    rack::Module* expanderModule = module->rightExpander.module;
@@ -90,7 +118,7 @@ void SchweineSystem::Exapnder<MessageType>::sendToRight(const MessageType& messa
 template <typename MessageType>
 MessageType SchweineSystem::Exapnder<MessageType>::receiveFromLeft()
 {
-   if (!hasExpanderToLeft())
+   if (!canCommunicatWithLeft())
       return MessageType{};
 
    Module::Expander& source = module->leftExpander;
@@ -102,7 +130,7 @@ MessageType SchweineSystem::Exapnder<MessageType>::receiveFromLeft()
 template <typename MessageType>
 MessageType SchweineSystem::Exapnder<MessageType>::receiveFromRight()
 {
-   if (!hasExpanderToRight())
+   if (!canCommunicatWithRight())
       return MessageType{};
 
    Module::Expander& source = module->rightExpander;

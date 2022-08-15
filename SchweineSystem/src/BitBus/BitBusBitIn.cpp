@@ -14,6 +14,8 @@ BitBusBitIn::BitBusBitIn()
 
 {
    setup();
+   allowExpanderOnLeft();
+   allowExpanderOnRight();
 
    inputList.append({Panel::BitIn8, Panel::BitIn7, Panel::BitIn6, Panel::BitIn5, Panel::BitIn4, Panel::BitIn3, Panel::BitIn2, Panel::BitIn1});
 }
@@ -26,7 +28,7 @@ void BitBusBitIn::process(const ProcessArgs& args)
 {
    BoolField8 boolFieldBus = 0;
 
-   if (hasExpanderToLeft())
+   if (canCommunicatWithLeft())
    {
       busInIndicator.setOn();
       boolFieldBus = receiveFromLeft().byte;
@@ -36,7 +38,7 @@ void BitBusBitIn::process(const ProcessArgs& args)
       busInIndicator.setOff();
    }
 
-   if (!hasExpanderToRight())
+   if (!canCommunicatWithRight())
    {
       busOutIndicator.setOff();
       return;
