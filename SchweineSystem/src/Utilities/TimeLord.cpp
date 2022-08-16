@@ -512,39 +512,13 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
    }
 }
 
-json_t* TimeLord::dataToJson()
+void TimeLord::load(const SchweineSystem::Json::Object& rootObject)
 {
-   using namespace SchweineSystem::Json;
-
-   Object rootObject;
-   rootObject.set("bank", bankIndex);
-   rootObject.set("display", static_cast<uint8_t>(displayMode));
-   rootObject.set("operation", static_cast<uint8_t>(operationMode));
-
-   Array silenceArray;
-
-   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
-   {
-      bool silence = silenceSwitches[rampIndex]->isOn();
-      silenceArray.append(Value(silence));
-   }
-
-   rootObject.set("silence", silenceArray);
-   rootObject.set("fileName", fileName);
-
-   return rootObject.toJson();
-}
-
-void TimeLord::dataFromJson(json_t* rootJson)
-{
-   using namespace SchweineSystem::Json;
-
-   Object rootObject(rootJson);
    bankIndex = rootObject.get("bank").toInt();
    displayMode = static_cast<DisplayMode>(rootObject.get("display").toInt());
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
 
-   Array silenceArray = rootObject.get("silence").toArray();
+   SchweineSystem::Json::Array silenceArray = rootObject.get("silence").toArray();
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       bool silence = silenceArray.get(rampIndex).toBool();
@@ -553,6 +527,24 @@ void TimeLord::dataFromJson(json_t* rootJson)
 
    const std::string newFileName = rootObject.get("fileName").toString();
    loadRamps(newFileName);
+}
+
+void TimeLord::save(SchweineSystem::Json::Object& rootObject)
+{
+   rootObject.set("bank", bankIndex);
+   rootObject.set("display", static_cast<uint8_t>(displayMode));
+   rootObject.set("operation", static_cast<uint8_t>(operationMode));
+
+   SchweineSystem::Json::Array silenceArray;
+
+   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
+   {
+      bool silence = silenceSwitches[rampIndex]->isOn();
+      silenceArray.append(silence);
+   }
+
+   rootObject.set("silence", silenceArray);
+   rootObject.set("fileName", fileName);
 }
 
 void TimeLord::uploadToRemote()

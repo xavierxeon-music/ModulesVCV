@@ -58,30 +58,22 @@ BitBusNegate::~BitBusNegate()
 {
 }
 
-json_t* BitBusNegate::dataToJson()
+void BitBusNegate::load(const SchweineSystem::Json::Object& rootObject)
 {
-   json_t* rootJson = json_object();
    for (uint8_t index = 0; index < 8; index++)
    {
       const std::string key = "negate" + std::to_string(index);
-      json_object_set_new(rootJson, key.c_str(), json_boolean(gates[index]));
+      gates[index] = rootObject.get(key).toBool();
+      lightList[index]->setActive(gates[index]);
    }
-
-   return rootJson;
 }
 
-void BitBusNegate::dataFromJson(json_t* rootJson)
+void BitBusNegate::save(SchweineSystem::Json::Object& rootObject)
 {
    for (uint8_t index = 0; index < 8; index++)
    {
       const std::string key = "negate" + std::to_string(index);
-      json_t* negateJson = json_object_get(rootJson, key.c_str());
-
-      if (!negateJson)
-         continue;
-
-      gates[index] = json_boolean_value(negateJson);
-      lightList[index]->setOn();
+      rootObject.set(key, gates[index]);
    }
 }
 

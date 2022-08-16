@@ -18,7 +18,11 @@ MidiReplay::MidiReplay()
    , info{}
    // display
    , displayMode(DisplayMode::Overview)
-   , displayButton(this, Panel::Display)
+   , pageButton(this, Panel::Page)
+   , editUpButton(this, Panel::Edit_Up)
+   , editDownButton(this, Panel::Edit_Down)
+   , editLeftButton(this, Panel::Edit_Left)
+   , editRightButton(this, Panel::Edit_Right)
    , displayController(this, Panel::Pixels_Display)
    // clock
    , clockTrigger()
@@ -35,7 +39,6 @@ MidiReplay::MidiReplay()
    , lastTick(0)
 {
    setup();
-   allowExpanderOnLeft();
    allowExpanderOnRight();
 
    loopButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
@@ -49,9 +52,9 @@ void MidiReplay::process(const ProcessArgs& args)
    atEnd = (lastTick > info.maxTick);
 
    // screen mode
-   if (displayButton.isTriggered())
+   if (pageButton.isTriggered())
    {
-      static const std::vector<DisplayMode> order = {DisplayMode::Overview, DisplayMode::Current};
+      static const std::vector<DisplayMode> order = {DisplayMode::Overview, DisplayMode::Tracks, DisplayMode::Current};
       Variable::Enum<DisplayMode> variable(displayMode, order, true);
       variable.increment();
    }
@@ -70,8 +73,7 @@ void MidiReplay::process(const ProcessArgs& args)
       endPulse.trigger();
 
    if (endPulse.process(args.sampleTime))
-      outputs[Panel::End]
-         .setVoltage(5.0);
+      outputs[Panel::End].setVoltage(5.0);
    else
       outputs[Panel::End].setVoltage(0.0);
 
@@ -111,16 +113,10 @@ void MidiReplay::process(const ProcessArgs& args)
    const uint64_t noOfSequencerChannels = info.monophonicTrackIndexList.size();
    const uint8_t noOfChannels = (noOfSequencerChannels > 16) ? 16 : noOfSequencerChannels;
 
-   if (outputs[Panel::Pitch].getChannels() != noOfChannels)
-      outputs[Panel::Pitch].setChannels(noOfChannels);
-
-   if (outputs[Panel::Gate].getChannels() != noOfChannels)
-      outputs[Panel::Gate].setChannels(noOfChannels);
-
-   if (outputs[Panel::Velocity].getChannels() != noOfChannels)
-      outputs[Panel::Velocity].setChannels(noOfChannels);
-
    SchweineSystem::BusMidi busMessage;
+   busMessage.noOfChannels = noOfChannels;
+   busMessage.startTick = lastTick;
+   busMessage.endTick = currentTick;
 
    for (uint8_t index = 0; index < noOfChannels; index++)
    {
@@ -130,50 +126,25 @@ void MidiReplay::process(const ProcessArgs& args)
       const uint32_t trackIndex = info.monophonicTrackIndexList.at(index);
       const Sequencer::Track& track = midiReplay.getTrackList().at(trackIndex);
 
-      Sequencer::Track::NoteEvent lastEvent;
-      bool foundEvent = false;
+      SchweineSystem::BusMidi::Channel& busChannel = busMessage.channels[index];
+
       for (Sequencer::Tick tick = lastTick; tick <= currentTick; tick++)
       {
          if (track.noteOffEventMap.find(tick) != track.noteOffEventMap.end())
          {
             const Sequencer::Track::NoteEvent::List& eventList = track.noteOffEventMap.at(tick);
-            mergeVectos(busMessage.offEventList, eventList);
-            lastEvent = eventList.at(0);
-            foundEvent = true;
+            busChannel.noteOffEventMap[tick] = eventList;
          }
          if (track.noteOnEventMap.find(tick) != track.noteOnEventMap.end())
          {
             const Sequencer::Track::NoteEvent::List& eventList = track.noteOnEventMap.at(tick);
-            mergeVectos(busMessage.onEventList, eventList);
-            lastEvent = eventList.at(0);
-            foundEvent = true;
+            busChannel.noteOnEventMap[tick] = eventList;
          }
-      }
-
-      if (!foundEvent)
-         continue;
-
-      if (lastEvent.on)
-      {
-         const float voltage = Note::fromMidi(lastEvent.key).voltage;
-         outputs[Panel::Pitch].setVoltage(voltage, index);
-
-         outputs[Panel::Gate].setVoltage(5.0, index);
-
-         const float velocity = 5.0;
-         outputs[Panel::Velocity].setVoltage(velocity, index);
-      }
-      else
-      {
-         outputs[Panel::Pitch].setVoltage(0.0, index);
-         outputs[Panel::Gate].setVoltage(0.0, index);
-         outputs[Panel::Velocity].setVoltage(0.0, index);
       }
    }
 
    lastTick = currentTick;
 
-   sendToLeft(busMessage);
    sendToRight(busMessage);
 }
 
@@ -232,6 +203,11 @@ void MidiReplay::updateDisplays()
       displayController.writeText(50, 95, timeDisplay(duration), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Center);
       displayController.writeText(50, 115, timeDisplay(durationSequence), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Center);
    }
+   else if (DisplayMode::Tracks == displayMode)
+   {
+      displayController.setColor(SchweineSystem::Color{255, 255, 255});
+      displayController.writeText(1, 1, "Tracks", SchweineSystem::DisplayOLED::Font::Normal);
+   }
    else if (DisplayMode::Current == displayMode)
    {
       displayController.setColor(SchweineSystem::Color{255, 255, 255});
@@ -253,26 +229,18 @@ void MidiReplay::loadMidiFile(const std::string& newFileName)
    info = midiReplay.compileInfo();
 }
 
-json_t* MidiReplay::dataToJson()
+void MidiReplay::load(const SchweineSystem::Json::Object& rootObject)
 {
-   using namespace SchweineSystem::Json;
-
-   Object rootObject;
-   rootObject.set("fileName", fileName);
-   rootObject.set("loop", isLooping);
-
-   return rootObject.toJson();
-}
-
-void MidiReplay::dataFromJson(json_t* rootJson)
-{
-   using namespace SchweineSystem::Json;
-
-   Object rootObject(rootJson);
    const std::string newFileName = rootObject.get("fileName").toString();
    loadMidiFile(newFileName);
 
    isLooping = rootObject.get("loop").toBool();
+}
+
+void MidiReplay::save(SchweineSystem::Json::Object& rootObject)
+{
+   rootObject.set("fileName", fileName);
+   rootObject.set("loop", isLooping);
 }
 
 // widget

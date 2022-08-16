@@ -64,8 +64,8 @@ private:
    void setOperationLEDs();
    void dataFromMidiInput(const Bytes& message) override;
 
-   json_t* dataToJson() override;
-   void dataFromJson(json_t* rootJson) override;
+   void load(const SchweineSystem::Json::Object& rootObject) override;
+   void save(SchweineSystem::Json::Object& rootObject) override;
 
    void uploadToRemote();
    void setFromRemote(const SchweineSystem::Json::Object& rootObject);

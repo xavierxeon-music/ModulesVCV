@@ -1,9 +1,9 @@
-#include "DoepferQuad.h"
-#include "DoepferQuadPanel.h"
+#include "DoepferQuadCV.h"
+#include "DoepferQuadCVPanel.h"
 
 #include <SchweineSystemMaster.h>
 
-DoepferQuad::DoepferQuad()
+DoepferQuadCV::DoepferQuadCV()
    : SchweineSystem::Module()
    , SchweineSystem::MidiOutput(Midi::Device::DopeferQuad1)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
@@ -22,11 +22,11 @@ DoepferQuad::DoepferQuad()
    channelMap[Midi::Device::DopeferQuad4].inputIdList = {Panel::Channel4_In1, Panel::Channel4_In2, Panel::Channel4_In3};
 }
 
-DoepferQuad::~DoepferQuad()
+DoepferQuadCV::~DoepferQuadCV()
 {
 }
 
-void DoepferQuad::process(const ProcessArgs& args)
+void DoepferQuadCV::process(const ProcessArgs& args)
 {
    if (connectionButton.isTriggered())
       connectToMidiDevice();
@@ -73,7 +73,7 @@ void DoepferQuad::process(const ProcessArgs& args)
    }
 }
 
-void DoepferQuad::connectToMidiDevice()
+void DoepferQuadCV::connectToMidiDevice()
 {
    if (connected())
    {
@@ -95,11 +95,10 @@ void DoepferQuad::connectToMidiDevice()
 
 // widget
 
-DoepferQuadWidget::DoepferQuadWidget(DoepferQuad* module)
+DoepferQuadCVWidget::DoepferQuadCVWidget(DoepferQuadCV* module)
    : SchweineSystem::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelDoepferQuad = SchweineSystem::Master::the()->addModule<DoepferQuad, DoepferQuadWidget>("DoepferQuad");
-
+Model* modelDoepferQuad = SchweineSystem::Master::the()->addModule<DoepferQuadCV, DoepferQuadCVWidget>("DoepferQuadCV");

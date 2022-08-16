@@ -15,7 +15,7 @@ using namespace rack;
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
-#include <SchweineSystemBusMidi.h>
+#include <SchweineSystemExpanderMessages.h>
 
 class MidiReplay : public SchweineSystem::Module, public SchweineSystem::Exapnder<SchweineSystem::BusMidi>
 {
@@ -31,13 +31,14 @@ public:
 
    void loadMidiFile(const std::string& newFileName);
 
-   json_t* dataToJson() override;
-   void dataFromJson(json_t* rootJson) override;
+   void load(const SchweineSystem::Json::Object& rootObject) override;
+   void save(SchweineSystem::Json::Object& rootObject) override;
 
 private:
    enum class DisplayMode
    {
       Overview,
+      Tracks,
       Current
    };
 
@@ -51,7 +52,11 @@ private:
 
    // display
    DisplayMode displayMode;
-   SchweineSystem::Button displayButton;
+   SchweineSystem::Button pageButton;
+   SchweineSystem::Button editUpButton;
+   SchweineSystem::Button editDownButton;
+   SchweineSystem::Button editLeftButton;
+   SchweineSystem::Button editRightButton;
    SchweineSystem::DisplayOLED::Controller displayController;
 
    // clock

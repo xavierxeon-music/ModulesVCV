@@ -92,34 +92,27 @@ void GateLatch::process(const ProcessArgs& args)
    }
 }
 
-json_t* GateLatch::dataToJson()
+void GateLatch::load(const SchweineSystem::Json::Object& rootObject)
 {
-   using namespace SchweineSystem::Json;
-
-   Array latchArray;
-   for (uint8_t index = 0; index < 8; index++)
-   {
-      latchArray.append(Value(latches[index]));
-   }
-
-   Object rootObject;
-   rootObject.set("latches", latchArray);
-
-   return rootObject.toJson();
-}
-
-void GateLatch::dataFromJson(json_t* rootJson)
-{
-   using namespace SchweineSystem::Json;
-
-   Object rootObject(rootJson);
-   Array latchArray = rootObject.get("latches").toArray();
-
+   SchweineSystem::Json::Array latchArray = rootObject.get("latches").toArray();
    for (uint8_t index = 0; index < 8; index++)
    {
       latches[index] = latchArray.get(index).toBool();
    }
 }
+
+void GateLatch::save(SchweineSystem::Json::Object& rootObject)
+{
+   SchweineSystem::Json::Array latchArray;
+   for (uint8_t index = 0; index < 8; index++)
+   {
+      latchArray.append(latches[index]);
+   }
+
+   rootObject.set("latches", latchArray);
+}
+
+// widget
 
 GateLatchWidget::GateLatchWidget(GateLatch* module)
    : SchweineSystem::ModuleWidget(module)

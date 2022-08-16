@@ -37,22 +37,15 @@ BitBusMeterAndFreeze::~BitBusMeterAndFreeze()
 {
 }
 
-json_t* BitBusMeterAndFreeze::dataToJson()
+void BitBusMeterAndFreeze::load(const SchweineSystem::Json::Object& rootObject)
 {
-   json_t* rootJson = json_object();
-   json_object_set_new(rootJson, "freeze", json_boolean(freezeMode));
-
-   return rootJson;
+   freezeMode = rootObject.get("freeze").toBool();
+   lights[Panel::RGB_FlipFreeze + 2].setBrightness(freezeMode);
 }
 
-void BitBusMeterAndFreeze::dataFromJson(json_t* rootJson)
+void BitBusMeterAndFreeze::save(SchweineSystem::Json::Object& rootObject)
 {
-   json_t* freezeJson = json_object_get(rootJson, "freeze");
-   if (freezeJson)
-   {
-      freezeMode = json_boolean_value(freezeJson);
-      lights[Panel::RGB_FlipFreeze + 2].setBrightness(freezeMode);
-   }
+   rootObject.set("freeze", freezeMode);
 }
 
 void BitBusMeterAndFreeze::process(const ProcessArgs& args)

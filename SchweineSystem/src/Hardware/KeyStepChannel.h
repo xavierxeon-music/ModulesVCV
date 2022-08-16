@@ -1,5 +1,5 @@
-#ifndef KeyStepH
-#define KeyStepH
+#ifndef KeyStepChannelH
+#define KeyStepChannelH
 
 #include <rack.hpp>
 using namespace rack;
@@ -16,13 +16,13 @@ using namespace rack;
 #include <SchweineSystemModuleWidget.h>
 #include <SchweineSystemSwitch.h>
 
-class KeyStep : public SchweineSystem::Module, private SchweineSystem::MidiOutput
+class KeyStepChannel : public SchweineSystem::Module, private SchweineSystem::MidiOutput
 {
 public:
    struct Panel;
 
 public:
-   KeyStep();
+   KeyStepChannel();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -34,8 +34,8 @@ private:
    void sendClockReset();
    void updateDisplay(uint8_t channel);
 
-   json_t* dataToJson() override;
-   void dataFromJson(json_t* rootJson) override;
+   void load(const SchweineSystem::Json::Object& rootObject) override;
+   void save(SchweineSystem::Json::Object& rootObject) override;
 
 private:
    // midi
@@ -53,13 +53,13 @@ private:
    dsp::BooleanTrigger resetTrigger;
 };
 
-class KeyStepWidget : public SchweineSystem::ModuleWidget
+class KeyStepChannelWidget : public SchweineSystem::ModuleWidget
 {
 public:
-   KeyStepWidget(KeyStep* module);
+   KeyStepChannelWidget(KeyStepChannel* module);
 
 private:
    void setup();
 };
 
-#endif // NOT KeyStepH
+#endif // NOT KeyStepChannelH

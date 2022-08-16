@@ -49,25 +49,17 @@ void Revoicer::onSampleRateChange(const SampleRateChangeEvent& e)
    internal.setSampleRate(e.sampleRate);
 }
 
-json_t* Revoicer::dataToJson()
+void Revoicer::load(const SchweineSystem::Json::Object& rootObject)
 {
-   using namespace SchweineSystem::Json;
-
-   Object rootObject;
-   rootObject.set("numberOfVoices", Value(numberOfVoices));
-
-   return rootObject.toJson();
-}
-
-void Revoicer::dataFromJson(json_t* rootJson)
-{
-   using namespace SchweineSystem::Json;
-
-   Object rootObject(rootJson);
    numberOfVoices = rootObject.get("numberOfVoices").toInt();
 
    internal.setNumberOfVoices(numberOfVoices);
    controller.setText(std::to_string(numberOfVoices));
+}
+
+void Revoicer::save(SchweineSystem::Json::Object& rootObject)
+{
+   rootObject.set("numberOfVoices", numberOfVoices);
 }
 
 // widget

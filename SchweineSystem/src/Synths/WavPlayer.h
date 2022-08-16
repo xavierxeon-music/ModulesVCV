@@ -28,8 +28,10 @@ public:
 private:
    void setup();
    void load();
-   json_t* dataToJson() override;
-   void dataFromJson(json_t* rootJson) override;
+
+   void load(const SchweineSystem::Json::Object& rootObject) override;
+   void save(SchweineSystem::Json::Object& rootObject) override;
+
    void onSampleRateChange(const SampleRateChangeEvent& event) override;
 
 private:

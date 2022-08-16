@@ -126,24 +126,8 @@ void WavPlayer::load()
    oscilator.setLooping(loop);
 }
 
-json_t* WavPlayer::dataToJson()
+void WavPlayer::load(const SchweineSystem::Json::Object& rootObject)
 {
-   using namespace SchweineSystem::Json;
-
-   Object rootObject;
-   rootObject.set("fileName", Value(fileName));
-   rootObject.set("play", Value(play));
-   rootObject.set("loop", Value(loop));
-
-   return rootObject.toJson();
-}
-
-void WavPlayer::dataFromJson(json_t* rootJson)
-{
-   using namespace SchweineSystem::Json;
-
-   Object rootObject(rootJson);
-
    fileName = rootObject.get("fileName").toString();
 
    play = rootObject.get("play").toBool();
@@ -153,6 +137,13 @@ void WavPlayer::dataFromJson(json_t* rootJson)
    loopButton.setActive(loop);
 
    load();
+}
+
+void WavPlayer::save(SchweineSystem::Json::Object& rootObject)
+{
+   rootObject.set("fileName", fileName);
+   rootObject.set("play", play);
+   rootObject.set("loop", loop);
 }
 
 void WavPlayer::onSampleRateChange(const SampleRateChangeEvent& event)

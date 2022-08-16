@@ -1,7 +1,7 @@
-#ifndef KeyStepPanelH
-#define KeyStepPanelH
+#ifndef KeyStepChannelPanelH
+#define KeyStepChannelPanelH
 
-#include "KeyStep.h"
+#include "KeyStepChannel.h"
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemButton.h>
@@ -9,7 +9,7 @@
 #include <SchweineSystemButtonLED.h>
 #include <SchweineSystemSwitch.h>
 
-struct KeyStep::Panel
+struct KeyStepChannel::Panel
 {
    enum ParamId
    {
@@ -76,4 +76,4 @@ struct KeyStep::Panel
 
 };
 
-#endif // NOT KeyStepPanelH
+#endif // NOT KeyStepChannelPanelH

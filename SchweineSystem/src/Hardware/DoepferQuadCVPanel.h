@@ -1,12 +1,12 @@
-#ifndef DoepferQuadPanelH
-#define DoepferQuadPanelH
+#ifndef DoepferQuadCVPanelH
+#define DoepferQuadCVPanelH
 
-#include "DoepferQuad.h"
+#include "DoepferQuadCV.h"
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemButtonLED.h>
 
-struct DoepferQuad::Panel
+struct DoepferQuadCV::Panel
 {
    enum ParamId
    {
@@ -63,4 +63,4 @@ struct DoepferQuad::Panel
 
 };
 
-#endif // NOT DoepferQuadPanelH
+#endif // NOT DoepferQuadCVPanelH

@@ -84,8 +84,8 @@
          ]
       },
       {
-         "slug": "DoepferQuad",
-         "name": "Doepfer Quad Sender",
+         "slug": "DoepferQuadCV",
+         "name": "Doepfer Quad CV Sender",
          "description": "Send cv via a Doepfer A-190-5 interface (as a 12 channel cv source)",
          "tags": [
             "Midi",
@@ -110,9 +110,9 @@
          ]
       },
       {
-         "slug": "KeyStep",
-         "name": "KeyStep",
-         "description": "",
+         "slug": "KeyStepChannel",
+         "name": "Key Step Channel",
+         "description": "Change the Key Step (Pro) channel",
          "tags": [
             "Midi",
             "External"
@@ -120,8 +120,8 @@
       },
       {
          "slug": "BarCounter",
-         "name": "BarCounter",
-         "description": "",
+         "name": "Bar Counter",
+         "description": "Count the number of bars and the current tempo",
          "tags": [
             "Utility"
          ]
@@ -136,16 +136,16 @@
       },
       {
          "slug": "WavPlayer",
-         "name": "WavPlayer",
-         "description": "",
+         "name": "Wav Player",
+         "description": "Play WAV files",
          "tags": [
             "Oscillator"
          ]
       },
       {
          "slug": "MidiReplay",
-         "name": "MidiReplay",
-         "description": "",
+         "name": " MidiReplay",
+         "description": "Playback Midi files",
          "tags": [
             "Midi",
             "Polyphonic"
@@ -153,7 +153,7 @@
       },
       {
          "slug": "MeshStack",
-         "name": "MeshStack",
+         "name": "Mesh Stack",
          "description": "",
          "tags": [
             "Oscillator",
@@ -162,9 +162,20 @@
       },
       {
          "slug": "RemoteScript",
-         "name": "RemoteScript",
-         "description": "",
-         "tags": []
+         "name": "Remote Script",
+         "description": "Execute a remote python script",
+         "tags": [
+            "Utility"
+         ]
+      },
+      {
+         "slug": "MidiCV",
+         "name": "Midi CV",
+         "description": "Convert Midi (from Midi Replay) to CV",
+         "tags": [
+            "Sequencer",
+            "Expander"
+         ]
       }
    ]
 }

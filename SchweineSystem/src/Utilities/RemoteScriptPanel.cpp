@@ -26,6 +26,6 @@ void RemoteScriptWidget::setup()
 
    makeLEDButton(this, Vec(30.00, 355.83), RemoteScript::Panel::Connect, RemoteScript::Panel::RGB_Connect);
 
-   makeOLED(this, Vec(9.00, 56.34), RemoteScript::Panel::Pixels_Display, 40, 40);
+   makeOLED(this, Vec(9.00, 62.34), RemoteScript::Panel::Pixels_Display, 40, 40);
 }
 

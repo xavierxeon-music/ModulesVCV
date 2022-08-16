@@ -1,5 +1,5 @@
-#ifndef DoepferQuadH
-#define DoepferQuadH
+#ifndef DoepferQuadCVH
+#define DoepferQuadCVH
 
 #include <rack.hpp>
 using namespace rack;
@@ -12,14 +12,14 @@ using namespace rack;
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
-class DoepferQuad : public SchweineSystem::Module, private SchweineSystem::MidiOutput
+class DoepferQuadCV : public SchweineSystem::Module, private SchweineSystem::MidiOutput
 {
 public:
    struct Panel;
 
 public:
-   DoepferQuad();
-   ~DoepferQuad();
+   DoepferQuadCV();
+   ~DoepferQuadCV();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -50,13 +50,13 @@ private:
 
 // widget
 
-class DoepferQuadWidget : public SchweineSystem::ModuleWidget
+class DoepferQuadCVWidget : public SchweineSystem::ModuleWidget
 {
 public:
-   DoepferQuadWidget(DoepferQuad* module);
+   DoepferQuadCVWidget(DoepferQuadCV* module);
 
 private:
    void setup();
 };
 
-#endif // NOT DoepferQuadH
+#endif // NOT DoepferQuadCVH

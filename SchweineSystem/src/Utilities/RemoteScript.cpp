@@ -72,25 +72,16 @@ void RemoteScript::connectToMidiDevice()
    sendStart();
 }
 
-json_t* RemoteScript::dataToJson()
+void RemoteScript::load(const SchweineSystem::Json::Object& rootObject)
 {
-   using namespace SchweineSystem::Json;
-
-   Object rootObject;
-   rootObject.set("fileName", Value(fileName));
-
-   return rootObject.toJson();
-}
-
-void RemoteScript::dataFromJson(json_t* rootJson)
-{
-   using namespace SchweineSystem::Json;
-
-   Object rootObject(rootJson);
-
    fileName = rootObject.get("fileName").toString();
 
    sendStart();
+}
+
+void RemoteScript::save(SchweineSystem::Json::Object& rootObject)
+{
+   rootObject.set("fileName", fileName);
 }
 
 void RemoteScript::sendStart()

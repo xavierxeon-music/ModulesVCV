@@ -31,8 +31,8 @@ private:
    void processMessage(const midi::Message& msg);
    void connectToMidiDevice();
 
-   json_t* dataToJson() override;
-   void dataFromJson(json_t* rootJson) override;
+   void load(const SchweineSystem::Json::Object& rootObject) override;
+   void save(SchweineSystem::Json::Object& rootObject) override;
 
 private:
    // midi

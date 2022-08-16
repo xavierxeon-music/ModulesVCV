@@ -215,36 +215,11 @@ void VCMCReceiver::connectToMidiDevice()
    }
 }
 
-json_t* VCMCReceiver::dataToJson()
+void VCMCReceiver::load(const SchweineSystem::Json::Object& rootObject)
 {
-   using namespace SchweineSystem::Json;
-
-   Array gateArray;
-   Array cvArray;
-   Array sliderArray;
-   for (uint8_t index = 0; index < 8; index++)
-   {
-      gateArray.append(Value(gates[index]));
-      cvArray.append(Value(cvValues[index]));
-      sliderArray.append(Value(sliderValues[index]));
-   }
-
-   Object rootObject;
-   rootObject.set("gates", gateArray);
-   rootObject.set("cvs", cvArray);
-   rootObject.set("sliders", sliderArray);
-
-   return rootObject.toJson();
-}
-
-void VCMCReceiver::dataFromJson(json_t* rootJson)
-{
-   using namespace SchweineSystem::Json;
-
-   Object rootObject(rootJson);
-   Array gateArray = rootObject.get("gates").toArray();
-   Array cvArray = rootObject.get("cvs").toArray();
-   Array sliderArray = rootObject.get("sliders").toArray();
+   SchweineSystem::Json::Array gateArray = rootObject.get("gates").toArray();
+   SchweineSystem::Json::Array cvArray = rootObject.get("cvs").toArray();
+   SchweineSystem::Json::Array sliderArray = rootObject.get("sliders").toArray();
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -253,6 +228,25 @@ void VCMCReceiver::dataFromJson(json_t* rootJson)
       sliderValues[index] = sliderArray.get(index).toInt();
    }
 }
+
+void VCMCReceiver::save(SchweineSystem::Json::Object& rootObject)
+{
+   SchweineSystem::Json::Array gateArray;
+   SchweineSystem::Json::Array cvArray;
+   SchweineSystem::Json::Array sliderArray;
+   for (uint8_t index = 0; index < 8; index++)
+   {
+      gateArray.append(gates[index]);
+      cvArray.append(cvValues[index]);
+      sliderArray.append(sliderValues[index]);
+   }
+
+   rootObject.set("gates", gateArray);
+   rootObject.set("cvs", cvArray);
+   rootObject.set("sliders", sliderArray);
+}
+
+// widget
 
 VCMCReceiverWidget::VCMCReceiverWidget(VCMCReceiver* module)
    : SchweineSystem::ModuleWidget(module)

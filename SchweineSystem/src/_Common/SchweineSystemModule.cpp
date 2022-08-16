@@ -160,3 +160,29 @@ void SchweineSystem::Module::dataFromMidiInput(const Bytes &message)
    (void)message;
    // do nothing
 }
+
+void SchweineSystem::Module::load(const Json::Object& rootObject)
+{
+   (void)rootObject;
+   // do nothing
+}
+
+void SchweineSystem::Module::save(Json::Object& rootObject)
+{
+   (void)rootObject;
+   // do nothing
+}
+
+void SchweineSystem::Module::dataFromJson(json_t* rootJson)
+{
+   const Json::Object rootObject(rootJson);
+   load(rootObject);
+}
+
+json_t* SchweineSystem::Module::dataToJson()
+{
+   Json::Object rootObject;
+   save(rootObject);
+
+   return rootObject.toJson();
+}

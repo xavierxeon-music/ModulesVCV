@@ -22,8 +22,9 @@ public:
 
 private:
    void setup();
-   json_t* dataToJson() override;
-   void dataFromJson(json_t* rootJson) override;
+
+   void load(const SchweineSystem::Json::Object& rootObject) override;
+   void save(SchweineSystem::Json::Object& rootObject) override;
 
 private:
    SchweineSystem::Input::List inputList;

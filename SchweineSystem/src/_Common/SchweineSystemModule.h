@@ -7,6 +7,8 @@
 
 #include <MusicTools.h>
 
+#include <SchweineSystemJson.h>
+
 namespace SchweineSystem
 {
    class Module : public rack::Module
@@ -59,6 +61,12 @@ namespace SchweineSystem
       void configMeter(const uint16_t& valueId, std::string name = "");
       void configPixels(const uint16_t& valueId, const uint8_t& width, const uint8_t& height, std::string name = "");
       virtual void dataFromMidiInput(const Bytes& message);
+      virtual void load(const Json::Object& rootObject);
+      virtual void save(Json::Object& rootObject);
+
+   private:
+      void dataFromJson(json_t* rootJson) override final;
+      json_t* dataToJson() override final;
    };
 } // namespace SchweineSystem
 

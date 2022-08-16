@@ -127,35 +127,26 @@ void FlameCC::sendSysEx()
    sendMessage(sysExMessage);
 }
 
-json_t* FlameCC::dataToJson()
+void FlameCC::load(const SchweineSystem::Json::Object& rootObject)
 {
-   using namespace SchweineSystem::Json;
-
-   Array fullVoltageArray;
-   for (uint8_t index = 0; index < 16; index++)
-   {
-      const bool on = fullVoltSwitchList[index]->isOn();
-      fullVoltageArray.append(Value(on));
-   }
-
-   Object rootObject;
-   rootObject.set("fullVoltage", fullVoltageArray);
-
-   return rootObject.toJson();
-}
-
-void FlameCC::dataFromJson(json_t* rootJson)
-{
-   using namespace SchweineSystem::Json;
-
-   Object rootObject(rootJson);
-
-   Array fullVoltageArray = rootObject.get("fullVoltage").toArray();
+   SchweineSystem::Json::Array fullVoltageArray = rootObject.get("fullVoltage").toArray();
    for (uint8_t index = 0; index < 16; index++)
    {
       const bool on = fullVoltageArray.get(index).toBool();
       fullVoltSwitchList[index]->setState(on);
    }
+}
+
+void FlameCC::save(SchweineSystem::Json::Object& rootObject)
+{
+   SchweineSystem::Json::Array fullVoltageArray;
+   for (uint8_t index = 0; index < 16; index++)
+   {
+      const bool on = fullVoltSwitchList[index]->isOn();
+      fullVoltageArray.append(on);
+   }
+
+   rootObject.set("fullVoltage", fullVoltageArray);
 }
 
 // widget
