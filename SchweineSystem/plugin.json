@@ -176,6 +176,18 @@
             "Sequencer",
             "Expander"
          ]
+      },
+      {
+         "slug": "DoepferQuadMidi",
+         "name": "DoepferQuadMidi",
+         "description": "",
+         "tags": []
+      },
+      {
+         "slug": "KeyStepMidi",
+         "name": "KeyStepMidi",
+         "description": "",
+         "tags": []
       }
    ]
 }

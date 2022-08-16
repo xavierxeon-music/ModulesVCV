@@ -19,7 +19,11 @@ RemoteScript::RemoteScript()
    setup();
 
    connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
-   connectToMidiDevice(); // will try to send start
+
+   if (connected())
+      sendStart();
+   else
+      connectToMidiDevice();
 }
 
 RemoteScript::~RemoteScript()
