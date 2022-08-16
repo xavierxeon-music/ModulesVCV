@@ -110,7 +110,7 @@ void MidiReplay::process(const ProcessArgs& args)
    if (lastTick >= currentTick)
       return;
 
-   const uint64_t noOfSequencerChannels = info.monophonicTrackIndexList.size();
+   const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
    const uint8_t noOfChannels = (noOfSequencerChannels > 16) ? 16 : noOfSequencerChannels;
 
    SchweineSystem::BusMidi busMessage;
@@ -120,13 +120,9 @@ void MidiReplay::process(const ProcessArgs& args)
 
    for (uint8_t index = 0; index < noOfChannels; index++)
    {
-      if (index >= info.monophonicTrackIndexList.size())
-         continue;
-
-      const uint32_t trackIndex = info.monophonicTrackIndexList.at(index);
-      const Sequencer::Track& track = midiReplay.getTrackList().at(trackIndex);
-
       SchweineSystem::BusMidi::Channel& busChannel = busMessage.channels[index];
+      const Sequencer::Track& track = midiReplay.getTrackList().at(index);
+      busChannel.isMonophoic = track.isMonophonic;
 
       for (Sequencer::Tick tick = lastTick; tick <= currentTick; tick++)
       {
@@ -144,7 +140,6 @@ void MidiReplay::process(const ProcessArgs& args)
    }
 
    lastTick = currentTick;
-
    sendToRight(busMessage);
 }
 
@@ -171,7 +166,10 @@ void MidiReplay::updateDisplays()
 
       const uint8_t bpm = tempo.getBeatsPerMinute();
       displayController.writeText(1, 15, " " + std::to_string(bpm) + " bpm", SchweineSystem::DisplayOLED::Font::Small);
-      displayController.writeText(1, 25, " " + std::to_string(info.monophonicTrackIndexList.size()) + " tracks", SchweineSystem::DisplayOLED::Font::Small);
+
+      const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
+      const uint8_t noOfChannels = (noOfSequencerChannels > 16) ? 16 : noOfSequencerChannels;
+      displayController.writeText(1, 25, " " + std::to_string(noOfChannels) + " tracks", SchweineSystem::DisplayOLED::Font::Small);
 
       const TimeCode timeCodeReplay(duration);
       displayController.writeText(50, 45, std::to_string(timeCodeReplay.bar), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Right);
@@ -206,12 +204,31 @@ void MidiReplay::updateDisplays()
    else if (DisplayMode::Tracks == displayMode)
    {
       displayController.setColor(SchweineSystem::Color{255, 255, 255});
+      displayController.drawRect(0, 0, 99, 10, true);
+
+      displayController.setColor(SchweineSystem::Color{0, 0, 0});
       displayController.writeText(1, 1, "Tracks", SchweineSystem::DisplayOLED::Font::Normal);
+
+      displayController.setColor(SchweineSystem::Color{255, 255, 255});
+
+      const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
+      for (uint8_t index = 0; index < noOfSequencerChannels; index++)
+      {
+         const Sequencer::Track& track = midiReplay.getTrackList().at(index);
+         const uint8_t y = 10 + index * 10;
+         const std::string polyMarker = track.isMonophonic ? "o" : "+";
+         displayController.writeText(1, y, polyMarker + ' ' + track.name, SchweineSystem::DisplayOLED::Font::Normal);
+      }
    }
    else if (DisplayMode::Current == displayMode)
    {
       displayController.setColor(SchweineSystem::Color{255, 255, 255});
+      displayController.drawRect(0, 0, 99, 10, true);
+
+      displayController.setColor(SchweineSystem::Color{0, 0, 0});
       displayController.writeText(1, 1, "Current", SchweineSystem::DisplayOLED::Font::Normal);
+
+      displayController.setColor(SchweineSystem::Color{255, 255, 255});
    }
 }
 
@@ -235,12 +252,15 @@ void MidiReplay::load(const SchweineSystem::Json::Object& rootObject)
    loadMidiFile(newFileName);
 
    isLooping = rootObject.get("loop").toBool();
+
+   displayMode = static_cast<DisplayMode>(rootObject.get("displayMode").toInt());
 }
 
 void MidiReplay::save(SchweineSystem::Json::Object& rootObject)
 {
    rootObject.set("fileName", fileName);
    rootObject.set("loop", isLooping);
+   rootObject.set("displayMode", static_cast<uint8_t>(displayMode));
 }
 
 // widget

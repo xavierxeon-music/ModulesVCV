@@ -13,6 +13,7 @@ MidiCV::MidiCV()
    allowExpanderOnLeft();
    allowExpanderOnRight();
 }
+
 void MidiCV::process(const ProcessArgs& args)
 {
    SchweineSystem::BusMidi busMessage = receiveFromLeft();
@@ -54,7 +55,7 @@ void MidiCV::process(const ProcessArgs& args)
       if (!foundEvent)
          continue;
 
-      if (lastEvent.on)
+      if (lastEvent.on && busChannel.isMonophoic)
       {
          const float voltage = Note::fromMidi(lastEvent.key).voltage;
          outputs[Panel::Pitch].setVoltage(voltage, index);
