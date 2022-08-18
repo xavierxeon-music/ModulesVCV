@@ -13,16 +13,12 @@ struct MidiReplay::Panel
    enum ParamId
    {
       // buttons
-      Edit_Right = 0,
-      Edit_Left = 1,
-      Edit_Down = 2,
-      Edit_Up = 3,
-      Page = 4,
+      Page = 0,
       // switches
       // ledbuttons
-      Loop = 5,
+      Loop = 1,
       // knobs
-      PARAMS_LEN = 6
+      PARAMS_LEN = 2
    };
 
    enum DisplayId

@@ -24,11 +24,29 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
+   struct NoteBuffer
+   {
+      uint8_t index = 0;
+      uint8_t channel = 0;
+      uint8_t key = 0;
+
+      NoteBuffer(uint8_t index, uint8_t channel, uint8_t key);
+      bool operator==(const NoteBuffer& other) const;
+
+      using List = std::list<NoteBuffer>;
+   };
+
+   friend std::ostream& operator<<(std::ostream& os, const NoteBuffer& buffer);
+
+private:
    void setup();
    void connectToMidiDevice();
+   void processBusMessage(const SchweineSystem::BusMidi& busMessage);
 
 private:
    SchweineSystem::ButtonLED connectionButton;
+   NoteBuffer::List bufferList;
+   bool wasRunning;
 };
 
 // widget

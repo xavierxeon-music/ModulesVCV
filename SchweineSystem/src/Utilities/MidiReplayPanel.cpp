@@ -7,10 +7,6 @@ void MidiReplay::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configButton(Panel::Edit_Right, "Edit_Right");
-   configButton(Panel::Edit_Left, "Edit_Left");
-   configButton(Panel::Edit_Down, "Edit_Down");
-   configButton(Panel::Edit_Up, "Edit_Up");
    configButton(Panel::Page, "Page");
 
    configButton(Panel::Loop, "Loop");
@@ -30,11 +26,7 @@ void MidiReplayWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeButton(this, Vec(103.18, 51.37), MidiReplay::Panel::Edit_Right);
-   makeButton(this, Vec(76.99, 51.37), MidiReplay::Panel::Edit_Left);
-   makeButton(this, Vec(90.09, 63.16), MidiReplay::Panel::Edit_Down);
-   makeButton(this, Vec(90.09, 39.59), MidiReplay::Panel::Edit_Up);
-   makeButton(this, Vec(36.80, 51.38), MidiReplay::Panel::Page);
+   makeButton(this, Vec(69.99, 51.55), MidiReplay::Panel::Page);
 
    makeLEDButton(this, Vec(84.33, 261.51), MidiReplay::Panel::Loop, MidiReplay::Panel::RGB_Loop);
 
@@ -44,6 +36,6 @@ void MidiReplayWidget::setup()
 
    makeOutput(this, Vec(84.33, 309.97), MidiReplay::Panel::End);
 
-   makeOLED(this, Vec(9.00, 80.91), MidiReplay::Panel::Pixels_Display, 100, 135);
+   makeOLED(this, Vec(9.00, 68.57), MidiReplay::Panel::Pixels_Display, 100, 135);
 }
 

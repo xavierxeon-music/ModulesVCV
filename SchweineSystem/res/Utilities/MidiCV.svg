@@ -53,8 +53,13 @@
             </g>
         </g>
     </g>
-    <g transform="matrix(1,0,0,1,-0.0472672,-1.86841)">
-        <rect x="0" y="370" width="60" height="3.737" style="fill:rgb(5,5,5);"/>
+    <g transform="matrix(1,0,0,1,-60,-5.68434e-14)">
+        <g transform="matrix(0.833333,0,0,1,60,-1.86841)">
+            <rect x="0" y="370" width="60" height="3.737" style="fill:rgb(5,5,5);"/>
+        </g>
+        <g transform="matrix(6.12323e-17,1,-1,6.12323e-17,461.64,276.746)">
+            <path d="M93.254,341.64L99.405,357.806L87.104,357.806L93.254,341.64Z" style="fill:rgb(5,5,5);"/>
+        </g>
     </g>
     <g transform="matrix(0.816456,0,0,0.816456,24.7946,-226.739)">
         <g transform="matrix(1,0,0,1,-89.6693,-31.1068)">

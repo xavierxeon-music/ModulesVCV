@@ -19,6 +19,18 @@ void MidiCV::process(const ProcessArgs& args)
    SchweineSystem::BusMidi busMessage = receiveFromLeft();
    sendToRight(busMessage);
 
+   const bool isRunning = (Tempo::Running == busMessage.runState) || (Tempo::FirstTick == busMessage.runState);
+   if (!isRunning)
+   {
+      for (uint8_t index = 0; index < busMessage.noOfChannels; index++)
+      {
+         outputs[Panel::Pitch].setVoltage(0.0, index);
+         outputs[Panel::Gate].setVoltage(0.0, index);
+         outputs[Panel::Velocity].setVoltage(0.0, index);
+      }
+      return;
+   }
+
    if (outputs[Panel::Pitch].getChannels() != busMessage.noOfChannels)
       outputs[Panel::Pitch].setChannels(busMessage.noOfChannels);
 
@@ -27,6 +39,12 @@ void MidiCV::process(const ProcessArgs& args)
 
    if (outputs[Panel::Velocity].getChannels() != busMessage.noOfChannels)
       outputs[Panel::Velocity].setChannels(busMessage.noOfChannels);
+
+   if (busMessage.startTick >= busMessage.endTick)
+      return;
+
+   if (!busMessage.hasEvents)
+      return;
 
    for (uint8_t index = 0; index < busMessage.noOfChannels; index++)
    {

@@ -53,10 +53,6 @@ private:
    // display
    DisplayMode displayMode;
    SchweineSystem::Button pageButton;
-   SchweineSystem::Button editUpButton;
-   SchweineSystem::Button editDownButton;
-   SchweineSystem::Button editLeftButton;
-   SchweineSystem::Button editRightButton;
    SchweineSystem::DisplayOLED::Controller displayController;
 
    // clock

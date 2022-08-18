@@ -19,10 +19,6 @@ MidiReplay::MidiReplay()
    // display
    , displayMode(DisplayMode::Overview)
    , pageButton(this, Panel::Page)
-   , editUpButton(this, Panel::Edit_Up)
-   , editDownButton(this, Panel::Edit_Down)
-   , editLeftButton(this, Panel::Edit_Left)
-   , editRightButton(this, Panel::Edit_Right)
    , displayController(this, Panel::Pixels_Display)
    // clock
    , clockTrigger()
@@ -43,6 +39,7 @@ MidiReplay::MidiReplay()
 
    loopButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
 }
+
 void MidiReplay::process(const ProcessArgs& args)
 {
    // clock
@@ -104,42 +101,52 @@ void MidiReplay::process(const ProcessArgs& args)
       tempo.advance(args.sampleRate);
    }
 
+   SchweineSystem::BusMidi busMessage;
+   busMessage.runState = tempo.getRunState();
+   if (!tempo.isRunningOrFirstTick())
+   {
+      sendToRight(busMessage);
+      return;
+   }
+
    // play
    currentTick = midiReplay.toTick(duration, tempo.getPercentage(Tempo::Sixteenth));
 
-   if (lastTick >= currentTick)
-      return;
+   busMessage.startTick = lastTick;
+   busMessage.endTick = currentTick;
+   busMessage.hasEvents = false;
 
    const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
    const uint8_t noOfChannels = (noOfSequencerChannels > 16) ? 16 : noOfSequencerChannels;
-
-   SchweineSystem::BusMidi busMessage;
    busMessage.noOfChannels = noOfChannels;
-   busMessage.startTick = lastTick;
-   busMessage.endTick = currentTick;
 
-   for (uint8_t index = 0; index < noOfChannels; index++)
+   if (lastTick <= currentTick)
    {
-      SchweineSystem::BusMidi::Channel& busChannel = busMessage.channels[index];
-      const Sequencer::Track& track = midiReplay.getTrackList().at(index);
-      busChannel.isMonophoic = track.isMonophonic;
-
-      for (Sequencer::Tick tick = lastTick; tick <= currentTick; tick++)
+      for (uint8_t index = 0; index < noOfChannels; index++)
       {
-         if (track.noteOffEventMap.find(tick) != track.noteOffEventMap.end())
+         SchweineSystem::BusMidi::Channel& busChannel = busMessage.channels[index];
+         const Sequencer::Track& track = midiReplay.getTrackList().at(index);
+         busChannel.isMonophoic = track.isMonophonic;
+
+         for (Sequencer::Tick tick = lastTick; tick <= currentTick; tick++)
          {
-            const Sequencer::Track::NoteEvent::List& eventList = track.noteOffEventMap.at(tick);
-            busChannel.noteOffEventMap[tick] = eventList;
-         }
-         if (track.noteOnEventMap.find(tick) != track.noteOnEventMap.end())
-         {
-            const Sequencer::Track::NoteEvent::List& eventList = track.noteOnEventMap.at(tick);
-            busChannel.noteOnEventMap[tick] = eventList;
+            if (track.noteOffEventMap.find(tick) != track.noteOffEventMap.end())
+            {
+               const Sequencer::Track::NoteEvent::List& eventList = track.noteOffEventMap.at(tick);
+               busChannel.noteOffEventMap[tick] = eventList;
+               busMessage.hasEvents = true;
+            }
+            if (track.noteOnEventMap.find(tick) != track.noteOnEventMap.end())
+            {
+               const Sequencer::Track::NoteEvent::List& eventList = track.noteOnEventMap.at(tick);
+               busChannel.noteOnEventMap[tick] = eventList;
+               busMessage.hasEvents = true;
+            }
          }
       }
-   }
 
-   lastTick = currentTick;
+      lastTick = currentTick;
+   }
    sendToRight(busMessage);
 }
 

@@ -22,8 +22,7 @@ RemoteScript::RemoteScript()
 
    if (connected())
       sendStart();
-   else
-      connectToMidiDevice();
+   connectToMidiDevice(); // only turns on LED if connected
 }
 
 RemoteScript::~RemoteScript()

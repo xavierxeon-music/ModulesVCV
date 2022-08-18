@@ -3,6 +3,7 @@
 
 #include <Blocks/Sequencer.h>
 #include <Midi/MidiCommon.h>
+#include <Music/Tempo.h>
 
 namespace SchweineSystem
 {
@@ -17,6 +18,8 @@ namespace SchweineSystem
 
       Sequencer::Tick startTick = 0;
       Sequencer::Tick endTick = 0;
+      Tempo::RunState runState = Tempo::Reset;
+      bool hasEvents = false;
 
       uint8_t noOfChannels = 0;
       Channel channels[16];

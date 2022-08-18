@@ -4,10 +4,12 @@
 #include "TimeLord.h"
 
 #include <SchweineSystemCommon.h>
+#include <SchweineSystemButton.h>
 #include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemLED.h>
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemDisplayOLED.h>
+#include <SchweineSystemSwitch.h>
 
 struct TimeLord::Panel
 {
