@@ -42,18 +42,14 @@ private:
    bool gates[8];
    SchweineSystem::LED::List lightListGate;
    SchweineSystem::Output::List gateList;
-   // cv
-   uint8_t cvValues[8];
-   SchweineSystem::LightMeter::Controller::List lightMeterListCV;
-   SchweineSystem::Output::List cvOutputList;
    // sliders
    uint8_t sliderValues[8];
    SchweineSystem::LightMeter::Controller::List lightMeterListSlider;
    SchweineSystem::Output::List sliderOutputList;
-   // exterenal
-   int8_t externalValues[2];
-   SchweineSystem::LightMeter::Controller::List lightMeterListExternal;
-   SchweineSystem::Output::List externalOutputList;
+   // cv
+   uint8_t cvValues[10];
+   SchweineSystem::LightMeter::Controller::List lightMeterListCV;
+   SchweineSystem::Output::List cvOutputList;
 };
 
 class VCMCReceiverWidget : public SchweineSystem::ModuleWidget

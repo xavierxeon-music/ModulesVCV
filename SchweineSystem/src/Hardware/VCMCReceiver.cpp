@@ -16,15 +16,12 @@ VCMCReceiver::VCMCReceiver()
    , gates{false, false, false, false, false, false, false, false}
    , lightListGate(this)
    , gateList(outputs)
-   , cvValues{0, 0, 0, 0, 0, 0, 0, 0}
-   , lightMeterListCV(this)
-   , cvOutputList(outputs)
    , sliderValues{0, 0, 0, 0, 0, 0, 0, 0}
    , lightMeterListSlider(this)
    , sliderOutputList(outputs)
-   , externalValues{0, 0}
-   , lightMeterListExternal(this)
-   , externalOutputList(outputs)
+   , cvValues{0, 0, 0, 0, 0, 0, 0, 0}
+   , lightMeterListCV(this)
+   , cvOutputList(outputs)
 {
    setup();
 
@@ -46,24 +43,6 @@ VCMCReceiver::VCMCReceiver()
                     Panel::Channel7_Gate1_BitOut1,
                     Panel::Channel8_Gate_BitOut1});
 
-   lightMeterListCV.append({Panel::Value_Channel1_CV7_Strip,
-                            Panel::Value_Channel2_CV6_Strip,
-                            Panel::Value_Channel3_CV5_Strip,
-                            Panel::Value_Channel4_CV4_Strip,
-                            Panel::Value_Channel5_CV3_Strip,
-                            Panel::Value_Channel6_CV2_Strip,
-                            Panel::Value_Channel7_CV1_Strip,
-                            Panel::Value_Channel8_CV_Strip});
-
-   cvOutputList.append({Panel::Channel1_CV7_Output,
-                        Panel::Channel2_CV6_Output,
-                        Panel::Channel3_CV5_Output,
-                        Panel::Channel4_CV4_Output,
-                        Panel::Channel5_CV3_Output,
-                        Panel::Channel6_CV2_Output,
-                        Panel::Channel7_CV1_Output,
-                        Panel::Channel8_CV_Output});
-
    lightMeterListSlider.append({Panel::Value_Channel1_Slider7_Strip,
                                 Panel::Value_Channel2_Slider6_Strip,
                                 Panel::Value_Channel3_Slider5_Strip,
@@ -82,18 +61,34 @@ VCMCReceiver::VCMCReceiver()
                             Panel::Channel7_Slider1_Output,
                             Panel::Channel8_Slider_Output});
 
-   lightMeterListExternal.append({Panel::Value_External_B,
-                                  Panel::Value_External_A});
+   lightMeterListCV.append({Panel::Value_Channel1_CV7_Strip,
+                            Panel::Value_Channel2_CV6_Strip,
+                            Panel::Value_Channel3_CV5_Strip,
+                            Panel::Value_Channel4_CV4_Strip,
+                            Panel::Value_Channel5_CV3_Strip,
+                            Panel::Value_Channel6_CV2_Strip,
+                            Panel::Value_Channel7_CV1_Strip,
+                            Panel::Value_Channel8_CV_Strip,
+                            Panel::Value_External_A,
+                            Panel::Value_External_B});
 
-   externalOutputList.append({Panel::External_B,
-                              Panel::External_A});
+   cvOutputList.append({Panel::Channel1_CV7_Output,
+                        Panel::Channel2_CV6_Output,
+                        Panel::Channel3_CV5_Output,
+                        Panel::Channel4_CV4_Output,
+                        Panel::Channel5_CV3_Output,
+                        Panel::Channel6_CV2_Output,
+                        Panel::Channel7_CV1_Output,
+                        Panel::Channel8_CV_Output,
+                        Panel::External_A,
+                        Panel::External_B});
 
-   for (uint8_t index = 0; index < 8; index++)
+   for (uint8_t index = 0; index < 10; index++)
    {
+      lightListGate[index]->setDefaultColor(SchweineSystem::Color{255, 0, 255});
       lightMeterListCV[index]->setMaxValue(127);
-      lightMeterListSlider[index]->setMaxValue(127);
-      if (index < 2)
-         lightMeterListExternal[index]->setMaxValue(127);
+      if (index < 8)
+         lightMeterListSlider[index]->setMaxValue(127);
    }
 
    connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
@@ -113,33 +108,29 @@ void VCMCReceiver::process(const ProcessArgs& args)
    while (midiInput.tryPop(&msg, args.frame))
       processMessage(msg);
 
-   for (uint8_t index = 0; index < 8; index++)
+   for (uint8_t index = 0; index < 10; index++)
    {
-      if (gates[index])
+      if (index < 8)
       {
-         lightListGate[index]->setOn();
-         gateList[index]->setVoltage(10.0);
-      }
-      else
-      {
-         lightListGate[index]->setOff();
-         gateList[index]->setVoltage(0.0);
+         if (gates[index])
+         {
+            lightListGate[index]->setOn();
+            gateList[index]->setVoltage(10.0);
+         }
+         else
+         {
+            lightListGate[index]->setOff();
+            gateList[index]->setVoltage(0.0);
+         }
+
+         lightMeterListSlider[index]->setValue(sliderValues[index]);
+         const float sliderVoltage = ccValueToVoltage(sliderValues[index]);
+         sliderOutputList[index]->setVoltage(sliderVoltage);
       }
 
       lightMeterListCV[index]->setValue(cvValues[index]);
       const float cvVoltage = ccValueToVoltage(cvValues[index]);
       cvOutputList[index]->setVoltage(cvVoltage);
-
-      lightMeterListSlider[index]->setValue(sliderValues[index]);
-      const float sliderVoltage = ccValueToVoltage(sliderValues[index]);
-      sliderOutputList[index]->setVoltage(sliderVoltage);
-
-      if (index < 2)
-      {
-         lightMeterListExternal[index]->setValue(externalValues[index]);
-         const float sliderVoltage = ccValueToVoltage(externalValues[index]);
-         externalOutputList[index]->setVoltage(sliderVoltage);
-      }
    }
 }
 
@@ -182,12 +173,12 @@ void VCMCReceiver::connectToMidiDevice()
    connectionButton.setOff();
 
    static const std::string targetDeviceName = SchweineSystem::Common::midiInterfaceMap.at(Midi::Device::VCMC);
-   std::cout << targetDeviceName << std::endl;
+   std::cout << "TARGET = " << targetDeviceName << std::endl;
 
    for (const int& deviceId : midiInput.getDeviceIds())
    {
       const std::string deviceName = midiInput.getDeviceName(deviceId);
-      // std::cout << deviceName << std::endl;
+      //std::cout << deviceName << std::endl;
 
       if (targetDeviceName == deviceName)
       {
