@@ -9,8 +9,8 @@ void VCMCReceiver::setup()
 
    configButton(Panel::Connect, "Connect");
 
-   configOutput(Panel::Reset, "Reset");
-   configOutput(Panel::Clock, "Clock");
+   configOutput(Panel::External_B, "External_B");
+   configOutput(Panel::External_A, "External_A");
    configOutput(Panel::Channel8_Gate_BitOut1, "Channel8_Gate_BitOut1");
    configOutput(Panel::Channel8_Slider_Output, "Channel8_Slider_Output");
    configOutput(Panel::Channel8_CV_Output, "Channel8_CV_Output");
@@ -36,6 +36,8 @@ void VCMCReceiver::setup()
    configOutput(Panel::Channel1_Slider7_Output, "Channel1_Slider7_Output");
    configOutput(Panel::Channel1_CV7_Output, "Channel1_CV7_Output");
 
+   configMeter(Panel::Value_External_B, "External_B");
+   configMeter(Panel::Value_External_A, "External_A");
    configMeter(Panel::Value_Channel8_Slider_Strip, "Channel8_Slider_Strip");
    configMeter(Panel::Value_Channel8_CV_Strip, "Channel8_CV_Strip");
    configMeter(Panel::Value_Channel7_Slider1_Strip, "Channel7_Slider1_Strip");
@@ -62,8 +64,8 @@ void VCMCReceiverWidget::setup()
 
    makeLEDButton(this, Vec(113.83, 355.94), VCMCReceiver::Panel::Connect, VCMCReceiver::Panel::RGB_Connect);
 
-   makeOutput(this, Vec(71.25, 355.83), VCMCReceiver::Panel::Reset);
-   makeOutput(this, Vec(35.28, 355.58), VCMCReceiver::Panel::Clock);
+   makeOutput(this, Vec(71.25, 355.83), VCMCReceiver::Panel::External_B);
+   makeOutput(this, Vec(27.28, 355.58), VCMCReceiver::Panel::External_A);
    makeOutput(this, Vec(32.19, 311.65), VCMCReceiver::Panel::Channel8_Gate_BitOut1);
    makeOutput(this, Vec(114.88, 311.65), VCMCReceiver::Panel::Channel8_Slider_Output);
    makeOutput(this, Vec(73.72, 311.65), VCMCReceiver::Panel::Channel8_CV_Output);
@@ -98,6 +100,8 @@ void VCMCReceiverWidget::setup()
    makeLED(this, Vec(54.02, 99.41), VCMCReceiver::Panel::RGB_Channel2_Gate6_Status1);
    makeLED(this, Vec(54.02, 64.03), VCMCReceiver::Panel::RGB_Channel1_Gate7_Status1);
 
+   makeMeter(this, Vec(87.18, 342.97), 5, VCMCReceiver::Panel::Value_External_B);
+   makeMeter(this, Vec(43.87, 342.41), 5, VCMCReceiver::Panel::Value_External_A);
    makeMeter(this, Vec(131.70, 298.65), 5, VCMCReceiver::Panel::Value_Channel8_Slider_Strip);
    makeMeter(this, Vec(90.54, 298.65), 5, VCMCReceiver::Panel::Value_Channel8_CV_Strip);
    makeMeter(this, Vec(132.34, 263.27), 5, VCMCReceiver::Panel::Value_Channel7_Slider1_Strip);

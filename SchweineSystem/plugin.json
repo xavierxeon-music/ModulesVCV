@@ -14,26 +14,41 @@
    "changelogUrl": "",
    "modules": [
       {
+         "slug": "VCMCReceiver",
+         "name": "VCMC Receiver",
+         "description": "A unified midi interface to a VCMV module running my configuration",
+         "tags": [
+            "Midi",
+            "External"
+         ]
+      },
+      {
+         "slug": "PamelasClock",
+         "name": "PamelasClock",
+         "description": "",
+         "tags": []
+      },
+      {
+         "slug": "TimeLord",
+         "name": "Time Lord",
+         "description": "poly ramps in time and space",
+         "tags": [
+            "Utility"
+         ]
+      },
+      {
+         "slug": "FlameCC",
+         "name": "Flamme CC Sender",
+         "description": "Send cv via a Flame u16MCC  interface",
+         "tags": [
+            "Midi",
+            "External"
+         ]
+      },
+      {
          "slug": "BitBusCVIn",
          "name": "BitBus CV Input",
          "description": "turn CV intp 8 bits",
-         "tags": [
-            "Binary"
-         ]
-      },
-      {
-         "slug": "BitBusCVOut",
-         "name": "BitBus CV Output",
-         "description": "turn 8 bits into CV",
-         "tags": [
-            "Binary",
-            "Expander"
-         ]
-      },
-      {
-         "slug": "BitBusBitIn",
-         "name": "BitBus Bit Input",
-         "description": "set 8 bits",
          "tags": [
             "Binary"
          ]
@@ -67,38 +82,20 @@
          ]
       },
       {
-         "slug": "VCMCReceiver",
-         "name": "VCMC Receiver",
-         "description": "A unified midi interface to a VCMV module running my configuration",
+         "slug": "BitBusBitIn",
+         "name": "BitBus Bit Input",
+         "description": "set 8 bits",
          "tags": [
-            "Midi",
-            "External"
+            "Binary"
          ]
       },
       {
-         "slug": "TimeLord",
-         "name": "Time Lord",
-         "description": "poly ramps in time and space",
+         "slug": "BitBusCVOut",
+         "name": "BitBus CV Output",
+         "description": "turn 8 bits into CV",
          "tags": [
-            "Utility"
-         ]
-      },
-      {
-         "slug": "DoepferQuadCV",
-         "name": "Doepfer Quad CV Sender",
-         "description": "Send cv via a Doepfer A-190-5 interface (as a 12 channel cv source)",
-         "tags": [
-            "Midi",
-            "External"
-         ]
-      },
-      {
-         "slug": "FlameCC",
-         "name": "Flamme CC Sender",
-         "description": "Send cv via a Flame u16MCC  interface",
-         "tags": [
-            "Midi",
-            "External"
+            "Binary",
+            "Expander"
          ]
       },
       {
@@ -127,6 +124,15 @@
          ]
       },
       {
+         "slug": "DoepferQuadCV",
+         "name": "Doepfer Quad CV Sender",
+         "description": "Send cv via a Doepfer A-190-5 interface (as a 12 channel cv source)",
+         "tags": [
+            "Midi",
+            "External"
+         ]
+      },
+      {
          "slug": "Revoicer",
          "name": "Revoicer",
          "description": "",
@@ -152,23 +158,6 @@
          ]
       },
       {
-         "slug": "MeshStack",
-         "name": "Mesh Stack",
-         "description": "",
-         "tags": [
-            "Oscillator",
-            "Polyphonic"
-         ]
-      },
-      {
-         "slug": "RemoteScript",
-         "name": "Remote Script",
-         "description": "Execute a remote python script",
-         "tags": [
-            "Utility"
-         ]
-      },
-      {
          "slug": "MidiCV",
          "name": "Midi CV",
          "description": "Convert Midi (from Midi Replay) to CV",
@@ -188,6 +177,23 @@
          "name": "KeyStepMidi",
          "description": "",
          "tags": []
+      },
+      {
+         "slug": "MeshStack",
+         "name": "Mesh Stack",
+         "description": "",
+         "tags": [
+            "Oscillator",
+            "Polyphonic"
+         ]
+      },
+      {
+         "slug": "RemoteScript",
+         "name": "Remote Script",
+         "description": "Execute a remote python script",
+         "tags": [
+            "Utility"
+         ]
       }
    ]
 }

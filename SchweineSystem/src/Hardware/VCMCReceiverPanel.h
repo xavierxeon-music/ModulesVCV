@@ -29,23 +29,25 @@ struct VCMCReceiver::Panel
 
    enum MeterId
    {
-      Value_Channel8_Slider_Strip = 0,
-      Value_Channel8_CV_Strip = 1,
-      Value_Channel7_Slider1_Strip = 2,
-      Value_Channel7_CV1_Strip = 3,
-      Value_Channel6_Slider2_Strip = 4,
-      Value_Channel6_CV2_Strip = 5,
-      Value_Channel5_Slider3_Strip = 6,
-      Value_Channel5_CV3_Strip = 7,
-      Value_Channel4_Slider4_Strip = 8,
-      Value_Channel4_CV4_Strip = 9,
-      Value_Channel3_Slider5_Strip = 10,
-      Value_Channel3_CV5_Strip = 11,
-      Value_Channel2_Slider6_Strip = 12,
-      Value_Channel2_CV6_Strip = 13,
-      Value_Channel1_Slider7_Strip = 14,
-      Value_Channel1_CV7_Strip = 15,
-      METERS_LEN = 16
+      Value_External_B = 0,
+      Value_External_A = 1,
+      Value_Channel8_Slider_Strip = 2,
+      Value_Channel8_CV_Strip = 3,
+      Value_Channel7_Slider1_Strip = 4,
+      Value_Channel7_CV1_Strip = 5,
+      Value_Channel6_Slider2_Strip = 6,
+      Value_Channel6_CV2_Strip = 7,
+      Value_Channel5_Slider3_Strip = 8,
+      Value_Channel5_CV3_Strip = 9,
+      Value_Channel4_Slider4_Strip = 10,
+      Value_Channel4_CV4_Strip = 11,
+      Value_Channel3_Slider5_Strip = 12,
+      Value_Channel3_CV5_Strip = 13,
+      Value_Channel2_Slider6_Strip = 14,
+      Value_Channel2_CV6_Strip = 15,
+      Value_Channel1_Slider7_Strip = 16,
+      Value_Channel1_CV7_Strip = 17,
+      METERS_LEN = 18
    };
 
    enum InputId
@@ -55,8 +57,8 @@ struct VCMCReceiver::Panel
 
    enum OutputId
    {
-      Reset = 0,
-      Clock = 1,
+      External_B = 0,
+      External_A = 1,
       Channel8_Gate_BitOut1 = 2,
       Channel8_Slider_Output = 3,
       Channel8_CV_Output = 4,

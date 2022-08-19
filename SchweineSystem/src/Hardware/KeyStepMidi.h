@@ -5,14 +5,12 @@
 using namespace rack;
 
 #include <SchweineSystemButtonLED.h>
-#include <SchweineSystemExapnder.h>
-#include <SchweineSystemMidiOutput.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
-#include <SchweineSystemExpanderMessages.h>
+#include "MidiBusModule.h"
 
-class KeyStepMidi : public SchweineSystem::Module, private SchweineSystem::MidiOutput, public SchweineSystem::Exapnder<SchweineSystem::BusMidi>
+class KeyStepMidi : public SchweineSystem::Module, public MidiBusModule
 {
 public:
    struct Panel;

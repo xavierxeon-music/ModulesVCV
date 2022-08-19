@@ -1,14 +1,17 @@
 ./src/Hardware/DoepferQuadCVPanel.h
 ./src/Hardware/KeyStepMidiPanel.h
 ./src/Hardware/KeyStepChannelPanel.h
+./src/Hardware/PamelasClockPanel.h
 ./src/Hardware/DoepferQuadCV.h
 ./src/Hardware/FlameCCPanel.h
 ./src/Hardware/DoepferQuadMidi.h
+./src/Hardware/MidiBusModule.h
 ./src/Hardware/FlameCC.h
 ./src/Hardware/VCMCReceiverPanel.h
 ./src/Hardware/DoepferQuadMidiPanel.h
 ./src/Hardware/KeyStepChannel.h
 ./src/Hardware/VCMCReceiver.h
+./src/Hardware/PamelasClock.h
 ./src/Hardware/KeyStepMidi.h
 ./src/_Common/SchweineSystemDisplayLCD.h
 ./src/_Common/SchweineSystemDisplayOLED.h
@@ -178,6 +181,7 @@
 ./src/_MusicTools/Convert.hpp
 ./src/_MusicTools/StandardTable.hpp
 ./src/Hardware/FlameCCPanel.cpp
+./src/Hardware/PamelasClockPanel.cpp
 ./src/Hardware/VCMCReceiverPanel.cpp
 ./src/Hardware/KeyStepChannelPanel.cpp
 ./src/Hardware/DoepferQuadCVPanel.cpp
@@ -187,6 +191,8 @@
 ./src/Hardware/VCMCReceiver.cpp
 ./src/Hardware/KeyStepChannel.cpp
 ./src/Hardware/DoepferQuadMidi.cpp
+./src/Hardware/MidiBusModule.cpp
+./src/Hardware/PamelasClock.cpp
 ./src/Hardware/FlameCC.cpp
 ./src/Hardware/KeyStepMidi.cpp
 ./src/_Common/SchweineSystemMidiOutput.cpp

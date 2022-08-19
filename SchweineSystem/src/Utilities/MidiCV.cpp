@@ -22,7 +22,8 @@ void MidiCV::process(const ProcessArgs& args)
    const bool isRunning = (Tempo::Running == busMessage.runState) || (Tempo::FirstTick == busMessage.runState);
    if (!isRunning)
    {
-      for (uint8_t index = 0; index < busMessage.noOfChannels; index++)
+      const uint8_t noOfChannels = outputs[Panel::Pitch].getChannels();
+      for (uint8_t index = 0; index < noOfChannels; index++)
       {
          outputs[Panel::Pitch].setVoltage(0.0, index);
          outputs[Panel::Gate].setVoltage(0.0, index);

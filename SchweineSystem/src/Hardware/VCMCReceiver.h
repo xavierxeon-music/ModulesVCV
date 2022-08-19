@@ -4,7 +4,6 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <Music/Tempo.h>
 #include <Tools/Counter.h>
 #include <Tools/Range.h>
 
@@ -39,14 +38,6 @@ private:
    midi::InputQueue midiInput;
    SchweineSystem::ButtonLED connectionButton;
    Range::Mapper ccValueToVoltage;
-   // tempo
-   Counter tickCounter;
-   bool doNotAdvanceTempo;
-   Tempo tempo;
-   dsp::PulseGenerator clockTick;
-   dsp::BooleanTrigger tickTrigger;
-   dsp::PulseGenerator clockReset;
-   dsp::BooleanTrigger resetTrigger;
    // gates
    bool gates[8];
    SchweineSystem::LED::List lightListGate;
@@ -59,6 +50,10 @@ private:
    uint8_t sliderValues[8];
    SchweineSystem::LightMeter::Controller::List lightMeterListSlider;
    SchweineSystem::Output::List sliderOutputList;
+   // exterenal
+   int8_t externalValues[2];
+   SchweineSystem::LightMeter::Controller::List lightMeterListExternal;
+   SchweineSystem::Output::List externalOutputList;
 };
 
 class VCMCReceiverWidget : public SchweineSystem::ModuleWidget

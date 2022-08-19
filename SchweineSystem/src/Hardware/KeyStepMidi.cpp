@@ -5,8 +5,7 @@
 
 KeyStepMidi::KeyStepMidi()
    : SchweineSystem::Module()
-   , SchweineSystem::MidiOutput(Midi::Device::KeyStep1)
-   , SchweineSystem::Exapnder<SchweineSystem::BusMidi>(this)
+   , MidiBusModule(Midi::Device::KeyStep1, this)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
 
 {
@@ -29,26 +28,7 @@ void KeyStepMidi::process(const ProcessArgs& args)
    if (!connected())
       return;
 
-   for (Sequencer::Tick tick = busMessage.startTick; tick <= busMessage.endTick; tick++)
-   {
-      for (uint8_t index = 0; index < 16; index++)
-      {
-         const SchweineSystem::BusMidi::Channel& busChannel = busMessage.channels[index];
-
-         if (busChannel.noteOffEventMap.find(tick) != busChannel.noteOffEventMap.end())
-         {
-            const Sequencer::Track::NoteEvent::List& eventList = busChannel.noteOffEventMap.at(tick);
-            for (const Sequencer::Track::NoteEvent& noteEvent : eventList)
-               sendNoteOff(noteEvent.channel, Note::fromMidi(noteEvent.key));
-         }
-         if (busChannel.noteOnEventMap.find(tick) != busChannel.noteOnEventMap.end())
-         {
-            const Sequencer::Track::NoteEvent::List& eventList = busChannel.noteOnEventMap.at(tick);
-            for (const Sequencer::Track::NoteEvent& noteEvent : eventList)
-               sendNoteOn(noteEvent.channel, Note::fromMidi(noteEvent.key), noteEvent.velocity);
-         }
-      }
-   }
+   processBusMessage(busMessage);
 }
 
 void KeyStepMidi::connectToMidiDevice()

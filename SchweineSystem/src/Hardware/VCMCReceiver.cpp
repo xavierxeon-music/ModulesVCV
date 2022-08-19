@@ -13,21 +13,18 @@ VCMCReceiver::VCMCReceiver()
    , midiInput()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , ccValueToVoltage(0.0, 127, 0, 10.0)
-   , tickCounter(6)
-   , doNotAdvanceTempo(false)
-   , tempo()
-   , clockTick()
-   , tickTrigger()
-   , clockReset()
-   , resetTrigger()
    , gates{false, false, false, false, false, false, false, false}
    , lightListGate(this)
    , gateList(outputs)
    , cvValues{0, 0, 0, 0, 0, 0, 0, 0}
    , lightMeterListCV(this)
    , cvOutputList(outputs)
+   , sliderValues{0, 0, 0, 0, 0, 0, 0, 0}
    , lightMeterListSlider(this)
    , sliderOutputList(outputs)
+   , externalValues{0, 0}
+   , lightMeterListExternal(this)
+   , externalOutputList(outputs)
 {
    setup();
 
@@ -85,10 +82,18 @@ VCMCReceiver::VCMCReceiver()
                             Panel::Channel7_Slider1_Output,
                             Panel::Channel8_Slider_Output});
 
+   lightMeterListExternal.append({Panel::Value_External_B,
+                                  Panel::Value_External_A});
+
+   externalOutputList.append({Panel::External_B,
+                              Panel::External_A});
+
    for (uint8_t index = 0; index < 8; index++)
    {
       lightMeterListCV[index]->setMaxValue(127);
       lightMeterListSlider[index]->setMaxValue(127);
+      if (index < 2)
+         lightMeterListExternal[index]->setMaxValue(127);
    }
 
    connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
@@ -107,14 +112,6 @@ void VCMCReceiver::process(const ProcessArgs& args)
    midi::Message msg;
    while (midiInput.tryPop(&msg, args.frame))
       processMessage(msg);
-
-   if (doNotAdvanceTempo)
-      doNotAdvanceTempo = false;
-   else
-      tempo.advance(args.sampleRate);
-
-   outputs[Panel::Clock].setVoltage(clockTick.process(args.sampleTime) ? 10.f : 0.f);
-   outputs[Panel::Reset].setVoltage(clockReset.process(args.sampleTime) ? 10.f : 0.f);
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -136,59 +133,46 @@ void VCMCReceiver::process(const ProcessArgs& args)
       lightMeterListSlider[index]->setValue(sliderValues[index]);
       const float sliderVoltage = ccValueToVoltage(sliderValues[index]);
       sliderOutputList[index]->setVoltage(sliderVoltage);
+
+      if (index < 2)
+      {
+         lightMeterListExternal[index]->setValue(externalValues[index]);
+         const float sliderVoltage = ccValueToVoltage(externalValues[index]);
+         externalOutputList[index]->setVoltage(sliderVoltage);
+      }
    }
 }
+
 void VCMCReceiver::processMessage(const midi::Message& msg)
 {
    const bool isSystemEvent = (0xF0 == (msg.bytes[0] & 0xF0));
-   if (!isSystemEvent)
+   if (isSystemEvent)
+      return;
+
+   const Midi::Event event = static_cast<Midi::Event>(msg.bytes[0] & 0xF0);
+   const Midi::Channel channel = 1 + (msg.bytes[0] & 0x0F);
+   if (Midi::Device::VCVRack != channel)
+      return;
+
+   if (Midi::Event::NoteOn == event)
    {
-      const Midi::Event event = static_cast<Midi::Event>(msg.bytes[0] & 0xF0);
-      const Midi::Channel channel = 1 + (msg.bytes[0] & 0x0F);
-      if (Midi::Device::VCVRack != channel)
-         return;
-
-      if (Midi::Event::NoteOn == event)
-      {
-         const uint8_t gateIndex = msg.bytes[1] - 60;
-         const bool on = (0 != msg.bytes[2]);
-         gates[gateIndex] = on;
-      }
-      else if (Midi::Event::NoteOff == event)
-      {
-         // VCMC does not send note off, instead a second note on with velocity 0
-      }
-      else if (Midi::Event::ControlChange == event)
-      {
-         const uint8_t index = msg.bytes[1];
-         const uint8_t value = msg.bytes[2];
-
-         if (index >= 10)
-            sliderValues[index - 10] = value;
-         else
-            cvValues[index] = value;
-      }
+      const uint8_t gateIndex = msg.bytes[1] - 60;
+      const bool on = (0 != msg.bytes[2]);
+      gates[gateIndex] = on;
    }
-   else
+   else if (Midi::Event::NoteOff == event)
    {
-      const Midi::Event event = static_cast<Midi::Event>(msg.bytes[0]);
+      // VCMC does not send note off, instead a second note on with velocity 0
+   }
+   else if (Midi::Event::ControlChange == event)
+   {
+      const uint8_t index = msg.bytes[1];
+      const uint8_t value = msg.bytes[2];
 
-      if (Midi::Event::Clock == event)
-      {
-         if (0 == tickCounter.valueAndNext())
-         {
-            tempo.clockTick();
-            clockTick.trigger();
-            doNotAdvanceTempo = true;
-         }
-      }
-      else if (Midi::Event::Start == event)
-      {
-         tickCounter.reset();
-         tempo.clockReset();
-         clockReset.trigger();
-         doNotAdvanceTempo = true;
-      }
+      if (index >= 10)
+         sliderValues[index - 10] = value;
+      else
+         cvValues[index] = value;
    }
 }
 
@@ -197,7 +181,7 @@ void VCMCReceiver::connectToMidiDevice()
    midiInput.reset();
    connectionButton.setOff();
 
-   static const std::string targetDeviceName = SchweineSystem::Common::midiInterfaceMap.at(Midi::Device::VCVRack);
+   static const std::string targetDeviceName = SchweineSystem::Common::midiInterfaceMap.at(Midi::Device::VCMC);
    std::cout << targetDeviceName << std::endl;
 
    for (const int& deviceId : midiInput.getDeviceIds())
