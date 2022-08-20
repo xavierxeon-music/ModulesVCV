@@ -1,5 +1,5 @@
-#ifndef KeyStepMidiH
-#define KeyStepMidiH
+#ifndef DoepferQuadH
+#define DoepferQuadH
 
 #include <rack.hpp>
 using namespace rack;
@@ -10,13 +10,13 @@ using namespace rack;
 
 #include "MidiBusModule.h"
 
-class KeyStepMidi : public SchweineSystem::Module, public MidiBusModule
+class DoepferQuad : public SchweineSystem::Module, public MidiBusModule
 {
 public:
    struct Panel;
 
 public:
-   KeyStepMidi();
+   DoepferQuad();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -31,13 +31,13 @@ private:
 
 // widget
 
-class KeyStepMidiWidget : public SchweineSystem::ModuleWidget
+class DoepferQuadWidget : public SchweineSystem::ModuleWidget
 {
 public:
-   KeyStepMidiWidget(KeyStepMidi* module);
+   DoepferQuadWidget(DoepferQuad* module);
 
 private:
    void setup();
 };
 
-#endif // NOT KeyStepMidiH
+#endif // NOT DoepferQuadH

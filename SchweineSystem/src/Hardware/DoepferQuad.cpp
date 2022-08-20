@@ -1,9 +1,9 @@
-#include "DoepferQuadMidi.h"
-#include "DoepferQuadMidiPanel.h"
+#include "DoepferQuad.h"
+#include "DoepferQuadPanel.h"
 
 #include <SchweineSystemMaster.h>
 
-DoepferQuadMidi::DoepferQuadMidi()
+DoepferQuad::DoepferQuad()
    : SchweineSystem::Module()
    , MidiBusModule(Midi::Device::DopeferQuad1, this)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
@@ -16,7 +16,7 @@ DoepferQuadMidi::DoepferQuadMidi()
    connectToMidiDevice();
 }
 
-void DoepferQuadMidi::process(const ProcessArgs& args)
+void DoepferQuad::process(const ProcessArgs& args)
 {
    SchweineSystem::BusMidi busMessage = receiveFromLeft();
    sendToRight(busMessage);
@@ -30,7 +30,7 @@ void DoepferQuadMidi::process(const ProcessArgs& args)
    processBusMessage(busMessage);
 }
 
-void DoepferQuadMidi::connectToMidiDevice()
+void DoepferQuad::connectToMidiDevice()
 {
    if (connected())
    {
@@ -47,10 +47,10 @@ void DoepferQuadMidi::connectToMidiDevice()
 
 // widget
 
-DoepferQuadMidiWidget::DoepferQuadMidiWidget(DoepferQuadMidi* module)
+DoepferQuadWidget::DoepferQuadWidget(DoepferQuad* module)
 : SchweineSystem::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelDoepferQuadMidi = SchweineSystem::Master::the()->addModule<DoepferQuadMidi, DoepferQuadMidiWidget>("DoepferQuadMidi");
+Model* modelDoepferQuad = SchweineSystem::Master::the()->addModule<DoepferQuad, DoepferQuadWidget>("DoepferQuad");

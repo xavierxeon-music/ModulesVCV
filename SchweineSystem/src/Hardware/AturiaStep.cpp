@@ -1,21 +1,22 @@
-#include "KeyStepChannel.h"
-#include "KeyStepChannelPanel.h"
+#include "AturiaStep.h"
+#include "AturiaStepPanel.h"
 
-#include <SchweineSystemJson.h>
+#include <Tools/Variable.h>
+
 #include <SchweineSystemMaster.h>
 
-KeyStepChannel::KeyStepChannel()
+AturiaStep::AturiaStep()
    : SchweineSystem::Module()
-   , SchweineSystem::MidiOutput(Midi::Device::KeyStep1)
+   , MidiBusModule(Midi::Device::KeyStep1, this)
+   , useDrumChannel(false)
+   , drumButon(this, Panel::Drums, Panel::RGB_Drums)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
-   , midiChannelSwitch(this, Panel::Channel1_Drums)
    , inputList(inputs)
    , patterns{0, 0, 0, 0}
    , channelSwitch(CvSwitch::ChannelCount::Sixteen)
    , displayList(this)
    , downButtonList(this)
    , upButtonList(this)
-   , resetTrigger()
 {
    setup();
 
@@ -45,18 +46,27 @@ KeyStepChannel::KeyStepChannel()
       updateDisplay(channel);
    }
 
+   drumButon.setDefaultColor(SchweineSystem::Color{0, 0, 255});
+   drumButon.setActive(useDrumChannel);
+
    connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
    connectToMidiDevice();
 }
 
-void KeyStepChannel::process(const ProcessArgs& args)
+void AturiaStep::process(const ProcessArgs& args)
 {
+   SchweineSystem::BusMidi busMessage = receiveFromLeft();
+   sendToRight(busMessage);
+
    if (connectionButton.isTriggered())
       connectToMidiDevice();
 
-   const bool isReset = resetTrigger.process(inputs[Panel::Reset].getVoltage() > 3.0);
-   if (isReset)
-      sendClockReset();
+   if (connected())
+      processBusMessage(busMessage);
+
+   if (drumButon.isTriggered())
+      useDrumChannel ^= true;
+   drumButon.setActive(useDrumChannel);
 
    for (uint8_t channel = 0; channel < 4; channel++)
    {
@@ -64,20 +74,11 @@ void KeyStepChannel::process(const ProcessArgs& args)
 
       if (!inputList[channel]->isConnected())
       {
+         Variable::Integer<uint8_t> var(newPattern, 0, 15, true);
          if (downButtonList[channel]->isTriggered())
-         {
-            if (0 == newPattern)
-               newPattern = 15;
-            else
-               newPattern--;
-         }
+            var.increment();
          else if (upButtonList[channel]->isTriggered())
-         {
-            if (15 == newPattern)
-               newPattern = 0;
-            else
-               newPattern++;
-         }
+            var.decrement();
       }
       else
       {
@@ -96,7 +97,7 @@ void KeyStepChannel::process(const ProcessArgs& args)
    }
 }
 
-void KeyStepChannel::connectToMidiDevice()
+void AturiaStep::connectToMidiDevice()
 {
    if (connected())
    {
@@ -117,10 +118,10 @@ void KeyStepChannel::connectToMidiDevice()
    }
 }
 
-void KeyStepChannel::sendProgramChange(uint8_t channel)
+void AturiaStep::sendProgramChange(uint8_t channel)
 {
    Midi::Channel midiChannel = Midi::Device::KeyStep1 + channel;
-   if (0 == channel && midiChannelSwitch.isOn())
+   if (0 == channel && useDrumChannel)
       midiChannel = Midi::Device::DrumTrigger;
 
    std::cout << (uint16_t)midiChannel << std::endl;
@@ -131,22 +132,16 @@ void KeyStepChannel::sendProgramChange(uint8_t channel)
    sendMessage(progChangeMessage);
 }
 
-void KeyStepChannel::sendClockReset()
-{
-   std::vector<unsigned char> startMessage(1);
-   startMessage[0] = Midi::Event::Start;
-   sendMessage(startMessage);
-}
-
-void KeyStepChannel::updateDisplay(uint8_t channel)
+void AturiaStep::updateDisplay(uint8_t channel)
 {
    std::string text = std::to_string(patterns[channel] + 1);
    if (1 == text.size())
       text = "0" + text;
+
    displayList[channel]->setText(text);
 }
 
-void KeyStepChannel::load(const SchweineSystem::Json::Object& rootObject)
+void AturiaStep::load(const SchweineSystem::Json::Object& rootObject)
 {
    SchweineSystem::Json::Array patternArray = rootObject.get("patterns").toArray();
    for (uint8_t channel = 0; channel < 4; channel++)
@@ -157,26 +152,25 @@ void KeyStepChannel::load(const SchweineSystem::Json::Object& rootObject)
       updateDisplay(channel);
    }
 
-   const bool channel1Mode = rootObject.get("channel1Mode").toBool();
-   midiChannelSwitch.setState(channel1Mode);
+   useDrumChannel = rootObject.get("channel1Mode").toBool();
 }
 
-void KeyStepChannel::save(SchweineSystem::Json::Object& rootObject)
+void AturiaStep::save(SchweineSystem::Json::Object& rootObject)
 {
    SchweineSystem::Json::Array patternArray;
    for (uint8_t channel = 0; channel < 4; channel++)
       patternArray.append(patterns[channel]);
 
    rootObject.set("patterns", patternArray);
-   rootObject.set("channel1Mode", midiChannelSwitch.isOn());
+   rootObject.set("channel1Mode", useDrumChannel);
 }
 
 // widget
 
-KeyStepChannelWidget::KeyStepChannelWidget(KeyStepChannel* module)
-   : SchweineSystem::ModuleWidget(module)
+AturiaStepWidget::AturiaStepWidget(AturiaStep* module)
+: SchweineSystem::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelKeyStepChannel = SchweineSystem::Master::the()->addModule<KeyStepChannel, KeyStepChannelWidget>("KeyStepChannel");
+Model* modelAturiaStep = SchweineSystem::Master::the()->addModule<AturiaStep, AturiaStepWidget>("AturiaStep");

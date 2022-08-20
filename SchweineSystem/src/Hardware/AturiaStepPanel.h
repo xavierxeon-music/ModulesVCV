@@ -1,15 +1,14 @@
-#ifndef KeyStepChannelPanelH
-#define KeyStepChannelPanelH
+#ifndef AturiaStepPanelH
+#define AturiaStepPanelH
 
-#include "KeyStepChannel.h"
+#include "AturiaStep.h"
 
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemButton.h>
 #include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemButtonLED.h>
-#include <SchweineSystemSwitch.h>
 
-struct KeyStepChannel::Panel
+struct AturiaStep::Panel
 {
    enum ParamId
    {
@@ -23,9 +22,9 @@ struct KeyStepChannel::Panel
       Channel1_Up = 6,
       Channel1_Down = 7,
       // switches
-      Channel1_Drums = 8,
       // ledbuttons
-      Connect = 9,
+      Connect = 8,
+      Drums = 9,
       // knobs
       PARAMS_LEN = 10
    };
@@ -48,12 +47,11 @@ struct KeyStepChannel::Panel
 
    enum InputId
    {
-      Reset = 0,
-      Channel4_Select = 1,
-      Channel3_Select = 2,
-      Channel2_Select = 3,
-      Channel1_Select = 4,
-      INPUTS_LEN = 5
+      Channel4_Select = 0,
+      Channel3_Select = 1,
+      Channel2_Select = 2,
+      Channel1_Select = 3,
+      INPUTS_LEN = 4
    };
 
    enum OutputId
@@ -66,14 +64,15 @@ struct KeyStepChannel::Panel
       // leds
       // ledbuttons
       RGB_Connect = 0,
+      RGB_Drums = 3,
       // lcds
-      RGB_Channel4_Pattern = 3,
-      RGB_Channel3_Pattern = 6,
-      RGB_Channel2_Pattern = 9,
-      RGB_Channel1_Pattern = 12,
-      LIGHTS_LEN = 15
+      RGB_Channel4_Pattern = 6,
+      RGB_Channel3_Pattern = 9,
+      RGB_Channel2_Pattern = 12,
+      RGB_Channel1_Pattern = 15,
+      LIGHTS_LEN = 18
    };
 
 };
 
-#endif // NOT KeyStepChannelPanelH
+#endif // NOT AturiaStepPanelH

@@ -29,6 +29,14 @@
          "tags": []
       },
       {
+         "slug": "BarCounter",
+         "name": "Bar Counter",
+         "description": "Count the number of bars and the current tempo",
+         "tags": [
+            "Utility"
+         ]
+      },
+      {
          "slug": "TimeLord",
          "name": "Time Lord",
          "description": "poly ramps in time and space",
@@ -107,32 +115,6 @@
          ]
       },
       {
-         "slug": "KeyStepChannel",
-         "name": "Key Step Channel",
-         "description": "Change the Key Step (Pro) channel",
-         "tags": [
-            "Midi",
-            "External"
-         ]
-      },
-      {
-         "slug": "BarCounter",
-         "name": "Bar Counter",
-         "description": "Count the number of bars and the current tempo",
-         "tags": [
-            "Utility"
-         ]
-      },
-      {
-         "slug": "DoepferQuadCV",
-         "name": "Doepfer Quad CV Sender",
-         "description": "Send cv via a Doepfer A-190-5 interface (as a 12 channel cv source)",
-         "tags": [
-            "Midi",
-            "External"
-         ]
-      },
-      {
          "slug": "Revoicer",
          "name": "Revoicer",
          "description": "",
@@ -167,16 +149,24 @@
          ]
       },
       {
-         "slug": "DoepferQuadMidi",
-         "name": "DoepferQuadMidi",
+         "slug": "DoepferQuad",
+         "name": "DoepferQuad",
          "description": "",
-         "tags": []
+         "tags": [
+            "Midi",
+            "Expander",
+            "External"
+         ]
       },
       {
-         "slug": "KeyStepMidi",
-         "name": "KeyStepMidi",
+         "slug": "AturiaStep",
+         "name": "AturiaStep",
          "description": "",
-         "tags": []
+         "tags": [
+            "Midi",
+            "Expander",
+            "External"
+         ]
       },
       {
          "slug": "MeshStack",

@@ -1,5 +1,5 @@
-#ifndef KeyStepChannelH
-#define KeyStepChannelH
+#ifndef AturiaStepH
+#define AturiaStepH
 
 #include <rack.hpp>
 using namespace rack;
@@ -8,21 +8,20 @@ using namespace rack;
 
 #include <SchweineSystemButton.h>
 #include <SchweineSystemButtonLED.h>
-#include <SchweineSystemCommon.h>
 #include <SchweineSystemDisplayLCD.h>
-#include <SchweineSystemLED.h>
-#include <SchweineSystemMidiOutput.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 #include <SchweineSystemSwitch.h>
 
-class KeyStepChannel : public SchweineSystem::Module, private SchweineSystem::MidiOutput
+#include "MidiBusModule.h"
+
+class AturiaStep : public SchweineSystem::Module, public MidiBusModule
 {
 public:
    struct Panel;
 
 public:
-   KeyStepChannel();
+   AturiaStep();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -31,7 +30,6 @@ private:
    void setup();
    void connectToMidiDevice();
    void sendProgramChange(uint8_t channel);
-   void sendClockReset();
    void updateDisplay(uint8_t channel);
 
    void load(const SchweineSystem::Json::Object& rootObject) override;
@@ -39,8 +37,9 @@ private:
 
 private:
    // midi
+   bool useDrumChannel;
+   SchweineSystem::ButtonLED drumButon;
    SchweineSystem::ButtonLED connectionButton;
-   SchweineSystem::Switch midiChannelSwitch;
    // patterns
    SchweineSystem::Input::List inputList;
    uint8_t patterns[4];
@@ -49,17 +48,17 @@ private:
    SchweineSystem::DisplayLCD::Controller::List displayList;
    SchweineSystem::Button::List downButtonList;
    SchweineSystem::Button::List upButtonList;
-   // manual reset
-   dsp::BooleanTrigger resetTrigger;
 };
 
-class KeyStepChannelWidget : public SchweineSystem::ModuleWidget
+// widget
+
+class AturiaStepWidget : public SchweineSystem::ModuleWidget
 {
 public:
-   KeyStepChannelWidget(KeyStepChannel* module);
+   AturiaStepWidget(AturiaStep* module);
 
 private:
    void setup();
 };
 
-#endif // NOT KeyStepChannelH
+#endif // NOT AturiaStepH
