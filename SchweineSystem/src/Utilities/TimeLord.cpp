@@ -529,23 +529,22 @@ void TimeLord::uploadToRemote(const BusTimeLord& busMessage)
 {
    using namespace SchweineSystem::Json;
 
-   Array valueArray;
-   Array steadyArray;
+   Array stageArray;
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       float voltage = inputList[rampIndex]->getVoltage();
       if (0 > voltage)
          voltage = 0.0;
 
-      const uint8_t value = voltageToValue(voltage);
-      valueArray.append(value);
+      Object stageObject;
+      stageObject.set("value", voltageToValue(voltage));
+      stageObject.set("steady", busMessage.steady[rampIndex]);
 
-      steadyArray.append(busMessage.steady[rampIndex]);
+      stageArray.append(stageObject);
    }
 
    Object uploadObject;
-   uploadObject.set("values", valueArray);
-   uploadObject.set("steady", steadyArray);
+   uploadObject.set("stages", stageArray);
    uploadObject.set("bankIndex", bankIndex);
 
    Queue queue;
@@ -576,15 +575,16 @@ void TimeLord::setFromRemote(const SchweineSystem::Json::Object& rootObject)
 {
    using namespace SchweineSystem::Json;
 
-   Array valueArray = rootObject.get("values").toArray();
-   const uint8_t valueCount = valueArray.size();
+   Array stageArray = rootObject.get("stages").toArray();
+   const uint8_t valueCount = stageArray.size();
    if (8 != valueCount)
       return;
 
    for (uint8_t index = 0; index < valueCount; index++)
    {
-      const uint8_t value = valueArray.get(index).toInt();
-      remoteValues[index] = value;
+      const Object stageObject = stageArray.get(index).toObject();
+
+      remoteValues[index] = stageObject.get("value").toInt();
    }
 }
 
