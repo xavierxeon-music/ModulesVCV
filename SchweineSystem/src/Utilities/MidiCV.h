@@ -8,9 +8,9 @@ using namespace rack;
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
-#include <SchweineSystemExpanderMessages.h>
+#include "MidiReplay.h"
 
-class MidiCV : public SchweineSystem::Module, public SchweineSystem::Exapnder<SchweineSystem::BusMidi>
+class MidiCV : public SchweineSystem::Module, public SchweineSystem::Exapnder<BusMidi>
 {
 public:
    struct Panel;

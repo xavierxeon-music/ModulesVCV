@@ -7,7 +7,7 @@
 
 MidiCV::MidiCV()
    : SchweineSystem::Module()
-   , SchweineSystem::Exapnder<SchweineSystem::BusMidi>(this)
+   , SchweineSystem::Exapnder<BusMidi>(this)
 {
    setup();
    allowExpanderOnLeft();
@@ -16,7 +16,7 @@ MidiCV::MidiCV()
 
 void MidiCV::process(const ProcessArgs& args)
 {
-   SchweineSystem::BusMidi busMessage = receiveFromLeft();
+   BusMidi busMessage = receiveFromLeft();
    sendToRight(busMessage);
 
    const bool isRunning = (Tempo::Running == busMessage.runState) || (Tempo::FirstTick == busMessage.runState);
@@ -52,7 +52,7 @@ void MidiCV::process(const ProcessArgs& args)
       Sequencer::Track::NoteEvent lastEvent;
       bool foundEvent = false;
 
-      const SchweineSystem::BusMidi::Channel& busChannel = busMessage.channels[index];
+      const BusMidi::Channel& busChannel = busMessage.channels[index];
       using ConstIterator = Sequencer::Track::NoteEvent::TimeMap::const_iterator;
 
       ConstIterator itOff = busChannel.noteOffEventMap.find(busMessage.endTick);

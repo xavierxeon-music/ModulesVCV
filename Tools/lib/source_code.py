@@ -220,6 +220,7 @@ class Sources(Common):
             line(0, '{')
             line(1, 'setup();')
             line(0, '}')
+            line(0)
 
             line(0, f'void {self.moduleName}::process(const ProcessArgs& args)')
             line(0, '{')

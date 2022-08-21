@@ -12,7 +12,7 @@
 
 MidiReplay::MidiReplay()
    : SchweineSystem::Module()
-   , SchweineSystem::Exapnder<SchweineSystem::BusMidi>(this)
+   , SchweineSystem::Exapnder<BusMidi>(this)
    , fileName()
    , midiReplay()
    , info{}
@@ -101,7 +101,7 @@ void MidiReplay::process(const ProcessArgs& args)
       tempo.advance(args.sampleRate);
    }
 
-   SchweineSystem::BusMidi busMessage;
+   BusMidi busMessage;
    busMessage.runState = tempo.getRunState();
    if (!tempo.isRunningOrFirstTick())
    {
@@ -124,7 +124,7 @@ void MidiReplay::process(const ProcessArgs& args)
    {
       for (uint8_t index = 0; index < noOfChannels; index++)
       {
-         SchweineSystem::BusMidi::Channel& busChannel = busMessage.channels[index];
+         BusMidi::Channel& busChannel = busMessage.channels[index];
          const Sequencer::Track& track = midiReplay.getTrackList().at(index);
          busChannel.isMonophoic = track.isMonophonic;
 

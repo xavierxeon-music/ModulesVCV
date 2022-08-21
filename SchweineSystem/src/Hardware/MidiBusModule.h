@@ -8,15 +8,15 @@ using namespace rack;
 #include <SchweineSystemMidiOutput.h>
 #include <SchweineSystemModule.h>
 
-#include <SchweineSystemExpanderMessages.h>
+#include "../Utilities/MidiReplay.h"
 
-class MidiBusModule : protected SchweineSystem::MidiOutput, public SchweineSystem::Exapnder<SchweineSystem::BusMidi>
+class MidiBusModule : protected SchweineSystem::MidiOutput, public SchweineSystem::Exapnder<BusMidi>
 {
 public:
    MidiBusModule(const Midi::Device::Channel& deviceChannel, SchweineSystem::Module* module);
 
 protected:
-   void processBusMessage(const SchweineSystem::BusMidi& busMessage);
+   void processBusMessage(const BusMidi& busMessage);
 
 private:
    struct NoteBuffer

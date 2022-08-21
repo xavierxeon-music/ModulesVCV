@@ -12,15 +12,6 @@ void TimeLord::setup()
    configButton(Panel::Display, "Display");
    configButton(Panel::BankUp, "BankUp");
 
-   configSwitch(Panel::Channel8_Silence, 0.0f, 1.0f, 0.0f, "Channel8_Silence");
-   configSwitch(Panel::Channel7_Silence, 0.0f, 1.0f, 0.0f, "Channel7_Silence");
-   configSwitch(Panel::Channel6_Silence, 0.0f, 1.0f, 0.0f, "Channel6_Silence");
-   configSwitch(Panel::Channel5_Silence, 0.0f, 1.0f, 0.0f, "Channel5_Silence");
-   configSwitch(Panel::Channel4_Silence, 0.0f, 1.0f, 0.0f, "Channel4_Silence");
-   configSwitch(Panel::Channel3_Silence, 0.0f, 1.0f, 0.0f, "Channel3_Silence");
-   configSwitch(Panel::Channel2_Silence, 0.0f, 1.0f, 0.0f, "Channel2_Silence");
-   configSwitch(Panel::Channel1_Silence, 0.0f, 1.0f, 0.0f, "Channel1_Silence");
-
    configInput(Panel::Upload, "Upload");
    configInput(Panel::ModeCV, "ModeCV");
    configInput(Panel::Reset, "Reset");
@@ -71,31 +62,22 @@ void TimeLordWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeButton(this, Vec(122.58, 330.46), TimeLord::Panel::ModeManual);
-   makeButton(this, Vec(171.34, 232.56), TimeLord::Panel::Display);
-   makeButton(this, Vec(150.54, 71.42), TimeLord::Panel::BankUp);
+   makeButton(this, Vec(124.58, 326.46), TimeLord::Panel::ModeManual);
+   makeButton(this, Vec(162.42, 274.56), TimeLord::Panel::Display);
+   makeButton(this, Vec(148.00, 87.52), TimeLord::Panel::BankUp);
 
-   makeSwitch(this, Vec(107.59, 289.03), TimeLord::Panel::Channel8_Silence);
-   makeSwitch(this, Vec(107.59, 251.03), TimeLord::Panel::Channel7_Silence);
-   makeSwitch(this, Vec(107.59, 213.03), TimeLord::Panel::Channel6_Silence);
-   makeSwitch(this, Vec(107.59, 175.03), TimeLord::Panel::Channel5_Silence);
-   makeSwitch(this, Vec(107.59, 137.03), TimeLord::Panel::Channel4_Silence);
-   makeSwitch(this, Vec(107.59, 99.03), TimeLord::Panel::Channel3_Silence);
-   makeSwitch(this, Vec(107.59, 61.03), TimeLord::Panel::Channel2_Silence);
-   makeSwitch(this, Vec(107.59, 23.03), TimeLord::Panel::Channel1_Silence);
-
-   makeInput(this, Vec(203.59, 355.83),  TimeLord::Panel::Upload);
-   makeInput(this, Vec(121.35, 355.83),  TimeLord::Panel::ModeCV);
+   makeInput(this, Vec(209.59, 355.83),  TimeLord::Panel::Upload);
+   makeInput(this, Vec(123.35, 355.83),  TimeLord::Panel::ModeCV);
    makeInput(this, Vec(65.58, 355.83),  TimeLord::Panel::Reset);
    makeInput(this, Vec(31.38, 355.48),  TimeLord::Panel::Clock);
-   makeInput(this, Vec(32.07, 289.03),  TimeLord::Panel::Channel8_Pass);
-   makeInput(this, Vec(32.07, 251.03),  TimeLord::Panel::Channel7_Pass);
-   makeInput(this, Vec(32.07, 213.03),  TimeLord::Panel::Channel6_Pass);
-   makeInput(this, Vec(32.07, 175.03),  TimeLord::Panel::Channel5_Pass);
-   makeInput(this, Vec(32.07, 137.03),  TimeLord::Panel::Channel4_Pass);
-   makeInput(this, Vec(32.07, 99.03),  TimeLord::Panel::Channel3_Pass);
-   makeInput(this, Vec(32.07, 61.03),  TimeLord::Panel::Channel2_Pass);
-   makeInput(this, Vec(32.07, 23.03),  TimeLord::Panel::Channel1_Pass);
+   makeInput(this, Vec(34.07, 289.03),  TimeLord::Panel::Channel8_Pass);
+   makeInput(this, Vec(34.07, 251.03),  TimeLord::Panel::Channel7_Pass);
+   makeInput(this, Vec(34.07, 213.03),  TimeLord::Panel::Channel6_Pass);
+   makeInput(this, Vec(34.07, 175.03),  TimeLord::Panel::Channel5_Pass);
+   makeInput(this, Vec(34.07, 137.03),  TimeLord::Panel::Channel4_Pass);
+   makeInput(this, Vec(34.07, 99.03),  TimeLord::Panel::Channel3_Pass);
+   makeInput(this, Vec(34.07, 61.03),  TimeLord::Panel::Channel2_Pass);
+   makeInput(this, Vec(34.07, 23.03),  TimeLord::Panel::Channel1_Pass);
 
    makeOutput(this, Vec(204.37, 289.03), TimeLord::Panel::Channel8_Output);
    makeOutput(this, Vec(204.37, 251.03), TimeLord::Panel::Channel7_Output);
@@ -106,21 +88,21 @@ void TimeLordWidget::setup()
    makeOutput(this, Vec(204.37, 61.03), TimeLord::Panel::Channel2_Output);
    makeOutput(this, Vec(204.37, 23.03), TimeLord::Panel::Channel1_Output);
 
-   makeLED(this, Vec(145.23, 359.60), TimeLord::Panel::RGB_Internal_Status);
-   makeLED(this, Vec(145.23, 345.04), TimeLord::Panel::RGB_Remote_Status);
-   makeLED(this, Vec(145.23, 330.48), TimeLord::Panel::RGB_Input_Status);
+   makeLED(this, Vec(147.23, 359.60), TimeLord::Panel::RGB_Internal_Status);
+   makeLED(this, Vec(147.23, 345.04), TimeLord::Panel::RGB_Remote_Status);
+   makeLED(this, Vec(147.23, 330.48), TimeLord::Panel::RGB_Input_Status);
 
-   makeLCD(this, Vec(162.00, 59.42), 1, TimeLord::Panel::Text_Bank, TimeLord::Panel::RGB_Bank);
-   makeLCD(this, Vec(48.48, 277.03), 3, TimeLord::Panel::Text_Channel8_Value, TimeLord::Panel::RGB_Channel8_Value);
-   makeLCD(this, Vec(48.48, 239.03), 3, TimeLord::Panel::Text_Channel7_Value, TimeLord::Panel::RGB_Channel7_Value);
-   makeLCD(this, Vec(48.48, 201.03), 3, TimeLord::Panel::Text_Channel6_Value, TimeLord::Panel::RGB_Channel6_Value);
-   makeLCD(this, Vec(48.48, 163.03), 3, TimeLord::Panel::Text_Channel5_Value, TimeLord::Panel::RGB_Channel5_Value);
-   makeLCD(this, Vec(48.48, 125.03), 3, TimeLord::Panel::Text_Channel4_Value, TimeLord::Panel::RGB_Channel4_Value);
-   makeLCD(this, Vec(48.48, 87.03), 3, TimeLord::Panel::Text_Channel3_Value, TimeLord::Panel::RGB_Channel3_Value);
-   makeLCD(this, Vec(48.48, 49.03), 3, TimeLord::Panel::Text_Channel2_Value, TimeLord::Panel::RGB_Channel2_Value);
-   makeLCD(this, Vec(48.48, 11.03), 3, TimeLord::Panel::Text_Channel1_Value, TimeLord::Panel::RGB_Channel1_Value);
+   makeLCD(this, Vec(138.00, 98.63), 1, TimeLord::Panel::Text_Bank, TimeLord::Panel::RGB_Bank);
+   makeLCD(this, Vec(50.48, 277.03), 3, TimeLord::Panel::Text_Channel8_Value, TimeLord::Panel::RGB_Channel8_Value);
+   makeLCD(this, Vec(50.48, 239.03), 3, TimeLord::Panel::Text_Channel7_Value, TimeLord::Panel::RGB_Channel7_Value);
+   makeLCD(this, Vec(50.48, 201.03), 3, TimeLord::Panel::Text_Channel6_Value, TimeLord::Panel::RGB_Channel6_Value);
+   makeLCD(this, Vec(50.48, 163.03), 3, TimeLord::Panel::Text_Channel5_Value, TimeLord::Panel::RGB_Channel5_Value);
+   makeLCD(this, Vec(50.48, 125.03), 3, TimeLord::Panel::Text_Channel4_Value, TimeLord::Panel::RGB_Channel4_Value);
+   makeLCD(this, Vec(50.48, 87.03), 3, TimeLord::Panel::Text_Channel3_Value, TimeLord::Panel::RGB_Channel3_Value);
+   makeLCD(this, Vec(50.48, 49.03), 3, TimeLord::Panel::Text_Channel2_Value, TimeLord::Panel::RGB_Channel2_Value);
+   makeLCD(this, Vec(50.48, 11.03), 3, TimeLord::Panel::Text_Channel1_Value, TimeLord::Panel::RGB_Channel1_Value);
 
-   makeOLED(this, Vec(120.00, 95.59), TimeLord::Panel::Pixels_Display, 60, 120);
+   makeOLED(this, Vec(117.00, 137.59), TimeLord::Panel::Pixels_Display, 60, 120);
 
    makeMeter(this, Vec(220.31, 276.03), 5, TimeLord::Panel::Value_Channel8_Strip);
    makeMeter(this, Vec(220.31, 238.03), 5, TimeLord::Panel::Value_Channel7_Strip);

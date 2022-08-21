@@ -4,6 +4,8 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <Blocks/Sequencer.h>
+#include <Midi/MidiCommon.h>
 #include <Midi/MidiFile.h>
 #include <Music/Tempo.h>
 #include <Music/TimeCode.h>
@@ -15,9 +17,25 @@ using namespace rack;
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
 
-#include <SchweineSystemExpanderMessages.h>
+struct BusMidi
+{
+   struct Channel
+   {
+      Sequencer::Track::NoteEvent::TimeMap noteOffEventMap;
+      Sequencer::Track::NoteEvent::TimeMap noteOnEventMap;
+      bool isMonophoic = false;
+   };
 
-class MidiReplay : public SchweineSystem::Module, public SchweineSystem::Exapnder<SchweineSystem::BusMidi>
+   Sequencer::Tick startTick = 0;
+   Sequencer::Tick endTick = 0;
+   Tempo::RunState runState = Tempo::Reset;
+   bool hasEvents = false;
+
+   uint8_t noOfChannels = 0;
+   Channel channels[16];
+};
+
+class MidiReplay : public SchweineSystem::Module, public SchweineSystem::Exapnder<BusMidi>
 {
 public:
    struct Panel;

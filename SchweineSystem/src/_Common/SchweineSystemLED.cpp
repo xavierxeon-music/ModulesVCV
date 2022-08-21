@@ -7,7 +7,7 @@ SchweineSystem::LED::LED(Module* module, const uint16_t& rgbIndex)
    , redIndex(rgbIndex + 0)
    , greenIndex(rgbIndex + 1)
    , blueIndex(rgbIndex + 2)
-   , defaultColor{255, 255, 255}
+   , defaultColor(SchweineSystem::Color{255, 255, 255})
 {
 }
 

@@ -12,14 +12,20 @@ using namespace rack;
 #include <SchweineSystemCommon.h>
 #include <SchweineSystemDisplayLCD.h>
 #include <SchweineSystemDisplayOLED.h>
+#include <SchweineSystemExapnder.h>
 #include <SchweineSystemJson.h>
 #include <SchweineSystemLED.h>
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemModule.h>
 #include <SchweineSystemModuleWidget.h>
-#include <SchweineSystemSwitch.h>
 
-class TimeLord : public SchweineSystem::Module
+struct BusTimeLord
+{
+   bool steady[8] = {false, false, false, false, false, false, false, false};
+   bool silence[8] = {true, true, true, true, true, true, true, true};
+};
+
+class TimeLord : public SchweineSystem::Module, public SchweineSystem::Exapnder<BusTimeLord>
 {
 public:
    struct Panel;
@@ -60,14 +66,14 @@ private:
 private:
    void setup();
 
-   void setOutputs(bool isReset, bool isClock);
+   void setOutputs(bool isReset, bool isClock, const BusTimeLord& busMessage);
    void setOperationLEDs();
    void dataFromMidiInput(const Bytes& message) override;
 
    void load(const SchweineSystem::Json::Object& rootObject) override;
    void save(SchweineSystem::Json::Object& rootObject) override;
 
-   void uploadToRemote();
+   void uploadToRemote(const BusTimeLord& busMessage);
    void setFromRemote(const SchweineSystem::Json::Object& rootObject);
 
 private:
@@ -117,8 +123,6 @@ private:
    SchweineSystem::LED modeRemoteLight;
    SchweineSystem::LED modeInternalLight;
 
-   // silence
-   SchweineSystem::Switch::List silenceSwitches;
 };
 
 class TimeLordWidget : public SchweineSystem::ModuleWidget

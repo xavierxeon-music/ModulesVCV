@@ -9,7 +9,6 @@
 #include <SchweineSystemLED.h>
 #include <SchweineSystemLightMeter.h>
 #include <SchweineSystemDisplayOLED.h>
-#include <SchweineSystemSwitch.h>
 
 struct TimeLord::Panel
 {
@@ -20,17 +19,9 @@ struct TimeLord::Panel
       Display = 1,
       BankUp = 2,
       // switches
-      Channel8_Silence = 3,
-      Channel7_Silence = 4,
-      Channel6_Silence = 5,
-      Channel5_Silence = 6,
-      Channel4_Silence = 7,
-      Channel3_Silence = 8,
-      Channel2_Silence = 9,
-      Channel1_Silence = 10,
       // ledbuttons
       // knobs
-      PARAMS_LEN = 11
+      PARAMS_LEN = 3
    };
 
    enum DisplayId

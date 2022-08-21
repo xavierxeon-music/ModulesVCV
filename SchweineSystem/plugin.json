@@ -37,6 +37,15 @@
          ]
       },
       {
+         "slug": "TimeLordCompanion",
+         "name": "TimeLordCompanion",
+         "description": "Help the Time Lord",
+         "tags": [
+            "Utility",
+            "Expander"
+         ]
+      },
+      {
          "slug": "TimeLord",
          "name": "Time Lord",
          "description": "poly ramps in time and space",

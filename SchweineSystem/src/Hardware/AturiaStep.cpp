@@ -55,7 +55,7 @@ AturiaStep::AturiaStep()
 
 void AturiaStep::process(const ProcessArgs& args)
 {
-   SchweineSystem::BusMidi busMessage = receiveFromLeft();
+   BusMidi busMessage = receiveFromLeft();
    sendToRight(busMessage);
 
    if (connectionButton.isTriggered())

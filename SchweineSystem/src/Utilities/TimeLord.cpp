@@ -17,6 +17,7 @@ const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 TimeLord::TimeLord()
    : SchweineSystem::Module()
+   , SchweineSystem::Exapnder<BusTimeLord>(this)
    , fileName()
    , ramps{}
    // midi
@@ -53,11 +54,11 @@ TimeLord::TimeLord()
    , modeInputLight(this, Panel::RGB_Input_Status)
    , modeRemoteLight(this, Panel::RGB_Remote_Status)
    , modeInternalLight(this, Panel::RGB_Internal_Status)
-   // silence
-   , silenceSwitches(this)
 {
-   setup();
    Majordomo::hello(this);
+
+   setup();
+   allowExpanderOnLeft();
 
    inputList.append({Panel::Channel1_Pass,
                      Panel::Channel2_Pass,
@@ -95,21 +96,12 @@ TimeLord::TimeLord()
                           Panel::Value_Channel7_Strip,
                           Panel::Value_Channel8_Strip});
 
-   silenceSwitches.append({Panel::Channel1_Silence,
-                           Panel::Channel2_Silence,
-                           Panel::Channel3_Silence,
-                           Panel::Channel4_Silence,
-                           Panel::Channel5_Silence,
-                           Panel::Channel6_Silence,
-                           Panel::Channel7_Silence,
-                           Panel::Channel8_Silence});
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       lightMeterList[rampIndex]->setMaxValue(255);
       displayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 0});
       displayList[rampIndex]->setText("ABC");
-      silenceSwitches[rampIndex]->setState(true);
    }
 
    modeInputLight.setDefaultColor(SchweineSystem::Color{255, 255, 0});
@@ -126,6 +118,8 @@ TimeLord::~TimeLord()
 void TimeLord::process(const ProcessArgs& args)
 {
    Majordomo::process();
+
+   BusTimeLord busMessage = receiveFromLeft();
 
    // clock
    const bool isClock = clockTrigger.process(inputs[Panel::Clock].getVoltage() > 3.0);
@@ -192,7 +186,7 @@ void TimeLord::process(const ProcessArgs& args)
    }
 
    // outputs
-   setOutputs(isReset, isClock);
+   setOutputs(isReset, isClock, busMessage);
 
    // maybe upload
    if (uploadTrigger.process(inputs[Panel::Upload].getVoltage() > 3.0) || uploadData)
@@ -200,7 +194,7 @@ void TimeLord::process(const ProcessArgs& args)
       uploadData = false;
 
       if (OperationMode::Input == operationMode)
-         uploadToRemote();
+         uploadToRemote(busMessage);
    }
 }
 
@@ -313,7 +307,7 @@ void TimeLord::loadRamps(const std::string& newFileName)
    }
 }
 
-void TimeLord::setOutputs(bool isReset, bool isClock)
+void TimeLord::setOutputs(bool isReset, bool isClock, const BusTimeLord& busMessage)
 {
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
@@ -334,7 +328,7 @@ void TimeLord::setOutputs(bool isReset, bool isClock)
 
          const uint8_t value = voltageToValue(voltage);
 
-         if (silenceSwitches[rampIndex]->isOn() && !tempo.isRunningOrFirstTick())
+         if (busMessage.silence[rampIndex] && !tempo.isRunningOrFirstTick())
          {
             displayList[rampIndex]->setText("off");
             lightMeterList[rampIndex]->setValue(0);
@@ -355,7 +349,7 @@ void TimeLord::setOutputs(bool isReset, bool isClock)
          const uint8_t value = remoteValues[rampIndex];
          const float voltage = valueToVoltage(value);
 
-         if (silenceSwitches[rampIndex]->isOn() && !tempo.isRunningOrFirstTick())
+         if (busMessage.silence[rampIndex] && !tempo.isRunningOrFirstTick())
          {
             displayList[rampIndex]->setText("off");
             lightMeterList[rampIndex]->setValue(0);
@@ -518,13 +512,6 @@ void TimeLord::load(const SchweineSystem::Json::Object& rootObject)
    displayMode = static_cast<DisplayMode>(rootObject.get("display").toInt());
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
 
-   SchweineSystem::Json::Array silenceArray = rootObject.get("silence").toArray();
-   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
-   {
-      bool silence = silenceArray.get(rampIndex).toBool();
-      silenceSwitches[rampIndex]->setState(silence);
-   }
-
    const std::string newFileName = rootObject.get("fileName").toString();
    loadRamps(newFileName);
 }
@@ -535,23 +522,15 @@ void TimeLord::save(SchweineSystem::Json::Object& rootObject)
    rootObject.set("display", static_cast<uint8_t>(displayMode));
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
 
-   SchweineSystem::Json::Array silenceArray;
-
-   for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
-   {
-      bool silence = silenceSwitches[rampIndex]->isOn();
-      silenceArray.append(silence);
-   }
-
-   rootObject.set("silence", silenceArray);
    rootObject.set("fileName", fileName);
 }
 
-void TimeLord::uploadToRemote()
+void TimeLord::uploadToRemote(const BusTimeLord& busMessage)
 {
    using namespace SchweineSystem::Json;
 
    Array valueArray;
+   Array steadyArray;
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       float voltage = inputList[rampIndex]->getVoltage();
@@ -560,10 +539,13 @@ void TimeLord::uploadToRemote()
 
       const uint8_t value = voltageToValue(voltage);
       valueArray.append(value);
+
+      steadyArray.append(busMessage.steady[rampIndex]);
    }
 
    Object uploadObject;
    uploadObject.set("values", valueArray);
+   uploadObject.set("steady", steadyArray);
    uploadObject.set("bankIndex", bankIndex);
 
    Queue queue;
