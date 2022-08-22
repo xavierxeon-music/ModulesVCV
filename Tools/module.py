@@ -33,6 +33,10 @@ class Module:
                     continue
 
                 name = entry.name.replace('.svg', '')
+                master = os.path.dirname(entry.path) + '/' + name + '.afdesign'
+                if not os.path.exists(master):
+                    continue
+
                 mtime = os.path.getmtime(entry.path)
                 self._modules[name] = dict()
                 self._modules[name]['rc_path'] = entry.path

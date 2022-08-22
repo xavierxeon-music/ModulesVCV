@@ -12,6 +12,7 @@ using namespace rack;
 #include <SyMidiOutput.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
+#include <SySvgImage.h>
 
 class RemoteScript : public Sy::Module, private Sy::MidiOutput
 {
@@ -24,11 +25,12 @@ public:
 
 public:
    void process(const ProcessArgs& args) override;
-   void updateDisplays() override;
    void setScriptFileName(const std::string& newFileName);
+   bool scriptExists() const;
 
 private:
    void setup();
+   void updateDisplays() override;
    void connectToMidiDevice();
 
    void load(const Sy::Json::Object& rootObject) override;
@@ -58,6 +60,10 @@ public:
 private:
    void setup();
    void displayClicked(const float& x, const float& y);
+   void preDraw() override;
+
+private:
+   Sy::SvgImage* logoWidget;
 };
 
 #endif // NOT RemoteScriptH

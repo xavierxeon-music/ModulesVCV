@@ -3,6 +3,7 @@
 
 #include <osdialog.h>
 
+#include <Tools/File.h>
 #include <Tools/SevenBit.h>
 
 #include <SyMaster.h>
@@ -17,6 +18,7 @@ RemoteScript::RemoteScript()
    , fileName()
 {
    setup();
+   displayController.fill();
 
    connectionButton.setDefaultColor(Sy::Color{0, 255, 0});
 
@@ -41,22 +43,20 @@ void RemoteScript::process(const ProcessArgs& args)
       connectToMidiDevice();
 }
 
-void RemoteScript::updateDisplays()
-{
-   displayController.fill();
-
-   if (!fileName.empty())
-   {
-      displayController.setColor(Sy::Color{255, 255, 255});
-      displayController.writeText(1, 1, "P", Sy::DisplayOLED::Font::Huge);
-      displayController.writeText(20, 10, "Y", Sy::DisplayOLED::Font::Huge);
-   }
-}
-
 void RemoteScript::setScriptFileName(const std::string& newFileName)
 {
    fileName = newFileName;
    sendStart();
+}
+
+bool RemoteScript::scriptExists() const
+{
+   return !fileName.empty();
+}
+
+void RemoteScript::updateDisplays()
+{
+   //displayController.fill();
 }
 
 void RemoteScript::connectToMidiDevice()
@@ -89,11 +89,17 @@ void RemoteScript::save(Sy::Json::Object& rootObject)
 
 void RemoteScript::sendStart()
 {
+   if (!File::exists(fileName))
+   {
+      fileName = std::string();
+      return;
+   }
+
    using namespace Sy::Json;
 
    Object startObject;
-   startObject.set("action", Value(std::string("launch")));
-   startObject.set("fileName", Value(fileName));
+   startObject.set("action", std::string("launch"));
+   startObject.set("fileName", fileName);
 
    sendToRemote(startObject);
 }
@@ -103,7 +109,7 @@ void RemoteScript::sendKill()
    using namespace Sy::Json;
 
    Object killObject;
-   killObject.set("action", Value(std::string("kill")));
+   killObject.set("action", std::string("kill"));
 
    sendToRemote(killObject);
 }
@@ -135,6 +141,14 @@ RemoteScriptWidget::RemoteScriptWidget(RemoteScript* module)
    OLEDWidget* oled = OLEDWidget::find(module, RemoteScript::Panel::Pixels_Display);
    if (oled)
       oled->onClicked(this, &RemoteScriptWidget::displayClicked);
+
+   std::string logoPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/Python.svg");
+
+   const float offset = 5.0;
+   logoWidget = new Sy::SvgImage(rack::math::Vec(9.00 + offset, 62.34 + offset), module, logoPath, 0.3);
+   addChild(logoWidget);
+
+   //logoWidget->visible = false;
 }
 
 void RemoteScriptWidget::displayClicked(const float& x, const float& y)
@@ -149,6 +163,15 @@ void RemoteScriptWidget::displayClicked(const float& x, const float& y)
    const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Python:py"));
    if (path)
       myModule->setScriptFileName(std::string(path));
+}
+
+void RemoteScriptWidget::preDraw()
+{
+   RemoteScript* myModule = dynamic_cast<RemoteScript*>(getSchweineModule());
+   if (!myModule)
+      return;
+
+   logoWidget->visible = myModule->scriptExists();
 }
 
 Model* modelRemoteScript = Sy::Master::the()->addModule<RemoteScript, RemoteScriptWidget>("RemoteScript");
