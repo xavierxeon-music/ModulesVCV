@@ -889,7 +889,7 @@ uint16_t Sy::DisplayOLED::PixelThing::compileIndex(const uint8_t x, const uint8_
    return x + (width * y);
 }
 
-// comntroller
+// controller
 
 Sy::DisplayOLED::Controller::ControllerMap Sy::DisplayOLED::Controller::controllerMap = Sy::DisplayOLED::Controller::ControllerMap();
 

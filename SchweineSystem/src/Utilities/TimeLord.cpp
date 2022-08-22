@@ -11,8 +11,6 @@
 #include <SyJson.h>
 #include <SyMaster.h>
 
-// widget addChild -> visible
-
 const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 TimeLord::TimeLord()
@@ -600,6 +598,13 @@ TimeLordWidget::TimeLordWidget(TimeLord* module)
    OLEDWidget* oled = OLEDWidget::find(module, TimeLord::Panel::Pixels_Display);
    if (oled)
       oled->onClicked(this, &TimeLordWidget::displayClicked);
+
+   std::string logoPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/TimeLordLogo.svg");
+
+   Sy::SvgImage* logoWidget = new Sy::SvgImage(rack::math::Vec(0, 342.5), module, logoPath, 0.4);
+   const int8_t xShift = 0.5 * logoWidget->box.size.x;
+   logoWidget->shift(math::Vec(-xShift, 0.0));
+   addChild(logoWidget);
 }
 
 void TimeLordWidget::displayClicked(const float& x, const float& y)

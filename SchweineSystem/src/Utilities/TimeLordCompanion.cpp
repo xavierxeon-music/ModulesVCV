@@ -113,6 +113,13 @@ TimeLordCompanionWidget::TimeLordCompanionWidget(TimeLordCompanion* module)
 : Sy::ModuleWidget(module)
 {
    setup();
+
+   std::string logoPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/TimeLordLogo.svg");
+
+   Sy::SvgImage* logoWidget = new Sy::SvgImage(rack::math::Vec(0, 342.5), module, logoPath, 0.4);
+   const int16_t x = box.size.x - 0.5 * logoWidget->box.size.x;
+   logoWidget->box.pos.x = x;
+   addChild(logoWidget);
 }
 
 Model* modelTimeLordCompanion = Sy::Master::the()->addModule<TimeLordCompanion, TimeLordCompanionWidget>("TimeLordCompanion");

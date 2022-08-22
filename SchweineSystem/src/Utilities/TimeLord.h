@@ -18,6 +18,7 @@ using namespace rack;
 #include <SyLightMeter.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
+#include <SySvgImage.h>
 
 struct BusTimeLord
 {

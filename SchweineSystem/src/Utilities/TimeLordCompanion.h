@@ -8,6 +8,7 @@ using namespace rack;
 #include <SyExapnder.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
+#include <SySvgImage.h>
 #include <SySwitch.h>
 
 #include "TimeLord.h"
