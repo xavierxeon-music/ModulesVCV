@@ -5,14 +5,14 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemExapnder.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyCommon.h>
+#include <SyExapnder.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
-#include <SchweineSystemLED.h>
+#include <SyLED.h>
 
-class BitBusBitIn : public SchweineSystem::Module, public SchweineSystem::Exapnder<BitBusMessage>
+class BitBusBitIn : public Sy::Module, public Sy::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -28,13 +28,13 @@ private:
    void setup();
 
 private:
-   SchweineSystem::Input::List inputList;
+   Sy::Input::List inputList;
 
-   SchweineSystem::LED busInIndicator;
-   SchweineSystem::LED busOutIndicator;
+   Sy::LED busInIndicator;
+   Sy::LED busOutIndicator;
 };
 
-class BitBusBitInWidget : public SchweineSystem::ModuleWidget
+class BitBusBitInWidget : public Sy::ModuleWidget
 {
 public:
    BitBusBitInWidget(BitBusBitIn* module);

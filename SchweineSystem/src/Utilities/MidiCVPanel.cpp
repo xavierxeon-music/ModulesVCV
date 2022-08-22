@@ -1,7 +1,7 @@
 #include "MidiCV.h"
 #include "MidiCVPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void MidiCV::setup()
 {
@@ -14,7 +14,7 @@ void MidiCV::setup()
 
 void MidiCVWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Utilities/MidiCV.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/MidiCV.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

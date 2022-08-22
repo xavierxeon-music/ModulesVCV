@@ -3,7 +3,7 @@
 
 #include "MidiCV.h"
 
-#include <SchweineSystemCommon.h>
+#include <SyCommon.h>
 
 struct MidiCV::Panel
 {

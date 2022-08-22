@@ -1,19 +1,19 @@
 #ifndef RemoteScriptH
 #define RemoteScriptH
 
-#include "SchweineSystemJson.h"
+#include "SyJson.h"
 #include <rack.hpp>
 using namespace rack;
 
-#include <SchweineSystemButton.h>
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemDisplayOLED.h>
-#include <SchweineSystemJson.h>
-#include <SchweineSystemMidiOutput.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyButton.h>
+#include <SyButtonLED.h>
+#include <SyDisplayOLED.h>
+#include <SyJson.h>
+#include <SyMidiOutput.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
-class RemoteScript : public SchweineSystem::Module, private SchweineSystem::MidiOutput
+class RemoteScript : public Sy::Module, private Sy::MidiOutput
 {
 public:
    struct Panel;
@@ -31,18 +31,18 @@ private:
    void setup();
    void connectToMidiDevice();
 
-   void load(const SchweineSystem::Json::Object& rootObject) override;
-   void save(SchweineSystem::Json::Object& rootObject) override;
+   void load(const Sy::Json::Object& rootObject) override;
+   void save(Sy::Json::Object& rootObject) override;
 
    void sendStart();
    void sendKill();
-   void sendToRemote(const SchweineSystem::Json::Object& object);
+   void sendToRemote(const Sy::Json::Object& object);
 
 private:
-   SchweineSystem::DisplayOLED::Controller displayController;
-   SchweineSystem::Button restartButton;
-   SchweineSystem::Button killButton;
-   SchweineSystem::ButtonLED connectionButton;
+   Sy::DisplayOLED::Controller displayController;
+   Sy::Button restartButton;
+   Sy::Button killButton;
+   Sy::ButtonLED connectionButton;
 
    // file
    std::string fileName;
@@ -50,7 +50,7 @@ private:
 
 // widget
 
-class RemoteScriptWidget : public SchweineSystem::ModuleWidget
+class RemoteScriptWidget : public Sy::ModuleWidget
 {
 public:
    RemoteScriptWidget(RemoteScript* module);

@@ -1,7 +1,7 @@
 #include "RemoteScript.h"
 #include "RemoteScriptPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void RemoteScript::setup()
 {
@@ -17,7 +17,7 @@ void RemoteScript::setup()
 
 void RemoteScriptWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Utilities/RemoteScript.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/RemoteScript.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

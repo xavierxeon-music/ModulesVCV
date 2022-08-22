@@ -1,14 +1,14 @@
-#ifndef SchweineSystemHPP
-#define SchweineSystemHPP
+#ifndef SyHPP
+#define SyHPP
 
-#include "SchweineSystemMaster.h"
+#include "SyMaster.h"
 
 template <typename AudioClass, typename WidgetClass>
-Model* SchweineSystem::addModule(const std::string& name)
+Model* Sy::addModule(const std::string& name)
 {
    Model* model = createModel<AudioClass, WidgetClass>(name);
    modelList.push_back(model);
    return model;
 }
 
-#endif // NOT SchweineSystemHPP
+#endif // NOT SyHPP

@@ -4,12 +4,12 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemLED.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyCommon.h>
+#include <SyLED.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
-class GateLatch : public SchweineSystem::Module
+class GateLatch : public Sy::Module
 {
 public:
    struct Panel;
@@ -23,13 +23,13 @@ public:
 private:
    void setup();
 
-   void load(const SchweineSystem::Json::Object& rootObject) override;
-   void save(SchweineSystem::Json::Object& rootObject) override;
+   void load(const Sy::Json::Object& rootObject) override;
+   void save(Sy::Json::Object& rootObject) override;
 
 private:
-   SchweineSystem::Input::List inputList;
-   SchweineSystem::Output::List outputList;
-   SchweineSystem::LED::List lightList;
+   Sy::Input::List inputList;
+   Sy::Output::List outputList;
+   Sy::LED::List lightList;
 
    dsp::BooleanTrigger triggers[8];
    dsp::PulseGenerator activity[8];
@@ -38,7 +38,7 @@ private:
    dsp::BooleanTrigger resetTrigger;
 };
 
-class GateLatchWidget : public SchweineSystem::ModuleWidget
+class GateLatchWidget : public Sy::ModuleWidget
 {
 public:
    GateLatchWidget(GateLatch* module);

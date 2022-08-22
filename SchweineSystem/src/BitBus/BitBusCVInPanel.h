@@ -3,8 +3,8 @@
 
 #include "BitBusCVIn.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemLED.h>
+#include <SyCommon.h>
+#include <SyLED.h>
 
 struct BitBusCVIn::Panel
 {

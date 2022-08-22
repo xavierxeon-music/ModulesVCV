@@ -1,10 +1,10 @@
 #include "PamelasClock.h"
 #include "PamelasClockPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 PamelasClock::PamelasClock()
-   : SchweineSystem::Module()
+   : Sy::Module()
    , midiInput()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , tickCounter(6)
@@ -18,7 +18,7 @@ PamelasClock::PamelasClock()
 {
    setup();
 
-   connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
+   connectionButton.setDefaultColor(Sy::Color{0, 255, 0});
    connectToMidiDevice();
 }
 
@@ -71,7 +71,7 @@ void PamelasClock::connectToMidiDevice()
    midiInput.reset();
    connectionButton.setOff();
 
-   static const std::string targetDeviceName = SchweineSystem::Common::midiInterfaceMap.at(Midi::Device::Pamela);
+   static const std::string targetDeviceName = Sy::Common::midiInterfaceMap.at(Midi::Device::Pamela);
    std::cout << targetDeviceName << std::endl;
 
    for (const int& deviceId : midiInput.getDeviceIds())
@@ -92,9 +92,9 @@ void PamelasClock::connectToMidiDevice()
 // widget
 
 PamelasClockWidget::PamelasClockWidget(PamelasClock* module)
-: SchweineSystem::ModuleWidget(module)
+: Sy::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelPamelasClock = SchweineSystem::Master::the()->addModule<PamelasClock, PamelasClockWidget>("PamelasClock");
+Model* modelPamelasClock = Sy::Master::the()->addModule<PamelasClock, PamelasClockWidget>("PamelasClock");

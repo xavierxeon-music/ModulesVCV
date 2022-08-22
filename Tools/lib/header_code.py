@@ -141,23 +141,23 @@ class Headers(Common):
             line(0, f'#include "{self.moduleName}.h"')
             line(0)
 
-            line(0, '#include <SchweineSystemCommon.h>')
+            line(0, '#include <SyCommon.h>')
             if self.buttons:
-                line(0, '#include <SchweineSystemButton.h>')
+                line(0, '#include <SyButton.h>')
             if self.knobs:
-                line(0, '#include <SchweineSystemKnob.h>')
+                line(0, '#include <SyKnob.h>')
             if self.lcds:
-                line(0, '#include <SchweineSystemDisplayLCD.h>')
+                line(0, '#include <SyDisplayLCD.h>')
             if self.ledbuttons:
-                line(0, '#include <SchweineSystemButtonLED.h>')
+                line(0, '#include <SyButtonLED.h>')
             if self.leds:
-                line(0, '#include <SchweineSystemLED.h>')
+                line(0, '#include <SyLED.h>')
             if self.meters:
-                line(0, '#include <SchweineSystemLightMeter.h>')
+                line(0, '#include <SyLightMeter.h>')
             if self.oleds:
-                line(0, '#include <SchweineSystemDisplayOLED.h>')
+                line(0, '#include <SyDisplayOLED.h>')
             if self.switches:
-                line(0, '#include <SchweineSystemSwitch.h>')
+                line(0, '#include <SySwitch.h>')
             line(0)
 
             line(0, f'struct {self.moduleName}::Panel')
@@ -193,11 +193,11 @@ class Headers(Common):
             line(0, '#include <rack.hpp>')
             line(0, 'using namespace rack;')
             line(0)
-            line(0, '#include <SchweineSystemModule.h>')
-            line(0, '#include <SchweineSystemModuleWidget.h>')
+            line(0, '#include <SyModule.h>')
+            line(0, '#include <SyModuleWidget.h>')
             line(0)
 
-            line(0, f'class {self.moduleName} : public SchweineSystem::Module')
+            line(0, f'class {self.moduleName} : public Sy::Module')
             line(0, '{')
             line(0, 'public:')
             line(1, 'struct Panel;')
@@ -216,7 +216,7 @@ class Headers(Common):
             line(0, '// widget')
             line(0)
 
-            line(0, f'class {self.moduleName}Widget : public SchweineSystem::ModuleWidget')
+            line(0, f'class {self.moduleName}Widget : public Sy::ModuleWidget')
             line(0, '{')
             line(0, 'public:')
             line(1, f'{self.moduleName}Widget({self.moduleName}* module);')

@@ -1,10 +1,10 @@
 #include "DoepferQuad.h"
 #include "DoepferQuadPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 DoepferQuad::DoepferQuad()
-   : SchweineSystem::Module()
+   : Sy::Module()
    , MidiBusModule(Midi::Device::DopeferQuad1, this)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
 {
@@ -12,7 +12,7 @@ DoepferQuad::DoepferQuad()
    allowExpanderOnLeft();
    allowExpanderOnRight();
 
-   connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
+   connectionButton.setDefaultColor(Sy::Color{0, 255, 0});
    connectToMidiDevice();
 }
 
@@ -48,9 +48,9 @@ void DoepferQuad::connectToMidiDevice()
 // widget
 
 DoepferQuadWidget::DoepferQuadWidget(DoepferQuad* module)
-: SchweineSystem::ModuleWidget(module)
+: Sy::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelDoepferQuad = SchweineSystem::Master::the()->addModule<DoepferQuad, DoepferQuadWidget>("DoepferQuad");
+Model* modelDoepferQuad = Sy::Master::the()->addModule<DoepferQuad, DoepferQuadWidget>("DoepferQuad");

@@ -5,19 +5,19 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SchweineSystemExapnder.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyExapnder.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
 #include <Tools/BoolField.h>
 #include <Tools/RingBuffer.h>
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemLED.h>
+#include <SyCommon.h>
+#include <SyLED.h>
 
 static constexpr uint16_t AverageBufferSize = 4800;
 
-class BitBusMeterAndFreeze : public SchweineSystem::Module, public SchweineSystem::Exapnder<BitBusMessage>
+class BitBusMeterAndFreeze : public Sy::Module, public Sy::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -32,21 +32,21 @@ public:
 private:
    void setup();
 
-   void load(const SchweineSystem::Json::Object& rootObject) override;
-   void save(SchweineSystem::Json::Object& rootObject) override;
+   void load(const Sy::Json::Object& rootObject) override;
+   void save(Sy::Json::Object& rootObject) override;
 
 private:
-   SchweineSystem::LED::List lightList;
+   Sy::LED::List lightList;
    dsp::BooleanTrigger freezTrigger;
    bool freezeMode;
    BoolField8 freezeBuffer;
    dsp::BooleanTrigger sampleTrigger;
 
-   SchweineSystem::LED busInIndicator;
-   SchweineSystem::LED busOutIndicator;
+   Sy::LED busInIndicator;
+   Sy::LED busOutIndicator;
 };
 
-class BitBusMeterAndFreezeWidget : public SchweineSystem::ModuleWidget
+class BitBusMeterAndFreezeWidget : public Sy::ModuleWidget
 {
 public:
    BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module);

@@ -4,10 +4,10 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
-class MeshStack : public SchweineSystem::Module
+class MeshStack : public Sy::Module
 {
 public:
    struct Panel;
@@ -24,7 +24,7 @@ private:
 
 // widget
 
-class MeshStackWidget : public SchweineSystem::ModuleWidget
+class MeshStackWidget : public Sy::ModuleWidget
 {
 public:
    MeshStackWidget(MeshStack* module);

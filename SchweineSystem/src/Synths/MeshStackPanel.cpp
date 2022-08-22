@@ -1,7 +1,7 @@
 #include "MeshStack.h"
 #include "MeshStackPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void MeshStack::setup()
 {
@@ -16,7 +16,7 @@ void MeshStack::setup()
 
 void MeshStackWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Synths/MeshStack.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Synths/MeshStack.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

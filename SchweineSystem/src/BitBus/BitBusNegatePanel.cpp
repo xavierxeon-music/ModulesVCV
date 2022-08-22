@@ -1,7 +1,7 @@
 #include "BitBusNegate.h"
 #include "BitBusNegatePanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void BitBusNegate::setup()
 {
@@ -28,7 +28,7 @@ void BitBusNegate::setup()
 
 void BitBusNegateWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBus/BitBusNegate.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/BitBus/BitBusNegate.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

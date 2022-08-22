@@ -1,7 +1,7 @@
 #include "MidiReplay.h"
 #include "MidiReplayPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void MidiReplay::setup()
 {
@@ -22,7 +22,7 @@ void MidiReplay::setup()
 
 void MidiReplayWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Utilities/MidiReplay.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/MidiReplay.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

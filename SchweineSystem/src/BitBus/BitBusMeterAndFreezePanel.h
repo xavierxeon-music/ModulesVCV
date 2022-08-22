@@ -3,9 +3,9 @@
 
 #include "BitBusMeterAndFreeze.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemLED.h>
+#include <SyCommon.h>
+#include <SyButtonLED.h>
+#include <SyLED.h>
 
 struct BitBusMeterAndFreeze::Panel
 {

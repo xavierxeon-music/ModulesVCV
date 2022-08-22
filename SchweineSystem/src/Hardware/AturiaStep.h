@@ -6,16 +6,16 @@ using namespace rack;
 
 #include <Blocks/CvSwitch.h>
 
-#include <SchweineSystemButton.h>
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemDisplayLCD.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
-#include <SchweineSystemSwitch.h>
+#include <SyButton.h>
+#include <SyButtonLED.h>
+#include <SyDisplayLCD.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
+#include <SySwitch.h>
 
 #include "MidiBusModule.h"
 
-class AturiaStep : public SchweineSystem::Module, public MidiBusModule
+class AturiaStep : public Sy::Module, public MidiBusModule
 {
 public:
    struct Panel;
@@ -32,27 +32,27 @@ private:
    void sendProgramChange(uint8_t channel);
    void updateDisplay(uint8_t channel);
 
-   void load(const SchweineSystem::Json::Object& rootObject) override;
-   void save(SchweineSystem::Json::Object& rootObject) override;
+   void load(const Sy::Json::Object& rootObject) override;
+   void save(Sy::Json::Object& rootObject) override;
 
 private:
    // midi
    bool useDrumChannel;
-   SchweineSystem::ButtonLED drumButon;
-   SchweineSystem::ButtonLED connectionButton;
+   Sy::ButtonLED drumButon;
+   Sy::ButtonLED connectionButton;
    // patterns
-   SchweineSystem::Input::List inputList;
+   Sy::Input::List inputList;
    uint8_t patterns[4];
    CvSwitch channelSwitch;
    // manual pattern
-   SchweineSystem::DisplayLCD::Controller::List displayList;
-   SchweineSystem::Button::List downButtonList;
-   SchweineSystem::Button::List upButtonList;
+   Sy::DisplayLCD::Controller::List displayList;
+   Sy::Button::List downButtonList;
+   Sy::Button::List upButtonList;
 };
 
 // widget
 
-class AturiaStepWidget : public SchweineSystem::ModuleWidget
+class AturiaStepWidget : public Sy::ModuleWidget
 {
 public:
    AturiaStepWidget(AturiaStep* module);

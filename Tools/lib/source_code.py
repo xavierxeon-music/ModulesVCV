@@ -84,7 +84,7 @@ class Sources(Common):
 
         line(0, f'void {self.moduleName}Widget::setup()')
         line(0, '{')
-        line(1, f'std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "{self.panelFileName}");')
+        line(1, f'std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "{self.panelFileName}");')
         line(1, 'SvgPanel* mainPanel = createPanel(panelPath);')
         line(1, 'setPanel(mainPanel);')
 
@@ -186,7 +186,7 @@ class Sources(Common):
             line(0, f'#include "{self.moduleName}.h"')
             line(0, f'#include "{self.moduleName}Panel.h"')
             line(0)
-            line(0, '#include <SchweineSystemMaster.h>')
+            line(0, '#include <SyMaster.h>')
             if self.lcds:
                 line(0, '#include <limits>')
             line(0)
@@ -212,11 +212,11 @@ class Sources(Common):
             line(0, f'#include "{self.moduleName}.h"')
             line(0, f'#include "{self.moduleName}Panel.h"')
             line(0)
-            line(0, '#include <SchweineSystemMaster.h>')
+            line(0, '#include <SyMaster.h>')
             line(0)
 
             line(0, f'{self.moduleName}::{self.moduleName}()')
-            line(1, ': SchweineSystem::Module()')
+            line(1, ': Sy::Module()')
             line(0, '{')
             line(1, 'setup();')
             line(0, '}')
@@ -232,10 +232,10 @@ class Sources(Common):
             line(0)
 
             line(0, f'{self.moduleName}Widget::{self.moduleName}Widget({self.moduleName}* module)')
-            line(0, f': SchweineSystem::ModuleWidget(module)')
+            line(0, f': Sy::ModuleWidget(module)')
             line(0, '{')
             line(1, 'setup();')
             line(0, '}')
             line(0)
 
-            line(0, f'Model* model{self.moduleName} = SchweineSystem::Master::the()->addModule<{self.moduleName}, {self.moduleName}Widget>("{self.moduleName}");')
+            line(0, f'Model* model{self.moduleName} = Sy::Master::the()->addModule<{self.moduleName}, {self.moduleName}Widget>("{self.moduleName}");')

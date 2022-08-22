@@ -1,7 +1,7 @@
 #include "DoepferQuad.h"
 #include "DoepferQuadPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void DoepferQuad::setup()
 {
@@ -12,7 +12,7 @@ void DoepferQuad::setup()
 
 void DoepferQuadWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Hardware/DoepferQuad.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Hardware/DoepferQuad.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

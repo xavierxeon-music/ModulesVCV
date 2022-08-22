@@ -1,7 +1,7 @@
 #include "FlameCC.h"
 #include "FlameCCPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void FlameCC::setup()
 {
@@ -46,7 +46,7 @@ void FlameCC::setup()
 
 void FlameCCWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Hardware/FlameCC.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Hardware/FlameCC.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

@@ -6,11 +6,11 @@ using namespace rack;
 
 #include <Music/Tempo.h>
 
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyButtonLED.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
-class PamelasClock : public SchweineSystem::Module
+class PamelasClock : public Sy::Module
 {
 public:
    struct Panel;
@@ -29,7 +29,7 @@ private:
 private:
    // midi
    midi::InputQueue midiInput;
-   SchweineSystem::ButtonLED connectionButton;
+   Sy::ButtonLED connectionButton;
    // tempo
    Counter tickCounter;
    bool doNotAdvanceTempo;
@@ -42,7 +42,7 @@ private:
 
 // widget
 
-class PamelasClockWidget : public SchweineSystem::ModuleWidget
+class PamelasClockWidget : public Sy::ModuleWidget
 {
 public:
    PamelasClockWidget(PamelasClock* module);

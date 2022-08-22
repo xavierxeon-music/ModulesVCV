@@ -1,7 +1,7 @@
 #include "PamelasClock.h"
 #include "PamelasClockPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void PamelasClock::setup()
 {
@@ -15,7 +15,7 @@ void PamelasClock::setup()
 
 void PamelasClockWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Hardware/PamelasClock.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Hardware/PamelasClock.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

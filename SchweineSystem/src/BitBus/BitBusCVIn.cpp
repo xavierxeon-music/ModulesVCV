@@ -3,11 +3,11 @@
 
 #include <Tools/BoolField.h>
 
-#include "SchweineSystemMaster.h"
+#include "SyMaster.h"
 
 BitBusCVIn::BitBusCVIn()
-   : SchweineSystem::Module()
-   , SchweineSystem::Exapnder<BitBusMessage>(this)
+   : Sy::Module()
+   , Sy::Exapnder<BitBusMessage>(this)
    , inputMapper(-5.0, 5.0, 0.0, 255.0)
    , busOutIndicator(this, Panel::RGB_BusOut)
 
@@ -43,9 +43,9 @@ void BitBusCVIn::process(const ProcessArgs& args)
 // widget
 
 BitBusCVInWidget::BitBusCVInWidget(BitBusCVIn* module)
-   : SchweineSystem::ModuleWidget(module)
+   : Sy::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelBitBusCVIn = SchweineSystem::Master::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn");
+Model* modelBitBusCVIn = Sy::Master::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn");

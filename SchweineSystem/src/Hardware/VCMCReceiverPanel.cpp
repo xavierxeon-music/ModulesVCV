@@ -1,7 +1,7 @@
 #include "VCMCReceiver.h"
 #include "VCMCReceiverPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void VCMCReceiver::setup()
 {
@@ -58,7 +58,7 @@ void VCMCReceiver::setup()
 
 void VCMCReceiverWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Hardware/VCMCReceiver.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Hardware/VCMCReceiver.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

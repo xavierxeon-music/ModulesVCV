@@ -8,11 +8,11 @@ using namespace rack;
 #include <Music/TimeCode.h>
 #include <Tools/Counter.h>
 
-#include <SchweineSystemDisplayOLED.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyDisplayOLED.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
-class BarCounter : public SchweineSystem::Module
+class BarCounter : public Sy::Module
 {
 public:
    struct Panel;
@@ -34,12 +34,12 @@ private:
    Tempo tempo;
    // time
    TimeCode::Duration duration;
-   SchweineSystem::DisplayOLED::Controller displayController;
+   Sy::DisplayOLED::Controller displayController;
 };
 
 // widget
 
-class BarCounterWidget : public SchweineSystem::ModuleWidget
+class BarCounterWidget : public Sy::ModuleWidget
 {
 public:
    BarCounterWidget(BarCounter* module);

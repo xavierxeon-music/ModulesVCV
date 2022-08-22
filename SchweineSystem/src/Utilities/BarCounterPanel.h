@@ -3,8 +3,8 @@
 
 #include "BarCounter.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemDisplayOLED.h>
+#include <SyCommon.h>
+#include <SyDisplayOLED.h>
 
 struct BarCounter::Panel
 {

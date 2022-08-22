@@ -1,7 +1,7 @@
 #include "BarCounter.h"
 #include "BarCounterPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void BarCounter::setup()
 {
@@ -15,7 +15,7 @@ void BarCounter::setup()
 
 void BarCounterWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Utilities/BarCounter.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/BarCounter.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

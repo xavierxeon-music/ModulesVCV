@@ -3,10 +3,10 @@
 
 #include "WavPlayer.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemButton.h>
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemDisplayOLED.h>
+#include <SyCommon.h>
+#include <SyButton.h>
+#include <SyButtonLED.h>
+#include <SyDisplayOLED.h>
 
 struct WavPlayer::Panel
 {

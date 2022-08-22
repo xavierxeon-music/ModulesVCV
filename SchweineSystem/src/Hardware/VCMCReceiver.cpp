@@ -4,12 +4,12 @@
 #include <Midi/MidiCommon.h>
 #include <Music/Note.h>
 
-#include <SchweineSystemJson.h>
-#include <SchweineSystemDisplayLCD.h>
-#include <SchweineSystemMaster.h>
+#include <SyJson.h>
+#include <SyDisplayLCD.h>
+#include <SyMaster.h>
 
 VCMCReceiver::VCMCReceiver()
-   : SchweineSystem::Module()
+   : Sy::Module()
    , midiInput()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , ccValueToVoltage(0.0, 127, 0, 10.0)
@@ -85,13 +85,13 @@ VCMCReceiver::VCMCReceiver()
 
    for (uint8_t index = 0; index < 10; index++)
    {
-      lightListGate[index]->setDefaultColor(SchweineSystem::Color{255, 0, 255});
+      lightListGate[index]->setDefaultColor(Sy::Color{255, 0, 255});
       lightMeterListCV[index]->setMaxValue(127);
       if (index < 8)
          lightMeterListSlider[index]->setMaxValue(127);
    }
 
-   connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
+   connectionButton.setDefaultColor(Sy::Color{0, 255, 0});
    connectToMidiDevice();
 }
 
@@ -172,7 +172,7 @@ void VCMCReceiver::connectToMidiDevice()
    midiInput.reset();
    connectionButton.setOff();
 
-   static const std::string targetDeviceName = SchweineSystem::Common::midiInterfaceMap.at(Midi::Device::VCMC);
+   static const std::string targetDeviceName = Sy::Common::midiInterfaceMap.at(Midi::Device::VCMC);
    std::cout << "TARGET = " << targetDeviceName << std::endl;
 
    for (const int& deviceId : midiInput.getDeviceIds())
@@ -190,11 +190,11 @@ void VCMCReceiver::connectToMidiDevice()
    }
 }
 
-void VCMCReceiver::load(const SchweineSystem::Json::Object& rootObject)
+void VCMCReceiver::load(const Sy::Json::Object& rootObject)
 {
-   SchweineSystem::Json::Array gateArray = rootObject.get("gates").toArray();
-   SchweineSystem::Json::Array cvArray = rootObject.get("cvs").toArray();
-   SchweineSystem::Json::Array sliderArray = rootObject.get("sliders").toArray();
+   Sy::Json::Array gateArray = rootObject.get("gates").toArray();
+   Sy::Json::Array cvArray = rootObject.get("cvs").toArray();
+   Sy::Json::Array sliderArray = rootObject.get("sliders").toArray();
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -204,11 +204,11 @@ void VCMCReceiver::load(const SchweineSystem::Json::Object& rootObject)
    }
 }
 
-void VCMCReceiver::save(SchweineSystem::Json::Object& rootObject)
+void VCMCReceiver::save(Sy::Json::Object& rootObject)
 {
-   SchweineSystem::Json::Array gateArray;
-   SchweineSystem::Json::Array cvArray;
-   SchweineSystem::Json::Array sliderArray;
+   Sy::Json::Array gateArray;
+   Sy::Json::Array cvArray;
+   Sy::Json::Array sliderArray;
    for (uint8_t index = 0; index < 8; index++)
    {
       gateArray.append(gates[index]);
@@ -224,9 +224,9 @@ void VCMCReceiver::save(SchweineSystem::Json::Object& rootObject)
 // widget
 
 VCMCReceiverWidget::VCMCReceiverWidget(VCMCReceiver* module)
-   : SchweineSystem::ModuleWidget(module)
+   : Sy::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelVCMCReceiver = SchweineSystem::Master::the()->addModule<VCMCReceiver, VCMCReceiverWidget>("VCMCReceiver");
+Model* modelVCMCReceiver = Sy::Master::the()->addModule<VCMCReceiver, VCMCReceiverWidget>("VCMCReceiver");

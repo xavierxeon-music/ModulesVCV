@@ -8,16 +8,16 @@ using namespace rack;
 #include <Music/Tempo.h>
 #include <Tools/Range.h>
 
-#include <SchweineSystemButton.h>
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemDisplayLCD.h>
-#include <SchweineSystemDisplayOLED.h>
-#include <SchweineSystemExapnder.h>
-#include <SchweineSystemJson.h>
-#include <SchweineSystemLED.h>
-#include <SchweineSystemLightMeter.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyButton.h>
+#include <SyCommon.h>
+#include <SyDisplayLCD.h>
+#include <SyDisplayOLED.h>
+#include <SyExapnder.h>
+#include <SyJson.h>
+#include <SyLED.h>
+#include <SyLightMeter.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
 struct BusTimeLord
 {
@@ -25,7 +25,7 @@ struct BusTimeLord
    bool silence[8] = {true, true, true, true, true, true, true, true};
 };
 
-class TimeLord : public SchweineSystem::Module, public SchweineSystem::Exapnder<BusTimeLord>
+class TimeLord : public Sy::Module, public Sy::Exapnder<BusTimeLord>
 {
 public:
    struct Panel;
@@ -70,11 +70,11 @@ private:
    void setOperationLEDs();
    void dataFromMidiInput(const Bytes& message) override;
 
-   void load(const SchweineSystem::Json::Object& rootObject) override;
-   void save(SchweineSystem::Json::Object& rootObject) override;
+   void load(const Sy::Json::Object& rootObject) override;
+   void save(Sy::Json::Object& rootObject) override;
 
    void uploadToRemote(const BusTimeLord& busMessage);
-   void setFromRemote(const SchweineSystem::Json::Object& rootObject);
+   void setFromRemote(const Sy::Json::Object& rootObject);
 
 private:
    std::string fileName;
@@ -91,8 +91,8 @@ private:
    Tempo tempo;
 
    // input
-   SchweineSystem::Input::List inputList;
-   SchweineSystem::DisplayLCD::Controller::List displayList;
+   Sy::Input::List inputList;
+   Sy::DisplayLCD::Controller::List displayList;
    Range::Mapper voltageToValue;
 
    // upload
@@ -101,31 +101,31 @@ private:
 
    // outpt
    Range::Mapper valueToVoltage;
-   SchweineSystem::LightMeter::Controller::List lightMeterList;
-   SchweineSystem::Output::List outputList;
+   Sy::LightMeter::Controller::List lightMeterList;
+   Sy::Output::List outputList;
 
    // display
    DisplayMode displayMode;
-   SchweineSystem::Button displayButton;
-   SchweineSystem::DisplayOLED::Controller displayController;
+   Sy::Button displayButton;
+   Sy::DisplayOLED::Controller displayController;
 
    // bank
    uint8_t bankIndex;
-   SchweineSystem::Button bankButton;
+   Sy::Button bankButton;
    dsp::PulseGenerator dataAppliedPulse;
-   SchweineSystem::DisplayLCD::Controller bankDisplay;
+   Sy::DisplayLCD::Controller bankDisplay;
 
    // mode
    OperationMode operationMode;
    dsp::BooleanTrigger operationTrigger;
    uint8_t remoteValues[8];
-   SchweineSystem::LED modeInputLight;
-   SchweineSystem::LED modeRemoteLight;
-   SchweineSystem::LED modeInternalLight;
+   Sy::LED modeInputLight;
+   Sy::LED modeRemoteLight;
+   Sy::LED modeInternalLight;
 
 };
 
-class TimeLordWidget : public SchweineSystem::ModuleWidget
+class TimeLordWidget : public Sy::ModuleWidget
 {
 public:
    TimeLordWidget(TimeLord* module);

@@ -7,13 +7,13 @@ using namespace rack;
 #include <Tools/Counter.h>
 #include <Tools/Range.h>
 
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemDisplayLCD.h>
-#include <SchweineSystemLightMeter.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyButtonLED.h>
+#include <SyDisplayLCD.h>
+#include <SyLightMeter.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
-class VCMCReceiver : public SchweineSystem::Module
+class VCMCReceiver : public Sy::Module
 {
 public:
    struct Panel;
@@ -30,29 +30,29 @@ private:
    void processMessage(const midi::Message& msg);
    void connectToMidiDevice();
 
-   void load(const SchweineSystem::Json::Object& rootObject) override;
-   void save(SchweineSystem::Json::Object& rootObject) override;
+   void load(const Sy::Json::Object& rootObject) override;
+   void save(Sy::Json::Object& rootObject) override;
 
 private:
    // midi
    midi::InputQueue midiInput;
-   SchweineSystem::ButtonLED connectionButton;
+   Sy::ButtonLED connectionButton;
    Range::Mapper ccValueToVoltage;
    // gates
    bool gates[8];
-   SchweineSystem::LED::List lightListGate;
-   SchweineSystem::Output::List gateList;
+   Sy::LED::List lightListGate;
+   Sy::Output::List gateList;
    // sliders
    uint8_t sliderValues[8];
-   SchweineSystem::LightMeter::Controller::List lightMeterListSlider;
-   SchweineSystem::Output::List sliderOutputList;
+   Sy::LightMeter::Controller::List lightMeterListSlider;
+   Sy::Output::List sliderOutputList;
    // cv
    uint8_t cvValues[10];
-   SchweineSystem::LightMeter::Controller::List lightMeterListCV;
-   SchweineSystem::Output::List cvOutputList;
+   Sy::LightMeter::Controller::List lightMeterListCV;
+   Sy::Output::List cvOutputList;
 };
 
-class VCMCReceiverWidget : public SchweineSystem::ModuleWidget
+class VCMCReceiverWidget : public Sy::ModuleWidget
 {
 public:
    VCMCReceiverWidget(VCMCReceiver* module);

@@ -1,7 +1,7 @@
 #include "AturiaStep.h"
 #include "AturiaStepPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 #include <limits>
 
 void AturiaStep::setup()
@@ -33,7 +33,7 @@ void AturiaStep::setup()
 
 void AturiaStepWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Hardware/AturiaStep.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Hardware/AturiaStep.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

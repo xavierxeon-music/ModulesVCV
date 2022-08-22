@@ -3,9 +3,9 @@
 
 #include "FlameCC.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemSwitch.h>
+#include <SyCommon.h>
+#include <SyButtonLED.h>
+#include <SySwitch.h>
 
 struct FlameCC::Panel
 {

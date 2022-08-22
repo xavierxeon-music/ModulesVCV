@@ -6,14 +6,14 @@ using namespace rack;
 
 #include <Tools/Range.h>
 
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemMidiOutput.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
-#include <SchweineSystemSwitch.h>
+#include <SyButtonLED.h>
+#include <SyCommon.h>
+#include <SyMidiOutput.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
+#include <SySwitch.h>
 
-class FlameCC : public SchweineSystem::Module, private SchweineSystem::MidiOutput
+class FlameCC : public Sy::Module, private Sy::MidiOutput
 {
 public:
    struct Panel;
@@ -29,21 +29,21 @@ private:
    void connectToMidiDevice();
    void sendSysEx();
 
-   void load(const SchweineSystem::Json::Object& rootObject) override;
-   void save(SchweineSystem::Json::Object& rootObject) override;
+   void load(const Sy::Json::Object& rootObject) override;
+   void save(Sy::Json::Object& rootObject) override;
 
 private:
    // midi
-   SchweineSystem::ButtonLED connectionButton;
+   Sy::ButtonLED connectionButton;
    Range::Mapper voltageToCcValue;
    // outputs
-   SchweineSystem::Input::List inputList;
+   Sy::Input::List inputList;
    uint8_t controllerValueStore[16];
    // half voltage
-   SchweineSystem::Switch::List fullVoltSwitchList;
+   Sy::Switch::List fullVoltSwitchList;
 };
 
-class FlameCCWidget : public SchweineSystem::ModuleWidget
+class FlameCCWidget : public Sy::ModuleWidget
 {
 public:
    FlameCCWidget(FlameCC* module);

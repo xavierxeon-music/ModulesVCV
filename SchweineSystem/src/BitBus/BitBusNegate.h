@@ -5,14 +5,14 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SchweineSystemExapnder.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyExapnder.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemLED.h>
+#include <SyCommon.h>
+#include <SyLED.h>
 
-class BitBusNegate : public SchweineSystem::Module, public SchweineSystem::Exapnder<BitBusMessage>
+class BitBusNegate : public Sy::Module, public Sy::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -27,23 +27,23 @@ public:
 private:
    void setup();
 
-   void load(const SchweineSystem::Json::Object& rootObject) override;
-   void save(SchweineSystem::Json::Object& rootObject) override;
+   void load(const Sy::Json::Object& rootObject) override;
+   void save(Sy::Json::Object& rootObject) override;
 
 private:
-   SchweineSystem::LED::List lightList;
-   SchweineSystem::Param::List paramList;
-   SchweineSystem::Input::List gateList;
+   Sy::LED::List lightList;
+   Sy::Param::List paramList;
+   Sy::Input::List gateList;
    dsp::BooleanTrigger gateTrigger[8];
    bool gates[8];
 
-   SchweineSystem::LED busInIndicator;
-   SchweineSystem::LED busOutIndicator;
+   Sy::LED busInIndicator;
+   Sy::LED busOutIndicator;
 };
 
 // widget
 
-class BitBusNegateWidget : public SchweineSystem::ModuleWidget
+class BitBusNegateWidget : public Sy::ModuleWidget
 {
 public:
    BitBusNegateWidget(BitBusNegate* module);
