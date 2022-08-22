@@ -9,13 +9,24 @@ Sy::ModuleWidget::ModuleWidget(Module* schweineModule)
    rack::ModuleWidget::setModule(schweineModule);
 }
 
+Sy::ModuleWidget::~ModuleWidget()
+{
+}
+
 Sy::Module* Sy::ModuleWidget::getSchweineModule() const
 {
    return schweineModule;
 }
 
+void Sy::ModuleWidget::preDraw()
+{
+   // do nothing
+}
+
 void Sy::ModuleWidget::draw(const DrawArgs& args)
 {
+   preDraw();
+
    if (schweineModule)
       schweineModule->updateDisplays();
 

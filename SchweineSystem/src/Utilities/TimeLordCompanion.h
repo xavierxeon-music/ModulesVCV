@@ -48,6 +48,10 @@ public:
 
 private:
    void setup();
+   void preDraw() override;
+
+private:
+   Sy::SvgImage* logoWidget;
 };
 
 #endif // NOT TimeLordCompanionH

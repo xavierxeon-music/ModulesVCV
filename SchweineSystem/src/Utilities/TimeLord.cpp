@@ -590,6 +590,7 @@ void TimeLord::setFromRemote(const Sy::Json::Object& rootObject)
 
 TimeLordWidget::TimeLordWidget(TimeLord* module)
    : Sy::ModuleWidget(module)
+   , logoWidget(nullptr)
 {
    setup();
 
@@ -601,10 +602,11 @@ TimeLordWidget::TimeLordWidget(TimeLord* module)
 
    std::string logoPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/TimeLordLogo.svg");
 
-   Sy::SvgImage* logoWidget = new Sy::SvgImage(rack::math::Vec(0, 342.5), module, logoPath, 0.4);
-   const int8_t xShift = 0.5 * logoWidget->box.size.x;
-   logoWidget->shift(math::Vec(-xShift, 0.0));
+   logoWidget = new Sy::SvgImage(rack::math::Vec(0, 342.5), module, logoPath, 0.4);
+   logoWidget->shift(math::Vec(-0.5, 0.0));
    addChild(logoWidget);
+
+   logoWidget->visible = false;
 }
 
 void TimeLordWidget::displayClicked(const float& x, const float& y)
@@ -619,6 +621,15 @@ void TimeLordWidget::displayClicked(const float& x, const float& y)
    const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Ramps:json"));
    if (path)
       myModule->loadRamps(std::string(path));
+}
+
+void TimeLordWidget::preDraw()
+{
+   TimeLord* myModule = dynamic_cast<TimeLord*>(getSchweineModule());
+   if (!myModule)
+      return;
+
+   logoWidget->visible = myModule->canCommunicatWithLeft();
 }
 
 Model* modelTimeLord = Sy::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");

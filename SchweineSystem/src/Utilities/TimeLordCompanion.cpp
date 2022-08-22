@@ -110,16 +110,28 @@ void TimeLordCompanion::save(Sy::Json::Object& rootObject)
 // widget
 
 TimeLordCompanionWidget::TimeLordCompanionWidget(TimeLordCompanion* module)
-: Sy::ModuleWidget(module)
+   : Sy::ModuleWidget(module)
+   , logoWidget(nullptr)
 {
    setup();
 
    std::string logoPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/TimeLordLogo.svg");
 
-   Sy::SvgImage* logoWidget = new Sy::SvgImage(rack::math::Vec(0, 342.5), module, logoPath, 0.4);
+   logoWidget = new Sy::SvgImage(rack::math::Vec(0, 342.5), module, logoPath, 0.4);
    const int16_t x = box.size.x - 0.5 * logoWidget->box.size.x;
    logoWidget->box.pos.x = x;
    addChild(logoWidget);
+
+   logoWidget->visible = false;
+}
+
+void TimeLordCompanionWidget::preDraw()
+{
+   TimeLordCompanion* myModule = dynamic_cast<TimeLordCompanion*>(getSchweineModule());
+   if (!myModule)
+      return;
+
+   logoWidget->visible = myModule->canCommunicatWithRight();
 }
 
 Model* modelTimeLordCompanion = Sy::Master::the()->addModule<TimeLordCompanion, TimeLordCompanionWidget>("TimeLordCompanion");

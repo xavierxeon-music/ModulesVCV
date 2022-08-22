@@ -134,6 +134,10 @@ public:
 private:
    void setup();
    void displayClicked(const float& x, const float& y);
+   void preDraw() override;
+
+private:
+   Sy::SvgImage* logoWidget;
 };
 
 #endif // NOT TimeLordH

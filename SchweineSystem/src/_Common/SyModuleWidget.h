@@ -11,11 +11,13 @@ namespace Sy
    {
    public:
       ModuleWidget(Module* schweineModule);
+      virtual ~ModuleWidget();
 
    public:
       Module* getSchweineModule() const;
 
-   public:
+   protected:
+      virtual void preDraw();
       void draw(const DrawArgs& args) override;
 
    protected:

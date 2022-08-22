@@ -40,18 +40,6 @@ Sy::Exapnder<MessageType>::~Exapnder()
 }
 
 template <typename MessageType>
-void Sy::Exapnder<MessageType>::allowExpanderOnLeft()
-{
-   instanceMap[module].left = true;
-}
-
-template <typename MessageType>
-void Sy::Exapnder<MessageType>::allowExpanderOnRight()
-{
-   instanceMap[module].right = true;
-}
-
-template <typename MessageType>
 bool Sy::Exapnder<MessageType>::canCommunicatWithLeft()
 {
    if (!instanceMap[module].left)
@@ -83,6 +71,18 @@ bool Sy::Exapnder<MessageType>::canCommunicatWithRight()
       return false;
 
    return itOther->second.left;
+}
+
+template <typename MessageType>
+void Sy::Exapnder<MessageType>::allowExpanderOnLeft()
+{
+   instanceMap[module].left = true;
+}
+
+template <typename MessageType>
+void Sy::Exapnder<MessageType>::allowExpanderOnRight()
+{
+   instanceMap[module].right = true;
 }
 
 template <typename MessageType>

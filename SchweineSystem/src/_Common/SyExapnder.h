@@ -18,12 +18,13 @@ namespace Sy
       Exapnder(Module* module);
       ~Exapnder();
 
+   public:
+      bool canCommunicatWithLeft();
+      bool canCommunicatWithRight();
+
    protected:
       void allowExpanderOnLeft();
       void allowExpanderOnRight();
-
-      bool canCommunicatWithLeft();
-      bool canCommunicatWithRight();
 
       void sendToLeft(const MessageType& message);
       void sendToRight(const MessageType& message);
