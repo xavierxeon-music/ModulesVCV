@@ -148,7 +148,7 @@ RemoteScriptWidget::RemoteScriptWidget(RemoteScript* module)
    logoWidget = new Sy::SvgImage(rack::math::Vec(9.00 + offset, 62.34 + offset), module, logoPath, 0.3);
    addChild(logoWidget);
 
-   //logoWidget->visible = false;
+   logoWidget->visible = false;
 }
 
 void RemoteScriptWidget::displayClicked(const float& x, const float& y)
