@@ -4,13 +4,13 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SchweineSystemExapnder.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyExapnder.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
 #include "MidiReplay.h"
 
-class MidiCV : public SchweineSystem::Module, public SchweineSystem::Exapnder<BusMidi>
+class MidiCV : public Sy::Module, public Sy::Exapnder<BusMidi>
 {
 public:
    struct Panel;
@@ -27,7 +27,7 @@ private:
 
 // widget
 
-class MidiCVWidget : public SchweineSystem::ModuleWidget
+class MidiCVWidget : public Sy::ModuleWidget
 {
 public:
    MidiCVWidget(MidiCV* module);

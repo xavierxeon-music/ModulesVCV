@@ -10,12 +10,12 @@ using namespace rack;
 #include <Music/Tempo.h>
 #include <Music/TimeCode.h>
 
-#include <SchweineSystemButton.h>
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemDisplayOLED.h>
-#include <SchweineSystemExapnder.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyButton.h>
+#include <SyButtonLED.h>
+#include <SyDisplayOLED.h>
+#include <SyExapnder.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
 struct BusMidi
 {
@@ -35,7 +35,7 @@ struct BusMidi
    Channel channels[16];
 };
 
-class MidiReplay : public SchweineSystem::Module, public SchweineSystem::Exapnder<BusMidi>
+class MidiReplay : public Sy::Module, public Sy::Exapnder<BusMidi>
 {
 public:
    struct Panel;
@@ -49,8 +49,8 @@ public:
 
    void loadMidiFile(const std::string& newFileName);
 
-   void load(const SchweineSystem::Json::Object& rootObject) override;
-   void save(SchweineSystem::Json::Object& rootObject) override;
+   void load(const Sy::Json::Object& rootObject) override;
+   void save(Sy::Json::Object& rootObject) override;
 
 private:
    enum class DisplayMode
@@ -70,8 +70,8 @@ private:
 
    // display
    DisplayMode displayMode;
-   SchweineSystem::Button pageButton;
-   SchweineSystem::DisplayOLED::Controller displayController;
+   Sy::Button pageButton;
+   Sy::DisplayOLED::Controller displayController;
 
    // clock
    dsp::BooleanTrigger clockTrigger;
@@ -79,7 +79,7 @@ private:
    Tempo tempo;
 
    // cycle
-   SchweineSystem::ButtonLED loopButton;
+   Sy::ButtonLED loopButton;
    bool isLooping;
    bool atEnd;
    dsp::PulseGenerator endPulse;
@@ -92,7 +92,7 @@ private:
 
 // widget
 
-class MidiReplayWidget : public SchweineSystem::ModuleWidget
+class MidiReplayWidget : public Sy::ModuleWidget
 {
 public:
    MidiReplayWidget(MidiReplay* module);

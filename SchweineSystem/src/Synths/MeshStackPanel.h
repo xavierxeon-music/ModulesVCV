@@ -3,8 +3,8 @@
 
 #include "MeshStack.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemKnob.h>
+#include <SyCommon.h>
+#include <SyKnob.h>
 
 struct MeshStack::Panel
 {

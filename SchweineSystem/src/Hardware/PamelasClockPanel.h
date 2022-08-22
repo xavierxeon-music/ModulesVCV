@@ -3,8 +3,8 @@
 
 #include "PamelasClock.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemButtonLED.h>
+#include <SyCommon.h>
+#include <SyButtonLED.h>
 
 struct PamelasClock::Panel
 {

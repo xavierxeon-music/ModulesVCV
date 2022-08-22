@@ -3,10 +3,10 @@
 
 #include "AturiaStep.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemButton.h>
-#include <SchweineSystemDisplayLCD.h>
-#include <SchweineSystemButtonLED.h>
+#include <SyCommon.h>
+#include <SyButton.h>
+#include <SyDisplayLCD.h>
+#include <SyButtonLED.h>
 
 struct AturiaStep::Panel
 {

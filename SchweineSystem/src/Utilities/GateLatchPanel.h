@@ -3,9 +3,9 @@
 
 #include "GateLatch.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemButton.h>
-#include <SchweineSystemLED.h>
+#include <SyCommon.h>
+#include <SyButton.h>
+#include <SyLED.h>
 
 struct GateLatch::Panel
 {

@@ -4,16 +4,16 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SchweineSystemExapnder.h>
-#include <SchweineSystemMidiOutput.h>
-#include <SchweineSystemModule.h>
+#include <SyExapnder.h>
+#include <SyMidiOutput.h>
+#include <SyModule.h>
 
 #include "../Utilities/MidiReplay.h"
 
-class MidiBusModule : protected SchweineSystem::MidiOutput, public SchweineSystem::Exapnder<BusMidi>
+class MidiBusModule : protected Sy::MidiOutput, public Sy::Exapnder<BusMidi>
 {
 public:
-   MidiBusModule(const Midi::Device::Channel& deviceChannel, SchweineSystem::Module* module);
+   MidiBusModule(const Midi::Device::Channel& deviceChannel, Sy::Module* module);
 
 protected:
    void processBusMessage(const BusMidi& busMessage);

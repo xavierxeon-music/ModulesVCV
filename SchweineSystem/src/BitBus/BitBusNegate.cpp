@@ -3,14 +3,14 @@
 
 #include <Tools/BoolField.h>
 
-#include "SchweineSystemMaster.h"
-#include "SchweineSystemModule.h"
+#include "SyMaster.h"
+#include "SyModule.h"
 
 using Panel = BitBusNegate::Panel;
 
 BitBusNegate::BitBusNegate()
-   : SchweineSystem::Module()
-   , SchweineSystem::Exapnder<BitBusMessage>(this)
+   : Sy::Module()
+   , Sy::Exapnder<BitBusMessage>(this)
    , lightList(this)
    , paramList(params)
    , gateList(inputs)
@@ -58,7 +58,7 @@ BitBusNegate::~BitBusNegate()
 {
 }
 
-void BitBusNegate::load(const SchweineSystem::Json::Object& rootObject)
+void BitBusNegate::load(const Sy::Json::Object& rootObject)
 {
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -68,7 +68,7 @@ void BitBusNegate::load(const SchweineSystem::Json::Object& rootObject)
    }
 }
 
-void BitBusNegate::save(SchweineSystem::Json::Object& rootObject)
+void BitBusNegate::save(Sy::Json::Object& rootObject)
 {
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -124,9 +124,9 @@ void BitBusNegate::process(const ProcessArgs& args)
 // widget
 
 BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
-   : SchweineSystem::ModuleWidget(module)
+   : Sy::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelBitBusNegate = SchweineSystem::Master::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");
+Model* modelBitBusNegate = Sy::Master::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");

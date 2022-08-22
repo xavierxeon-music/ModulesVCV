@@ -5,11 +5,11 @@
 
 #include <Tools/Convert.h>
 
-#include <SchweineSystemJson.h>
-#include <SchweineSystemMaster.h>
+#include <SyJson.h>
+#include <SyMaster.h>
 
 WavPlayer::WavPlayer()
-   : SchweineSystem::Module()
+   : Sy::Module()
    , displayController(this, Panel::Pixels_Display)
    , oscilator(true)
    , sampleRate(APP->engine->getSampleRate())
@@ -22,8 +22,8 @@ WavPlayer::WavPlayer()
 {
    setup();
 
-   playButton.setDefaultColor(SchweineSystem::Color{0, 0, 255});
-   loopButton.setDefaultColor(SchweineSystem::Color{0, 0, 255});
+   playButton.setDefaultColor(Sy::Color{0, 0, 255});
+   loopButton.setDefaultColor(Sy::Color{0, 0, 255});
 }
 
 void WavPlayer::process(const ProcessArgs& args)
@@ -74,17 +74,17 @@ void WavPlayer::updateDisplays()
 
    displayController.drawRect(0, 10, 82, 18, true);
 
-   displayController.setColor(SchweineSystem::Color{255, 255, 255});
+   displayController.setColor(Sy::Color{255, 255, 255});
    const std::size_t posSlash = fileName.rfind("/");
    const std::string fileNameEnd = fileName.substr(1 + posSlash);
-   displayController.writeText(1, 1, fileNameEnd, SchweineSystem::DisplayOLED::Font::Small);
+   displayController.writeText(1, 1, fileNameEnd, Sy::DisplayOLED::Font::Small);
 
-   displayController.setColor(SchweineSystem::Color{0, 0, 0});
+   displayController.setColor(Sy::Color{0, 0, 0});
    std::string message = std::to_string(oscilator.getMeta().noOfChannels) + " ch";
    message += " @ " + Convert::text(oscilator.getMeta().sampleRate / 1000.0, 1);
-   displayController.writeText(1, 11, message, SchweineSystem::DisplayOLED::Font::Small);
+   displayController.writeText(1, 11, message, Sy::DisplayOLED::Font::Small);
 
-   displayController.setColor(SchweineSystem::Color{255, 255, 255});
+   displayController.setColor(Sy::Color{255, 255, 255});
 
    auto timeDisplay = [&](const size_t value)
    {
@@ -102,10 +102,10 @@ void WavPlayer::updateDisplays()
       return std::to_string(minutes) + ":" + secondsText;
    };
 
-   displayController.writeText(75, 26, timeDisplay(oscilator.getSamplePlayhead()), SchweineSystem::DisplayOLED::Font::Large, SchweineSystem::DisplayOLED::Alignment::Right);
+   displayController.writeText(75, 26, timeDisplay(oscilator.getSamplePlayhead()), Sy::DisplayOLED::Font::Large, Sy::DisplayOLED::Alignment::Right);
 
-   displayController.writeText(1, 51, "x" + Convert::text(oscilator.getPlaybackSpeed(), 2), SchweineSystem::DisplayOLED::Font::Small);
-   displayController.writeText(80, 50, timeDisplay(oscilator.getMeta().numberOfSamples), SchweineSystem::DisplayOLED::Font::Normal, SchweineSystem::DisplayOLED::Alignment::Right);
+   displayController.writeText(1, 51, "x" + Convert::text(oscilator.getPlaybackSpeed(), 2), Sy::DisplayOLED::Font::Small);
+   displayController.writeText(80, 50, timeDisplay(oscilator.getMeta().numberOfSamples), Sy::DisplayOLED::Font::Normal, Sy::DisplayOLED::Alignment::Right);
 }
 
 void WavPlayer::setWavFileName(const std::string& newFileName)
@@ -126,7 +126,7 @@ void WavPlayer::load()
    oscilator.setLooping(loop);
 }
 
-void WavPlayer::load(const SchweineSystem::Json::Object& rootObject)
+void WavPlayer::load(const Sy::Json::Object& rootObject)
 {
    fileName = rootObject.get("fileName").toString();
 
@@ -139,7 +139,7 @@ void WavPlayer::load(const SchweineSystem::Json::Object& rootObject)
    load();
 }
 
-void WavPlayer::save(SchweineSystem::Json::Object& rootObject)
+void WavPlayer::save(Sy::Json::Object& rootObject)
 {
    rootObject.set("fileName", fileName);
    rootObject.set("play", play);
@@ -155,11 +155,11 @@ void WavPlayer::onSampleRateChange(const SampleRateChangeEvent& event)
 // widget
 
 WavPlayerWidget::WavPlayerWidget(WavPlayer* module)
-   : SchweineSystem::ModuleWidget(module)
+   : Sy::ModuleWidget(module)
 {
    setup();
 
-   using OLEDWidget = SchweineSystem::DisplayOLED::Widget;
+   using OLEDWidget = Sy::DisplayOLED::Widget;
 
    OLEDWidget* oled = OLEDWidget::find(module, WavPlayer::Panel::Pixels_Display);
    if (oled)
@@ -180,4 +180,4 @@ void WavPlayerWidget::displayClicked(const float& x, const float& y)
       myModule->setWavFileName(std::string(path));
 }
 
-Model* modelWavPlayer = SchweineSystem::Master::the()->addModule<WavPlayer, WavPlayerWidget>("WavPlayer");
+Model* modelWavPlayer = Sy::Master::the()->addModule<WavPlayer, WavPlayerWidget>("WavPlayer");

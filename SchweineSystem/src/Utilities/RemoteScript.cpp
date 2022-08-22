@@ -5,11 +5,11 @@
 
 #include <Tools/SevenBit.h>
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 RemoteScript::RemoteScript()
-   : SchweineSystem::Module()
-   , SchweineSystem::MidiOutput("Trittbrettfahrer")
+   : Sy::Module()
+   , Sy::MidiOutput("Trittbrettfahrer")
    , displayController(this, Panel::Pixels_Display)
    , restartButton(this, Panel::Restart)
    , killButton(this, Panel::Kill)
@@ -18,7 +18,7 @@ RemoteScript::RemoteScript()
 {
    setup();
 
-   connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
+   connectionButton.setDefaultColor(Sy::Color{0, 255, 0});
 
    if (connected())
       sendStart();
@@ -47,9 +47,9 @@ void RemoteScript::updateDisplays()
 
    if (!fileName.empty())
    {
-      displayController.setColor(SchweineSystem::Color{255, 255, 255});
-      displayController.writeText(1, 1, "P", SchweineSystem::DisplayOLED::Font::Huge);
-      displayController.writeText(20, 10, "Y", SchweineSystem::DisplayOLED::Font::Huge);
+      displayController.setColor(Sy::Color{255, 255, 255});
+      displayController.writeText(1, 1, "P", Sy::DisplayOLED::Font::Huge);
+      displayController.writeText(20, 10, "Y", Sy::DisplayOLED::Font::Huge);
    }
 }
 
@@ -75,21 +75,21 @@ void RemoteScript::connectToMidiDevice()
    sendStart();
 }
 
-void RemoteScript::load(const SchweineSystem::Json::Object& rootObject)
+void RemoteScript::load(const Sy::Json::Object& rootObject)
 {
    fileName = rootObject.get("fileName").toString();
 
    sendStart();
 }
 
-void RemoteScript::save(SchweineSystem::Json::Object& rootObject)
+void RemoteScript::save(Sy::Json::Object& rootObject)
 {
    rootObject.set("fileName", fileName);
 }
 
 void RemoteScript::sendStart()
 {
-   using namespace SchweineSystem::Json;
+   using namespace Sy::Json;
 
    Object startObject;
    startObject.set("action", Value(std::string("launch")));
@@ -100,7 +100,7 @@ void RemoteScript::sendStart()
 
 void RemoteScript::sendKill()
 {
-   using namespace SchweineSystem::Json;
+   using namespace Sy::Json;
 
    Object killObject;
    killObject.set("action", Value(std::string("kill")));
@@ -108,7 +108,7 @@ void RemoteScript::sendKill()
    sendToRemote(killObject);
 }
 
-void RemoteScript::sendToRemote(const SchweineSystem::Json::Object& object)
+void RemoteScript::sendToRemote(const Sy::Json::Object& object)
 {
    if (!connected())
       return;
@@ -126,11 +126,11 @@ void RemoteScript::sendToRemote(const SchweineSystem::Json::Object& object)
 // widget
 
 RemoteScriptWidget::RemoteScriptWidget(RemoteScript* module)
-: SchweineSystem::ModuleWidget(module)
+: Sy::ModuleWidget(module)
 {
    setup();
 
-   using OLEDWidget = SchweineSystem::DisplayOLED::Widget;
+   using OLEDWidget = Sy::DisplayOLED::Widget;
 
    OLEDWidget* oled = OLEDWidget::find(module, RemoteScript::Panel::Pixels_Display);
    if (oled)
@@ -151,4 +151,4 @@ void RemoteScriptWidget::displayClicked(const float& x, const float& y)
       myModule->setScriptFileName(std::string(path));
 }
 
-Model* modelRemoteScript = SchweineSystem::Master::the()->addModule<RemoteScript, RemoteScriptWidget>("RemoteScript");
+Model* modelRemoteScript = Sy::Master::the()->addModule<RemoteScript, RemoteScriptWidget>("RemoteScript");

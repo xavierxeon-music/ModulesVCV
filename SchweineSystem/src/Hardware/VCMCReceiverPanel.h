@@ -3,10 +3,10 @@
 
 #include "VCMCReceiver.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemLED.h>
-#include <SchweineSystemLightMeter.h>
+#include <SyCommon.h>
+#include <SyButtonLED.h>
+#include <SyLED.h>
+#include <SyLightMeter.h>
 
 struct VCMCReceiver::Panel
 {

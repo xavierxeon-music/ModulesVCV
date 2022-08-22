@@ -1,5 +1,5 @@
-#ifndef SchweineSystemH
-#define SchweineSystemH
+#ifndef SyH
+#define SyH
 
 #include <iostream>
 
@@ -9,13 +9,13 @@ using namespace rack;
 // the "main" function
 void init(Plugin* pluginInstance);
 
-class SchweineSystem
+class Sy
 {
 public:
    using ModelList = std::vector<Model*>;
 
 public:
-   static SchweineSystem* the();
+   static Sy* the();
 
    template <typename AudioClass, typename WidgetClass>
    Model* addModule(const std::string& name);
@@ -26,15 +26,15 @@ private:
    friend void init(Plugin* pluginInstance);
 
 private:
-   SchweineSystem();
+   Sy();
 
 private:
    Plugin* pluginInstance;
    ModelList modelList;
 };
 
-#ifndef SchweineSystemHPP
-#include "SchweineSystemMaster.hpp"
-#endif // NOT SchweineSystemHPP
+#ifndef SyHPP
+#include "SyMaster.hpp"
+#endif // NOT SyHPP
 
-#endif // NOT  SchweineSystemH
+#endif // NOT  SyH

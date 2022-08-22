@@ -8,16 +8,16 @@
 #include <Tools/SevenBit.h>
 #include <Tools/Variable.h>
 
-#include <SchweineSystemJson.h>
-#include <SchweineSystemMaster.h>
+#include <SyJson.h>
+#include <SyMaster.h>
 
 // lord
 
 const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 TimeLord::TimeLord()
-   : SchweineSystem::Module()
-   , SchweineSystem::Exapnder<BusTimeLord>(this)
+   : Sy::Module()
+   , Sy::Exapnder<BusTimeLord>(this)
    , fileName()
    , ramps{}
    // midi
@@ -100,13 +100,13 @@ TimeLord::TimeLord()
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       lightMeterList[rampIndex]->setMaxValue(255);
-      displayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 0});
+      displayList[rampIndex]->setColor(Sy::Color{255, 255, 0});
       displayList[rampIndex]->setText("ABC");
    }
 
-   modeInputLight.setDefaultColor(SchweineSystem::Color{255, 255, 0});
-   modeRemoteLight.setDefaultColor(SchweineSystem::Color{0, 0, 255});
-   modeInternalLight.setDefaultColor(SchweineSystem::Color{0, 255, 0});
+   modeInputLight.setDefaultColor(Sy::Color{255, 255, 0});
+   modeRemoteLight.setDefaultColor(Sy::Color{0, 0, 255});
+   modeInternalLight.setDefaultColor(Sy::Color{0, 255, 0});
    setOperationLEDs();
 }
 
@@ -171,17 +171,17 @@ void TimeLord::process(const ProcessArgs& args)
    const bool dataApply = dataAppliedPulse.process(args.sampleTime);
    if (MidiReceive::Remember == receive)
    {
-      bankDisplay.setColor(SchweineSystem::Color{255, 255, 255});
+      bankDisplay.setColor(Sy::Color{255, 255, 255});
       bankDisplay.setText("?");
    }
    else if (dataApply)
    {
-      bankDisplay.setColor(SchweineSystem::Color{255, 255, 255});
+      bankDisplay.setColor(Sy::Color{255, 255, 255});
       bankDisplay.setText("@");
    }
    else
    {
-      bankDisplay.setColor(SchweineSystem::Color{255, 255, 255});
+      bankDisplay.setColor(Sy::Color{255, 255, 255});
       bankDisplay.setText(std::to_string(bankIndex));
    }
 
@@ -205,21 +205,21 @@ void TimeLord::updateDisplays()
    if (OperationMode::Internal != operationMode)
       return;
 
-   displayController.setColor(SchweineSystem::Color{255, 255, 255});
+   displayController.setColor(Sy::Color{255, 255, 255});
    displayController.drawRect(0, 0, 60, 10, true);
 
-   displayController.setColor(SchweineSystem::Color{0, 0, 0});
+   displayController.setColor(Sy::Color{0, 0, 0});
 
    if (DisplayMode::Division == displayMode)
-      displayController.writeText(5, 1, "Step", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(5, 1, "Step", Sy::DisplayOLED::Font::Normal);
    else if (DisplayMode::Length == displayMode)
-      displayController.writeText(5, 1, "Length", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(5, 1, "Length", Sy::DisplayOLED::Font::Normal);
    else if (DisplayMode::StageCount == displayMode)
-      displayController.writeText(5, 1, "Count", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(5, 1, "Count", Sy::DisplayOLED::Font::Normal);
    else
-      displayController.writeText(5, 1, "Current", SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(5, 1, "Current", Sy::DisplayOLED::Font::Normal);
 
-   displayController.setColor(SchweineSystem::Color{255, 255, 255});
+   displayController.setColor(Sy::Color{255, 255, 255});
 
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
@@ -238,7 +238,7 @@ void TimeLord::updateDisplays()
       else
          text += std::to_string(polyRamp->getCurrentStageIndex());
 
-      displayController.writeText(x, y, text, SchweineSystem::DisplayOLED::Font::Normal);
+      displayController.writeText(x, y, text, Sy::DisplayOLED::Font::Normal);
    }
 }
 
@@ -250,7 +250,7 @@ void TimeLord::loadRamps(const std::string& newFileName)
    if (data.empty())
       return;
 
-   using namespace SchweineSystem::Json;
+   using namespace Sy::Json;
 
    auto loadContent = [&](const Object& contentObject)
    {
@@ -318,12 +318,12 @@ void TimeLord::setOutputs(bool isReset, bool isClock, const BusTimeLord& busMess
          float voltage = inputList[rampIndex]->getVoltage();
          if (0 > voltage)
          {
-            displayList[rampIndex]->setColor(SchweineSystem::Color{255, 0, 0});
+            displayList[rampIndex]->setColor(Sy::Color{255, 0, 0});
             voltage = 0.0;
          }
          else
          {
-            displayList[rampIndex]->setColor(SchweineSystem::Color{255, 255, 0});
+            displayList[rampIndex]->setColor(Sy::Color{255, 255, 0});
          }
 
          const uint8_t value = voltageToValue(voltage);
@@ -344,7 +344,7 @@ void TimeLord::setOutputs(bool isReset, bool isClock, const BusTimeLord& busMess
 
       auto remoteMode = [&]()
       {
-         displayList[rampIndex]->setColor(SchweineSystem::Color{0, 0, 255});
+         displayList[rampIndex]->setColor(Sy::Color{0, 0, 255});
 
          const uint8_t value = remoteValues[rampIndex];
          const float voltage = valueToVoltage(value);
@@ -365,7 +365,7 @@ void TimeLord::setOutputs(bool isReset, bool isClock, const BusTimeLord& busMess
 
       auto internalMode = [&]()
       {
-         displayList[rampIndex]->setColor(SchweineSystem::Color{0, 0, 0});
+         displayList[rampIndex]->setColor(Sy::Color{0, 0, 0});
          displayList[rampIndex]->setText("");
 
          if (tempo.isRunningOrFirstTick())
@@ -442,7 +442,7 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       };
       printIncomingData();
 
-      SchweineSystem::Json::Object rootObject(data);
+      Sy::Json::Object rootObject(data);
       return rootObject;
    };
 
@@ -470,7 +470,7 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       if (value != bankIndex || MidiReceive::Remember != receive)
          return;
 
-      SchweineSystem::Json::Object rootObject = extractJsonAndClearBuffer();
+      Sy::Json::Object rootObject = extractJsonAndClearBuffer();
 
       const std::string newFileName = rootObject.get("fileName").toString();
       loadRamps(newFileName);
@@ -499,14 +499,14 @@ void TimeLord::dataFromMidiInput(const Bytes& message)
       if (value != bankIndex || MidiReceive::Data != receive)
          return;
 
-      SchweineSystem::Json::Object rootObject = extractJsonAndClearBuffer();
+      Sy::Json::Object rootObject = extractJsonAndClearBuffer();
 
       setFromRemote(rootObject);
       receive = MidiReceive::None;
    }
 }
 
-void TimeLord::load(const SchweineSystem::Json::Object& rootObject)
+void TimeLord::load(const Sy::Json::Object& rootObject)
 {
    bankIndex = rootObject.get("bank").toInt();
    displayMode = static_cast<DisplayMode>(rootObject.get("display").toInt());
@@ -516,7 +516,7 @@ void TimeLord::load(const SchweineSystem::Json::Object& rootObject)
    loadRamps(newFileName);
 }
 
-void TimeLord::save(SchweineSystem::Json::Object& rootObject)
+void TimeLord::save(Sy::Json::Object& rootObject)
 {
    rootObject.set("bank", bankIndex);
    rootObject.set("display", static_cast<uint8_t>(displayMode));
@@ -527,7 +527,7 @@ void TimeLord::save(SchweineSystem::Json::Object& rootObject)
 
 void TimeLord::uploadToRemote(const BusTimeLord& busMessage)
 {
-   using namespace SchweineSystem::Json;
+   using namespace Sy::Json;
 
    Array valueArray;
    Array steadyArray;
@@ -572,9 +572,9 @@ void TimeLord::uploadToRemote(const BusTimeLord& busMessage)
    Majordomo::send(queue);
 }
 
-void TimeLord::setFromRemote(const SchweineSystem::Json::Object& rootObject)
+void TimeLord::setFromRemote(const Sy::Json::Object& rootObject)
 {
-   using namespace SchweineSystem::Json;
+   using namespace Sy::Json;
 
    Array valueArray = rootObject.get("values").toArray();
    const uint8_t valueCount = valueArray.size();
@@ -591,11 +591,11 @@ void TimeLord::setFromRemote(const SchweineSystem::Json::Object& rootObject)
 // widget
 
 TimeLordWidget::TimeLordWidget(TimeLord* module)
-   : SchweineSystem::ModuleWidget(module)
+   : Sy::ModuleWidget(module)
 {
    setup();
 
-   using OLEDWidget = SchweineSystem::DisplayOLED::Widget;
+   using OLEDWidget = Sy::DisplayOLED::Widget;
 
    OLEDWidget* oled = OLEDWidget::find(module, TimeLord::Panel::Pixels_Display);
    if (oled)
@@ -616,4 +616,4 @@ void TimeLordWidget::displayClicked(const float& x, const float& y)
       myModule->loadRamps(std::string(path));
 }
 
-Model* modelTimeLord = SchweineSystem::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");
+Model* modelTimeLord = Sy::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");

@@ -1,7 +1,7 @@
 #include "BitBusCVOut.h"
 #include "BitBusCVOutPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void BitBusCVOut::setup()
 {
@@ -12,7 +12,7 @@ void BitBusCVOut::setup()
 
 void BitBusCVOutWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBus/BitBusCVOut.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/BitBus/BitBusCVOut.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

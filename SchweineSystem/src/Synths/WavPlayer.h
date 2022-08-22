@@ -6,13 +6,13 @@ using namespace rack;
 
 #include <Sound/SampleOscilator.h>
 
-#include <SchweineSystemButton.h>
-#include <SchweineSystemButtonLED.h>
-#include <SchweineSystemDisplayOLED.h>
-#include <SchweineSystemModule.h>
-#include <SchweineSystemModuleWidget.h>
+#include <SyButton.h>
+#include <SyButtonLED.h>
+#include <SyDisplayOLED.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
 
-class WavPlayer : public SchweineSystem::Module
+class WavPlayer : public Sy::Module
 {
 public:
    struct Panel;
@@ -29,30 +29,30 @@ private:
    void setup();
    void load();
 
-   void load(const SchweineSystem::Json::Object& rootObject) override;
-   void save(SchweineSystem::Json::Object& rootObject) override;
+   void load(const Sy::Json::Object& rootObject) override;
+   void save(Sy::Json::Object& rootObject) override;
 
    void onSampleRateChange(const SampleRateChangeEvent& event) override;
 
 private:
-   SchweineSystem::DisplayOLED::Controller displayController;
+   Sy::DisplayOLED::Controller displayController;
    Sample::Oscilator oscilator;
    float sampleRate;
    // file
    std::string fileName;
    // play
    bool play;
-   SchweineSystem::ButtonLED playButton;
+   Sy::ButtonLED playButton;
    // reset
-   SchweineSystem::Button resetButton;
+   Sy::Button resetButton;
    // loop
    bool loop;
-   SchweineSystem::ButtonLED loopButton;
+   Sy::ButtonLED loopButton;
 };
 
 // widget
 
-class WavPlayerWidget : public SchweineSystem::ModuleWidget
+class WavPlayerWidget : public Sy::ModuleWidget
 {
 public:
    WavPlayerWidget(WavPlayer* module);

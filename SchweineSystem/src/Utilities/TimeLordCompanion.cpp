@@ -1,11 +1,11 @@
 #include "TimeLordCompanion.h"
 #include "TimeLordCompanionPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 TimeLordCompanion::TimeLordCompanion()
-   : SchweineSystem::Module()
-   , SchweineSystem::Exapnder<BusTimeLord>(this)
+   : Sy::Module()
+   , Sy::Exapnder<BusTimeLord>(this)
    // stready
    , steadyInputList(inputs)
    , steadyButtonList(this)
@@ -47,7 +47,7 @@ TimeLordCompanion::TimeLordCompanion()
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       silenceSwitches[rampIndex]->setState(true);
-      steadyButtonList[rampIndex]->setDefaultColor(SchweineSystem::Color{0, 0, 255});
+      steadyButtonList[rampIndex]->setDefaultColor(Sy::Color{0, 0, 255});
    }
 }
 
@@ -62,12 +62,12 @@ void TimeLordCompanion::process(const ProcessArgs& args)
 
       if (steadyInputList[rampIndex]->isConnected())
       {
-         steadyButtonList[rampIndex]->setDefaultColor(SchweineSystem::Color{0, 255, 0});
+         steadyButtonList[rampIndex]->setDefaultColor(Sy::Color{0, 255, 0});
          busMessage.steady[rampIndex] = (steadyInputList[rampIndex]->getVoltage() > 3.0);
       }
       else
       {
-         steadyButtonList[rampIndex]->setDefaultColor(SchweineSystem::Color{0, 0, 255});
+         steadyButtonList[rampIndex]->setDefaultColor(Sy::Color{0, 0, 255});
          busMessage.steady[rampIndex] = buttonSteady[rampIndex];
       }
       steadyButtonList[rampIndex]->setActive(busMessage.steady[rampIndex]);
@@ -78,10 +78,10 @@ void TimeLordCompanion::process(const ProcessArgs& args)
    sendToRight(busMessage);
 }
 
-void TimeLordCompanion::load(const SchweineSystem::Json::Object& rootObject)
+void TimeLordCompanion::load(const Sy::Json::Object& rootObject)
 {
-   SchweineSystem::Json::Array silenceArray = rootObject.get("silence").toArray();
-   SchweineSystem::Json::Array steadyArray = rootObject.get("steady").toArray();
+   Sy::Json::Array silenceArray = rootObject.get("silence").toArray();
+   Sy::Json::Array steadyArray = rootObject.get("steady").toArray();
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       bool silence = silenceArray.get(rampIndex).toBool();
@@ -91,10 +91,10 @@ void TimeLordCompanion::load(const SchweineSystem::Json::Object& rootObject)
    }
 }
 
-void TimeLordCompanion::save(SchweineSystem::Json::Object& rootObject)
+void TimeLordCompanion::save(Sy::Json::Object& rootObject)
 {
-   SchweineSystem::Json::Array silenceArray;
-   SchweineSystem::Json::Array steadyArray;
+   Sy::Json::Array silenceArray;
+   Sy::Json::Array steadyArray;
    for (uint8_t rampIndex = 0; rampIndex < 8; rampIndex++)
    {
       const bool silence = silenceSwitches[rampIndex]->isOn();
@@ -110,9 +110,9 @@ void TimeLordCompanion::save(SchweineSystem::Json::Object& rootObject)
 // widget
 
 TimeLordCompanionWidget::TimeLordCompanionWidget(TimeLordCompanion* module)
-: SchweineSystem::ModuleWidget(module)
+: Sy::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelTimeLordCompanion = SchweineSystem::Master::the()->addModule<TimeLordCompanion, TimeLordCompanionWidget>("TimeLordCompanion");
+Model* modelTimeLordCompanion = Sy::Master::the()->addModule<TimeLordCompanion, TimeLordCompanionWidget>("TimeLordCompanion");

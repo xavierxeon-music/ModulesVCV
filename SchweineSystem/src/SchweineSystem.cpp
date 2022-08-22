@@ -1,18 +1,18 @@
-#include "SchweineSystemMaster.h"
+#include "SyMaster.h"
 
-SchweineSystem::SchweineSystem()
+Sy::Sy()
    : pluginInstance(nullptr)
    , modelList()
 {
 }
 
-SchweineSystem* SchweineSystem::Master::the()
+Sy* Sy::Master::the()
 {
-   static SchweineSystem* theOnlyOne = new SchweineSystem();
+   static Sy* theOnlyOne = new Sy();
    return theOnlyOne;
 }
 
-Plugin* SchweineSystem::instance()
+Plugin* Sy::instance()
 {
    return pluginInstance;
 }
@@ -20,10 +20,10 @@ Plugin* SchweineSystem::instance()
 // the "main" function
 void init(Plugin* pluginInstance)
 {
-   SchweineSystem::Master::the()->pluginInstance = pluginInstance;
+   Sy::Master::the()->pluginInstance = pluginInstance;
 
-   using ModelList = SchweineSystem::ModelList;
-   const ModelList& modelList = SchweineSystem::Master::the()->modelList;
+   using ModelList = Sy::ModelList;
+   const ModelList& modelList = Sy::Master::the()->modelList;
 
    for (Model* model : modelList)
       pluginInstance->addModel(model);

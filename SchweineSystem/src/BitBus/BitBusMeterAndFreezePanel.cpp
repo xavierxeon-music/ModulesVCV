@@ -1,7 +1,7 @@
 #include "BitBusMeterAndFreeze.h"
 #include "BitBusMeterAndFreezePanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 
 void BitBusMeterAndFreeze::setup()
 {
@@ -16,7 +16,7 @@ void BitBusMeterAndFreeze::setup()
 
 void BitBusMeterAndFreezeWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/BitBus/BitBusMeterAndFreeze.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/BitBus/BitBusMeterAndFreeze.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

@@ -3,12 +3,12 @@
 
 #include "TimeLord.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemButton.h>
-#include <SchweineSystemDisplayLCD.h>
-#include <SchweineSystemLED.h>
-#include <SchweineSystemLightMeter.h>
-#include <SchweineSystemDisplayOLED.h>
+#include <SyCommon.h>
+#include <SyButton.h>
+#include <SyDisplayLCD.h>
+#include <SyLED.h>
+#include <SyLightMeter.h>
+#include <SyDisplayOLED.h>
 
 struct TimeLord::Panel
 {

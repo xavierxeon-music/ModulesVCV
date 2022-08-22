@@ -3,12 +3,12 @@
 
 #include <Midi/MidiCommon.h>
 
-#include <SchweineSystemJson.h>
-#include <SchweineSystemMaster.h>
+#include <SyJson.h>
+#include <SyMaster.h>
 
 FlameCC::FlameCC()
-   : SchweineSystem::Module()
-   , SchweineSystem::MidiOutput(Midi::Device::FlameCC)
+   : Sy::Module()
+   , Sy::MidiOutput(Midi::Device::FlameCC)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , voltageToCcValue(0.0, 5.0, 0.0, 127.0)
    , inputList(inputs)
@@ -51,7 +51,7 @@ FlameCC::FlameCC()
                               Panel::Row7_HalfB,
                               Panel::Row8_HalfB});
 
-   connectionButton.setDefaultColor(SchweineSystem::Color{0, 255, 0});
+   connectionButton.setDefaultColor(Sy::Color{0, 255, 0});
    connectToMidiDevice();
 }
 
@@ -127,9 +127,9 @@ void FlameCC::sendSysEx()
    sendMessage(sysExMessage);
 }
 
-void FlameCC::load(const SchweineSystem::Json::Object& rootObject)
+void FlameCC::load(const Sy::Json::Object& rootObject)
 {
-   SchweineSystem::Json::Array fullVoltageArray = rootObject.get("fullVoltage").toArray();
+   Sy::Json::Array fullVoltageArray = rootObject.get("fullVoltage").toArray();
    for (uint8_t index = 0; index < 16; index++)
    {
       const bool on = fullVoltageArray.get(index).toBool();
@@ -137,9 +137,9 @@ void FlameCC::load(const SchweineSystem::Json::Object& rootObject)
    }
 }
 
-void FlameCC::save(SchweineSystem::Json::Object& rootObject)
+void FlameCC::save(Sy::Json::Object& rootObject)
 {
-   SchweineSystem::Json::Array fullVoltageArray;
+   Sy::Json::Array fullVoltageArray;
    for (uint8_t index = 0; index < 16; index++)
    {
       const bool on = fullVoltSwitchList[index]->isOn();
@@ -152,9 +152,9 @@ void FlameCC::save(SchweineSystem::Json::Object& rootObject)
 // widget
 
 FlameCCWidget::FlameCCWidget(FlameCC* module)
-   : SchweineSystem::ModuleWidget(module)
+   : Sy::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelFlameCC = SchweineSystem::Master::the()->addModule<FlameCC, FlameCCWidget>("FlameCC");
+Model* modelFlameCC = Sy::Master::the()->addModule<FlameCC, FlameCCWidget>("FlameCC");

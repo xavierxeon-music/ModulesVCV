@@ -1,7 +1,7 @@
 #include "TimeLord.h"
 #include "TimeLordPanel.h"
 
-#include <SchweineSystemMaster.h>
+#include <SyMaster.h>
 #include <limits>
 
 void TimeLord::setup()
@@ -58,7 +58,7 @@ void TimeLord::setup()
 
 void TimeLordWidget::setup()
 {
-   std::string panelPath = asset::plugin(SchweineSystem::Master::the()->instance(), "res/Utilities/TimeLord.svg");
+   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/TimeLord.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

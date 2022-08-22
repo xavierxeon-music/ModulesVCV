@@ -3,9 +3,9 @@
 
 #include "Revoicer.h"
 
-#include <SchweineSystemCommon.h>
-#include <SchweineSystemButton.h>
-#include <SchweineSystemDisplayLCD.h>
+#include <SyCommon.h>
+#include <SyButton.h>
+#include <SyDisplayLCD.h>
 
 struct Revoicer::Panel
 {
