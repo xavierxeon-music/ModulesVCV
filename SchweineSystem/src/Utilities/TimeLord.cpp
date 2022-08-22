@@ -11,7 +11,7 @@
 #include <SchweineSystemJson.h>
 #include <SchweineSystemMaster.h>
 
-// lord
+// widget addChild -> visible
 
 const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
