@@ -79,21 +79,17 @@ void BitBusNegate::save(Sy::Json::Object& rootObject)
 
 void BitBusNegate::process(const ProcessArgs& args)
 {
-   if (canCommunicatWithRight())
+   if (!canCommunicatWithRight())
+      return busOutIndicator.setOff();
+   else
       busOutIndicator.setOn();
-   else
-      busOutIndicator.setOff();
 
-   BoolField8 boolField = 0;
    if (!canCommunicatWithLeft())
-   {
-      busInIndicator.setOff();
-   }
+      return busInIndicator.setOff();
    else
-   {
       busInIndicator.setOn();
-      boolField = receiveFromLeft().byte;
-   }
+
+   BoolField8 boolField = receiveFromLeft().byte;
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -117,8 +113,7 @@ void BitBusNegate::process(const ProcessArgs& args)
       }
    }
 
-   if (canCommunicatWithRight())
-      sendToRight(BitBusMessage {boolField});
+   sendToRight(BitBusMessage{boolField});
 }
 
 // widget

@@ -37,8 +37,6 @@ public:
 
 public:
    void process(const ProcessArgs& args) override;
-   void updateDisplays() override;
-
    void loadRamps(const std::string& newFileName);
 
 private:
@@ -66,6 +64,7 @@ private:
 
 private:
    void setup();
+   void updateDisplays() override;
 
    void setOutputs(bool isReset, bool isClock, const BusTimeLord& busMessage);
    void setOperationLEDs();

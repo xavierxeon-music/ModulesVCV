@@ -107,6 +107,18 @@
          ]
       },
       {
+         "slug": "BitBusCounter",
+         "name": "BitBusCounter",
+         "description": "",
+         "tags": []
+      },
+      {
+         "slug": "BitBusTransmutor",
+         "name": "BitBusTransmutor",
+         "description": "",
+         "tags": []
+      },
+      {
          "slug": "BitBusCVOut",
          "name": "BitBus CV Output",
          "description": "turn 8 bits into CV",
