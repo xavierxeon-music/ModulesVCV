@@ -5,12 +5,12 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
+#include <SyButtonLED.h>
+#include <SyCommon.h>
 #include <SyExapnder.h>
+#include <SyLED.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
-
-#include <SyCommon.h>
-#include <SyLED.h>
 
 class BitBusNegate : public Sy::Module, public Sy::Exapnder<BitBusMessage>
 {
@@ -31,8 +31,7 @@ private:
    void save(Sy::Json::Object& rootObject) override;
 
 private:
-   Sy::LED::List lightList;
-   Sy::Param::List paramList;
+   Sy::ButtonLED::List latchList;
    Sy::Input::List gateList;
    dsp::BooleanTrigger gateTrigger[8];
    bool gates[8];

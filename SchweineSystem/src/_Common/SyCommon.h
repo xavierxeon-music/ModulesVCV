@@ -23,13 +23,37 @@ namespace Sy
    class Module;
 
    template <typename ElementType>
-   class ElementList
+   class OneParamElementList
    {
    public:
-      ElementList(Module* module);
+      OneParamElementList(Module* module);
 
    public:
       void append(const std::vector<uint16_t>& indexList);
+      ElementType* operator[](const uint16_t& index);
+
+   private:
+      Module* module;
+      std::vector<ElementType> instanceList;
+   };
+
+   template <typename ElementType>
+   class TwoParamElementList
+   {
+   public:
+      struct Params
+      {
+         uint16_t paramA;
+         uint16_t paramB;
+
+         using List = std::vector<Params>;
+      };
+
+   public:
+      TwoParamElementList(Module* module);
+
+   public:
+      void append(const typename Params::List& paramsList);
       ElementType* operator[](const uint16_t& index);
 
    private:
@@ -54,11 +78,6 @@ namespace Sy
       std::vector<uint16_t> idMappingList;
    };
 
-   namespace Param
-   {
-      using List = SubList<rack::engine::Param>;
-   }
-
    namespace Input
    {
       using List = SubList<rack::engine::Input>;
@@ -73,16 +92,23 @@ namespace Sy
 
 } // namespace Sy
 
-
-inline void makeInput(rack::ModuleWidget* widget, rack::math::Vec pos, int inputId)
+inline void makeInput(rack::ModuleWidget* widget, rack::math::Vec pos, int inputId, bool black = false)
 {
-   rack::app::PortWidget* portWidget = rack::createInputCentered<rack::PJ301MPort>(pos, widget->getModule(), inputId);
+   rack::app::PortWidget* portWidget = nullptr;
+   if (black)
+      portWidget = rack::createInputCentered<rack::PJ3410Port>(pos, widget->getModule(), inputId);
+   else
+      portWidget = rack::createInputCentered<rack::PJ301MPort>(pos, widget->getModule(), inputId);
    widget->addInput(portWidget);
 }
 
-inline void makeOutput(rack::ModuleWidget* widget, rack::math::Vec pos, int outputId)
+inline void makeOutput(rack::ModuleWidget* widget, rack::math::Vec pos, int outputId, bool black = false)
 {
-   rack::app::PortWidget* portWidget = rack::createOutputCentered<rack::PJ301MPort>(pos, widget->getModule(), outputId);
+   rack::app::PortWidget* portWidget = nullptr;
+   if (black)
+      portWidget = rack::createOutputCentered<rack::PJ3410Port>(pos, widget->getModule(), outputId);
+   else
+      portWidget = rack::createOutputCentered<rack::PJ301MPort>(pos, widget->getModule(), outputId);
    widget->addOutput(portWidget);
 }
 

@@ -16,7 +16,7 @@ namespace Sy
       class Controller
       {
       public:
-         class List;
+         using List = TwoParamElementList<Controller>;
 
       public:
          Controller(Module* module, const uint16_t& textId, const uint16_t& rgbId);
@@ -29,30 +29,6 @@ namespace Sy
          Module* module;
          const uint16_t textId;
          const uint16_t rgbId;
-      };
-
-      class Controller::List
-      {
-      public:
-         struct Params
-         {
-            uint16_t valueParamId;
-            uint16_t redLightId;
-
-            using List = std::vector<Params>;
-         };
-
-      public:
-         List(Module* module);
-         ~List();
-
-      public:
-         void append(const Params::List& paramsList);
-         Controller* operator[](const uint8_t& index);
-
-      private:
-         Module* module;
-         std::vector<Controller*> instanceList;
       };
 
       class Widget : public rack::TransparentWidget

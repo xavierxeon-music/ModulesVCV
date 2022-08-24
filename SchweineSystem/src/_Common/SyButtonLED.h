@@ -11,7 +11,7 @@ namespace Sy
    class ButtonLED : private LED
    {
    public:
-      class List;
+      using List = TwoParamElementList<ButtonLED>;
 
    public:
       ButtonLED(Module* module, const uint16_t& paramIndex = 0, const uint16_t& rgbIndex = 0);
@@ -29,29 +29,6 @@ namespace Sy
    private:
       uint16_t paramIndex;
       rack::dsp::BooleanTrigger trigger;
-   };
-
-   class ButtonLED::List
-   {
-   public:
-      struct Params
-      {
-         const uint16_t paramIndex;
-         const uint16_t rgbIndex;
-
-         using List = std::vector<Params>;
-      };
-
-   public:
-      List(Module* module);
-
-   public:
-      void append(const Params::List& paramsList);
-      ButtonLED* operator[](const uint16_t& index);
-
-   private:
-      Module* module;
-      std::vector<ButtonLED> instanceList;
    };
 
 } // namespace Sy

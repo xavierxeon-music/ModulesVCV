@@ -64,6 +64,20 @@ void MetropolixClock::processMessage(const midi::Message& msg)
       clockReset.trigger();
       doNotAdvanceTempo = true;
    }
+   else if (Midi::Event::SongPositionPointer == event)
+   {
+      const uint8_t frontByte = msg.bytes[0];
+      const uint8_t backByte = msg.bytes[1];
+      const uint16_t position = frontByte * 128 + backByte;
+
+      if (30976 == position) // metropolix magix ?
+      {
+         tickCounter.reset();
+         tempo.clockReset();
+         clockReset.trigger();
+         doNotAdvanceTempo = true;
+      }
+   }
 }
 
 void MetropolixClock::connectToMidiDevice()

@@ -8,7 +8,7 @@ namespace Sy
    class Switch
    {
    public:
-      using List = ElementList<Switch>;
+      using List = OneParamElementList<Switch>;
 
    public:
       Switch(Module* module, const uint16_t& paramIndex = 0);

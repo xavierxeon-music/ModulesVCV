@@ -19,8 +19,8 @@ void BarCounterWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeInput(this, Vec(52.50, 344.93),  BarCounter::Panel::Reset);
-   makeInput(this, Vec(52.50, 295.80),  BarCounter::Panel::Clock);
+   makeInput(this, Vec(52.50, 344.93),  BarCounter::Panel::Reset, false);
+   makeInput(this, Vec(52.50, 295.80),  BarCounter::Panel::Clock, true);
 
    makeOLED(this, Vec(10.00, 63.98), BarCounter::Panel::Pixels_Display, 83, 170);
 }

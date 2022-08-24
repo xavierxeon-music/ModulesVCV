@@ -3,8 +3,8 @@
 
 #include "MetropolixClock.h"
 
-#include <SyButtonLED.h>
 #include <SyCommon.h>
+#include <SyButtonLED.h>
 
 struct MetropolixClock::Panel
 {
@@ -50,6 +50,7 @@ struct MetropolixClock::Panel
       // lcds
       LIGHTS_LEN = 3
    };
+
 };
 
 #endif // NOT MetropolixClockPanelH

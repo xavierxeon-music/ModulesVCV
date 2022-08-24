@@ -28,33 +28,6 @@ void Sy::DisplayLCD::Controller::setColor(const Sy::Color& color)
    module->lights[rgbId + 2].setBrightness(blue);
 }
 
-// controller list
-
-Sy::DisplayLCD::Controller::List::List(Module* module)
-   : module(module)
-{
-}
-
-Sy::DisplayLCD::Controller::List::~List()
-{
-   for (Controller* instance : instanceList)
-      delete instance;
-}
-
-void Sy::DisplayLCD::Controller::List::append(const Params::List& paramsList)
-{
-   for (const Params& params : paramsList)
-   {
-      Controller* controller = new Controller(module, params.valueParamId, params.redLightId);
-      instanceList.push_back(controller);
-   }
-}
-
-Sy::DisplayLCD::Controller* Sy::DisplayLCD::Controller::List::operator[](const uint8_t& index)
-{
-   return instanceList[index];
-}
-
 // widget
 
 Sy::DisplayLCD::Widget::Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& textId, const uint16_t& rgbId)

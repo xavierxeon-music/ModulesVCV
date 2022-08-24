@@ -1,5 +1,5 @@
-#include "MetropolixClockPanel.h"
 #include "MetropolixClock.h"
+#include "MetropolixClockPanel.h"
 
 #include <SyMaster.h>
 
@@ -21,6 +21,7 @@ void MetropolixClockWidget::setup()
 
    makeLEDButton(this, Vec(29.95, 340.14), MetropolixClock::Panel::Connect, MetropolixClock::Panel::RGB_Connect);
 
-   makeOutput(this, Vec(30.01, 240.06), MetropolixClock::Panel::Reset);
-   makeOutput(this, Vec(30.00, 190.72), MetropolixClock::Panel::Clock);
+   makeOutput(this, Vec(30.01, 240.06), MetropolixClock::Panel::Reset, false);
+   makeOutput(this, Vec(30.00, 190.72), MetropolixClock::Panel::Clock, true);
 }
+

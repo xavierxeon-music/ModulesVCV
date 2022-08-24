@@ -10,7 +10,7 @@ namespace Sy
    class Button
    {
    public:
-      using List = ElementList<Button>;
+      using List = OneParamElementList<Button>;
 
    public:
       Button(Module* module, const uint16_t& paramIndex = 0);

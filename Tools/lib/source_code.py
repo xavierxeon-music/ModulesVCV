@@ -127,7 +127,8 @@ class Sources(Common):
             name = input['name']
             x = input['cx']
             y = input['cy']
-            line(1, f'makeInput(this, Vec({x:.2f}, {y:.2f}),  {self.moduleName}::Panel::{name});')
+            black = 'true' if input['count'] != 1 else 'false'
+            line(1, f'makeInput(this, Vec({x:.2f}, {y:.2f}),  {self.moduleName}::Panel::{name}, {black});')
 
         if self.outputs:
             line(0)
@@ -135,7 +136,8 @@ class Sources(Common):
             name = output['name']
             x = output['cx']
             y = output['cy']
-            line(1, f'makeOutput(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name});')
+            black = 'true' if output['count'] != 1 else 'false'
+            line(1, f'makeOutput(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {black});')
 
         if self.leds:
             line(0)

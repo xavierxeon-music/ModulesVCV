@@ -18,7 +18,7 @@
         <g transform="matrix(1,0,0,1,20.4271,159.225)">
             <text x="89.198px" y="118.306px" style="font-family:'DINCondensed-Bold', 'DIN Condensed';font-weight:700;font-stretch:condensed;font-size:10px;">reset</text>
         </g>
-        <g id="Clock-input" serif:id="Clock#input" transform="matrix(0.175002,0,0,0.175002,94.1072,214.527)">
+        <g id="Clock-input-M" serif:id="Clock#input$M" transform="matrix(0.175002,0,0,0.175002,94.1072,214.527)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(217,217,217);"/>
         </g>
         <g transform="matrix(1,0,0,1,20.7463,110.854)">
