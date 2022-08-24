@@ -7,11 +7,10 @@ using namespace rack;
 #include "BitBusCommon.h"
 #include <SyCommon.h>
 #include <SyExapnder.h>
+#include <SyLED.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
-
-#include <SyCommon.h>
-#include <SyLED.h>
+#include <SyOutput.h>
 
 class BitBusBitOut : public Sy::Module, public Sy::Exapnder<BitBusMessage>
 {

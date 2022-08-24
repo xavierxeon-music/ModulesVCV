@@ -13,6 +13,7 @@ using namespace rack;
 #include <Tools/RingBuffer.h>
 
 #include <SyCommon.h>
+#include <SyInput.h>
 #include <SyLED.h>
 
 static constexpr uint16_t AverageBufferSize = 4800;

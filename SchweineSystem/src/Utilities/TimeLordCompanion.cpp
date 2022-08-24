@@ -7,7 +7,7 @@ TimeLordCompanion::TimeLordCompanion()
    : Sy::Module()
    , Sy::Exapnder<BusTimeLord>(this)
    // stready
-   , steadyInputList(inputs)
+   , steadyInputList(this)
    , steadyButtonList(this)
    , buttonSteady{false, false, false, false, false, false, false, false}
    // silence

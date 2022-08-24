@@ -5,9 +5,11 @@
 using namespace rack;
 
 #include <SyCommon.h>
+#include <SyInput.h>
 #include <SyLED.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
+#include <SyOutput.h>
 
 class GateLatch : public Sy::Module
 {

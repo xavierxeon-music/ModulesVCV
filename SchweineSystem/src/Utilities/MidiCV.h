@@ -4,11 +4,12 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include "MidiReplay.h"
 #include <SyExapnder.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
 
-#include "MidiReplay.h"
+#include <SyOutput.h>
 
 class MidiCV : public Sy::Module, public Sy::Exapnder<BusMidi>
 {

@@ -8,7 +8,7 @@
 BitBusBitIn::BitBusBitIn()
    : Sy::Module()
    , Sy::Exapnder<BitBusMessage>(this)
-   , inputList(inputs)
+   , inputList(this)
    , busInIndicator(this, Panel::RGB_BusIn)
    , busOutIndicator(this, Panel::RGB_BusOut)
 

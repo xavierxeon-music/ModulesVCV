@@ -8,6 +8,7 @@ using namespace rack;
 
 #include <SyButtonLED.h>
 #include <SyCommon.h>
+#include <SyInput.h>
 #include <SyMidiOutput.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>

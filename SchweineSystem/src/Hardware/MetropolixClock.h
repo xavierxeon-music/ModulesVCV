@@ -6,9 +6,11 @@ using namespace rack;
 
 #include <Music/Tempo.h>
 
-#include <SyButtonLED.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
+
+#include <SyButtonLED.h>
+#include <SyOutput.h>
 
 class MetropolixClock : public Sy::Module
 {
@@ -35,9 +37,7 @@ private:
    bool doNotAdvanceTempo;
    Tempo tempo;
    dsp::PulseGenerator clockTick;
-   dsp::BooleanTrigger tickTrigger;
    dsp::PulseGenerator clockReset;
-   dsp::BooleanTrigger resetTrigger;
 };
 
 // widget

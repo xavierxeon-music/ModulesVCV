@@ -8,10 +8,6 @@ Sy::Switch::Switch(Module* module, const uint16_t& paramIndex)
 {
 }
 
-void Sy::Switch::assign(const uint16_t& newParamIndex)
-{
-   paramIndex = newParamIndex;
-}
 
 void Sy::Switch::setState(bool on)
 {

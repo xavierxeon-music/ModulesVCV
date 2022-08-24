@@ -16,7 +16,6 @@ namespace Sy
       Button(Module* module, const uint16_t& paramIndex = 0);
 
    public:
-      void assign(const uint16_t& paramIndex);
       bool isTriggered();
 
    private:

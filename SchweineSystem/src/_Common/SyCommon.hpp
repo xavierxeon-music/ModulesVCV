@@ -53,26 +53,4 @@ ElementType* Sy::TwoParamElementList<ElementType>::operator[](const uint16_t& in
    return &instanceList[index];
 }
 
-// ************************************************
-
-template <typename ContentType>
-Sy::SubList<ContentType>::SubList(std::vector<ContentType>& fullList)
-   : fullList(fullList)
-{
-}
-
-template <typename ContentType>
-void Sy::SubList<ContentType>::append(const std::vector<uint16_t>& idList)
-{
-   idMappingList.insert(idMappingList.end(), idList.begin(), idList.end());
-}
-
-template <typename ContentType>
-ContentType* Sy::SubList<ContentType>::operator[](const uint16_t& index)
-{
-   const uint8_t fullIndex = idMappingList.at(index);
-   ContentType* value = &fullList[fullIndex];
-   return value;
-}
-
 #endif // NOT SyCommonHPP

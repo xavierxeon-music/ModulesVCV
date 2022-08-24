@@ -5,11 +5,14 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SyDisplayLCD.h>
 #include <SyExapnder.h>
-#include <SyLED.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
+
+#include <SyDisplayLCD.h>
+#include <SyInput.h>
+#include <SyLED.h>
+#include <SyOutput.h>
 
 class BitBusCounter : public Sy::Module, public Sy::Exapnder<BitBusMessage>
 {

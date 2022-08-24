@@ -6,11 +6,14 @@ using namespace rack;
 
 #include <Sound/SampleOscilator.h>
 
+#include <SyModule.h>
+#include <SyModuleWidget.h>
+
 #include <SyButton.h>
 #include <SyButtonLED.h>
 #include <SyDisplayOLED.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SyInput.h>
+#include <SyOutput.h>
 
 class WavPlayer : public Sy::Module
 {

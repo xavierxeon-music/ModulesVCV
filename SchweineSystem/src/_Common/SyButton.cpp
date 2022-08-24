@@ -9,11 +9,6 @@ Sy::Button::Button(Module* module, const uint16_t& paramIndex)
 {
 }
 
-void Sy::Button::assign(const uint16_t& newParamIndex)
-{
-   paramIndex = newParamIndex;
-}
-
 bool Sy::Button::isTriggered()
 {
    const bool pressed = module->params[paramIndex].getValue();

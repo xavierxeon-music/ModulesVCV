@@ -12,7 +12,7 @@ BitBusNegate::BitBusNegate()
    : Sy::Module()
    , Sy::Exapnder<BitBusMessage>(this)
    , latchList(this)
-   , gateList(inputs)
+   , gateList(this)
    , gateTrigger()
    , gates{}
    , busInIndicator(this, Panel::RGB_BusIn)
@@ -85,7 +85,7 @@ void BitBusNegate::process(const ProcessArgs& args)
    {
       bool negateValue = latchList[index]->isTriggered();
       if (gateList[index]->isConnected())
-         negateValue = (gateList[index]->getVoltage() > 3.0);
+         negateValue = gateList[index]->isOn();
 
       if (gateTrigger[index].process(negateValue))
          gates[index] ^= true;

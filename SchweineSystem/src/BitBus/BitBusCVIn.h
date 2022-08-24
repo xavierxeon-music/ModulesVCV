@@ -12,6 +12,7 @@ using namespace rack;
 #include <Tools/Range.h>
 
 #include <SyCommon.h>
+#include <SyInput.h>
 #include <SyLED.h>
 
 class BitBusCVIn : public Sy::Module, public Sy::Exapnder<BitBusMessage>

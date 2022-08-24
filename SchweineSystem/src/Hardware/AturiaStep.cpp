@@ -11,7 +11,7 @@ AturiaStep::AturiaStep()
    , useDrumChannel(false)
    , drumButon(this, Panel::Drums, Panel::RGB_Drums)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
-   , inputList(inputs)
+   , inputList(this)
    , patterns{0, 0, 0, 0}
    , channelSwitch(CvSwitch::ChannelCount::Sixteen)
    , displayList(this)

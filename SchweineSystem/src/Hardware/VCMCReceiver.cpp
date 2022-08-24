@@ -15,13 +15,13 @@ VCMCReceiver::VCMCReceiver()
    , ccValueToVoltage(0.0, 127, 0, 10.0)
    , gates{false, false, false, false, false, false, false, false}
    , lightListGate(this)
-   , gateList(outputs)
+   , gateList(this)
    , sliderValues{0, 0, 0, 0, 0, 0, 0, 0}
    , lightMeterListSlider(this)
-   , sliderOutputList(outputs)
+   , sliderOutputList(this)
    , cvValues{0, 0, 0, 0, 0, 0, 0, 0}
    , lightMeterListCV(this)
-   , cvOutputList(outputs)
+   , cvOutputList(this)
 {
    setup();
 

@@ -19,10 +19,7 @@ namespace Sy
       LED(Module* module, const uint16_t& rgbIndex = 0);
 
    public:
-      void assign(const uint16_t& rgbIndex);
-
       void setColor(const Color& color);
-
       void setDefaultColor(const Color& color);
       void setOn(); // set to default color
       void setOff();

@@ -11,7 +11,7 @@ FlameCC::FlameCC()
    , Sy::MidiOutput(Midi::Device::FlameCC)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , voltageToCcValue(0.0, 5.0, 0.0, 127.0)
-   , inputList(inputs)
+   , inputList(this)
    , controllerValueStore{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
    , fullVoltSwitchList(this)
 {

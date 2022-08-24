@@ -6,10 +6,13 @@ using namespace rack;
 
 #include <Effect/Revoice.h>
 
-#include <SyButton.h>
-#include <SyDisplayLCD.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
+
+#include <SyButton.h>
+#include <SyDisplayLCD.h>
+#include <SyInput.h>
+#include <SyOutput.h>
 
 class Revoicer : public Sy::Module
 {

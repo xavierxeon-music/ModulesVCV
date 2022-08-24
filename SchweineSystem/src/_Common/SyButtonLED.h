@@ -17,7 +17,6 @@ namespace Sy
       ButtonLED(Module* module, const uint16_t& paramIndex = 0, const uint16_t& rgbIndex = 0);
 
    public:
-      void assign(const uint16_t& paramIndex, const uint16_t& rgbIndex);
       bool isTriggered();
 
       using LED::setActive;

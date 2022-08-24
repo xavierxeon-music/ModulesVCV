@@ -11,10 +11,7 @@ MetropolixClock::MetropolixClock()
    , doNotAdvanceTempo(false)
    , tempo()
    , clockTick()
-   , tickTrigger()
    , clockReset()
-   , resetTrigger()
-
 {
    setup();
 

@@ -4,8 +4,10 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <SyInput.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
+#include <SyOutput.h>
 
 class MeshStack : public Sy::Module
 {

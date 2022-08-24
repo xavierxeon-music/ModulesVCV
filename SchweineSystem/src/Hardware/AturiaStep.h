@@ -6,14 +6,15 @@ using namespace rack;
 
 #include <Blocks/CvSwitch.h>
 
+#include "MidiBusModule.h"
+#include <SyModule.h>
+#include <SyModuleWidget.h>
+
 #include <SyButton.h>
 #include <SyButtonLED.h>
 #include <SyDisplayLCD.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SyInput.h>
 #include <SySwitch.h>
-
-#include "MidiBusModule.h"
 
 class AturiaStep : public Sy::Module, public MidiBusModule
 {

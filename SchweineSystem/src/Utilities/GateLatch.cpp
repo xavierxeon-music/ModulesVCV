@@ -6,8 +6,8 @@
 
 GateLatch::GateLatch()
    : Sy::Module()
-   , inputList(inputs)
-   , outputList(outputs)
+   , inputList(this)
+   , outputList(this)
    , lightList(this)
    , triggers{}
    , activity{}
@@ -71,7 +71,7 @@ void GateLatch::process(const ProcessArgs& args)
             return inputList[index]->getVoltage();
          else if (0 == index)
             return 0.0f;
-         else
+         else // pass output above
             return outputList[index - 1]->getVoltage();
       }();
 

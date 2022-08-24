@@ -1,6 +1,8 @@
 #ifndef SySwitchH
 #define SySwitchH
 
+#include <rack.hpp>
+
 #include "SyCommon.h"
 
 namespace Sy
@@ -14,7 +16,6 @@ namespace Sy
       Switch(Module* module, const uint16_t& paramIndex = 0);
 
    public:
-      void assign(const uint16_t& paramIndex);
       void setState(bool on);
       bool isOn() const;
       bool isOff() const;

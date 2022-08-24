@@ -11,13 +11,6 @@ Sy::LED::LED(Module* module, const uint16_t& rgbIndex)
 {
 }
 
-void Sy::LED::assign(const uint16_t& rgbIndex)
-{
-   redIndex = rgbIndex + 0;
-   greenIndex = rgbIndex + 1;
-   blueIndex = rgbIndex + 2;
-}
-
 void Sy::LED::setColor(const Color& color)
 {
    const float red = static_cast<float>(color.red) / 255.0;

@@ -9,8 +9,10 @@ using namespace rack;
 #include <Tools/Counter.h>
 
 #include <SyDisplayOLED.h>
+#include <SyInput.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
+#include <SyOutput.h>
 
 class BarCounter : public Sy::Module
 {

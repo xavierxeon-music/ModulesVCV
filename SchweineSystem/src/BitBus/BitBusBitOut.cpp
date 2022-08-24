@@ -8,10 +8,9 @@
 BitBusBitOut::BitBusBitOut()
    : Sy::Module()
    , Sy::Exapnder<BitBusMessage>(this)
-   , outputList(outputs)
+   , outputList(this)
    , busInIndicator(this, Panel::RGB_BusIn)
    , busOutIndicator(this, Panel::RGB_BusOut)
-
 {
    setup();
    allowExpanderOnLeft();

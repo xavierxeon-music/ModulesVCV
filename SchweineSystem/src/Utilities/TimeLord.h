@@ -8,16 +8,19 @@ using namespace rack;
 #include <Music/Tempo.h>
 #include <Tools/Range.h>
 
+#include <SyExapnder.h>
+#include <SyModule.h>
+#include <SyModuleWidget.h>
+
 #include <SyButton.h>
 #include <SyCommon.h>
 #include <SyDisplayLCD.h>
 #include <SyDisplayOLED.h>
-#include <SyExapnder.h>
+#include <SyInput.h>
 #include <SyJson.h>
 #include <SyLED.h>
 #include <SyLightMeter.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SyOutput.h>
 #include <SySvgImage.h>
 
 struct BusTimeLord

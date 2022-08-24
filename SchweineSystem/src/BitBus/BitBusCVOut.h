@@ -14,6 +14,7 @@ using namespace rack;
 
 #include <SyCommon.h>
 #include <SyLED.h>
+#include <SyOutput.h>
 
 class BitBusCVOut : public Sy::Module, public Sy::Exapnder<BitBusMessage>
 {

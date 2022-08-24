@@ -10,12 +10,15 @@ using namespace rack;
 #include <Music/Tempo.h>
 #include <Music/TimeCode.h>
 
-#include <SyButton.h>
-#include <SyButtonLED.h>
-#include <SyDisplayOLED.h>
 #include <SyExapnder.h>
 #include <SyModule.h>
 #include <SyModuleWidget.h>
+
+#include <SyButton.h>
+#include <SyButtonLED.h>
+#include <SyDisplayOLED.h>
+#include <SyInput.h>
+#include <SyOutput.h>
 
 struct BusMidi
 {

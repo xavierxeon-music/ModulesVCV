@@ -26,7 +26,7 @@ TimeLord::TimeLord()
    , resetTrigger()
    , tempo()
    // input
-   , inputList(inputs)
+   , inputList(this)
    , displayList(this)
    , voltageToValue(0.0, 10.0, 0, 255)
    // upload
@@ -35,7 +35,7 @@ TimeLord::TimeLord()
    // outout
    , valueToVoltage(0.0, 255.0, 0.0, 10.0)
    , lightMeterList(this)
-   , outputList(outputs)
+   , outputList(this)
    // display
    , displayMode(DisplayMode::StageIndex)
    , displayButton(this, Panel::Display)
