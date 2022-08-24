@@ -1,5 +1,5 @@
-#ifndef PamelasClockH
-#define PamelasClockH
+#ifndef MetropolixClockH
+#define MetropolixClockH
 
 #include <rack.hpp>
 using namespace rack;
@@ -10,13 +10,13 @@ using namespace rack;
 #include <SyModule.h>
 #include <SyModuleWidget.h>
 
-class PamelasClock : public Sy::Module
+class MetropolixClock : public Sy::Module
 {
 public:
    struct Panel;
 
 public:
-   PamelasClock();
+   MetropolixClock();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -42,13 +42,13 @@ private:
 
 // widget
 
-class PamelasClockWidget : public Sy::ModuleWidget
+class MetropolixClockWidget : public Sy::ModuleWidget
 {
 public:
-   PamelasClockWidget(PamelasClock* module);
+   MetropolixClockWidget(MetropolixClock* module);
 
 private:
    void setup();
 };
 
-#endif // NOT PamelasClockH
+#endif // NOT MetropolixClockH

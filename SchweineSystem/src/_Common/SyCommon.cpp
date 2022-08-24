@@ -13,10 +13,9 @@ const Sy::Common::MidiInterfaceMap Sy::Common::midiInterfaceMap = {
    {Midi::Device::Daisy, "ESI M4U eX Port 4"},
    {Midi::Device::DrumTrigger, "ESI M4U eX Port 5"},
    {Midi::Device::VCMC, "VCMC"},
-   {Midi::Device::Pamela, "VCMC"},
+   {Midi::Device::Metropolix, "Metropolix"},
    {Midi::Device::FlameCC, "ESI M4U eX Port 7"},
    {Midi::Device::BitBox, "ESI M4U eX Port 4"},
    {Midi::Device::BitBoxMicro, "ESI M4U eX Port 4"},
-   {Midi::Device::UnusedA, ""},
-   {Midi::Device::UnusedB, ""},
+   {Midi::Device::Unused, ""},
 };

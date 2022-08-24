@@ -1,9 +1,9 @@
-#include "PamelasClock.h"
-#include "PamelasClockPanel.h"
+#include "MetropolixClock.h"
+#include "MetropolixClockPanel.h"
 
 #include <SyMaster.h>
 
-PamelasClock::PamelasClock()
+MetropolixClock::MetropolixClock()
    : Sy::Module()
    , midiInput()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
@@ -22,7 +22,7 @@ PamelasClock::PamelasClock()
    connectToMidiDevice();
 }
 
-void PamelasClock::process(const ProcessArgs& args)
+void MetropolixClock::process(const ProcessArgs& args)
 {
    if (connectionButton.isTriggered())
       connectToMidiDevice();
@@ -40,7 +40,7 @@ void PamelasClock::process(const ProcessArgs& args)
    outputs[Panel::Reset].setVoltage(clockReset.process(args.sampleTime) ? 10.f : 0.f);
 }
 
-void PamelasClock::processMessage(const midi::Message& msg)
+void MetropolixClock::processMessage(const midi::Message& msg)
 {
    const bool isSystemEvent = (0xF0 == (msg.bytes[0] & 0xF0));
    if (!isSystemEvent)
@@ -66,12 +66,12 @@ void PamelasClock::processMessage(const midi::Message& msg)
    }
 }
 
-void PamelasClock::connectToMidiDevice()
+void MetropolixClock::connectToMidiDevice()
 {
    midiInput.reset();
    connectionButton.setOff();
 
-   static const std::string targetDeviceName = Sy::Common::midiInterfaceMap.at(Midi::Device::Pamela);
+   static const std::string targetDeviceName = Sy::Common::midiInterfaceMap.at(Midi::Device::Metropolix);
    std::cout << targetDeviceName << std::endl;
 
    for (const int& deviceId : midiInput.getDeviceIds())
@@ -91,10 +91,10 @@ void PamelasClock::connectToMidiDevice()
 
 // widget
 
-PamelasClockWidget::PamelasClockWidget(PamelasClock* module)
-: Sy::ModuleWidget(module)
+MetropolixClockWidget::MetropolixClockWidget(MetropolixClock* module)
+   : Sy::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelPamelasClock = Sy::Master::the()->addModule<PamelasClock, PamelasClockWidget>("PamelasClock");
+Model* modelMetropolixClock = Sy::Master::the()->addModule<MetropolixClock, MetropolixClockWidget>("MetropolixClock");

@@ -1,12 +1,12 @@
-#ifndef PamelasClockPanelH
-#define PamelasClockPanelH
+#ifndef MetropolixClockPanelH
+#define MetropolixClockPanelH
 
-#include "PamelasClock.h"
+#include "MetropolixClock.h"
 
-#include <SyCommon.h>
 #include <SyButtonLED.h>
+#include <SyCommon.h>
 
-struct PamelasClock::Panel
+struct MetropolixClock::Panel
 {
    enum ParamId
    {
@@ -50,7 +50,6 @@ struct PamelasClock::Panel
       // lcds
       LIGHTS_LEN = 3
    };
-
 };
 
-#endif // NOT PamelasClockPanelH
+#endif // NOT MetropolixClockPanelH
