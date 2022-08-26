@@ -37,10 +37,10 @@ namespace Sy
    };
 } // namespace Sy
 
-inline void makeOutput(rack::ModuleWidget* widget, rack::math::Vec pos, int outputId, bool black = false)
+inline void makeOutput(rack::ModuleWidget* widget, rack::math::Vec pos, int outputId, bool poly = false)
 {
    rack::app::PortWidget* portWidget = nullptr;
-   if (black)
+   if (poly)
       portWidget = rack::createOutputCentered<rack::PJ3410Port>(pos, widget->getModule(), outputId);
    else
       portWidget = rack::createOutputCentered<rack::PJ301MPort>(pos, widget->getModule(), outputId);

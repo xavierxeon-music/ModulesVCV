@@ -6,7 +6,7 @@
     </g>
     <g transform="matrix(1,0,0,1,18.7287,-155.177)">
         <g transform="matrix(1,0,0,1,0,93.203)">
-            <g id="Velocity-output" serif:id="Velocity#output" transform="matrix(0.175002,0,0,0.175002,-12.3416,338.088)">
+            <g id="Velocity-output-P" serif:id="Velocity#output$P" transform="matrix(0.175002,0,0,0.175002,-12.3416,338.088)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
             <g transform="matrix(1,0,0,1,-89.8467,234.706)">
@@ -24,7 +24,7 @@
             </g>
         </g>
         <g transform="matrix(1,0,0,1,0,46.3891)">
-            <g id="Gate-output" serif:id="Gate#output" transform="matrix(0.175002,0,0,0.175002,-12.3416,338.088)">
+            <g id="Gate-output-P" serif:id="Gate#output$P" transform="matrix(0.175002,0,0,0.175002,-12.3416,338.088)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
             <g transform="matrix(1,0,0,1,-84.7825,234.342)">
@@ -38,7 +38,7 @@
             </g>
         </g>
         <g transform="matrix(1,0,0,1,0,-0.278849)">
-            <g id="Pitch-output" serif:id="Pitch#output" transform="matrix(0.175002,0,0,0.175002,-12.3416,338.088)">
+            <g id="Pitch-output-P" serif:id="Pitch#output$P" transform="matrix(0.175002,0,0,0.175002,-12.3416,338.088)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
             <g transform="matrix(1,0,0,1,-85.7025,234.27)">

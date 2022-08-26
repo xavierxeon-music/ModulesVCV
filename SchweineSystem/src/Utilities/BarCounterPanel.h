@@ -5,6 +5,7 @@
 
 #include <SyCommon.h>
 #include <SyDisplayOLED.h>
+#include <SyInput.h>
 
 struct BarCounter::Panel
 {

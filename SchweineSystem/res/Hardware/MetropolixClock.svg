@@ -37,7 +37,7 @@
         </g>
     </g>
     <g transform="matrix(1,0,0,1,-5.27636,-164.859)">
-        <g id="Clock-output-M" serif:id="Clock#output$M" transform="matrix(0.175002,0,0,0.175002,11.6635,322.699)">
+        <g id="Clock-output" serif:id="Clock#output" transform="matrix(0.175002,0,0,0.175002,11.6635,322.699)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
         <g transform="matrix(1,0,0,1,-61.6974,219.026)">

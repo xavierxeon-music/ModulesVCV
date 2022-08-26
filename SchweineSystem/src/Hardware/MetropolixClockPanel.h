@@ -5,6 +5,7 @@
 
 #include <SyCommon.h>
 #include <SyButtonLED.h>
+#include <SyOutput.h>
 
 struct MetropolixClock::Panel
 {

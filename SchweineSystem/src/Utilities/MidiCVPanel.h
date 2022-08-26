@@ -4,6 +4,7 @@
 #include "MidiCV.h"
 
 #include <SyCommon.h>
+#include <SyOutput.h>
 
 struct MidiCV::Panel
 {

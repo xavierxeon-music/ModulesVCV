@@ -11,7 +11,8 @@ CXXFLAGS += -D NON_DAISY_DEVICE
 LDFLAGS +=
 
 FLAGS += \
-	-Isrc/_Common \
+	-Isrc/_Base \
+	-Isrc/_Gui \
 	-Isrc/_MusicTools \
 	-Isrc/_MusicTools/Include \
 	-Isrc/_MusicTools/RememberDummy \
@@ -25,7 +26,8 @@ SOURCES += \
 	$(wildcard src/Morpher/*.cpp) \
 	$(wildcard src/Synths/*.cpp) \
 	$(wildcard src/Utilities/*.cpp) \
-	$(wildcard src/_Common/*.cpp) \
+	$(wildcard src/_Base/*.cpp) \
+	$(wildcard src/_Gui/*.cpp) \
 	$(wildcard src/_MusicTools/*.cpp) \
 
 

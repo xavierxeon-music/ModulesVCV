@@ -158,6 +158,10 @@ class Headers(Common):
                 line(0, '#include <SyDisplayOLED.h>')
             if self.switches:
                 line(0, '#include <SySwitch.h>')
+            if self.inputs:
+                line(0, '#include <SyInput.h>')
+            if self.outputs:
+                line(0, '#include <SyOutput.h>')
             line(0)
 
             line(0, f'struct {self.moduleName}::Panel')

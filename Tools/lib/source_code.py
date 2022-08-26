@@ -127,8 +127,8 @@ class Sources(Common):
             name = input['name']
             x = input['cx']
             y = input['cy']
-            black = 'true' if input['count'] != 1 else 'false'
-            line(1, f'makeInput(this, Vec({x:.2f}, {y:.2f}),  {self.moduleName}::Panel::{name}, {black});')
+            poly = 'true' if input['count'] != 1 else 'false'
+            line(1, f'makeInput(this, Vec({x:.2f}, {y:.2f}),  {self.moduleName}::Panel::{name}, {poly});')
 
         if self.outputs:
             line(0)
@@ -136,8 +136,8 @@ class Sources(Common):
             name = output['name']
             x = output['cx']
             y = output['cy']
-            black = 'true' if output['count'] != 1 else 'false'
-            line(1, f'makeOutput(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {black});')
+            poly = 'true' if output['count'] != 1 else 'false'
+            line(1, f'makeOutput(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {poly});')
 
         if self.leds:
             line(0)

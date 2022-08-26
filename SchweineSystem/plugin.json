@@ -148,7 +148,8 @@
          "name": "Wav Player",
          "description": "Play WAV files",
          "tags": [
-            "Oscillator"
+            "Oscillator",
+            "Polyphonic"
          ]
       },
       {
@@ -156,8 +157,8 @@
          "name": " MidiReplay",
          "description": "Playback Midi files",
          "tags": [
-            "Midi",
-            "Polyphonic"
+            "Sequencer",
+            "Midi"
          ]
       },
       {
@@ -165,8 +166,8 @@
          "name": "Midi CV",
          "description": "Convert Midi (from Midi Replay) to CV",
          "tags": [
-            "Sequencer",
-            "Expander"
+            "Expander",
+            "Polyphonic"
          ]
       },
       {

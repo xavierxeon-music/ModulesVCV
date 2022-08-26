@@ -18,8 +18,8 @@ void MidiCVWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeOutput(this, Vec(30.00, 309.00), MidiCV::Panel::Velocity);
-   makeOutput(this, Vec(30.00, 262.18), MidiCV::Panel::Gate);
-   makeOutput(this, Vec(30.00, 215.52), MidiCV::Panel::Pitch);
+   makeOutput(this, Vec(30.00, 309.00), MidiCV::Panel::Velocity, true);
+   makeOutput(this, Vec(30.00, 262.18), MidiCV::Panel::Gate, true);
+   makeOutput(this, Vec(30.00, 215.52), MidiCV::Panel::Pitch, true);
 }
 
