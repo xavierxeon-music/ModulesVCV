@@ -3,7 +3,7 @@
 
 #include <rack.hpp>
 
-#include "SyCommon.h"
+#include <SyCommon.h>
 
 namespace Sy
 {

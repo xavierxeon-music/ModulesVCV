@@ -3,6 +3,9 @@
 
 #include <SyMaster.h>
 
+#include <Midi/MidiCommon.h>
+#include <SyMidiOutput.h>
+
 MetropolixClock::MetropolixClock()
    : Sy::Module()
    , midiInput()

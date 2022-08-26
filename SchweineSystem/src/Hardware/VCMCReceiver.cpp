@@ -4,9 +4,10 @@
 #include <Midi/MidiCommon.h>
 #include <Music/Note.h>
 
-#include <SyJson.h>
 #include <SyDisplayLCD.h>
+#include <SyJson.h>
 #include <SyMaster.h>
+#include <SyMidiOutput.h>
 
 VCMCReceiver::VCMCReceiver()
    : Sy::Module()

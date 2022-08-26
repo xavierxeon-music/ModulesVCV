@@ -7,7 +7,7 @@
 
 #include <MusicTools.h>
 
-#include <SyJson.h>
+#include "SyJson.h"
 
 namespace Sy
 {
@@ -32,6 +32,7 @@ namespace Sy
 
    protected:
       // communicate with external helper apps via midi
+
       class Majordomo
       {
       public:

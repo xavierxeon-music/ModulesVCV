@@ -1,9 +1,7 @@
 #ifndef SyCommonH
 #define SyCommonH
 
-#include <map>
-
-#include <Midi/MidiCommon.h>
+#include <MusicTools.h>
 
 namespace Sy
 {   
@@ -14,11 +12,6 @@ namespace Sy
       uint8_t blue;
    };
 
-   struct Common
-   {
-      using MidiInterfaceMap = std::map<Midi::Device::Channel, std::string>;
-      static const MidiInterfaceMap midiInterfaceMap;
-   };
 
    class Module;
 

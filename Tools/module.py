@@ -34,6 +34,7 @@ class Module:
 
                 name = entry.name.replace('.svg', '')
                 master = os.path.dirname(entry.path) + '/' + name + '.afdesign'
+                master = master.replace(modulesPath + '/res', modulesPath + '/panels')
                 if not os.path.exists(master):
                     continue
 
@@ -138,13 +139,11 @@ class Module:
         for entry in os.scandir(desktop):
             if not entry.is_file():
                 continue
-            if not entry.name.endswith('.svg') and not entry.name.endswith('.afdesign'):
+            if not entry.name.endswith('.svg'):
                 continue
 
             if entry.name.endswith('.svg'):
                 name = entry.name.replace('.svg', '')
-            if entry.name.endswith('.afdesign'):
-                name = entry.name.replace('.afdesign', '')
 
             if not name in self._modules:
                 continue

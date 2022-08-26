@@ -1,6 +1,8 @@
 #ifndef SyMidiOutputH
 #define SyMidiOutputH
 
+#include <map>
+
 #include <rtmidi/RtMidi.h>
 
 #include <Midi/MidiCommon.h>
@@ -9,6 +11,12 @@
 
 namespace Sy
 {
+   struct Common
+   {
+      using MidiInterfaceMap = std::map<Midi::Device::Channel, std::string>;
+      static const MidiInterfaceMap midiInterfaceMap;
+   };
+
    class MidiOutput
    {
    public:
