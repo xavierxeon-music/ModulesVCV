@@ -5,7 +5,6 @@
 
 #include <SvinCommon.h>
 #include <SvinButton.h>
-#include <SvinLED.h>
 #include <SvinDisplayOLED.h>
 #include <SvinInput.h>
 #include <SvinOutput.h>
@@ -15,8 +14,8 @@ struct Tracker::Panel
    enum ParamId
    {
       // buttons
-      ModeManual = 0,
-      Display = 1,
+      Display = 0,
+      ModeManual = 1,
       // switches
       // ledbuttons
       // knobs
@@ -39,30 +38,26 @@ struct Tracker::Panel
    enum InputId
    {
       Upload = 0,
-      ModeCV = 1,
-      Reset = 2,
-      Clock = 3,
-      Channel2_Pass = 4,
-      Channel1_Pass = 5,
-      INPUTS_LEN = 6
+      Reset = 1,
+      Clock = 2,
+      Group2_Pass = 3,
+      Group1_Pass = 4,
+      INPUTS_LEN = 5
    };
 
    enum OutputId
    {
-      Channel2_Output = 0,
-      Channel1_Output = 1,
+      Group2_Output = 0,
+      Group1_Output = 1,
       OUTPUTS_LEN = 2
    };
 
    enum LightId
    {
       // leds
-      RGB_Internal_Status = 0,
-      RGB_Remote_Status = 3,
-      RGB_Input_Status = 6,
       // ledbuttons
       // lcds
-      LIGHTS_LEN = 9
+      LIGHTS_LEN = 0
    };
 
 };

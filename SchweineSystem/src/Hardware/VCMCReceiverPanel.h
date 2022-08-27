@@ -60,8 +60,8 @@ struct VCMCReceiver::Panel
    {
       External_B = 0,
       External_A = 1,
-      Gate = 2,
-      CV = 3,
+      CV = 2,
+      Gate = 3,
       OUTPUTS_LEN = 4
    };
 

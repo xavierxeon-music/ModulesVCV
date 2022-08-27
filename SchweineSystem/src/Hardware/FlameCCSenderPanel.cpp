@@ -20,10 +20,10 @@ void FlameCCSenderWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeSwitch(this, Vec(37.78, 252.76), FlameCCSender::Panel::Half);
+   makeSwitch(this, Vec(37.78, 175.76), FlameCCSender::Panel::Half);
 
    makeLEDButton(this, Vec(30.00, 350.06), FlameCCSender::Panel::Connect, FlameCCSender::Panel::RGB_Connect);
 
-   makeInput(this, Vec(30.00, 148.33),  FlameCCSender::Panel::Voltages, true);
+   makeInput(this, Vec(30.00, 261.36),  FlameCCSender::Panel::Voltages, true);
 }
 
