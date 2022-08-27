@@ -209,20 +209,28 @@
          "description": "",
          "tags": [
             "External",
+            "Midi",
             "Polyphonic"
+         ]
+      },
+      {
+         "slug": "TrackerWorker",
+         "name": "TrackerWorker",
+         "description": "",
+         "tags": [
+            "Sequencer",
+            "Utility"
          ]
       },
       {
          "slug": "FlameCCSender",
          "name": "FlameCCSender",
          "description": "",
-         "tags": []
-      },
-      {
-         "slug": "Tracker",
-         "name": "Tracker",
-         "description": "",
-         "tags": []
+         "tags": [
+            "External",
+            "Midi",
+            "Polyphonic"
+         ]
       }
    ]
 }

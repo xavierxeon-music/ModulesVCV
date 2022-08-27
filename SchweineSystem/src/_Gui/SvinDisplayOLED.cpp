@@ -914,7 +914,7 @@ Svin::DisplayOLED::Controller::~Controller()
 
 void Svin::DisplayOLED::Controller::setColor(const Color& newColor)
 {
-   color = nvgRGB(newColor.red, newColor.green, newColor.red);
+   color = nvgRGB(newColor.red, newColor.green, newColor.blue);
 }
 
 void Svin::DisplayOLED::Controller::fill(const Color& fillColor)

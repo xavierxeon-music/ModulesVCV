@@ -71,10 +71,10 @@
         </g>
     </g>
     <g id="Slider" transform="matrix(1,0,0,1,-21.7264,130.691)">
-        <g id="Channel18-meter-5" serif:id="Channel18#meter$5" transform="matrix(0.0370421,-1.88741e-32,1.15556e-33,0.160516,93.0183,43.0511)">
+        <g id="Channel8-meter-5" serif:id="Channel8#meter$5" transform="matrix(0.0370421,-1.88741e-32,1.15556e-33,0.160516,93.0183,43.0511)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978"/>
         </g>
-        <g id="Channel17-meter-5" serif:id="Channel17#meter$5" transform="matrix(0.0370421,-1.88741e-32,1.15556e-33,0.160516,84.1131,43.0511)">
+        <g id="Channel7-meter-5" serif:id="Channel7#meter$5" transform="matrix(0.0370421,-1.88741e-32,1.15556e-33,0.160516,84.1131,43.0511)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978"/>
         </g>
         <g id="Channel6-meter-5" serif:id="Channel6#meter$5" transform="matrix(0.0370421,-1.88741e-32,1.15556e-33,0.160516,75.2079,43.0511)">
@@ -108,10 +108,10 @@
         </g>
     </g>
     <g id="CV" transform="matrix(1,0,0,1,-21.7264,87.8329)">
-        <g id="Channel18-meter-51" serif:id="Channel18#meter$5" transform="matrix(0.0370421,-1.88741e-32,1.15556e-33,0.160516,93.0183,43.0511)">
+        <g id="Channel8-meter-51" serif:id="Channel8#meter$5" transform="matrix(0.0370421,-1.88741e-32,1.15556e-33,0.160516,93.0183,43.0511)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978"/>
         </g>
-        <g id="Channel17-meter-51" serif:id="Channel17#meter$5" transform="matrix(0.0370421,-1.88741e-32,1.15556e-33,0.160516,84.1131,43.0511)">
+        <g id="Channel7-meter-51" serif:id="Channel7#meter$5" transform="matrix(0.0370421,-1.88741e-32,1.15556e-33,0.160516,84.1131,43.0511)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978"/>
         </g>
         <g id="Channel6-meter-51" serif:id="Channel6#meter$5" transform="matrix(0.0370421,-1.88741e-32,1.15556e-33,0.160516,75.2079,43.0511)">
@@ -179,7 +179,7 @@
         <g id="Channel3-led" serif:id="Channel3#led" transform="matrix(1,0,0,1,15.0811,-171.456)">
             <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
         </g>
-        <g id="Channe21-led" serif:id="Channe21#led" transform="matrix(1,0,0,1,6.2073,-171.456)">
+        <g id="Channel2-led" serif:id="Channel2#led" transform="matrix(1,0,0,1,6.2073,-171.456)">
             <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
         </g>
         <g id="Channel1-led" serif:id="Channel1#led" transform="matrix(1,0,0,1,-2.66646,-171.456)">
@@ -215,7 +215,7 @@
         <g id="Channel3-led1" serif:id="Channel3#led" transform="matrix(1,0,0,1,15.0811,-171.456)">
             <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
         </g>
-        <g id="Channe21-led1" serif:id="Channe21#led" transform="matrix(1,0,0,1,6.2073,-171.456)">
+        <g id="Channel2-led1" serif:id="Channel2#led" transform="matrix(1,0,0,1,6.2073,-171.456)">
             <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
         </g>
         <g id="Channel1-led1" serif:id="Channel1#led" transform="matrix(1,0,0,1,-2.66646,-171.456)">

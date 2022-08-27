@@ -1,7 +1,7 @@
-#ifndef TrackerPanelH
-#define TrackerPanelH
+#ifndef TrackerWorkerPanelH
+#define TrackerWorkerPanelH
 
-#include "Tracker.h"
+#include "TrackerWorker.h"
 
 #include <SvinCommon.h>
 #include <SvinButton.h>
@@ -9,7 +9,7 @@
 #include <SvinInput.h>
 #include <SvinOutput.h>
 
-struct Tracker::Panel
+struct TrackerWorker::Panel
 {
    enum ParamId
    {
@@ -62,4 +62,4 @@ struct Tracker::Panel
 
 };
 
-#endif // NOT TrackerPanelH
+#endif // NOT TrackerWorkerPanelH
