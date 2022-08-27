@@ -1,11 +1,11 @@
 #include "GateLatch.h"
 #include "GateLatchPanel.h"
 
-#include <SyJson.h>
-#include <SyMaster.h>
+#include <SvinJson.h>
+#include <SvinMaster.h>
 
 GateLatch::GateLatch()
-   : Sy::Module()
+   : Svin::Module()
    , inputList(this)
    , outputList(this)
    , lightList(this)
@@ -58,7 +58,7 @@ void GateLatch::process(const ProcessArgs& args)
          triggers[index].reset();
          latches[index] = false;
          activity[index].reset();
-         lightList[index]->setColor(Sy::Color{0, 0, 0});
+         lightList[index]->setColor(Svin::Color{0, 0, 0});
       }
       return;
    }
@@ -84,26 +84,26 @@ void GateLatch::process(const ProcessArgs& args)
 
       outputList[index]->setVoltage(latches[index] ? 10.0f : 0.0f);
       if (activity[index].process(args.sampleTime))
-         lightList[index]->setColor(Sy::Color{255, 0, 255});
+         lightList[index]->setColor(Svin::Color{255, 0, 255});
       else if (latches[index])
-         lightList[index]->setColor(Sy::Color{255, 255, 0});
+         lightList[index]->setColor(Svin::Color{255, 255, 0});
       else
-         lightList[index]->setColor(Sy::Color{0, 0, 0});
+         lightList[index]->setColor(Svin::Color{0, 0, 0});
    }
 }
 
-void GateLatch::load(const Sy::Json::Object& rootObject)
+void GateLatch::load(const Svin::Json::Object& rootObject)
 {
-   Sy::Json::Array latchArray = rootObject.get("latches").toArray();
+   Svin::Json::Array latchArray = rootObject.get("latches").toArray();
    for (uint8_t index = 0; index < 8; index++)
    {
       latches[index] = latchArray.get(index).toBool();
    }
 }
 
-void GateLatch::save(Sy::Json::Object& rootObject)
+void GateLatch::save(Svin::Json::Object& rootObject)
 {
-   Sy::Json::Array latchArray;
+   Svin::Json::Array latchArray;
    for (uint8_t index = 0; index < 8; index++)
    {
       latchArray.append(latches[index]);
@@ -115,9 +115,9 @@ void GateLatch::save(Sy::Json::Object& rootObject)
 // widget
 
 GateLatchWidget::GateLatchWidget(GateLatch* module)
-   : Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelGateLatch = Sy::Master::the()->addModule<GateLatch, GateLatchWidget>("GateLatch");
+Model* modelGateLatch = Svin::Master::the()->addModule<GateLatch, GateLatchWidget>("GateLatch");

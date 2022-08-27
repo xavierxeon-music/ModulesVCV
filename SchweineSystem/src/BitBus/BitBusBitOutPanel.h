@@ -3,8 +3,8 @@
 
 #include "BitBusBitOut.h"
 
-#include <SyCommon.h>
-#include <SyLED.h>
+#include <SvinCommon.h>
+#include <SvinLED.h>
 
 struct BitBusBitOut::Panel
 {
@@ -56,7 +56,6 @@ struct BitBusBitOut::Panel
       // lcds
       LIGHTS_LEN = 6
    };
-
 };
 
 #endif // NOT BitBusBitOutPanelH

@@ -3,14 +3,11 @@
 
 #include <Tools/BoolField.h>
 
-#include "SyMaster.h"
-#include "SyModule.h"
-
-using Panel = BitBusNegate::Panel;
+#include <SvinMaster.h>
 
 BitBusNegate::BitBusNegate()
-   : Sy::Module()
-   , Sy::Exapnder<BitBusMessage>(this)
+   : Svin::Module()
+   , Svin::Exapnder<BitBusMessage>(this)
    , latchList(this)
    , gateList(this)
    , gateTrigger()
@@ -48,7 +45,7 @@ BitBusNegate::~BitBusNegate()
 {
 }
 
-void BitBusNegate::load(const Sy::Json::Object& rootObject)
+void BitBusNegate::load(const Svin::Json::Object& rootObject)
 {
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -58,7 +55,7 @@ void BitBusNegate::load(const Sy::Json::Object& rootObject)
    }
 }
 
-void BitBusNegate::save(Sy::Json::Object& rootObject)
+void BitBusNegate::save(Svin::Json::Object& rootObject)
 {
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -109,9 +106,9 @@ void BitBusNegate::process(const ProcessArgs& args)
 // widget
 
 BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
-   : Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelBitBusNegate = Sy::Master::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");
+Model* modelBitBusNegate = Svin::Master::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");

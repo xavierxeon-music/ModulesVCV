@@ -5,15 +5,15 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SyButtonLED.h>
-#include <SyCommon.h>
-#include <SyExapnder.h>
-#include <SyInput.h>
-#include <SyLED.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinButtonLED.h>
+#include <SvinCommon.h>
+#include <SvinExapnder.h>
+#include <SvinInput.h>
+#include <SvinLED.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
-class BitBusNegate : public Sy::Module, public Sy::Exapnder<BitBusMessage>
+class BitBusNegate : public Svin::Module, public Svin::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -28,22 +28,22 @@ public:
 private:
    void setup();
 
-   void load(const Sy::Json::Object& rootObject) override;
-   void save(Sy::Json::Object& rootObject) override;
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
 
 private:
-   Sy::ButtonLED::List latchList;
-   Sy::Input::List gateList;
+   Svin::ButtonLED::List latchList;
+   Svin::Input::List gateList;
    dsp::BooleanTrigger gateTrigger[8];
    bool gates[8];
 
-   Sy::LED busInIndicator;
-   Sy::LED busOutIndicator;
+   Svin::LED busInIndicator;
+   Svin::LED busOutIndicator;
 };
 
 // widget
 
-class BitBusNegateWidget : public Sy::ModuleWidget
+class BitBusNegateWidget : public Svin::ModuleWidget
 {
 public:
    BitBusNegateWidget(BitBusNegate* module);

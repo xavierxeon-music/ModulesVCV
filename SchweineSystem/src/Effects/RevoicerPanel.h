@@ -3,9 +3,9 @@
 
 #include "Revoicer.h"
 
-#include <SyCommon.h>
-#include <SyButton.h>
-#include <SyDisplayLCD.h>
+#include <SvinButton.h>
+#include <SvinCommon.h>
+#include <SvinDisplayLCD.h>
 
 struct Revoicer::Panel
 {
@@ -53,7 +53,6 @@ struct Revoicer::Panel
       RGB_Quality_Value = 0,
       LIGHTS_LEN = 3
    };
-
 };
 
 #endif // NOT RevoicerPanelH

@@ -5,13 +5,13 @@
 using namespace rack;
 
 #include "MidiReplay.h"
-#include <SyExapnder.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinExapnder.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
-#include <SyOutput.h>
+#include <SvinOutput.h>
 
-class MidiCV : public Sy::Module, public Sy::Exapnder<BusMidi>
+class MidiCV : public Svin::Module, public Svin::Exapnder<BusMidi>
 {
 public:
    struct Panel;
@@ -28,7 +28,7 @@ private:
 
 // widget
 
-class MidiCVWidget : public Sy::ModuleWidget
+class MidiCVWidget : public Svin::ModuleWidget
 {
 public:
    MidiCVWidget(MidiCV* module);

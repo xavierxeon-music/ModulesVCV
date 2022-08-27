@@ -3,10 +3,10 @@
 
 #include "MidiReplay.h"
 
-#include <SyCommon.h>
-#include <SyButton.h>
-#include <SyButtonLED.h>
-#include <SyDisplayOLED.h>
+#include <SvinButton.h>
+#include <SvinButtonLED.h>
+#include <SvinCommon.h>
+#include <SvinDisplayOLED.h>
 
 struct MidiReplay::Panel
 {
@@ -56,7 +56,6 @@ struct MidiReplay::Panel
       // lcds
       LIGHTS_LEN = 3
    };
-
 };
 
 #endif // NOT MidiReplayPanelH

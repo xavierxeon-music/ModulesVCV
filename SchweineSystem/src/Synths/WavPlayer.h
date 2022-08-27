@@ -6,16 +6,16 @@ using namespace rack;
 
 #include <Sound/SampleOscilator.h>
 
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
-#include <SyButton.h>
-#include <SyButtonLED.h>
-#include <SyDisplayOLED.h>
-#include <SyInput.h>
-#include <SyOutput.h>
+#include <SvinButton.h>
+#include <SvinButtonLED.h>
+#include <SvinDisplayOLED.h>
+#include <SvinInput.h>
+#include <SvinOutput.h>
 
-class WavPlayer : public Sy::Module
+class WavPlayer : public Svin::Module
 {
 public:
    struct Panel;
@@ -32,37 +32,37 @@ private:
    void setup();
    void load();
 
-   void load(const Sy::Json::Object& rootObject) override;
-   void save(Sy::Json::Object& rootObject) override;
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
 
    void onSampleRateChange(const SampleRateChangeEvent& event) override;
 
 private:
-   Sy::DisplayOLED::Controller displayController;
+   Svin::DisplayOLED::Controller displayController;
    Sample::Oscilator oscilator;
    float sampleRate;
    // file
    std::string fileName;
    // play
    bool play;
-   Sy::ButtonLED playButton;
+   Svin::ButtonLED playButton;
    // reset
-   Sy::Button resetButton;
+   Svin::Button resetButton;
    // loop
    bool loop;
-   Sy::ButtonLED loopButton;
+   Svin::ButtonLED loopButton;
 };
 
 // widget
 
-class WavPlayerWidget : public Sy::ModuleWidget
+class WavPlayerWidget : public Svin::ModuleWidget
 {
 public:
    WavPlayerWidget(WavPlayer* module);
 
 private:
    void setup();
-   void displayClicked(const float& x, const float& y);   
+   void displayClicked(const float& x, const float& y);
 };
 
 #endif // NOT WavPlayerH

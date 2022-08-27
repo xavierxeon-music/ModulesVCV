@@ -4,14 +4,14 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SyCommon.h>
-#include <SyInput.h>
-#include <SyLED.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
-#include <SyOutput.h>
+#include <SvinCommon.h>
+#include <SvinInput.h>
+#include <SvinLED.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
+#include <SvinOutput.h>
 
-class GateLatch : public Sy::Module
+class GateLatch : public Svin::Module
 {
 public:
    struct Panel;
@@ -25,13 +25,13 @@ public:
 private:
    void setup();
 
-   void load(const Sy::Json::Object& rootObject) override;
-   void save(Sy::Json::Object& rootObject) override;
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
 
 private:
-   Sy::Input::List inputList;
-   Sy::Output::List outputList;
-   Sy::LED::List lightList;
+   Svin::Input::List inputList;
+   Svin::Output::List outputList;
+   Svin::LED::List lightList;
 
    dsp::BooleanTrigger triggers[8];
    dsp::PulseGenerator activity[8];
@@ -40,7 +40,7 @@ private:
    dsp::BooleanTrigger resetTrigger;
 };
 
-class GateLatchWidget : public Sy::ModuleWidget
+class GateLatchWidget : public Svin::ModuleWidget
 {
 public:
    GateLatchWidget(GateLatch* module);

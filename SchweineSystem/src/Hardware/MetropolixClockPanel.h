@@ -3,9 +3,11 @@
 
 #include "MetropolixClock.h"
 
-#include <SyCommon.h>
-#include <SyButtonLED.h>
-#include <SyOutput.h>
+#include <SvinCommon.h>
+#include <SvinButtonLED.h>
+#include <SvinDisplayOLED.h>
+#include <SvinInput.h>
+#include <SvinOutput.h>
 
 struct MetropolixClock::Panel
 {
@@ -23,7 +25,8 @@ struct MetropolixClock::Panel
    {
       // lcd
       // oled
-      DISPLAYS_LEN = 0
+      Pixels_Display = 0,
+      DISPLAYS_LEN = 1
    };
 
    enum MeterId
@@ -33,7 +36,9 @@ struct MetropolixClock::Panel
 
    enum InputId
    {
-      INPUTS_LEN = 0
+      Override_Reset = 0,
+      Override_Clock = 1,
+      INPUTS_LEN = 2
    };
 
    enum OutputId

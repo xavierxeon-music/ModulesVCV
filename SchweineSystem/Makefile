@@ -29,6 +29,7 @@ SOURCES += \
 	$(wildcard src/_Base/*.cpp) \
 	$(wildcard src/_Gui/*.cpp) \
 	$(wildcard src/_MusicTools/*.cpp) \
+	$(wildcard src/TimeLord/*.cpp) \
 
 
 # Add files to the ZIP package when running `make dist`

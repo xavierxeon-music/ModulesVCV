@@ -3,8 +3,8 @@
 
 #include "MeshStack.h"
 
-#include <SyCommon.h>
-#include <SyKnob.h>
+#include <SvinCommon.h>
+#include <SvinKnob.h>
 
 struct MeshStack::Panel
 {
@@ -49,7 +49,6 @@ struct MeshStack::Panel
       // lcds
       LIGHTS_LEN = 0
    };
-
 };
 
 #endif // NOT MeshStackPanelH

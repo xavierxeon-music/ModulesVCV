@@ -3,8 +3,8 @@
 
 #include "MidiCV.h"
 
-#include <SyCommon.h>
-#include <SyOutput.h>
+#include <SvinCommon.h>
+#include <SvinOutput.h>
 
 struct MidiCV::Panel
 {
@@ -49,7 +49,6 @@ struct MidiCV::Panel
       // lcds
       LIGHTS_LEN = 0
    };
-
 };
 
 #endif // NOT MidiCVPanelH

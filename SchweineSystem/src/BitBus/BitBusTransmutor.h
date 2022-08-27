@@ -5,14 +5,14 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SyButton.h>
-#include <SyDisplayOLED.h>
-#include <SyExapnder.h>
-#include <SyLED.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinButton.h>
+#include <SvinDisplayOLED.h>
+#include <SvinExapnder.h>
+#include <SvinLED.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
-class BitBusTransmutor : public Sy::Module, public Sy::Exapnder<BitBusMessage>
+class BitBusTransmutor : public Svin::Module, public Svin::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -27,20 +27,20 @@ private:
    void setup();
    void updateDisplays() override;
 
-   void load(const Sy::Json::Object& rootObject) override;
-   void save(Sy::Json::Object& rootObject) override;
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
 
 private:
-   Sy::Button displayButton;
-   Sy::DisplayOLED::Controller displayController;
+   Svin::Button displayButton;
+   Svin::DisplayOLED::Controller displayController;
 
-   Sy::LED busInIndicator;
-   Sy::LED busOutIndicator;
+   Svin::LED busInIndicator;
+   Svin::LED busOutIndicator;
 };
 
 // widget
 
-class BitBusTransmutorWidget : public Sy::ModuleWidget
+class BitBusTransmutorWidget : public Svin::ModuleWidget
 {
 public:
    BitBusTransmutorWidget(BitBusTransmutor* module);

@@ -3,10 +3,10 @@
 
 #include <Tools/Variable.h>
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 AturiaStep::AturiaStep()
-   : Sy::Module()
+   : Svin::Module()
    , MidiBusModule(Midi::Device::KeyStep1, this)
    , useDrumChannel(false)
    , drumButon(this, Panel::Drums, Panel::RGB_Drums)
@@ -42,14 +42,14 @@ AturiaStep::AturiaStep()
 
    for (uint8_t channel = 0; channel < 4; channel++)
    {
-      displayList[channel]->setColor(Sy::Color{255, 255, 0});
+      displayList[channel]->setColor(Svin::Color{255, 255, 0});
       updateDisplay(channel);
    }
 
-   drumButon.setDefaultColor(Sy::Color{0, 0, 255});
+   drumButon.setDefaultColor(Svin::Color{0, 0, 255});
    drumButon.setActive(useDrumChannel);
 
-   connectionButton.setDefaultColor(Sy::Color{0, 255, 0});
+   connectionButton.setDefaultColor(Svin::Color{0, 255, 0});
    connectToMidiDevice();
 }
 
@@ -141,9 +141,9 @@ void AturiaStep::updateDisplay(uint8_t channel)
    displayList[channel]->setText(text);
 }
 
-void AturiaStep::load(const Sy::Json::Object& rootObject)
+void AturiaStep::load(const Svin::Json::Object& rootObject)
 {
-   Sy::Json::Array patternArray = rootObject.get("patterns").toArray();
+   Svin::Json::Array patternArray = rootObject.get("patterns").toArray();
    for (uint8_t channel = 0; channel < 4; channel++)
    {
       patterns[channel] = patternArray.get(channel).toInt();
@@ -155,9 +155,9 @@ void AturiaStep::load(const Sy::Json::Object& rootObject)
    useDrumChannel = rootObject.get("channel1Mode").toBool();
 }
 
-void AturiaStep::save(Sy::Json::Object& rootObject)
+void AturiaStep::save(Svin::Json::Object& rootObject)
 {
-   Sy::Json::Array patternArray;
+   Svin::Json::Array patternArray;
    for (uint8_t channel = 0; channel < 4; channel++)
       patternArray.append(patterns[channel]);
 
@@ -168,9 +168,9 @@ void AturiaStep::save(Sy::Json::Object& rootObject)
 // widget
 
 AturiaStepWidget::AturiaStepWidget(AturiaStep* module)
-: Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelAturiaStep = Sy::Master::the()->addModule<AturiaStep, AturiaStepWidget>("AturiaStep");
+Model* modelAturiaStep = Svin::Master::the()->addModule<AturiaStep, AturiaStepWidget>("AturiaStep");

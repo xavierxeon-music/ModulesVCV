@@ -5,14 +5,17 @@
 using namespace rack;
 
 #include <Music/Tempo.h>
+#include <Music/TimeCode.h>
 
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
-#include <SyButtonLED.h>
-#include <SyOutput.h>
+#include <SvinButtonLED.h>
+#include <SvinDisplayOLED.h>
+#include <SvinInput.h>
+#include <SvinOutput.h>
 
-class MetropolixClock : public Sy::Module
+class MetropolixClock : public Svin::Module
 {
 public:
    struct Panel;
@@ -22,6 +25,7 @@ public:
 
 public:
    void process(const ProcessArgs& args) override;
+   void updateDisplays() override;
 
 private:
    void setup();
@@ -31,18 +35,25 @@ private:
 private:
    // midi
    midi::InputQueue midiInput;
-   Sy::ButtonLED connectionButton;
+   Svin::ButtonLED connectionButton;
+
    // tempo
    Counter tickCounter;
    bool doNotAdvanceTempo;
    Tempo tempo;
-   dsp::PulseGenerator clockTick;
-   dsp::PulseGenerator clockReset;
+   Svin::Output clockOutput;
+   Svin::Output resetOutput;
+
+   // time
+   Svin::Input clockInput;
+   Svin::Input resetInput;
+   TimeCode::Duration duration;
+   Svin::DisplayOLED::Controller displayController;
 };
 
 // widget
 
-class MetropolixClockWidget : public Sy::ModuleWidget
+class MetropolixClockWidget : public Svin::ModuleWidget
 {
 public:
    MetropolixClockWidget(MetropolixClock* module);

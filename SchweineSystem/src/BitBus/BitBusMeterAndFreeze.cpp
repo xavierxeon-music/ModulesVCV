@@ -1,13 +1,13 @@
 #include "BitBusMeterAndFreeze.h"
 #include "BitBusMeterAndFreezePanel.h"
 
-#include "SyMaster.h"
+#include <SvinMaster.h>
 
 // meter and freeze
 
 BitBusMeterAndFreeze::BitBusMeterAndFreeze()
-   : Sy::Module()
-   , Sy::Exapnder<BitBusMessage>(this)
+   : Svin::Module()
+   , Svin::Exapnder<BitBusMessage>(this)
    , lightList(this)
    , freezTrigger()
    , freezeMode(false)
@@ -29,21 +29,20 @@ BitBusMeterAndFreeze::BitBusMeterAndFreeze()
                      Panel::RGB_Bit1_Status1});
 
    for (uint8_t index = 0; index < 8; index++)
-      lightList[index]->setDefaultColor(Sy::Color{0, 255, 0});
-
+      lightList[index]->setDefaultColor(Svin::Color{0, 255, 0});
 }
 
 BitBusMeterAndFreeze::~BitBusMeterAndFreeze()
 {
 }
 
-void BitBusMeterAndFreeze::load(const Sy::Json::Object& rootObject)
+void BitBusMeterAndFreeze::load(const Svin::Json::Object& rootObject)
 {
    freezeMode = rootObject.get("freeze").toBool();
    lights[Panel::RGB_FlipFreeze + 2].setBrightness(freezeMode);
 }
 
-void BitBusMeterAndFreeze::save(Sy::Json::Object& rootObject)
+void BitBusMeterAndFreeze::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("freeze", freezeMode);
 }
@@ -96,9 +95,9 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
 }
 
 BitBusMeterAndFreezeWidget::BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module)
-   : Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelBitBusMeterAndFreeze = Sy::Master::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");
+Model* modelBitBusMeterAndFreeze = Svin::Master::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");

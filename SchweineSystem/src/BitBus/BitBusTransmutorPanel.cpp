@@ -1,7 +1,7 @@
-#include "BitBusTransmutor.h"
 #include "BitBusTransmutorPanel.h"
+#include "BitBusTransmutor.h"
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 void BitBusTransmutor::setup()
 {
@@ -14,7 +14,7 @@ void BitBusTransmutor::setup()
 
 void BitBusTransmutorWidget::setup()
 {
-   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/BitBus/BitBusTransmutor.svg");
+   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/BitBus/BitBusTransmutor.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -25,4 +25,3 @@ void BitBusTransmutorWidget::setup()
 
    makeOLED(this, Vec(14.00, 59.75), BitBusTransmutor::Panel::Pixels_Display, 60, 120);
 }
-

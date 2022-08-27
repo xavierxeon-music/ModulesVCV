@@ -7,16 +7,16 @@ using namespace rack;
 #include <Blocks/CvSwitch.h>
 
 #include "MidiBusModule.h"
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
-#include <SyButton.h>
-#include <SyButtonLED.h>
-#include <SyDisplayLCD.h>
-#include <SyInput.h>
-#include <SySwitch.h>
+#include <SvinButton.h>
+#include <SvinButtonLED.h>
+#include <SvinDisplayLCD.h>
+#include <SvinInput.h>
+#include <SvinSwitch.h>
 
-class AturiaStep : public Sy::Module, public MidiBusModule
+class AturiaStep : public Svin::Module, public MidiBusModule
 {
 public:
    struct Panel;
@@ -33,27 +33,27 @@ private:
    void sendProgramChange(uint8_t channel);
    void updateDisplay(uint8_t channel);
 
-   void load(const Sy::Json::Object& rootObject) override;
-   void save(Sy::Json::Object& rootObject) override;
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
 
 private:
    // midi
    bool useDrumChannel;
-   Sy::ButtonLED drumButon;
-   Sy::ButtonLED connectionButton;
+   Svin::ButtonLED drumButon;
+   Svin::ButtonLED connectionButton;
    // patterns
-   Sy::Input::List inputList;
+   Svin::Input::List inputList;
    uint8_t patterns[4];
    CvSwitch channelSwitch;
    // manual pattern
-   Sy::DisplayLCD::Controller::List displayList;
-   Sy::Button::List downButtonList;
-   Sy::Button::List upButtonList;
+   Svin::DisplayLCD::Controller::List displayList;
+   Svin::Button::List downButtonList;
+   Svin::Button::List upButtonList;
 };
 
 // widget
 
-class AturiaStepWidget : public Sy::ModuleWidget
+class AturiaStepWidget : public Svin::ModuleWidget
 {
 public:
    AturiaStepWidget(AturiaStep* module);

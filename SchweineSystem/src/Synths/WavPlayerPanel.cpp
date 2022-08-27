@@ -1,7 +1,7 @@
-#include "WavPlayer.h"
 #include "WavPlayerPanel.h"
+#include "WavPlayer.h"
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 void WavPlayer::setup()
 {
@@ -25,7 +25,7 @@ void WavPlayer::setup()
 
 void WavPlayerWidget::setup()
 {
-   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Synths/WavPlayer.svg");
+   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/Synths/WavPlayer.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -34,14 +34,13 @@ void WavPlayerWidget::setup()
    makeLEDButton(this, Vec(85.10, 207.15), WavPlayer::Panel::Loop, WavPlayer::Panel::RGB_Loop);
    makeLEDButton(this, Vec(85.10, 135.91), WavPlayer::Panel::Play, WavPlayer::Panel::RGB_Play);
 
-   makeInput(this, Vec(55.54, 266.05),  WavPlayer::Panel::Pitch);
-   makeInput(this, Vec(55.48, 207.15),  WavPlayer::Panel::LoopOverride);
-   makeInput(this, Vec(55.54, 171.53),  WavPlayer::Panel::Reset);
-   makeInput(this, Vec(55.48, 135.91),  WavPlayer::Panel::PlayOverride);
+   makeInput(this, Vec(55.54, 266.05), WavPlayer::Panel::Pitch);
+   makeInput(this, Vec(55.48, 207.15), WavPlayer::Panel::LoopOverride);
+   makeInput(this, Vec(55.54, 171.53), WavPlayer::Panel::Reset);
+   makeInput(this, Vec(55.48, 135.91), WavPlayer::Panel::PlayOverride);
 
    makeOutput(this, Vec(55.48, 355.83), WavPlayer::Panel::Right);
    makeOutput(this, Vec(55.48, 318.15), WavPlayer::Panel::Left);
 
    makeOLED(this, Vec(10.00, 34.24), WavPlayer::Panel::Pixels_Display, 83, 60);
 }
-

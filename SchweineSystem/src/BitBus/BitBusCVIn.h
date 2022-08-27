@@ -5,17 +5,17 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SyExapnder.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinExapnder.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
 #include <Tools/Range.h>
 
-#include <SyCommon.h>
-#include <SyInput.h>
-#include <SyLED.h>
+#include <SvinCommon.h>
+#include <SvinInput.h>
+#include <SvinLED.h>
 
-class BitBusCVIn : public Sy::Module, public Sy::Exapnder<BitBusMessage>
+class BitBusCVIn : public Svin::Module, public Svin::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -33,12 +33,12 @@ private:
 private:
    Range::Mapper inputMapper;
 
-   Sy::LED busOutIndicator;
+   Svin::LED busOutIndicator;
 };
 
 // widget
 
-class BitBusCVInWidget : public Sy::ModuleWidget
+class BitBusCVInWidget : public Svin::ModuleWidget
 {
 public:
    BitBusCVInWidget(BitBusCVIn* module);

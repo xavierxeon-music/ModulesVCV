@@ -3,11 +3,11 @@
 
 #include <Tools/BoolField.h>
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 BitBusBitOut::BitBusBitOut()
-   : Sy::Module()
-   , Sy::Exapnder<BitBusMessage>(this)
+   : Svin::Module()
+   , Svin::Exapnder<BitBusMessage>(this)
    , outputList(this)
    , busInIndicator(this, Panel::RGB_BusIn)
    , busOutIndicator(this, Panel::RGB_BusOut)
@@ -54,9 +54,9 @@ void BitBusBitOut::process(const ProcessArgs& args)
 // widget
 
 BitBusBitOutWidget::BitBusBitOutWidget(BitBusBitOut* module)
-   : Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelBitBusBitOut = Sy::Master::the()->addModule<BitBusBitOut, BitBusBitOutWidget>("BitBusBitOut");
+Model* modelBitBusBitOut = Svin::Master::the()->addModule<BitBusBitOut, BitBusBitOutWidget>("BitBusBitOut");

@@ -4,12 +4,12 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SyInput.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
-#include <SyOutput.h>
+#include <SvinInput.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
+#include <SvinOutput.h>
 
-class MeshStack : public Sy::Module
+class MeshStack : public Svin::Module
 {
 public:
    struct Panel;
@@ -26,7 +26,7 @@ private:
 
 // widget
 
-class MeshStackWidget : public Sy::ModuleWidget
+class MeshStackWidget : public Svin::ModuleWidget
 {
 public:
    MeshStackWidget(MeshStack* module);

@@ -4,16 +4,16 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SyExapnder.h>
-#include <SyMidiOutput.h>
-#include <SyModule.h>
+#include <SvinExapnder.h>
+#include <SvinMidiOutput.h>
+#include <SvinModule.h>
 
 #include "../Utilities/MidiReplay.h"
 
-class MidiBusModule : protected Sy::MidiOutput, public Sy::Exapnder<BusMidi>
+class MidiBusModule : protected Svin::MidiOutput, public Svin::Exapnder<BusMidi>
 {
 public:
-   MidiBusModule(const Midi::Device::Channel& deviceChannel, Sy::Module* module);
+   MidiBusModule(const Midi::Device::Channel& deviceChannel, Svin::Module* module);
 
 protected:
    void processBusMessage(const BusMidi& busMessage);

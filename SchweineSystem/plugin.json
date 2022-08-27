@@ -14,52 +14,13 @@
    "changelogUrl": "",
    "modules": [
       {
-         "slug": "VCMCReceiver",
-         "name": "VCMC Receiver",
-         "description": "A unified midi interface to a VCMV module running my configuration",
-         "tags": [
-            "Midi",
-            "External"
-         ]
-      },
-      {
          "slug": "MetropolixClock",
          "name": "MetropolixClock",
          "description": "",
-         "tags": []
-      },
-      {
-         "slug": "BarCounter",
-         "name": "Bar Counter",
-         "description": "Count the number of bars and the current tempo",
-         "tags": [
-            "Utility"
-         ]
-      },
-      {
-         "slug": "TimeLordCompanion",
-         "name": "TimeLordCompanion",
-         "description": "Help the Time Lord",
          "tags": [
             "Utility",
-            "Expander"
-         ]
-      },
-      {
-         "slug": "TimeLord",
-         "name": "Time Lord",
-         "description": "poly ramps in time and space",
-         "tags": [
-            "Utility"
-         ]
-      },
-      {
-         "slug": "FlameCC",
-         "name": "Flamme CC Sender",
-         "description": "Send cv via a Flame u16MCC  interface",
-         "tags": [
             "Midi",
-            "External"
+            "Clock"
          ]
       },
       {
@@ -206,6 +167,62 @@
          "tags": [
             "Utility"
          ]
+      },
+      {
+         "slug": "TimeLordVCMCReceiver",
+         "name": "VCMC Receiver",
+         "description": "A unified midi interface to a VCMV module running my configuration",
+         "tags": [
+            "Midi",
+            "External"
+         ]
+      },
+      {
+         "slug": "TimeLordCompanion",
+         "name": "TimeLordCompanion",
+         "description": "Help the Time Lord",
+         "tags": [
+            "Utility",
+            "Expander"
+         ]
+      },
+      {
+         "slug": "TimeLord",
+         "name": "Time Lord",
+         "description": "poly ramps in time and space",
+         "tags": [
+            "Utility"
+         ]
+      },
+      {
+         "slug": "TimeLordFlameCC",
+         "name": "Flamme CC Sender",
+         "description": "Send cv via a Flame u16MCC  interface",
+         "tags": [
+            "Midi",
+            "External"
+         ]
+      },
+      {
+         "slug": "VCMCReceiver",
+         "name": "VCMCReceiver",
+         "description": "",
+         "tags": [
+            "External",
+            "Polyphonic"
+         ]
+      },
+      {
+         "slug": "FlameCCSender",
+         "name": "FlameCCSender",
+         "description": "",
+         "tags": []
+      },
+      {
+         "slug": "Tracker",
+         "name": "Tracker",
+         "description": "",
+         "tags": []
       }
    ]
 }

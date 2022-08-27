@@ -3,11 +3,11 @@
 
 #include <Tools/BoolField.h>
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 BitBusTransmutor::BitBusTransmutor()
-   : Sy::Module()
-   , Sy::Exapnder<BitBusMessage>(this)
+   : Svin::Module()
+   , Svin::Exapnder<BitBusMessage>(this)
    , displayButton(this, Panel::Display)
    , displayController(this, Panel::Pixels_Display)
    , busInIndicator(this, Panel::RGB_BusIn)
@@ -19,11 +19,11 @@ BitBusTransmutor::BitBusTransmutor()
    allowExpanderOnRight();
 }
 
-void BitBusTransmutor::load(const Sy::Json::Object& rootObject)
+void BitBusTransmutor::load(const Svin::Json::Object& rootObject)
 {
 }
 
-void BitBusTransmutor::save(Sy::Json::Object& rootObject)
+void BitBusTransmutor::save(Svin::Json::Object& rootObject)
 {
 }
 
@@ -53,9 +53,9 @@ void BitBusTransmutor::updateDisplays()
 // widget
 
 BitBusTransmutorWidget::BitBusTransmutorWidget(BitBusTransmutor* module)
-: Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelBitBusTransmutor = Sy::Master::the()->addModule<BitBusTransmutor, BitBusTransmutorWidget>("BitBusTransmutor");
+Model* modelBitBusTransmutor = Svin::Master::the()->addModule<BitBusTransmutor, BitBusTransmutorWidget>("BitBusTransmutor");

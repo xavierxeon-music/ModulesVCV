@@ -4,11 +4,11 @@
 #include <Tools/BoolField.h>
 #include <Tools/Variable.h>
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 BitBusCounter::BitBusCounter()
-   : Sy::Module()
-   , Sy::Exapnder<BitBusMessage>(this)
+   : Svin::Module()
+   , Svin::Exapnder<BitBusMessage>(this)
    , upTrigger()
    , downTrigger()
    , counter(0)
@@ -30,18 +30,18 @@ BitBusCounter::BitBusCounter()
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      bitIndicatorList[index]->setDefaultColor(Sy::Color{0, 255, 255});
+      bitIndicatorList[index]->setDefaultColor(Svin::Color{0, 255, 255});
    }
 
-   counterController.setColor(Sy::Color{0, 255, 255});
+   counterController.setColor(Svin::Color{0, 255, 255});
 }
 
-void BitBusCounter::load(const Sy::Json::Object& rootObject)
+void BitBusCounter::load(const Svin::Json::Object& rootObject)
 {
    counter = rootObject.get("counter").toInt();
 }
 
-void BitBusCounter::save(Sy::Json::Object& rootObject)
+void BitBusCounter::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("counter", counter);
 }
@@ -87,9 +87,9 @@ void BitBusCounter::process(const ProcessArgs& args)
 // widget
 
 BitBusCounterWidget::BitBusCounterWidget(BitBusCounter* module)
-: Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelBitBusCounter = Sy::Master::the()->addModule<BitBusCounter, BitBusCounterWidget>("BitBusCounter");
+Model* modelBitBusCounter = Svin::Master::the()->addModule<BitBusCounter, BitBusCounterWidget>("BitBusCounter");

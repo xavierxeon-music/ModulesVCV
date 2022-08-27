@@ -5,16 +5,16 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SyExapnder.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinExapnder.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
-#include <SyDisplayLCD.h>
-#include <SyInput.h>
-#include <SyLED.h>
-#include <SyOutput.h>
+#include <SvinDisplayLCD.h>
+#include <SvinInput.h>
+#include <SvinLED.h>
+#include <SvinOutput.h>
 
-class BitBusCounter : public Sy::Module, public Sy::Exapnder<BitBusMessage>
+class BitBusCounter : public Svin::Module, public Svin::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
@@ -28,23 +28,23 @@ public:
 private:
    void setup();
 
-   void load(const Sy::Json::Object& rootObject) override;
-   void save(Sy::Json::Object& rootObject) override;
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
 
 private:
    dsp::BooleanTrigger upTrigger;
    dsp::BooleanTrigger downTrigger;
 
    uint8_t counter;
-   Sy::DisplayLCD::Controller counterController;
-   Sy::LED ::List bitIndicatorList;
+   Svin::DisplayLCD::Controller counterController;
+   Svin::LED ::List bitIndicatorList;
 
-   Sy::LED busOutIndicator;
+   Svin::LED busOutIndicator;
 };
 
 // widget
 
-class BitBusCounterWidget : public Sy::ModuleWidget
+class BitBusCounterWidget : public Svin::ModuleWidget
 {
 public:
    BitBusCounterWidget(BitBusCounter* module);

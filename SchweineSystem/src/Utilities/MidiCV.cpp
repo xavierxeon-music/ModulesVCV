@@ -3,11 +3,11 @@
 
 #include <Music/Note.h>
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 MidiCV::MidiCV()
-   : Sy::Module()
-   , Sy::Exapnder<BusMidi>(this)
+   : Svin::Module()
+   , Svin::Exapnder<BusMidi>(this)
 {
    setup();
    allowExpanderOnLeft();
@@ -96,9 +96,9 @@ void MidiCV::process(const ProcessArgs& args)
 // widget
 
 MidiCVWidget::MidiCVWidget(MidiCV* module)
-: Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelMidiCV = Sy::Master::the()->addModule<MidiCV, MidiCVWidget>("MidiCV");
+Model* modelMidiCV = Svin::Master::the()->addModule<MidiCV, MidiCVWidget>("MidiCV");

@@ -1,7 +1,7 @@
-#include "BitBusNegate.h"
 #include "BitBusNegatePanel.h"
+#include "BitBusNegate.h"
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 void BitBusNegate::setup()
 {
@@ -28,7 +28,7 @@ void BitBusNegate::setup()
 
 void BitBusNegateWidget::setup()
 {
-   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/BitBus/BitBusNegate.svg");
+   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/BitBus/BitBusNegate.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -41,16 +41,15 @@ void BitBusNegateWidget::setup()
    makeLEDButton(this, Vec(29.23, 84.17), BitBusNegate::Panel::Bit2_Latch, BitBusNegate::Panel::RGB_Bit2_Latch);
    makeLEDButton(this, Vec(29.23, 48.43), BitBusNegate::Panel::Bit1_Latch, BitBusNegate::Panel::RGB_Bit1_Latch);
 
-   makeInput(this, Vec(60.77, 291.50),  BitBusNegate::Panel::Bit8_GateIn);
-   makeInput(this, Vec(60.77, 257.74),  BitBusNegate::Panel::Bit7_GateIn);
-   makeInput(this, Vec(60.77, 222.46),  BitBusNegate::Panel::Bit6_GateIn);
-   makeInput(this, Vec(60.77, 186.97),  BitBusNegate::Panel::Bit5_GateIn);
-   makeInput(this, Vec(60.77, 118.85),  BitBusNegate::Panel::Bit4_GateIn);
-   makeInput(this, Vec(60.77, 153.62),  BitBusNegate::Panel::Bit3_GateIn);
-   makeInput(this, Vec(60.77, 84.49),  BitBusNegate::Panel::Bit2_GateIn);
-   makeInput(this, Vec(60.77, 48.75),  BitBusNegate::Panel::Bit1_GateIn);
+   makeInput(this, Vec(60.77, 291.50), BitBusNegate::Panel::Bit8_GateIn);
+   makeInput(this, Vec(60.77, 257.74), BitBusNegate::Panel::Bit7_GateIn);
+   makeInput(this, Vec(60.77, 222.46), BitBusNegate::Panel::Bit6_GateIn);
+   makeInput(this, Vec(60.77, 186.97), BitBusNegate::Panel::Bit5_GateIn);
+   makeInput(this, Vec(60.77, 118.85), BitBusNegate::Panel::Bit4_GateIn);
+   makeInput(this, Vec(60.77, 153.62), BitBusNegate::Panel::Bit3_GateIn);
+   makeInput(this, Vec(60.77, 84.49), BitBusNegate::Panel::Bit2_GateIn);
+   makeInput(this, Vec(60.77, 48.75), BitBusNegate::Panel::Bit1_GateIn);
 
    makeLED(this, Vec(14.35, 346.69), BitBusNegate::Panel::RGB_BusIn);
    makeLED(this, Vec(75.35, 346.69), BitBusNegate::Panel::RGB_BusOut);
 }
-

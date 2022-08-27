@@ -4,13 +4,13 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SyButtonLED.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinButtonLED.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
 #include "MidiBusModule.h"
 
-class DoepferQuad : public Sy::Module, public MidiBusModule
+class DoepferQuad : public Svin::Module, public MidiBusModule
 {
 public:
    struct Panel;
@@ -26,12 +26,12 @@ private:
    void connectToMidiDevice();
 
 private:
-   Sy::ButtonLED connectionButton;
+   Svin::ButtonLED connectionButton;
 };
 
 // widget
 
-class DoepferQuadWidget : public Sy::ModuleWidget
+class DoepferQuadWidget : public Svin::ModuleWidget
 {
 public:
    DoepferQuadWidget(DoepferQuad* module);

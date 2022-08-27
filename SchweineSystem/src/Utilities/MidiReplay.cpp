@@ -7,12 +7,12 @@
 #include <Tools/File.h>
 #include <Tools/Variable.h>
 
-#include <SyJson.h>
-#include <SyMaster.h>
+#include <SvinJson.h>
+#include <SvinMaster.h>
 
 MidiReplay::MidiReplay()
-   : Sy::Module()
-   , Sy::Exapnder<BusMidi>(this)
+   : Svin::Module()
+   , Svin::Exapnder<BusMidi>(this)
    , fileName()
    , midiReplay()
    , info{}
@@ -37,7 +37,7 @@ MidiReplay::MidiReplay()
    setup();
    allowExpanderOnRight();
 
-   loopButton.setDefaultColor(Sy::Color{0, 255, 0});
+   loopButton.setDefaultColor(Svin::Color{0, 255, 0});
 }
 
 void MidiReplay::process(const ProcessArgs& args)
@@ -156,38 +156,38 @@ void MidiReplay::updateDisplays()
 
    if (DisplayMode::Overview == displayMode)
    {
-      displayController.setColor(Sy::Color{255, 255, 255});
+      displayController.setColor(Svin::Color{255, 255, 255});
       displayController.drawRect(0, 0, 99, 10, true);
       displayController.drawRect(0, 34, 99, 43, true);
       displayController.drawRect(0, 84, 99, 93, true);
 
-      displayController.setColor(Sy::Color{0, 0, 0});
+      displayController.setColor(Svin::Color{0, 0, 0});
       const std::size_t posSlash = fileName.rfind("/");
       const std::string fileNameEnd = fileName.substr(1 + posSlash);
-      displayController.writeText(1, 1, fileNameEnd, Sy::DisplayOLED::Font::Normal);
+      displayController.writeText(1, 1, fileNameEnd, Svin::DisplayOLED::Font::Normal);
 
-      displayController.writeText(1, 35, " b a r s", Sy::DisplayOLED::Font::Normal);
-      displayController.writeText(1, 85, " t i m e", Sy::DisplayOLED::Font::Normal);
+      displayController.writeText(1, 35, " b a r s", Svin::DisplayOLED::Font::Normal);
+      displayController.writeText(1, 85, " t i m e", Svin::DisplayOLED::Font::Normal);
 
-      displayController.setColor(Sy::Color{255, 255, 255});
+      displayController.setColor(Svin::Color{255, 255, 255});
 
       const uint8_t bpm = tempo.getBeatsPerMinute();
-      displayController.writeText(1, 15, " " + std::to_string(bpm) + " bpm", Sy::DisplayOLED::Font::Small);
+      displayController.writeText(1, 15, " " + std::to_string(bpm) + " bpm", Svin::DisplayOLED::Font::Small);
 
       const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
       const uint8_t noOfChannels = (noOfSequencerChannels > 16) ? 16 : noOfSequencerChannels;
-      displayController.writeText(1, 25, " " + std::to_string(noOfChannels) + " tracks", Sy::DisplayOLED::Font::Small);
+      displayController.writeText(1, 25, " " + std::to_string(noOfChannels) + " tracks", Svin::DisplayOLED::Font::Small);
 
       const TimeCode timeCodeReplay(duration);
-      displayController.writeText(50, 45, std::to_string(timeCodeReplay.bar), Sy::DisplayOLED::Font::Large, Sy::DisplayOLED::Alignment::Right);
+      displayController.writeText(50, 45, std::to_string(timeCodeReplay.bar), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Right);
       const std::string replayRest = "." + std::to_string(timeCodeReplay.quarter) + "." + std::to_string(timeCodeReplay.tick);
-      displayController.writeText(50, 45 + 8, replayRest, Sy::DisplayOLED::Font::Normal, Sy::DisplayOLED::Alignment::Left);
+      displayController.writeText(50, 45 + 8, replayRest, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Left);
 
       const TimeCode::Duration durationSequence = midiReplay.fromTick(info.maxTick);
       const TimeCode timeCodeSequence(durationSequence);
-      displayController.writeText(50, 65, std::to_string(timeCodeSequence.bar), Sy::DisplayOLED::Font::Large, Sy::DisplayOLED::Alignment::Right);
+      displayController.writeText(50, 65, std::to_string(timeCodeSequence.bar), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Right);
       const std::string sequyenceRest = "." + std::to_string(timeCodeSequence.quarter) + "." + std::to_string(timeCodeSequence.tick);
-      displayController.writeText(50, 65 + 8, sequyenceRest, Sy::DisplayOLED::Font::Normal, Sy::DisplayOLED::Alignment::Left);
+      displayController.writeText(50, 65 + 8, sequyenceRest, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Left);
 
       auto timeDisplay = [&](const TimeCode::Duration duration)
       {
@@ -205,18 +205,18 @@ void MidiReplay::updateDisplays()
          return std::to_string(minutes) + ":" + secondsText;
       };
 
-      displayController.writeText(50, 95, timeDisplay(duration), Sy::DisplayOLED::Font::Large, Sy::DisplayOLED::Alignment::Center);
-      displayController.writeText(50, 115, timeDisplay(durationSequence), Sy::DisplayOLED::Font::Large, Sy::DisplayOLED::Alignment::Center);
+      displayController.writeText(50, 95, timeDisplay(duration), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+      displayController.writeText(50, 115, timeDisplay(durationSequence), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
    }
    else if (DisplayMode::Tracks == displayMode)
    {
-      displayController.setColor(Sy::Color{255, 255, 255});
+      displayController.setColor(Svin::Color{255, 255, 255});
       displayController.drawRect(0, 0, 99, 10, true);
 
-      displayController.setColor(Sy::Color{0, 0, 0});
-      displayController.writeText(1, 1, "Tracks", Sy::DisplayOLED::Font::Normal);
+      displayController.setColor(Svin::Color{0, 0, 0});
+      displayController.writeText(1, 1, "Tracks", Svin::DisplayOLED::Font::Normal);
 
-      displayController.setColor(Sy::Color{255, 255, 255});
+      displayController.setColor(Svin::Color{255, 255, 255});
 
       const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
       for (uint8_t index = 0; index < noOfSequencerChannels; index++)
@@ -224,18 +224,18 @@ void MidiReplay::updateDisplays()
          const Sequencer::Track& track = midiReplay.getTrackList().at(index);
          const uint8_t y = 10 + index * 10;
          const std::string polyMarker = track.isMonophonic ? "o" : "+";
-         displayController.writeText(1, y, polyMarker + ' ' + track.name, Sy::DisplayOLED::Font::Normal);
+         displayController.writeText(1, y, polyMarker + ' ' + track.name, Svin::DisplayOLED::Font::Normal);
       }
    }
    else if (DisplayMode::Current == displayMode)
    {
-      displayController.setColor(Sy::Color{255, 255, 255});
+      displayController.setColor(Svin::Color{255, 255, 255});
       displayController.drawRect(0, 0, 99, 10, true);
 
-      displayController.setColor(Sy::Color{0, 0, 0});
-      displayController.writeText(1, 1, "Current", Sy::DisplayOLED::Font::Normal);
+      displayController.setColor(Svin::Color{0, 0, 0});
+      displayController.writeText(1, 1, "Current", Svin::DisplayOLED::Font::Normal);
 
-      displayController.setColor(Sy::Color{255, 255, 255});
+      displayController.setColor(Svin::Color{255, 255, 255});
    }
 }
 
@@ -253,7 +253,7 @@ void MidiReplay::loadMidiFile(const std::string& newFileName)
    info = midiReplay.compileInfo();
 }
 
-void MidiReplay::load(const Sy::Json::Object& rootObject)
+void MidiReplay::load(const Svin::Json::Object& rootObject)
 {
    const std::string newFileName = rootObject.get("fileName").toString();
    loadMidiFile(newFileName);
@@ -263,7 +263,7 @@ void MidiReplay::load(const Sy::Json::Object& rootObject)
    displayMode = static_cast<DisplayMode>(rootObject.get("displayMode").toInt());
 }
 
-void MidiReplay::save(Sy::Json::Object& rootObject)
+void MidiReplay::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("fileName", fileName);
    rootObject.set("loop", isLooping);
@@ -273,11 +273,11 @@ void MidiReplay::save(Sy::Json::Object& rootObject)
 // widget
 
 MidiReplayWidget::MidiReplayWidget(MidiReplay* module)
-: Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 
-   using OLEDWidget = Sy::DisplayOLED::Widget;
+   using OLEDWidget = Svin::DisplayOLED::Widget;
 
    OLEDWidget* oled = OLEDWidget::find(module, MidiReplay::Panel::Pixels_Display);
    if (oled)
@@ -298,4 +298,4 @@ void MidiReplayWidget::displayClicked(const float& x, const float& y)
       myModule->loadMidiFile(std::string(path));
 }
 
-Model* modelMidiReplay = Sy::Master::the()->addModule<MidiReplay, MidiReplayWidget>("MidiReplay");
+Model* modelMidiReplay = Svin::Master::the()->addModule<MidiReplay, MidiReplayWidget>("MidiReplay");

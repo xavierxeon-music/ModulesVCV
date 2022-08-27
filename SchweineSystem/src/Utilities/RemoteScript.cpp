@@ -6,11 +6,11 @@
 #include <Tools/File.h>
 #include <Tools/SevenBit.h>
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 RemoteScript::RemoteScript()
-   : Sy::Module()
-   , Sy::MidiOutput("Trittbrettfahrer")
+   : Svin::Module()
+   , Svin::MidiOutput("Trittbrettfahrer")
    , displayController(this, Panel::Pixels_Display)
    , restartButton(this, Panel::Restart)
    , killButton(this, Panel::Kill)
@@ -20,7 +20,7 @@ RemoteScript::RemoteScript()
    setup();
    displayController.fill();
 
-   connectionButton.setDefaultColor(Sy::Color{0, 255, 0});
+   connectionButton.setDefaultColor(Svin::Color{0, 255, 0});
 
    if (connected())
       sendStart();
@@ -75,14 +75,14 @@ void RemoteScript::connectToMidiDevice()
    sendStart();
 }
 
-void RemoteScript::load(const Sy::Json::Object& rootObject)
+void RemoteScript::load(const Svin::Json::Object& rootObject)
 {
    fileName = rootObject.get("fileName").toString();
 
    sendStart();
 }
 
-void RemoteScript::save(Sy::Json::Object& rootObject)
+void RemoteScript::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("fileName", fileName);
 }
@@ -95,7 +95,7 @@ void RemoteScript::sendStart()
       return;
    }
 
-   using namespace Sy::Json;
+   using namespace Svin::Json;
 
    Object startObject;
    startObject.set("action", std::string("launch"));
@@ -106,7 +106,7 @@ void RemoteScript::sendStart()
 
 void RemoteScript::sendKill()
 {
-   using namespace Sy::Json;
+   using namespace Svin::Json;
 
    Object killObject;
    killObject.set("action", std::string("kill"));
@@ -114,7 +114,7 @@ void RemoteScript::sendKill()
    sendToRemote(killObject);
 }
 
-void RemoteScript::sendToRemote(const Sy::Json::Object& object)
+void RemoteScript::sendToRemote(const Svin::Json::Object& object)
 {
    if (!connected())
       return;
@@ -132,20 +132,20 @@ void RemoteScript::sendToRemote(const Sy::Json::Object& object)
 // widget
 
 RemoteScriptWidget::RemoteScriptWidget(RemoteScript* module)
-: Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 
-   using OLEDWidget = Sy::DisplayOLED::Widget;
+   using OLEDWidget = Svin::DisplayOLED::Widget;
 
    OLEDWidget* oled = OLEDWidget::find(module, RemoteScript::Panel::Pixels_Display);
    if (oled)
       oled->onClicked(this, &RemoteScriptWidget::displayClicked);
 
-   std::string logoPath = asset::plugin(Sy::Master::the()->instance(), "res/Utilities/Python.svg");
+   std::string logoPath = asset::plugin(Svin::Master::the()->instance(), "res/Utilities/Python.svg");
 
    const float offset = 5.0;
-   logoWidget = new Sy::SvgImage(rack::math::Vec(9.00 + offset, 62.34 + offset), module, logoPath, 0.3);
+   logoWidget = new Svin::SvgImage(rack::math::Vec(9.00 + offset, 62.34 + offset), module, logoPath, 0.3);
    addChild(logoWidget);
 
    logoWidget->visible = false;
@@ -174,4 +174,4 @@ void RemoteScriptWidget::preDraw()
    logoWidget->visible = myModule->scriptExists();
 }
 
-Model* modelRemoteScript = Sy::Master::the()->addModule<RemoteScript, RemoteScriptWidget>("RemoteScript");
+Model* modelRemoteScript = Svin::Master::the()->addModule<RemoteScript, RemoteScriptWidget>("RemoteScript");

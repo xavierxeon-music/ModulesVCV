@@ -6,15 +6,15 @@ using namespace rack;
 
 #include <Effect/Revoice.h>
 
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
-#include <SyButton.h>
-#include <SyDisplayLCD.h>
-#include <SyInput.h>
-#include <SyOutput.h>
+#include <SvinButton.h>
+#include <SvinDisplayLCD.h>
+#include <SvinInput.h>
+#include <SvinOutput.h>
 
-class Revoicer : public Sy::Module
+class Revoicer : public Svin::Module
 {
 public:
    struct Panel;
@@ -29,20 +29,20 @@ public:
 private:
    void setup();
 
-   void load(const Sy::Json::Object& rootObject) override;
-   void save(Sy::Json::Object& rootObject) override;
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
 
 private:
    uint8_t numberOfVoices;
    Revoice internal;
-   Sy::Button upButton;
-   Sy::Button downButton;
-   Sy::DisplayLCD::Controller controller;
+   Svin::Button upButton;
+   Svin::Button downButton;
+   Svin::DisplayLCD::Controller controller;
 };
 
 // widget
 
-class RevoicerWidget : public Sy::ModuleWidget
+class RevoicerWidget : public Svin::ModuleWidget
 {
 public:
    RevoicerWidget(Revoicer* module);

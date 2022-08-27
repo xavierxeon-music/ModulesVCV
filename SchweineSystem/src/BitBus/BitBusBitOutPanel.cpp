@@ -1,7 +1,7 @@
-#include "BitBusBitOut.h"
 #include "BitBusBitOutPanel.h"
+#include "BitBusBitOut.h"
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 void BitBusBitOut::setup()
 {
@@ -19,7 +19,7 @@ void BitBusBitOut::setup()
 
 void BitBusBitOutWidget::setup()
 {
-   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/BitBus/BitBusBitOut.svg");
+   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/BitBus/BitBusBitOut.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -35,4 +35,3 @@ void BitBusBitOutWidget::setup()
    makeLED(this, Vec(14.35, 346.69), BitBusBitOut::Panel::RGB_BusIn);
    makeLED(this, Vec(46.35, 346.69), BitBusBitOut::Panel::RGB_BusOut);
 }
-

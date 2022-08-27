@@ -1,7 +1,7 @@
 #include "MetropolixClock.h"
 #include "MetropolixClockPanel.h"
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 void MetropolixClock::setup()
 {
@@ -9,19 +9,29 @@ void MetropolixClock::setup()
 
    configButton(Panel::Connect, "Connect");
 
+   configInput(Panel::Override_Reset, "Override_Reset");
+   configInput(Panel::Override_Clock, "Override_Clock");
+
    configOutput(Panel::Reset, "Reset");
    configOutput(Panel::Clock, "Clock");
+
+   configPixels(Panel::Pixels_Display, 83, 170, "Display");
 }
 
 void MetropolixClockWidget::setup()
 {
-   std::string panelPath = asset::plugin(Sy::Master::the()->instance(), "res/Hardware/MetropolixClock.svg");
+   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/Hardware/MetropolixClock.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeLEDButton(this, Vec(29.95, 340.14), MetropolixClock::Panel::Connect, MetropolixClock::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(68.53, 261.21), MetropolixClock::Panel::Connect, MetropolixClock::Panel::RGB_Connect);
 
-   makeOutput(this, Vec(30.01, 240.06), MetropolixClock::Panel::Reset, false);
-   makeOutput(this, Vec(30.00, 190.72), MetropolixClock::Panel::Clock, false);
+   makeInput(this, Vec(24.17, 355.61),  MetropolixClock::Panel::Override_Reset, false);
+   makeInput(this, Vec(24.17, 306.49),  MetropolixClock::Panel::Override_Clock, false);
+
+   makeOutput(this, Vec(80.83, 355.83), MetropolixClock::Panel::Reset, false);
+   makeOutput(this, Vec(80.82, 306.49), MetropolixClock::Panel::Clock, false);
+
+   makeOLED(this, Vec(10.00, 67.98), MetropolixClock::Panel::Pixels_Display, 83, 170);
 }
 

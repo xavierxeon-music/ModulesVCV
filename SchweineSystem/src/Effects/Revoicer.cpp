@@ -3,11 +3,11 @@
 
 #include <Tools/Variable.h>
 
-#include <SyJson.h>
-#include <SyMaster.h>
+#include <SvinJson.h>
+#include <SvinMaster.h>
 
 Revoicer::Revoicer()
-   : Sy::Module()
+   : Svin::Module()
    , numberOfVoices(16)
    , internal(numberOfVoices, Spectrum::Quality::Low)
    , upButton(this, Panel::Quality_Up)
@@ -16,7 +16,7 @@ Revoicer::Revoicer()
 {
    setup();
 
-   controller.setColor(Sy::Color{0, 255, 255});
+   controller.setColor(Svin::Color{0, 255, 255});
    controller.setText(std::to_string(numberOfVoices));
 }
 
@@ -49,7 +49,7 @@ void Revoicer::onSampleRateChange(const SampleRateChangeEvent& e)
    internal.setSampleRate(e.sampleRate);
 }
 
-void Revoicer::load(const Sy::Json::Object& rootObject)
+void Revoicer::load(const Svin::Json::Object& rootObject)
 {
    numberOfVoices = rootObject.get("numberOfVoices").toInt();
 
@@ -57,7 +57,7 @@ void Revoicer::load(const Sy::Json::Object& rootObject)
    controller.setText(std::to_string(numberOfVoices));
 }
 
-void Revoicer::save(Sy::Json::Object& rootObject)
+void Revoicer::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("numberOfVoices", numberOfVoices);
 }
@@ -65,9 +65,9 @@ void Revoicer::save(Sy::Json::Object& rootObject)
 // widget
 
 RevoicerWidget::RevoicerWidget(Revoicer* module)
-   : Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelRevoicer = Sy::Master::the()->addModule<Revoicer, RevoicerWidget>("Revoicer");
+Model* modelRevoicer = Svin::Master::the()->addModule<Revoicer, RevoicerWidget>("Revoicer");

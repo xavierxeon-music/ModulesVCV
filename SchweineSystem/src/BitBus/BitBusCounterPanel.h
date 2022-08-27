@@ -3,9 +3,9 @@
 
 #include "BitBusCounter.h"
 
-#include <SyCommon.h>
-#include <SyDisplayLCD.h>
-#include <SyLED.h>
+#include <SvinCommon.h>
+#include <SvinDisplayLCD.h>
+#include <SvinLED.h>
 
 struct BitBusCounter::Panel
 {
@@ -61,7 +61,6 @@ struct BitBusCounter::Panel
       RGB_Number = 27,
       LIGHTS_LEN = 30
    };
-
 };
 
 #endif // NOT BitBusCounterPanelH

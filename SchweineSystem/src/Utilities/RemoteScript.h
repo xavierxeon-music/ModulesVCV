@@ -1,20 +1,19 @@
 #ifndef RemoteScriptH
 #define RemoteScriptH
 
-#include "SyJson.h"
 #include <rack.hpp>
 using namespace rack;
 
-#include <SyButton.h>
-#include <SyButtonLED.h>
-#include <SyDisplayOLED.h>
-#include <SyJson.h>
-#include <SyMidiOutput.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
-#include <SySvgImage.h>
+#include <SvinButton.h>
+#include <SvinButtonLED.h>
+#include <SvinDisplayOLED.h>
+#include <SvinJson.h>
+#include <SvinMidiOutput.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
+#include <SvinSvgImage.h>
 
-class RemoteScript : public Sy::Module, private Sy::MidiOutput
+class RemoteScript : public Svin::Module, private Svin::MidiOutput
 {
 public:
    struct Panel;
@@ -33,18 +32,18 @@ private:
    void updateDisplays() override;
    void connectToMidiDevice();
 
-   void load(const Sy::Json::Object& rootObject) override;
-   void save(Sy::Json::Object& rootObject) override;
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
 
    void sendStart();
    void sendKill();
-   void sendToRemote(const Sy::Json::Object& object);
+   void sendToRemote(const Svin::Json::Object& object);
 
 private:
-   Sy::DisplayOLED::Controller displayController;
-   Sy::Button restartButton;
-   Sy::Button killButton;
-   Sy::ButtonLED connectionButton;
+   Svin::DisplayOLED::Controller displayController;
+   Svin::Button restartButton;
+   Svin::Button killButton;
+   Svin::ButtonLED connectionButton;
 
    // file
    std::string fileName;
@@ -52,7 +51,7 @@ private:
 
 // widget
 
-class RemoteScriptWidget : public Sy::ModuleWidget
+class RemoteScriptWidget : public Svin::ModuleWidget
 {
 public:
    RemoteScriptWidget(RemoteScript* module);
@@ -63,7 +62,7 @@ private:
    void preDraw() override;
 
 private:
-   Sy::SvgImage* logoWidget;
+   Svin::SvgImage* logoWidget;
 };
 
 #endif // NOT RemoteScriptH

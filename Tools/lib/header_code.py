@@ -141,27 +141,27 @@ class Headers(Common):
             line(0, f'#include "{self.moduleName}.h"')
             line(0)
 
-            line(0, '#include <SyCommon.h>')
+            line(0, '#include <SvinCommon.h>')
             if self.buttons:
-                line(0, '#include <SyButton.h>')
+                line(0, '#include <SvinButton.h>')
             if self.knobs:
-                line(0, '#include <SyKnob.h>')
+                line(0, '#include <SvinKnob.h>')
             if self.lcds:
-                line(0, '#include <SyDisplayLCD.h>')
+                line(0, '#include <SvinDisplayLCD.h>')
             if self.ledbuttons:
-                line(0, '#include <SyButtonLED.h>')
+                line(0, '#include <SvinButtonLED.h>')
             if self.leds:
-                line(0, '#include <SyLED.h>')
+                line(0, '#include <SvinLED.h>')
             if self.meters:
-                line(0, '#include <SyLightMeter.h>')
+                line(0, '#include <SvinLightMeter.h>')
             if self.oleds:
-                line(0, '#include <SyDisplayOLED.h>')
+                line(0, '#include <SvinDisplayOLED.h>')
             if self.switches:
-                line(0, '#include <SySwitch.h>')
+                line(0, '#include <SvinSwitch.h>')
             if self.inputs:
-                line(0, '#include <SyInput.h>')
+                line(0, '#include <SvinInput.h>')
             if self.outputs:
-                line(0, '#include <SyOutput.h>')
+                line(0, '#include <SvinOutput.h>')
             line(0)
 
             line(0, f'struct {self.moduleName}::Panel')
@@ -197,11 +197,11 @@ class Headers(Common):
             line(0, '#include <rack.hpp>')
             line(0, 'using namespace rack;')
             line(0)
-            line(0, '#include <SyModule.h>')
-            line(0, '#include <SyModuleWidget.h>')
+            line(0, '#include <SvinModule.h>')
+            line(0, '#include <SvinModuleWidget.h>')
             line(0)
 
-            line(0, f'class {self.moduleName} : public Sy::Module')
+            line(0, f'class {self.moduleName} : public Svin::Module')
             line(0, '{')
             line(0, 'public:')
             line(1, 'struct Panel;')
@@ -220,7 +220,7 @@ class Headers(Common):
             line(0, '// widget')
             line(0)
 
-            line(0, f'class {self.moduleName}Widget : public Sy::ModuleWidget')
+            line(0, f'class {self.moduleName}Widget : public Svin::ModuleWidget')
             line(0, '{')
             line(0, 'public:')
             line(1, f'{self.moduleName}Widget({self.moduleName}* module);')

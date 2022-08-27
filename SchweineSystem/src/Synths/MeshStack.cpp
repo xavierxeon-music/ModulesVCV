@@ -1,10 +1,10 @@
 #include "MeshStack.h"
 #include "MeshStackPanel.h"
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 MeshStack::MeshStack()
-   : Sy::Module()
+   : Svin::Module()
 {
    setup();
 }
@@ -12,13 +12,12 @@ void MeshStack::process(const ProcessArgs& args)
 {
 }
 
-
 // widget
 
 MeshStackWidget::MeshStackWidget(MeshStack* module)
-: Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelMeshStack = Sy::Master::the()->addModule<MeshStack, MeshStackWidget>("MeshStack");
+Model* modelMeshStack = Svin::Master::the()->addModule<MeshStack, MeshStackWidget>("MeshStack");

@@ -1,24 +1,28 @@
 #include "MetropolixClock.h"
 #include "MetropolixClockPanel.h"
 
-#include <SyMaster.h>
+#include <SvinMaster.h>
 
 #include <Midi/MidiCommon.h>
-#include <SyMidiOutput.h>
+#include <SvinMidiOutput.h>
 
 MetropolixClock::MetropolixClock()
-   : Sy::Module()
+   : Svin::Module()
    , midiInput()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , tickCounter(6)
    , doNotAdvanceTempo(false)
    , tempo()
-   , clockTick()
-   , clockReset()
+   , clockOutput(this, Panel::Clock)
+   , resetOutput(this, Panel::Reset)
+   , clockInput(this, Panel::Override_Clock)
+   , resetInput(this, Panel::Override_Reset)
+   , duration(0)
+   , displayController(this, Panel::Pixels_Display)
 {
    setup();
 
-   connectionButton.setDefaultColor(Sy::Color{0, 255, 0});
+   connectionButton.setDefaultColor(Svin::Color{0, 255, 0});
    connectToMidiDevice();
 }
 
@@ -27,17 +31,83 @@ void MetropolixClock::process(const ProcessArgs& args)
    if (connectionButton.isTriggered())
       connectToMidiDevice();
 
-   midi::Message msg;
-   while (midiInput.tryPop(&msg, args.frame))
-      processMessage(msg);
+   if (clockInput.isConnected()) // override
+   {
+      const bool isClock = clockInput.isTriggered();
+      const bool isReset = resetInput.isTriggered();
 
-   if (doNotAdvanceTempo)
-      doNotAdvanceTempo = false;
+      if (isReset)
+      {
+         duration = 0;
+         tempo.clockReset();
+         resetOutput.trigger();
+      }
+      else if (isClock)
+      {
+         duration++;
+         tempo.clockTick();
+         clockOutput.trigger();
+      }
+      else
+         tempo.advance(args.sampleRate);
+   }
    else
-      tempo.advance(args.sampleRate);
+   {
+      midi::Message msg;
+      while (midiInput.tryPop(&msg, args.frame))
+         processMessage(msg);
 
-   outputs[Panel::Clock].setVoltage(clockTick.process(args.sampleTime) ? 10.f : 0.f);
-   outputs[Panel::Reset].setVoltage(clockReset.process(args.sampleTime) ? 10.f : 0.f);
+      if (doNotAdvanceTempo)
+         doNotAdvanceTempo = false;
+      else
+         tempo.advance(args.sampleRate);
+   }
+
+   clockOutput.animateTriggers(args);
+   resetOutput.animateTriggers(args);
+}
+
+void MetropolixClock::updateDisplays()
+{
+   displayController.fill();
+
+   displayController.drawRect(0, 0, 82, 10, true);
+   displayController.drawRect(0, 95, 82, 105, true);
+   displayController.drawRect(0, 135, 82, 145, true);
+
+   displayController.setColor(Svin::Color{0, 0, 0});
+   displayController.writeText(1, 1, "counter", Svin::DisplayOLED::Font::Normal);
+   displayController.writeText(1, 96, "tempo", Svin::DisplayOLED::Font::Normal);
+   displayController.writeText(1, 136, "time", Svin::DisplayOLED::Font::Normal);
+
+   displayController.setColor(Svin::Color{255, 255, 255});
+
+   TimeCode timeCode(duration);
+
+   // counter
+   displayController.writeText(1, 15, "bar", Svin::DisplayOLED::Font::Normal);
+   displayController.writeText(41, 30, std::to_string(timeCode.bar), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
+
+   displayController.writeText(1, 65, "rest", Svin::DisplayOLED::Font::Small);
+   const std::string rest = std::to_string(timeCode.quarter) + '.' + std::to_string(timeCode.tick);
+   displayController.writeText(41, 75, rest, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   // tempo
+   const uint8_t bpm = tempo.getBeatsPerMinute();
+   displayController.writeText(41, 110, std::to_string(bpm), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+
+   // time
+   const float secondsPerTick = 60.0 / (4.0 * bpm);
+   const uint32_t totalSeconds = static_cast<uint32_t>(duration * secondsPerTick);
+   const uint8_t seconds = totalSeconds % 60;
+   const uint32_t minutes = (totalSeconds - seconds) / 60;
+
+   std::string secondText = std::to_string(seconds);
+   if (seconds < 10)
+      secondText = "0" + secondText;
+
+   const std::string timeText = std::to_string(minutes) + ":" + secondText;
+   displayController.writeText(41, 150, timeText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 }
 
 void MetropolixClock::processMessage(const midi::Message& msg)
@@ -53,16 +123,10 @@ void MetropolixClock::processMessage(const midi::Message& msg)
       if (0 == tickCounter.valueAndNext())
       {
          tempo.clockTick();
-         clockTick.trigger();
+         clockOutput.trigger();
          doNotAdvanceTempo = true;
+         duration++;
       }
-   }
-   else if (Midi::Event::Start == event)
-   {
-      tickCounter.reset();
-      tempo.clockReset();
-      clockReset.trigger();
-      doNotAdvanceTempo = true;
    }
    else if (Midi::Event::SongPositionPointer == event)
    {
@@ -74,8 +138,9 @@ void MetropolixClock::processMessage(const midi::Message& msg)
       {
          tickCounter.reset();
          tempo.clockReset();
-         clockReset.trigger();
+         resetOutput.trigger();
          doNotAdvanceTempo = true;
+         duration = 0;
       }
    }
 }
@@ -85,7 +150,7 @@ void MetropolixClock::connectToMidiDevice()
    midiInput.reset();
    connectionButton.setOff();
 
-   static const std::string targetDeviceName = Sy::Common::midiInterfaceMap.at(Midi::Device::Metropolix);
+   static const std::string targetDeviceName = Svin::Common::midiInterfaceMap.at(Midi::Device::Metropolix);
    std::cout << targetDeviceName << std::endl;
 
    for (const int& deviceId : midiInput.getDeviceIds())
@@ -106,9 +171,9 @@ void MetropolixClock::connectToMidiDevice()
 // widget
 
 MetropolixClockWidget::MetropolixClockWidget(MetropolixClock* module)
-   : Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelMetropolixClock = Sy::Master::the()->addModule<MetropolixClock, MetropolixClockWidget>("MetropolixClock");
+Model* modelMetropolixClock = Svin::Master::the()->addModule<MetropolixClock, MetropolixClockWidget>("MetropolixClock");

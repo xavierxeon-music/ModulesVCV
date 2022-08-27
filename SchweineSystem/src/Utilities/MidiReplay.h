@@ -10,15 +10,15 @@ using namespace rack;
 #include <Music/Tempo.h>
 #include <Music/TimeCode.h>
 
-#include <SyExapnder.h>
-#include <SyModule.h>
-#include <SyModuleWidget.h>
+#include <SvinExapnder.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
 
-#include <SyButton.h>
-#include <SyButtonLED.h>
-#include <SyDisplayOLED.h>
-#include <SyInput.h>
-#include <SyOutput.h>
+#include <SvinButton.h>
+#include <SvinButtonLED.h>
+#include <SvinDisplayOLED.h>
+#include <SvinInput.h>
+#include <SvinOutput.h>
 
 struct BusMidi
 {
@@ -38,7 +38,7 @@ struct BusMidi
    Channel channels[16];
 };
 
-class MidiReplay : public Sy::Module, public Sy::Exapnder<BusMidi>
+class MidiReplay : public Svin::Module, public Svin::Exapnder<BusMidi>
 {
 public:
    struct Panel;
@@ -52,8 +52,8 @@ public:
 
    void loadMidiFile(const std::string& newFileName);
 
-   void load(const Sy::Json::Object& rootObject) override;
-   void save(Sy::Json::Object& rootObject) override;
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
 
 private:
    enum class DisplayMode
@@ -73,8 +73,8 @@ private:
 
    // display
    DisplayMode displayMode;
-   Sy::Button pageButton;
-   Sy::DisplayOLED::Controller displayController;
+   Svin::Button pageButton;
+   Svin::DisplayOLED::Controller displayController;
 
    // clock
    dsp::BooleanTrigger clockTrigger;
@@ -82,7 +82,7 @@ private:
    Tempo tempo;
 
    // cycle
-   Sy::ButtonLED loopButton;
+   Svin::ButtonLED loopButton;
    bool isLooping;
    bool atEnd;
    dsp::PulseGenerator endPulse;
@@ -95,7 +95,7 @@ private:
 
 // widget
 
-class MidiReplayWidget : public Sy::ModuleWidget
+class MidiReplayWidget : public Svin::ModuleWidget
 {
 public:
    MidiReplayWidget(MidiReplay* module);

@@ -3,11 +3,11 @@
 
 #include <Tools/BoolField.h>
 
-#include "SyMaster.h"
+#include <SvinMaster.h>
 
 BitBusCVIn::BitBusCVIn()
-   : Sy::Module()
-   , Sy::Exapnder<BitBusMessage>(this)
+   : Svin::Module()
+   , Svin::Exapnder<BitBusMessage>(this)
    , inputMapper(-5.0, 5.0, 0.0, 255.0)
    , busOutIndicator(this, Panel::RGB_BusOut)
 
@@ -37,15 +37,15 @@ void BitBusCVIn::process(const ProcessArgs& args)
       boolField = static_cast<uint8_t>(inputMapper(voltageInput));
    }
 
-   sendToRight(BitBusMessage {boolField});
+   sendToRight(BitBusMessage{boolField});
 }
 
 // widget
 
 BitBusCVInWidget::BitBusCVInWidget(BitBusCVIn* module)
-   : Sy::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelBitBusCVIn = Sy::Master::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn");
+Model* modelBitBusCVIn = Svin::Master::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn");
