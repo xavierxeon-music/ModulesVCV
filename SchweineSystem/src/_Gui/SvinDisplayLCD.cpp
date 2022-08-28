@@ -38,9 +38,20 @@ Svin::DisplayLCD::Widget::Widget(rack::math::Vec pos, Module* module, const uint
    , rgbId(rgbId)
    , font()
    , fontPath()
+   , fontSize(18)
 {
-   fontPath = std::string(rack::asset::plugin(Master::the()->instance(), "res/Segment14.ttf"));
-   box.pos = rack::math::Vec(pos.x + 2, pos.y + 20);
+   fontPath = std::string(rack::asset::plugin(Master::the()->instance(), "res/fonts/Segment14.ttf"));
+   box.pos = rack::math::Vec(pos.x + 2, pos.y + fontSize + 2);
+}
+
+const uint8_t& Svin::DisplayLCD::Widget::getFontSize() const
+{
+   return fontSize;
+}
+
+void Svin::DisplayLCD::Widget::setFontSize(const uint8_t size)
+{
+   fontSize = size;
 }
 
 void Svin::DisplayLCD::Widget::drawLayer(const DrawArgs& args, int layer)
@@ -51,7 +62,7 @@ void Svin::DisplayLCD::Widget::drawLayer(const DrawArgs& args, int layer)
    if (!font)
       font = APP->window->loadFont(fontPath);
 
-   nvgFontSize(args.vg, 18);
+   nvgFontSize(args.vg, fontSize);
    nvgFontFaceId(args.vg, font->handle);
    //nvgTextLetterSpacing(args.vg, 2.5);
 

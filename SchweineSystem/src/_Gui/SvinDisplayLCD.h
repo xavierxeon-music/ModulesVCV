@@ -26,6 +26,12 @@ namespace Svin
          void setColor(const Svin::Color& color);
 
       private:
+         friend class Widget;
+         using IdMap = std::map<const uint16_t, Controller*>;
+         using ControllerMap = std::map<Module*, IdMap>;
+
+      private:
+         static ControllerMap controllerMap;
          Module* module;
          const uint16_t textId;
          const uint16_t rgbId;
@@ -36,8 +42,13 @@ namespace Svin
       public:
          Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& textId, const uint16_t& rgbId);
 
+      public:
+         const uint8_t& getFontSize() const;
+         void setFontSize(const uint8_t size = 18);
+
       private:
          void drawLayer(const DrawArgs& args, int layer) override;
+         Controller* findController();
 
       private:
          Module* module;
@@ -46,6 +57,7 @@ namespace Svin
          const uint16_t rgbId;
          std::shared_ptr<rack::Font> font;
          std::string fontPath;
+         uint8_t fontSize;
       };
    } // namespace DisplayLCD
 } // namespace Svin

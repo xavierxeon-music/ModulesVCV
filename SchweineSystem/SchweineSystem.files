@@ -35,6 +35,8 @@
 ./src/_Gui/SvinLED.h
 ./src/Utilities/TrackerWorkerPanel.h
 ./src/Utilities/RemoteScript.h
+./src/Utilities/TrackerWorker/Midi.h
+./src/Utilities/TrackerWorker/Display.h
 ./src/Utilities/MidiCVPanel.h
 ./src/Utilities/GateLatchPanel.h
 ./src/Utilities/MidiCV.h
@@ -267,3 +269,5 @@
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp
+src/Utilities/TrackerWorker/Display.cpp
+src/Utilities/TrackerWorker/Midi.cpp

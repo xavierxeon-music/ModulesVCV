@@ -11,9 +11,11 @@ using namespace rack;
 #include <SvinModuleWidget.h>
 
 #include <SvinButton.h>
-#include <SvinDisplayOLED.h>
 #include <SvinInput.h>
 #include <SvinOutput.h>
+
+#include "TrackerWorker/Display.h"
+//#include "TrackerWorker/Midi.h"
 
 class TrackerWorker : public Svin::Module
 {
@@ -28,20 +30,14 @@ public:
    void loadProject(const std::string& newFileName);
 
 private:
-   enum class DisplayMode
-   {
-      Division,
-      Length,
-      StageCount,
-      StageIndex
-   };
-
    enum class OperationMode
    {
       Passthrough,
       Remote,
       Internal
    };
+
+   friend class Display;
 
    enum class MidiReceive
    {
@@ -58,10 +54,6 @@ private:
    void processInternal();
 
    void updateDisplays() override;
-
-   void updateDisplayPassthrough();
-   void updateDisplayRemote();
-   void updateDisplayInternal();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -90,15 +82,13 @@ private:
    Range::Mapper valueToVoltage;
    Svin::Output::List outputList;
 
-   // display
-   DisplayMode displayMode;
-   Svin::Button displayButton;
-   Svin::DisplayOLED::Controller displayController;
 
    // mode
    OperationMode operationMode;
    Svin::Button operationModeButton;
    uint8_t remoteValues[32];
+
+   Display display;
 };
 
 // widget

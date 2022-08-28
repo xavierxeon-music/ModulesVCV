@@ -26,6 +26,7 @@ SOURCES += \
 	$(wildcard src/Morpher/*.cpp) \
 	$(wildcard src/Synths/*.cpp) \
 	$(wildcard src/Utilities/*.cpp) \
+	$(wildcard src/Utilities/TrackerWorker/*.cpp) \
 	$(wildcard src/_Base/*.cpp) \
 	$(wildcard src/_Gui/*.cpp) \
 	$(wildcard src/_MusicTools/*.cpp) \

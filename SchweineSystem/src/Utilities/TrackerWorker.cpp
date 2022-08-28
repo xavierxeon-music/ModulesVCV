@@ -31,13 +31,11 @@ TrackerWorker::TrackerWorker()
    , valueToVoltage(0.0, 255.0, 0.0, 10.0)
    , outputList(this)
    // display
-   , displayMode(DisplayMode::StageIndex)
-   , displayButton(this, Panel::Display)
-   , displayController(this, Panel::Pixels_Display)
    // mode
    , operationMode(OperationMode::Passthrough)
    , operationModeButton(this, Panel::ModeManual)
    , remoteValues{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+   , display(this)
 {
    setup();
 
@@ -63,14 +61,6 @@ void TrackerWorker::process(const ProcessArgs& args)
    {
       static const std::vector<OperationMode> order = {OperationMode::Passthrough, OperationMode::Remote, OperationMode::Internal};
       Variable::Enum<OperationMode> variable(operationMode, order, true);
-      variable.increment();
-   }
-
-   // screen mode
-   if (displayButton.isTriggered())
-   {
-      static const std::vector<DisplayMode> order = {DisplayMode::Division, DisplayMode::Length, DisplayMode::StageCount, DisplayMode::StageIndex};
-      Variable::Enum<DisplayMode> variable(displayMode, order, true);
       variable.increment();
    }
 
@@ -130,91 +120,12 @@ void TrackerWorker::processInternal()
 
 void TrackerWorker::updateDisplays()
 {
-   displayController.fill();
-
-   if (OperationMode::Passthrough == operationMode)
-      updateDisplayPassthrough();
-   else if (OperationMode::Remote == operationMode)
-      updateDisplayRemote();
-   else if (OperationMode::Internal == operationMode)
-      updateDisplayInternal();
-}
-
-void TrackerWorker::updateDisplayPassthrough()
-{
-   displayController.setColor(Svin::Color{0, 255, 0});
-   displayController.drawRect(0, 0, 100, 10, true);
-
-   displayController.setColor(Svin::Color{0, 0, 0});
-   displayController.writeText(5, 1, "Passthrough", Svin::DisplayOLED::Font::Normal);
-
-   displayController.setColor(Svin::Color{0, 255, 0});
-
-   for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
-   {
-      const uint8_t y = 15 + 10 * channelIndex;
-
-      for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
-      {
-         const uint8_t x = 50 + groupIndex * 40;
-
-         const float voltage = inputList[groupIndex]->getVoltage(channelIndex);
-         const uint8_t value = voltageToValue(voltage);
-         const std::string valueText = tempo.isRunningOrFirstTick() ? Convert::text(value) : "off";
-         displayController.writeText(x, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
-      }
-   }
-}
-
-void TrackerWorker::updateDisplayRemote()
-{
-   displayController.setColor(Svin::Color{0, 255, 255});
-   displayController.drawRect(0, 0, 100, 10, true);
-
-   displayController.setColor(Svin::Color{0, 0, 0});
-   displayController.writeText(5, 1, "Remote", Svin::DisplayOLED::Font::Normal);
-
-   displayController.setColor(Svin::Color{0, 255, 255});
-
-   for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
-   {
-      const uint8_t y = 15 + 10 * channelIndex;
-
-      for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
-      {
-         const uint8_t x = 50 + groupIndex * 40;
-
-         const uint8_t value = remoteValues[16 * groupIndex + channelIndex];
-         const std::string valueText = tempo.isRunningOrFirstTick() ? Convert::text(value) : "off";
-         displayController.writeText(x, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
-      }
-   }
-}
-
-void TrackerWorker::updateDisplayInternal()
-{
-   displayController.setColor(Svin::Color{255, 255, 255});
-   displayController.drawRect(0, 0, 100, 10, true);
-
-   displayController.setColor(Svin::Color{0, 0, 0});
-
-   if (DisplayMode::Division == displayMode)
-      displayController.writeText(5, 1, "Step", Svin::DisplayOLED::Font::Normal);
-   else if (DisplayMode::Length == displayMode)
-      displayController.writeText(5, 1, "Length", Svin::DisplayOLED::Font::Normal);
-   else if (DisplayMode::StageCount == displayMode)
-      displayController.writeText(5, 1, "Count", Svin::DisplayOLED::Font::Normal);
-   else
-      displayController.writeText(5, 1, "Current", Svin::DisplayOLED::Font::Normal);
-
-   displayController.setColor(Svin::Color{255, 255, 255});
-
-   displayController.writeText(5, 20, "Hello", Svin::DisplayOLED::Font::Normal);
+   display.update();
 }
 
 void TrackerWorker::load(const Svin::Json::Object& rootObject)
 {
-   displayMode = static_cast<DisplayMode>(rootObject.get("display").toInt());
+   display.displayMode = static_cast<Display::Mode>(rootObject.get("display").toInt());
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
 
    const std::string newFileName = rootObject.get("fileName").toString();
@@ -223,7 +134,7 @@ void TrackerWorker::load(const Svin::Json::Object& rootObject)
 
 void TrackerWorker::save(Svin::Json::Object& rootObject)
 {
-   rootObject.set("display", static_cast<uint8_t>(displayMode));
+   rootObject.set("display", static_cast<uint8_t>(display.displayMode));
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
 
    rootObject.set("fileName", fileName);
