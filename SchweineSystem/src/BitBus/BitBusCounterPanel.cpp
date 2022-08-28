@@ -11,8 +11,6 @@ void BitBusCounter::setup()
    configInput(Panel::Reset, "Reset");
    configInput(Panel::Down, "Down");
    configInput(Panel::Up, "Up");
-
-   configText(Panel::Text_Number, "Number");
 }
 
 void BitBusCounterWidget::setup()
@@ -35,5 +33,5 @@ void BitBusCounterWidget::setup()
    makeLED(this, Vec(65.77, 84.32), BitBusCounter::Panel::RGB_Bit2_Indicator);
    makeLED(this, Vec(65.77, 48.73), BitBusCounter::Panel::RGB_Bit1_Indicator);
 
-   makeLCD(this, Vec(11.00, 320.77), 3, BitBusCounter::Panel::Text_Number, BitBusCounter::Panel::RGB_Number);
+   makeLCD(this, Vec(11.00, 320.77), 3, BitBusCounter::Panel::Text_Number);
 }

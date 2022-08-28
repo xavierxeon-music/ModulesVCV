@@ -44,7 +44,7 @@ TimeLord::TimeLord()
    , bankIndex(0)
    , bankButton(this, Panel::BankUp)
    , dataAppliedPulse()
-   , bankDisplay(this, Panel::Text_Bank, Panel::RGB_Bank)
+   , bankDisplay(this, Panel::Text_Bank)
    // mode
    , operationMode(OperationMode::Input)
    , operationTrigger()
@@ -67,14 +67,14 @@ TimeLord::TimeLord()
                      Panel::Channel7_Pass,
                      Panel::Channel8_Pass});
 
-   displayList.append({{Panel::Text_Channel1_Value, Panel::RGB_Channel1_Value},
-                       {Panel::Text_Channel2_Value, Panel::RGB_Channel2_Value},
-                       {Panel::Text_Channel3_Value, Panel::RGB_Channel3_Value},
-                       {Panel::Text_Channel4_Value, Panel::RGB_Channel4_Value},
-                       {Panel::Text_Channel5_Value, Panel::RGB_Channel5_Value},
-                       {Panel::Text_Channel6_Value, Panel::RGB_Channel6_Value},
-                       {Panel::Text_Channel7_Value, Panel::RGB_Channel7_Value},
-                       {Panel::Text_Channel8_Value, Panel::RGB_Channel8_Value}});
+   displayList.append({Panel::Text_Channel1_Value,
+                       Panel::Text_Channel2_Value,
+                       Panel::Text_Channel3_Value,
+                       Panel::Text_Channel4_Value,
+                       Panel::Text_Channel5_Value,
+                       Panel::Text_Channel6_Value,
+                       Panel::Text_Channel7_Value,
+                       Panel::Text_Channel8_Value});
 
    outputList.append({Panel::Channel1_Output,
                       Panel::Channel2_Output,

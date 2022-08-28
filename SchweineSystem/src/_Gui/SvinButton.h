@@ -10,7 +10,7 @@ namespace Svin
    class Button
    {
    public:
-      using List = OneParamElementList<Button>;
+      using List = ElementList<Button>;
 
    public:
       Button(Module* module, const uint16_t& paramIndex = 0);

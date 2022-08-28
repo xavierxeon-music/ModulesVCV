@@ -10,7 +10,7 @@ namespace Svin
    class Switch
    {
    public:
-      using List = OneParamElementList<Switch>;
+      using List = ElementList<Switch>;
 
    public:
       Switch(Module* module, const uint16_t& paramIndex = 0);

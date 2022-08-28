@@ -130,18 +130,15 @@ void Svin::Module::Majordomo::midiError(RtMidiError::Type type, const std::strin
 // module
 
 Svin::Module::Module()
-    : rack::Module(), texts(), values(), pixels()
+   : rack::Module()
+   , values()
+   , pixels()
 {
 }
 
 void Svin::Module::updateDisplays()
 {
    // do nothing
-}
-
-void Svin::Module::configText(const uint16_t &textId, std::string name)
-{
-   texts[textId] = std::string();
 }
 
 void Svin::Module::configMeter(const uint16_t &valueId, std::string name)

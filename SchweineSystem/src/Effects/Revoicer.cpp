@@ -12,7 +12,7 @@ Revoicer::Revoicer()
    , internal(numberOfVoices, Spectrum::Quality::Low)
    , upButton(this, Panel::Quality_Up)
    , downButton(this, Panel::Quality_Down)
-   , controller(this, Panel::Text_Quality_Value, Panel::RGB_Quality_Value)
+   , controller(this, Panel::Text_Quality_Value)
 {
    setup();
 

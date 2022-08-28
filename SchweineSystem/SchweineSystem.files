@@ -70,6 +70,7 @@
 ./src/_Base/SvinJson.h
 ./src/_Base/SvinMaster.h
 ./src/_Base/SvinExapnder.h
+./src/_Base/SvinUiElement.h
 ./src/_MusicTools/RememberDummy/Remember.h
 ./src/_MusicTools/RememberDummy/RememberArray.h
 ./src/_MusicTools/RememberDummy/RememberList.h
@@ -138,6 +139,7 @@
 ./src/_Gui/SvinDisplayOLED.hpp
 ./src/_Gui/SvinCommon.hpp
 ./src/_Base/SvinMaster.hpp
+./src/_Base/SvinUiElement.hpp
 ./src/_Base/SvinExapnder.hpp
 ./src/_MusicTools/Variable.hpp
 ./src/_MusicTools/BoolField.hpp
@@ -231,6 +233,8 @@
 ./src/_Gui/SvinDisplayLCD.cpp
 ./src/Utilities/TrackerWorkerPanel.cpp
 ./src/Utilities/RemoteScriptPanel.cpp
+./src/Utilities/TrackerWorker/Midi.cpp
+./src/Utilities/TrackerWorker/Display.cpp
 ./src/Utilities/MidiCV.cpp
 ./src/Utilities/RemoteScript.cpp
 ./src/Utilities/MidiCVPanel.cpp
@@ -269,5 +273,3 @@
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp
-src/Utilities/TrackerWorker/Display.cpp
-src/Utilities/TrackerWorker/Midi.cpp

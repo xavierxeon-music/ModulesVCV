@@ -16,10 +16,10 @@ namespace Svin
    class Module;
 
    template <typename ElementType>
-   class OneParamElementList
+   class ElementList
    {
    public:
-      OneParamElementList(Module* module);
+      ElementList(Module* module);
 
    public:
       void append(const std::vector<uint16_t>& indexList);

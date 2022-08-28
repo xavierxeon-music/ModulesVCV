@@ -25,10 +25,10 @@ AturiaStep::AturiaStep()
                      Panel::Channel3_Select,
                      Panel::Channel4_Select});
 
-   displayList.append({{Panel::Text_Channel1_Pattern, Panel::RGB_Channel1_Pattern},
-                       {Panel::Text_Channel2_Pattern, Panel::RGB_Channel2_Pattern},
-                       {Panel::Text_Channel3_Pattern, Panel::RGB_Channel3_Pattern},
-                       {Panel::Text_Channel4_Pattern, Panel::RGB_Channel4_Pattern}});
+   displayList.append({Panel::Text_Channel1_Pattern,
+                       Panel::Text_Channel2_Pattern,
+                       Panel::Text_Channel3_Pattern,
+                       Panel::Text_Channel4_Pattern});
 
    downButtonList.append({Panel::Channel1_Down,
                           Panel::Channel2_Down,

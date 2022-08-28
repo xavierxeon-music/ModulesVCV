@@ -34,16 +34,6 @@ void TimeLord::setup()
    configOutput(Panel::Channel2_Output, "Channel2_Output");
    configOutput(Panel::Channel1_Output, "Channel1_Output");
 
-   configText(Panel::Text_Bank, "Bank");
-   configText(Panel::Text_Channel8_Value, "Channel8_Value");
-   configText(Panel::Text_Channel7_Value, "Channel7_Value");
-   configText(Panel::Text_Channel6_Value, "Channel6_Value");
-   configText(Panel::Text_Channel5_Value, "Channel5_Value");
-   configText(Panel::Text_Channel4_Value, "Channel4_Value");
-   configText(Panel::Text_Channel3_Value, "Channel3_Value");
-   configText(Panel::Text_Channel2_Value, "Channel2_Value");
-   configText(Panel::Text_Channel1_Value, "Channel1_Value");
-
    configPixels(Panel::Pixels_Display, 60, 120, "Display");
 
    configMeter(Panel::Value_Channel8_Strip, "Channel8_Strip");
@@ -92,15 +82,15 @@ void TimeLordWidget::setup()
    makeLED(this, Vec(147.23, 345.04), TimeLord::Panel::RGB_Remote_Status);
    makeLED(this, Vec(147.23, 330.48), TimeLord::Panel::RGB_Input_Status);
 
-   makeLCD(this, Vec(138.00, 98.63), 1, TimeLord::Panel::Text_Bank, TimeLord::Panel::RGB_Bank);
-   makeLCD(this, Vec(50.48, 277.03), 3, TimeLord::Panel::Text_Channel8_Value, TimeLord::Panel::RGB_Channel8_Value);
-   makeLCD(this, Vec(50.48, 239.03), 3, TimeLord::Panel::Text_Channel7_Value, TimeLord::Panel::RGB_Channel7_Value);
-   makeLCD(this, Vec(50.48, 201.03), 3, TimeLord::Panel::Text_Channel6_Value, TimeLord::Panel::RGB_Channel6_Value);
-   makeLCD(this, Vec(50.48, 163.03), 3, TimeLord::Panel::Text_Channel5_Value, TimeLord::Panel::RGB_Channel5_Value);
-   makeLCD(this, Vec(50.48, 125.03), 3, TimeLord::Panel::Text_Channel4_Value, TimeLord::Panel::RGB_Channel4_Value);
-   makeLCD(this, Vec(50.48, 87.03), 3, TimeLord::Panel::Text_Channel3_Value, TimeLord::Panel::RGB_Channel3_Value);
-   makeLCD(this, Vec(50.48, 49.03), 3, TimeLord::Panel::Text_Channel2_Value, TimeLord::Panel::RGB_Channel2_Value);
-   makeLCD(this, Vec(50.48, 11.03), 3, TimeLord::Panel::Text_Channel1_Value, TimeLord::Panel::RGB_Channel1_Value);
+   makeLCD(this, Vec(138.00, 98.63), 1, TimeLord::Panel::Text_Bank);
+   makeLCD(this, Vec(50.48, 277.03), 3, TimeLord::Panel::Text_Channel8_Value);
+   makeLCD(this, Vec(50.48, 239.03), 3, TimeLord::Panel::Text_Channel7_Value);
+   makeLCD(this, Vec(50.48, 201.03), 3, TimeLord::Panel::Text_Channel6_Value);
+   makeLCD(this, Vec(50.48, 163.03), 3, TimeLord::Panel::Text_Channel5_Value);
+   makeLCD(this, Vec(50.48, 125.03), 3, TimeLord::Panel::Text_Channel4_Value);
+   makeLCD(this, Vec(50.48, 87.03), 3, TimeLord::Panel::Text_Channel3_Value);
+   makeLCD(this, Vec(50.48, 49.03), 3, TimeLord::Panel::Text_Channel2_Value);
+   makeLCD(this, Vec(50.48, 11.03), 3, TimeLord::Panel::Text_Channel1_Value);
 
    makeOLED(this, Vec(117.00, 137.59), TimeLord::Panel::Pixels_Display, 60, 120);
 

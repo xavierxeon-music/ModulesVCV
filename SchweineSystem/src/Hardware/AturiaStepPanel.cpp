@@ -25,10 +25,6 @@ void AturiaStep::setup()
    configInput(Panel::Channel2_Select, "Channel2_Select");
    configInput(Panel::Channel1_Select, "Channel1_Select");
 
-   configText(Panel::Text_Channel4_Pattern, "Channel4_Pattern");
-   configText(Panel::Text_Channel3_Pattern, "Channel3_Pattern");
-   configText(Panel::Text_Channel2_Pattern, "Channel2_Pattern");
-   configText(Panel::Text_Channel1_Pattern, "Channel1_Pattern");
 }
 
 void AturiaStepWidget::setup()
@@ -54,8 +50,8 @@ void AturiaStepWidget::setup()
    makeInput(this, Vec(42.38, 145.23), AturiaStep::Panel::Channel2_Select);
    makeInput(this, Vec(42.38, 76.03), AturiaStep::Panel::Channel1_Select);
 
-   makeLCD(this, Vec(61.00, 271.65), 2, AturiaStep::Panel::Text_Channel4_Pattern, AturiaStep::Panel::RGB_Channel4_Pattern);
-   makeLCD(this, Vec(61.65, 202.44), 2, AturiaStep::Panel::Text_Channel3_Pattern, AturiaStep::Panel::RGB_Channel3_Pattern);
-   makeLCD(this, Vec(61.00, 133.23), 2, AturiaStep::Panel::Text_Channel2_Pattern, AturiaStep::Panel::RGB_Channel2_Pattern);
-   makeLCD(this, Vec(61.00, 64.03), 2, AturiaStep::Panel::Text_Channel1_Pattern, AturiaStep::Panel::RGB_Channel1_Pattern);
+   makeLCD(this, Vec(61.00, 271.65), 2, AturiaStep::Panel::Text_Channel4_Pattern);
+   makeLCD(this, Vec(61.65, 202.44), 2, AturiaStep::Panel::Text_Channel3_Pattern);
+   makeLCD(this, Vec(61.00, 133.23), 2, AturiaStep::Panel::Text_Channel2_Pattern);
+   makeLCD(this, Vec(61.00, 64.03), 2, AturiaStep::Panel::Text_Channel1_Pattern);
 }

@@ -3,17 +3,17 @@
 
 #include "SvinCommon.h"
 
-// OneParamElementList
+// ElementList
 
 template <typename ElementType>
-Svin::OneParamElementList<ElementType>::OneParamElementList(Module* module)
+Svin::ElementList<ElementType>::ElementList(Module* module)
    : module(module)
    , instanceList()
 {
 }
 
 template <typename ElementType>
-void Svin::OneParamElementList<ElementType>::append(const std::vector<uint16_t>& paramIndexList)
+void Svin::ElementList<ElementType>::append(const std::vector<uint16_t>& paramIndexList)
 {
    for (const uint16_t paramIndex : paramIndexList)
    {
@@ -23,7 +23,7 @@ void Svin::OneParamElementList<ElementType>::append(const std::vector<uint16_t>&
 }
 
 template <typename ElementType>
-ElementType* Svin::OneParamElementList<ElementType>::operator[](const uint16_t& index)
+ElementType* Svin::ElementList<ElementType>::operator[](const uint16_t& index)
 {
    return &instanceList[index];
 }

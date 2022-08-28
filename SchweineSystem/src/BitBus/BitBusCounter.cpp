@@ -12,7 +12,7 @@ BitBusCounter::BitBusCounter()
    , upTrigger()
    , downTrigger()
    , counter(0)
-   , counterController(this, Panel::Text_Number, Panel::RGB_Number)
+   , counterController(this, Panel::Text_Number)
    , bitIndicatorList(this)
    , busOutIndicator(this, Panel::RGB_BusOut)
 {

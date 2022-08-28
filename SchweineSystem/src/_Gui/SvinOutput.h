@@ -10,7 +10,7 @@ namespace Svin
    class Output
    {
    public:
-      using List = OneParamElementList<Output>;
+      using List = ElementList<Output>;
 
    public:
       Output(Module* module, const uint16_t& outputIndex = 0);
