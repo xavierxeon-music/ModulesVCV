@@ -46,7 +46,7 @@ void Display::updatePassthrough()
    controller.drawRect(0, 0, 100, 10, true);
 
    controller.setColor(Svin::Color{0, 0, 0});
-   controller.writeText(5, 1, "Passthrough", Svin::DisplayOLED::Font::Normal);
+   controller.writeText(0, 0, "Passthrough", Svin::DisplayOLED::Font::Normal);
 
    controller.setColor(Svin::Color{0, 255, 0});
 

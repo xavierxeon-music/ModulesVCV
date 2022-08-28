@@ -13,6 +13,21 @@ Svin::DisplayOLED::Controller::Instruction::~Instruction()
 {
 }
 
+// pixel
+
+class Svin::DisplayOLED::Controller::Pixel : public Instruction
+{
+public:
+   Pixel(const NVGcolor& color, const uint8_t x, const uint8_t y);
+
+private:
+   void draw(NVGcontext* context) override;
+
+private:
+   const uint8_t x;
+   const uint8_t y;
+};
+
 Svin::DisplayOLED::Controller::Pixel::Pixel(const NVGcolor& color, const uint8_t x, const uint8_t y)
    : Instruction(color)
    , x(x)
@@ -23,10 +38,27 @@ Svin::DisplayOLED::Controller::Pixel::Pixel(const NVGcolor& color, const uint8_t
 void Svin::DisplayOLED::Controller::Pixel::draw(NVGcontext* context)
 {
    nvgBeginPath(context);
-   nvgRect(context, x + 1, y + 1, 1, 1);
+   nvgRect(context, x, y, 1, 1);
    nvgFillColor(context, color);
    nvgFill(context);
 }
+
+// line
+
+class Svin::DisplayOLED::Controller::Line : public Instruction
+{
+public:
+   Line(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2);
+
+private:
+   void draw(NVGcontext* context) override;
+
+private:
+   const uint8_t x1;
+   const uint8_t y1;
+   const uint8_t x2;
+   const uint8_t y2;
+};
 
 Svin::DisplayOLED::Controller::Line::Line(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2)
    : Instruction(color)
@@ -47,6 +79,23 @@ void Svin::DisplayOLED::Controller::Line::draw(NVGcontext* context)
    nvgStroke(context);
 }
 
+// rect
+
+class Svin::DisplayOLED::Controller::Rect : public Instruction
+{
+public:
+   Rect(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2);
+
+private:
+   void draw(NVGcontext* context) override;
+
+private:
+   const uint8_t x1;
+   const uint8_t y1;
+   const uint8_t x2;
+   const uint8_t y2;
+};
+
 Svin::DisplayOLED::Controller::Rect::Rect(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2)
    : Instruction(color)
    , x1(x1)
@@ -65,6 +114,26 @@ void Svin::DisplayOLED::Controller::Rect::draw(NVGcontext* context)
    nvgFillColor(context, color);
    nvgFill(context);
 }
+
+// text
+
+class Svin::DisplayOLED::Controller::Text : public Instruction
+{
+public:
+   Text(const NVGcolor& color, const uint8_t x, const uint8_t y, const std::string& text, const uint8_t fontSize);
+
+private:
+   void draw(NVGcontext* context) override;
+
+private:
+   const uint8_t x;
+   const uint8_t y;
+   const std::string text;
+   const uint8_t fontSize;
+
+   std::shared_ptr<rack::Font> font;
+   static std::string fontPath;
+};
 
 std::string Svin::DisplayOLED::Controller::Text::fontPath;
 
@@ -89,7 +158,7 @@ void Svin::DisplayOLED::Controller::Text::draw(NVGcontext* context)
    nvgFontFaceId(context, font->handle);
 
    nvgFillColor(context, color);
-   nvgText(context, x, y + fontSize, text.c_str(), nullptr);
+   nvgText(context, x, y + (fontSize - 1), text.c_str(), nullptr);
 }
 
 // controller
@@ -189,11 +258,9 @@ void Svin::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
    if (layer != 1)
       return;
 
-   const float padding = 0.1;
-   const float pixelOffset = (1.0 - padding);
-   const float pixelWidth = 1.0 + 2.0 * pixelOffset;
-
    Controller* controller = findElement();
+   if (!controller)
+      return;
 
    for (Controller::Instruction* instruction : controller->renderInstructions)
    {

@@ -71,66 +71,10 @@ namespace Svin
             NVGcolor color;
          };
 
-         struct Pixel : public Instruction
-         {
-         public:
-            Pixel(const NVGcolor& color, const uint8_t x, const uint8_t y);
-
-         private:
-            void draw(NVGcontext* context) override;
-
-         private:
-            const uint8_t x;
-            const uint8_t y;
-         };
-
-         struct Line : public Instruction
-         {
-         public:
-            Line(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2);
-
-         private:
-            void draw(NVGcontext* context) override;
-
-         private:
-            const uint8_t x1;
-            const uint8_t y1;
-            const uint8_t x2;
-            const uint8_t y2;
-         };
-
-         struct Rect : public Instruction
-         {
-         public:
-            Rect(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2);
-
-         private:
-            void draw(NVGcontext* context) override;
-
-         private:
-            const uint8_t x1;
-            const uint8_t y1;
-            const uint8_t x2;
-            const uint8_t y2;
-         };
-
-         struct Text : public Instruction
-         {
-         public:
-            Text(const NVGcolor& color, const uint8_t x, const uint8_t y, const std::string& text, const uint8_t fontSize);
-
-         private:
-            void draw(NVGcontext* context) override;
-
-         private:
-            const uint8_t x;
-            const uint8_t y;
-            const std::string text;
-            const uint8_t fontSize;
-
-            std::shared_ptr<rack::Font> font;
-            static std::string fontPath;
-         };
+         class Pixel;
+         class Line;
+         class Rect;
+         class Text;
 
          friend class Widget;
 
