@@ -14,16 +14,12 @@ namespace Svin
    // default colors are white on black background
    namespace DisplayOLED
    {
-      struct Font
+      enum Font : uint8_t
       {
-         static Font Small;  //  6 x  8
-         static Font Normal; //  7 x 10
-         static Font Large;  // 11 x 18
-         static Font Huge;   // 16 x 26
-
-         const uint8_t width;
-         const uint8_t height;
-         const uint16_t* data;
+         Small = 8,   //  6 x  8
+         Normal = 10, //  7 x 10
+         Large = 18,  // 11 x 18
+         Huge = 26,   // 16 x 26
       };
 
       enum class Alignment
@@ -47,9 +43,10 @@ namespace Svin
 
          void setColor(const Color& newColor);
          void drawPixel(const uint8_t x, const uint8_t y);
+
          void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
          void drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill);
-         void writeText(const uint8_t x, const uint8_t y, const std::string& text, const Font& font, const Alignment& alignment = Alignment::Left);
+         void writeText(const uint8_t x, const uint8_t y, const std::string& text, const uint8_t& fontSize, const Alignment& alignment = Alignment::Left);
 
          template <typename ClassType>
          void onClicked(ClassType* instance, void (ClassType::*functionPointer)(const float&, const float&));
@@ -58,12 +55,89 @@ namespace Svin
          void clicked(const float& x, const float& y);
 
       private:
+         class Instruction
+         {
+         public:
+            using List = std::vector<Instruction*>;
+
+         public:
+            Instruction(const NVGcolor& color);
+            virtual ~Instruction();
+
+         public:
+            virtual void draw(NVGcontext* context) = 0;
+
+         protected:
+            NVGcolor color;
+         };
+
+         struct Pixel : public Instruction
+         {
+         public:
+            Pixel(const NVGcolor& color, const uint8_t x, const uint8_t y);
+
+         private:
+            void draw(NVGcontext* context) override;
+
+         private:
+            const uint8_t x;
+            const uint8_t y;
+         };
+
+         struct Line : public Instruction
+         {
+         public:
+            Line(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2);
+
+         private:
+            void draw(NVGcontext* context) override;
+
+         private:
+            const uint8_t x1;
+            const uint8_t y1;
+            const uint8_t x2;
+            const uint8_t y2;
+         };
+
+         struct Rect : public Instruction
+         {
+         public:
+            Rect(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2);
+
+         private:
+            void draw(NVGcontext* context) override;
+
+         private:
+            const uint8_t x1;
+            const uint8_t y1;
+            const uint8_t x2;
+            const uint8_t y2;
+         };
+
+         struct Text : public Instruction
+         {
+         public:
+            Text(const NVGcolor& color, const uint8_t x, const uint8_t y, const std::string& text, const uint8_t fontSize);
+
+         private:
+            void draw(NVGcontext* context) override;
+
+         private:
+            const uint8_t x;
+            const uint8_t y;
+            const std::string text;
+            const uint8_t fontSize;
+
+            std::shared_ptr<rack::Font> font;
+            static std::string fontPath;
+         };
+
          friend class Widget;
 
       private:
-         NVGcolor color;
-         NVGcolor* pixels;
+         Instruction::List renderInstructions;
 
+         NVGcolor currentColor;
          uint8_t width;
          uint8_t height;
 
