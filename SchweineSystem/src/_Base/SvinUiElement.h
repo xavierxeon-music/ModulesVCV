@@ -13,30 +13,28 @@ namespace Svin
    {
       // the controller is knonw by the module and holds the data to be used by the fes (e.g. widget)
 
-      template <typename ControllerType>
-      class View
+      struct Base
       {
-      public:
-         View(Module* module, const uint16_t controllerId);
-
-      public:
-         ControllerType* findController() const;
-
-      protected:
          Module* module;
-         const uint16_t controllerId;
+         const uint16_t identifier;
       };
 
       template <typename ControllerType>
-      class Controller
+      class View : protected Base
       {
       public:
-         Controller(Module* module, const uint16_t controllerId, ControllerType* controller);
-         virtual ~Controller();
+         View(Module* module, const uint16_t identifier);
 
-      protected:
-         Module* module;
-         const uint16_t controllerId;
+      public:
+         ControllerType* findController() const;
+      };
+
+      template <typename ControllerType>
+      class Controller : protected Base
+      {
+      public:
+         Controller(Module* module, const uint16_t identifier, ControllerType* controller);
+         virtual ~Controller();
 
       private:
          friend class View<ControllerType>;

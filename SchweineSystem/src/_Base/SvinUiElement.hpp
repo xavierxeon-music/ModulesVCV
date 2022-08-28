@@ -6,9 +6,8 @@
 // view
 
 template <typename ControllerType>
-Svin::UiElement::View<ControllerType>::View(Module* module, const uint16_t controllerId)
-   : module(module)
-   , controllerId(controllerId)
+Svin::UiElement::View<ControllerType>::View(Module* module, const uint16_t identifier)
+   : Base{module, identifier}
 {
 }
 
@@ -19,10 +18,10 @@ ControllerType* Svin::UiElement::View<ControllerType>::findController() const
       return nullptr;
 
    const typename ControllerType::IdMap& idMap = ControllerType::controllerMap.at(module);
-   if (idMap.find(controllerId) == idMap.end())
+   if (idMap.find(identifier) == idMap.end())
       return nullptr;
 
-   return idMap.at(controllerId);
+   return idMap.at(identifier);
 }
 
 // base
@@ -31,17 +30,16 @@ template <typename ControllerType>
 typename Svin::UiElement::Controller<ControllerType>::ControllerMap Svin::UiElement::Controller<ControllerType>::controllerMap;
 
 template <typename ControllerType>
-Svin::UiElement::Controller<ControllerType>::Controller(Module* module, const uint16_t controllerId, ControllerType* controller)
-   : module(module)
-   , controllerId(controllerId)
+Svin::UiElement::Controller<ControllerType>::Controller(Module* module, const uint16_t identifier, ControllerType* controller)
+   : Base{module, identifier}
 {
-   controllerMap[module][controllerId] = controller;
+   controllerMap[module][identifier] = controller;
 }
 
 template <typename ControllerType>
 Svin::UiElement::Controller<ControllerType>::~Controller()
 {
-   controllerMap[module][controllerId] = nullptr;
+   controllerMap[module][identifier] = nullptr;
 }
 
 #endif // NOT SvinUiElementHPP
