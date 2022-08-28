@@ -8,13 +8,13 @@
 #include <SvinCommon.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
-#include <SvinUiElement.h>
+
 
 namespace Svin
 {
    namespace LightMeter
    {
-      class Controller : public UiElement::ElementMap<Controller>
+      class Controller : public InstanceMap<Controller>
       {
       public:
          using List = ElementList<Controller>;
@@ -34,7 +34,7 @@ namespace Svin
          uint32_t value;
       };
 
-      class Widget : public rack::TransparentWidget, private UiElement::ElementMap<Controller>::Access
+      class Widget : public rack::TransparentWidget, private InstanceMap<Controller>::Access
       {
       public:
          Widget(rack::math::Vec pos, Module* module, const uint8_t& segmentCount, const uint16_t& valueId);

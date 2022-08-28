@@ -1,5 +1,5 @@
-#include "BitBusTransmutorPanel.h"
 #include "BitBusTransmutor.h"
+#include "BitBusTransmutorPanel.h"
 
 #include <SvinMaster.h>
 
@@ -16,10 +16,11 @@ void BitBusTransmutorWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeButton(this, Vec(59.42, 196.72), BitBusTransmutor::Panel::Display);
+   makeButton(this, Vec(59.84, 242.50), BitBusTransmutor::Panel::Display);
 
-   makeLED(this, Vec(14.35, 346.69), BitBusTransmutor::Panel::RGB_BusIn);
-   makeLED(this, Vec(75.35, 346.69), BitBusTransmutor::Panel::RGB_BusOut);
+   makeLED(this, Vec(9.92, 46.77), BitBusTransmutor::Panel::RGB_BusIn);
+   makeLED(this, Vec(79.92, 46.77), BitBusTransmutor::Panel::RGB_BusOut);
 
-   makeOLED(this, Vec(14.00, 59.75), BitBusTransmutor::Panel::Pixels_Display, 60, 120);
+   makeOLED(this, Vec(14.42, 105.53), BitBusTransmutor::Panel::Pixels_Display, 60, 120);
 }
+

@@ -3,10 +3,12 @@
 
 #include "WavPlayer.h"
 
+#include <SvinCommon.h>
 #include <SvinButton.h>
 #include <SvinButtonLED.h>
-#include <SvinCommon.h>
 #include <SvinDisplayOLED.h>
+#include <SvinInput.h>
+#include <SvinOutput.h>
 
 struct WavPlayer::Panel
 {
@@ -60,6 +62,7 @@ struct WavPlayer::Panel
       // lcds
       LIGHTS_LEN = 6
    };
+
 };
 
 #endif // NOT WavPlayerPanelH

@@ -1,5 +1,5 @@
-#include "BitBusMeterAndFreezePanel.h"
 #include "BitBusMeterAndFreeze.h"
+#include "BitBusMeterAndFreezePanel.h"
 
 #include <SvinMaster.h>
 
@@ -20,20 +20,21 @@ void BitBusMeterAndFreezeWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeLEDButton(this, Vec(44.94, 244.95), BitBusMeterAndFreeze::Panel::FlipSample, BitBusMeterAndFreeze::Panel::RGB_FlipSample);
-   makeLEDButton(this, Vec(44.94, 145.96), BitBusMeterAndFreeze::Panel::FlipFreeze, BitBusMeterAndFreeze::Panel::RGB_FlipFreeze);
+   makeLEDButton(this, Vec(44.94, 290.74), BitBusMeterAndFreeze::Panel::FlipSample, BitBusMeterAndFreeze::Panel::RGB_FlipSample);
+   makeLEDButton(this, Vec(44.94, 191.75), BitBusMeterAndFreeze::Panel::FlipFreeze, BitBusMeterAndFreeze::Panel::RGB_FlipFreeze);
 
-   makeInput(this, Vec(44.94, 209.15), BitBusMeterAndFreeze::Panel::GateSample);
-   makeInput(this, Vec(44.94, 110.39), BitBusMeterAndFreeze::Panel::GateFreeze);
+   makeInput(this, Vec(44.94, 254.94),  BitBusMeterAndFreeze::Panel::GateSample, false);
+   makeInput(this, Vec(44.94, 156.19),  BitBusMeterAndFreeze::Panel::GateFreeze, false);
 
-   makeLED(this, Vec(13.82, 291.23), BitBusMeterAndFreeze::Panel::RGB_Bit8_Status1);
-   makeLED(this, Vec(13.82, 257.59), BitBusMeterAndFreeze::Panel::RGB_Bit7_Status1);
-   makeLED(this, Vec(13.82, 222.22), BitBusMeterAndFreeze::Panel::RGB_Bit6_Status1);
-   makeLED(this, Vec(13.82, 187.06), BitBusMeterAndFreeze::Panel::RGB_Bit5_Status1);
-   makeLED(this, Vec(13.82, 153.47), BitBusMeterAndFreeze::Panel::RGB_Bit4_Status1);
-   makeLED(this, Vec(13.82, 118.69), BitBusMeterAndFreeze::Panel::RGB_Bit3_Status1);
-   makeLED(this, Vec(13.82, 84.39), BitBusMeterAndFreeze::Panel::RGB_Bit2_Status1);
-   makeLED(this, Vec(13.82, 48.73), BitBusMeterAndFreeze::Panel::RGB_Bit1_Status1);
-   makeLED(this, Vec(14.35, 346.69), BitBusMeterAndFreeze::Panel::RGB_BusIn);
-   makeLED(this, Vec(60.35, 346.69), BitBusMeterAndFreeze::Panel::RGB_BusOut);
+   makeLED(this, Vec(13.82, 337.02), BitBusMeterAndFreeze::Panel::RGB_Bit8_Status1);
+   makeLED(this, Vec(13.82, 303.38), BitBusMeterAndFreeze::Panel::RGB_Bit7_Status1);
+   makeLED(this, Vec(13.82, 268.01), BitBusMeterAndFreeze::Panel::RGB_Bit6_Status1);
+   makeLED(this, Vec(13.82, 232.86), BitBusMeterAndFreeze::Panel::RGB_Bit5_Status1);
+   makeLED(this, Vec(13.82, 199.26), BitBusMeterAndFreeze::Panel::RGB_Bit4_Status1);
+   makeLED(this, Vec(13.82, 164.48), BitBusMeterAndFreeze::Panel::RGB_Bit3_Status1);
+   makeLED(this, Vec(13.82, 130.19), BitBusMeterAndFreeze::Panel::RGB_Bit2_Status1);
+   makeLED(this, Vec(13.82, 94.53), BitBusMeterAndFreeze::Panel::RGB_Bit1_Status1);
+   makeLED(this, Vec(10.00, 46.77), BitBusMeterAndFreeze::Panel::RGB_BusIn);
+   makeLED(this, Vec(65.00, 46.77), BitBusMeterAndFreeze::Panel::RGB_BusOut);
 }
+

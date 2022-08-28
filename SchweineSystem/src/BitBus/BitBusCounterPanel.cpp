@@ -1,5 +1,5 @@
-#include "BitBusCounterPanel.h"
 #include "BitBusCounter.h"
+#include "BitBusCounterPanel.h"
 
 #include <SvinMaster.h>
 #include <limits>
@@ -19,19 +19,20 @@ void BitBusCounterWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeInput(this, Vec(24.17, 253.42), BitBusCounter::Panel::Reset);
-   makeInput(this, Vec(24.17, 169.98), BitBusCounter::Panel::Down);
-   makeInput(this, Vec(24.17, 114.18), BitBusCounter::Panel::Up);
+   makeInput(this, Vec(24.17, 299.21),  BitBusCounter::Panel::Reset, false);
+   makeInput(this, Vec(24.17, 215.77),  BitBusCounter::Panel::Down, false);
+   makeInput(this, Vec(24.17, 159.97),  BitBusCounter::Panel::Up, false);
 
-   makeLED(this, Vec(75.35, 346.69), BitBusCounter::Panel::RGB_BusOut);
-   makeLED(this, Vec(65.77, 291.23), BitBusCounter::Panel::RGB_Bit8_Indicator);
-   makeLED(this, Vec(65.77, 257.59), BitBusCounter::Panel::RGB_Bit7_Indicator);
-   makeLED(this, Vec(65.77, 222.22), BitBusCounter::Panel::RGB_Bit6_Indicator);
-   makeLED(this, Vec(65.77, 186.91), BitBusCounter::Panel::RGB_Bit5_Indicator);
-   makeLED(this, Vec(65.77, 153.47), BitBusCounter::Panel::RGB_Bit4_Indicator);
-   makeLED(this, Vec(65.77, 118.69), BitBusCounter::Panel::RGB_Bit3_Indicator);
-   makeLED(this, Vec(65.77, 84.32), BitBusCounter::Panel::RGB_Bit2_Indicator);
-   makeLED(this, Vec(65.77, 48.73), BitBusCounter::Panel::RGB_Bit1_Indicator);
+   makeLED(this, Vec(65.77, 337.02), BitBusCounter::Panel::RGB_Bit8_Indicator);
+   makeLED(this, Vec(65.77, 303.38), BitBusCounter::Panel::RGB_Bit7_Indicator);
+   makeLED(this, Vec(65.77, 268.01), BitBusCounter::Panel::RGB_Bit6_Indicator);
+   makeLED(this, Vec(65.77, 232.71), BitBusCounter::Panel::RGB_Bit5_Indicator);
+   makeLED(this, Vec(65.77, 199.26), BitBusCounter::Panel::RGB_Bit4_Indicator);
+   makeLED(this, Vec(65.77, 164.48), BitBusCounter::Panel::RGB_Bit3_Indicator);
+   makeLED(this, Vec(65.77, 130.11), BitBusCounter::Panel::RGB_Bit2_Indicator);
+   makeLED(this, Vec(65.77, 94.53), BitBusCounter::Panel::RGB_Bit1_Indicator);
+   makeLED(this, Vec(79.92, 46.77), BitBusCounter::Panel::RGB_BusOut);
 
-   makeLCD(this, Vec(11.00, 320.77), 3, BitBusCounter::Panel::Text_Number, 18);
+   makeLCD(this, Vec(20.00, 42.49), 3, BitBusCounter::Panel::Text_Number, 18);
 }
+

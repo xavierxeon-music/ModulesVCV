@@ -3,7 +3,7 @@
 // controller
 
 Svin::LightMeter::Controller::Controller(Module* module, const uint16_t& valueId)
-   : UiElement::ElementMap<Controller>(module, valueId, this)
+   : InstanceMap<Controller>(module, valueId, this)
    , valueMapper(0.0, 1.0, 0.0, 100.0)
    , value(0)
 {
@@ -23,7 +23,7 @@ void Svin::LightMeter::Controller::setValue(const uint32_t& newValue)
 
 Svin::LightMeter::Widget::Widget(rack::math::Vec pos, Module* module, const uint8_t& segmentCount, const uint16_t& valueId)
    : rack::TransparentWidget()
-   , UiElement::ElementMap<Controller>::Access(module, valueId)
+   , InstanceMap<Controller>::Access(module, valueId)
    , segmentCount(segmentCount)
    , meterMapper(0.0, 100.0, 0.0, 3.0 * segmentCount)
 {
@@ -37,7 +37,7 @@ void Svin::LightMeter::Widget::drawLayer(const DrawArgs& args, int layer)
 
    static const std::vector<NVGcolor> stageColorList = {nvgRGB(0, 0, 0), nvgRGB(0, 150, 255), nvgRGB(255, 255, 0), nvgRGB(255, 50, 50)};
 
-   Controller* controller = findElement();
+   Controller* controller = findIntstance();
    const uint8_t meterValue = [&]() -> uint8_t
    {
       if (!controller)

@@ -5,6 +5,7 @@
 
 #include <SvinCommon.h>
 #include <SvinLED.h>
+#include <SvinOutput.h>
 
 struct BitBusBitOut::Panel
 {
@@ -56,6 +57,7 @@ struct BitBusBitOut::Panel
       // lcds
       LIGHTS_LEN = 6
    };
+
 };
 
 #endif // NOT BitBusBitOutPanelH

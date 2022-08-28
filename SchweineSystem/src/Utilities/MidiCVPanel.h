@@ -49,6 +49,7 @@ struct MidiCV::Panel
       // lcds
       LIGHTS_LEN = 0
    };
+
 };
 
 #endif // NOT MidiCVPanelH

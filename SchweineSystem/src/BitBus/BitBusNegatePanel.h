@@ -3,9 +3,10 @@
 
 #include "BitBusNegate.h"
 
-#include <SvinButtonLED.h>
 #include <SvinCommon.h>
+#include <SvinButtonLED.h>
 #include <SvinLED.h>
+#include <SvinInput.h>
 
 struct BitBusNegate::Panel
 {
@@ -73,6 +74,7 @@ struct BitBusNegate::Panel
       // lcds
       LIGHTS_LEN = 30
    };
+
 };
 
 #endif // NOT BitBusNegatePanelH

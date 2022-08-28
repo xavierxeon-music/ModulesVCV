@@ -3,9 +3,11 @@
 
 #include "GateLatch.h"
 
-#include <SvinButton.h>
 #include <SvinCommon.h>
+#include <SvinButton.h>
 #include <SvinLED.h>
+#include <SvinInput.h>
+#include <SvinOutput.h>
 
 struct GateLatch::Panel
 {
@@ -73,6 +75,7 @@ struct GateLatch::Panel
       // lcds
       LIGHTS_LEN = 24
    };
+
 };
 
 #endif // NOT GateLatchPanelH

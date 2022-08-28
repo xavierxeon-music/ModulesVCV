@@ -1,5 +1,5 @@
-#include "BitBusBitInPanel.h"
 #include "BitBusBitIn.h"
+#include "BitBusBitInPanel.h"
 
 #include <SvinMaster.h>
 
@@ -23,15 +23,16 @@ void BitBusBitInWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeInput(this, Vec(30.00, 291.61), BitBusBitIn::Panel::BitIn8);
-   makeInput(this, Vec(30.00, 256.86), BitBusBitIn::Panel::BitIn7);
-   makeInput(this, Vec(30.00, 187.36), BitBusBitIn::Panel::BitIn6);
-   makeInput(this, Vec(30.00, 222.11), BitBusBitIn::Panel::BitIn5);
-   makeInput(this, Vec(30.00, 152.61), BitBusBitIn::Panel::BitIn4);
-   makeInput(this, Vec(30.00, 117.85), BitBusBitIn::Panel::BitIn3);
-   makeInput(this, Vec(30.00, 83.10), BitBusBitIn::Panel::BitIn2);
-   makeInput(this, Vec(30.00, 48.35), BitBusBitIn::Panel::BitIn1);
+   makeInput(this, Vec(30.00, 337.40),  BitBusBitIn::Panel::BitIn8, false);
+   makeInput(this, Vec(30.00, 302.65),  BitBusBitIn::Panel::BitIn7, false);
+   makeInput(this, Vec(30.00, 233.15),  BitBusBitIn::Panel::BitIn6, false);
+   makeInput(this, Vec(30.00, 267.90),  BitBusBitIn::Panel::BitIn5, false);
+   makeInput(this, Vec(30.00, 198.40),  BitBusBitIn::Panel::BitIn4, false);
+   makeInput(this, Vec(30.00, 163.65),  BitBusBitIn::Panel::BitIn3, false);
+   makeInput(this, Vec(30.00, 128.90),  BitBusBitIn::Panel::BitIn2, false);
+   makeInput(this, Vec(30.00, 94.14),  BitBusBitIn::Panel::BitIn1, false);
 
-   makeLED(this, Vec(45.35, 346.69), BitBusBitIn::Panel::RGB_BusOut);
-   makeLED(this, Vec(14.35, 346.69), BitBusBitIn::Panel::RGB_BusIn);
+   makeLED(this, Vec(10.50, 46.77), BitBusBitIn::Panel::RGB_BusIn);
+   makeLED(this, Vec(50.00, 46.77), BitBusBitIn::Panel::RGB_BusOut);
 }
+

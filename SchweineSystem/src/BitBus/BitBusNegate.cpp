@@ -67,14 +67,17 @@ void BitBusNegate::save(Svin::Json::Object& rootObject)
 void BitBusNegate::process(const ProcessArgs& args)
 {
    if (!canCommunicatWithRight())
-      return busOutIndicator.setOff();
+      busOutIndicator.setOff();
    else
       busOutIndicator.setOn();
 
    if (!canCommunicatWithLeft())
-      return busInIndicator.setOff();
+      busInIndicator.setOff();
    else
       busInIndicator.setOn();
+
+   if (!canCommunicatWithRight() || !canCommunicatWithLeft())
+      return;
 
    BoolField8 boolField = receiveFromLeft().byte;
 

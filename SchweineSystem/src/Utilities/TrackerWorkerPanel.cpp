@@ -1,5 +1,5 @@
-#include "TrackerWorkerPanel.h"
 #include "TrackerWorker.h"
+#include "TrackerWorkerPanel.h"
 
 #include <SvinMaster.h>
 
@@ -29,14 +29,15 @@ void TrackerWorkerWidget::setup()
    makeButton(this, Vec(46.10, 228.33), TrackerWorker::Panel::Display);
    makeButton(this, Vec(99.68, 228.33), TrackerWorker::Panel::ModeManual);
 
-   makeInput(this, Vec(95.83, 355.81), TrackerWorker::Panel::Upload, false);
-   makeInput(this, Vec(56.92, 355.83), TrackerWorker::Panel::Reset, false);
-   makeInput(this, Vec(24.17, 355.83), TrackerWorker::Panel::Clock, false);
-   makeInput(this, Vec(24.17, 300.21), TrackerWorker::Panel::Group2_Pass, true);
-   makeInput(this, Vec(24.17, 266.71), TrackerWorker::Panel::Group1_Pass, true);
+   makeInput(this, Vec(95.83, 355.81),  TrackerWorker::Panel::Upload, false);
+   makeInput(this, Vec(56.92, 355.83),  TrackerWorker::Panel::Reset, false);
+   makeInput(this, Vec(24.17, 355.83),  TrackerWorker::Panel::Clock, false);
+   makeInput(this, Vec(24.17, 300.21),  TrackerWorker::Panel::Group2_Pass, true);
+   makeInput(this, Vec(24.17, 266.71),  TrackerWorker::Panel::Group1_Pass, true);
 
    makeOutput(this, Vec(95.83, 300.21), TrackerWorker::Panel::Group2_Output, true);
    makeOutput(this, Vec(95.83, 266.71), TrackerWorker::Panel::Group1_Output, true);
 
    makeOLED(this, Vec(9.00, 34.00), TrackerWorker::Panel::Pixels_Display, 100, 180);
 }
+

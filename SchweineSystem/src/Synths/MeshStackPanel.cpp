@@ -1,5 +1,5 @@
-#include "MeshStackPanel.h"
 #include "MeshStack.h"
+#include "MeshStackPanel.h"
 
 #include <SvinMaster.h>
 
@@ -22,7 +22,8 @@ void MeshStackWidget::setup()
 
    makeKnob(this, Vec(143.98, 121.89), MeshStack::Panel::Knob_Mode, 1);
 
-   makeInput(this, Vec(55.54, 285.15), MeshStack::Panel::Pitch);
+   makeInput(this, Vec(55.54, 285.15),  MeshStack::Panel::Pitch, false);
 
-   makeOutput(this, Vec(55.54, 328.06), MeshStack::Panel::Out);
+   makeOutput(this, Vec(55.54, 328.06), MeshStack::Panel::Out, false);
 }
+

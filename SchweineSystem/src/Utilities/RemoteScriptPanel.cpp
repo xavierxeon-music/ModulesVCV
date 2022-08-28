@@ -1,5 +1,5 @@
-#include "RemoteScriptPanel.h"
 #include "RemoteScript.h"
+#include "RemoteScriptPanel.h"
 
 #include <SvinMaster.h>
 
@@ -22,7 +22,8 @@ void RemoteScriptWidget::setup()
    makeButton(this, Vec(29.50, 227.25), RemoteScript::Panel::Kill);
    makeButton(this, Vec(30.00, 170.36), RemoteScript::Panel::Restart);
 
-   makeLEDButton(this, Vec(30.00, 355.83), RemoteScript::Panel::Connect, RemoteScript::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(30.00, 350.06), RemoteScript::Panel::Connect, RemoteScript::Panel::RGB_Connect);
 
    makeOLED(this, Vec(9.00, 62.34), RemoteScript::Panel::Pixels_Display, 40, 40);
 }
+

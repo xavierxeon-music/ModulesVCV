@@ -15,7 +15,7 @@ Svin::DisplayOLED::Controller::Instruction::~Instruction()
 
 // pixel
 
-class Svin::DisplayOLED::Controller::Pixel : public Instruction
+class Svin::DisplayOLED::Controller::Instruction::Pixel : public Instruction
 {
 public:
    Pixel(const NVGcolor& color, const uint8_t x, const uint8_t y);
@@ -28,14 +28,14 @@ private:
    const uint8_t y;
 };
 
-Svin::DisplayOLED::Controller::Pixel::Pixel(const NVGcolor& color, const uint8_t x, const uint8_t y)
+Svin::DisplayOLED::Controller::Instruction::Pixel::Pixel(const NVGcolor& color, const uint8_t x, const uint8_t y)
    : Instruction(color)
    , x(x)
    , y(y)
 {
 }
 
-void Svin::DisplayOLED::Controller::Pixel::draw(NVGcontext* context)
+void Svin::DisplayOLED::Controller::Instruction::Pixel::draw(NVGcontext* context)
 {
    nvgBeginPath(context);
    nvgRect(context, x, y, 1, 1);
@@ -45,7 +45,7 @@ void Svin::DisplayOLED::Controller::Pixel::draw(NVGcontext* context)
 
 // line
 
-class Svin::DisplayOLED::Controller::Line : public Instruction
+class Svin::DisplayOLED::Controller::Instruction::Line : public Instruction
 {
 public:
    Line(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2);
@@ -60,7 +60,7 @@ private:
    const uint8_t y2;
 };
 
-Svin::DisplayOLED::Controller::Line::Line(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2)
+Svin::DisplayOLED::Controller::Instruction::Line::Line(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2)
    : Instruction(color)
    , x1(x1)
    , y1(y1)
@@ -69,7 +69,7 @@ Svin::DisplayOLED::Controller::Line::Line(const NVGcolor& color, const uint8_t x
 {
 }
 
-void Svin::DisplayOLED::Controller::Line::draw(NVGcontext* context)
+void Svin::DisplayOLED::Controller::Instruction::Line::draw(NVGcontext* context)
 {
    nvgBeginPath(context);
    nvgMoveTo(context, x1, y1);
@@ -81,7 +81,7 @@ void Svin::DisplayOLED::Controller::Line::draw(NVGcontext* context)
 
 // rect
 
-class Svin::DisplayOLED::Controller::Rect : public Instruction
+class Svin::DisplayOLED::Controller::Instruction::Rect : public Instruction
 {
 public:
    Rect(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2);
@@ -96,7 +96,7 @@ private:
    const uint8_t y2;
 };
 
-Svin::DisplayOLED::Controller::Rect::Rect(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2)
+Svin::DisplayOLED::Controller::Instruction::Rect::Rect(const NVGcolor& color, const uint8_t x1, const uint8_t y1, const uint8_t x2, const uint8_t y2)
    : Instruction(color)
    , x1(x1)
    , y1(y1)
@@ -105,7 +105,7 @@ Svin::DisplayOLED::Controller::Rect::Rect(const NVGcolor& color, const uint8_t x
 {
 }
 
-void Svin::DisplayOLED::Controller::Rect::draw(NVGcontext* context)
+void Svin::DisplayOLED::Controller::Instruction::Rect::draw(NVGcontext* context)
 {
    nvgBeginPath(context);
    const uint8_t width = x2 - x1;
@@ -117,10 +117,10 @@ void Svin::DisplayOLED::Controller::Rect::draw(NVGcontext* context)
 
 // text
 
-class Svin::DisplayOLED::Controller::Text : public Instruction
+class Svin::DisplayOLED::Controller::Instruction::Text : public Instruction
 {
 public:
-   Text(const NVGcolor& color, const uint8_t x, const uint8_t y, const std::string& text, const uint8_t fontSize);
+   Text(const NVGcolor& color, const uint8_t x, const uint8_t y, const std::string& text, const uint8_t fontHeigth);
 
 private:
    void draw(NVGcontext* context) override;
@@ -129,42 +129,42 @@ private:
    const uint8_t x;
    const uint8_t y;
    const std::string text;
-   const uint8_t fontSize;
+   const uint8_t fontHeigth;
 
    std::shared_ptr<rack::Font> font;
    static std::string fontPath;
 };
 
-std::string Svin::DisplayOLED::Controller::Text::fontPath;
+std::string Svin::DisplayOLED::Controller::Instruction::Text::fontPath;
 
-Svin::DisplayOLED::Controller::Text::Text(const NVGcolor& color, const uint8_t x, const uint8_t y, const std::string& text, const uint8_t fontSize)
+Svin::DisplayOLED::Controller::Instruction::Text::Text(const NVGcolor& color, const uint8_t x, const uint8_t y, const std::string& text, const uint8_t fontHeigth)
    : Instruction(color)
    , x(x)
    , y(y)
    , text(text)
-   , fontSize(fontSize)
+   , fontHeigth(fontHeigth)
    , font()
 {
    if (fontPath.empty())
       fontPath = std::string(rack::asset::plugin(Master::the()->instance(), "res/fonts/FiraCode-Regular.ttf"));
 }
 
-void Svin::DisplayOLED::Controller::Text::draw(NVGcontext* context)
+void Svin::DisplayOLED::Controller::Instruction::Text::draw(NVGcontext* context)
 {
    if (!font)
       font = APP->window->loadFont(fontPath);
 
-   nvgFontSize(context, fontSize);
+   nvgFontSize(context, 1.25 * fontHeigth); // pixel to point size
    nvgFontFaceId(context, font->handle);
 
    nvgFillColor(context, color);
-   nvgText(context, x, y + (fontSize - 1), text.c_str(), nullptr);
+   nvgText(context, x, y + (0.9 * fontHeigth), text.c_str(), nullptr);
 }
 
 // controller
 
 Svin::DisplayOLED::Controller::Controller(Module* module, const uint16_t& pixelId)
-   : UiElement::ElementMap<Controller>(module, pixelId, this)
+   : InstanceMap<Controller>(module, pixelId, this)
    , renderInstructions()
    , currentColor(nvgRGB(255, 255, 255))
    , width(1)
@@ -187,8 +187,8 @@ void Svin::DisplayOLED::Controller::fill(const Color& fillColor)
 {
    NVGcolor color = nvgRGB(fillColor.red, fillColor.green, fillColor.red);
 
-   Rect* rect = new Rect(color, 0, 0, width, height);
-   renderInstructions.push_back(rect);
+   Instruction::Rect* instruction = new Instruction::Rect(color, 0, 0, width, height);
+   renderInstructions.push_back(instruction);
 }
 
 void Svin::DisplayOLED::Controller::drawPixel(const uint8_t x, const uint8_t y)
@@ -196,13 +196,13 @@ void Svin::DisplayOLED::Controller::drawPixel(const uint8_t x, const uint8_t y)
    if (x >= width || y >= height)
       return;
 
-   Pixel* instruction = new Pixel(currentColor, x, y);
+   Instruction::Pixel* instruction = new Instruction::Pixel(currentColor, x, y);
    renderInstructions.push_back(instruction);
 }
 
 void Svin::DisplayOLED::Controller::drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
 {
-   Line* instruction = new Line(currentColor, x1, y1, x2, y2);
+   Instruction::Line* instruction = new Instruction::Line(currentColor, x1, y1, x2, y2);
    renderInstructions.push_back(instruction);
 }
 
@@ -210,7 +210,7 @@ void Svin::DisplayOLED::Controller::drawRect(uint8_t x1, uint8_t y1, uint8_t x2,
 {
    if (fill)
    {
-      Rect* instruction = new Rect(currentColor, x1, y1, x2, y2);
+      Instruction::Rect* instruction = new Instruction::Rect(currentColor, x1, y1, x2, y2);
       renderInstructions.push_back(instruction);
    }
    else
@@ -222,15 +222,23 @@ void Svin::DisplayOLED::Controller::drawRect(uint8_t x1, uint8_t y1, uint8_t x2,
    }
 }
 
-void Svin::DisplayOLED::Controller::writeText(const uint8_t x, const uint8_t y, const std::string& text, const uint8_t& fontSize, const Alignment& alignment)
+void Svin::DisplayOLED::Controller::writeText(const uint8_t x, const uint8_t y, const std::string& text, const uint8_t& fontHeigth, const Alignment& alignment)
 {
-   Text* instruction = new Text(currentColor, x, y, text, fontSize);
+   const float offset = 0.5 * text.length() * fontHeigth;
+
+   uint8_t textX = x;
+   if (Alignment::Center == alignment)
+      textX = x - (0.5 * offset);
+   else if (Alignment::Right == alignment)
+      textX = x - offset;
+
+   Instruction::Text* instruction = new Instruction::Text(currentColor, textX, y, text, fontHeigth);
    renderInstructions.push_back(instruction);
 }
 
 void Svin::DisplayOLED::Controller::clicked(const float& x, const float& y)
 {
-   for (ClickedFunction clickedFunction : clickedFunctionList)
+   for (ClickedFunction& clickedFunction : clickedFunctionList)
       clickedFunction(x, y);
 }
 
@@ -238,13 +246,13 @@ void Svin::DisplayOLED::Controller::clicked(const float& x, const float& y)
 
 Svin::DisplayOLED::Widget::Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
    : rack::widget::Widget()
-   , UiElement::ElementMap<Controller>::Access(module, pixelId)
+   , InstanceMap<Controller>::Access(module, pixelId)
    , width(width)
    , height(height)
 {
    box.pos = rack::math::Vec(pos.x, pos.y);
 
-   Controller* controller = findElement();
+   Controller* controller = findIntstance();
    if (controller)
    {
       controller->width = width;
@@ -258,7 +266,7 @@ void Svin::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
    if (layer != 1)
       return;
 
-   Controller* controller = findElement();
+   Controller* controller = findIntstance();
    if (!controller)
       return;
 
@@ -272,7 +280,7 @@ void Svin::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
 
 void Svin::DisplayOLED::Widget::onButton(const rack::event::Button& buttonEvent)
 {
-   Controller* controller = findElement();
+   Controller* controller = findIntstance();
    if (!controller)
       return;
 

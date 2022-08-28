@@ -1,5 +1,5 @@
-#include "RevoicerPanel.h"
 #include "Revoicer.h"
+#include "RevoicerPanel.h"
 
 #include <SvinMaster.h>
 #include <limits>
@@ -25,9 +25,10 @@ void RevoicerWidget::setup()
    makeButton(this, Vec(30.33, 183.71), Revoicer::Panel::Quality_Down);
    makeButton(this, Vec(30.33, 134.83), Revoicer::Panel::Quality_Up);
 
-   makeInput(this, Vec(30.00, 300.34), Revoicer::Panel::AudioInput);
+   makeInput(this, Vec(30.00, 300.34),  Revoicer::Panel::AudioInput, false);
 
-   makeOutput(this, Vec(30.68, 344.57), Revoicer::Panel::AudioOutput);
+   makeOutput(this, Vec(30.68, 344.57), Revoicer::Panel::AudioOutput, false);
 
    makeLCD(this, Vec(11.00, 147.27), 2, Revoicer::Panel::Text_Quality_Value, 18);
 }
+

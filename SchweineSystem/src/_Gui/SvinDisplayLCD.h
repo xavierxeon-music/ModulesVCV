@@ -6,7 +6,7 @@
 #include <SvinCommon.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
-#include <SvinUiElement.h>
+
 
 namespace Svin
 {
@@ -14,7 +14,7 @@ namespace Svin
    {
       // 16 with per digit + 2 margin
       // 24 height
-      class Controller : public UiElement::ElementMap<Controller>
+      class Controller : public InstanceMap<Controller>
       {
       public:
          using List = ElementList<Controller>;
@@ -35,7 +35,7 @@ namespace Svin
          NVGcolor color;
       };
 
-      class Widget : public rack::widget::Widget, private UiElement::ElementMap<Controller>::Access
+      class Widget : public rack::widget::Widget, private InstanceMap<Controller>::Access
       {
       public:
          Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& displayId, const uint8_t fontSize);

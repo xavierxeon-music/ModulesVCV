@@ -3,8 +3,8 @@
 
 #include "DoepferQuad.h"
 
-#include <SvinButtonLED.h>
 #include <SvinCommon.h>
+#include <SvinButtonLED.h>
 
 struct DoepferQuad::Panel
 {
@@ -48,6 +48,7 @@ struct DoepferQuad::Panel
       // lcds
       LIGHTS_LEN = 3
    };
+
 };
 
 #endif // NOT DoepferQuadPanelH

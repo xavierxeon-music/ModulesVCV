@@ -5,7 +5,7 @@
 // controller
 
 Svin::DisplayLCD::Controller::Controller(Module* module, const uint16_t& displayId)
-   : UiElement::ElementMap<Controller>(module, displayId, this)
+   : InstanceMap<Controller>(module, displayId, this)
    , text()
    , color()
 {
@@ -29,7 +29,7 @@ void Svin::DisplayLCD::Controller::setColor(const Svin::Color& newColor)
 
 Svin::DisplayLCD::Widget::Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& displayId, const uint8_t fontSize)
    : rack::widget::Widget()
-   , UiElement::ElementMap<Controller>::Access(module, displayId)
+   , InstanceMap<Controller>::Access(module, displayId)
    , digitCount(digitCount)
    , font()
    , fontPath()
@@ -50,7 +50,7 @@ void Svin::DisplayLCD::Widget::drawLayer(const DrawArgs& args, int layer)
    nvgFontSize(args.vg, fontSize);
    nvgFontFaceId(args.vg, font->handle);
 
-   Controller* controller = findElement();
+   Controller* controller = findIntstance();
    if (!controller)
    {
       NVGcolor digitColor = nvgRGB(255, 25, 255);

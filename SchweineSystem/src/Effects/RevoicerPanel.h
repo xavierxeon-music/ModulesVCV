@@ -3,9 +3,11 @@
 
 #include "Revoicer.h"
 
-#include <SvinButton.h>
 #include <SvinCommon.h>
+#include <SvinButton.h>
 #include <SvinDisplayLCD.h>
+#include <SvinInput.h>
+#include <SvinOutput.h>
 
 struct Revoicer::Panel
 {
@@ -53,6 +55,7 @@ struct Revoicer::Panel
       RGB_Quality_Value = 0,
       LIGHTS_LEN = 3
    };
+
 };
 
 #endif // NOT RevoicerPanelH

@@ -1,5 +1,5 @@
-#include "AturiaStepPanel.h"
 #include "AturiaStep.h"
+#include "AturiaStepPanel.h"
 
 #include <SvinMaster.h>
 #include <limits>
@@ -24,7 +24,6 @@ void AturiaStep::setup()
    configInput(Panel::Channel3_Select, "Channel3_Select");
    configInput(Panel::Channel2_Select, "Channel2_Select");
    configInput(Panel::Channel1_Select, "Channel1_Select");
-
 }
 
 void AturiaStepWidget::setup()
@@ -45,13 +44,14 @@ void AturiaStepWidget::setup()
    makeLEDButton(this, Vec(50.98, 349.24), AturiaStep::Panel::Connect, AturiaStep::Panel::RGB_Connect);
    makeLEDButton(this, Vec(45.01, 42.78), AturiaStep::Panel::Drums, AturiaStep::Panel::RGB_Drums);
 
-   makeInput(this, Vec(42.38, 283.65), AturiaStep::Panel::Channel4_Select);
-   makeInput(this, Vec(43.04, 214.44), AturiaStep::Panel::Channel3_Select);
-   makeInput(this, Vec(42.38, 145.23), AturiaStep::Panel::Channel2_Select);
-   makeInput(this, Vec(42.38, 76.03), AturiaStep::Panel::Channel1_Select);
+   makeInput(this, Vec(42.38, 283.65),  AturiaStep::Panel::Channel4_Select, false);
+   makeInput(this, Vec(43.04, 214.44),  AturiaStep::Panel::Channel3_Select, false);
+   makeInput(this, Vec(42.38, 145.23),  AturiaStep::Panel::Channel2_Select, false);
+   makeInput(this, Vec(42.38, 76.03),  AturiaStep::Panel::Channel1_Select, false);
 
    makeLCD(this, Vec(61.00, 271.65), 2, AturiaStep::Panel::Text_Channel4_Pattern, 18);
    makeLCD(this, Vec(61.65, 202.44), 2, AturiaStep::Panel::Text_Channel3_Pattern, 18);
    makeLCD(this, Vec(61.00, 133.23), 2, AturiaStep::Panel::Text_Channel2_Pattern, 18);
    makeLCD(this, Vec(61.00, 64.03), 2, AturiaStep::Panel::Text_Channel1_Pattern, 18);
 }
+

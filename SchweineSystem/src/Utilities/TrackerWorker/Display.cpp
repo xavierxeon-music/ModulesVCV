@@ -46,7 +46,7 @@ void Display::updatePassthrough()
    controller.drawRect(0, 0, 100, 10, true);
 
    controller.setColor(Svin::Color{0, 0, 0});
-   controller.writeText(0, 0, "Passthrough", Svin::DisplayOLED::Font::Normal);
+   controller.writeText(50, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    controller.setColor(Svin::Color{0, 255, 0});
 
@@ -72,7 +72,7 @@ void Display::updateRemote()
    controller.drawRect(0, 0, 100, 10, true);
 
    controller.setColor(Svin::Color{0, 0, 0});
-   controller.writeText(5, 1, "Remote", Svin::DisplayOLED::Font::Normal);
+   controller.writeText(50, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    controller.setColor(Svin::Color{0, 255, 255});
 
@@ -109,7 +109,7 @@ void Display::updateInternal()
 
    controller.setColor(Svin::Color{255, 255, 255});
 
-   controller.writeText(5, 20, "Hello", Svin::DisplayOLED::Font::Normal);
+   controller.writeText(5, 20, "Hello", 2);
 }
 
 void Display::displayClicked(const float& x, const float& y)

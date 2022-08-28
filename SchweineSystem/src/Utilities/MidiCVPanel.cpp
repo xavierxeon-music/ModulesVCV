@@ -1,5 +1,5 @@
-#include "MidiCVPanel.h"
 #include "MidiCV.h"
+#include "MidiCVPanel.h"
 
 #include <SvinMaster.h>
 
@@ -22,3 +22,4 @@ void MidiCVWidget::setup()
    makeOutput(this, Vec(30.00, 262.18), MidiCV::Panel::Gate, true);
    makeOutput(this, Vec(30.00, 215.52), MidiCV::Panel::Pitch, true);
 }
+

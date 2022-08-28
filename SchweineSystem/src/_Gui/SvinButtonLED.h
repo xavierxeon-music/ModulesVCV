@@ -11,7 +11,7 @@ namespace Svin
    class ButtonLED : private LED
    {
    public:
-      using List = TwoParamElementList<ButtonLED>;
+      using List = ElementList<ButtonLED>;
 
    public:
       ButtonLED(Module* module, const uint16_t& paramIndex = 0, const uint16_t& rgbIndex = 0);

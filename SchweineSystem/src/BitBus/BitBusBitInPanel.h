@@ -5,6 +5,7 @@
 
 #include <SvinCommon.h>
 #include <SvinLED.h>
+#include <SvinInput.h>
 
 struct BitBusBitIn::Panel
 {
@@ -50,12 +51,13 @@ struct BitBusBitIn::Panel
    enum LightId
    {
       // leds
-      RGB_BusOut = 0,
-      RGB_BusIn = 3,
+      RGB_BusIn = 0,
+      RGB_BusOut = 3,
       // ledbuttons
       // lcds
       LIGHTS_LEN = 6
    };
+
 };
 
 #endif // NOT BitBusBitInPanelH

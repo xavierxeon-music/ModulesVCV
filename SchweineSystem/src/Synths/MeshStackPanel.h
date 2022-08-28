@@ -5,6 +5,8 @@
 
 #include <SvinCommon.h>
 #include <SvinKnob.h>
+#include <SvinInput.h>
+#include <SvinOutput.h>
 
 struct MeshStack::Panel
 {
@@ -49,6 +51,7 @@ struct MeshStack::Panel
       // lcds
       LIGHTS_LEN = 0
    };
+
 };
 
 #endif // NOT MeshStackPanelH

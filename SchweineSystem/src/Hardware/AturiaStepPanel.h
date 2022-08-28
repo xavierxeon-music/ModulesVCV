@@ -3,10 +3,11 @@
 
 #include "AturiaStep.h"
 
-#include <SvinButton.h>
-#include <SvinButtonLED.h>
 #include <SvinCommon.h>
+#include <SvinButton.h>
 #include <SvinDisplayLCD.h>
+#include <SvinButtonLED.h>
+#include <SvinInput.h>
 
 struct AturiaStep::Panel
 {
@@ -72,6 +73,7 @@ struct AturiaStep::Panel
       RGB_Channel1_Pattern = 15,
       LIGHTS_LEN = 18
    };
+
 };
 
 #endif // NOT AturiaStepPanelH

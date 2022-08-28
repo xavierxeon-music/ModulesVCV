@@ -3,9 +3,10 @@
 
 #include "BitBusMeterAndFreeze.h"
 
-#include <SvinButtonLED.h>
 #include <SvinCommon.h>
+#include <SvinButtonLED.h>
 #include <SvinLED.h>
+#include <SvinInput.h>
 
 struct BitBusMeterAndFreeze::Panel
 {
@@ -63,6 +64,7 @@ struct BitBusMeterAndFreeze::Panel
       // lcds
       LIGHTS_LEN = 36
    };
+
 };
 
 #endif // NOT BitBusMeterAndFreezePanelH

@@ -3,10 +3,10 @@
 
 #include "BitBusTransmutor.h"
 
-#include <SvinButton.h>
 #include <SvinCommon.h>
-#include <SvinDisplayOLED.h>
+#include <SvinButton.h>
 #include <SvinLED.h>
+#include <SvinDisplayOLED.h>
 
 struct BitBusTransmutor::Panel
 {
@@ -52,6 +52,7 @@ struct BitBusTransmutor::Panel
       // lcds
       LIGHTS_LEN = 6
    };
+
 };
 
 #endif // NOT BitBusTransmutorPanelH

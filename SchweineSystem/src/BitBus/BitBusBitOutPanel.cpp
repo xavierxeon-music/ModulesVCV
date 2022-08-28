@@ -1,5 +1,5 @@
-#include "BitBusBitOutPanel.h"
 #include "BitBusBitOut.h"
+#include "BitBusBitOutPanel.h"
 
 #include <SvinMaster.h>
 
@@ -23,15 +23,16 @@ void BitBusBitOutWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeOutput(this, Vec(30.00, 291.61), BitBusBitOut::Panel::BitOut8);
-   makeOutput(this, Vec(30.00, 256.86), BitBusBitOut::Panel::BitOut7);
-   makeOutput(this, Vec(30.00, 187.36), BitBusBitOut::Panel::BitOut6);
-   makeOutput(this, Vec(30.00, 222.11), BitBusBitOut::Panel::BitOut5);
-   makeOutput(this, Vec(30.00, 152.61), BitBusBitOut::Panel::BitOut4);
-   makeOutput(this, Vec(30.00, 117.85), BitBusBitOut::Panel::BitOut3);
-   makeOutput(this, Vec(30.00, 83.10), BitBusBitOut::Panel::BitOut2);
-   makeOutput(this, Vec(30.00, 48.35), BitBusBitOut::Panel::BitOut1);
+   makeOutput(this, Vec(30.00, 337.40), BitBusBitOut::Panel::BitOut8, false);
+   makeOutput(this, Vec(30.00, 302.65), BitBusBitOut::Panel::BitOut7, false);
+   makeOutput(this, Vec(30.00, 233.15), BitBusBitOut::Panel::BitOut6, false);
+   makeOutput(this, Vec(30.00, 267.90), BitBusBitOut::Panel::BitOut5, false);
+   makeOutput(this, Vec(30.00, 198.40), BitBusBitOut::Panel::BitOut4, false);
+   makeOutput(this, Vec(30.00, 163.65), BitBusBitOut::Panel::BitOut3, false);
+   makeOutput(this, Vec(30.00, 128.90), BitBusBitOut::Panel::BitOut2, false);
+   makeOutput(this, Vec(30.00, 94.14), BitBusBitOut::Panel::BitOut1, false);
 
-   makeLED(this, Vec(14.35, 346.69), BitBusBitOut::Panel::RGB_BusIn);
-   makeLED(this, Vec(46.35, 346.69), BitBusBitOut::Panel::RGB_BusOut);
+   makeLED(this, Vec(9.50, 46.77), BitBusBitOut::Panel::RGB_BusIn);
+   makeLED(this, Vec(49.50, 46.77), BitBusBitOut::Panel::RGB_BusOut);
 }
+

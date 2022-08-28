@@ -1,5 +1,5 @@
-#include "DoepferQuadPanel.h"
 #include "DoepferQuad.h"
+#include "DoepferQuadPanel.h"
 
 #include <SvinMaster.h>
 
@@ -16,5 +16,6 @@ void DoepferQuadWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeLEDButton(this, Vec(29.95, 340.14), DoepferQuad::Panel::Connect, DoepferQuad::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(30.00, 340.14), DoepferQuad::Panel::Connect, DoepferQuad::Panel::RGB_Connect);
 }
+

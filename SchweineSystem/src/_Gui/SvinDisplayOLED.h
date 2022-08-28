@@ -6,7 +6,6 @@
 #include <SvinCommon.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
-#include <SvinUiElement.h>
 
 namespace Svin
 {
@@ -16,10 +15,10 @@ namespace Svin
    {
       enum Font : uint8_t
       {
-         Small = 8,   //  6 x  8
-         Normal = 10, //  7 x 10
-         Large = 18,  // 11 x 18
-         Huge = 26,   // 16 x 26
+         Small = 8,
+         Normal = 10,
+         Large = 18,
+         Huge = 26
       };
 
       enum class Alignment
@@ -29,7 +28,7 @@ namespace Svin
          Right
       };
 
-      class Controller : public UiElement::ElementMap<Controller>
+      class Controller : public InstanceMap<Controller>
       {
       public:
          using ClickedFunction = std::function<void(const float& x, const float& y)>;
@@ -46,7 +45,7 @@ namespace Svin
 
          void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
          void drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill);
-         void writeText(const uint8_t x, const uint8_t y, const std::string& text, const uint8_t& fontSize, const Alignment& alignment = Alignment::Left);
+         void writeText(const uint8_t x, const uint8_t y, const std::string& text, const uint8_t& fontHeigth, const Alignment& alignment = Alignment::Left);
 
          template <typename ClassType>
          void onClicked(ClassType* instance, void (ClassType::*functionPointer)(const float&, const float&));
@@ -59,6 +58,10 @@ namespace Svin
          {
          public:
             using List = std::vector<Instruction*>;
+            class Pixel;
+            class Line;
+            class Rect;
+            class Text;
 
          public:
             Instruction(const NVGcolor& color);
@@ -71,10 +74,6 @@ namespace Svin
             NVGcolor color;
          };
 
-         class Pixel;
-         class Line;
-         class Rect;
-         class Text;
 
          friend class Widget;
 
@@ -88,7 +87,7 @@ namespace Svin
          std::vector<ClickedFunction> clickedFunctionList;
       };
 
-      class Widget : public rack::widget::Widget, private UiElement::ElementMap<Controller>::Access
+      class Widget : public rack::widget::Widget, private InstanceMap<Controller>::Access
       {
 
       public:

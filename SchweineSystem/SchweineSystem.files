@@ -27,7 +27,6 @@
 ./src/_Gui/SvinDisplayOLED.h
 ./src/_Gui/SvinLightMeter.h
 ./src/_Gui/SvinInput.h
-./src/_Gui/SvinCommon.h
 ./src/_Gui/SvinSvgImage.h
 ./src/_Gui/SvinButton.h
 ./src/_Gui/SvinOutput.h
@@ -65,12 +64,13 @@
 ./src/Effects/RevoicerPanel.h
 ./src/Effects/Revoicer.h
 ./src/_Base/SvinModule.h
+./src/_Base/SvinRenderInstruction.h
+./src/_Base/SvinCommon.h
 ./src/_Base/SvinModuleWidget.h
 ./src/_Base/SvinMidiOutput.h
 ./src/_Base/SvinJson.h
 ./src/_Base/SvinMaster.h
 ./src/_Base/SvinExapnder.h
-./src/_Base/SvinUiElement.h
 ./src/_MusicTools/RememberDummy/Remember.h
 ./src/_MusicTools/RememberDummy/RememberArray.h
 ./src/_MusicTools/RememberDummy/RememberList.h
@@ -137,9 +137,8 @@
 ./src/_MusicTools/ffft/FFTRealPassInverse.h
 ./src/_MusicTools/DoubleBuffer.h
 ./src/_Gui/SvinDisplayOLED.hpp
-./src/_Gui/SvinCommon.hpp
 ./src/_Base/SvinMaster.hpp
-./src/_Base/SvinUiElement.hpp
+./src/_Base/SvinCommon.hpp
 ./src/_Base/SvinExapnder.hpp
 ./src/_MusicTools/Variable.hpp
 ./src/_MusicTools/BoolField.hpp
@@ -222,7 +221,6 @@
 ./src/_Gui/SvinSvgImage.cpp
 ./src/_Gui/SvinOutput.cpp
 ./src/_Gui/SvinSwitch.cpp
-./src/_Gui/SvinCommon.cpp
 ./src/_Gui/SvinLED.cpp
 ./src/_Gui/SvinInput.cpp
 ./src/_Gui/SvinButtonLED.cpp
@@ -265,8 +263,10 @@
 ./src/_Base/SvinModule.cpp
 ./src/_Base/SvinJson.cpp
 ./src/_Base/SvinMidiOutput.cpp
+./src/_Base/SvinCommon.cpp
 ./src/_Base/SvinModuleWidget.cpp
 ./src/_Base/SvinMaster.cpp
+./src/_Base/SvinRenderInstruction.cpp
 ./src/_MusicTools/AbstractSoundSource.cpp
 ./src/_MusicTools/Spectrum.cpp
 ./src/_MusicTools/AbstractEffect.cpp
