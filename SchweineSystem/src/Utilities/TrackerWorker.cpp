@@ -1,8 +1,6 @@
 #include "TrackerWorker.h"
 #include "TrackerWorkerPanel.h"
 
-#include <osdialog.h>
-
 #include <Midi/MidiCommon.h>
 #include <Tools/Convert.h>
 #include <Tools/File.h>
@@ -147,25 +145,7 @@ TrackerWorkerWidget::TrackerWorkerWidget(TrackerWorker* module)
 {
    setup();
 
-   using OLEDWidget = Svin::DisplayOLED::Widget;
-
-   OLEDWidget* oled = OLEDWidget::find(module, TrackerWorker::Panel::Pixels_Display);
-   if (oled)
-      oled->onClicked(this, &TrackerWorkerWidget::displayClicked);
 }
 
-void TrackerWorkerWidget::displayClicked(const float& x, const float& y)
-{
-   (void)x;
-   (void)y;
-
-   TrackerWorker* myModule = dynamic_cast<TrackerWorker*>(getSchweineModule());
-   if (!myModule)
-      return;
-
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Projects:json"));
-   if (path)
-      myModule->loadProject(std::string(path));
-}
 
 Model* modelTrackerWorker = Svin::Master::the()->addModule<TrackerWorker, TrackerWorkerWidget>("TrackerWorker");

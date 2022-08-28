@@ -16,8 +16,6 @@ void MidiReplay::setup()
    configInput(Panel::Play, "Play");
 
    configOutput(Panel::End, "End");
-
-   configPixels(Panel::Pixels_Display, 100, 135, "Display");
 }
 
 void MidiReplayWidget::setup()

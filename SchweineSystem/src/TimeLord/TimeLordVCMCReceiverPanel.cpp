@@ -1,5 +1,5 @@
-#include "TimeLordVCMCReceiverPanel.h"
 #include "TimeLordVCMCReceiver.h"
+#include "TimeLordVCMCReceiverPanel.h"
 
 #include <SvinMaster.h>
 
@@ -35,25 +35,6 @@ void TimeLordVCMCReceiver::setup()
    configOutput(Panel::Channel1_Gate7_BitOut1, "Channel1_Gate7_BitOut1");
    configOutput(Panel::Channel1_Slider7_Output, "Channel1_Slider7_Output");
    configOutput(Panel::Channel1_CV7_Output, "Channel1_CV7_Output");
-
-   configMeter(Panel::Value_External_B, "External_B");
-   configMeter(Panel::Value_External_A, "External_A");
-   configMeter(Panel::Value_Channel8_Slider_Strip, "Channel8_Slider_Strip");
-   configMeter(Panel::Value_Channel8_CV_Strip, "Channel8_CV_Strip");
-   configMeter(Panel::Value_Channel7_Slider1_Strip, "Channel7_Slider1_Strip");
-   configMeter(Panel::Value_Channel7_CV1_Strip, "Channel7_CV1_Strip");
-   configMeter(Panel::Value_Channel6_Slider2_Strip, "Channel6_Slider2_Strip");
-   configMeter(Panel::Value_Channel6_CV2_Strip, "Channel6_CV2_Strip");
-   configMeter(Panel::Value_Channel5_Slider3_Strip, "Channel5_Slider3_Strip");
-   configMeter(Panel::Value_Channel5_CV3_Strip, "Channel5_CV3_Strip");
-   configMeter(Panel::Value_Channel4_Slider4_Strip, "Channel4_Slider4_Strip");
-   configMeter(Panel::Value_Channel4_CV4_Strip, "Channel4_CV4_Strip");
-   configMeter(Panel::Value_Channel3_Slider5_Strip, "Channel3_Slider5_Strip");
-   configMeter(Panel::Value_Channel3_CV5_Strip, "Channel3_CV5_Strip");
-   configMeter(Panel::Value_Channel2_Slider6_Strip, "Channel2_Slider6_Strip");
-   configMeter(Panel::Value_Channel2_CV6_Strip, "Channel2_CV6_Strip");
-   configMeter(Panel::Value_Channel1_Slider7_Strip, "Channel1_Slider7_Strip");
-   configMeter(Panel::Value_Channel1_CV7_Strip, "Channel1_CV7_Strip");
 }
 
 void TimeLordVCMCReceiverWidget::setup()
@@ -64,32 +45,32 @@ void TimeLordVCMCReceiverWidget::setup()
 
    makeLEDButton(this, Vec(113.83, 355.94), TimeLordVCMCReceiver::Panel::Connect, TimeLordVCMCReceiver::Panel::RGB_Connect);
 
-   makeOutput(this, Vec(71.25, 355.83), TimeLordVCMCReceiver::Panel::External_B);
-   makeOutput(this, Vec(27.28, 355.58), TimeLordVCMCReceiver::Panel::External_A);
-   makeOutput(this, Vec(32.19, 311.65), TimeLordVCMCReceiver::Panel::Channel8_Gate_BitOut1);
-   makeOutput(this, Vec(114.88, 311.65), TimeLordVCMCReceiver::Panel::Channel8_Slider_Output);
-   makeOutput(this, Vec(73.72, 311.65), TimeLordVCMCReceiver::Panel::Channel8_CV_Output);
-   makeOutput(this, Vec(32.83, 276.27), TimeLordVCMCReceiver::Panel::Channel7_Gate1_BitOut1);
-   makeOutput(this, Vec(115.52, 276.27), TimeLordVCMCReceiver::Panel::Channel7_Slider1_Output);
-   makeOutput(this, Vec(74.36, 276.27), TimeLordVCMCReceiver::Panel::Channel7_CV1_Output);
-   makeOutput(this, Vec(32.83, 240.90), TimeLordVCMCReceiver::Panel::Channel6_Gate2_BitOut1);
-   makeOutput(this, Vec(115.52, 240.90), TimeLordVCMCReceiver::Panel::Channel6_Slider2_Output);
-   makeOutput(this, Vec(74.36, 240.90), TimeLordVCMCReceiver::Panel::Channel6_CV2_Output);
-   makeOutput(this, Vec(32.83, 205.53), TimeLordVCMCReceiver::Panel::Channel5_Gate3_BitOut1);
-   makeOutput(this, Vec(115.52, 205.53), TimeLordVCMCReceiver::Panel::Channel5_Slider3_Output);
-   makeOutput(this, Vec(74.36, 205.53), TimeLordVCMCReceiver::Panel::Channel5_CV3_Output);
-   makeOutput(this, Vec(32.83, 170.15), TimeLordVCMCReceiver::Panel::Channel4_Gate4_BitOut1);
-   makeOutput(this, Vec(115.52, 170.15), TimeLordVCMCReceiver::Panel::Channel4_Slider4_Output);
-   makeOutput(this, Vec(74.36, 170.15), TimeLordVCMCReceiver::Panel::Channel4_CV4_Output);
-   makeOutput(this, Vec(32.83, 134.78), TimeLordVCMCReceiver::Panel::Channel3_Gate5_BitOut1);
-   makeOutput(this, Vec(115.52, 134.78), TimeLordVCMCReceiver::Panel::Channel3_Slider5_Output);
-   makeOutput(this, Vec(74.36, 134.78), TimeLordVCMCReceiver::Panel::Channel3_CV5_Output);
-   makeOutput(this, Vec(32.83, 99.41), TimeLordVCMCReceiver::Panel::Channel2_Gate6_BitOut1);
-   makeOutput(this, Vec(115.52, 99.41), TimeLordVCMCReceiver::Panel::Channel2_Slider6_Output);
-   makeOutput(this, Vec(74.36, 99.41), TimeLordVCMCReceiver::Panel::Channel2_CV6_Output);
-   makeOutput(this, Vec(32.83, 64.03), TimeLordVCMCReceiver::Panel::Channel1_Gate7_BitOut1);
-   makeOutput(this, Vec(115.52, 64.03), TimeLordVCMCReceiver::Panel::Channel1_Slider7_Output);
-   makeOutput(this, Vec(74.36, 64.03), TimeLordVCMCReceiver::Panel::Channel1_CV7_Output);
+   makeOutput(this, Vec(71.25, 355.83), TimeLordVCMCReceiver::Panel::External_B, false);
+   makeOutput(this, Vec(27.28, 355.58), TimeLordVCMCReceiver::Panel::External_A, false);
+   makeOutput(this, Vec(32.19, 311.65), TimeLordVCMCReceiver::Panel::Channel8_Gate_BitOut1, false);
+   makeOutput(this, Vec(114.88, 311.65), TimeLordVCMCReceiver::Panel::Channel8_Slider_Output, false);
+   makeOutput(this, Vec(73.72, 311.65), TimeLordVCMCReceiver::Panel::Channel8_CV_Output, false);
+   makeOutput(this, Vec(32.83, 276.27), TimeLordVCMCReceiver::Panel::Channel7_Gate1_BitOut1, false);
+   makeOutput(this, Vec(115.52, 276.27), TimeLordVCMCReceiver::Panel::Channel7_Slider1_Output, false);
+   makeOutput(this, Vec(74.36, 276.27), TimeLordVCMCReceiver::Panel::Channel7_CV1_Output, false);
+   makeOutput(this, Vec(32.83, 240.90), TimeLordVCMCReceiver::Panel::Channel6_Gate2_BitOut1, false);
+   makeOutput(this, Vec(115.52, 240.90), TimeLordVCMCReceiver::Panel::Channel6_Slider2_Output, false);
+   makeOutput(this, Vec(74.36, 240.90), TimeLordVCMCReceiver::Panel::Channel6_CV2_Output, false);
+   makeOutput(this, Vec(32.83, 205.53), TimeLordVCMCReceiver::Panel::Channel5_Gate3_BitOut1, false);
+   makeOutput(this, Vec(115.52, 205.53), TimeLordVCMCReceiver::Panel::Channel5_Slider3_Output, false);
+   makeOutput(this, Vec(74.36, 205.53), TimeLordVCMCReceiver::Panel::Channel5_CV3_Output, false);
+   makeOutput(this, Vec(32.83, 170.15), TimeLordVCMCReceiver::Panel::Channel4_Gate4_BitOut1, false);
+   makeOutput(this, Vec(115.52, 170.15), TimeLordVCMCReceiver::Panel::Channel4_Slider4_Output, false);
+   makeOutput(this, Vec(74.36, 170.15), TimeLordVCMCReceiver::Panel::Channel4_CV4_Output, false);
+   makeOutput(this, Vec(32.83, 134.78), TimeLordVCMCReceiver::Panel::Channel3_Gate5_BitOut1, false);
+   makeOutput(this, Vec(115.52, 134.78), TimeLordVCMCReceiver::Panel::Channel3_Slider5_Output, false);
+   makeOutput(this, Vec(74.36, 134.78), TimeLordVCMCReceiver::Panel::Channel3_CV5_Output, false);
+   makeOutput(this, Vec(32.83, 99.41), TimeLordVCMCReceiver::Panel::Channel2_Gate6_BitOut1, false);
+   makeOutput(this, Vec(115.52, 99.41), TimeLordVCMCReceiver::Panel::Channel2_Slider6_Output, false);
+   makeOutput(this, Vec(74.36, 99.41), TimeLordVCMCReceiver::Panel::Channel2_CV6_Output, false);
+   makeOutput(this, Vec(32.83, 64.03), TimeLordVCMCReceiver::Panel::Channel1_Gate7_BitOut1, false);
+   makeOutput(this, Vec(115.52, 64.03), TimeLordVCMCReceiver::Panel::Channel1_Slider7_Output, false);
+   makeOutput(this, Vec(74.36, 64.03), TimeLordVCMCReceiver::Panel::Channel1_CV7_Output, false);
 
    makeLED(this, Vec(53.38, 311.65), TimeLordVCMCReceiver::Panel::RGB_Channel8_Gate_Status1);
    makeLED(this, Vec(54.02, 276.27), TimeLordVCMCReceiver::Panel::RGB_Channel7_Gate1_Status1);
@@ -119,3 +100,4 @@ void TimeLordVCMCReceiverWidget::setup()
    makeMeter(this, Vec(132.34, 51.03), 5, TimeLordVCMCReceiver::Panel::Value_Channel1_Slider7_Strip);
    makeMeter(this, Vec(91.18, 51.03), 5, TimeLordVCMCReceiver::Panel::Value_Channel1_CV7_Strip);
 }
+

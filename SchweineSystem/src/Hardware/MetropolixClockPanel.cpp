@@ -14,8 +14,6 @@ void MetropolixClock::setup()
 
    configOutput(Panel::Reset, "Reset");
    configOutput(Panel::Clock, "Clock");
-
-   configPixels(Panel::Pixels_Display, 83, 170, "Display");
 }
 
 void MetropolixClockWidget::setup()

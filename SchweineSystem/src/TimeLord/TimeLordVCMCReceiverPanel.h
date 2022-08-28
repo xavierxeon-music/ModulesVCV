@@ -3,10 +3,11 @@
 
 #include "TimeLordVCMCReceiver.h"
 
-#include <SvinButtonLED.h>
 #include <SvinCommon.h>
+#include <SvinButtonLED.h>
 #include <SvinLED.h>
 #include <SvinLightMeter.h>
+#include <SvinOutput.h>
 
 struct TimeLordVCMCReceiver::Panel
 {
@@ -102,6 +103,7 @@ struct TimeLordVCMCReceiver::Panel
       // lcds
       LIGHTS_LEN = 27
    };
+
 };
 
 #endif // NOT TimeLordVCMCReceiverPanelH

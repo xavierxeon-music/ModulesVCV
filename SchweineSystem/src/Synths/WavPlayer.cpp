@@ -21,6 +21,7 @@ WavPlayer::WavPlayer()
    , loopButton(this, Panel::Loop, Panel::RGB_Loop)
 {
    setup();
+   displayController.onClicked(this, &WavPlayer::displayClicked);
 
    playButton.setDefaultColor(Svin::Color{0, 0, 255});
    loopButton.setDefaultColor(Svin::Color{0, 0, 255});
@@ -152,32 +153,22 @@ void WavPlayer::onSampleRateChange(const SampleRateChangeEvent& event)
    load();
 }
 
+void WavPlayer::displayClicked(const float& x, const float& y)
+{
+   (void)x;
+   (void)y;
+
+   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Wav:wav"));
+   if (path)
+      setWavFileName(std::string(path));
+}
+
 // widget
 
 WavPlayerWidget::WavPlayerWidget(WavPlayer* module)
    : Svin::ModuleWidget(module)
 {
    setup();
-
-   using OLEDWidget = Svin::DisplayOLED::Widget;
-
-   OLEDWidget* oled = OLEDWidget::find(module, WavPlayer::Panel::Pixels_Display);
-   if (oled)
-      oled->onClicked(this, &WavPlayerWidget::displayClicked);
-}
-
-void WavPlayerWidget::displayClicked(const float& x, const float& y)
-{
-   (void)x;
-   (void)y;
-
-   WavPlayer* myModule = dynamic_cast<WavPlayer*>(getSchweineModule());
-   if (!myModule)
-      return;
-
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Wav:wav"));
-   if (path)
-      myModule->setWavFileName(std::string(path));
 }
 
 Model* modelWavPlayer = Svin::Master::the()->addModule<WavPlayer, WavPlayerWidget>("WavPlayer");

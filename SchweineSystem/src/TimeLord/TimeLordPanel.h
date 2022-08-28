@@ -3,12 +3,14 @@
 
 #include "TimeLord.h"
 
-#include <SvinButton.h>
 #include <SvinCommon.h>
+#include <SvinButton.h>
 #include <SvinDisplayLCD.h>
-#include <SvinDisplayOLED.h>
 #include <SvinLED.h>
 #include <SvinLightMeter.h>
+#include <SvinDisplayOLED.h>
+#include <SvinInput.h>
+#include <SvinOutput.h>
 
 struct TimeLord::Panel
 {
@@ -103,6 +105,7 @@ struct TimeLord::Panel
       RGB_Channel1_Value = 33,
       LIGHTS_LEN = 36
    };
+
 };
 
 #endif // NOT TimeLordPanelH

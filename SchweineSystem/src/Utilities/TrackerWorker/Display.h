@@ -34,12 +34,14 @@ private:
    void updateRemote();
    void updateInternal();
 
+   void displayClicked(const float& x, const float& y);
+
 private:
    TrackerWorker* main;
 
    Mode displayMode;
    Svin::Button displayButton;
-   Svin::DisplayOLED::Controller displayController;
+   Svin::DisplayOLED::Controller controller;
 };
 
 #endif // NOT DisplayH

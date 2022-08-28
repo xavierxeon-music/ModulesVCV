@@ -19,30 +19,30 @@ namespace Svin
          const uint16_t identifier;
       };
 
-      template <typename ControllerType>
-      class View : protected Base
+      template <typename ContentType>
+      class ElementMap : protected Base
       {
       public:
-         View(Module* module, const uint16_t identifier);
+         class Access : protected Base
+         {
+         public:
+            Access(Module* module, const uint16_t identifier);
+
+         public:
+            ContentType* findElement() const;
+         };
 
       public:
-         ControllerType* findController() const;
-      };
-
-      template <typename ControllerType>
-      class Controller : protected Base
-      {
-      public:
-         Controller(Module* module, const uint16_t identifier, ControllerType* controller);
-         virtual ~Controller();
+         ElementMap(Module* module, const uint16_t identifier, ContentType* content);
+         virtual ~ElementMap();
 
       private:
-         friend class View<ControllerType>;
-         using IdMap = std::map<const uint16_t, ControllerType*>;
-         using ControllerMap = std::map<Module*, IdMap>;
+         //friend class Access<ContentType>;
+         using IdMap = std::map<const uint16_t, ContentType*>;
+         using ContentMap = std::map<Module*, IdMap>;
 
       private:
-         static ControllerMap controllerMap;
+         static ContentMap instances;
       };
    } // namespace UiElement
 

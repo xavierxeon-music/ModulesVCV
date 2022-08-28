@@ -8,8 +8,6 @@ void BitBusTransmutor::setup()
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
    configButton(Panel::Display, "Display");
-
-   configPixels(Panel::Pixels_Display, 60, 120, "Display");
 }
 
 void BitBusTransmutorWidget::setup()

@@ -19,6 +19,7 @@ RemoteScript::RemoteScript()
 {
    setup();
    displayController.fill();
+   displayController.onClicked(this, &RemoteScript::displayClicked);
 
    connectionButton.setDefaultColor(Svin::Color{0, 255, 0});
 
@@ -129,18 +130,22 @@ void RemoteScript::sendToRemote(const Svin::Json::Object& object)
    sendControllerChange(1, Midi::ControllerMessage::DataApply, 0);
 }
 
+void RemoteScript::displayClicked(const float& x, const float& y)
+{
+   (void)x;
+   (void)y;
+
+   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Python:py"));
+   if (path)
+      setScriptFileName(std::string(path));
+}
+
 // widget
 
 RemoteScriptWidget::RemoteScriptWidget(RemoteScript* module)
    : Svin::ModuleWidget(module)
 {
    setup();
-
-   using OLEDWidget = Svin::DisplayOLED::Widget;
-
-   OLEDWidget* oled = OLEDWidget::find(module, RemoteScript::Panel::Pixels_Display);
-   if (oled)
-      oled->onClicked(this, &RemoteScriptWidget::displayClicked);
 
    std::string logoPath = asset::plugin(Svin::Master::the()->instance(), "res/Utilities/Python.svg");
 
@@ -151,19 +156,6 @@ RemoteScriptWidget::RemoteScriptWidget(RemoteScript* module)
    logoWidget->visible = false;
 }
 
-void RemoteScriptWidget::displayClicked(const float& x, const float& y)
-{
-   (void)x;
-   (void)y;
-
-   RemoteScript* myModule = dynamic_cast<RemoteScript*>(getSchweineModule());
-   if (!myModule)
-      return;
-
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Python:py"));
-   if (path)
-      myModule->setScriptFileName(std::string(path));
-}
 
 void RemoteScriptWidget::preDraw()
 {

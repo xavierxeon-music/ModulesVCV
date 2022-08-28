@@ -65,6 +65,7 @@ private:
 
 private:
    void setup();
+   void displayClicked(const float& x, const float& y);
 
 private:
    std::string fileName;
@@ -102,7 +103,6 @@ public:
 
 private:
    void setup();
-   void displayClicked(const float& x, const float& y);
 };
 
 #endif // NOT MidiReplayH

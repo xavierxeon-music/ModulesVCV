@@ -19,8 +19,6 @@ void WavPlayer::setup()
 
    configOutput(Panel::Right, "Right");
    configOutput(Panel::Left, "Left");
-
-   configPixels(Panel::Pixels_Display, 83, 60, "Display");
 }
 
 void WavPlayerWidget::setup()

@@ -13,25 +13,6 @@ void VCMCReceiver::setup()
    configOutput(Panel::External_A, "External_A");
    configOutput(Panel::CV, "CV");
    configOutput(Panel::Gate, "Gate");
-
-   configMeter(Panel::Value_External_B, "External_B");
-   configMeter(Panel::Value_External_A, "External_A");
-   configMeter(Panel::Value_Slider_Channel8, "Slider_Channel8");
-   configMeter(Panel::Value_Slider_Channel7, "Slider_Channel7");
-   configMeter(Panel::Value_Slider_Channel6, "Slider_Channel6");
-   configMeter(Panel::Value_Slider_Channel5, "Slider_Channel5");
-   configMeter(Panel::Value_Slider_Channel4, "Slider_Channel4");
-   configMeter(Panel::Value_Slider_Channel3, "Slider_Channel3");
-   configMeter(Panel::Value_Slider_Channel2, "Slider_Channel2");
-   configMeter(Panel::Value_Slider_Channel1, "Slider_Channel1");
-   configMeter(Panel::Value_CV_Channel8, "CV_Channel8");
-   configMeter(Panel::Value_CV_Channel7, "CV_Channel7");
-   configMeter(Panel::Value_CV_Channel6, "CV_Channel6");
-   configMeter(Panel::Value_CV_Channel5, "CV_Channel5");
-   configMeter(Panel::Value_CV_Channel4, "CV_Channel4");
-   configMeter(Panel::Value_CV_Channel3, "CV_Channel3");
-   configMeter(Panel::Value_CV_Channel2, "CV_Channel2");
-   configMeter(Panel::Value_CV_Channel1, "CV_Channel1");
 }
 
 void VCMCReceiverWidget::setup()

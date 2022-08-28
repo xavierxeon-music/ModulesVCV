@@ -37,6 +37,8 @@ MidiReplay::MidiReplay()
    setup();
    allowExpanderOnRight();
 
+   displayController.onClicked(this, &MidiReplay::displayClicked);
+
    loopButton.setDefaultColor(Svin::Color{0, 255, 0});
 }
 
@@ -270,32 +272,22 @@ void MidiReplay::save(Svin::Json::Object& rootObject)
    rootObject.set("displayMode", static_cast<uint8_t>(displayMode));
 }
 
+void MidiReplay::displayClicked(const float& x, const float& y)
+{
+   (void)x;
+   (void)y;
+
+   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("MIDI:mid"));
+   if (path)
+      loadMidiFile(std::string(path));
+}
+
 // widget
 
 MidiReplayWidget::MidiReplayWidget(MidiReplay* module)
    : Svin::ModuleWidget(module)
 {
    setup();
-
-   using OLEDWidget = Svin::DisplayOLED::Widget;
-
-   OLEDWidget* oled = OLEDWidget::find(module, MidiReplay::Panel::Pixels_Display);
-   if (oled)
-      oled->onClicked(this, &MidiReplayWidget::displayClicked);
-}
-
-void MidiReplayWidget::displayClicked(const float& x, const float& y)
-{
-   (void)x;
-   (void)y;
-
-   MidiReplay* myModule = dynamic_cast<MidiReplay*>(getSchweineModule());
-   if (!myModule)
-      return;
-
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("MIDI:mid"));
-   if (path)
-      myModule->loadMidiFile(std::string(path));
 }
 
 Model* modelMidiReplay = Svin::Master::the()->addModule<MidiReplay, MidiReplayWidget>("MidiReplay");

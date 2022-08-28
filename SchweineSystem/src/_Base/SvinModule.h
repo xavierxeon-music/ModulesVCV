@@ -14,8 +14,6 @@ namespace Svin
    class Module : public rack::Module
    {
    public:
-      using ValueMap = std::map<uint16_t, float>;
-      using PixelMap = std::map<uint16_t, NVGcolor*>;
       using Queue = std::list<Bytes>;
 
    public:
@@ -25,8 +23,6 @@ namespace Svin
       virtual void updateDisplays();
 
    public:
-      ValueMap values;
-      PixelMap pixels;
 
    protected:
       // communicate with external helper apps via midi
@@ -56,8 +52,6 @@ namespace Svin
       };
 
    protected:
-      void configMeter(const uint16_t& valueId, std::string name = "");
-      void configPixels(const uint16_t& valueId, const uint8_t& width, const uint8_t& height, std::string name = "");
       virtual void dataFromMidiInput(const Bytes& message);
       virtual void load(const Json::Object& rootObject);
       virtual void save(Json::Object& rootObject);

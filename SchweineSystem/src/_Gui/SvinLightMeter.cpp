@@ -3,9 +3,9 @@
 // controller
 
 Svin::LightMeter::Controller::Controller(Module* module, const uint16_t& valueId)
-   : module(module)
-   , valueId(valueId)
+   : UiElement::ElementMap<Controller>(module, valueId, this)
    , valueMapper(0.0, 1.0, 0.0, 100.0)
+   , value(0)
 {
 }
 
@@ -14,44 +14,16 @@ void Svin::LightMeter::Controller::setMaxValue(const uint16_t& newMaxValue)
    valueMapper.setMaxInput(newMaxValue);
 }
 
-void Svin::LightMeter::Controller::setValue(const uint32_t& value)
+void Svin::LightMeter::Controller::setValue(const uint32_t& newValue)
 {
-   module->values[valueId] = valueMapper(value);
-}
-
-// controller list
-
-Svin::LightMeter::Controller::List::List(Module* module)
-   : module(module)
-{
-}
-
-Svin::LightMeter::Controller::List::~List()
-{
-   for (Controller* instance : instanceList)
-      delete instance;
-}
-
-void Svin::LightMeter::Controller::List::append(const std::vector<uint16_t>& valueIdList)
-{
-   for (const uint16_t& valueId : valueIdList)
-   {
-      Controller* controller = new Controller(module, valueId);
-      instanceList.push_back(controller);
-   }
-}
-
-Svin::LightMeter::Controller* Svin::LightMeter::Controller::List::operator[](const uint16_t& index)
-{
-   return instanceList[index];
+   value = newValue;
 }
 
 // widget
 
 Svin::LightMeter::Widget::Widget(rack::math::Vec pos, Module* module, const uint8_t& segmentCount, const uint16_t& valueId)
    : rack::TransparentWidget()
-   , module(module)
-   , valueId(valueId)
+   , UiElement::ElementMap<Controller>::Access(module, valueId)
    , segmentCount(segmentCount)
    , meterMapper(0.0, 100.0, 0.0, 3.0 * segmentCount)
 {
@@ -65,13 +37,13 @@ void Svin::LightMeter::Widget::drawLayer(const DrawArgs& args, int layer)
 
    static const std::vector<NVGcolor> stageColorList = {nvgRGB(0, 0, 0), nvgRGB(0, 150, 255), nvgRGB(255, 255, 0), nvgRGB(255, 50, 50)};
 
+   Controller* controller = findElement();
    const uint8_t meterValue = [&]() -> uint8_t
    {
-      if (!module)
+      if (!controller)
          return 13;
 
-      const float fValue = module->values[valueId];
-      return static_cast<uint8_t>(meterMapper(fValue));
+      return static_cast<uint8_t>(meterMapper(controller->value));
    }();
 
    auto drawSegment = [&](const uint8_t index, const uint8_t colorIndex)

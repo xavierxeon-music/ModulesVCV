@@ -82,7 +82,6 @@ private:
    Range::Mapper valueToVoltage;
    Svin::Output::List outputList;
 
-
    // mode
    OperationMode operationMode;
    Svin::Button operationModeButton;
@@ -100,7 +99,6 @@ public:
 
 private:
    void setup();
-   void displayClicked(const float& x, const float& y);
 };
 
 #endif // NOT TrackerWorkerH

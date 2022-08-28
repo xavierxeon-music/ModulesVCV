@@ -29,5 +29,5 @@ void RevoicerWidget::setup()
 
    makeOutput(this, Vec(30.68, 344.57), Revoicer::Panel::AudioOutput);
 
-   makeLCD(this, Vec(11.00, 147.27), 2, Revoicer::Panel::Text_Quality_Value);
+   makeLCD(this, Vec(11.00, 147.27), 2, Revoicer::Panel::Text_Quality_Value, 18);
 }

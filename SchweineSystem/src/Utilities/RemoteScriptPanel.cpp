@@ -11,8 +11,6 @@ void RemoteScript::setup()
    configButton(Panel::Restart, "Restart");
 
    configButton(Panel::Connect, "Connect");
-
-   configPixels(Panel::Pixels_Display, 40, 40, "Display");
 }
 
 void RemoteScriptWidget::setup()

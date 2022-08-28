@@ -131,25 +131,12 @@ void Svin::Module::Majordomo::midiError(RtMidiError::Type type, const std::strin
 
 Svin::Module::Module()
    : rack::Module()
-   , values()
-   , pixels()
 {
 }
 
 void Svin::Module::updateDisplays()
 {
    // do nothing
-}
-
-void Svin::Module::configMeter(const uint16_t &valueId, std::string name)
-{
-   values[valueId] = 0.0;
-}
-
-void Svin::Module::configPixels(const uint16_t &valueId, const uint8_t &width, const uint8_t &height, std::string name)
-{
-   const uint16_t size = width * height;
-   pixels[valueId] = new NVGcolor[size];
 }
 
 void Svin::Module::dataFromMidiInput(const Bytes &message)

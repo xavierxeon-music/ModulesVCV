@@ -39,6 +39,8 @@ private:
    void sendKill();
    void sendToRemote(const Svin::Json::Object& object);
 
+   void displayClicked(const float& x, const float& y);
+
 private:
    Svin::DisplayOLED::Controller displayController;
    Svin::Button restartButton;
@@ -58,7 +60,6 @@ public:
 
 private:
    void setup();
-   void displayClicked(const float& x, const float& y);
    void preDraw() override;
 
 private:

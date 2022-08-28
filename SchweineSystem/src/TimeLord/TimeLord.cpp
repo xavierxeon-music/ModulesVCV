@@ -55,6 +55,8 @@ TimeLord::TimeLord()
 {
    Majordomo::hello(this);
 
+   displayController.onClicked(this, &TimeLord::displayClicked);
+
    setup();
    allowExpanderOnLeft();
 
@@ -585,6 +587,16 @@ void TimeLord::setFromRemote(const Svin::Json::Object& rootObject)
    }
 }
 
+void TimeLord::displayClicked(const float& x, const float& y)
+{
+   (void)x;
+   (void)y;
+
+   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Ramps:json"));
+   if (path)
+      loadRamps(std::string(path));
+}
+
 // widget
 
 TimeLordWidget::TimeLordWidget(TimeLord* module)
@@ -593,12 +605,6 @@ TimeLordWidget::TimeLordWidget(TimeLord* module)
 {
    setup();
 
-   using OLEDWidget = Svin::DisplayOLED::Widget;
-
-   OLEDWidget* oled = OLEDWidget::find(module, TimeLord::Panel::Pixels_Display);
-   if (oled)
-      oled->onClicked(this, &TimeLordWidget::displayClicked);
-
    std::string logoPath = asset::plugin(Svin::Master::the()->instance(), "res/TimeLord/TimeLordLogo.svg");
 
    logoWidget = new Svin::SvgImage(rack::math::Vec(0, 342.5), module, logoPath, 0.4);
@@ -606,20 +612,6 @@ TimeLordWidget::TimeLordWidget(TimeLord* module)
    addChild(logoWidget);
 
    logoWidget->visible = false;
-}
-
-void TimeLordWidget::displayClicked(const float& x, const float& y)
-{
-   (void)x;
-   (void)y;
-
-   TimeLord* myModule = dynamic_cast<TimeLord*>(getSchweineModule());
-   if (!myModule)
-      return;
-
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Ramps:json"));
-   if (path)
-      myModule->loadRamps(std::string(path));
 }
 
 void TimeLordWidget::preDraw()

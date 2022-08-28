@@ -874,42 +874,16 @@ Svin::DisplayOLED::Font Svin::DisplayOLED::Font::Normal = {7, 10, Font7x10};
 Svin::DisplayOLED::Font Svin::DisplayOLED::Font::Large = {11, 18, Font11x18};
 Svin::DisplayOLED::Font Svin::DisplayOLED::Font::Huge = {16, 26, Font16x26};
 
-// pixel thing
-
-Svin::DisplayOLED::PixelThing::PixelThing(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
-   : module(module)
-   , pixelId(pixelId)
-   , width(width)
-   , height(height)
-{
-}
-
-uint16_t Svin::DisplayOLED::PixelThing::compileIndex(const uint8_t x, const uint8_t y) const
-{
-   return x + (width * y);
-}
-
 // controller
 
-Svin::DisplayOLED::Controller::ControllerMap Svin::DisplayOLED::Controller::controllerMap = Svin::DisplayOLED::Controller::ControllerMap();
-
 Svin::DisplayOLED::Controller::Controller(Module* module, const uint16_t& pixelId)
-   : PixelThing(module, pixelId, 0, 0)
+   : UiElement::ElementMap<Controller>(module, pixelId, this)
    , color(nvgRGB(255, 255, 255))
+   , pixels(nullptr)
+   , width(1)
+   , height(1)
+   , clickedFunctionList()
 {
-   controllerMap[module][pixelId] = this;
-
-   Widget* widget = Widget::find(module, pixelId);
-   if (widget)
-   {
-      this->width = widget->width;
-      this->height = widget->height;
-   }
-}
-
-Svin::DisplayOLED::Controller::~Controller()
-{
-   controllerMap[module][pixelId] = nullptr;
 }
 
 void Svin::DisplayOLED::Controller::setColor(const Color& newColor)
@@ -917,15 +891,20 @@ void Svin::DisplayOLED::Controller::setColor(const Color& newColor)
    color = nvgRGB(newColor.red, newColor.green, newColor.blue);
 }
 
+uint16_t Svin::DisplayOLED::Controller::compileIndex(const uint8_t x, const uint8_t y) const
+{
+   return x + (width * y);
+}
+
 void Svin::DisplayOLED::Controller::fill(const Color& fillColor)
 {
-   if (!module)
+   if (!module || !pixels)
       return;
 
    NVGcolor color = nvgRGB(fillColor.red, fillColor.green, fillColor.red);
 
    for (uint16_t index = 0; index < width * height; index++)
-      module->pixels[pixelId][index] = color;
+      pixels[index] = color;
 }
 
 void Svin::DisplayOLED::Controller::drawPixel(const uint8_t x, const uint8_t y)
@@ -937,7 +916,7 @@ void Svin::DisplayOLED::Controller::drawPixel(const uint8_t x, const uint8_t y)
       return;
 
    const uint16_t index = compileIndex(x, y);
-   module->pixels[pixelId][index] = color;
+   pixels[index] = color;
 }
 
 void Svin::DisplayOLED::Controller::drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
@@ -1045,54 +1024,33 @@ void Svin::DisplayOLED::Controller::writeText(const uint8_t x, const uint8_t y, 
    }
 }
 
-// widget
+void Svin::DisplayOLED::Controller::clicked(const float& x, const float& y)
+{
+   for (ClickedFunction clickedFunction : clickedFunctionList)
+      clickedFunction(x, y);
+}
 
-Svin::DisplayOLED::Widget::WidgetMap Svin::DisplayOLED::Widget::widgetMap = Svin::DisplayOLED::Widget::WidgetMap();
+// widget
 
 Svin::DisplayOLED::Widget::Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
    : rack::widget::Widget()
-   , PixelThing(module, pixelId, width, height)
-   , clickedFunctionList()
+   , UiElement::ElementMap<Controller>::Access(module, pixelId)
+   , width(width)
+   , height(height)
 {
    box.pos = rack::math::Vec(pos.x, pos.y);
-   widgetMap[module][pixelId] = this;
 
-   auto updateController = [&]()
+   Controller* controller = findElement();
+   if (controller)
    {
-      if (Controller::controllerMap.find(module) == Controller::controllerMap.end())
-         return;
-
-      const Controller::IdMap& idMap = Controller::controllerMap.at(module);
-      if (idMap.find(pixelId) == idMap.end())
-         return;
-
-      Controller* controller = idMap.at(pixelId);
-      if (!controller)
-         return;
-
       controller->width = width;
       controller->height = height;
-   };
 
-   updateController();
+      const uint16_t size = width * height;
+      controller->pixels = new NVGcolor[size];
+   }
 }
 
-Svin::DisplayOLED::Widget::~Widget()
-{
-   widgetMap[module][pixelId] = nullptr;
-}
-
-Svin::DisplayOLED::Widget* Svin::DisplayOLED::Widget::find(Module* module, const uint16_t& pixelId)
-{
-   if (widgetMap.find(module) == widgetMap.end())
-      return nullptr;
-
-   const IdMap& idMap = widgetMap.at(module);
-   if (idMap.find(pixelId) == idMap.end())
-      return nullptr;
-
-   return idMap.at(pixelId);
-}
 
 void Svin::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
 {
@@ -1103,17 +1061,19 @@ void Svin::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
    const float pixelOffset = (1.0 - padding);
    const float pixelWidth = 1.0 + 2.0 * pixelOffset;
 
+   Controller* controller = findElement();
+
    for (uint8_t x = 0; x < width; x++)
    {
       for (uint8_t y = 0; y < height; y++)
       {
          const NVGcolor color = [&]() -> NVGcolor
          {
-            if (!module)
+            if (!controller)
                return nvgRGB(10, 10, 10);
 
-            const uint16_t index = compileIndex(x, y);
-            return module->pixels[pixelId][index];
+            const uint16_t index = controller->compileIndex(x, y);
+            return controller->pixels[index];
          }();
 
          nvgBeginPath(args.vg);
@@ -1127,6 +1087,10 @@ void Svin::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
 
 void Svin::DisplayOLED::Widget::onButton(const rack::event::Button& buttonEvent)
 {
+   Controller* controller = findElement();
+   if (!controller)
+      return;
+
    if (0 > buttonEvent.pos.x || width <= buttonEvent.pos.x)
       return;
    if (0 > buttonEvent.pos.y || height <= buttonEvent.pos.y)
@@ -1135,8 +1099,6 @@ void Svin::DisplayOLED::Widget::onButton(const rack::event::Button& buttonEvent)
    if (GLFW_MOUSE_BUTTON_LEFT == buttonEvent.button && GLFW_PRESS == buttonEvent.action)
    {
       buttonEvent.consume(this);
-
-      for (ClickedFunction clickedFunction : clickedFunctionList)
-         clickedFunction(buttonEvent.pos.x, buttonEvent.pos.y);
+      controller->clicked(buttonEvent.pos.x, buttonEvent.pos.y);
    }
 }

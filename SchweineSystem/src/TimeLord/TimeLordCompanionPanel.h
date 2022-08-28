@@ -3,9 +3,10 @@
 
 #include "TimeLordCompanion.h"
 
-#include <SvinButtonLED.h>
 #include <SvinCommon.h>
+#include <SvinButtonLED.h>
 #include <SvinSwitch.h>
+#include <SvinInput.h>
 
 struct TimeLordCompanion::Panel
 {
@@ -79,6 +80,7 @@ struct TimeLordCompanion::Panel
       // lcds
       LIGHTS_LEN = 24
    };
+
 };
 
 #endif // NOT TimeLordCompanionPanelH

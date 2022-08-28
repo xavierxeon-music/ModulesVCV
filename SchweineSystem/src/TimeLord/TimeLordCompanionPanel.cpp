@@ -1,5 +1,5 @@
-#include "TimeLordCompanionPanel.h"
 #include "TimeLordCompanion.h"
+#include "TimeLordCompanionPanel.h"
 
 #include <SvinMaster.h>
 
@@ -59,12 +59,13 @@ void TimeLordCompanionWidget::setup()
    makeLEDButton(this, Vec(61.60, 61.03), TimeLordCompanion::Panel::Channel2_Steady, TimeLordCompanion::Panel::RGB_Channel2_Steady);
    makeLEDButton(this, Vec(61.60, 23.03), TimeLordCompanion::Panel::Channel1_Steady, TimeLordCompanion::Panel::RGB_Channel1_Steady);
 
-   makeInput(this, Vec(34.07, 289.03), TimeLordCompanion::Panel::Channel8_SteadyOverride);
-   makeInput(this, Vec(34.07, 251.03), TimeLordCompanion::Panel::Channel7_SteadyOverride);
-   makeInput(this, Vec(34.07, 213.03), TimeLordCompanion::Panel::Channel6_SteadyOverride);
-   makeInput(this, Vec(34.07, 175.03), TimeLordCompanion::Panel::Channel5_SteadyOverride);
-   makeInput(this, Vec(34.07, 137.03), TimeLordCompanion::Panel::Channel4_SteadyOverride);
-   makeInput(this, Vec(34.07, 99.03), TimeLordCompanion::Panel::Channel3_SteadyOverride);
-   makeInput(this, Vec(34.07, 61.03), TimeLordCompanion::Panel::Channel2_SteadyOverride);
-   makeInput(this, Vec(34.07, 23.03), TimeLordCompanion::Panel::Channel1_SteadyOverride);
+   makeInput(this, Vec(34.07, 289.03),  TimeLordCompanion::Panel::Channel8_SteadyOverride, false);
+   makeInput(this, Vec(34.07, 251.03),  TimeLordCompanion::Panel::Channel7_SteadyOverride, false);
+   makeInput(this, Vec(34.07, 213.03),  TimeLordCompanion::Panel::Channel6_SteadyOverride, false);
+   makeInput(this, Vec(34.07, 175.03),  TimeLordCompanion::Panel::Channel5_SteadyOverride, false);
+   makeInput(this, Vec(34.07, 137.03),  TimeLordCompanion::Panel::Channel4_SteadyOverride, false);
+   makeInput(this, Vec(34.07, 99.03),  TimeLordCompanion::Panel::Channel3_SteadyOverride, false);
+   makeInput(this, Vec(34.07, 61.03),  TimeLordCompanion::Panel::Channel2_SteadyOverride, false);
+   makeInput(this, Vec(34.07, 23.03),  TimeLordCompanion::Panel::Channel1_SteadyOverride, false);
 }
+

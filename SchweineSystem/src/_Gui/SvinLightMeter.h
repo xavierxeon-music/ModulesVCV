@@ -8,47 +8,34 @@
 #include <SvinCommon.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
+#include <SvinUiElement.h>
 
 namespace Svin
 {
    namespace LightMeter
    {
-      class Controller
+      class Controller : public UiElement::ElementMap<Controller>
       {
       public:
-         class List;
+         using List = ElementList<Controller>;
 
       public:
          Controller(Module* module, const uint16_t& valueId);
 
       public:
          void setMaxValue(const uint16_t& newMaxValue);
-         void setValue(const uint32_t& value);
+         void setValue(const uint32_t& newValue);
 
       private:
-         Module* module;
-         const uint16_t valueId;
+         friend class Widget;
+
+      private:
          Range::Mapper valueMapper;
+         uint32_t value;
       };
 
-      class Controller::List
+      class Widget : public rack::TransparentWidget, private UiElement::ElementMap<Controller>::Access
       {
-      public:
-         List(Module* module);
-         ~List();
-
-      public:
-         void append(const std::vector<uint16_t>& valueIdList);
-         Controller* operator[](const uint16_t& index);
-
-      private:
-         Module* module;
-         std::vector<Controller*> instanceList;
-      };
-
-      class Widget : public rack::TransparentWidget
-      {
-      public:
       public:
          Widget(rack::math::Vec pos, Module* module, const uint8_t& segmentCount, const uint16_t& valueId);
 
@@ -56,8 +43,6 @@ namespace Svin
          void drawLayer(const DrawArgs& args, int layer) override;
 
       private:
-         Module* module;
-         const uint16_t valueId;
          const uint8_t segmentCount;
          Range::Mapper meterMapper;
       };

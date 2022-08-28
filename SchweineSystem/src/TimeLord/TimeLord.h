@@ -79,6 +79,8 @@ private:
    void uploadToRemote(const BusTimeLord& busMessage);
    void setFromRemote(const Svin::Json::Object& rootObject);
 
+   void displayClicked(const float& x, const float& y);
+
 private:
    std::string fileName;
    PolyRamp ramps[8];
@@ -134,7 +136,6 @@ public:
 
 private:
    void setup();
-   void displayClicked(const float& x, const float& y);
    void preDraw() override;
 
 private:

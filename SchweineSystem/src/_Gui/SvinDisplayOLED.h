@@ -3,9 +3,10 @@
 
 #include <rack.hpp>
 
-#include "SvinCommon.h"
-#include "SvinModule.h"
-#include "SvinModuleWidget.h"
+#include <SvinCommon.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
+#include <SvinUiElement.h>
 
 namespace Svin
 {
@@ -32,28 +33,16 @@ namespace Svin
          Right
       };
 
-      class PixelThing
+      class Controller : public UiElement::ElementMap<Controller>
       {
       public:
-         PixelThing(Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height);
+         using ClickedFunction = std::function<void(const float& x, const float& y)>;
 
-      protected:
-         uint16_t compileIndex(const uint8_t x, const uint8_t y) const;
-
-      protected:
-         Module* module;
-         const uint16_t pixelId;
-         uint8_t width;
-         uint8_t height;
-      };
-
-      class Controller : public PixelThing
-      {
       public:
          Controller(Module* module, const uint16_t& pixelId);
-         ~Controller();
 
       public:
+         uint16_t compileIndex(const uint8_t x, const uint8_t y) const;
          void fill(const Color& fillColor = Color{0, 0, 0}); // set all pixels to fill color
 
          void setColor(const Color& newColor);
@@ -62,43 +51,39 @@ namespace Svin
          void drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill);
          void writeText(const uint8_t x, const uint8_t y, const std::string& text, const Font& font, const Alignment& alignment = Alignment::Left);
 
-      private:
-         friend class Widget;
-         using IdMap = std::map<const uint16_t, Controller*>;
-         using ControllerMap = std::map<Module*, IdMap>;
-
-      private:
-         static ControllerMap controllerMap;
-         NVGcolor color;
-      };
-
-      class Widget : public rack::widget::Widget, public PixelThing
-      {
-      public:
-         using ClickedFunction = std::function<void(const float& x, const float& y)>;
-
-      public:
-         Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height);
-         ~Widget();
-
-      public:
          template <typename ClassType>
          void onClicked(ClassType* instance, void (ClassType::*functionPointer)(const float&, const float&));
 
-         static Widget* find(Module* module, const uint16_t& pixelId);
+      private:
+         void clicked(const float& x, const float& y);
 
       private:
-         friend class Controller;
-         using IdMap = std::map<const uint16_t, Widget*>;
-         using WidgetMap = std::map<Module*, IdMap>;
+         friend class Widget;
+
+      private:
+         NVGcolor color;
+         NVGcolor* pixels;
+
+         uint8_t width;
+         uint8_t height;
+
+         std::vector<ClickedFunction> clickedFunctionList;
+      };
+
+      class Widget : public rack::widget::Widget, private UiElement::ElementMap<Controller>::Access
+      {
+
+      public:
+         Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height);
 
       private:
          void drawLayer(const DrawArgs& args, int layer) override;
          void onButton(const rack::event::Button& buttonEvent) override;
 
       private:
-         static WidgetMap widgetMap;
-         std::vector<ClickedFunction> clickedFunctionList;
+         uint8_t width;
+         uint8_t height;
+
       };
    }; // namespace DisplayOLED
 } // namespace Svin

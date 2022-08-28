@@ -36,6 +36,7 @@ private:
    void save(Svin::Json::Object& rootObject) override;
 
    void onSampleRateChange(const SampleRateChangeEvent& event) override;
+   void displayClicked(const float& x, const float& y);
 
 private:
    Svin::DisplayOLED::Controller displayController;

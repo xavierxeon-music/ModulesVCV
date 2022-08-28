@@ -3,10 +3,10 @@
 
 #include <rack.hpp>
 
-#include "SvinCommon.h"
-#include "SvinModule.h"
-#include "SvinModuleWidget.h"
-#include "SvinUiElement.h"
+#include <SvinCommon.h>
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
+#include <SvinUiElement.h>
 
 namespace Svin
 {
@@ -14,7 +14,7 @@ namespace Svin
    {
       // 16 with per digit + 2 margin
       // 24 height
-      class Controller : public UiElement::Controller<Controller>
+      class Controller : public UiElement::ElementMap<Controller>
       {
       public:
          using List = ElementList<Controller>;
@@ -35,10 +35,10 @@ namespace Svin
          NVGcolor color;
       };
 
-      class Widget : public rack::widget::Widget, private UiElement::View<Controller>
+      class Widget : public rack::widget::Widget, private UiElement::ElementMap<Controller>::Access
       {
       public:
-         Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& displayId, const uint8_t fontSize = 18);
+         Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& displayId, const uint8_t fontSize);
 
       private:
          void drawLayer(const DrawArgs& args, int layer) override;
@@ -52,9 +52,9 @@ namespace Svin
    } // namespace DisplayLCD
 } // namespace Svin
 
-inline void makeLCD(Svin::ModuleWidget* widget, rack::math::Vec pos, const uint8_t& digitCount, const uint16_t& displayId)
+inline void makeLCD(Svin::ModuleWidget* widget, rack::math::Vec pos, const uint8_t& digitCount, const uint16_t& displayId, const uint8_t fontSize)
 {
-   rack::Widget* displayWidget = new Svin::DisplayLCD::Widget(pos, widget->getSchweineModule(), digitCount, displayId);
+   rack::Widget* displayWidget = new Svin::DisplayLCD::Widget(pos, widget->getSchweineModule(), digitCount, displayId, fontSize);
    widget->addChild(displayWidget);
 }
 

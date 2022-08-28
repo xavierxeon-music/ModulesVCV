@@ -18,8 +18,6 @@ void TrackerWorker::setup()
 
    configOutput(Panel::Group2_Output, "Group2_Output");
    configOutput(Panel::Group1_Output, "Group1_Output");
-
-   configPixels(Panel::Pixels_Display, 100, 180, "Display");
 }
 
 void TrackerWorkerWidget::setup()

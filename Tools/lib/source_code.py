@@ -58,26 +58,6 @@ class Sources(Common):
             name = output['name']
             line(1, f'configOutput(Panel::{name}, "{name}");')
 
-        if self.lcds:
-            line(0)
-        for lcd in self.lcds:
-            name = lcd['name']
-            line(1, f'configText(Panel::Text_{name}, "{name}");')
-
-        if self.oleds:
-            line(0)
-        for oled in self.oleds:
-            name = oled['name']
-            count = oled['count']
-            width, height = count.split('x')
-            line(1, f'configPixels(Panel::Pixels_{name}, {width}, {height}, "{name}");')
-
-        if self.meters:
-            line(0)
-        for meter in self.meters:
-            name = meter['name']
-            line(1, f'configMeter(Panel::Value_{name}, "{name}");')
-
         line(0, '}')
 
     def _addWidgetSetup(self, line):
@@ -154,7 +134,8 @@ class Sources(Common):
             count = lcd['count']
             x = lcd['rx']
             y = lcd['ry']
-            line(1, f'makeLCD(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Text_{name}, {self.moduleName}::Panel::RGB_{name});')
+            fontSize = 18
+            line(1, f'makeLCD(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Text_{name}, {fontSize});')
 
         if self.oleds:
             line(0)
