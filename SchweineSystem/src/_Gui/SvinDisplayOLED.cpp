@@ -1050,7 +1050,7 @@ void Svin::DisplayOLED::Controller::writeText(const uint8_t x, const uint8_t y, 
 Svin::DisplayOLED::Widget::WidgetMap Svin::DisplayOLED::Widget::widgetMap = Svin::DisplayOLED::Widget::WidgetMap();
 
 Svin::DisplayOLED::Widget::Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height)
-   : rack::TransparentWidget()
+   : rack::widget::Widget()
    , PixelThing(module, pixelId, width, height)
    , clickedFunctionList()
 {
@@ -1099,6 +1099,10 @@ void Svin::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
    if (layer != 1)
       return;
 
+   const float padding = 0.1;
+   const float pixelOffset = (1.0 - padding);
+   const float pixelWidth = 1.0 + 2.0 * pixelOffset;
+
    for (uint8_t x = 0; x < width; x++)
    {
       for (uint8_t y = 0; y < height; y++)
@@ -1113,7 +1117,8 @@ void Svin::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
          }();
 
          nvgBeginPath(args.vg);
-         nvgRoundedRect(args.vg, x + 1, y + 1, 1, 1, 0.4);
+         nvgRect(args.vg, x + pixelOffset, y + pixelOffset, pixelWidth, pixelWidth);
+         //nvgRoundedRect(args.vg, x + pixelOffset, y + pixelOffset, pixelWidth, pixelWidth, 0.01);
          nvgFillColor(args.vg, color);
          nvgFill(args.vg);
       }

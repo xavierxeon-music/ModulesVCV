@@ -72,7 +72,7 @@ namespace Svin
          NVGcolor color;
       };
 
-      class Widget : public rack::TransparentWidget, public PixelThing
+      class Widget : public rack::widget::Widget, public PixelThing
       {
       public:
          using ClickedFunction = std::function<void(const float& x, const float& y)>;

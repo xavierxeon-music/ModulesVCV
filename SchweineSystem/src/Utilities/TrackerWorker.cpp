@@ -4,6 +4,7 @@
 #include <osdialog.h>
 
 #include <Midi/MidiCommon.h>
+#include <Tools/Convert.h>
 #include <Tools/File.h>
 #include <Tools/SevenBit.h>
 #include <Tools/Variable.h>
@@ -39,6 +40,9 @@ TrackerWorker::TrackerWorker()
    , remoteValues{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 {
    setup();
+
+   inputList.append({Panel::Group1_Pass, Panel::Group2_Pass});
+   outputList.append({Panel::Group1_Output, Panel::Group2_Output});
 }
 
 void TrackerWorker::process(const ProcessArgs& args)
@@ -94,14 +98,14 @@ void TrackerWorker::loadProject(const std::string& newFileName)
 
 void TrackerWorker::processPassthrough()
 {
-   displayController.setColor(Svin::Color{0, 255, 0});
-   displayController.drawRect(0, 0, 100, 10, true);
-
-   displayController.setColor(Svin::Color{0, 0, 0});
-   displayController.writeText(5, 1, "Passthrough", Svin::DisplayOLED::Font::Normal);
-
-   displayController.setColor(Svin::Color{0, 255, 0});
-   displayController.writeText(5, 20, "Hello", Svin::DisplayOLED::Font::Normal);
+   for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+   {
+      for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+      {
+         const float value = tempo.isRunningOrFirstTick() ? inputList[groupIndex]->getVoltage(channelIndex) : 0.0;
+         outputList[groupIndex]->setVoltage(value, channelIndex);
+      }
+   }
 
    if (uploadInput.isTriggered())
    {
@@ -110,17 +114,84 @@ void TrackerWorker::processPassthrough()
 
 void TrackerWorker::proccessRemote()
 {
-   displayController.setColor(Svin::Color{0, 0, 255});
+   for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+   {
+      for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+      {
+         const float value = tempo.isRunningOrFirstTick() ? remoteValues[16 * groupIndex + channelIndex] : 0.0;
+         outputList[groupIndex]->setVoltage(value, channelIndex);
+      }
+   }
+}
+
+void TrackerWorker::processInternal()
+{
+}
+
+void TrackerWorker::updateDisplays()
+{
+   displayController.fill();
+
+   if (OperationMode::Passthrough == operationMode)
+      updateDisplayPassthrough();
+   else if (OperationMode::Remote == operationMode)
+      updateDisplayRemote();
+   else if (OperationMode::Internal == operationMode)
+      updateDisplayInternal();
+}
+
+void TrackerWorker::updateDisplayPassthrough()
+{
+   displayController.setColor(Svin::Color{0, 255, 0});
+   displayController.drawRect(0, 0, 100, 10, true);
+
+   displayController.setColor(Svin::Color{0, 0, 0});
+   displayController.writeText(5, 1, "Passthrough", Svin::DisplayOLED::Font::Normal);
+
+   displayController.setColor(Svin::Color{0, 255, 0});
+
+   for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+   {
+      const uint8_t y = 15 + 10 * channelIndex;
+
+      for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+      {
+         const uint8_t x = 50 + groupIndex * 40;
+
+         const float voltage = inputList[groupIndex]->getVoltage(channelIndex);
+         const uint8_t value = voltageToValue(voltage);
+         const std::string valueText = tempo.isRunningOrFirstTick() ? Convert::text(value) : "off";
+         displayController.writeText(x, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
+      }
+   }
+}
+
+void TrackerWorker::updateDisplayRemote()
+{
+   displayController.setColor(Svin::Color{0, 255, 255});
    displayController.drawRect(0, 0, 100, 10, true);
 
    displayController.setColor(Svin::Color{0, 0, 0});
    displayController.writeText(5, 1, "Remote", Svin::DisplayOLED::Font::Normal);
 
-   displayController.setColor(Svin::Color{0, 0, 255});
-   displayController.writeText(5, 20, "Hello", Svin::DisplayOLED::Font::Normal);
+   displayController.setColor(Svin::Color{0, 255, 255});
+
+   for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+   {
+      const uint8_t y = 15 + 10 * channelIndex;
+
+      for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+      {
+         const uint8_t x = 50 + groupIndex * 40;
+
+         const uint8_t value = remoteValues[16 * groupIndex + channelIndex];
+         const std::string valueText = tempo.isRunningOrFirstTick() ? Convert::text(value) : "off";
+         displayController.writeText(x, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
+      }
+   }
 }
 
-void TrackerWorker::processInternal()
+void TrackerWorker::updateDisplayInternal()
 {
    displayController.setColor(Svin::Color{255, 255, 255});
    displayController.drawRect(0, 0, 100, 10, true);
@@ -139,30 +210,6 @@ void TrackerWorker::processInternal()
    displayController.setColor(Svin::Color{255, 255, 255});
 
    displayController.writeText(5, 20, "Hello", Svin::DisplayOLED::Font::Normal);
-}
-
-void TrackerWorker::updateDisplays()
-{
-   displayController.fill();
-
-   if (OperationMode::Passthrough == operationMode)
-      updateDisplayPassthrough();
-   else if (OperationMode::Remote == operationMode)
-      updateDisplayRemote();
-   else if (OperationMode::Internal == operationMode)
-      updateDisplayInternal();
-}
-
-void TrackerWorker::updateDisplayPassthrough()
-{
-}
-
-void TrackerWorker::updateDisplayRemote()
-{
-}
-
-void TrackerWorker::updateDisplayInternal()
-{
 }
 
 void TrackerWorker::load(const Svin::Json::Object& rootObject)

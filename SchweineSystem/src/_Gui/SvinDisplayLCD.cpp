@@ -31,7 +31,7 @@ void Svin::DisplayLCD::Controller::setColor(const Svin::Color& color)
 // widget
 
 Svin::DisplayLCD::Widget::Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& textId, const uint16_t& rgbId)
-   : rack::TransparentWidget()
+   : rack::widget::Widget()
    , module(module)
    , digitCount(digitCount)
    , textId(textId)

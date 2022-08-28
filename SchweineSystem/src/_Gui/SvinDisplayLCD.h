@@ -31,7 +31,7 @@ namespace Svin
          const uint16_t rgbId;
       };
 
-      class Widget : public rack::TransparentWidget
+      class Widget : public rack::widget::Widget
       {
       public:
          Widget(rack::math::Vec pos, Module* module, const uint8_t& digitCount, const uint16_t& textId, const uint16_t& rgbId);
