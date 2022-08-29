@@ -13,6 +13,7 @@ TrackerWorker::TrackerWorker()
    : Svin::Module()
    , fileName()
    , project()
+   , eventNameList()
    // midi
    , receive(MidiReceive::None)
    , buffer()
@@ -28,10 +29,10 @@ TrackerWorker::TrackerWorker()
    // outout
    , valueToVoltage(0.0, 255.0, 0.0, 10.0)
    , outputList(this)
-   // display
    // mode
+   , loopButton(this, Panel::Loop, Panel::RGB_Loop)
    , operationMode(OperationMode::Passthrough)
-   , operationModeButton(this, Panel::ModeManual)
+   , operationModeButton(this, Panel::Mode)
    , remoteValues{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
    , display(this)
 {
@@ -39,6 +40,8 @@ TrackerWorker::TrackerWorker()
 
    inputList.append({Panel::Group1_Pass, Panel::Group2_Pass});
    outputList.append({Panel::Group1_Output, Panel::Group2_Output});
+
+   loopButton.setDefaultColor(Svin::Color{0, 255, 0});
 }
 
 void TrackerWorker::process(const ProcessArgs& args)
@@ -46,6 +49,14 @@ void TrackerWorker::process(const ProcessArgs& args)
    // clock
    const bool isClock = clockInput.isTriggered();
    const bool isReset = resetInput.isTriggered();
+
+   if (loopButton.isTriggered())
+   {
+      bool loop = project.isLooping();
+      loop ^= true;
+      project.setLooping(loop);
+   }
+   loopButton.setActive(project.isLooping());
 
    if (isReset)
       tempo.clockReset();
@@ -57,18 +68,29 @@ void TrackerWorker::process(const ProcessArgs& args)
    // operation mode
    if (operationModeButton.isTriggered())
    {
-      static const std::vector<OperationMode> order = {OperationMode::Passthrough, OperationMode::Remote, OperationMode::Internal};
+      static const std::vector<OperationMode> order = {OperationMode::Passthrough, OperationMode::Remote, OperationMode::InternalOverview, OperationMode::InternalCurrent};
       Variable::Enum<OperationMode> variable(operationMode, order, true);
       variable.increment();
    }
 
    // do stuff
    if (OperationMode::Passthrough == operationMode)
+   {
       processPassthrough();
+   }
    else if (OperationMode::Remote == operationMode)
+   {
       proccessRemote();
-   else if (OperationMode::Internal == operationMode)
+   }
+   else
+   {
+      if (isReset)
+         project.clockReset();
+      else if (isClock)
+         project.clockTick();
+
       processInternal();
+   }
 }
 
 void TrackerWorker::loadProject(const std::string& newFileName)
@@ -82,6 +104,53 @@ void TrackerWorker::loadProject(const std::string& newFileName)
    using namespace Svin::Json;
 
    const Object rootObject(data);
+   {
+      const Array eventArray = rootObject.get("events").toArray();
+      eventNameList.resize(eventArray.size());
+      for (size_t index = 0; index < eventArray.size(); index++)
+         eventNameList[index] = eventArray.get(index).toString();
+   }
+   {
+      const Object projectObject = rootObject.get("project").toObject();
+
+      const Tempo::Division division = static_cast<Tempo::Division>(projectObject.get("division").toInt());
+      const uint32_t segmentCount = projectObject.get("segments").toInt();
+      const uint16_t digitCount = Convert::compileDigitCount(segmentCount);
+
+      project.clear(division, segmentCount);
+
+      Array laneArray = projectObject.get("lanes").toArray();
+      if (project.getLaneCount() != laneArray.size())
+      {
+         std::cout << newFileName << " " << (uint16_t)project.getLaneCount() << " " << laneArray.size() << std::endl;
+         return;
+      }
+
+      for (uint8_t laneIndex = 0; laneIndex < project.getLaneCount(); laneIndex++)
+      {
+         Tracker::Lane& lane = project.getLane(laneIndex);
+         Object laneObject = laneArray.get(laneIndex).toObject();
+         lane.setName(laneObject.get("name").toString());
+
+         for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
+         {
+            std::string segmentKey = std::to_string(segmentIndex);
+            while (segmentKey.length() < digitCount)
+               segmentKey = "0" + segmentKey;
+
+            if (!laneObject.hasKey(segmentKey))
+               continue;
+
+            Object segmentObject = laneObject.get(segmentKey).toObject();
+            lane.setSegmentSteady(segmentIndex, segmentObject.get("steady").toBool());
+
+            if (segmentObject.hasKey("start"))
+               lane.setSegmentStartValue(segmentIndex, segmentObject.get("start").toInt());
+            if (segmentObject.hasKey("end"))
+               lane.setSegmentEndValue(segmentIndex, segmentObject.get("end").toInt());
+         }
+      }
+   }
 }
 
 void TrackerWorker::processPassthrough()
@@ -106,14 +175,32 @@ void TrackerWorker::proccessRemote()
    {
       for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
       {
-         const float value = tempo.isRunningOrFirstTick() ? remoteValues[16 * groupIndex + channelIndex] : 0.0;
-         outputList[groupIndex]->setVoltage(value, channelIndex);
+         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
+         const uint8_t value = tempo.isRunningOrFirstTick() ? remoteValues[laneIndex] : 0;
+         const float voltage = valueToVoltage(value);
+         outputList[groupIndex]->setVoltage(voltage, channelIndex);
       }
    }
 }
 
 void TrackerWorker::processInternal()
 {
+   const uint32_t currentIndex = project.getCurrentSegmentIndex();
+   const float percentage = tempo.getPercentage(project.getDivison());
+
+   for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+   {
+      for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+      {
+         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
+         const Tracker::Lane& lane = project.getLane(laneIndex);
+
+         const uint8_t value = lane.getSegmentValue(currentIndex, percentage);
+
+         const float voltage = valueToVoltage(value);
+         outputList[groupIndex]->setVoltage(voltage, channelIndex);
+      }
+   }
 }
 
 void TrackerWorker::updateDisplays()
@@ -123,8 +210,10 @@ void TrackerWorker::updateDisplays()
 
 void TrackerWorker::load(const Svin::Json::Object& rootObject)
 {
-   display.displayMode = static_cast<Display::Mode>(rootObject.get("display").toInt());
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
+
+   bool loop = rootObject.get("loop").toBool();
+   project.setLooping(loop);
 
    const std::string newFileName = rootObject.get("fileName").toString();
    loadProject(newFileName);
@@ -132,8 +221,8 @@ void TrackerWorker::load(const Svin::Json::Object& rootObject)
 
 void TrackerWorker::save(Svin::Json::Object& rootObject)
 {
-   rootObject.set("display", static_cast<uint8_t>(display.displayMode));
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
+   rootObject.set("loop", project.isLooping());
 
    rootObject.set("fileName", fileName);
 }

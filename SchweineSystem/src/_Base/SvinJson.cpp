@@ -149,6 +149,11 @@ Svin::Json::Value Svin::Json::Object::get(const std::string& key) const
    return Value(json_object_get(json, key.c_str()));
 }
 
+bool Svin::Json::Object::hasKey(const std::string& key) const
+{
+   return (nullptr != json_object_get(json, key.c_str()));
+}
+
 Bytes Svin::Json::Object::toBytes() const
 {
    size_t size = json_dumpb(json, nullptr, 0, 0);

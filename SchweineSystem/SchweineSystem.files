@@ -74,10 +74,12 @@
 ./src/_MusicTools/RememberDummy/Remember.h
 ./src/_MusicTools/RememberDummy/RememberArray.h
 ./src/_MusicTools/RememberDummy/RememberList.h
+./src/_MusicTools/Include/Blocks/TrackerProject.h
 ./src/_MusicTools/Include/Blocks/Trapezoid.h
 ./src/_MusicTools/Include/Blocks/PolyRamp.h
 ./src/_MusicTools/Include/Blocks/CvSwitch.h
 ./src/_MusicTools/Include/Blocks/Sequencer.h
+./src/_MusicTools/Include/Blocks/TrackerLane.h
 ./src/_MusicTools/Include/Abstract/AbstractEffect.h
 ./src/_MusicTools/Include/Abstract/AbstractOscilator.h
 ./src/_MusicTools/Include/Abstract/AbstractSoundSource.h
@@ -110,9 +112,6 @@
 ./src/_MusicTools/Include/Effect/Revoice.h
 ./src/_MusicTools/Include/Effect/StateVariableFilter.h
 ./src/_MusicTools/Include/Effect/Compressor.h
-./src/_MusicTools/Include/Tracker/TrackerProject.h
-./src/_MusicTools/Include/Tracker/TrackerSegment.h
-./src/_MusicTools/Include/Tracker/TrackerLane.h
 ./src/_MusicTools/Include/Maths.h
 ./src/_MusicTools/Include/Sound/WaveTableMorpher.h
 ./src/_MusicTools/Include/Sound/WaveTable.h
@@ -139,6 +138,7 @@
 ./src/_Gui/SvinDisplayOLED.hpp
 ./src/_Base/SvinMaster.hpp
 ./src/_Base/SvinCommon.hpp
+./src/_Base/SvinUiElement.hpp
 ./src/_Base/SvinExapnder.hpp
 ./src/_MusicTools/Variable.hpp
 ./src/_MusicTools/BoolField.hpp
@@ -158,7 +158,6 @@
 ./src/_MusicTools/MidiInterfaceInput.hpp
 ./src/_MusicTools/Tempo.hpp
 ./src/_MusicTools/Trapezoid.hpp
-./src/_MusicTools/TrackerSegment.hpp
 ./src/_MusicTools/File.hpp
 ./src/_MusicTools/PolyRamp.hpp
 ./src/_MusicTools/ffft/FFTRealSelect.hpp

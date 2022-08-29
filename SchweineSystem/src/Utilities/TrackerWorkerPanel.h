@@ -5,6 +5,7 @@
 
 #include <SvinCommon.h>
 #include <SvinButton.h>
+#include <SvinButtonLED.h>
 #include <SvinDisplayOLED.h>
 #include <SvinInput.h>
 #include <SvinOutput.h>
@@ -14,10 +15,10 @@ struct TrackerWorker::Panel
    enum ParamId
    {
       // buttons
-      Display = 0,
-      ModeManual = 1,
+      Mode = 0,
       // switches
       // ledbuttons
+      Loop = 1,
       // knobs
       PARAMS_LEN = 2
    };
@@ -56,8 +57,9 @@ struct TrackerWorker::Panel
    {
       // leds
       // ledbuttons
+      RGB_Loop = 0,
       // lcds
-      LIGHTS_LEN = 0
+      LIGHTS_LEN = 3
    };
 
 };

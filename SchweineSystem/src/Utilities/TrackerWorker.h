@@ -4,13 +4,14 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <Blocks/TrackerProject.h>
 #include <Tools/Range.h>
-#include <Tracker/TrackerProject.h>
 
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
 #include <SvinButton.h>
+#include <SvinButtonLED.h>
 #include <SvinInput.h>
 #include <SvinOutput.h>
 
@@ -34,7 +35,8 @@ private:
    {
       Passthrough,
       Remote,
-      Internal
+      InternalOverview,
+      InternalCurrent
    };
 
    friend class Display;
@@ -61,6 +63,7 @@ private:
 private:
    std::string fileName;
    Tracker::Project project;
+   std::vector<std::string> eventNameList;
 
    // midi
    MidiReceive receive;
@@ -83,6 +86,8 @@ private:
    Svin::Output::List outputList;
 
    // mode
+   Svin::ButtonLED loopButton;
+
    OperationMode operationMode;
    Svin::Button operationModeButton;
    uint8_t remoteValues[32];

@@ -61,6 +61,7 @@ namespace Svin
       public:
          void set(const std::string& key, const Value& value);
          Value get(const std::string& key) const;
+         bool hasKey(const std::string& key) const;
 
          Bytes toBytes() const;
          std::string toString() const;

@@ -10,22 +10,9 @@
 
 Display::Display(TrackerWorker* main)
    : main(main)
-   , displayMode(Mode::StageIndex)
-   , displayButton(main, TrackerWorker::Panel::Display)
    , controller(main, TrackerWorker::Panel::Pixels_Display)
 {
    controller.onClicked(this, &Display::displayClicked);
-}
-
-void Display::process(const Module::ProcessArgs& args)
-{
-   // screen mode
-   if (displayButton.isTriggered())
-   {
-      static const std::vector<Mode> order = {Mode::Division, Mode::Length, Mode::StageCount, Mode::StageIndex};
-      Variable::Enum<Mode> variable(displayMode, order, true);
-      variable.increment();
-   }
 }
 
 void Display::update()
@@ -36,8 +23,10 @@ void Display::update()
       updatePassthrough();
    else if (TrackerWorker::OperationMode::Remote == main->operationMode)
       updateRemote();
-   else if (TrackerWorker::OperationMode::Internal == main->operationMode)
-      updateInternal();
+   else if (TrackerWorker::OperationMode::InternalOverview == main->operationMode)
+      updateInternalOverview();
+   else if (TrackerWorker::OperationMode::InternalCurrent == main->operationMode)
+      updateInternalCurrent();
 }
 
 void Display::updatePassthrough()
@@ -48,7 +37,7 @@ void Display::updatePassthrough()
    controller.setColor(Svin::Color{0, 0, 0});
    controller.writeText(50, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   controller.setColor(Svin::Color{0, 255, 0});
+   controller.setColor(Svin::Color{255, 255, 255});
 
    for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
    {
@@ -74,7 +63,7 @@ void Display::updateRemote()
    controller.setColor(Svin::Color{0, 0, 0});
    controller.writeText(50, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   controller.setColor(Svin::Color{0, 255, 255});
+   controller.setColor(Svin::Color{255, 255, 255});
 
    for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
    {
@@ -91,25 +80,49 @@ void Display::updateRemote()
    }
 }
 
-void Display::updateInternal()
+void Display::updateInternalOverview()
 {
-   controller.setColor(Svin::Color{255, 255, 255});
+   controller.setColor(Svin::Color{255, 255, 0});
    controller.drawRect(0, 0, 100, 10, true);
 
    controller.setColor(Svin::Color{0, 0, 0});
-
-   if (Mode::Division == displayMode)
-      controller.writeText(5, 1, "Step", Svin::DisplayOLED::Font::Normal);
-   else if (Mode::Length == displayMode)
-      controller.writeText(5, 1, "Length", Svin::DisplayOLED::Font::Normal);
-   else if (Mode::StageCount == displayMode)
-      controller.writeText(5, 1, "Count", Svin::DisplayOLED::Font::Normal);
-   else
-      controller.writeText(5, 1, "Current", Svin::DisplayOLED::Font::Normal);
+   controller.writeText(50, 0, "Overview", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    controller.setColor(Svin::Color{255, 255, 255});
+   controller.writeText(0, 175, main->fileName, 3);
 
-   controller.writeText(5, 20, "Hello", 2);
+   const uint32_t segmentCount = main->project.getSegementCount();
+   controller.writeText(5, 15, std::to_string(segmentCount) + " segments", Svin::DisplayOLED::Font::Normal);
+
+   const std::string divName = Tempo::getName(main->project.getDivison());
+   controller.writeText(5, 30, "@ " + divName, Svin::DisplayOLED::Font::Normal);
+
+   const uint32_t index = main->project.getCurrentSegmentIndex();
+   if (index < main->project.getSegementCount())
+   {
+      controller.writeText(50, 70, std::to_string(index), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
+
+      const std::string eventName = main->eventNameList.at(index);
+      const std::string eventText = eventName.empty() ? "--" : eventName;
+      controller.writeText(50, 100, eventText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+   }
+   else
+   {
+      controller.setColor(Svin::Color{255, 255, 0});
+      controller.writeText(50, 70, "END", Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
+   }
+}
+
+void Display::updateInternalCurrent()
+{
+   controller.setColor(Svin::Color{255, 0, 255});
+   controller.drawRect(0, 0, 100, 10, true);
+
+   controller.setColor(Svin::Color{0, 0, 0});
+   controller.writeText(50, 0, "Current", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   controller.setColor(Svin::Color{255, 255, 255});
+   controller.writeText(0, 15, "Hello", Svin::DisplayOLED::Font::Normal);
 }
 
 void Display::displayClicked(const float& x, const float& y)
