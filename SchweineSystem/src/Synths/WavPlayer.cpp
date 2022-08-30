@@ -158,7 +158,7 @@ void WavPlayer::displayClicked(const float& x, const float& y)
    (void)x;
    (void)y;
 
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Wav:wav"));
+   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, osdialog_filters_parse("Wav:wav"));
    if (path)
       setWavFileName(std::string(path));
 }

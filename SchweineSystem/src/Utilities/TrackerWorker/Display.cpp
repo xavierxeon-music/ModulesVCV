@@ -138,7 +138,7 @@ void Display::displayClicked(const float& x, const float& y)
    (void)x;
    (void)y;
 
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, NULL, osdialog_filters_parse("Projects:json"));
+   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, osdialog_filters_parse("Projects:json"));
    if (path)
       main->loadProject(std::string(path));
 }
