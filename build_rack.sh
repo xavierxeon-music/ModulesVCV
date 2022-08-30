@@ -59,11 +59,10 @@ fi
 make dep -j 16
 make -j 16
 
-cd $SCRIPT_DIR/Rack/plugins
-ln -s ../../3rdParty/Fundamental Fundamental   
-ln -s ../../3rdParty/ImpromptuModular ImpromptuModular      
-ln -s ../../3rdParty/BogaudioModules BogaudioModules      
-ln -s ../../SchweineSystem SchweineSystem
+ln -s $SCRIPT_DIR/3rdParty/Fundamental $SCRIPT_DIR/Rack/plugins/Fundamental   
+ln -s $SCRIPT_DIR/3rdParty/ImpromptuModular $SCRIPT_DIR/Rack/plugins/ImpromptuModular      
+ln -s $SCRIPT_DIR/3rdParty/BogaudioModules $SCRIPT_DIR/Rack/plugins/BogaudioModules      
+ln -s $SCRIPT_DIR/SchweineSystem $SCRIPT_DIR/Rack/plugins/SchweineSystem
 
 cd $SCRIPT_DIR/3rdParty/Fundamental
 git switch v2
