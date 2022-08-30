@@ -1,8 +1,6 @@
 #include "RemoteScript.h"
 #include "RemoteScriptPanel.h"
 
-#include <osdialog.h>
-
 #include <Tools/File.h>
 #include <Tools/SevenBit.h>
 
@@ -19,7 +17,8 @@ RemoteScript::RemoteScript()
 {
    setup();
    displayController.fill();
-   displayController.onClicked(this, &RemoteScript::displayClicked);
+   //displayController.onClicked(this, &RemoteScript::displayClicked);
+   displayController.onClickedOpenFileFunction(this, &RemoteScript::setScriptFileName, "Python:py");
 
    connectionButton.setDefaultColor(Svin::Color{0, 255, 0});
 
@@ -135,9 +134,7 @@ void RemoteScript::displayClicked(const float& x, const float& y)
    (void)x;
    (void)y;
 
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, osdialog_filters_parse("Python:py"));
-   if (path)
-      setScriptFileName(std::string(path));
+   setScriptFileName(getOpenFileName("Python:py"));
 }
 
 // widget

@@ -1,8 +1,6 @@
 #include "MidiReplay.h"
 #include "MidiReplayPanel.h"
 
-#include <osdialog.h>
-
 #include <Music/Note.h>
 #include <Tools/File.h>
 #include <Tools/Variable.h>
@@ -277,9 +275,7 @@ void MidiReplay::displayClicked(const float& x, const float& y)
    (void)x;
    (void)y;
 
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, osdialog_filters_parse("MIDI:mid"));
-   if (path)
-      loadMidiFile(std::string(path));
+   loadMidiFile(getOpenFileName("MIDI:mid"));
 }
 
 // widget

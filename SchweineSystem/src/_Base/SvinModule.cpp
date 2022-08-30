@@ -1,13 +1,15 @@
 #include "SvinModule.h"
 
+#include <osdialog.h>
+
 // majordomo
 
-Svin::Module::Majordomo *Svin::Module::Majordomo::me = nullptr;
+Svin::Module::Majordomo* Svin::Module::Majordomo::me = nullptr;
 Svin::Module::Queue Svin::Module::Majordomo::sendBuffer = Svin::Module::Queue();
 
 using LockGuard = std::lock_guard<std::mutex>;
 
-void Svin::Module::Majordomo::hello(Svin::Module *server)
+void Svin::Module::Majordomo::hello(Svin::Module* server)
 {
    if (!me)
       me = new Majordomo();
@@ -20,14 +22,14 @@ void Svin::Module::Majordomo::hello(Svin::Module *server)
    me->instanceList.push_back(server);
 }
 
-void Svin::Module::Majordomo::bye(Svin::Module *server)
+void Svin::Module::Majordomo::bye(Svin::Module* server)
 {
    if (!me)
       return;
 
    const LockGuard lock(me->mutex);
 
-   std::vector<Svin::Module *>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
+   std::vector<Svin::Module*>::iterator it = std::find(me->instanceList.begin(), me->instanceList.end(), server);
    if (it != me->instanceList.end())
       me->instanceList.erase(it);
 
@@ -35,7 +37,7 @@ void Svin::Module::Majordomo::bye(Svin::Module *server)
       me->stop();
 }
 
-void Svin::Module::Majordomo::send(const Queue &messages)
+void Svin::Module::Majordomo::send(const Queue& messages)
 {
    if (!me)
       return;
@@ -65,7 +67,10 @@ void Svin::Module::Majordomo::process()
 }
 
 Svin::Module::Majordomo::Majordomo()
-    : mutex(), midiInput(), midiOutput(), instanceList()
+   : mutex()
+   , midiInput()
+   , midiOutput()
+   , instanceList()
 {
 }
 
@@ -86,7 +91,7 @@ void Svin::Module::Majordomo::stop()
    midiInput.closePort();
 }
 
-void Svin::Module::Majordomo::midiReceive(double timeStamp, std::vector<unsigned char> *message, void *userData)
+void Svin::Module::Majordomo::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
 {
    (void)timeStamp;
 
@@ -102,7 +107,7 @@ void Svin::Module::Majordomo::midiReceive(double timeStamp, std::vector<unsigned
       if (0 == buffer.size())
          return;
 
-      for (Module *module : me->instanceList)
+      for (Module* module : me->instanceList)
          module->dataFromMidiInput(buffer);
       buffer.clear();
    };
@@ -119,7 +124,7 @@ void Svin::Module::Majordomo::midiReceive(double timeStamp, std::vector<unsigned
    maybeProcessBuffer();
 }
 
-void Svin::Module::Majordomo::midiError(RtMidiError::Type type, const std::string &errorText, void *userData)
+void Svin::Module::Majordomo::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
 {
    if (me != userData)
       return;
@@ -139,7 +144,16 @@ void Svin::Module::updateDisplays()
    // do nothing
 }
 
-void Svin::Module::dataFromMidiInput(const Bytes &message)
+std::string Svin::Module::getOpenFileName(const std::string& filter) const
+{
+   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, osdialog_filters_parse(filter.c_str()));
+   if (path)
+      return std::string(path);
+   else
+      return std::string();
+}
+
+void Svin::Module::dataFromMidiInput(const Bytes& message)
 {
    (void)message;
    // do nothing

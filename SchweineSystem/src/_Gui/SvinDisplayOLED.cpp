@@ -170,6 +170,7 @@ Svin::DisplayOLED::Controller::Controller(Module* module, const uint16_t& pixelI
    , width(1)
    , height(1)
    , clickedFunctionList()
+   , openFileList()
 {
 }
 
@@ -240,6 +241,15 @@ void Svin::DisplayOLED::Controller::clicked(const float& x, const float& y)
 {
    for (ClickedFunction& clickedFunction : clickedFunctionList)
       clickedFunction(x, y);
+
+   for (OpenFile& openFile : openFileList)
+   {
+      const std::string fileName = module->getOpenFileName(openFile.filter);
+      if (fileName.empty())
+         continue;
+
+      openFile.function(fileName);
+   }
 }
 
 // widget

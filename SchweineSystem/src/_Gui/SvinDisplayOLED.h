@@ -31,9 +31,6 @@ namespace Svin
       class Controller : public InstanceMap<Controller>
       {
       public:
-         using ClickedFunction = std::function<void(const float& x, const float& y)>;
-
-      public:
          Controller(Module* module, const uint16_t& pixelId);
 
       public:
@@ -49,6 +46,9 @@ namespace Svin
 
          template <typename ClassType>
          void onClicked(ClassType* instance, void (ClassType::*functionPointer)(const float&, const float&));
+
+         template <typename ClassType>
+         void onClickedOpenFileFunction(ClassType* instance, void (ClassType::*functionPointer)(const std::string& fileName), const std::string& filter);
 
       private:
          void clicked(const float& x, const float& y);
@@ -74,6 +74,17 @@ namespace Svin
             NVGcolor color;
          };
 
+         using ClickedFunction = std::function<void(const float& x, const float& y)>;
+
+         struct OpenFile
+         {
+            using Function = std::function<void(const std::string& fileName)>;
+
+            Function function;
+            const std::string filter;
+
+            using List = std::vector<OpenFile>;
+         };
 
          friend class Widget;
 
@@ -85,11 +96,11 @@ namespace Svin
          uint8_t height;
 
          std::vector<ClickedFunction> clickedFunctionList;
+         OpenFile::List openFileList;
       };
 
       class Widget : public rack::widget::Widget, private InstanceMap<Controller>::Access
       {
-
       public:
          Widget(rack::math::Vec pos, Module* module, const uint16_t& pixelId, const uint8_t& width, const uint8_t& height);
 
@@ -100,7 +111,6 @@ namespace Svin
       private:
          uint8_t width;
          uint8_t height;
-
       };
    }; // namespace DisplayOLED
 } // namespace Svin

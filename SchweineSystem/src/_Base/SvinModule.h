@@ -21,8 +21,7 @@ namespace Svin
 
    public:
       virtual void updateDisplays();
-
-   public:
+      std::string getOpenFileName(const std::string& filter) const;
 
    protected:
       // communicate with external helper apps via midi

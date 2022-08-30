@@ -1,8 +1,6 @@
 #include "WavPlayer.h"
 #include "WavPlayerPanel.h"
 
-#include <osdialog.h>
-
 #include <Tools/Convert.h>
 
 #include <SvinJson.h>
@@ -158,9 +156,7 @@ void WavPlayer::displayClicked(const float& x, const float& y)
    (void)x;
    (void)y;
 
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, osdialog_filters_parse("Wav:wav"));
-   if (path)
-      setWavFileName(std::string(path));
+   setWavFileName(getOpenFileName("Wav:wav"));
 }
 
 // widget

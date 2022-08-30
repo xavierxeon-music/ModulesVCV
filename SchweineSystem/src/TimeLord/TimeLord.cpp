@@ -1,8 +1,6 @@
 #include "TimeLord.h"
 #include "TimeLordPanel.h"
 
-#include <osdialog.h>
-
 #include <Midi/MidiCommon.h>
 #include <Tools/File.h>
 #include <Tools/SevenBit.h>
@@ -592,9 +590,7 @@ void TimeLord::displayClicked(const float& x, const float& y)
    (void)x;
    (void)y;
 
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, osdialog_filters_parse("Ramps:json"));
-   if (path)
-      loadRamps(std::string(path));
+   loadRamps(getOpenFileName("Ramps:json"));
 }
 
 // widget

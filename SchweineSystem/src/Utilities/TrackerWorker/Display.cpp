@@ -1,7 +1,5 @@
 #include "Display.h"
 
-#include <osdialog.h>
-
 #include <Tools/Convert.h>
 #include <Tools/Variable.h>
 
@@ -138,7 +136,5 @@ void Display::displayClicked(const float& x, const float& y)
    (void)x;
    (void)y;
 
-   const char* path = osdialog_file(OSDIALOG_OPEN, nullptr, nullptr, osdialog_filters_parse("Projects:json"));
-   if (path)
-      main->loadProject(std::string(path));
+   main->loadProject(main->getOpenFileName("Projects:json"));
 }
