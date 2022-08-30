@@ -46,10 +46,6 @@ TrackerWorker::TrackerWorker()
 
 void TrackerWorker::process(const ProcessArgs& args)
 {
-   // clock
-   const bool isClock = clockInput.isTriggered();
-   const bool isReset = resetInput.isTriggered();
-
    if (loopButton.isTriggered())
    {
       bool loop = project.isLooping();
@@ -58,12 +54,6 @@ void TrackerWorker::process(const ProcessArgs& args)
    }
    loopButton.setActive(project.isLooping());
 
-   if (isReset)
-      tempo.clockReset();
-   else if (isClock)
-      tempo.clockTick();
-   else
-      tempo.advance(args.sampleRate);
 
    // operation mode
    if (operationModeButton.isTriggered())
@@ -71,6 +61,12 @@ void TrackerWorker::process(const ProcessArgs& args)
       static const std::vector<OperationMode> order = {OperationMode::Passthrough, OperationMode::Remote, OperationMode::InternalOverview, OperationMode::InternalCurrent};
       Variable::Enum<OperationMode> variable(operationMode, order, true);
       variable.increment();
+   }
+
+   for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+   {
+      if (16 != outputList[groupIndex]->getNumberOfChannels())
+         outputList[groupIndex]->setNumberOfChannels(16);
    }
 
    // do stuff
@@ -84,10 +80,20 @@ void TrackerWorker::process(const ProcessArgs& args)
    }
    else
    {
-      if (isReset)
+      if (resetInput.isTriggered())
+      {
          project.clockReset();
-      else if (isClock)
+         tempo.clockReset();
+      }
+      else if (clockInput.isTriggered())
+      {
          project.clockTick();
+         tempo.clockTick();
+      }
+      else
+      {
+         tempo.advance(args.sampleRate);
+      }
 
       processInternal();
    }
@@ -195,7 +201,7 @@ void TrackerWorker::processInternal()
          const uint8_t laneIndex = 16 * groupIndex + channelIndex;
          const Tracker::Lane& lane = project.getLane(laneIndex);
 
-         const uint8_t value = lane.getSegmentValue(currentIndex, percentage);
+         const uint8_t value = tempo.isRunningOrFirstTick() ? lane.getSegmentValue(currentIndex, percentage) : 0.0;
 
          const float voltage = valueToVoltage(value);
          outputList[groupIndex]->setVoltage(voltage, channelIndex);

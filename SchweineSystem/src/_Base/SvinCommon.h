@@ -32,6 +32,7 @@ namespace Svin
 
    public:
       ElementList(Module* module);
+      ~ElementList();
 
    public:
       void append(const std::vector<uint16_t>& indexList);  // single id
@@ -40,7 +41,7 @@ namespace Svin
 
    private:
       Module* module;
-      std::vector<ElementType> instanceList;
+      std::vector<ElementType*> instanceList;
    };
 
    // keeep list of all instances of a type

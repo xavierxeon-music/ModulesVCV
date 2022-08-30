@@ -15,6 +15,7 @@ MetropolixClock::MetropolixClock()
    , tempo()
    , clockOutput(this, Panel::Clock)
    , resetOutput(this, Panel::Reset)
+   , clockCounter(0)
    , clockInput(this, Panel::Override_Clock)
    , resetInput(this, Panel::Override_Reset)
    , duration(0)
@@ -46,7 +47,7 @@ void MetropolixClock::process(const ProcessArgs& args)
       {
          duration++;
          tempo.clockTick();
-         clockOutput.trigger();
+         clockCounter++;
       }
       else
          tempo.advance(args.sampleRate);
@@ -54,8 +55,9 @@ void MetropolixClock::process(const ProcessArgs& args)
    else
    {
       midi::Message msg;
+      uint16_t messageCounter = 0;
       while (midiInput.tryPop(&msg, args.frame))
-         processMessage(msg);
+         processMessage(msg, ++messageCounter);
 
       if (doNotAdvanceTempo)
          doNotAdvanceTempo = false;
@@ -63,8 +65,12 @@ void MetropolixClock::process(const ProcessArgs& args)
          tempo.advance(args.sampleRate);
    }
 
-   clockOutput.animateTriggers(args);
    resetOutput.animateTriggers(args);
+   if (!clockOutput.animateTriggers(args) && clockCounter > 0)
+   {
+      clockOutput.trigger();
+      clockCounter--;
+   }
 }
 
 void MetropolixClock::updateDisplays()
@@ -110,8 +116,8 @@ void MetropolixClock::updateDisplays()
    displayController.writeText(41, 150, timeText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 }
 
-void MetropolixClock::processMessage(const midi::Message& msg)
-{
+void MetropolixClock::processMessage(const midi::Message& msg, uint16_t messageCounter)
+{  
    const bool isSystemEvent = (0xF0 == (msg.bytes[0] & 0xF0));
    if (!isSystemEvent)
       return;
@@ -123,7 +129,7 @@ void MetropolixClock::processMessage(const midi::Message& msg)
       if (0 == tickCounter.valueAndNext())
       {
          tempo.clockTick();
-         clockOutput.trigger();
+         clockCounter++;
          doNotAdvanceTempo = true;
          duration++;
       }
@@ -139,6 +145,7 @@ void MetropolixClock::processMessage(const midi::Message& msg)
          tickCounter.reset();
          tempo.clockReset();
          resetOutput.trigger();
+         clockCounter = 0;
          doNotAdvanceTempo = true;
          duration = 0;
       }

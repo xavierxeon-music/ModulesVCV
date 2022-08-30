@@ -7,6 +7,7 @@ Svin::LightMeter::Controller::Controller(Module* module, const uint16_t& valueId
    , valueMapper(0.0, 1.0, 0.0, 100.0)
    , value(0)
 {
+   std::cout << __FUNCTION__ << " " << this << std::endl;
 }
 
 void Svin::LightMeter::Controller::setMaxValue(const uint16_t& newMaxValue)
@@ -16,7 +17,7 @@ void Svin::LightMeter::Controller::setMaxValue(const uint16_t& newMaxValue)
 
 void Svin::LightMeter::Controller::setValue(const uint32_t& newValue)
 {
-   value = newValue;
+   value = valueMapper(newValue);
 }
 
 // widget
@@ -41,9 +42,12 @@ void Svin::LightMeter::Widget::drawLayer(const DrawArgs& args, int layer)
    const uint8_t meterValue = [&]() -> uint8_t
    {
       if (!controller)
-         return 13;
+         return 0;
 
-      return static_cast<uint8_t>(meterMapper(controller->value));
+      const uint32_t controllerValue = controller->value;
+      const uint8_t meterValue = static_cast<uint8_t>(meterMapper(controllerValue));
+
+      return meterValue;
    }();
 
    auto drawSegment = [&](const uint8_t index, const uint8_t colorIndex)

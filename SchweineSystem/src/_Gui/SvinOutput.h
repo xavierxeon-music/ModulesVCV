@@ -24,7 +24,7 @@ namespace Svin
       void setVoltage(const float& value, const uint8_t channel = 0);
       // trigger
       void trigger(const uint8_t channel = 0);
-      void animateTriggers(const rack::Module::ProcessArgs& args);
+      bool animateTriggers(const rack::Module::ProcessArgs& args); // trigger is active
       // gate
       void setOn(const uint8_t channel = 0);
       void setOff(const uint8_t channel = 0);

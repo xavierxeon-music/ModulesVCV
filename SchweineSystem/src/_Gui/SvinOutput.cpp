@@ -42,15 +42,22 @@ void Svin::Output::trigger(const uint8_t channel)
    pulses[channel].trigger();
 }
 
-void Svin::Output::animateTriggers(const rack::Module::ProcessArgs& args)
+bool Svin::Output::animateTriggers(const rack::Module::ProcessArgs& args)
 {
+   bool active = false;
    for (uint8_t channel = 0; channel < 16; channel++)
    {
       if (channel < getNumberOfChannels() && pulses[channel].process(args.sampleTime))
+      {
          setOn(channel);
+         active = true;
+      }
       else
+      {
          setOff(channel);
+      }
    }
+   return active;
 }
 
 void Svin::Output::setOn(const uint8_t channel)

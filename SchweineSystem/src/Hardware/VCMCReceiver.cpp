@@ -44,6 +44,7 @@ VCMCReceiver::VCMCReceiver()
                        Panel::RGB_Latch_Channel7,
                        Panel::RGB_Latch_Channel8});
 
+   std::cout << __FUNCTION__ << std::endl;
    cvMeter.append({Panel::Value_CV_Channel1,
                    Panel::Value_CV_Channel2,
                    Panel::Value_CV_Channel3,
@@ -60,6 +61,7 @@ VCMCReceiver::VCMCReceiver()
                    Panel::Value_Slider_Channel6,
                    Panel::Value_Slider_Channel7,
                    Panel::Value_Slider_Channel8});
+   std::cout << __FUNCTION__ << std::endl;
 
    for (uint8_t index = 0; index < 8; index++)
    {

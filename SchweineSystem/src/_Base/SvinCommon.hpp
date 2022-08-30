@@ -13,11 +13,19 @@ Svin::ElementList<ElementType>::ElementList(Module* module)
 }
 
 template <typename ElementType>
+Svin::ElementList<ElementType>::~ElementList()
+{
+   for (ElementType* element : instanceList)
+      delete element;
+   instanceList.clear();
+}
+
+template <typename ElementType>
 void Svin::ElementList<ElementType>::append(const std::vector<uint16_t>& paramIndexList)
 {
    for (const uint16_t paramIndex : paramIndexList)
    {
-      ElementType element(module, paramIndex);
+      ElementType* element = new ElementType(module, paramIndex);
       instanceList.push_back(element);
    }
 }
@@ -27,7 +35,7 @@ void Svin::ElementList<ElementType>::append(const typename Params::List& paramsL
 {
    for (const Params& params : paramsList)
    {
-      ElementType element(module, params.paramA, params.paramB);
+      ElementType* element = new ElementType(module, params.paramA, params.paramB);
       instanceList.push_back(element);
    }
 }
@@ -35,7 +43,7 @@ void Svin::ElementList<ElementType>::append(const typename Params::List& paramsL
 template <typename ElementType>
 ElementType* Svin::ElementList<ElementType>::operator[](const uint16_t& index)
 {
-   return &instanceList[index];
+   return instanceList[index];
 }
 
 // InstanceMap::Access
@@ -56,7 +64,8 @@ ContentType* Svin::InstanceMap<ContentType>::Access::findIntstance() const
    if (idMap.find(identifier) == idMap.end())
       return nullptr;
 
-   return idMap.at(identifier);
+   ContentType* instance = idMap.at(identifier);
+   return instance;
 }
 
 // InstanceMap
@@ -69,6 +78,7 @@ Svin::InstanceMap<ControllerType>::InstanceMap(Module* module, const uint16_t id
    : Base{module, identifier}
 {
    instances[module][identifier] = controller;
+   std::cout << module << " " << identifier << " " << controller << std::endl;
 }
 
 template <typename ControllerType>

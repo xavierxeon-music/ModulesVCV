@@ -29,7 +29,7 @@ public:
 
 private:
    void setup();
-   void processMessage(const midi::Message& msg);
+   void processMessage(const midi::Message& msg, uint16_t messageCounter);
    void connectToMidiDevice();
 
 private:
@@ -43,6 +43,7 @@ private:
    Tempo tempo;
    Svin::Output clockOutput;
    Svin::Output resetOutput;
+   uint8_t clockCounter;
 
    // time
    Svin::Input clockInput;
