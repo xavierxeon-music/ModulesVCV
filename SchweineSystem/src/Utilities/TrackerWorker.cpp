@@ -7,11 +7,11 @@
 #include <Tools/SevenBit.h>
 #include <Tools/Variable.h>
 
-#include <SvinMasterClock.h>
 #include <SvinOrigin.h>
 
 TrackerWorker::TrackerWorker()
    : Svin::Module()
+   , Svin::MasterClock::Client()
    , fileName()
    , project()
    , eventNameList()
@@ -66,7 +66,6 @@ void TrackerWorker::process(const ProcessArgs& args)
    }
 
    // do stuff
-   const Svin::MasterClock* clock = Svin::MasterClock::the();
    if (OperationMode::Passthrough == operationMode)
    {
       processPassthrough();
@@ -75,18 +74,21 @@ void TrackerWorker::process(const ProcessArgs& args)
    {
       proccessRemote();
    }
-   else if (clock)
+   if (hasReset())
    {
-      if (Svin::MasterClock::Signal::Reset == clock->getSignal())
-         project.clockReset();
-      else if (Svin::MasterClock::Signal::Tick == clock->getSignal())
-         project.clockTick();
-
-      processInternal();
+      project.clockReset();
    }
    else
    {
-      zeroOutputs();
+      bool doProcess = true;
+      while (hasTick())
+      {
+         project.clockTick();
+         doProcess = false;
+         std::cout << "tock " << getDuration() << std::endl;
+      }
+      if (doProcess)
+         processInternal();
    }
 }
 
@@ -152,11 +154,7 @@ void TrackerWorker::loadProject(const std::string& newFileName)
 
 void TrackerWorker::processPassthrough()
 {
-   const Svin::MasterClock* clock = Svin::MasterClock::the();
-   if (!clock)
-      return zeroOutputs();
-
-   const bool on = clock->getTempo().isRunningOrFirstTick();
+   const bool on = getTempo().isRunningOrFirstTick();
 
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
    {
@@ -174,11 +172,7 @@ void TrackerWorker::processPassthrough()
 
 void TrackerWorker::proccessRemote()
 {
-   const Svin::MasterClock* clock = Svin::MasterClock::the();
-   if (!clock)
-      return zeroOutputs();
-
-   const bool on = clock->getTempo().isRunningOrFirstTick();
+   const bool on = getTempo().isRunningOrFirstTick();
 
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
    {
@@ -194,13 +188,10 @@ void TrackerWorker::proccessRemote()
 
 void TrackerWorker::processInternal()
 {
-   const Svin::MasterClock* clock = Svin::MasterClock::the();
-   if (!clock)
-      return zeroOutputs();
-
-   const bool on = clock->getTempo().isRunningOrFirstTick();
+   const Tempo tempo = getTempo();
+   const bool on = tempo.isRunningOrFirstTick();
    const uint32_t currentIndex = project.getCurrentSegmentIndex();
-   const float percentage = clock->getTempo().getPercentage(project.getDivison());
+   const float percentage = tempo.getPercentage(project.getDivison());
 
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
    {
@@ -213,17 +204,6 @@ void TrackerWorker::processInternal()
 
          const float voltage = valueToVoltage(value);
          outputList[groupIndex]->setVoltage(voltage, channelIndex);
-      }
-   }
-}
-
-void TrackerWorker::zeroOutputs()
-{
-   for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
-   {
-      for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
-      {
-         outputList[groupIndex]->setVoltage(0.0, channelIndex);
       }
    }
 }

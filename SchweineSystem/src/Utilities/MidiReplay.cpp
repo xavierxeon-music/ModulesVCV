@@ -12,6 +12,7 @@
 MidiReplay::MidiReplay()
    : Svin::Module()
    , Svin::Exapnder<BusMidi>(this)
+   , Svin::MasterClock::Client()
    , fileName()
    , midiReplay()
    , info{}
@@ -77,32 +78,33 @@ void MidiReplay::process(const ProcessArgs& args)
    }
 
    // clock
-   const Svin::MasterClock* clock = Svin::MasterClock::the();
-   if (clock)
-      return;
 
-   if (Svin::MasterClock::Signal::Reset == clock->getSignal())
+   if (hasReset())
    {
       duration = 0;
       currentTick = 0;
       lastTick = 0;
    }
-   else if (Svin::MasterClock::Signal::Tick == clock->getSignal())
+   else
    {
-      if (isPlay && !atEnd)
-         duration++;
+      while (hasTick())
+      {
+         if (isPlay && !atEnd)
+            duration++;
+      }
    }
 
    BusMidi busMessage;
-   busMessage.runState = clock->getTempo().getRunState();
-   if (!clock->getTempo().isRunningOrFirstTick())
+   const Tempo tempo = getTempo();
+   busMessage.runState = tempo.getRunState();
+   if (!tempo.isRunningOrFirstTick())
    {
       sendToRight(busMessage);
       return;
    }
 
    // play
-   currentTick = midiReplay.toTick(duration, clock->getTempo().getPercentage(Tempo::Sixteenth));
+   currentTick = midiReplay.toTick(duration, tempo.getPercentage(Tempo::Sixteenth));
 
    busMessage.startTick = lastTick;
    busMessage.endTick = currentTick;
@@ -163,8 +165,8 @@ void MidiReplay::updateDisplays()
 
       displayController.setColor(Svin::Color{255, 255, 255});
 
-      const Svin::MasterClock* clock = Svin::MasterClock::the();
-      const uint8_t bpm = clock ? clock->getTempo().getBeatsPerMinute() : 0;
+      const Tempo tempo = getTempo();
+      const uint8_t bpm = tempo.getBeatsPerMinute();
       displayController.writeText(1, 15, " " + std::to_string(bpm) + " bpm", Svin::DisplayOLED::Font::Small);
 
       const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();

@@ -11,6 +11,7 @@ using namespace rack;
 #include <Music/TimeCode.h>
 
 #include <SvinExapnder.h>
+#include <SvinMasterClock.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -38,7 +39,7 @@ struct BusMidi
    Channel channels[16];
 };
 
-class MidiReplay : public Svin::Module, public Svin::Exapnder<BusMidi>
+class MidiReplay : public Svin::Module, public Svin::Exapnder<BusMidi>, public Svin::MasterClock::Client
 {
 public:
    struct Panel;

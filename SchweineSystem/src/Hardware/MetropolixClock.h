@@ -30,14 +30,13 @@ public:
 
 private:
    void setup();
-   void processMessage(const midi::Message& msg, uint16_t messageCounter);
    void connectToMidiDevice();
 
 private:
    // midi
    midi::InputQueue midiInput;
    Svin::ButtonLED connectionButton;
-   bool doNotAdvanceTempo;
+
    Counter midiTickCounter;
 
    // override

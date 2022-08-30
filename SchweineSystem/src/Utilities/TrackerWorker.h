@@ -7,6 +7,7 @@ using namespace rack;
 #include <Blocks/TrackerProject.h>
 #include <Tools/Range.h>
 
+#include <SvinMasterClock.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -18,7 +19,7 @@ using namespace rack;
 #include "TrackerWorker/Display.h"
 //#include "TrackerWorker/Midi.h"
 
-class TrackerWorker : public Svin::Module
+class TrackerWorker : public Svin::Module, public Svin::MasterClock::Client
 {
 public:
    struct Panel;
@@ -54,7 +55,6 @@ private:
    void processPassthrough();
    void proccessRemote();
    void processInternal();
-   void zeroOutputs();
 
    void updateDisplays() override;
 

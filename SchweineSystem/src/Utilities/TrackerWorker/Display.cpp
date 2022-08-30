@@ -39,8 +39,8 @@ void Display::updatePassthrough()
 
    controller.setColor(Svin::Color{255, 255, 255});
 
-   const Svin::MasterClock* clock = Svin::MasterClock::the();
-   const bool on = clock ? clock->getTempo().isRunningOrFirstTick() : false;
+   const Tempo tempo = main->getTempo();
+   const bool on = tempo.isRunningOrFirstTick();
 
    for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
    {
@@ -68,8 +68,8 @@ void Display::updateRemote()
 
    controller.setColor(Svin::Color{255, 255, 255});
 
-   const Svin::MasterClock* clock = Svin::MasterClock::the();
-   const bool on = clock ? clock->getTempo().isRunningOrFirstTick() : false;
+   const Tempo tempo = main->getTempo();
+   const bool on = tempo.isRunningOrFirstTick();
 
    for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
    {
