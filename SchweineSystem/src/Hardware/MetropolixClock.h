@@ -7,6 +7,7 @@ using namespace rack;
 #include <Music/Tempo.h>
 #include <Music/TimeCode.h>
 
+#include <SvinMasterClock.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -15,7 +16,7 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinOutput.h>
 
-class MetropolixClock : public Svin::Module
+class MetropolixClock : public Svin::Module, public Svin::MasterClock
 {
 public:
    struct Panel;
@@ -36,19 +37,17 @@ private:
    // midi
    midi::InputQueue midiInput;
    Svin::ButtonLED connectionButton;
+   bool doNotAdvanceTempo;
+   Counter tickCounter;
 
    // tempo
-   Counter tickCounter;
-   bool doNotAdvanceTempo;
-   Tempo tempo;
    Svin::Output clockOutput;
    Svin::Output resetOutput;
-   uint8_t clockCounter;
 
-   // time
+   // override
    Svin::Input clockInput;
    Svin::Input resetInput;
-   TimeCode::Duration duration;
+   // display
    Svin::DisplayOLED::Controller displayController;
 };
 
