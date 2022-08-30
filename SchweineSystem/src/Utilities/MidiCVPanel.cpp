@@ -1,7 +1,7 @@
-#include "MidiCV.h"
 #include "MidiCVPanel.h"
+#include "MidiCV.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 void MidiCV::setup()
 {
@@ -14,7 +14,7 @@ void MidiCV::setup()
 
 void MidiCVWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/Utilities/MidiCV.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Utilities/MidiCV.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -22,4 +22,3 @@ void MidiCVWidget::setup()
    makeOutput(this, Vec(30.00, 262.18), MidiCV::Panel::Gate, true);
    makeOutput(this, Vec(30.00, 215.52), MidiCV::Panel::Pitch, true);
 }
-

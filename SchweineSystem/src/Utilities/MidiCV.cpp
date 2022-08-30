@@ -3,7 +3,7 @@
 
 #include <Music/Note.h>
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 MidiCV::MidiCV()
    : Svin::Module()
@@ -101,4 +101,4 @@ MidiCVWidget::MidiCVWidget(MidiCV* module)
    setup();
 }
 
-Model* modelMidiCV = Svin::Master::the()->addModule<MidiCV, MidiCVWidget>("MidiCV");
+Model* modelMidiCV = Svin::Origin::the()->addModule<MidiCV, MidiCVWidget>("MidiCV");

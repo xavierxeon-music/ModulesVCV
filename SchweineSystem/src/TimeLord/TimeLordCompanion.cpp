@@ -1,7 +1,7 @@
 #include "TimeLordCompanion.h"
 #include "TimeLordCompanionPanel.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 TimeLordCompanion::TimeLordCompanion()
    : Svin::Module()
@@ -115,7 +115,7 @@ TimeLordCompanionWidget::TimeLordCompanionWidget(TimeLordCompanion* module)
 {
    setup();
 
-   std::string logoPath = asset::plugin(Svin::Master::the()->instance(), "res/TimeLord/TimeLordLogo.svg");
+   std::string logoPath = asset::plugin(Svin::Origin::the()->instance(), "res/TimeLord/TimeLordLogo.svg");
 
    logoWidget = new Svin::SvgImage(rack::math::Vec(0, 342.5), module, logoPath, 0.4);
    const int16_t x = box.size.x - 0.5 * logoWidget->box.size.x;
@@ -134,4 +134,4 @@ void TimeLordCompanionWidget::preDraw()
    logoWidget->visible = myModule->canCommunicatWithRight();
 }
 
-Model* modelTimeLordCompanion = Svin::Master::the()->addModule<TimeLordCompanion, TimeLordCompanionWidget>("TimeLordCompanion");
+Model* modelTimeLordCompanion = Svin::Origin::the()->addModule<TimeLordCompanion, TimeLordCompanionWidget>("TimeLordCompanion");

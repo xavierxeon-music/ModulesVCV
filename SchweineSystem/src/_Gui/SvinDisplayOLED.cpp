@@ -1,6 +1,6 @@
 #include "SvinDisplayOLED.h"
 
-#include "SvinMaster.h"
+#include <SvinOrigin.h>
 
 // instructions
 
@@ -146,7 +146,7 @@ Svin::DisplayOLED::Controller::Instruction::Text::Text(const NVGcolor& color, co
    , font()
 {
    if (fontPath.empty())
-      fontPath = std::string(rack::asset::plugin(Master::the()->instance(), "res/fonts/FiraCode-Regular.ttf"));
+      fontPath = std::string(rack::asset::plugin(Origin::the()->instance(), "res/fonts/FiraCode-Regular.ttf"));
 }
 
 void Svin::DisplayOLED::Controller::Instruction::Text::draw(NVGcontext* context)
@@ -259,7 +259,6 @@ Svin::DisplayOLED::Widget::Widget(rack::math::Vec pos, Module* module, const uin
       controller->height = height;
    }
 }
-
 
 void Svin::DisplayOLED::Widget::drawLayer(const DrawArgs& args, int layer)
 {

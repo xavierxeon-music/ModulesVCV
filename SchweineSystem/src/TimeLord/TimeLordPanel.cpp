@@ -1,7 +1,7 @@
-#include "TimeLord.h"
 #include "TimeLordPanel.h"
+#include "TimeLord.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 #include <limits>
 
 void TimeLord::setup()
@@ -37,7 +37,7 @@ void TimeLord::setup()
 
 void TimeLordWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/TimeLord/TimeLord.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/TimeLord/TimeLord.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -45,18 +45,18 @@ void TimeLordWidget::setup()
    makeButton(this, Vec(162.42, 274.56), TimeLord::Panel::Display);
    makeButton(this, Vec(148.00, 87.52), TimeLord::Panel::BankUp);
 
-   makeInput(this, Vec(209.59, 355.83),  TimeLord::Panel::Upload, false);
-   makeInput(this, Vec(123.35, 355.83),  TimeLord::Panel::ModeCV, false);
-   makeInput(this, Vec(65.58, 355.83),  TimeLord::Panel::Reset, false);
-   makeInput(this, Vec(31.38, 355.48),  TimeLord::Panel::Clock, false);
-   makeInput(this, Vec(34.07, 289.03),  TimeLord::Panel::Channel8_Pass, false);
-   makeInput(this, Vec(34.07, 251.03),  TimeLord::Panel::Channel7_Pass, false);
-   makeInput(this, Vec(34.07, 213.03),  TimeLord::Panel::Channel6_Pass, false);
-   makeInput(this, Vec(34.07, 175.03),  TimeLord::Panel::Channel5_Pass, false);
-   makeInput(this, Vec(34.07, 137.03),  TimeLord::Panel::Channel4_Pass, false);
-   makeInput(this, Vec(34.07, 99.03),  TimeLord::Panel::Channel3_Pass, false);
-   makeInput(this, Vec(34.07, 61.03),  TimeLord::Panel::Channel2_Pass, false);
-   makeInput(this, Vec(34.07, 23.03),  TimeLord::Panel::Channel1_Pass, false);
+   makeInput(this, Vec(209.59, 355.83), TimeLord::Panel::Upload, false);
+   makeInput(this, Vec(123.35, 355.83), TimeLord::Panel::ModeCV, false);
+   makeInput(this, Vec(65.58, 355.83), TimeLord::Panel::Reset, false);
+   makeInput(this, Vec(31.38, 355.48), TimeLord::Panel::Clock, false);
+   makeInput(this, Vec(34.07, 289.03), TimeLord::Panel::Channel8_Pass, false);
+   makeInput(this, Vec(34.07, 251.03), TimeLord::Panel::Channel7_Pass, false);
+   makeInput(this, Vec(34.07, 213.03), TimeLord::Panel::Channel6_Pass, false);
+   makeInput(this, Vec(34.07, 175.03), TimeLord::Panel::Channel5_Pass, false);
+   makeInput(this, Vec(34.07, 137.03), TimeLord::Panel::Channel4_Pass, false);
+   makeInput(this, Vec(34.07, 99.03), TimeLord::Panel::Channel3_Pass, false);
+   makeInput(this, Vec(34.07, 61.03), TimeLord::Panel::Channel2_Pass, false);
+   makeInput(this, Vec(34.07, 23.03), TimeLord::Panel::Channel1_Pass, false);
 
    makeOutput(this, Vec(204.37, 289.03), TimeLord::Panel::Channel8_Output, false);
    makeOutput(this, Vec(204.37, 251.03), TimeLord::Panel::Channel7_Output, false);
@@ -92,4 +92,3 @@ void TimeLordWidget::setup()
    makeMeter(this, Vec(220.31, 48.03), 5, TimeLord::Panel::Value_Channel2_Strip);
    makeMeter(this, Vec(220.31, 10.03), 5, TimeLord::Panel::Value_Channel1_Strip);
 }
-

@@ -1,7 +1,7 @@
-#include "Revoicer.h"
 #include "RevoicerPanel.h"
+#include "Revoicer.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 #include <limits>
 
 void Revoicer::setup()
@@ -18,17 +18,16 @@ void Revoicer::setup()
 
 void RevoicerWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/Effects/Revoicer.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Effects/Revoicer.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
    makeButton(this, Vec(30.33, 183.71), Revoicer::Panel::Quality_Down);
    makeButton(this, Vec(30.33, 134.83), Revoicer::Panel::Quality_Up);
 
-   makeInput(this, Vec(30.00, 300.34),  Revoicer::Panel::AudioInput, false);
+   makeInput(this, Vec(30.00, 300.34), Revoicer::Panel::AudioInput, false);
 
    makeOutput(this, Vec(30.68, 344.57), Revoicer::Panel::AudioOutput, false);
 
    makeLCD(this, Vec(11.00, 147.27), 2, Revoicer::Panel::Text_Quality_Value, 18);
 }
-

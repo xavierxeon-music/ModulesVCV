@@ -1,7 +1,7 @@
-#include "BitBusCVIn.h"
 #include "BitBusCVInPanel.h"
+#include "BitBusCVIn.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 void BitBusCVIn::setup()
 {
@@ -12,12 +12,11 @@ void BitBusCVIn::setup()
 
 void BitBusCVInWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/BitBus/BitBusCVIn.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusCVIn.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeInput(this, Vec(24.17, 215.77),  BitBusCVIn::Panel::CVIn, false);
+   makeInput(this, Vec(24.17, 215.77), BitBusCVIn::Panel::CVIn, false);
 
    makeLED(this, Vec(49.50, 46.77), BitBusCVIn::Panel::RGB_BusOut);
 }
-

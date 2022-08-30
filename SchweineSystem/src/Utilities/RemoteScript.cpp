@@ -6,7 +6,7 @@
 #include <Tools/File.h>
 #include <Tools/SevenBit.h>
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 RemoteScript::RemoteScript()
    : Svin::Module()
@@ -147,7 +147,7 @@ RemoteScriptWidget::RemoteScriptWidget(RemoteScript* module)
 {
    setup();
 
-   std::string logoPath = asset::plugin(Svin::Master::the()->instance(), "res/Utilities/Python.svg");
+   std::string logoPath = asset::plugin(Svin::Origin::the()->instance(), "res/Utilities/Python.svg");
 
    const float offset = 5.0;
    logoWidget = new Svin::SvgImage(rack::math::Vec(9.00 + offset, 62.34 + offset), module, logoPath, 0.3);
@@ -155,7 +155,6 @@ RemoteScriptWidget::RemoteScriptWidget(RemoteScript* module)
 
    logoWidget->visible = false;
 }
-
 
 void RemoteScriptWidget::preDraw()
 {
@@ -166,4 +165,4 @@ void RemoteScriptWidget::preDraw()
    logoWidget->visible = myModule->scriptExists();
 }
 
-Model* modelRemoteScript = Svin::Master::the()->addModule<RemoteScript, RemoteScriptWidget>("RemoteScript");
+Model* modelRemoteScript = Svin::Origin::the()->addModule<RemoteScript, RemoteScriptWidget>("RemoteScript");

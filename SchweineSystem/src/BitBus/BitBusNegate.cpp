@@ -3,7 +3,7 @@
 
 #include <Tools/BoolField.h>
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 BitBusNegate::BitBusNegate()
    : Svin::Module()
@@ -114,4 +114,4 @@ BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
    setup();
 }
 
-Model* modelBitBusNegate = Svin::Master::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");
+Model* modelBitBusNegate = Svin::Origin::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");

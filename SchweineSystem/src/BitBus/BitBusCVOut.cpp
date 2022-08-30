@@ -3,7 +3,7 @@
 
 #include <Tools/BoolField.h>
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 BitBusCVOut::BitBusCVOut()
    : Svin::Module()
@@ -44,4 +44,4 @@ BitBusCVOutWidget::BitBusCVOutWidget(BitBusCVOut* module)
    setup();
 }
 
-Model* modelBitBusCVOut = Svin::Master::the()->addModule<BitBusCVOut, BitBusCVOutWidget>("BitBusCVOut");
+Model* modelBitBusCVOut = Svin::Origin::the()->addModule<BitBusCVOut, BitBusCVOutWidget>("BitBusCVOut");

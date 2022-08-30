@@ -1,7 +1,7 @@
-#include "TimeLordVCMCReceiver.h"
 #include "TimeLordVCMCReceiverPanel.h"
+#include "TimeLordVCMCReceiver.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 void TimeLordVCMCReceiver::setup()
 {
@@ -39,7 +39,7 @@ void TimeLordVCMCReceiver::setup()
 
 void TimeLordVCMCReceiverWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/TimeLord/TimeLordVCMCReceiver.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/TimeLord/TimeLordVCMCReceiver.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -100,4 +100,3 @@ void TimeLordVCMCReceiverWidget::setup()
    makeMeter(this, Vec(132.34, 51.03), 5, TimeLordVCMCReceiver::Panel::Value_Channel1_Slider7_Strip);
    makeMeter(this, Vec(91.18, 51.03), 5, TimeLordVCMCReceiver::Panel::Value_Channel1_CV7_Strip);
 }
-

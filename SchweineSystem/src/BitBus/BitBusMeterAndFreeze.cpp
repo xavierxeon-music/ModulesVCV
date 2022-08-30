@@ -1,7 +1,7 @@
 #include "BitBusMeterAndFreeze.h"
 #include "BitBusMeterAndFreezePanel.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 // meter and freeze
 
@@ -100,4 +100,4 @@ BitBusMeterAndFreezeWidget::BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* mod
    setup();
 }
 
-Model* modelBitBusMeterAndFreeze = Svin::Master::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");
+Model* modelBitBusMeterAndFreeze = Svin::Origin::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");

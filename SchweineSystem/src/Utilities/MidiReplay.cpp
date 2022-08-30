@@ -8,7 +8,7 @@
 #include <Tools/Variable.h>
 
 #include <SvinJson.h>
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 MidiReplay::MidiReplay()
    : Svin::Module()
@@ -290,4 +290,4 @@ MidiReplayWidget::MidiReplayWidget(MidiReplay* module)
    setup();
 }
 
-Model* modelMidiReplay = Svin::Master::the()->addModule<MidiReplay, MidiReplayWidget>("MidiReplay");
+Model* modelMidiReplay = Svin::Origin::the()->addModule<MidiReplay, MidiReplayWidget>("MidiReplay");

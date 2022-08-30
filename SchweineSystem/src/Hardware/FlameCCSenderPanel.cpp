@@ -1,7 +1,7 @@
-#include "FlameCCSender.h"
 #include "FlameCCSenderPanel.h"
+#include "FlameCCSender.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 void FlameCCSender::setup()
 {
@@ -16,7 +16,7 @@ void FlameCCSender::setup()
 
 void FlameCCSenderWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/Hardware/FlameCCSender.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Hardware/FlameCCSender.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -24,6 +24,5 @@ void FlameCCSenderWidget::setup()
 
    makeLEDButton(this, Vec(30.00, 350.06), FlameCCSender::Panel::Connect, FlameCCSender::Panel::RGB_Connect);
 
-   makeInput(this, Vec(30.00, 261.36),  FlameCCSender::Panel::Voltages, true);
+   makeInput(this, Vec(30.00, 261.36), FlameCCSender::Panel::Voltages, true);
 }
-

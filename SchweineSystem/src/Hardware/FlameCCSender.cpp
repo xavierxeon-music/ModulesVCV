@@ -1,7 +1,7 @@
 #include "FlameCCSender.h"
 #include "FlameCCSenderPanel.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 FlameCCSender::FlameCCSender()
    : Svin::Module()
@@ -105,9 +105,9 @@ void FlameCCSender::save(Svin::Json::Object& rootObject)
 // widget
 
 FlameCCSenderWidget::FlameCCSenderWidget(FlameCCSender* module)
-: Svin::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelFlameCCSender = Svin::Master::the()->addModule<FlameCCSender, FlameCCSenderWidget>("FlameCCSender");
+Model* modelFlameCCSender = Svin::Origin::the()->addModule<FlameCCSender, FlameCCSenderWidget>("FlameCCSender");

@@ -3,7 +3,7 @@
 
 #include <Tools/BoolField.h>
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 BitBusTransmutor::BitBusTransmutor()
    : Svin::Module()
@@ -58,4 +58,4 @@ BitBusTransmutorWidget::BitBusTransmutorWidget(BitBusTransmutor* module)
    setup();
 }
 
-Model* modelBitBusTransmutor = Svin::Master::the()->addModule<BitBusTransmutor, BitBusTransmutorWidget>("BitBusTransmutor");
+Model* modelBitBusTransmutor = Svin::Origin::the()->addModule<BitBusTransmutor, BitBusTransmutorWidget>("BitBusTransmutor");

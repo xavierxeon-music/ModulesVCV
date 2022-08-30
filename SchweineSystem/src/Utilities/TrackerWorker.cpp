@@ -7,8 +7,8 @@
 #include <Tools/SevenBit.h>
 #include <Tools/Variable.h>
 
-#include <SvinMaster.h>
 #include <SvinMasterClock.h>
+#include <SvinOrigin.h>
 
 TrackerWorker::TrackerWorker()
    : Svin::Module()
@@ -260,4 +260,4 @@ TrackerWorkerWidget::TrackerWorkerWidget(TrackerWorker* module)
    setup();
 }
 
-Model* modelTrackerWorker = Svin::Master::the()->addModule<TrackerWorker, TrackerWorkerWidget>("TrackerWorker");
+Model* modelTrackerWorker = Svin::Origin::the()->addModule<TrackerWorker, TrackerWorkerWidget>("TrackerWorker");

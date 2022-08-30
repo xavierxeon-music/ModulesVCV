@@ -1,13 +1,13 @@
-#ifndef SvinMasterHPP
-#define SvinMasterHPP
+#ifndef SvinOriginHPP
+#define SvinOriginHPP
 
-#include "SvinMaster.h"
+#include "SvinOrigin.h"
 
 template <typename AudioClass, typename WidgetClass>
-Model* Svin::Master::addModule(const std::string& name)
+Model* Svin::Origin::addModule(const std::string& name)
 {
    Model* model = createModel<AudioClass, WidgetClass>(name);
    modelList.push_back(model);
    return model;
 }
-#endif // NOT SvinMasterHPP
+#endif // NOT SvinOriginHPP

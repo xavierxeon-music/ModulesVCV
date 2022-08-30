@@ -1,7 +1,7 @@
 #include "MeshStack.h"
 #include "MeshStackPanel.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 MeshStack::MeshStack()
    : Svin::Module()
@@ -20,4 +20,4 @@ MeshStackWidget::MeshStackWidget(MeshStack* module)
    setup();
 }
 
-Model* modelMeshStack = Svin::Master::the()->addModule<MeshStack, MeshStackWidget>("MeshStack");
+Model* modelMeshStack = Svin::Origin::the()->addModule<MeshStack, MeshStackWidget>("MeshStack");

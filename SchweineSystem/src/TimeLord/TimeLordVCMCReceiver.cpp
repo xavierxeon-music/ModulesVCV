@@ -6,8 +6,8 @@
 
 #include <SvinDisplayLCD.h>
 #include <SvinJson.h>
-#include <SvinMaster.h>
 #include <SvinMidiOutput.h>
+#include <SvinOrigin.h>
 
 TimeLordVCMCReceiver::TimeLordVCMCReceiver()
    : Svin::Module()
@@ -230,4 +230,4 @@ TimeLordVCMCReceiverWidget::TimeLordVCMCReceiverWidget(TimeLordVCMCReceiver* mod
    setup();
 }
 
-Model* modelTimeLordVCMCReceiver = Svin::Master::the()->addModule<TimeLordVCMCReceiver, TimeLordVCMCReceiverWidget>("TimeLordVCMCReceiver");
+Model* modelTimeLordVCMCReceiver = Svin::Origin::the()->addModule<TimeLordVCMCReceiver, TimeLordVCMCReceiverWidget>("TimeLordVCMCReceiver");

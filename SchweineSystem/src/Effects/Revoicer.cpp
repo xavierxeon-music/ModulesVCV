@@ -4,7 +4,7 @@
 #include <Tools/Variable.h>
 
 #include <SvinJson.h>
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 Revoicer::Revoicer()
    : Svin::Module()
@@ -70,4 +70,4 @@ RevoicerWidget::RevoicerWidget(Revoicer* module)
    setup();
 }
 
-Model* modelRevoicer = Svin::Master::the()->addModule<Revoicer, RevoicerWidget>("Revoicer");
+Model* modelRevoicer = Svin::Origin::the()->addModule<Revoicer, RevoicerWidget>("Revoicer");

@@ -9,7 +9,7 @@
 #include <Tools/Variable.h>
 
 #include <SvinJson.h>
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 const std::string TimeLord::keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -605,7 +605,7 @@ TimeLordWidget::TimeLordWidget(TimeLord* module)
 {
    setup();
 
-   std::string logoPath = asset::plugin(Svin::Master::the()->instance(), "res/TimeLord/TimeLordLogo.svg");
+   std::string logoPath = asset::plugin(Svin::Origin::the()->instance(), "res/TimeLord/TimeLordLogo.svg");
 
    logoWidget = new Svin::SvgImage(rack::math::Vec(0, 342.5), module, logoPath, 0.4);
    logoWidget->shift(math::Vec(-0.5, 0.0));
@@ -623,4 +623,4 @@ void TimeLordWidget::preDraw()
    logoWidget->visible = myModule->canCommunicatWithLeft();
 }
 
-Model* modelTimeLord = Svin::Master::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");
+Model* modelTimeLord = Svin::Origin::the()->addModule<TimeLord, TimeLordWidget>("TimeLord");

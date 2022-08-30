@@ -1,6 +1,6 @@
 #include "SvinDisplayLCD.h"
 
-#include "SvinMaster.h"
+#include <SvinOrigin.h>
 
 // controller
 
@@ -35,7 +35,7 @@ Svin::DisplayLCD::Widget::Widget(rack::math::Vec pos, Module* module, const uint
    , fontPath()
    , fontSize(fontSize)
 {
-   fontPath = std::string(rack::asset::plugin(Master::the()->instance(), "res/fonts/Segment14.ttf"));
+   fontPath = std::string(rack::asset::plugin(Origin::the()->instance(), "res/fonts/Segment14.ttf"));
    box.pos = rack::math::Vec(pos.x + 2, pos.y + fontSize + 2);
 }
 

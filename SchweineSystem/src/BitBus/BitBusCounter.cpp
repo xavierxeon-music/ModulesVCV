@@ -4,7 +4,7 @@
 #include <Tools/BoolField.h>
 #include <Tools/Variable.h>
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 BitBusCounter::BitBusCounter()
    : Svin::Module()
@@ -92,4 +92,4 @@ BitBusCounterWidget::BitBusCounterWidget(BitBusCounter* module)
    setup();
 }
 
-Model* modelBitBusCounter = Svin::Master::the()->addModule<BitBusCounter, BitBusCounterWidget>("BitBusCounter");
+Model* modelBitBusCounter = Svin::Origin::the()->addModule<BitBusCounter, BitBusCounterWidget>("BitBusCounter");

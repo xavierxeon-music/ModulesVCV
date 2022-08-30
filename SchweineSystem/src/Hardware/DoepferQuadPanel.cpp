@@ -1,7 +1,7 @@
-#include "DoepferQuad.h"
 #include "DoepferQuadPanel.h"
+#include "DoepferQuad.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 void DoepferQuad::setup()
 {
@@ -12,10 +12,9 @@ void DoepferQuad::setup()
 
 void DoepferQuadWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/Hardware/DoepferQuad.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Hardware/DoepferQuad.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
    makeLEDButton(this, Vec(30.00, 340.14), DoepferQuad::Panel::Connect, DoepferQuad::Panel::RGB_Connect);
 }
-

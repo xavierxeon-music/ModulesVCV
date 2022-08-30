@@ -1,7 +1,7 @@
-#include "RemoteScript.h"
 #include "RemoteScriptPanel.h"
+#include "RemoteScript.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 void RemoteScript::setup()
 {
@@ -15,7 +15,7 @@ void RemoteScript::setup()
 
 void RemoteScriptWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/Utilities/RemoteScript.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Utilities/RemoteScript.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -26,4 +26,3 @@ void RemoteScriptWidget::setup()
 
    makeOLED(this, Vec(9.00, 62.34), RemoteScript::Panel::Pixels_Display, 40, 40);
 }
-

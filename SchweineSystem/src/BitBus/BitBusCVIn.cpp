@@ -3,7 +3,7 @@
 
 #include <Tools/BoolField.h>
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 BitBusCVIn::BitBusCVIn()
    : Svin::Module()
@@ -48,4 +48,4 @@ BitBusCVInWidget::BitBusCVInWidget(BitBusCVIn* module)
    setup();
 }
 
-Model* modelBitBusCVIn = Svin::Master::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn");
+Model* modelBitBusCVIn = Svin::Origin::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn");

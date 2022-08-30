@@ -3,7 +3,7 @@
 
 #include <Tools/BoolField.h>
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 BitBusBitIn::BitBusBitIn()
    : Svin::Module()
@@ -72,4 +72,4 @@ BitBusBitInWidget::BitBusBitInWidget(BitBusBitIn* module)
    setup();
 }
 
-Model* modelBitBusBitIn = Svin::Master::the()->addModule<BitBusBitIn, BitBusBitInWidget>("BitBusBitIn");
+Model* modelBitBusBitIn = Svin::Origin::the()->addModule<BitBusBitIn, BitBusBitInWidget>("BitBusBitIn");

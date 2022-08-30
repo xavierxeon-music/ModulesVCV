@@ -1,7 +1,7 @@
-#include "VCMCReceiver.h"
 #include "VCMCReceiverPanel.h"
+#include "VCMCReceiver.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 void VCMCReceiver::setup()
 {
@@ -17,7 +17,7 @@ void VCMCReceiver::setup()
 
 void VCMCReceiverWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/Hardware/VCMCReceiver.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Hardware/VCMCReceiver.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -64,4 +64,3 @@ void VCMCReceiverWidget::setup()
    makeMeter(this, Vec(19.86, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel2);
    makeMeter(this, Vec(10.95, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel1);
 }
-

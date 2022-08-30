@@ -1,7 +1,7 @@
-#include "BitBusMeterAndFreeze.h"
 #include "BitBusMeterAndFreezePanel.h"
+#include "BitBusMeterAndFreeze.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 void BitBusMeterAndFreeze::setup()
 {
@@ -16,15 +16,15 @@ void BitBusMeterAndFreeze::setup()
 
 void BitBusMeterAndFreezeWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/BitBus/BitBusMeterAndFreeze.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusMeterAndFreeze.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
    makeLEDButton(this, Vec(44.94, 290.74), BitBusMeterAndFreeze::Panel::FlipSample, BitBusMeterAndFreeze::Panel::RGB_FlipSample);
    makeLEDButton(this, Vec(44.94, 191.75), BitBusMeterAndFreeze::Panel::FlipFreeze, BitBusMeterAndFreeze::Panel::RGB_FlipFreeze);
 
-   makeInput(this, Vec(44.94, 254.94),  BitBusMeterAndFreeze::Panel::GateSample, false);
-   makeInput(this, Vec(44.94, 156.19),  BitBusMeterAndFreeze::Panel::GateFreeze, false);
+   makeInput(this, Vec(44.94, 254.94), BitBusMeterAndFreeze::Panel::GateSample, false);
+   makeInput(this, Vec(44.94, 156.19), BitBusMeterAndFreeze::Panel::GateFreeze, false);
 
    makeLED(this, Vec(13.82, 337.02), BitBusMeterAndFreeze::Panel::RGB_Bit8_Status1);
    makeLED(this, Vec(13.82, 303.38), BitBusMeterAndFreeze::Panel::RGB_Bit7_Status1);
@@ -37,4 +37,3 @@ void BitBusMeterAndFreezeWidget::setup()
    makeLED(this, Vec(10.00, 46.77), BitBusMeterAndFreeze::Panel::RGB_BusIn);
    makeLED(this, Vec(65.00, 46.77), BitBusMeterAndFreeze::Panel::RGB_BusOut);
 }
-

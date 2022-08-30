@@ -1,7 +1,7 @@
-#include "BitBusCounter.h"
 #include "BitBusCounterPanel.h"
+#include "BitBusCounter.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 #include <limits>
 
 void BitBusCounter::setup()
@@ -15,13 +15,13 @@ void BitBusCounter::setup()
 
 void BitBusCounterWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/BitBus/BitBusCounter.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusCounter.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeInput(this, Vec(24.17, 299.21),  BitBusCounter::Panel::Reset, false);
-   makeInput(this, Vec(24.17, 215.77),  BitBusCounter::Panel::Down, false);
-   makeInput(this, Vec(24.17, 159.97),  BitBusCounter::Panel::Up, false);
+   makeInput(this, Vec(24.17, 299.21), BitBusCounter::Panel::Reset, false);
+   makeInput(this, Vec(24.17, 215.77), BitBusCounter::Panel::Down, false);
+   makeInput(this, Vec(24.17, 159.97), BitBusCounter::Panel::Up, false);
 
    makeLED(this, Vec(65.77, 337.02), BitBusCounter::Panel::RGB_Bit8_Indicator);
    makeLED(this, Vec(65.77, 303.38), BitBusCounter::Panel::RGB_Bit7_Indicator);
@@ -35,4 +35,3 @@ void BitBusCounterWidget::setup()
 
    makeLCD(this, Vec(20.00, 42.49), 3, BitBusCounter::Panel::Text_Number, 18);
 }
-

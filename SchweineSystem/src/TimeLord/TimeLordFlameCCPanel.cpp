@@ -1,7 +1,7 @@
-#include "TimeLordFlameCC.h"
 #include "TimeLordFlameCCPanel.h"
+#include "TimeLordFlameCC.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 void TimeLordFlameCC::setup()
 {
@@ -46,7 +46,7 @@ void TimeLordFlameCC::setup()
 
 void TimeLordFlameCCWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "res/TimeLord/TimeLordFlameCC.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/TimeLord/TimeLordFlameCC.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
@@ -69,21 +69,20 @@ void TimeLordFlameCCWidget::setup()
 
    makeLEDButton(this, Vec(80.27, 360.35), TimeLordFlameCC::Panel::Connect, TimeLordFlameCC::Panel::RGB_Connect);
 
-   makeInput(this, Vec(88.33, 327.18),  TimeLordFlameCC::Panel::Row8_InB, false);
-   makeInput(this, Vec(46.67, 327.18),  TimeLordFlameCC::Panel::Row8_InA, false);
-   makeInput(this, Vec(88.33, 290.54),  TimeLordFlameCC::Panel::Row7_InB, false);
-   makeInput(this, Vec(46.67, 290.54),  TimeLordFlameCC::Panel::Row7_InA, false);
-   makeInput(this, Vec(88.33, 253.89),  TimeLordFlameCC::Panel::Row6_InB, false);
-   makeInput(this, Vec(46.67, 253.89),  TimeLordFlameCC::Panel::Row6_InA, false);
-   makeInput(this, Vec(88.33, 217.25),  TimeLordFlameCC::Panel::Row5_InB, false);
-   makeInput(this, Vec(46.67, 217.25),  TimeLordFlameCC::Panel::Row5_InA, false);
-   makeInput(this, Vec(88.33, 180.61),  TimeLordFlameCC::Panel::Row4_InB, false);
-   makeInput(this, Vec(46.67, 180.61),  TimeLordFlameCC::Panel::Row4_InA, false);
-   makeInput(this, Vec(88.33, 143.97),  TimeLordFlameCC::Panel::Row3_InB, false);
-   makeInput(this, Vec(46.67, 143.97),  TimeLordFlameCC::Panel::Row3_InA, false);
-   makeInput(this, Vec(88.33, 107.32),  TimeLordFlameCC::Panel::Row2_InB, false);
-   makeInput(this, Vec(46.67, 107.32),  TimeLordFlameCC::Panel::Row2_InA, false);
-   makeInput(this, Vec(88.33, 70.68),  TimeLordFlameCC::Panel::Row1_InB, false);
-   makeInput(this, Vec(46.67, 70.68),  TimeLordFlameCC::Panel::Row1_InA, false);
+   makeInput(this, Vec(88.33, 327.18), TimeLordFlameCC::Panel::Row8_InB, false);
+   makeInput(this, Vec(46.67, 327.18), TimeLordFlameCC::Panel::Row8_InA, false);
+   makeInput(this, Vec(88.33, 290.54), TimeLordFlameCC::Panel::Row7_InB, false);
+   makeInput(this, Vec(46.67, 290.54), TimeLordFlameCC::Panel::Row7_InA, false);
+   makeInput(this, Vec(88.33, 253.89), TimeLordFlameCC::Panel::Row6_InB, false);
+   makeInput(this, Vec(46.67, 253.89), TimeLordFlameCC::Panel::Row6_InA, false);
+   makeInput(this, Vec(88.33, 217.25), TimeLordFlameCC::Panel::Row5_InB, false);
+   makeInput(this, Vec(46.67, 217.25), TimeLordFlameCC::Panel::Row5_InA, false);
+   makeInput(this, Vec(88.33, 180.61), TimeLordFlameCC::Panel::Row4_InB, false);
+   makeInput(this, Vec(46.67, 180.61), TimeLordFlameCC::Panel::Row4_InA, false);
+   makeInput(this, Vec(88.33, 143.97), TimeLordFlameCC::Panel::Row3_InB, false);
+   makeInput(this, Vec(46.67, 143.97), TimeLordFlameCC::Panel::Row3_InA, false);
+   makeInput(this, Vec(88.33, 107.32), TimeLordFlameCC::Panel::Row2_InB, false);
+   makeInput(this, Vec(46.67, 107.32), TimeLordFlameCC::Panel::Row2_InA, false);
+   makeInput(this, Vec(88.33, 70.68), TimeLordFlameCC::Panel::Row1_InB, false);
+   makeInput(this, Vec(46.67, 70.68), TimeLordFlameCC::Panel::Row1_InA, false);
 }
-

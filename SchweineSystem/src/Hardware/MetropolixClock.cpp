@@ -1,7 +1,7 @@
 #include "MetropolixClock.h"
 #include "MetropolixClockPanel.h"
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 #include <Midi/MidiCommon.h>
 #include <SvinMidiOutput.h>
@@ -165,4 +165,4 @@ MetropolixClockWidget::MetropolixClockWidget(MetropolixClock* module)
    setup();
 }
 
-Model* modelMetropolixClock = Svin::Master::the()->addModule<MetropolixClock, MetropolixClockWidget>("MetropolixClock");
+Model* modelMetropolixClock = Svin::Origin::the()->addModule<MetropolixClock, MetropolixClockWidget>("MetropolixClock");

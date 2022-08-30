@@ -1,5 +1,5 @@
-#ifndef SvinMasterH
-#define SvinMasterH
+#ifndef SvinOriginH
+#define SvinOriginH
 
 #include <iostream>
 
@@ -11,13 +11,13 @@ void init(Plugin* pluginInstance);
 
 namespace Svin
 {
-   class Master
+   class Origin
    {
    public:
       using ModelList = std::vector<Model*>;
 
    public:
-      static Master* the();
+      static Origin* the();
 
       template <typename AudioClass, typename WidgetClass>
       Model* addModule(const std::string& name);
@@ -28,7 +28,7 @@ namespace Svin
       friend void ::init(Plugin* pluginInstance);
 
    private:
-      Master();
+      Origin();
 
    private:
       Plugin* pluginInstance;
@@ -36,8 +36,8 @@ namespace Svin
    };
 } // namespace Svin
 
-#ifndef SvinMasterHPP
-#include "SvinMaster.hpp"
-#endif // NOT SvinMasterHPP
+#ifndef SvinOriginHPP
+#include "SvinOrigin.hpp"
+#endif // NOT SvinOriginHPP
 
-#endif // NOT SvinMasterH
+#endif // NOT SvinOriginH

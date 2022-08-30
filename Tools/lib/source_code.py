@@ -64,7 +64,7 @@ class Sources(Common):
 
         line(0, f'void {self.moduleName}Widget::setup()')
         line(0, '{')
-        line(1, f'std::string panelPath = asset::plugin(Svin::Master::the()->instance(), "{self.panelFileName}");')
+        line(1, f'std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "{self.panelFileName}");')
         line(1, 'SvgPanel* mainPanel = createPanel(panelPath);')
         line(1, 'setPanel(mainPanel);')
 
@@ -169,7 +169,7 @@ class Sources(Common):
             line(0, f'#include "{self.moduleName}.h"')
             line(0, f'#include "{self.moduleName}Panel.h"')
             line(0)
-            line(0, '#include <SvinMaster.h>')
+            line(0, '#include <SvinOrigin.h>')
             if self.lcds:
                 line(0, '#include <limits>')
             line(0)
@@ -195,7 +195,7 @@ class Sources(Common):
             line(0, f'#include "{self.moduleName}.h"')
             line(0, f'#include "{self.moduleName}Panel.h"')
             line(0)
-            line(0, '#include <SvinMaster.h>')
+            line(0, '#include <SvinOrigin.h>')
             line(0)
 
             line(0, f'{self.moduleName}::{self.moduleName}()')
@@ -221,4 +221,4 @@ class Sources(Common):
             line(0, '}')
             line(0)
 
-            line(0, f'Model* model{self.moduleName} = Svin::Master::the()->addModule<{self.moduleName}, {self.moduleName}Widget>("{self.moduleName}");')
+            line(0, f'Model* model{self.moduleName} = Svin::Origin::the()->addModule<{self.moduleName}, {self.moduleName}Widget>("{self.moduleName}");')

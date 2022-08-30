@@ -2,7 +2,7 @@
 #include "GateLatchPanel.h"
 
 #include <SvinJson.h>
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 GateLatch::GateLatch()
    : Svin::Module()
@@ -120,4 +120,4 @@ GateLatchWidget::GateLatchWidget(GateLatch* module)
    setup();
 }
 
-Model* modelGateLatch = Svin::Master::the()->addModule<GateLatch, GateLatchWidget>("GateLatch");
+Model* modelGateLatch = Svin::Origin::the()->addModule<GateLatch, GateLatchWidget>("GateLatch");

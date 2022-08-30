@@ -3,8 +3,8 @@
 
 #include <Midi/MidiCommon.h>
 
-#include <SvinMaster.h>
 #include <SvinMidiOutput.h>
+#include <SvinOrigin.h>
 
 VCMCReceiver::VCMCReceiver()
    : Svin::Module()
@@ -187,9 +187,9 @@ void VCMCReceiver::connectToMidiDevice()
 // widget
 
 VCMCReceiverWidget::VCMCReceiverWidget(VCMCReceiver* module)
-: Svin::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelVCMCReceiver = Svin::Master::the()->addModule<VCMCReceiver, VCMCReceiverWidget>("VCMCReceiver");
+Model* modelVCMCReceiver = Svin::Origin::the()->addModule<VCMCReceiver, VCMCReceiverWidget>("VCMCReceiver");

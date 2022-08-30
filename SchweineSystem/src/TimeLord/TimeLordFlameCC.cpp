@@ -4,7 +4,7 @@
 #include <Midi/MidiCommon.h>
 
 #include <SvinJson.h>
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 TimeLordFlameCC::TimeLordFlameCC()
    : Svin::Module()
@@ -157,4 +157,4 @@ TimeLordFlameCCWidget::TimeLordFlameCCWidget(TimeLordFlameCC* module)
    setup();
 }
 
-Model* modelTimeLordFlameCC = Svin::Master::the()->addModule<TimeLordFlameCC, TimeLordFlameCCWidget>("TimeLordFlameCC");
+Model* modelTimeLordFlameCC = Svin::Origin::the()->addModule<TimeLordFlameCC, TimeLordFlameCCWidget>("TimeLordFlameCC");

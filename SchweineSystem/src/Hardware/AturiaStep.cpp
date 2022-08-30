@@ -3,7 +3,7 @@
 
 #include <Tools/Variable.h>
 
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 AturiaStep::AturiaStep()
    : Svin::Module()
@@ -173,4 +173,4 @@ AturiaStepWidget::AturiaStepWidget(AturiaStep* module)
    setup();
 }
 
-Model* modelAturiaStep = Svin::Master::the()->addModule<AturiaStep, AturiaStepWidget>("AturiaStep");
+Model* modelAturiaStep = Svin::Origin::the()->addModule<AturiaStep, AturiaStepWidget>("AturiaStep");

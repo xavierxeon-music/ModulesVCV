@@ -6,7 +6,7 @@
 #include <Tools/Convert.h>
 
 #include <SvinJson.h>
-#include <SvinMaster.h>
+#include <SvinOrigin.h>
 
 WavPlayer::WavPlayer()
    : Svin::Module()
@@ -171,4 +171,4 @@ WavPlayerWidget::WavPlayerWidget(WavPlayer* module)
    setup();
 }
 
-Model* modelWavPlayer = Svin::Master::the()->addModule<WavPlayer, WavPlayerWidget>("WavPlayer");
+Model* modelWavPlayer = Svin::Origin::the()->addModule<WavPlayer, WavPlayerWidget>("WavPlayer");
