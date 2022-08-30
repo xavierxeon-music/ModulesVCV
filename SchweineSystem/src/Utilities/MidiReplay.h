@@ -77,11 +77,6 @@ private:
    Svin::Button pageButton;
    Svin::DisplayOLED::Controller displayController;
 
-   // clock
-   dsp::BooleanTrigger clockTrigger;
-   dsp::BooleanTrigger resetTrigger;
-   Tempo tempo;
-
    // cycle
    Svin::ButtonLED loopButton;
    bool isLooping;
