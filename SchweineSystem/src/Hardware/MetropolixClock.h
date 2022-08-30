@@ -38,15 +38,12 @@ private:
    midi::InputQueue midiInput;
    Svin::ButtonLED connectionButton;
    bool doNotAdvanceTempo;
-   Counter tickCounter;
-
-   // tempo
-   Svin::Output clockOutput;
-   Svin::Output resetOutput;
+   Counter midiTickCounter;
 
    // override
    Svin::Input clockInput;
    Svin::Input resetInput;
+
    // display
    Svin::DisplayOLED::Controller displayController;
 };

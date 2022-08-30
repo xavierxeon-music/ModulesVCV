@@ -8,6 +8,7 @@
 #include <Tools/Variable.h>
 
 #include <SvinMaster.h>
+#include <SvinMasterClock.h>
 
 TrackerWorker::TrackerWorker()
    : Svin::Module()
@@ -17,10 +18,6 @@ TrackerWorker::TrackerWorker()
    // midi
    , receive(MidiReceive::None)
    , buffer()
-   // clock
-   , clockInput(this, Panel::Clock)
-   , resetInput(this, Panel::Reset)
-   , tempo()
    // input
    , inputList(this)
    , voltageToValue(0.0, 10.0, 0, 255)
@@ -54,7 +51,6 @@ void TrackerWorker::process(const ProcessArgs& args)
    }
    loopButton.setActive(project.isLooping());
 
-
    // operation mode
    if (operationModeButton.isTriggered())
    {
@@ -70,6 +66,7 @@ void TrackerWorker::process(const ProcessArgs& args)
    }
 
    // do stuff
+   const Svin::MasterClock* clock = Svin::MasterClock::the();
    if (OperationMode::Passthrough == operationMode)
    {
       processPassthrough();
@@ -78,24 +75,18 @@ void TrackerWorker::process(const ProcessArgs& args)
    {
       proccessRemote();
    }
-   else
+   else if (clock)
    {
-      if (resetInput.isTriggered())
-      {
+      if (Svin::MasterClock::Signal::Reset == clock->getSignal())
          project.clockReset();
-         tempo.clockReset();
-      }
-      else if (clockInput.isTriggered())
-      {
+      else if (Svin::MasterClock::Signal::Tick == clock->getSignal())
          project.clockTick();
-         tempo.clockTick();
-      }
-      else
-      {
-         tempo.advance(args.sampleRate);
-      }
 
       processInternal();
+   }
+   else
+   {
+      zeroOutputs();
    }
 }
 
@@ -161,11 +152,17 @@ void TrackerWorker::loadProject(const std::string& newFileName)
 
 void TrackerWorker::processPassthrough()
 {
+   const Svin::MasterClock* clock = Svin::MasterClock::the();
+   if (!clock)
+      return zeroOutputs();
+
+   const bool on = clock->getTempo().isRunningOrFirstTick();
+
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
    {
       for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
       {
-         const float value = tempo.isRunningOrFirstTick() ? inputList[groupIndex]->getVoltage(channelIndex) : 0.0;
+         const float value = on ? inputList[groupIndex]->getVoltage(channelIndex) : 0.0;
          outputList[groupIndex]->setVoltage(value, channelIndex);
       }
    }
@@ -177,12 +174,18 @@ void TrackerWorker::processPassthrough()
 
 void TrackerWorker::proccessRemote()
 {
+   const Svin::MasterClock* clock = Svin::MasterClock::the();
+   if (!clock)
+      return zeroOutputs();
+
+   const bool on = clock->getTempo().isRunningOrFirstTick();
+
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
    {
       for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
       {
          const uint8_t laneIndex = 16 * groupIndex + channelIndex;
-         const uint8_t value = tempo.isRunningOrFirstTick() ? remoteValues[laneIndex] : 0;
+         const uint8_t value = on ? remoteValues[laneIndex] : 0;
          const float voltage = valueToVoltage(value);
          outputList[groupIndex]->setVoltage(voltage, channelIndex);
       }
@@ -191,8 +194,13 @@ void TrackerWorker::proccessRemote()
 
 void TrackerWorker::processInternal()
 {
+   const Svin::MasterClock* clock = Svin::MasterClock::the();
+   if (!clock)
+      return zeroOutputs();
+
+   const bool on = clock->getTempo().isRunningOrFirstTick();
    const uint32_t currentIndex = project.getCurrentSegmentIndex();
-   const float percentage = tempo.getPercentage(project.getDivison());
+   const float percentage = clock->getTempo().getPercentage(project.getDivison());
 
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
    {
@@ -201,10 +209,21 @@ void TrackerWorker::processInternal()
          const uint8_t laneIndex = 16 * groupIndex + channelIndex;
          const Tracker::Lane& lane = project.getLane(laneIndex);
 
-         const uint8_t value = tempo.isRunningOrFirstTick() ? lane.getSegmentValue(currentIndex, percentage) : 0.0;
+         const uint8_t value = on ? lane.getSegmentValue(currentIndex, percentage) : 0.0;
 
          const float voltage = valueToVoltage(value);
          outputList[groupIndex]->setVoltage(voltage, channelIndex);
+      }
+   }
+}
+
+void TrackerWorker::zeroOutputs()
+{
+   for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+   {
+      for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+      {
+         outputList[groupIndex]->setVoltage(0.0, channelIndex);
       }
    }
 }
@@ -236,11 +255,9 @@ void TrackerWorker::save(Svin::Json::Object& rootObject)
 // widget
 
 TrackerWorkerWidget::TrackerWorkerWidget(TrackerWorker* module)
-: Svin::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
-
 }
-
 
 Model* modelTrackerWorker = Svin::Master::the()->addModule<TrackerWorker, TrackerWorkerWidget>("TrackerWorker");

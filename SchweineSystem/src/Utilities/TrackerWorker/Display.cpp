@@ -5,6 +5,8 @@
 #include <Tools/Convert.h>
 #include <Tools/Variable.h>
 
+#include <SvinMasterClock.h>
+
 #include "../TrackerWorker.h"
 #include "../TrackerWorkerPanel.h"
 
@@ -39,6 +41,9 @@ void Display::updatePassthrough()
 
    controller.setColor(Svin::Color{255, 255, 255});
 
+   const Svin::MasterClock* clock = Svin::MasterClock::the();
+   const bool on = clock ? clock->getTempo().isRunningOrFirstTick() : false;
+
    for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
    {
       const uint8_t y = 15 + 10 * channelIndex;
@@ -49,7 +54,7 @@ void Display::updatePassthrough()
 
          const float voltage = main->inputList[groupIndex]->getVoltage(channelIndex);
          const uint8_t value = main->voltageToValue(voltage);
-         const std::string valueText = main->tempo.isRunningOrFirstTick() ? Convert::text(value) : "off";
+         const std::string valueText = on ? Convert::text(value) : "off";
          controller.writeText(x, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
       }
    }
@@ -65,6 +70,9 @@ void Display::updateRemote()
 
    controller.setColor(Svin::Color{255, 255, 255});
 
+   const Svin::MasterClock* clock = Svin::MasterClock::the();
+   const bool on = clock ? clock->getTempo().isRunningOrFirstTick() : false;
+
    for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
    {
       const uint8_t y = 15 + 10 * channelIndex;
@@ -74,7 +82,7 @@ void Display::updateRemote()
          const uint8_t x = 50 + groupIndex * 40;
 
          const uint8_t value = main->remoteValues[16 * groupIndex + channelIndex];
-         const std::string valueText = main->tempo.isRunningOrFirstTick() ? Convert::text(value) : "off";
+         const std::string valueText = on ? Convert::text(value) : "off";
          controller.writeText(x, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
       }
    }

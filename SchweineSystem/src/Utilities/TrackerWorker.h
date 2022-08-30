@@ -54,6 +54,7 @@ private:
    void processPassthrough();
    void proccessRemote();
    void processInternal();
+   void zeroOutputs();
 
    void updateDisplays() override;
 
@@ -68,11 +69,6 @@ private:
    // midi
    MidiReceive receive;
    std::string buffer;
-
-   // clock
-   Svin::Input clockInput;
-   Svin::Input resetInput;
-   Tempo tempo;
 
    // input
    Svin::Input::List inputList;

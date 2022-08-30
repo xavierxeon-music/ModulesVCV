@@ -12,9 +12,7 @@ MetropolixClock::MetropolixClock()
    , midiInput()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , doNotAdvanceTempo(false)
-   , tickCounter(6)
-   , clockOutput(this, Panel::Clock)
-   , resetOutput(this, Panel::Reset)
+   , midiTickCounter(6)
    , clockInput(this, Panel::Override_Clock)
    , resetInput(this, Panel::Override_Reset)
    , displayController(this, Panel::Pixels_Display)
@@ -38,13 +36,11 @@ void MetropolixClock::process(const ProcessArgs& args)
       if (isReset)
       {
          reset();
-         resetOutput.trigger();
-         tickCounter.reset();
+         midiTickCounter.reset();
       }
       else if (isClock)
       {
          tick();
-         clockOutput.trigger();
       }
       else
          advance(args.sampleRate);
@@ -61,9 +57,6 @@ void MetropolixClock::process(const ProcessArgs& args)
       else
          advance(args.sampleRate);
    }
-
-   resetOutput.animateTriggers(args);
-   clockOutput.animateTriggers(args);
 }
 
 void MetropolixClock::updateDisplays()
@@ -119,7 +112,7 @@ void MetropolixClock::processMessage(const midi::Message& msg, uint16_t messageC
 
    if (Midi::Event::Clock == event)
    {
-      if (0 == tickCounter.valueAndNext())
+      if (0 == midiTickCounter.valueAndNext())
       {
          tick();
          doNotAdvanceTempo = true;
@@ -135,9 +128,8 @@ void MetropolixClock::processMessage(const midi::Message& msg, uint16_t messageC
       {
          reset();
 
-         resetOutput.trigger();
          doNotAdvanceTempo = true;
-         tickCounter.reset();
+         midiTickCounter.reset();
       }
    }
 }
