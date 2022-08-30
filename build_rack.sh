@@ -16,7 +16,7 @@ fi
 
 
 OS_TEST=$(uname)
-if [ "$OS_TEST" == " Darwin" ]
+if [ "$OS_TEST" == "Darwin" ]
 then
    echo 'install brew packages'
    brew install git wget cmake autoconf automake libtool jq python zstd
