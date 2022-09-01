@@ -1,5 +1,5 @@
-#include "MidiReplayPanel.h"
 #include "MidiReplay.h"
+#include "MidiReplayPanel.h"
 
 #include <SvinOrigin.h>
 
@@ -12,7 +12,6 @@ void MidiReplay::setup()
    configButton(Panel::Loop, "Loop");
 
    configInput(Panel::Reset, "Reset");
-   configInput(Panel::Clock, "Clock");
    configInput(Panel::Play, "Play");
 
    configOutput(Panel::End, "End");
@@ -28,11 +27,11 @@ void MidiReplayWidget::setup()
 
    makeLEDButton(this, Vec(84.33, 261.51), MidiReplay::Panel::Loop, MidiReplay::Panel::RGB_Loop);
 
-   makeInput(this, Vec(34.94, 355.83), MidiReplay::Panel::Reset, false);
-   makeInput(this, Vec(34.94, 309.70), MidiReplay::Panel::Clock, false);
-   makeInput(this, Vec(34.94, 262.70), MidiReplay::Panel::Play, false);
+   makeInput(this, Vec(35.33, 309.97),  MidiReplay::Panel::Reset, false);
+   makeInput(this, Vec(34.94, 262.70),  MidiReplay::Panel::Play, false);
 
    makeOutput(this, Vec(84.33, 309.97), MidiReplay::Panel::End, false);
 
    makeOLED(this, Vec(9.00, 68.57), MidiReplay::Panel::Pixels_Display, 100, 135);
 }
+

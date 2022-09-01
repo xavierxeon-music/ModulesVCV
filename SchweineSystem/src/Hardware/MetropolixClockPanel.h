@@ -44,8 +44,7 @@ struct MetropolixClock::Panel
    enum OutputId
    {
       Reset = 0,
-      Clock = 1,
-      OUTPUTS_LEN = 2
+      OUTPUTS_LEN = 1
    };
 
    enum LightId

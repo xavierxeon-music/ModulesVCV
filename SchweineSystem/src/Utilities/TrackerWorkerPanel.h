@@ -39,11 +39,9 @@ struct TrackerWorker::Panel
    enum InputId
    {
       Upload = 0,
-      Reset = 1,
-      Clock = 2,
-      Group2_Pass = 3,
-      Group1_Pass = 4,
-      INPUTS_LEN = 5
+      Group2_Pass = 1,
+      Group1_Pass = 2,
+      INPUTS_LEN = 3
    };
 
    enum OutputId

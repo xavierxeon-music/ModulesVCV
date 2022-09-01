@@ -12,6 +12,7 @@ MetropolixClock::MetropolixClock()
    , midiInput()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , midiTickCounter(6)
+   , resetOutput(this, Panel::Reset)
    , clockInput(this, Panel::Override_Clock)
    , resetInput(this, Panel::Override_Reset)
    , displayController(this, Panel::Pixels_Display)
@@ -35,6 +36,7 @@ void MetropolixClock::process(const ProcessArgs& args)
          reset();
          advanceTempo = false;
          midiTickCounter.reset();
+         resetOutput.trigger();
       }
       else if (clockInput.isTriggered())
       {
@@ -72,12 +74,16 @@ void MetropolixClock::process(const ProcessArgs& args)
                reset();
                advanceTempo = false;
                midiTickCounter.reset();
+               resetOutput.trigger();
             }
          }
       }
    }
+
    if (advanceTempo)
       advance(args.sampleRate);
+
+   resetOutput.animateTriggers(args);
 }
 
 void MetropolixClock::updateDisplays()

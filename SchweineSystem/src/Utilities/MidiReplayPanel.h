@@ -39,9 +39,8 @@ struct MidiReplay::Panel
    enum InputId
    {
       Reset = 0,
-      Clock = 1,
-      Play = 2,
-      INPUTS_LEN = 3
+      Play = 1,
+      INPUTS_LEN = 2
    };
 
    enum OutputId

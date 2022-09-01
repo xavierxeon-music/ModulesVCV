@@ -20,6 +20,8 @@ MidiReplay::MidiReplay()
    , displayMode(DisplayMode::Overview)
    , pageButton(this, Panel::Page)
    , displayController(this, Panel::Pixels_Display)
+   // manual
+   , manualResetInput(this, Panel::Reset)
    // cycle
    , loopButton(this, Panel::Loop, Panel::RGB_Loop)
    , isLooping(false)
@@ -79,7 +81,7 @@ void MidiReplay::process(const ProcessArgs& args)
 
    // clock
 
-   if (hasReset())
+   if (hasReset() || manualResetInput.isTriggered())
    {
       duration = 0;
       currentTick = 0;

@@ -85,7 +85,6 @@ void TrackerWorker::process(const ProcessArgs& args)
       {
          project.clockTick();
          doProcess = false;
-         std::cout << "tock " << getDuration() << std::endl;
       }
       if (doProcess)
          processInternal();

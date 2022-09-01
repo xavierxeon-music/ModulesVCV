@@ -78,6 +78,9 @@ private:
    Svin::Button pageButton;
    Svin::DisplayOLED::Controller displayController;
 
+   // manual
+   Svin::Input manualResetInput;
+
    // cycle
    Svin::ButtonLED loopButton;
    bool isLooping;

@@ -98,7 +98,6 @@ void Svin::MasterClock::tick()
       std::lock_guard<std::mutex> guard(client->mutex);
       client->tickCount++;
    }
-   std::cout << "TICK " << duration << std::endl;
 }
 
 void Svin::MasterClock::advance(const float& sampleRate)

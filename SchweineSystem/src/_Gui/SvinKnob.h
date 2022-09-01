@@ -3,6 +3,11 @@
 
 #include <rack.hpp>
 
+/*
+configParam(OCTAVE_PARAM, -5.0, 4.0, 0.0, "Octave", "'", 0.5);
+getParamQuantity(OCTAVE_PARAM)->snapEnabled = true;
+*/
+
 namespace Svin
 {
    class Knob

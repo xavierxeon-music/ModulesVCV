@@ -36,8 +36,10 @@ private:
    // midi
    midi::InputQueue midiInput;
    Svin::ButtonLED connectionButton;
-
    Counter midiTickCounter;
+
+   // manual
+   Svin::Output resetOutput;
 
    // override
    Svin::Input clockInput;
