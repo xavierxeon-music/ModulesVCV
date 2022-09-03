@@ -171,6 +171,7 @@ void Svin::Midi::Output::sendMessage(const std::vector<uint8_t>& message)
 Svin::Midi::Input::Input(const std::string& targetDeviceName, bool isVirtual)
    : Common(targetDeviceName, isVirtual)
    , midiInput()
+   , docBufferMap()
 {
    midiInput.setErrorCallback(&Common::midiError);
 
@@ -264,10 +265,20 @@ void Svin::Midi::Input::noteOff(const Channel& channel, const Note& note)
 
 void Svin::Midi::Input::controllerChange(const Channel& channel, const ControllerMessage& controllerMessage, const uint8_t& value)
 {
-   (void)channel;
-   (void)controllerMessage;
-   (void)value;
-   // do nothing
+   if (controllerMessage == Midi::ControllerMessage::DataInit)
+   {
+      docBufferMap[channel].clear();
+   }
+   else if (controllerMessage == Midi::ControllerMessage::DataInit)
+   {
+      docBufferMap[channel].push_back(value);
+   }
+   else if (controllerMessage == Midi::ControllerMessage::DataInit)
+   {
+      const Bytes content = SevenBit::decode(docBufferMap[channel]);
+      const Json::Object doc(content);
+      document(channel, doc, value);
+   }
 }
 
 void Svin::Midi::Input::document(const Channel& channel, const Json::Object& object, const uint8_t docIndex)

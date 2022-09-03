@@ -83,11 +83,15 @@ namespace Svin
          virtual void document(const Channel& channel, const Json::Object& object, const uint8_t docIndex);
 
       private:
+         using BufferMap = std::map<Channel, std::string>;
+
+      private:
          static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
          void prcocess(const Bytes& buffer);
 
       private:
          RtMidiIn midiInput;
+         BufferMap docBufferMap;
       };
    } // namespace Midi
 } // namespace Svin
