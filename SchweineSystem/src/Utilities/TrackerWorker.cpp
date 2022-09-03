@@ -11,6 +11,8 @@
 
 TrackerWorker::TrackerWorker()
    : Svin::Module()
+   , Svin::Midi::Input("Tracker", true)
+   , Svin::Midi::Output("Tracker", true)
    , Svin::MasterClock::Client()
    , fileName()
    , project()

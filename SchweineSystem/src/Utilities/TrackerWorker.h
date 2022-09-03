@@ -8,6 +8,7 @@ using namespace rack;
 #include <Tools/Range.h>
 
 #include <SvinMasterClock.h>
+#include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -19,7 +20,7 @@ using namespace rack;
 #include "TrackerWorker/Display.h"
 //#include "TrackerWorker/Midi.h"
 
-class TrackerWorker : public Svin::Module, public Svin::MasterClock::Client
+class TrackerWorker : public Svin::Module, public Svin::Midi::Input, public Svin::Midi::Output, public Svin::MasterClock::Client
 {
 public:
    struct Panel;
