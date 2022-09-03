@@ -8,12 +8,12 @@ using namespace rack;
 #include <SvinButtonLED.h>
 #include <SvinDisplayOLED.h>
 #include <SvinJson.h>
-#include <SvinMidiOutput.h>
+#include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 #include <SvinSvgImage.h>
 
-class RemoteScript : public Svin::Module, private Svin::MidiOutput
+class RemoteScript : public Svin::Module, private Svin::Midi::Output
 {
 public:
    struct Panel;
@@ -37,7 +37,6 @@ private:
 
    void sendStart();
    void sendKill();
-   void sendToRemote(const Svin::Json::Object& object);
 
    void displayClicked(const float& x, const float& y);
 

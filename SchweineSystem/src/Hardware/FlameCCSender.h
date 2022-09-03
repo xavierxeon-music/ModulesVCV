@@ -6,7 +6,7 @@ using namespace rack;
 
 #include <Tools/Range.h>
 
-#include <SvinMidiOutput.h>
+#include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -14,7 +14,7 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinSwitch.h>
 
-class FlameCCSender : public Svin::Module, private Svin::MidiOutput
+class FlameCCSender : public Svin::Module, private Svin::Midi::Output
 {
 public:
    struct Panel;

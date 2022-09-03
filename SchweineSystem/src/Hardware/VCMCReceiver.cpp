@@ -3,12 +3,12 @@
 
 #include <Midi/MidiCommon.h>
 
-#include <SvinMidiOutput.h>
+#include <SvinMidi.h>
 #include <SvinOrigin.h>
 
 VCMCReceiver::VCMCReceiver()
    : Svin::Module()
-   , midiInput()
+   , Svin::Midi::Input(Midi::Device::VCMC)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , ccValueToVoltage(0.0, 127, 0, 10.0)
    , gates{false, false, false, false, false, false, false, false}
@@ -44,7 +44,6 @@ VCMCReceiver::VCMCReceiver()
                        Panel::RGB_Latch_Channel7,
                        Panel::RGB_Latch_Channel8});
 
-   std::cout << __FUNCTION__ << std::endl;
    cvMeter.append({Panel::Value_CV_Channel1,
                    Panel::Value_CV_Channel2,
                    Panel::Value_CV_Channel3,
@@ -61,7 +60,6 @@ VCMCReceiver::VCMCReceiver()
                    Panel::Value_Slider_Channel6,
                    Panel::Value_Slider_Channel7,
                    Panel::Value_Slider_Channel8});
-   std::cout << __FUNCTION__ << std::endl;
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -89,10 +87,6 @@ void VCMCReceiver::process(const ProcessArgs& args)
 {
    if (connectionButton.isTriggered())
       connectToMidiDevice();
-
-   midi::Message msg;
-   while (midiInput.tryPop(&msg, args.frame))
-      processMessage(msg);
 
    if (16 != gateOutput.getNumberOfChannels())
       gateOutput.setNumberOfChannels(16);
@@ -126,62 +120,46 @@ void VCMCReceiver::process(const ProcessArgs& args)
    bOutput.setVoltage(bVoltage);
 }
 
-void VCMCReceiver::processMessage(const midi::Message& msg)
+void VCMCReceiver::connectToMidiDevice()
 {
-   const bool isSystemEvent = (0xF0 == (msg.bytes[0] & 0xF0));
-   if (isSystemEvent)
+   if (connected())
+   {
+      connectionButton.setOn();
+      return;
+   }
+
+   connectionButton.setOff();
+   if (!open())
       return;
 
-   const Midi::Event event = static_cast<Midi::Event>(msg.bytes[0] & 0xF0);
-   const Midi::Channel channel = 1 + (msg.bytes[0] & 0x0F);
+   connectionButton.setOn();
+}
+
+void VCMCReceiver::noteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity)
+{
    if (Midi::Device::VCVRack != channel)
       return;
 
-   if (Midi::Event::NoteOn == event)
-   {
-      const uint8_t gateIndex = msg.bytes[1] - 60;
-      const bool on = (0 != msg.bytes[2]);
-      gates[gateIndex] = on;
-      if (on)
-         latches[gateIndex] ^= true;
-   }
-   else if (Midi::Event::NoteOff == event)
-   {
-      // VCMC does not send note off, instead a second note on with velocity 0
-   }
-   else if (Midi::Event::ControlChange == event)
-   {
-      const uint8_t index = msg.bytes[1];
-      const uint8_t value = msg.bytes[2];
+   // VCMC does not send note off, instead a second note on with velocity 0
 
-      if (index >= 10)
-         cvValues[index - 2] = value;
-      else
-         cvValues[index] = value;
-   }
+   const uint8_t gateIndex = note.midiValue - 60;
+   const bool on = (0 != velocity);
+   gates[gateIndex] = on;
+   if (on)
+      latches[gateIndex] ^= true;
 }
 
-void VCMCReceiver::connectToMidiDevice()
+void VCMCReceiver::controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
 {
-   midiInput.reset();
-   connectionButton.setOff();
+   if (Midi::Device::VCVRack != channel)
+      return;
 
-   static const std::string targetDeviceName = Svin::Common::midiInterfaceMap.at(Midi::Device::VCMC);
-   std::cout << "TARGET = " << targetDeviceName << std::endl;
+   const uint8_t index = static_cast<uint8_t>(controllerMessage);
 
-   for (const int& deviceId : midiInput.getDeviceIds())
-   {
-      const std::string deviceName = midiInput.getDeviceName(deviceId);
-      //std::cout << deviceName << std::endl;
-
-      if (targetDeviceName == deviceName)
-      {
-         std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
-         midiInput.setDeviceId(deviceId);
-         connectionButton.setOn();
-         return;
-      }
-   }
+   if (index >= 10)
+      cvValues[index - 2] = value;
+   else
+      cvValues[index] = value;
 }
 
 // widget

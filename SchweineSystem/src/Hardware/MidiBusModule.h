@@ -5,12 +5,12 @@
 using namespace rack;
 
 #include <SvinExapnder.h>
-#include <SvinMidiOutput.h>
+#include <SvinMidi.h>
 #include <SvinModule.h>
 
 #include "../Utilities/MidiReplay.h"
 
-class MidiBusModule : protected Svin::MidiOutput, public Svin::Exapnder<BusMidi>
+class MidiBusModule : protected Svin::Midi::Output, public Svin::Exapnder<BusMidi>
 {
 public:
    MidiBusModule(const Midi::Device::Channel& deviceChannel, Svin::Module* module);

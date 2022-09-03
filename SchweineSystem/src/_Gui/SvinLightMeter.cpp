@@ -7,7 +7,6 @@ Svin::LightMeter::Controller::Controller(Module* module, const uint16_t& valueId
    , valueMapper(0.0, 1.0, 0.0, 100.0)
    , value(0)
 {
-   std::cout << __FUNCTION__ << " " << this << std::endl;
 }
 
 void Svin::LightMeter::Controller::setMaxValue(const uint16_t& newMaxValue)

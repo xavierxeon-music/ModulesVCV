@@ -59,7 +59,6 @@
 ./src/_Base/SvinRenderInstruction.h
 ./src/_Base/SvinCommon.h
 ./src/_Base/SvinModuleWidget.h
-./src/_Base/SvinMidiOutput.h
 ./src/_Base/SvinJson.h
 ./src/_Base/SvinMasterClock.h
 ./src/_Base/SvinExapnder.h
@@ -246,7 +245,6 @@
 ./src/Effects/RevoicerPanel.cpp
 ./src/_Base/SvinModule.cpp
 ./src/_Base/SvinJson.cpp
-./src/_Base/SvinMidiOutput.cpp
 ./src/_Base/SvinCommon.cpp
 ./src/_Base/SvinMasterClock.cpp
 ./src/_Base/SvinModuleWidget.cpp
@@ -258,3 +256,5 @@
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp
+src/_Base/SvinMidi.cpp
+src/_Base/SvinMidi.h

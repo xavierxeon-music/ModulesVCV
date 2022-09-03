@@ -6,6 +6,7 @@ using namespace rack;
 
 #include <Tools/Range.h>
 
+#include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 #include <SvinOutput.h>
@@ -14,7 +15,7 @@ using namespace rack;
 #include <SvinLED.h>
 #include <SvinLightMeter.h>
 
-class VCMCReceiver : public Svin::Module
+class VCMCReceiver : public Svin::Module, public Svin::Midi::Input
 {
 public:
    struct Panel;
@@ -27,12 +28,12 @@ public:
 
 private:
    void setup();
-   void processMessage(const midi::Message& msg);
    void connectToMidiDevice();
+   void noteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity) override;
+   void controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
 
 private:
    // midi
-   midi::InputQueue midiInput;
    Svin::ButtonLED connectionButton;
    Range::Mapper ccValueToVoltage;
 

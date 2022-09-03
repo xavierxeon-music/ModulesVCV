@@ -78,7 +78,6 @@ Svin::InstanceMap<ControllerType>::InstanceMap(Module* module, const uint16_t id
    : Base{module, identifier}
 {
    instances[module][identifier] = controller;
-   std::cout << module << " " << identifier << " " << controller << std::endl;
 }
 
 template <typename ControllerType>

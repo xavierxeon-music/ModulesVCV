@@ -8,7 +8,7 @@
 
 RemoteScript::RemoteScript()
    : Svin::Module()
-   , Svin::MidiOutput("Trittbrettfahrer")
+   , Svin::Midi::Output("Trittbrettfahrer")
    , displayController(this, Panel::Pixels_Display)
    , restartButton(this, Panel::Restart)
    , killButton(this, Panel::Kill)
@@ -101,7 +101,7 @@ void RemoteScript::sendStart()
    startObject.set("action", std::string("launch"));
    startObject.set("fileName", fileName);
 
-   sendToRemote(startObject);
+   sendDocument(startObject);
 }
 
 void RemoteScript::sendKill()
@@ -111,22 +111,7 @@ void RemoteScript::sendKill()
    Object killObject;
    killObject.set("action", std::string("kill"));
 
-   sendToRemote(killObject);
-}
-
-void RemoteScript::sendToRemote(const Svin::Json::Object& object)
-{
-   if (!connected())
-      return;
-
-   sendControllerChange(1, Midi::ControllerMessage::DataInit, 0);
-
-   const Bytes content = object.toBytes();
-   const std::string data = SevenBit::encode(content);
-   for (const char& byte : data)
-      sendControllerChange(1, Midi::ControllerMessage::DataBlock, byte);
-
-   sendControllerChange(1, Midi::ControllerMessage::DataApply, 0);
+   sendDocument(killObject);
 }
 
 void RemoteScript::displayClicked(const float& x, const float& y)

@@ -4,14 +4,15 @@
 #include <SvinOrigin.h>
 
 #include <Midi/MidiCommon.h>
-#include <SvinMidiOutput.h>
+#include <SvinMidi.h>
 
 MetropolixClock::MetropolixClock()
    : Svin::Module()
+   , Svin::Midi::Input(Midi::Device::Metropolix)
    , Svin::MasterClock()
-   , midiInput()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , midiTickCounter(6)
+   , advanceTempo(true)
    , resetOutput(this, Panel::Reset)
    , clockInput(this, Panel::Override_Clock)
    , resetInput(this, Panel::Override_Reset)
@@ -28,7 +29,6 @@ void MetropolixClock::process(const ProcessArgs& args)
    if (connectionButton.isTriggered())
       connectToMidiDevice();
 
-   bool advanceTempo = true;
    if (clockInput.isConnected()) // override
    {
       if (resetInput.isTriggered())
@@ -44,46 +44,12 @@ void MetropolixClock::process(const ProcessArgs& args)
          advanceTempo = false;
       }
    }
-   else
-   {
-      midi::Message msg;
-
-      while (midiInput.tryPop(&msg, args.frame))
-      {
-         const bool isSystemEvent = (0xF0 == (msg.bytes[0] & 0xF0));
-         if (!isSystemEvent)
-            continue;
-
-         const Midi::Event event = static_cast<Midi::Event>(msg.bytes[0]);
-         if (Midi::Event::Clock == event)
-         {
-            if (0 == midiTickCounter.valueAndNext())
-            {
-               tick();
-               advanceTempo = false;
-            }
-         }
-         else if (Midi::Event::SongPositionPointer == event)
-         {
-            const uint8_t frontByte = msg.bytes[0];
-            const uint8_t backByte = msg.bytes[1];
-            const uint16_t position = frontByte * 128 + backByte;
-
-            if (30976 == position) // metropolix magix ?
-            {
-               reset();
-               advanceTempo = false;
-               midiTickCounter.reset();
-               resetOutput.trigger();
-            }
-         }
-      }
-   }
 
    if (advanceTempo)
       advance(args.sampleRate);
 
    resetOutput.animateTriggers(args);
+   advanceTempo = true;
 }
 
 void MetropolixClock::updateDisplays()
@@ -131,25 +97,37 @@ void MetropolixClock::updateDisplays()
 
 void MetropolixClock::connectToMidiDevice()
 {
-   midiInput.reset();
-   connectionButton.setOff();
-
-   static const std::string targetDeviceName = Svin::Common::midiInterfaceMap.at(Midi::Device::Metropolix);
-   std::cout << targetDeviceName << std::endl;
-
-   for (const int& deviceId : midiInput.getDeviceIds())
+   if (connected())
    {
-      const std::string deviceName = midiInput.getDeviceName(deviceId);
-      // std::cout << deviceName << std::endl;
-
-      if (targetDeviceName == deviceName)
-      {
-         std::cout << "connected to " << deviceName << " @ " << deviceId << std::endl;
-         midiInput.setDeviceId(deviceId);
-         connectionButton.setOn();
-         return;
-      }
+      connectionButton.setOn();
+      return;
    }
+
+   connectionButton.setOff();
+   if (!open())
+      return;
+
+   connectionButton.setOn();
+}
+
+void MetropolixClock::clockTick()
+{
+   if (0 != midiTickCounter.valueAndNext())
+      return;
+
+   tick();
+   advanceTempo = false;
+}
+
+void MetropolixClock::songPosition(const uint16_t position)
+{
+   if (0 != position)
+      return;
+
+   reset();
+   advanceTempo = false;
+   midiTickCounter.reset();
+   resetOutput.trigger();
 }
 
 // widget
