@@ -98,10 +98,12 @@ void RemoteScript::sendStart()
    using namespace Svin::Json;
 
    Object startObject;
-   startObject.set("action", std::string("launch"));
+   startObject.set("_Application", "RemoteScript");
+   startObject.set("_Type", "Action");
+   startObject.set("action", "launch");
    startObject.set("fileName", fileName);
 
-   sendDocument(startObject);
+   sendDocument(1, startObject);
 }
 
 void RemoteScript::sendKill()
@@ -109,9 +111,11 @@ void RemoteScript::sendKill()
    using namespace Svin::Json;
 
    Object killObject;
-   killObject.set("action", std::string("kill"));
+   killObject.set("_Application", "RemoteScript");
+   killObject.set("_Type", "Action");
+   killObject.set("action", "kill");
 
-   sendDocument(killObject);
+   sendDocument(1, killObject);
 }
 
 void RemoteScript::displayClicked(const float& x, const float& y)

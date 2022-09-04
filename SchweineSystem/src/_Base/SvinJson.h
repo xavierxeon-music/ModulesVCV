@@ -60,6 +60,7 @@ namespace Svin
 
       public:
          void set(const std::string& key, const Value& value);
+         void set(const std::string& key, const char* text); // override for strings, else produces bool
          Value get(const std::string& key) const;
          bool hasKey(const std::string& key) const;
 

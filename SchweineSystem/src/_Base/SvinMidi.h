@@ -14,12 +14,9 @@
 namespace Svin
 {
 
+   // midi channels range from 1 -16
    namespace Midi
    {
-      using Channel = ::Midi::Channel; // midi channels range from 1 -16
-      using Velocity = ::Midi::Velocity;
-      using ControllerMessage = ::Midi::ControllerMessage;
-
       class Common
       {
       public:
@@ -50,10 +47,10 @@ namespace Svin
          void close();
          bool connected();
 
-         void sendNoteOn(const Channel& channel, const Note& note, const Velocity& velocity);
-         void sendNoteOff(const Channel& channel, const Note& note);
-         void sendControllerChange(const Channel& channel, const ControllerMessage& controllerMessage, const uint8_t& value);
-         void sendDocument(const Json::Object& object, const Channel& channel = 1, const uint8_t docIndex = 0);
+         void sendNoteOn(const ::Midi::Channel& channel, const Note& note, const ::Midi::Velocity& velocity);
+         void sendNoteOff(const ::Midi::Channel& channel, const Note& note);
+         void sendControllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value);
+         void sendDocument(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex = 0);
 
       protected:
          void sendMessage(const std::vector<uint8_t>& message);
@@ -77,13 +74,13 @@ namespace Svin
          virtual void clockTick();
          virtual void songPosition(const uint16_t position);
 
-         virtual void noteOn(const Channel& channel, const Note& note, const Velocity& velocity);
-         virtual void noteOff(const Channel& channel, const Note& note);
-         virtual void controllerChange(const Channel& channel, const ControllerMessage& controllerMessage, const uint8_t& value);
-         virtual void document(const Channel& channel, const Json::Object& object, const uint8_t docIndex);
+         virtual void noteOn(const ::Midi::Channel& channel, const Note& note, const ::Midi::Velocity& velocity);
+         virtual void noteOff(const ::Midi::Channel& channel, const Note& note);
+         virtual void controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value);
+         virtual void document(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex);
 
       private:
-         using BufferMap = std::map<Channel, std::string>;
+         using BufferMap = std::map<::Midi::Channel, std::string>;
 
       private:
          static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);

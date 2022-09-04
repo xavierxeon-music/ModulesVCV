@@ -144,6 +144,12 @@ void Svin::Json::Object::set(const std::string& key, const Value& value)
    json_object_set_new(json, key.c_str(), value.toJson());
 }
 
+void Svin::Json::Object::set(const std::string& key, const char* text)
+{
+   const std::string value(text);
+   json_object_set_new(json, key.c_str(), Value(value).toJson());
+}
+
 Svin::Json::Value Svin::Json::Object::get(const std::string& key) const
 {
    return Value(json_object_get(json, key.c_str()));

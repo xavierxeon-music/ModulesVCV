@@ -61,7 +61,8 @@ private:
    void updateInternalOverview();
    void updateInternalCurrent();
 
-   void document(const Svin::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
+   void document(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
+   void uploadState();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;

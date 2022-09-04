@@ -71,12 +71,13 @@ void TrackerWorker::process(const ProcessArgs& args)
    // do stuff
    if (OperationMode::Passthrough == operationMode)
    {
-      processPassthrough();
+      return processPassthrough();
    }
    else if (OperationMode::Remote == operationMode)
    {
-      proccessRemote();
+      return proccessRemote();
    }
+
    if (hasReset())
    {
       project.clockReset();
@@ -169,8 +170,7 @@ void TrackerWorker::processPassthrough()
    }
 
    if (uploadInput.isTriggered())
-   {
-   }
+      uploadState();
 }
 
 void TrackerWorker::proccessRemote()
@@ -327,9 +327,46 @@ void TrackerWorker::updateInternalCurrent()
    controller.writeText(0, 15, "Hello", Svin::DisplayOLED::Font::Normal);
 }
 
-void TrackerWorker::document(const Svin::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
+void TrackerWorker::document(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
 {
-   std::cout << object.toString() << std::endl;
+   if (1 != channel || 0 != docIndex)
+      return;
+
+   if ("Tracker" != object.get("_Application").toString())
+      return;
+
+   if ("Remote" == object.get("_Type").toString())
+   {
+      Svin::Json::Array stateArray = object.get("state").toArray();
+      if (32 != stateArray.size())
+      {
+         std::cout << "malformed state array from remote" << std::endl;
+         return;
+      }
+
+      for (uint8_t laneIndex = 0; laneIndex < 32; laneIndex++)
+      {
+         const uint8_t value = stateArray.get(laneIndex).toInt();
+         remoteValues[laneIndex] = value;
+      }
+   }
+   else if ("Reload" == object.get("_Type").toString())
+   {
+      const std::string fileName = object.get("fileName").toString();
+      loadProject(fileName);
+   }
+}
+
+void TrackerWorker::uploadState()
+{
+   Svin::Json::Array stateArray;
+
+   Svin::Json::Object object;
+   object.set("_Application", "Tracker");
+   object.set("_Type", "State");
+   object.set("state", stateArray);
+
+   sendDocument(1, object);
 }
 
 void TrackerWorker::load(const Svin::Json::Object& rootObject)

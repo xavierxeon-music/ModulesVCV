@@ -101,7 +101,7 @@ bool Svin::Midi::Output::connected()
    return midiOutput.isPortOpen();
 }
 
-void Svin::Midi::Output::sendNoteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity)
+void Svin::Midi::Output::sendNoteOn(const ::Midi::Channel& channel, const Note& note, const ::Midi::Velocity& velocity)
 {
    if (0 == channel || channel > 16)
    {
@@ -116,7 +116,7 @@ void Svin::Midi::Output::sendNoteOn(const Midi::Channel& channel, const Note& no
    sendMessage(onMessage);
 }
 
-void Svin::Midi::Output::sendNoteOff(const Midi::Channel& channel, const Note& note)
+void Svin::Midi::Output::sendNoteOff(const ::Midi::Channel& channel, const Note& note)
 {
    if (0 == channel || channel > 16)
    {
@@ -131,7 +131,7 @@ void Svin::Midi::Output::sendNoteOff(const Midi::Channel& channel, const Note& n
    sendMessage(offMessage);
 }
 
-void Svin::Midi::Output::sendControllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
+void Svin::Midi::Output::sendControllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value)
 {
    if (0 == channel || channel > 16)
    {
@@ -146,16 +146,19 @@ void Svin::Midi::Output::sendControllerChange(const Midi::Channel& channel, cons
    sendMessage(ccMessage);
 }
 
-void Svin::Midi::Output::sendDocument(const Json::Object& object, const Midi::Channel& channel, const uint8_t docIndex)
+void Svin::Midi::Output::sendDocument(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex)
 {
-   sendControllerChange(channel, Midi::ControllerMessage::DataInit, docIndex);
+   const std::string con = connected() ? " yes " : " no ";
+   std::cout << (uint16_t)channel << con << object.toString() << std::endl;
+
+   sendControllerChange(channel, ::Midi::ControllerMessage::DataInit, docIndex);
 
    const Bytes content = object.toBytes();
    const std::string data = SevenBit::encode(content);
    for (const char& byte : data)
-      sendControllerChange(channel, Midi::ControllerMessage::DataBlock, byte);
+      sendControllerChange(channel, ::Midi::ControllerMessage::DataBlock, byte);
 
-   sendControllerChange(channel, Midi::ControllerMessage::DataApply, docIndex);
+   sendControllerChange(channel, ::Midi::ControllerMessage::DataApply, docIndex);
 }
 
 void Svin::Midi::Output::sendMessage(const std::vector<uint8_t>& message)
@@ -244,7 +247,7 @@ void Svin::Midi::Input::songPosition(const uint16_t position)
    // do nothing
 }
 
-void Svin::Midi::Input::noteOn(const Channel& channel, const Note& note, const Velocity& velocity)
+void Svin::Midi::Input::noteOn(const ::Midi::Channel& channel, const Note& note, const ::Midi::Velocity& velocity)
 {
    (void)channel;
    (void)note;
@@ -252,24 +255,24 @@ void Svin::Midi::Input::noteOn(const Channel& channel, const Note& note, const V
    // do nothing
 }
 
-void Svin::Midi::Input::noteOff(const Channel& channel, const Note& note)
+void Svin::Midi::Input::noteOff(const ::Midi::Channel& channel, const Note& note)
 {
    (void)channel;
    (void)note;
    // do nothing
 }
 
-void Svin::Midi::Input::controllerChange(const Channel& channel, const ControllerMessage& controllerMessage, const uint8_t& value)
+void Svin::Midi::Input::controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value)
 {
-   if (controllerMessage == Midi::ControllerMessage::DataInit)
+   if (controllerMessage == ::Midi::ControllerMessage::DataInit)
    {
       docBufferMap[channel].clear();
    }
-   else if (controllerMessage == Midi::ControllerMessage::DataBlock)
+   else if (controllerMessage == ::Midi::ControllerMessage::DataBlock)
    {
       docBufferMap[channel].push_back(value);
    }
-   else if (controllerMessage == Midi::ControllerMessage::DataApply)
+   else if (controllerMessage == ::Midi::ControllerMessage::DataApply)
    {
       const Bytes content = SevenBit::decode(docBufferMap[channel]);
       const Json::Object doc(content);
@@ -277,7 +280,7 @@ void Svin::Midi::Input::controllerChange(const Channel& channel, const Controlle
    }
 }
 
-void Svin::Midi::Input::document(const Channel& channel, const Json::Object& object, const uint8_t docIndex)
+void Svin::Midi::Input::document(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex)
 {
    (void)channel;
    (void)object;
@@ -340,12 +343,12 @@ void Svin::Midi::Input::prcocess(const Bytes& buffer)
    else
    {
       const ::Midi::Event event = static_cast<::Midi::Event>(buffer[0] & 0xF0);
-      const Midi::Channel channel = 1 + (buffer[0] & 0x0F);
+      const ::Midi::Channel channel = 1 + (buffer[0] & 0x0F);
 
       if (::Midi::Event::NoteOn == event)
       {
          const Note note = Note::fromMidi(buffer[1]);
-         const Midi::Velocity velocity = buffer[2];
+         const ::Midi::Velocity velocity = buffer[2];
 
          noteOn(channel, note, velocity);
       }
@@ -357,7 +360,7 @@ void Svin::Midi::Input::prcocess(const Bytes& buffer)
       }
       else if (::Midi::Event::ControlChange == event)
       {
-         const ControllerMessage message = static_cast<ControllerMessage>(buffer[1]);
+         const ::Midi::ControllerMessage message = static_cast<::Midi::ControllerMessage>(buffer[1]);
          const uint8_t value = buffer[2];
 
          controllerChange(channel, message, value);
