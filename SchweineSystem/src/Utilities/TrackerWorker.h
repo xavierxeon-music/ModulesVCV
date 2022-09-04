@@ -14,11 +14,9 @@ using namespace rack;
 
 #include <SvinButton.h>
 #include <SvinButtonLED.h>
+#include <SvinDisplayOLED.h>
 #include <SvinInput.h>
 #include <SvinOutput.h>
-
-#include "TrackerWorker/Display.h"
-//#include "TrackerWorker/Midi.h"
 
 class TrackerWorker : public Svin::Module, public Svin::Midi::Input, public Svin::Midi::Output, public Svin::MasterClock::Client
 {
@@ -58,6 +56,12 @@ private:
    void processInternal();
 
    void updateDisplays() override;
+   void updatePassthrough();
+   void updateRemote();
+   void updateInternalOverview();
+   void updateInternalCurrent();
+
+   void document(const Svin::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -89,7 +93,8 @@ private:
    Svin::Button operationModeButton;
    uint8_t remoteValues[32];
 
-   Display display;
+   // display
+   Svin::DisplayOLED::Controller controller;
 };
 
 // widget

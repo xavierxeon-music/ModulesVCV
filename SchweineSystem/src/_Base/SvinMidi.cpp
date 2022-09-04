@@ -174,6 +174,8 @@ Svin::Midi::Input::Input(const std::string& targetDeviceName, bool isVirtual)
    , docBufferMap()
 {
    midiInput.setErrorCallback(&Common::midiError);
+   midiInput.setCallback(&Input::midiReceive, this);
+   midiInput.ignoreTypes(false, false, false); // do not ignore anything
 
    open();
 }
@@ -200,11 +202,7 @@ bool Svin::Midi::Input::open()
          if (targetDeviceName == deviceName)
          {
             std::cout << "connected to " << deviceName << " @ " << port << std::endl;
-
             midiInput.openPort(port);
-            midiInput.setCallback(&Input::midiReceive, this);
-            midiInput.ignoreTypes(true, false, true); // do not ignore time
-
             return true;
          }
       }
@@ -213,8 +211,6 @@ bool Svin::Midi::Input::open()
    }
 
    midiInput.openVirtualPort(targetDeviceName);
-   midiInput.setCallback(&Input::midiReceive, this);
-   midiInput.ignoreTypes(false, false, false); // do not ignore anything
 
    virtualOpen = true;
    return true;
@@ -269,11 +265,11 @@ void Svin::Midi::Input::controllerChange(const Channel& channel, const Controlle
    {
       docBufferMap[channel].clear();
    }
-   else if (controllerMessage == Midi::ControllerMessage::DataInit)
+   else if (controllerMessage == Midi::ControllerMessage::DataBlock)
    {
       docBufferMap[channel].push_back(value);
    }
-   else if (controllerMessage == Midi::ControllerMessage::DataInit)
+   else if (controllerMessage == Midi::ControllerMessage::DataApply)
    {
       const Bytes content = SevenBit::decode(docBufferMap[channel]);
       const Json::Object doc(content);

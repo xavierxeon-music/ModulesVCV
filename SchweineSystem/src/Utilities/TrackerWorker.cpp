@@ -33,9 +33,10 @@ TrackerWorker::TrackerWorker()
    , operationMode(OperationMode::Passthrough)
    , operationModeButton(this, Panel::Mode)
    , remoteValues{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-   , display(this)
+   , controller(this, TrackerWorker::Panel::Pixels_Display)
 {
    setup();
+   controller.onClickedOpenFileFunction(this, &TrackerWorker::loadProject, "Projects:json");
 
    inputList.append({Panel::Group1_Pass, Panel::Group2_Pass});
    outputList.append({Panel::Group1_Output, Panel::Group2_Output});
@@ -211,7 +212,123 @@ void TrackerWorker::processInternal()
 
 void TrackerWorker::updateDisplays()
 {
-   display.update();
+   controller.fill();
+
+   if (TrackerWorker::OperationMode::Passthrough == operationMode)
+      updatePassthrough();
+   else if (TrackerWorker::OperationMode::Remote == operationMode)
+      updateRemote();
+   else if (TrackerWorker::OperationMode::InternalOverview == operationMode)
+      updateInternalOverview();
+   else if (TrackerWorker::OperationMode::InternalCurrent == operationMode)
+      updateInternalCurrent();
+}
+
+void TrackerWorker::updatePassthrough()
+{
+   controller.setColor(Svin::Color{0, 255, 0});
+   controller.drawRect(0, 0, 100, 10, true);
+
+   controller.setColor(Svin::Color{0, 0, 0});
+   controller.writeText(50, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   controller.setColor(Svin::Color{255, 255, 255});
+
+   const Tempo tempo = getTempo();
+   const bool on = tempo.isRunningOrFirstTick();
+
+   for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+   {
+      const uint8_t y = 15 + 10 * channelIndex;
+
+      for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+      {
+         const uint8_t x = 50 + groupIndex * 40;
+
+         const float voltage = inputList[groupIndex]->getVoltage(channelIndex);
+         const uint8_t value = voltageToValue(voltage);
+         const std::string valueText = on ? Convert::text(value) : "off";
+         controller.writeText(x, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
+      }
+   }
+}
+
+void TrackerWorker::updateRemote()
+{
+   controller.setColor(Svin::Color{0, 255, 255});
+   controller.drawRect(0, 0, 100, 10, true);
+
+   controller.setColor(Svin::Color{0, 0, 0});
+   controller.writeText(50, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   controller.setColor(Svin::Color{255, 255, 255});
+
+   const Tempo tempo = getTempo();
+   const bool on = tempo.isRunningOrFirstTick();
+
+   for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+   {
+      const uint8_t y = 15 + 10 * channelIndex;
+
+      for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+      {
+         const uint8_t x = 50 + groupIndex * 40;
+
+         const uint8_t value = remoteValues[16 * groupIndex + channelIndex];
+         const std::string valueText = on ? Convert::text(value) : "off";
+         controller.writeText(x, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
+      }
+   }
+}
+
+void TrackerWorker::updateInternalOverview()
+{
+   controller.setColor(Svin::Color{255, 255, 0});
+   controller.drawRect(0, 0, 100, 10, true);
+
+   controller.setColor(Svin::Color{0, 0, 0});
+   controller.writeText(50, 0, "Overview", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   controller.setColor(Svin::Color{255, 255, 255});
+   controller.writeText(0, 175, fileName, 3);
+
+   const uint32_t segmentCount = project.getSegementCount();
+   controller.writeText(5, 15, std::to_string(segmentCount) + " segments", Svin::DisplayOLED::Font::Normal);
+
+   const std::string divName = Tempo::getName(project.getDivison());
+   controller.writeText(5, 30, "@ " + divName, Svin::DisplayOLED::Font::Normal);
+
+   const uint32_t index = project.getCurrentSegmentIndex();
+   if (index < project.getSegementCount())
+   {
+      controller.writeText(50, 70, std::to_string(index), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
+
+      const std::string eventName = eventNameList.at(index);
+      const std::string eventText = eventName.empty() ? "--" : eventName;
+      controller.writeText(50, 100, eventText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+   }
+   else
+   {
+      controller.setColor(Svin::Color{255, 255, 0});
+      controller.writeText(50, 70, "END", Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
+   }
+}
+
+void TrackerWorker::updateInternalCurrent()
+{
+   controller.setColor(Svin::Color{255, 0, 255});
+   controller.drawRect(0, 0, 100, 10, true);
+
+   controller.setColor(Svin::Color{0, 0, 0});
+   controller.writeText(50, 0, "Current", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   controller.setColor(Svin::Color{255, 255, 255});
+   controller.writeText(0, 15, "Hello", Svin::DisplayOLED::Font::Normal);
+}
+
+void TrackerWorker::document(const Svin::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
+{
+   std::cout << object.toString() << std::endl;
 }
 
 void TrackerWorker::load(const Svin::Json::Object& rootObject)
