@@ -118,7 +118,8 @@ void TrackerWorker::loadProject(const std::string& newFileName)
       const uint32_t segmentCount = projectObject.get("segments").toInt();
       const uint16_t digitCount = Convert::compileDigitCount(segmentCount);
 
-      project.clear(division, segmentCount);
+      project.clear();
+      project.update(division, segmentCount);
 
       Array laneArray = projectObject.get("lanes").toArray();
       if (project.getLaneCount() != laneArray.size())
@@ -292,14 +293,14 @@ void TrackerWorker::updateInternalOverview()
    controller.setColor(Svin::Color{255, 255, 255});
    controller.writeText(0, 175, fileName, 3);
 
-   const uint32_t segmentCount = project.getSegementCount();
+   const uint32_t segmentCount = project.getSegmentCount();
    controller.writeText(5, 15, std::to_string(segmentCount) + " segments", Svin::DisplayOLED::Font::Normal);
 
    const std::string divName = Tempo::getName(project.getDivison());
    controller.writeText(5, 30, "@ " + divName, Svin::DisplayOLED::Font::Normal);
 
    const uint32_t index = project.getCurrentSegmentIndex();
-   if (index < project.getSegementCount())
+   if (index < segmentCount)
    {
       controller.writeText(50, 70, std::to_string(index), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
 
