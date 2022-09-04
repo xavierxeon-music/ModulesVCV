@@ -92,7 +92,7 @@ private:
 
    OperationMode operationMode;
    Svin::Button operationModeButton;
-   uint8_t remoteValues[32];
+   uint8_t remoteValues[Tracker::Project::laneCount];
 
    // display
    Svin::DisplayOLED::Controller controller;
