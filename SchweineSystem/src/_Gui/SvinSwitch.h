@@ -13,7 +13,7 @@ namespace Svin
       using List = ElementList<Switch>;
 
    public:
-      Switch(Module* module, const uint16_t& paramIndex = 0);
+      Switch(Module* module, const uint16_t& paramIndex);
 
    public:
       void setState(bool on);

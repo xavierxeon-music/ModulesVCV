@@ -3,17 +3,26 @@
 
 #include <rack.hpp>
 
-/*
-configParam(OCTAVE_PARAM, -5.0, 4.0, 0.0, "Octave", "'", 0.5);
-getParamQuantity(OCTAVE_PARAM)->snapEnabled = true;
-*/
+#include "SvinCommon.h"
 
 namespace Svin
 {
    class Knob
    {
    public:
-      Knob();
+      using List = ElementList<Switch>;
+
+   public:
+      Knob(Module* module, const uint16_t& paramIndex);
+
+   public:
+      void setRange(const float& minValue, const float& maxValue, const bool& snap = false);
+      float getValue() const;
+      void setValue(const float& value);
+
+   private:
+      Module* module;
+      uint16_t paramIndex;
    };
 } // namespace Svin
 
