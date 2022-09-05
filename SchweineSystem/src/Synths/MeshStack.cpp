@@ -5,10 +5,20 @@
 
 MeshStack::MeshStack()
    : Svin::Module()
+   , knob(this, Panel::Knob_Mode)
 {
    setup();
+
+   knob.setRange(0, 10);
+   knob.enableSteps(true, 0.5);
 }
+
 void MeshStack::process(const ProcessArgs& args)
+{
+   knob.setValue(5);
+}
+
+void MeshStack::updateDisplays()
 {
 }
 

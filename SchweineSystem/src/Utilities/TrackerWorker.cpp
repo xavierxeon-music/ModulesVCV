@@ -160,17 +160,32 @@ void TrackerWorker::processPassthrough()
 {
    const bool on = getTempo().isRunningOrFirstTick();
 
+   uint8_t passthroughValues[Tracker::Project::laneCount];
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
    {
       for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
       {
          const float value = on ? inputList[groupIndex]->getVoltage(channelIndex) : 0.0;
          outputList[groupIndex]->setVoltage(value, channelIndex);
+
+         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
+         passthroughValues[laneIndex] = voltageToValue(value);
       }
    }
 
    if (uploadInput.isTriggered())
-      uploadState();
+   {
+      Svin::Json::Array stateArray;
+      for (uint8_t laneIndex = 0; laneIndex < Tracker::Project::laneCount; laneIndex++)
+         stateArray.append(passthroughValues[laneIndex]);
+
+      Svin::Json::Object object;
+      object.set("_Application", "Tracker");
+      object.set("_Type", "State");
+      object.set("state", stateArray);
+
+      sendDocument(1, object);
+   }
 }
 
 void TrackerWorker::proccessRemote()
@@ -355,18 +370,6 @@ void TrackerWorker::document(const ::Midi::Channel& channel, const Svin::Json::O
       const std::string fileName = object.get("fileName").toString();
       loadProject(fileName);
    }
-}
-
-void TrackerWorker::uploadState()
-{
-   Svin::Json::Array stateArray;
-
-   Svin::Json::Object object;
-   object.set("_Application", "Tracker");
-   object.set("_Type", "State");
-   object.set("state", stateArray);
-
-   sendDocument(1, object);
 }
 
 void TrackerWorker::load(const Svin::Json::Object& rootObject)

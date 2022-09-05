@@ -20,7 +20,10 @@ void MeshStackWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeKnob(this, Vec(143.98, 121.89), MeshStack::Panel::Knob_Mode, 1);
+   makeKnob(this, Vec(143.98, 121.89), MeshStack::Panel::Knob_Mode, 3);
+
+   auto paramWidget = rack::createParamCentered<rack::LEDSliderWhite>(Vec(10, 200), getModule(), MeshStack::Panel::Knob_Mode);
+   addParam(paramWidget);
 
    makeInput(this, Vec(55.54, 285.15), MeshStack::Panel::Pitch, false);
 

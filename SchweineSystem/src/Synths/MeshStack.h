@@ -4,9 +4,11 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SvinInput.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
+
+#include <SvinInput.h>
+#include <SvinKnob.h>
 #include <SvinOutput.h>
 
 class MeshStack : public Svin::Module
@@ -19,9 +21,13 @@ public:
 
 public:
    void process(const ProcessArgs& args) override;
+   void updateDisplays() override;
 
 private:
    void setup();
+
+private:
+   Svin::Knob knob;
 };
 
 // widget
