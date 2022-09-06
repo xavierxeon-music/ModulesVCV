@@ -135,6 +135,8 @@ class Module:
     def _gather(self):
 
         desktop = str(pathlib.Path.home()) + '/Desktop'
+        if not os.path.exists(desktop):
+            return
 
         for entry in os.scandir(desktop):
             if not entry.is_file():

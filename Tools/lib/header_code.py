@@ -39,7 +39,12 @@ class Headers(Common):
         line(2, '// knobs')
         for knob in self.knobs:
             name = knob['name']
-            line(2, f'Knob_{name} = {counter},')
+            line(2, f'{name} = {counter},')
+            counter += 1
+        line(2, '// sliders')            
+        for slider in self.sliders:
+            name = slider['name']
+            line(2, f'{name} = {counter},')
             counter += 1
         line(2, f'PARAMS_LEN = {counter}')
         line(1, '};')
@@ -118,9 +123,9 @@ class Headers(Common):
             name = ledbutton['name']
             line(2, f'RGB_{name} = {counter},')
             counter += 3
-        line(2, '// lcds')
-        for lcd in self.lcds:
-            name = lcd['name']
+        line(2, '// sliders')
+        for slider in self.sliders:
+            name = slider['name']
             line(2, f'RGB_{name} = {counter},')
             counter += 3
         line(2, f'LIGHTS_LEN = {counter}')
@@ -156,6 +161,8 @@ class Headers(Common):
                 line(0, '#include <SvinLightMeter.h>')
             if self.oleds:
                 line(0, '#include <SvinDisplayOLED.h>')
+            if self.sliders:
+                line(0, '#include <SvinSlider.h>')
             if self.switches:
                 line(0, '#include <SvinSwitch.h>')
             if self.inputs:
@@ -199,6 +206,30 @@ class Headers(Common):
             line(0)
             line(0, '#include <SvinModule.h>')
             line(0, '#include <SvinModuleWidget.h>')
+            line(0)
+
+            if self.buttons:
+                line(0, '#include <SvinButton.h>')
+            if self.knobs:
+                line(0, '#include <SvinKnob.h>')
+            if self.lcds:
+                line(0, '#include <SvinDisplayLCD.h>')
+            if self.ledbuttons:
+                line(0, '#include <SvinButtonLED.h>')
+            if self.leds:
+                line(0, '#include <SvinLED.h>')
+            if self.meters:
+                line(0, '#include <SvinLightMeter.h>')
+            if self.oleds:
+                line(0, '#include <SvinDisplayOLED.h>')
+            if self.sliders:
+                line(0, '#include <SvinSlider.h>')
+            if self.switches:
+                line(0, '#include <SvinSwitch.h>')
+            if self.inputs:
+                line(0, '#include <SvinInput.h>')
+            if self.outputs:
+                line(0, '#include <SvinOutput.h>')
             line(0)
 
             line(0, f'class {self.moduleName} : public Svin::Module')

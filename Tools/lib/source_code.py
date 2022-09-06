@@ -28,6 +28,12 @@ class Sources(Common):
             name = button['name']
             line(1, f'configButton(Panel::{name}, "{name}");')
 
+        if self.sliders:
+            line(0)
+        for slider in self.sliders:
+            name = slider['name']
+            line(1, f'configSwitch(Panel::{name}, 0.0f, 1.0f, 0.0f, "{name}");')
+
         if self.switches:
             line(0)
         for switch in self.switches:
@@ -44,7 +50,7 @@ class Sources(Common):
             line(0)
         for knob in self.knobs:
             name = knob['name']
-            line(1, f'configParam(Panel::Knob_{name}, -1.f, 1.f, 0.f, "");')
+            line(1, f'configParam(Panel::{name}, -1.f, 1.f, 0.f, "{name}");')
 
         if self.inputs:
             line(0)
@@ -76,6 +82,15 @@ class Sources(Common):
             y = button['cy']
             line(1, f'makeButton(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name});')
 
+        if self.sliders:
+            line(0)
+        for slider in self.sliders:
+            name = slider['name']
+            x = slider['cx']
+            y = slider['cy']
+            horizontal = 'false' if 1 == slider['count'] else 'true'
+            line(1, f'makeSlider(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {horizontal});')
+
         if self.switches:
             line(0)
         for switch in self.switches:
@@ -99,7 +114,7 @@ class Sources(Common):
             x = knob['cx']
             y = knob['cy']
             size = knob['count']
-            line(1, f'makeKnob(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::Knob_{name}, {size});')
+            line(1, f'makeKnob(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {size});')
 
         if self.inputs:
             line(0)

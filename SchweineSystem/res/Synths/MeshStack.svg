@@ -35,10 +35,10 @@
     <g id="Mode-knob-3" serif:id="Mode#knob$3" transform="matrix(0.758898,0,0,0.758898,101.741,-112.244)">
         <circle cx="55.661" cy="308.513" r="7.929"/>
     </g>
-    <g id="Two-VSlider" serif:id="Two#VSlider" transform="matrix(6.12323e-17,-1,1,6.12323e-17,-136.598,298.952)">
+    <g id="Two-slider" serif:id="Two#slider" transform="matrix(6.12323e-17,-1,1,6.12323e-17,-136.598,298.952)">
         <rect x="92.975" y="182.872" width="144.036" height="20.647" style="fill:rgb(217,217,217);"/>
     </g>
-    <rect id="One-HSlider" serif:id="One#HSlider" x="92.975" y="182.872" width="144.036" height="20.647" style="fill:rgb(217,217,217);"/>
+    <rect id="One-slider-h" serif:id="One#slider$h" x="92.975" y="182.872" width="144.036" height="20.647" style="fill:rgb(217,217,217);"/>
     <g transform="matrix(1,0,0,1,123.857,-3.32089)">
         <g transform="matrix(1,0,0,1,43.2454,1.87477)">
             <path d="M-38.253,23.596L-38.253,15.006L-36.542,15.006L-34.509,21.088C-34.321,21.654 -34.185,22.078 -34.099,22.359C-34.001,22.047 -33.849,21.588 -33.642,20.982L-31.585,15.006L-30.056,15.006L-30.056,23.596L-31.151,23.596L-31.151,16.406L-33.647,23.596L-34.673,23.596L-37.157,16.283L-37.157,23.596L-38.253,23.596Z" style="fill-rule:nonzero;"/>

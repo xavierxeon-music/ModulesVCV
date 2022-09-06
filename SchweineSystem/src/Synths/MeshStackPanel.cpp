@@ -1,5 +1,5 @@
-#include "MeshStackPanel.h"
 #include "MeshStack.h"
+#include "MeshStackPanel.h"
 
 #include <SvinOrigin.h>
 
@@ -7,7 +7,10 @@ void MeshStack::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configParam(Panel::Knob_Mode, -1.f, 1.f, 0.f, "");
+   configSwitch(Panel::Two, 0.0f, 1.0f, 0.0f, "Two");
+   configSwitch(Panel::One, 0.0f, 1.0f, 0.0f, "One");
+
+   configParam(Panel::Mode, -1.f, 1.f, 0.f, "Mode");
 
    configInput(Panel::Pitch, "Pitch");
 
@@ -20,12 +23,13 @@ void MeshStackWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeKnob(this, Vec(143.98, 121.89), MeshStack::Panel::Knob_Mode, 3);
+   makeSlider(this, Vec(56.60, 242.35), MeshStack::Panel::Two, false);
+   makeSlider(this, Vec(164.99, 193.20), MeshStack::Panel::One, true);
 
-   auto paramWidget = rack::createParamCentered<rack::LEDSliderWhite>(Vec(10, 200), getModule(), MeshStack::Panel::Knob_Mode);
-   addParam(paramWidget);
+   makeKnob(this, Vec(143.98, 121.89), MeshStack::Panel::Mode, 3);
 
-   makeInput(this, Vec(55.54, 285.15), MeshStack::Panel::Pitch, false);
+   makeInput(this, Vec(94.38, 290.07),  MeshStack::Panel::Pitch, false);
 
-   makeOutput(this, Vec(55.54, 328.06), MeshStack::Panel::Out, false);
+   makeOutput(this, Vec(94.38, 332.98), MeshStack::Panel::Out, false);
 }
+
