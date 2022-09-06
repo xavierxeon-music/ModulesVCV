@@ -10,7 +10,7 @@ namespace Svin
    class Slider
    {
    public:
-      using List = ElementList<Knob>;
+      using List = ElementList<Slider>;
 
    public:
       Slider(Module* module, const uint16_t& paramIndex);

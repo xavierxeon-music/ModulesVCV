@@ -86,8 +86,8 @@ class Sources(Common):
             line(0)
         for slider in self.sliders:
             name = slider['name']
-            x = slider['cx']
-            y = slider['cy']
+            x = slider['rx']
+            y = slider['ry']
             horizontal = 'false' if 1 == slider['count'] else 'true'
             line(1, f'makeSlider(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {horizontal});')
 

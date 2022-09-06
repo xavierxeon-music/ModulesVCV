@@ -5,7 +5,7 @@
 
 MeshStack::MeshStack()
    : Svin::Module()
-   , knob(this, Panel::Knob_Mode)
+   , knob(this, Panel::Mode)
 {
    setup();
 
