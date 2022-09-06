@@ -35,7 +35,7 @@
     <g id="Mode-knob-3" serif:id="Mode#knob$3" transform="matrix(0.758898,0,0,0.758898,101.741,-112.244)">
         <circle cx="55.661" cy="308.513" r="7.929"/>
     </g>
-    <g id="Two-slider" serif:id="Two#slider" transform="matrix(6.12323e-17,-1,1,6.12323e-17,-136.598,298.952)">
+    <g id="Two-slider" serif:id="Two#slider" transform="matrix(0.130817,0,0,6.51667,35.0934,-1121.73)">
         <rect x="92.975" y="182.872" width="144.036" height="20.647" style="fill:rgb(217,217,217);"/>
     </g>
     <rect id="One-slider-h" serif:id="One#slider$h" x="92.975" y="182.872" width="144.036" height="20.647" style="fill:rgb(217,217,217);"/>
