@@ -23,8 +23,8 @@ void MeshStackWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeSlider(this, Vec(46.27, 252.68), MeshStack::Panel::Two, false);
-   makeSlider(this, Vec(92.97, 182.87), MeshStack::Panel::One, true);
+   makeSlider(this, Vec(56.68, 137.26), MeshStack::Panel::Two, MeshStack::Panel::RGB_Two, false);
+   makeSlider(this, Vec(164.99, 193.20), MeshStack::Panel::One, MeshStack::Panel::RGB_One, true);
 
    makeKnob(this, Vec(143.98, 121.89), MeshStack::Panel::Mode, 3);
 

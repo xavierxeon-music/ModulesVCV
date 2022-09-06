@@ -10,6 +10,7 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinKnob.h>
 #include <SvinOutput.h>
+#include <SvinSlider.h>
 
 class MeshStack : public Svin::Module
 {
@@ -28,6 +29,7 @@ private:
 
 private:
    Svin::Knob knob;
+   Svin::Slider slider;
 };
 
 // widget

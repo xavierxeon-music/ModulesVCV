@@ -13,7 +13,7 @@ namespace Svin
       using List = ElementList<Input>;
 
    public:
-      Input(Module* module, const uint16_t& inputIndex = 0);
+      Input(Module* module, const uint16_t& inputIndex);
 
    public:
       bool isConnected() const;

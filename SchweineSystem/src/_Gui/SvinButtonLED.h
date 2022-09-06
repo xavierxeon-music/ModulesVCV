@@ -1,8 +1,8 @@
 #ifndef SvinButtonLEDH
 #define SvinButtonLEDH
 
-#include "SvinCommon.h"
-#include "SvinLED.h"
+#include <SvinCommon.h>
+#include <SvinLED.h>
 
 namespace Svin
 {
@@ -14,7 +14,7 @@ namespace Svin
       using List = ElementList<ButtonLED>;
 
    public:
-      ButtonLED(Module* module, const uint16_t& paramIndex = 0, const uint16_t& rgbIndex = 0);
+      ButtonLED(Module* module, const uint16_t& paramIndex, const uint16_t& rgbIndex);
 
    public:
       bool isTriggered();

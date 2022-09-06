@@ -16,7 +16,7 @@ namespace Svin
       class List;
 
    public:
-      LED(Module* module, const uint16_t& rgbIndex = 0);
+      LED(Module* module, const uint16_t& rgbIndex);
 
    public:
       void setColor(const Color& color);
