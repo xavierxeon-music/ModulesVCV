@@ -9,6 +9,7 @@ using namespace rack;
 
 #include <SvinInput.h>
 #include <SvinKnob.h>
+#include <SvinLED.h>
 #include <SvinOutput.h>
 #include <SvinSlider.h>
 
@@ -29,7 +30,8 @@ private:
 
 private:
    Svin::Knob knob;
-   Svin::Slider slider;
+   Svin::Slider::List colorSliders;
+   Svin::LED colorLED;
 };
 
 // widget

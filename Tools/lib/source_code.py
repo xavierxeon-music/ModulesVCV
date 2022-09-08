@@ -88,8 +88,7 @@ class Sources(Common):
             name = slider['name']
             x = slider['cx']
             y = slider['cy']
-            horizontal = 'false' if 1 == slider['count'] else 'true'
-            line(1, f'makeSlider(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {self.moduleName}::Panel::RGB_{name}, {horizontal});')
+            line(1, f'makeSlider(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {self.moduleName}::Panel::RGB_{name});')
 
         if self.switches:
             line(0)

@@ -8,6 +8,7 @@
 
 namespace Svin
 {
+   // 12 x 80
    class Slider : private LED
    {
    public:
@@ -34,13 +35,10 @@ namespace Svin
    };
 } // namespace Svin
 
-inline void makeSlider(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId, int firstLightId, bool horizontal)
+inline void makeSlider(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId, int firstLightId)
 {
    rack::app::ParamWidget* paramWidget = nullptr;
-   if (horizontal)
-      paramWidget = rack::createLightParamCentered<rack::VCVLightSliderHorizontal<rack::RedGreenBlueLight>>(pos, widget->getModule(), paramId, firstLightId);
-   else
-      paramWidget = rack::createLightParamCentered<rack::VCVLightSlider<rack::RedGreenBlueLight>>(pos, widget->getModule(), paramId, firstLightId);
+   paramWidget = rack::createLightParamCentered<rack::VCVLightSlider<rack::RedGreenBlueLight>>(pos, widget->getModule(), paramId, firstLightId);
    widget->addParam(paramWidget);
 }
 

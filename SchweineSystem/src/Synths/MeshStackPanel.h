@@ -5,6 +5,7 @@
 
 #include <SvinCommon.h>
 #include <SvinKnob.h>
+#include <SvinLED.h>
 #include <SvinSlider.h>
 #include <SvinInput.h>
 #include <SvinOutput.h>
@@ -19,9 +20,10 @@ struct MeshStack::Panel
       // knobs
       Mode = 0,
       // sliders
-      Two = 1,
-      One = 2,
-      PARAMS_LEN = 3
+      Blue = 1,
+      Green = 2,
+      Red = 3,
+      PARAMS_LEN = 4
    };
 
    enum DisplayId
@@ -51,11 +53,13 @@ struct MeshStack::Panel
    enum LightId
    {
       // leds
+      RGB_Color = 0,
       // ledbuttons
       // sliders
-      RGB_Two = 0,
-      RGB_One = 3,
-      LIGHTS_LEN = 6
+      RGB_Blue = 3,
+      RGB_Green = 6,
+      RGB_Red = 9,
+      LIGHTS_LEN = 12
    };
 
 };

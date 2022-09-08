@@ -8,9 +8,11 @@
 AturiaStep::AturiaStep()
    : Svin::Module()
    , MidiBusModule(Midi::Device::KeyStep1, this)
+   , Svin::MasterClock::Client()
    , useDrumChannel(false)
    , drumButon(this, Panel::Drums, Panel::RGB_Drums)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
+   , oldRunState(Tempo::Off)
    , inputList(this)
    , patterns{0, 0, 0, 0}
    , channelSwitch(CvSwitch::ChannelCount::Sixteen)
@@ -64,6 +66,19 @@ void AturiaStep::process(const ProcessArgs& args)
    if (connected())
       processBusMessage(busMessage);
 
+   updateClockState();
+   if (hasReset())
+   {
+      sendSongPositionZero();
+   }
+   else
+   {
+      while (hasMidiClock())
+      {
+         sendClock();
+      }
+   }
+
    if (drumButon.isTriggered())
       useDrumChannel ^= true;
    drumButon.setActive(useDrumChannel);
@@ -76,9 +91,9 @@ void AturiaStep::process(const ProcessArgs& args)
       {
          Variable::Integer<uint8_t> var(newPattern, 0, 15, true);
          if (downButtonList[channel]->isTriggered())
-            var.increment();
-         else if (upButtonList[channel]->isTriggered())
             var.decrement();
+         else if (upButtonList[channel]->isTriggered())
+            var.increment();
       }
       else
       {
@@ -124,12 +139,44 @@ void AturiaStep::sendProgramChange(uint8_t channel)
    if (0 == channel && useDrumChannel)
       midiChannel = Midi::Device::DrumTrigger;
 
-   std::cout << (uint16_t)midiChannel << std::endl;
+   // std::cout << (uint16_t)midiChannel << std::endl;
 
    std::vector<unsigned char> progChangeMessage(2);
    progChangeMessage[0] = (Midi::Event::ProgrammChange | (midiChannel - 1));
    progChangeMessage[1] = patterns[channel];
    sendMessage(progChangeMessage);
+}
+
+void AturiaStep::sendClock()
+{
+   std::vector<unsigned char> clockMessage(1);
+   clockMessage[0] = Midi::Event::Clock;
+   sendMessage(clockMessage);
+}
+
+void AturiaStep::updateClockState()
+{
+   const Tempo::RunState runState = getTempo().getRunState();
+   if (runState == oldRunState)
+      return;
+
+   std::vector<unsigned char> clockMessage(1);
+   if (Tempo::Off == runState)
+      clockMessage[0] = Midi::Event::Stop;
+   else if (Tempo::FirstTick == runState || Tempo::Running == runState)
+      clockMessage[0] = Midi::Event::Continue;
+
+   sendMessage(clockMessage);
+   oldRunState = runState;
+}
+
+void AturiaStep::sendSongPositionZero()
+{
+   std::vector<unsigned char> songPosMessage(3);
+   songPosMessage[0] = Midi::Event::SongPositionPointer;
+   songPosMessage[1] = 0;
+   songPosMessage[2] = 0;
+   sendMessage(songPosMessage);
 }
 
 void AturiaStep::updateDisplay(uint8_t channel)

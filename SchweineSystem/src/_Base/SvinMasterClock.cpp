@@ -5,6 +5,7 @@
 Svin::MasterClock::Client::Client()
    : mutex()
    , tickCount(0)
+   , midiClock(0)
    , reset(false)
 {
    MasterClock::clientList.push_back(this);
@@ -22,6 +23,16 @@ bool Svin::MasterClock::Client::hasTick()
       return false;
 
    tickCount--;
+   return true;
+}
+
+bool Svin::MasterClock::Client::hasMidiClock()
+{
+   std::lock_guard<std::mutex> guard(mutex);
+   if (0 == midiClock)
+      return false;
+
+   midiClock--;
    return true;
 }
 
@@ -76,18 +87,6 @@ bool Svin::MasterClock::iAmMasterClock() const
    return (this == me);
 }
 
-void Svin::MasterClock::reset()
-{
-   duration = 0;
-   tempo.clockReset();
-
-   for (Client* client : clientList)
-   {
-      std::lock_guard<std::mutex> guard(client->mutex);
-      client->reset = true;
-   }
-}
-
 void Svin::MasterClock::tick()
 {
    duration++;
@@ -97,6 +96,27 @@ void Svin::MasterClock::tick()
    {
       std::lock_guard<std::mutex> guard(client->mutex);
       client->tickCount++;
+   }
+}
+
+void Svin::MasterClock::midiClock()
+{
+   for (Client* client : clientList)
+   {
+      std::lock_guard<std::mutex> guard(client->mutex);
+      client->midiClock++;
+   }
+}
+
+void Svin::MasterClock::reset()
+{
+   duration = 0;
+   tempo.clockReset();
+
+   for (Client* client : clientList)
+   {
+      std::lock_guard<std::mutex> guard(client->mutex);
+      client->reset = true;
    }
 }
 

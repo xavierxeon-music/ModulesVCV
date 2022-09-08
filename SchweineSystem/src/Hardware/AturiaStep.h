@@ -7,6 +7,7 @@ using namespace rack;
 #include <Blocks/CvSwitch.h>
 
 #include "MidiBusModule.h"
+#include <SvinMasterClock.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -16,7 +17,7 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinSwitch.h>
 
-class AturiaStep : public Svin::Module, public MidiBusModule
+class AturiaStep : public Svin::Module, public MidiBusModule, public Svin::MasterClock::Client
 {
 public:
    struct Panel;
@@ -31,6 +32,9 @@ private:
    void setup();
    void connectToMidiDevice();
    void sendProgramChange(uint8_t channel);
+   void sendClock();
+   void updateClockState();
+   void sendSongPositionZero();
    void updateDisplay(uint8_t channel);
 
    void load(const Svin::Json::Object& rootObject) override;
@@ -41,6 +45,7 @@ private:
    bool useDrumChannel;
    Svin::ButtonLED drumButon;
    Svin::ButtonLED connectionButton;
+   Tempo::RunState oldRunState;
    // patterns
    Svin::Input::List inputList;
    uint8_t patterns[4];

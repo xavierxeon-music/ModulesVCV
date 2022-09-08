@@ -7,8 +7,9 @@ void MeshStack::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configSwitch(Panel::Two, 0.0f, 1.0f, 0.0f, "Two");
-   configSwitch(Panel::One, 0.0f, 1.0f, 0.0f, "One");
+   configSwitch(Panel::Blue, 0.0f, 1.0f, 0.0f, "Blue");
+   configSwitch(Panel::Green, 0.0f, 1.0f, 0.0f, "Green");
+   configSwitch(Panel::Red, 0.0f, 1.0f, 0.0f, "Red");
 
    configParam(Panel::Mode, -1.f, 1.f, 0.f, "Mode");
 
@@ -23,13 +24,16 @@ void MeshStackWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeSlider(this, Vec(56.68, 137.26), MeshStack::Panel::Two, MeshStack::Panel::RGB_Two, false);
-   makeSlider(this, Vec(164.99, 193.20), MeshStack::Panel::One, MeshStack::Panel::RGB_One, true);
+   makeSlider(this, Vec(83.74, 147.50), MeshStack::Panel::Blue, MeshStack::Panel::RGB_Blue);
+   makeSlider(this, Vec(68.50, 147.50), MeshStack::Panel::Green, MeshStack::Panel::RGB_Green);
+   makeSlider(this, Vec(53.26, 147.50), MeshStack::Panel::Red, MeshStack::Panel::RGB_Red);
 
-   makeKnob(this, Vec(143.98, 121.89), MeshStack::Panel::Mode, 3);
+   makeKnob(this, Vec(216.14, 319.36), MeshStack::Panel::Mode, 3);
 
    makeInput(this, Vec(94.38, 290.07),  MeshStack::Panel::Pitch, false);
 
    makeOutput(this, Vec(94.38, 332.98), MeshStack::Panel::Out, false);
+
+   makeLED(this, Vec(105.25, 147.50), MeshStack::Panel::RGB_Color);
 }
 

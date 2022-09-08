@@ -112,6 +112,7 @@ void MetropolixClock::connectToMidiDevice()
 
 void MetropolixClock::clockTick()
 {
+   midiClock();
    if (0 != midiTickCounter.valueAndNext())
       return;
 
