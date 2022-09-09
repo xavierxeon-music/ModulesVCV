@@ -14,18 +14,6 @@ then
    return
 fi
 
-
-OS_TEST=$(uname)
-if [ "$OS_TEST" == "Darwin" ]
-then
-   echo 'install brew packages'
-   brew install git wget cmake autoconf automake libtool jq python zstd
-else
-   echo 'install apt packages'
-   sudo apt install unzip git gdb curl cmake libx11-dev libglu1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev zlib1g-dev libasound2-dev libgtk2.0-dev libgtk-3-dev libjack-jackd2-dev jq zstd libpulse-dev
-fi
-
-
 RACK_DIR_TEST=$(echo $RACK_DIR)
 if [ -z "$RACK_DIR_TEST" ]
 then
@@ -34,11 +22,20 @@ then
    echo "rack environment set"
 fi
 
-
+OS_TEST=$(uname)
 if [ ! -f $SCRIPT_DIR/Rack/README.md ]
 then
    cd $SCRIPT_DIR
    git submodule update --init --recursive
+
+   if [ "$OS_TEST" == "Darwin" ]
+   then
+      echo 'install brew packages'
+      arch -x86_64 brew install git wget cmake autoconf automake libtool jq python zstd glfw
+   else
+      echo 'install apt packages'
+      sudo apt install unzip git gdb curl cmake libx11-dev libglu1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev zlib1g-dev libasound2-dev libgtk2.0-dev libgtk-3-dev libjack-jackd2-dev jq zstd libpulse-dev
+   fi
 fi
 
 
@@ -56,24 +53,31 @@ then
    git switch $VERSION 
 fi
 
-make dep -j 16
-make -j 16
+if [ "$OS_TEST" == "Darwin" ]
+then
+   MAXCORES=$(sysctl -n hw.ncpu)
+else
+   MAXCORES=$(nproc)
+fi
 
-ln -s $SCRIPT_DIR/3rdParty/Fundamental $SCRIPT_DIR/Rack/plugins/Fundamental   
-ln -s $SCRIPT_DIR/3rdParty/ImpromptuModular $SCRIPT_DIR/Rack/plugins/ImpromptuModular      
-ln -s $SCRIPT_DIR/3rdParty/BogaudioModules $SCRIPT_DIR/Rack/plugins/BogaudioModules      
-ln -s $SCRIPT_DIR/SchweineSystem $SCRIPT_DIR/Rack/plugins/SchweineSystem
+arch -x86_64 make dep -j $MAXCORES || exit
+arch -x86_64 make -j $MAXCORES || exit
+
+#ln -s $SCRIPT_DIR/3rdParty/Fundamental $SCRIPT_DIR/Rack/plugins/Fundamental   
+#ln -s $SCRIPT_DIR/3rdParty/ImpromptuModular $SCRIPT_DIR/Rack/plugins/ImpromptuModular      
+#ln -s $SCRIPT_DIR/3rdParty/BogaudioModules $SCRIPT_DIR/Rack/plugins/BogaudioModules      
+#ln -s $SCRIPT_DIR/SchweineSystem $SCRIPT_DIR/Rack/plugins/SchweineSystem
 
 cd $SCRIPT_DIR/3rdParty/Fundamental
 git switch v2
-make
+arch -x86_64 make -j $MAXCORES || exit
 
 cd $SCRIPT_DIR/3rdParty/ImpromptuModular
 git switch master
-make
+arch -x86_64 make -j $MAXCORES || exit
 
 cd $SCRIPT_DIR/3rdParty/BogaudioModules
 git switch master
-make
+arch -x86_64 make -j $MAXCORES || exit
 
 cd $CURRENT_DIR
