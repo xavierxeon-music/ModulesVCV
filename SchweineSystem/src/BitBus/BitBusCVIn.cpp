@@ -10,7 +10,6 @@ BitBusCVIn::BitBusCVIn()
    , Svin::Exapnder<BitBusMessage>(this)
    , inputMapper(-5.0, 5.0, 0.0, 255.0)
    , busOutIndicator(this, Panel::RGB_BusOut)
-
 {
    setup();
    allowExpanderOnRight();

@@ -26,6 +26,7 @@ namespace Svin
    protected:
       virtual void load(const Json::Object& rootObject);
       virtual void save(Json::Object& rootObject);
+      float getSampleRate() const;
 
    private:
       void dataFromJson(json_t* rootJson) override final;

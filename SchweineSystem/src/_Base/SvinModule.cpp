@@ -33,6 +33,11 @@ void Svin::Module::save(Json::Object& rootObject)
    // do nothing
 }
 
+float Svin::Module::getSampleRate() const
+{
+   return APP->engine->getSampleRate();
+}
+
 void Svin::Module::dataFromJson(json_t* rootJson)
 {
    const Json::Object rootObject(rootJson);

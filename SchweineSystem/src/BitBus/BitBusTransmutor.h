@@ -12,6 +12,9 @@ using namespace rack;
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
+#include <Sound/WaveTable.h>
+#include <Tools/Range.h>
+
 class BitBusTransmutor : public Svin::Module, public Svin::Exapnder<BitBusMessage>
 {
 public:
@@ -36,6 +39,9 @@ private:
 
    Svin::LED busInIndicator;
    Svin::LED busOutIndicator;
+
+   Range::Mapper inputMapper;
+   WaveTable::StepValueTable* table;
 };
 
 // widget

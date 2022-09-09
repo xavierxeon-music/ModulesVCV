@@ -57,7 +57,7 @@ namespace Svin
       static Client::List clientList;
       mutable std::mutex mutex;
 
-      Tempo::Control tempo;
+      TempoControl tempo;
       TimeCode::Duration duration;
    };
 
