@@ -7,25 +7,28 @@
 #include <SvinButton.h>
 #include <SvinDisplayLCD.h>
 #include <SvinLED.h>
+#include <SvinSlider.h>
+#include <SvinInput.h>
 
 struct BitBusTransmutor::Panel
 {
    enum ParamId
    {
       // buttons
-      Seed_Up = 0,
-      Seed_Down = 1,
+      Down = 0,
+      Up = 1,
       // switches
       // ledbuttons
       // knobs
       // sliders
-      PARAMS_LEN = 2
+      Mix = 2,
+      PARAMS_LEN = 3
    };
 
    enum DisplayId
    {
       // lcd
-      Text_Seed_Number = 0,
+      Text_Bank = 0,
       // oled
       DISPLAYS_LEN = 1
    };
@@ -37,7 +40,8 @@ struct BitBusTransmutor::Panel
 
    enum InputId
    {
-      INPUTS_LEN = 0
+      Scan = 0,
+      INPUTS_LEN = 1
    };
 
    enum OutputId
@@ -52,7 +56,8 @@ struct BitBusTransmutor::Panel
       RGB_BusOut = 3,
       // ledbuttons
       // sliders
-      LIGHTS_LEN = 6
+      RGB_Mix = 6,
+      LIGHTS_LEN = 9
    };
 
 };
