@@ -148,9 +148,6 @@ void Svin::Midi::Output::sendControllerChange(const ::Midi::Channel& channel, co
 
 void Svin::Midi::Output::sendDocument(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex)
 {
-   const std::string con = connected() ? " yes " : " no ";
-   std::cout << (uint16_t)channel << con << object.toString() << std::endl;
-
    sendControllerChange(channel, ::Midi::ControllerMessage::DataInit, docIndex);
 
    const Bytes content = object.toBytes();

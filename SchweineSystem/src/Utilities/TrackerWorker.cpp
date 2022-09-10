@@ -33,6 +33,7 @@ TrackerWorker::TrackerWorker()
    , operationModeButton(this, Panel::Mode)
    , remoteValues{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
    , controller(this, TrackerWorker::Panel::Pixels_Display)
+   , lastNamedSegement()
 {
    setup();
    controller.onClickedOpenFileFunction(this, &TrackerWorker::loadProject, "Projects:json");
@@ -254,7 +255,6 @@ void TrackerWorker::updatePassthrough()
    controller.setColor(Svin::Color{0, 0, 0});
    controller.writeText(50, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   controller.setColor(Svin::Color{255, 255, 255});
 
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
@@ -265,12 +265,24 @@ void TrackerWorker::updatePassthrough()
 
       for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
       {
-         const uint8_t x = 50 + groupIndex * 40;
+         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
+         const Tracker::Lane& lane = project.getLane(laneIndex);
+
+         controller.setColor(Svin::Color{155, 155, 155});
+
+         std::string name = lane.getName();
+         if (name.length() > 4)
+            name = name.substr(0, 4);
+         const uint8_t xName = 4 + groupIndex * 50;
+         controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
+
+         controller.setColor(Svin::Color{255, 255, 255});
 
          const float voltage = inputList[groupIndex]->getVoltage(channelIndex);
          const uint8_t value = voltageToValue(voltage);
          const std::string valueText = on ? Convert::text(value) : "off";
-         controller.writeText(x, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
+         const uint8_t xVoltage = 46 + groupIndex * 50;
+         controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
       }
    }
 }
@@ -294,11 +306,23 @@ void TrackerWorker::updateRemote()
 
       for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
       {
-         const uint8_t x = 50 + groupIndex * 40;
+         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
+         const Tracker::Lane& lane = project.getLane(laneIndex);
 
-         const uint8_t value = remoteValues[16 * groupIndex + channelIndex];
+         controller.setColor(Svin::Color{155, 155, 155});
+
+         std::string name = lane.getName();
+         if (name.length() > 4)
+            name = name.substr(0, 4);
+         const uint8_t xName = 4 + groupIndex * 50;
+         controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
+
+         controller.setColor(Svin::Color{255, 255, 255});
+
+         const uint8_t value = remoteValues[laneIndex];
          const std::string valueText = on ? Convert::text(value) : "off";
-         controller.writeText(x, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
+         const uint8_t xValue = 46 + groupIndex * 50;
+         controller.writeText(xValue, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
       }
    }
 }
@@ -320,10 +344,6 @@ void TrackerWorker::updateInternalOverview()
    const std::string divName = Tempo::getName(project.getDivison());
    controller.writeText(5, 30, "@ " + divName, Svin::DisplayOLED::Font::Normal);
 
-   Svin::Json::Object object;
-   object.set("_Application", "Tracker");
-   object.set("_Type", "Index");
-
    const uint32_t index = project.getCurrentSegmentIndex();
    if (index < segmentCount)
    {
@@ -333,17 +353,22 @@ void TrackerWorker::updateInternalOverview()
       const std::string eventText = eventName.empty() ? "--" : eventName;
       controller.writeText(50, 100, eventText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 
-      object.set("index", index);
-      object.set("end", false);
+      if (eventName.empty())
+         controller.writeText(50, 125, lastNamedSegement, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+      else
+         lastNamedSegement = eventName;
    }
    else
    {
       controller.setColor(Svin::Color{255, 255, 0});
       controller.writeText(50, 70, "END", Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
-
-      object.set("index", 0);
-      object.set("end", true);
    }
+
+   Svin::Json::Object object;
+   object.set("_Application", "Tracker");
+   object.set("_Type", "Index");
+   object.set("index", index);
+
    sendDocument(1, object);
 }
 
@@ -355,8 +380,36 @@ void TrackerWorker::updateInternalCurrent()
    controller.setColor(Svin::Color{0, 0, 0});
    controller.writeText(50, 0, "Current", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   controller.setColor(Svin::Color{255, 255, 255});
-   controller.writeText(0, 15, "Hello", Svin::DisplayOLED::Font::Normal);
+   const Tempo tempo = getTempo();
+   const bool on = tempo.isRunningOrFirstTick();
+   const uint32_t currentIndex = project.getCurrentSegmentIndex();
+   const float percentage = tempo.getPercentage(project.getDivison());
+
+   for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+   {
+      const uint8_t y = 15 + 10 * channelIndex;
+
+      for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+      {
+         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
+         const Tracker::Lane& lane = project.getLane(laneIndex);
+
+         controller.setColor(Svin::Color{155, 155, 155});
+
+         std::string name = lane.getName();
+         if (name.length() > 4)
+            name = name.substr(0, 4);
+         const uint8_t xName = 4 + groupIndex * 50;
+         controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
+
+         controller.setColor(Svin::Color{255, 255, 255});
+
+         const uint8_t value = on ? lane.getSegmentValue(currentIndex, percentage) : 0.0;
+         const std::string valueText = on ? Convert::text(value) : "off";
+         const uint8_t xVoltage = 46 + groupIndex * 50;
+         controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
+      }
+   }
 }
 
 void TrackerWorker::document(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
@@ -381,6 +434,9 @@ void TrackerWorker::document(const ::Midi::Channel& channel, const Svin::Json::O
          const uint8_t value = stateArray.get(laneIndex).toInt();
          remoteValues[laneIndex] = value;
       }
+
+      const uint32_t index = object.get("index").toInt();
+      project.setCurrentSegmentIndex(index);
    }
    else if ("Reload" == object.get("_Type").toString())
    {
