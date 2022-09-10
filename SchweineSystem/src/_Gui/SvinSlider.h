@@ -24,6 +24,7 @@ namespace Svin
       void setValue(const float& value);
 
       using LED::setActive;
+      using LED::setBrightness;
       using LED::setColor;
       using LED::setDefaultColor;
       using LED::setOff;

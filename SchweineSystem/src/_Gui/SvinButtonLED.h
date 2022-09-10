@@ -20,6 +20,7 @@ namespace Svin
       bool isTriggered();
 
       using LED::setActive;
+      using LED::setBrightness;
       using LED::setColor;
       using LED::setDefaultColor;
       using LED::setOff;

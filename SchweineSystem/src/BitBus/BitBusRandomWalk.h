@@ -5,14 +5,17 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SvinButton.h>
-#include <SvinDisplayLCD.h>
 #include <SvinExapnder.h>
-#include <SvinLED.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
-#include <Sound/WaveTable.h>
+#include <SvinButton.h>
+#include <SvinDisplayLCD.h>
+#include <SvinInput.h>
+#include <SvinLED.h>
+#include <SvinSlider.h>
+
+#include <Tools/Range.h>
 
 class BitBusRandomWalk : public Svin::Module, public Svin::Exapnder<BitBusMessage>
 {
@@ -20,7 +23,7 @@ public:
    struct Panel;
 
 public:
-   BitBusTransmutorBitBusRandomWalk();
+   BitBusRandomWalk();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -35,13 +38,17 @@ private:
    void save(Svin::Json::Object& rootObject) override;
 
 private:
-   Svin::Button upButton;
-   Svin::Button downButton;
-   Svin::DisplayLCD::Controller displayController;
-
    Svin::LED busInIndicator;
    Svin::LED busOutIndicator;
 
+   Svin::Slider mixSlider;
+   Svin::Button upButton;
+   Svin::Button downButton;
+   Svin::DisplayLCD::Controller displayController;
+   Svin::Input scanInput;
+   Range::Mapper scanMapper;
+
+   float mix;
    uint8_t seed;
    uint8_t tables[seedCount][256]; // seed, index
 };
@@ -51,10 +58,10 @@ private:
 class BitBusRandomWalkWidget : public Svin::ModuleWidget
 {
 public:
-   BitBusTransmutorWidget(BitBusRandomWalk* module);
+   BitBusRandomWalkWidget(BitBusRandomWalk* module);
 
 private:
    void setup();
 };
 
-#endif BitBusRandomWalkH
+#endif // NOT BitBusRandomWalkH

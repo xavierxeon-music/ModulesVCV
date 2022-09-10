@@ -5,7 +5,6 @@
 #include <Sound/StandardTable.h>
 #include <Tools/BoolField.h>
 #include <Tools/FastRandom.h>
-#include <Tools/Range.h>
 #include <Tools/Variable.h>
 
 #include <SvinOrigin.h>
@@ -13,16 +12,21 @@
 BitBusRandomWalk::BitBusRandomWalk()
    : Svin::Module()
    , Svin::Exapnder<BitBusMessage>(this)
-   , upButton(this, Panel::Seed_Up)
-   , downButton(this, Panel::Seed_Down)
-   , displayController(this, Panel::Text_Seed_Number)
    , busInIndicator(this, Panel::RGB_BusIn)
    , busOutIndicator(this, Panel::RGB_BusOut)
+   , mixSlider(this, Panel::Mix, Panel::RGB_Mix)
+   , upButton(this, Panel::Up)
+   , downButton(this, Panel::Down)
+   , displayController(this, Panel::Text_Bank)
+   , scanInput(this, Panel::Scan)
+   , scanMapper(0.0, 10.0, 0.0, 255.0)
+   , mix(0.0)
    , seed(0)
    , tables{}
 {
    setup();
    displayController.setColor(Svin::Color{255, 255, 0});
+   mixSlider.setDefaultColor(Svin::Color{255, 255, 0});
 
    allowExpanderOnLeft();
    allowExpanderOnRight();
@@ -67,11 +71,13 @@ BitBusRandomWalk::BitBusRandomWalk()
 void BitBusRandomWalk::load(const Svin::Json::Object& rootObject)
 {
    seed = rootObject.get("seed").toInt();
+   mix = rootObject.get("mix").toReal();
 }
 
 void BitBusRandomWalk::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("seed", seed);
+   rootObject.set("mix", mix);
 }
 
 void BitBusRandomWalk::process(const ProcessArgs& args)
@@ -86,18 +92,44 @@ void BitBusRandomWalk::process(const ProcessArgs& args)
    else
       busOutIndicator.setOn();
 
-   Variable::Integer<uint8_t> var(seed, 0, seedCount - 1, true);
-   if (upButton.isTriggered())
-      var.increment();
-   else if (downButton.isTriggered())
-      var.decrement();
+   if (scanInput.isConnected())
+   {
+      const float voltage = scanInput.getVoltage();
+      const float fSeed = scanMapper(voltage);
 
+      seed = static_cast<uint8_t>(fSeed);
+      mix = fSeed - seed;
+   }
+   else
+   {
+      Variable::Integer<uint8_t> var(seed, 0, seedCount - 1, true);
+      if (upButton.isTriggered())
+         var.increment();
+      else if (downButton.isTriggered())
+         var.decrement();
+
+      mix = mixSlider.getValue();
+   }
+
+   mixSlider.setBrightness(mix);
    displayController.setText(std::to_string(seed));
 
    const uint8_t valueIn = receiveFromLeft().byte;
-   const uint8_t valueOut = tables[seed][valueIn];
+   if (seedCount == seed + 1)
+   {
+      const uint8_t valueOut = tables[seed][valueIn];
+      sendToRight(BitBusMessage{valueOut});
+   }
+   else
+   {
+      const float valueOutA = static_cast<float>(tables[seed + 0][valueIn]);
+      const float valueOutB = static_cast<float>(tables[seed + 1][valueIn]);
 
-   sendToRight(BitBusMessage{valueOut});
+      const float valueMix = valueOutA + (mix * (valueOutB - valueOutA));
+
+      const uint8_t valueOut = static_cast<uint8_t>(valueMix);
+      sendToRight(BitBusMessage{valueOut});
+   }
 }
 
 // widget

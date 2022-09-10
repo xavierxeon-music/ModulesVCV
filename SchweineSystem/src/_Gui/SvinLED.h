@@ -19,20 +19,22 @@ namespace Svin
       LED(Module* module, const uint16_t& rgbIndex);
 
    public:
+      // set color directly
       void setColor(const Color& color);
+      // use default color
       void setDefaultColor(const Color& color);
-      void setOn(); // set to default color
+      void setOn();
       void setOff();
       void setActive(bool on);
+      void setBrightness(const float newBrightness);
 
    protected:
       Module* module;
 
    private:
-      uint16_t redIndex;
-      uint16_t greenIndex;
-      uint16_t blueIndex;
+      const uint16_t rgbIndex;
       Color defaultColor;
+      float brightness;
    };
 
    class LED::List
