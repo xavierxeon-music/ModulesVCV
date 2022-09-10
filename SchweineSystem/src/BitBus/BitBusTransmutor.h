@@ -13,7 +13,6 @@ using namespace rack;
 #include <SvinModuleWidget.h>
 
 #include <Sound/WaveTable.h>
-#include <Tools/Range.h>
 
 class BitBusTransmutor : public Svin::Module, public Svin::Exapnder<BitBusMessage>
 {
@@ -27,24 +26,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   class RandomWalkTables : public WaveTable::StepTable
-   {
-   public:
-      static constexpr uint16_t seedCount = 256;
-      static constexpr uint16_t fidelity = 64;
-
-   public:
-      RandomWalkTables();
-
-   public:
-      float valueByAngle(const float& angle) const;
-
-   public:
-      uint8_t seed;
-
-   private:
-      float tables[seedCount][fidelity]; // seed, index
-   };
+   static constexpr uint16_t seedCount = 256;
 
 private:
    void setup();
@@ -60,8 +42,8 @@ private:
    Svin::LED busInIndicator;
    Svin::LED busOutIndicator;
 
-   Range::Mapper inputMapper;
-   RandomWalkTables tables;
+   uint8_t seed;
+   uint8_t tables[seedCount][256]; // seed, index
 };
 
 // widget
