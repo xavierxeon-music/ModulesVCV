@@ -1,5 +1,5 @@
-#include "BitBusTransmutor.h"
-#include "BitBusTransmutorPanel.h"
+#include "BitBusRandomWalk.h"
+#include "BitBusRandomWalkPanel.h"
 
 #include <Maths.h>
 #include <Sound/StandardTable.h>
@@ -10,7 +10,7 @@
 
 #include <SvinOrigin.h>
 
-BitBusTransmutor::BitBusTransmutor()
+BitBusRandomWalk::BitBusRandomWalk()
    : Svin::Module()
    , Svin::Exapnder<BitBusMessage>(this)
    , upButton(this, Panel::Seed_Up)
@@ -64,17 +64,17 @@ BitBusTransmutor::BitBusTransmutor()
    }
 }
 
-void BitBusTransmutor::load(const Svin::Json::Object& rootObject)
+void BitBusRandomWalk::load(const Svin::Json::Object& rootObject)
 {
    seed = rootObject.get("seed").toInt();
 }
 
-void BitBusTransmutor::save(Svin::Json::Object& rootObject)
+void BitBusRandomWalk::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("seed", seed);
 }
 
-void BitBusTransmutor::process(const ProcessArgs& args)
+void BitBusRandomWalk::process(const ProcessArgs& args)
 {
    if (!canCommunicatWithLeft())
       return busInIndicator.setOff();
@@ -102,10 +102,10 @@ void BitBusTransmutor::process(const ProcessArgs& args)
 
 // widget
 
-BitBusTransmutorWidget::BitBusTransmutorWidget(BitBusTransmutor* module)
+BitBusRandomWalkWidget::BitBusRandomWalkWidget(BitBusRandomWalk* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
-Model* modelBitBusTransmutor = Svin::Origin::the()->addModule<BitBusTransmutor, BitBusTransmutorWidget>("BitBusTransmutor");
+Model* modelBitBusRandomWalk = Svin::Origin::the()->addModule<BitBusRandomWalk, BitBusRandomWalkWidget>("BitBusRandomWalk");

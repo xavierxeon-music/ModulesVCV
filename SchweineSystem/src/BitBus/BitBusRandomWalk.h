@@ -1,5 +1,5 @@
-#ifndef BitBusTransmutorH
-#define BitBusTransmutorH
+#ifndef BitBusRandomWalkH
+#define BitBusRandomWalkH
 
 #include <rack.hpp>
 using namespace rack;
@@ -14,13 +14,13 @@ using namespace rack;
 
 #include <Sound/WaveTable.h>
 
-class BitBusTransmutor : public Svin::Module, public Svin::Exapnder<BitBusMessage>
+class BitBusRandomWalk : public Svin::Module, public Svin::Exapnder<BitBusMessage>
 {
 public:
    struct Panel;
 
 public:
-   BitBusTransmutor();
+   BitBusTransmutorBitBusRandomWalk();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -48,13 +48,13 @@ private:
 
 // widget
 
-class BitBusTransmutorWidget : public Svin::ModuleWidget
+class BitBusRandomWalkWidget : public Svin::ModuleWidget
 {
 public:
-   BitBusTransmutorWidget(BitBusTransmutor* module);
+   BitBusTransmutorWidget(BitBusRandomWalk* module);
 
 private:
    void setup();
 };
 
-#endif // NOT BitBusTransmutorH
+#endif BitBusRandomWalkH

@@ -69,14 +69,14 @@
       },
       {
          "slug": "BitBusCounter",
-         "name": "BitBusCounter",
-         "description": "",
+         "name": "BitBus Counter",
+         "description": "count events and create a ramp",
          "tags": []
       },
       {
-         "slug": "BitBusTransmutor",
-         "name": "BitBusTransmutor",
-         "description": "",
+         "slug": "BitBusRandomWalk",
+         "name": "BitBus Random Walk",
+         "description": "replace ramp bits with random walk tables",
          "tags": []
       },
       {

@@ -1,7 +1,7 @@
-#ifndef BitBusTransmutorPanelH
-#define BitBusTransmutorPanelH
+#ifndef BitBusRandomWalkPanelH
+#define BitBusRandomWalkPanelH
 
-#include "BitBusTransmutor.h"
+#include "BitBusRandomWalk.h"
 
 #include <SvinCommon.h>
 #include <SvinButton.h>
@@ -10,7 +10,7 @@
 #include <SvinSlider.h>
 #include <SvinInput.h>
 
-struct BitBusTransmutor::Panel
+struct BitBusRandomWalk::Panel
 {
    enum ParamId
    {
@@ -62,4 +62,4 @@ struct BitBusTransmutor::Panel
 
 };
 
-#endif // NOT BitBusTransmutorPanelH
+#endif // NOT BitBusRandomWalkPanelH
