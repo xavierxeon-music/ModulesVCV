@@ -6,7 +6,7 @@ using namespace rack;
 
 #include "BitBusCommon.h"
 #include <SvinButton.h>
-#include <SvinDisplayOLED.h>
+#include <SvinDisplayLCD.h>
 #include <SvinExapnder.h>
 #include <SvinLED.h>
 #include <SvinModule.h>
@@ -27,21 +27,41 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
+   class RandomWalkTables : public WaveTable::StepTable
+   {
+   public:
+      static constexpr uint16_t seedCount = 256;
+      static constexpr uint16_t fidelity = 64;
+
+   public:
+      RandomWalkTables();
+
+   public:
+      float valueByAngle(const float& angle) const;
+
+   public:
+      uint8_t seed;
+
+   private:
+      float tables[seedCount][fidelity]; // seed, index
+   };
+
+private:
    void setup();
-   void updateDisplays() override;
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
 
 private:
-   Svin::Button displayButton;
-   Svin::DisplayOLED::Controller displayController;
+   Svin::Button upButton;
+   Svin::Button downButton;
+   Svin::DisplayLCD::Controller displayController;
 
    Svin::LED busInIndicator;
    Svin::LED busOutIndicator;
 
    Range::Mapper inputMapper;
-   WaveTable::StepValueTable* table;
+   RandomWalkTables tables;
 };
 
 // widget
