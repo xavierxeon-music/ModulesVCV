@@ -18,7 +18,6 @@ TrackerWorker::TrackerWorker()
    , project()
    , eventNameList()
    // midi
-   , receive(MidiReceive::None)
    , buffer()
    // input
    , inputList(this)
@@ -60,6 +59,13 @@ void TrackerWorker::process(const ProcessArgs& args)
       static const std::vector<OperationMode> order = {OperationMode::Passthrough, OperationMode::Remote, OperationMode::InternalOverview, OperationMode::InternalCurrent};
       Variable::Enum<OperationMode> variable(operationMode, order, true);
       variable.increment();
+
+      Svin::Json::Object object;
+      object.set("_Application", "Tracker");
+      object.set("_Type", "Mode");
+      object.set("mode", static_cast<uint8_t>(operationMode));
+
+      sendDocument(1, object);
    }
 
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
@@ -314,6 +320,10 @@ void TrackerWorker::updateInternalOverview()
    const std::string divName = Tempo::getName(project.getDivison());
    controller.writeText(5, 30, "@ " + divName, Svin::DisplayOLED::Font::Normal);
 
+   Svin::Json::Object object;
+   object.set("_Application", "Tracker");
+   object.set("_Type", "Index");
+
    const uint32_t index = project.getCurrentSegmentIndex();
    if (index < segmentCount)
    {
@@ -322,12 +332,19 @@ void TrackerWorker::updateInternalOverview()
       const std::string eventName = eventNameList.at(index);
       const std::string eventText = eventName.empty() ? "--" : eventName;
       controller.writeText(50, 100, eventText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+
+      object.set("index", index);
+      object.set("end", false);
    }
    else
    {
       controller.setColor(Svin::Color{255, 255, 0});
       controller.writeText(50, 70, "END", Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
+
+      object.set("index", 0);
+      object.set("end", true);
    }
+   sendDocument(1, object);
 }
 
 void TrackerWorker::updateInternalCurrent()

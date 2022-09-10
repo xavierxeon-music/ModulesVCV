@@ -33,19 +33,10 @@ public:
 private:
    enum class OperationMode
    {
-      Passthrough,
-      Remote,
-      InternalOverview,
-      InternalCurrent
-   };
-
-   friend class Display;
-
-   enum class MidiReceive
-   {
-      None,
-      Remember,
-      Data
+      Passthrough = 0,
+      Remote = 1,
+      InternalOverview = 2,
+      InternalCurrent = 3
    };
 
 private:
@@ -72,7 +63,6 @@ private:
    std::vector<std::string> eventNameList;
 
    // midi
-   MidiReceive receive;
    std::string buffer;
 
    // input
