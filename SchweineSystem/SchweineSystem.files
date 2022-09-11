@@ -27,7 +27,9 @@
 ./src/_Gui/SvinLED.h
 ./src/Utilities/TrackerWorkerPanel.h
 ./src/Utilities/RemoteScript.h
+./src/Utilities/HubConnect.h
 ./src/Utilities/MidiCVPanel.h
+./src/Utilities/HubConnectPanel.h
 ./src/Utilities/GateLatchPanel.h
 ./src/Utilities/MidiCV.h
 ./src/Utilities/TrackerWorker.h
@@ -215,6 +217,7 @@
 ./src/_Gui/SvinDisplayLCD.cpp
 ./src/Utilities/TrackerWorkerPanel.cpp
 ./src/Utilities/RemoteScriptPanel.cpp
+./src/Utilities/HubConnectPanel.cpp
 ./src/Utilities/MidiCV.cpp
 ./src/Utilities/RemoteScript.cpp
 ./src/Utilities/MidiCVPanel.cpp
@@ -223,6 +226,7 @@
 ./src/Utilities/TrackerWorker.cpp
 ./src/Utilities/MidiReplay.cpp
 ./src/Utilities/MidiReplayPanel.cpp
+./src/Utilities/HubConnect.cpp
 ./src/BitBus/BitBusRandomWalkPanel.cpp
 ./src/BitBus/BitBusCounterPanel.cpp
 ./src/BitBus/BitBusRandomWalk.cpp

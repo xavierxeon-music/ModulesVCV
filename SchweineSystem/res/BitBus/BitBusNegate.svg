@@ -26,7 +26,7 @@
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,78.6945)">
                 <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
             </g>
-            <g id="GateIn-input1" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,87.1026)">
+            <g id="GateIn-input-P" serif:id="GateIn#input$P" transform="matrix(0.23319,0,0,0.175002,108.438,87.1026)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
             </g>
         </g>
@@ -37,7 +37,7 @@
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,43.3266)">
                 <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
             </g>
-            <g id="GateIn-input2" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,51.8179)">
+            <g id="GateIn-input-P1" serif:id="GateIn#input$P" transform="matrix(0.23319,0,0,0.175002,108.438,51.8179)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
             </g>
         </g>
@@ -48,7 +48,7 @@
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,8.01938)">
                 <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
             </g>
-            <g id="GateIn-input3" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,16.3323)">
+            <g id="GateIn-input-P2" serif:id="GateIn#input$P" transform="matrix(0.23319,0,0,0.175002,108.438,16.3323)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
             </g>
         </g>
@@ -59,7 +59,7 @@
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,-60.2029)">
                 <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
             </g>
-            <g id="GateIn-input4" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,-51.7948)">
+            <g id="GateIn-input-P3" serif:id="GateIn#input$P" transform="matrix(0.23319,0,0,0.175002,108.438,-51.7948)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
@@ -70,7 +70,7 @@
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,-60.2029)">
                 <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
             </g>
-            <g id="GateIn-input5" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,-51.7948)">
+            <g id="GateIn-input-P4" serif:id="GateIn#input$P" transform="matrix(0.23319,0,0,0.175002,108.438,-51.7948)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
             </g>
         </g>
@@ -81,7 +81,7 @@
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,-94.5002)">
                 <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
             </g>
-            <g id="GateIn-input6" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,-86.1558)">
+            <g id="GateIn-input-P5" serif:id="GateIn#input$P" transform="matrix(0.23319,0,0,0.175002,108.438,-86.1558)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
             </g>
         </g>
@@ -92,7 +92,7 @@
             <g transform="matrix(3.30333,0,0,0.695794,-476.123,-130.158)">
                 <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
             </g>
-            <g id="GateIn-input7" serif:id="GateIn#input" transform="matrix(0.23319,0,0,0.175002,108.438,-121.893)">
+            <g id="GateIn-input-P6" serif:id="GateIn#input$P" transform="matrix(0.23319,0,0,0.175002,108.438,-121.893)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(235,235,235);"/>
             </g>
         </g>

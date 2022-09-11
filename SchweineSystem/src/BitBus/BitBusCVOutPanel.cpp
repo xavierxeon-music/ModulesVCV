@@ -1,5 +1,5 @@
-#include "BitBusCVOutPanel.h"
 #include "BitBusCVOut.h"
+#include "BitBusCVOutPanel.h"
 
 #include <SvinOrigin.h>
 
@@ -16,7 +16,8 @@ void BitBusCVOutWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeOutput(this, Vec(35.83, 215.77), BitBusCVOut::Panel::CVOut, false);
+   makeOutput(this, Vec(35.83, 215.77), BitBusCVOut::Panel::CVOut, true);
 
    makeLED(this, Vec(9.50, 46.77), BitBusCVOut::Panel::RGB_BusIn);
 }
+

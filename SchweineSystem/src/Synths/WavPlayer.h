@@ -42,6 +42,16 @@ private:
    Svin::DisplayOLED::Controller displayController;
    Sample::Oscilator oscilator;
    float sampleRate;
+
+   Svin::Input playInput;
+   Svin::Input loopInput;
+   Svin::Input resetInput;
+
+   Svin::Input pitchInput;
+
+   Svin::Output polyOutput;
+   Svin::Output rightOutput;
+
    // file
    std::string fileName;
    // play

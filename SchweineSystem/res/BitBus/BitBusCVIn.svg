@@ -38,7 +38,7 @@
         <g transform="matrix(4.08741e-16,6.67525,-0.695794,4.26051e-17,179.184,-1169.88)">
             <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
         </g>
-        <g id="CVIn-input" serif:id="CVIn#input" transform="matrix(0.175002,0,0,0.175002,89.4367,-0.660999)">
+        <g id="CVIn-input-P" serif:id="CVIn#input$P" transform="matrix(0.175002,0,0,0.175002,89.4367,-0.660999)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(204,204,204);"/>
         </g>
     </g>

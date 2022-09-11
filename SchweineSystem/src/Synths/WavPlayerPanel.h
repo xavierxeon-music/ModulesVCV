@@ -21,6 +21,7 @@ struct WavPlayer::Panel
       Loop = 1,
       Play = 2,
       // knobs
+      // sliders
       PARAMS_LEN = 3
    };
 
@@ -59,7 +60,7 @@ struct WavPlayer::Panel
       // ledbuttons
       RGB_Loop = 0,
       RGB_Play = 3,
-      // lcds
+      // sliders
       LIGHTS_LEN = 6
    };
 

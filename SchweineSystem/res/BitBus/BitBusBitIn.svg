@@ -32,28 +32,28 @@
         <g transform="matrix(1.65167,0,0,0.695794,-178.624,-130.158)">
             <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
         </g>
-        <g id="BitIn8-input" serif:id="BitIn8#input" transform="matrix(0.175002,0,0,0.175002,95.2635,120.969)">
+        <g id="BitIn8-input-P" serif:id="BitIn8#input$P" transform="matrix(0.175002,0,0,0.175002,95.2635,120.969)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
         </g>
-        <g id="BitIn7-input" serif:id="BitIn7#input" transform="matrix(0.175002,0,0,0.175002,95.2635,86.2175)">
+        <g id="BitIn7-input-P" serif:id="BitIn7#input$P" transform="matrix(0.175002,0,0,0.175002,95.2635,86.2175)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
         </g>
-        <g id="BitIn6-input" serif:id="BitIn6#input" transform="matrix(0.175002,0,0,0.175002,95.2635,16.7147)">
+        <g id="BitIn6-input-P" serif:id="BitIn6#input$P" transform="matrix(0.175002,0,0,0.175002,95.2635,16.7147)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
         </g>
-        <g id="BitIn5-input" serif:id="BitIn5#input" transform="matrix(0.175002,0,0,0.175002,95.2635,51.4661)">
+        <g id="BitIn5-input-P" serif:id="BitIn5#input$P" transform="matrix(0.175002,0,0,0.175002,95.2635,51.4661)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
         </g>
-        <g id="BitIn4-input" serif:id="BitIn4#input" transform="matrix(0.175002,0,0,0.175002,95.2635,-18.0367)">
+        <g id="BitIn4-input-P" serif:id="BitIn4#input$P" transform="matrix(0.175002,0,0,0.175002,95.2635,-18.0367)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
         </g>
-        <g id="BitIn3-input" serif:id="BitIn3#input" transform="matrix(0.175002,0,0,0.175002,95.2635,-52.7881)">
+        <g id="BitIn3-input-P" serif:id="BitIn3#input$P" transform="matrix(0.175002,0,0,0.175002,95.2635,-52.7881)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
         </g>
-        <g id="BitIn2-input" serif:id="BitIn2#input" transform="matrix(0.175002,0,0,0.175002,95.2635,-87.5395)">
+        <g id="BitIn2-input-P" serif:id="BitIn2#input$P" transform="matrix(0.175002,0,0,0.175002,95.2635,-87.5395)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
         </g>
-        <g id="BitIn1-input" serif:id="BitIn1#input" transform="matrix(0.175002,0,0,0.175002,95.2635,-122.291)">
+        <g id="BitIn1-input-P" serif:id="BitIn1#input$P" transform="matrix(0.175002,0,0,0.175002,95.2635,-122.291)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(230,230,230);"/>
         </g>
     </g>

@@ -24,6 +24,7 @@ struct BitBusNegate::Panel
       Bit2_Latch = 6,
       Bit1_Latch = 7,
       // knobs
+      // sliders
       PARAMS_LEN = 8
    };
 
@@ -71,7 +72,7 @@ struct BitBusNegate::Panel
       RGB_Bit3_Latch = 21,
       RGB_Bit2_Latch = 24,
       RGB_Bit1_Latch = 27,
-      // lcds
+      // sliders
       LIGHTS_LEN = 30
    };
 

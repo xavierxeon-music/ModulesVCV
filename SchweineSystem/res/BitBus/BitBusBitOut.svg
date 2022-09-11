@@ -32,28 +32,28 @@
         <g transform="matrix(1.65167,0,0,0.695794,-178.624,-130.158)">
             <rect x="161.957" y="57.989" width="36.327" height="2.261"/>
         </g>
-        <g id="BitOut8-output" serif:id="BitOut8#output" transform="matrix(0.175002,0,0,0.175002,95.2635,120.969)">
+        <g id="BitOut8-output-P" serif:id="BitOut8#output$P" transform="matrix(0.175002,0,0,0.175002,95.2635,120.969)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
-        <g id="BitOut7-output" serif:id="BitOut7#output" transform="matrix(0.175002,0,0,0.175002,95.2635,86.2175)">
+        <g id="BitOut7-output-P" serif:id="BitOut7#output$P" transform="matrix(0.175002,0,0,0.175002,95.2635,86.2175)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
-        <g id="BitOut6-output" serif:id="BitOut6#output" transform="matrix(0.175002,0,0,0.175002,95.2635,16.7147)">
+        <g id="BitOut6-output-P" serif:id="BitOut6#output$P" transform="matrix(0.175002,0,0,0.175002,95.2635,16.7147)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
-        <g id="BitOut5-output" serif:id="BitOut5#output" transform="matrix(0.175002,0,0,0.175002,95.2635,51.4661)">
+        <g id="BitOut5-output-P" serif:id="BitOut5#output$P" transform="matrix(0.175002,0,0,0.175002,95.2635,51.4661)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
-        <g id="BitOut4-output" serif:id="BitOut4#output" transform="matrix(0.175002,0,0,0.175002,95.2635,-18.0367)">
+        <g id="BitOut4-output-P" serif:id="BitOut4#output$P" transform="matrix(0.175002,0,0,0.175002,95.2635,-18.0367)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
-        <g id="BitOut3-output" serif:id="BitOut3#output" transform="matrix(0.175002,0,0,0.175002,95.2635,-52.7881)">
+        <g id="BitOut3-output-P" serif:id="BitOut3#output$P" transform="matrix(0.175002,0,0,0.175002,95.2635,-52.7881)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
-        <g id="BitOut2-output" serif:id="BitOut2#output" transform="matrix(0.175002,0,0,0.175002,95.2635,-87.5395)">
+        <g id="BitOut2-output-P" serif:id="BitOut2#output$P" transform="matrix(0.175002,0,0,0.175002,95.2635,-87.5395)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
-        <g id="BitOut1-output" serif:id="BitOut1#output" transform="matrix(0.175002,0,0,0.175002,95.2635,-122.291)">
+        <g id="BitOut1-output-P" serif:id="BitOut1#output$P" transform="matrix(0.175002,0,0,0.175002,95.2635,-122.291)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
         </g>
     </g>

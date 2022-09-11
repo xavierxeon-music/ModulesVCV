@@ -82,7 +82,7 @@
                 <g id="FlipSample-ledbutton" serif:id="FlipSample#ledbutton" transform="matrix(0.174892,0,0,0.175002,61.402,86.7121)">
                     <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(242,242,242);"/>
                 </g>
-                <g id="GateSample-input" serif:id="GateSample#input" transform="matrix(0.174892,0,0,0.175002,61.402,50.9114)">
+                <g id="GateSample-input-P" serif:id="GateSample#input$P" transform="matrix(0.174892,0,0,0.175002,61.402,50.9114)">
                     <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(217,217,217);"/>
                 </g>
                 <g transform="matrix(1,0,0,1,87.6198,-82.714)">
@@ -101,7 +101,7 @@
                 <g id="FlipFreeze-ledbutton" serif:id="FlipFreeze#ledbutton" transform="matrix(0.174892,0,0,0.175002,61.402,86.4739)">
                     <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:white;"/>
                 </g>
-                <g id="GateFreeze-input" serif:id="GateFreeze#input" transform="matrix(0.174892,0,0,0.175002,61.402,50.9114)">
+                <g id="GateFreeze-input-P" serif:id="GateFreeze#input$P" transform="matrix(0.174892,0,0,0.175002,61.402,50.9114)">
                     <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(217,217,217);"/>
                 </g>
                 <g transform="matrix(1,0,0,1,88.3194,-82.7856)">

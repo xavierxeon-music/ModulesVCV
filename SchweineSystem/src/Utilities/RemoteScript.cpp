@@ -11,6 +11,7 @@ RemoteScript::RemoteScript()
    , displayController(this, Panel::Pixels_Display)
    , restartButton(this, Panel::Restart)
    , killButton(this, Panel::Kill)
+   , connectedLight(this, Panel::RGB_Connected)
    , fileName()
 {
    setup();
@@ -32,8 +33,11 @@ void RemoteScript::process(const ProcessArgs& args)
 {
    if (restartButton.isTriggered())
       sendStart();
+
    if (killButton.isTriggered())
       sendKill();
+
+   connectedLight.setActive(hubConnected());
 }
 
 void RemoteScript::setScriptFileName(const std::string& newFileName)

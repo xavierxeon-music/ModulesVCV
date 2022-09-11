@@ -18,6 +18,7 @@ struct BitBusMeterAndFreeze::Panel
       FlipSample = 0,
       FlipFreeze = 1,
       // knobs
+      // sliders
       PARAMS_LEN = 2
    };
 
@@ -61,7 +62,7 @@ struct BitBusMeterAndFreeze::Panel
       // ledbuttons
       RGB_FlipSample = 30,
       RGB_FlipFreeze = 33,
-      // lcds
+      // sliders
       LIGHTS_LEN = 36
    };
 

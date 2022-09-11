@@ -1,5 +1,5 @@
-#include "WavPlayerPanel.h"
 #include "WavPlayer.h"
+#include "WavPlayerPanel.h"
 
 #include <SvinOrigin.h>
 
@@ -32,13 +32,14 @@ void WavPlayerWidget::setup()
    makeLEDButton(this, Vec(85.10, 207.15), WavPlayer::Panel::Loop, WavPlayer::Panel::RGB_Loop);
    makeLEDButton(this, Vec(85.10, 135.91), WavPlayer::Panel::Play, WavPlayer::Panel::RGB_Play);
 
-   makeInput(this, Vec(55.54, 266.05), WavPlayer::Panel::Pitch, false);
-   makeInput(this, Vec(55.48, 207.15), WavPlayer::Panel::LoopOverride, false);
-   makeInput(this, Vec(55.54, 171.53), WavPlayer::Panel::Reset, false);
-   makeInput(this, Vec(55.48, 135.91), WavPlayer::Panel::PlayOverride, false);
+   makeInput(this, Vec(55.54, 266.05),  WavPlayer::Panel::Pitch, false);
+   makeInput(this, Vec(55.48, 207.15),  WavPlayer::Panel::LoopOverride, false);
+   makeInput(this, Vec(55.54, 171.53),  WavPlayer::Panel::Reset, false);
+   makeInput(this, Vec(55.48, 135.91),  WavPlayer::Panel::PlayOverride, false);
 
    makeOutput(this, Vec(55.48, 355.83), WavPlayer::Panel::Right, false);
-   makeOutput(this, Vec(55.48, 318.15), WavPlayer::Panel::Left, false);
+   makeOutput(this, Vec(55.48, 318.15), WavPlayer::Panel::Left, true);
 
    makeOLED(this, Vec(10.00, 34.24), WavPlayer::Panel::Pixels_Display, 83, 60);
 }
+

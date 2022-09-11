@@ -15,6 +15,7 @@ struct BitBusCVOut::Panel
       // switches
       // ledbuttons
       // knobs
+      // sliders
       PARAMS_LEN = 0
    };
 
@@ -46,7 +47,7 @@ struct BitBusCVOut::Panel
       // leds
       RGB_BusIn = 0,
       // ledbuttons
-      // lcds
+      // sliders
       LIGHTS_LEN = 3
    };
 

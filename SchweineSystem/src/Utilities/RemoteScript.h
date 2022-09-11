@@ -5,9 +5,9 @@
 using namespace rack;
 
 #include <SvinButton.h>
-#include <SvinButtonLED.h>
 #include <SvinDisplayOLED.h>
 #include <SvinJson.h>
+#include <SvinLED.h>
 #include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
@@ -43,6 +43,7 @@ private:
    Svin::DisplayOLED::Controller displayController;
    Svin::Button restartButton;
    Svin::Button killButton;
+   Svin::LED connectedLight;
 
    // file
    std::string fileName;

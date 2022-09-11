@@ -1,33 +1,29 @@
-#ifndef RemoteScriptPanelH
-#define RemoteScriptPanelH
+#ifndef HubConnectPanelH
+#define HubConnectPanelH
 
-#include "RemoteScript.h"
+#include "HubConnect.h"
 
 #include <SvinCommon.h>
-#include <SvinButton.h>
-#include <SvinLED.h>
-#include <SvinDisplayOLED.h>
+#include <SvinButtonLED.h>
 
-struct RemoteScript::Panel
+struct HubConnect::Panel
 {
    enum ParamId
    {
       // buttons
-      Kill = 0,
-      Restart = 1,
       // switches
       // ledbuttons
+      Connect = 0,
       // knobs
       // sliders
-      PARAMS_LEN = 2
+      PARAMS_LEN = 1
    };
 
    enum DisplayId
    {
       // lcd
       // oled
-      Pixels_Display = 0,
-      DISPLAYS_LEN = 1
+      DISPLAYS_LEN = 0
    };
 
    enum MeterId
@@ -48,12 +44,12 @@ struct RemoteScript::Panel
    enum LightId
    {
       // leds
-      RGB_Connected = 0,
       // ledbuttons
+      RGB_Connect = 0,
       // sliders
       LIGHTS_LEN = 3
    };
 
 };
 
-#endif // NOT RemoteScriptPanelH
+#endif // NOT HubConnectPanelH

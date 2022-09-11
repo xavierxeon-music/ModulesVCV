@@ -24,11 +24,20 @@
          ]
       },
       {
+         "slug": "BitBusCounter",
+         "name": "BitBus Counter",
+         "description": "count events and create a ramp",
+         "tags": [
+            "Logic"
+         ]
+      },
+      {
          "slug": "BitBusCVIn",
          "name": "BitBus CV Input",
          "description": "turn CV intp 8 bits",
          "tags": [
-            "Binary"
+            "Logic",
+            "Polyphonic"
          ]
       },
       {
@@ -36,7 +45,8 @@
          "name": "BitBus Bit Output",
          "description": "get 8 bits",
          "tags": [
-            "Binary",
+            "Logic",
+            "Polyphonic",
             "Expander"
          ]
       },
@@ -45,7 +55,8 @@
          "name": "BitBus Meter And Freeze",
          "description": "freeze all bits",
          "tags": [
-            "Binary",
+            "Logic",
+            "Polyphonic",
             "Expander"
          ]
       },
@@ -54,9 +65,9 @@
          "name": "BitBus Negate",
          "description": "Negate individual bits",
          "tags": [
-            "Binary",
-            "Expander",
-            "Utility'"
+            "Logic",
+            "Polyphonic",
+            "Expander"
          ]
       },
       {
@@ -64,27 +75,27 @@
          "name": "BitBus Bit Input",
          "description": "set 8 bits",
          "tags": [
-            "Binary"
+            "Logic",
+            "Polyphonic"
          ]
-      },
-      {
-         "slug": "BitBusCounter",
-         "name": "BitBus Counter",
-         "description": "count events and create a ramp",
-         "tags": []
       },
       {
          "slug": "BitBusRandomWalk",
          "name": "BitBus Random Walk",
          "description": "replace ramp bits with random walk tables",
-         "tags": []
+         "tags": [
+            "Logic",
+            "Polyphonic",
+            "Expander"
+         ]
       },
       {
          "slug": "BitBusCVOut",
          "name": "BitBus CV Output",
          "description": "turn 8 bits into CV",
          "tags": [
-            "Binary",
+            "Logic",
+            "Polyphonic",
             "Expander"
          ]
       },
@@ -110,6 +121,7 @@
          "description": "Play WAV files",
          "tags": [
             "Oscillator",
+            "Oscillator",
             "Polyphonic"
          ]
       },
@@ -118,8 +130,8 @@
          "name": " MidiReplay",
          "description": "Playback Midi files",
          "tags": [
-            "Sequencer",
-            "Midi"
+            "Midi",
+            "Sequencer"
          ]
       },
       {
@@ -196,6 +208,12 @@
             "Midi",
             "Polyphonic"
          ]
+      },
+      {
+         "slug": "HubConnect",
+         "name": "HubConnect",
+         "description": "",
+         "tags": []
       }
    ]
 }

@@ -11,6 +11,12 @@ WavPlayer::WavPlayer()
    , displayController(this, Panel::Pixels_Display)
    , oscilator(true)
    , sampleRate(getSampleRate())
+   , playInput(this, Panel::Play)
+   , loopInput(this, Panel::Loop)
+   , resetInput(this, Panel::Reset)
+   , pitchInput(this, Panel::Pitch)
+   , polyOutput(this, Panel::Left)
+   , rightOutput(this, Panel::Right)
    , fileName()
    , play(false)
    , playButton(this, Panel::Play, Panel::RGB_Play)
@@ -27,9 +33,9 @@ WavPlayer::WavPlayer()
 
 void WavPlayer::process(const ProcessArgs& args)
 {
-   if (inputs[Panel::Pitch].isConnected())
+   if (pitchInput.isConnected())
    {
-      const float pitch = inputs[Panel::Pitch].getVoltage();
+      const float pitch = pitchInput.getVoltage();
       const float frequency = Abstract::Oscilator::frequencyFromCV(pitch);
       oscilator.setFrequency(frequency);
    }
@@ -60,11 +66,20 @@ void WavPlayer::process(const ProcessArgs& args)
       oscilator.reset();
    }
 
-   const float valueLeft = oscilator.createSound();
-   outputs[Panel::Left].setVoltage(valueLeft);
+   uint8_t channelCount = oscilator.getMeta().noOfChannels;
+   if (channelCount > 16)
+      channelCount = 16;
+
+   if (polyOutput.getNumberOfChannels() != channelCount)
+      polyOutput.setNumberOfChannels(channelCount);
+
+   oscilator.createSound();
+
+   for (uint8_t channel = 0; channel < channelCount; channel++)
+      polyOutput.setVoltage(oscilator.getSound(channel), channel);
 
    const float valueRight = oscilator.getSound();
-   outputs[Panel::Right].setVoltage(valueRight);
+   rightOutput.setVoltage(valueRight);
 }
 
 void WavPlayer::updateDisplays()

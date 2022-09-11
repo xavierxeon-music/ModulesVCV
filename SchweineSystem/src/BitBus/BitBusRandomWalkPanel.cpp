@@ -27,7 +27,7 @@ void BitBusRandomWalkWidget::setup()
 
    makeSlider(this, Vec(45.00, 138.86), BitBusRandomWalk::Panel::Mix, BitBusRandomWalk::Panel::RGB_Mix);
 
-   makeInput(this, Vec(45.00, 320.30),  BitBusRandomWalk::Panel::Scan, false);
+   makeInput(this, Vec(45.00, 320.30),  BitBusRandomWalk::Panel::Scan, true);
 
    makeLED(this, Vec(9.92, 46.77), BitBusRandomWalk::Panel::RGB_BusIn);
    makeLED(this, Vec(79.92, 46.77), BitBusRandomWalk::Panel::RGB_BusOut);
