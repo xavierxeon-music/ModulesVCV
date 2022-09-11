@@ -8,23 +8,19 @@
 
 RemoteScript::RemoteScript()
    : Svin::Module()
-   , Svin::Midi::Output("Trittbrettfahrer")
    , displayController(this, Panel::Pixels_Display)
    , restartButton(this, Panel::Restart)
    , killButton(this, Panel::Kill)
-   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , fileName()
 {
    setup();
+   registerHubClient("RemoteScript");
+
    displayController.fill();
-   //displayController.onClicked(this, &RemoteScript::displayClicked);
    displayController.onClickedOpenFileFunction(this, &RemoteScript::setScriptFileName, "Python:py");
 
-   connectionButton.setDefaultColor(Svin::Color{0, 255, 0});
-
-   if (connected())
+   if (hubConnected())
       sendStart();
-   connectToMidiDevice(); // only turns on LED if connected
 }
 
 RemoteScript::~RemoteScript()
@@ -38,9 +34,6 @@ void RemoteScript::process(const ProcessArgs& args)
       sendStart();
    if (killButton.isTriggered())
       sendKill();
-
-   if (connectionButton.isTriggered())
-      connectToMidiDevice();
 }
 
 void RemoteScript::setScriptFileName(const std::string& newFileName)
@@ -57,22 +50,6 @@ bool RemoteScript::scriptExists() const
 void RemoteScript::updateDisplays()
 {
    //displayController.fill();
-}
-
-void RemoteScript::connectToMidiDevice()
-{
-   if (connected())
-   {
-      connectionButton.setOn();
-      return;
-   }
-
-   connectionButton.setOff();
-   if (!open())
-      return;
-
-   connectionButton.setOn();
-   sendStart();
 }
 
 void RemoteScript::load(const Svin::Json::Object& rootObject)
@@ -103,7 +80,7 @@ void RemoteScript::sendStart()
    startObject.set("action", "launch");
    startObject.set("fileName", fileName);
 
-   sendDocument(1, startObject);
+   sendDocumentToHub(1, startObject);
 }
 
 void RemoteScript::sendKill()
@@ -115,7 +92,7 @@ void RemoteScript::sendKill()
    killObject.set("_Type", "Action");
    killObject.set("action", "kill");
 
-   sendDocument(1, killObject);
+   sendDocumentToHub(1, killObject);
 }
 
 void RemoteScript::displayClicked(const float& x, const float& y)

@@ -2,9 +2,79 @@
 
 #include <osdialog.h>
 
+// majordomo
+
+Svin::Module::Majordomo::Majordomo()
+   : Svin::Midi::Input("HubVCV")
+   , Svin::Midi::Output("HubVCV")
+   , moduleMap()
+{
+   tryConnect();
+}
+
+Svin::Module::Majordomo::~Majordomo()
+{
+   Midi::Input::close();
+   Midi::Output::close();
+}
+
+bool Svin::Module::Majordomo::add(Module* module, const std::string& name)
+{
+   if (moduleMap.find(name) != moduleMap.end()) // already resgistered  mdoule with that name
+      return false;
+
+   moduleMap[name] = module;
+   return true;
+}
+
+bool Svin::Module::Majordomo::remove(Module* module)
+{
+   for (Map::iterator it = moduleMap.begin(); it != moduleMap.end(); it++)
+   {
+      if (module != it->second)
+         continue;
+
+      moduleMap.erase(it);
+      break;
+   }
+
+   return moduleMap.empty();
+}
+
+bool Svin::Module::Majordomo::connected()
+{
+   return (Midi::Input::connected() && Midi::Output::connected());
+}
+
+void Svin::Module::Majordomo::tryConnect()
+{
+   if (!Midi::Input::connected())
+      Midi::Input::open();
+
+   if (!Midi::Output::connected())
+      Midi::Output::open();
+}
+
+void Svin::Module::Majordomo::document(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex)
+{
+}
+
+// module
+
+Svin::Module::Majordomo* Svin::Module::majordomo = nullptr;
+
 Svin::Module::Module()
    : rack::Module()
 {
+}
+
+Svin::Module::~Module()
+{
+   if (majordomo && majordomo->remove(this))
+   {
+      delete majordomo;
+      majordomo = nullptr;
+   }
 }
 
 void Svin::Module::updateDisplays()
@@ -36,6 +106,43 @@ void Svin::Module::save(Json::Object& rootObject)
 float Svin::Module::getSampleRate() const
 {
    return APP->engine->getSampleRate();
+}
+
+bool Svin::Module::hubConnected()
+{
+   if (!majordomo)
+      return false;
+
+   return majordomo->connected();
+}
+void Svin::Module::connectToHub()
+{
+   if (!majordomo)
+      return;
+
+   majordomo->tryConnect();
+}
+
+bool Svin::Module::registerHubClient(const std::string& name)
+{
+   if (!majordomo)
+      majordomo = new Majordomo();
+
+   return majordomo->add(this, name);
+}
+
+void Svin::Module::sendDocumentToHub(const ::Midi::Channel& channel, const Json::Object& object)
+{
+   if (!majordomo)
+      return;
+
+   majordomo->sendDocument(channel, object);
+}
+
+void Svin::Module::receivedDocumentFromHub(const Json::Object& object)
+{
+   (void)object;
+   // do nothing
 }
 
 void Svin::Module::dataFromJson(json_t* rootJson)

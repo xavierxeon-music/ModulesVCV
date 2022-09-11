@@ -245,6 +245,16 @@ void TrackerWorker::updateDisplays()
       updateInternalOverview();
    else if (TrackerWorker::OperationMode::InternalCurrent == operationMode)
       updateInternalCurrent();
+
+   const uint32_t index = project.getCurrentSegmentIndex();
+
+   Svin::Json::Object object;
+   object.set("_Application", "Tracker");
+   object.set("_Type", "Index");
+   object.set("index", index);
+   object.set("mode", static_cast<uint8_t>(operationMode));
+
+   sendDocument(1, object);
 }
 
 void TrackerWorker::updatePassthrough()
@@ -363,13 +373,6 @@ void TrackerWorker::updateInternalOverview()
       controller.setColor(Svin::Color{255, 255, 0});
       controller.writeText(50, 70, "END", Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
    }
-
-   Svin::Json::Object object;
-   object.set("_Application", "Tracker");
-   object.set("_Type", "Index");
-   object.set("index", index);
-
-   sendDocument(1, object);
 }
 
 void TrackerWorker::updateInternalCurrent()

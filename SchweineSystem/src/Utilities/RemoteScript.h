@@ -13,7 +13,7 @@ using namespace rack;
 #include <SvinModuleWidget.h>
 #include <SvinSvgImage.h>
 
-class RemoteScript : public Svin::Module, private Svin::Midi::Output
+class RemoteScript : public Svin::Module
 {
 public:
    struct Panel;
@@ -30,7 +30,6 @@ public:
 private:
    void setup();
    void updateDisplays() override;
-   void connectToMidiDevice();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -44,7 +43,6 @@ private:
    Svin::DisplayOLED::Controller displayController;
    Svin::Button restartButton;
    Svin::Button killButton;
-   Svin::ButtonLED connectionButton;
 
    // file
    std::string fileName;
