@@ -15,12 +15,10 @@ namespace Svin
 
    public:
       void shift(rack::math::Vec precentage);
+      void onButton(const rack::event::Button& buttonEvent) override;
 
    private:
-      widget::FramebufferWidget* fb;
       widget::TransformWidget* tw;
-      widget::SvgWidget* sw;
-
       float scale;
    };
 } // namespace Svin
