@@ -11,24 +11,25 @@ WavPlayer::WavPlayer()
    , displayController(this, Panel::Pixels_Display)
    , oscilator(true)
    , sampleRate(getSampleRate())
-   , playInput(this, Panel::Play)
-   , loopInput(this, Panel::Loop)
+   , fileName()
+   , playButton(this, Panel::Play, Panel::RGB_Play)
+   , playInput(this, Panel::PlayOverride)
+   , resetButton(this, Panel::ManualReset)
    , resetInput(this, Panel::Reset)
+   , loopButton(this, Panel::Loop, Panel::RGB_Loop)
+   , loopInput(this, Panel::LoopOverride)
    , pitchInput(this, Panel::Pitch)
    , polyOutput(this, Panel::Left)
    , rightOutput(this, Panel::Right)
-   , fileName()
-   , play(false)
-   , playButton(this, Panel::Play, Panel::RGB_Play)
-   , resetButton(this, Panel::ManualReset)
-   , loop(false)
-   , loopButton(this, Panel::Loop, Panel::RGB_Loop)
 {
    setup();
    displayController.onClicked(this, &WavPlayer::displayClicked);
 
    playButton.setDefaultColor(Svin::Color{0, 0, 255});
+   playButton.setLatchBuddy(&playInput);
+
    loopButton.setDefaultColor(Svin::Color{0, 0, 255});
+   loopButton.setLatchBuddy(&loopInput);
 }
 
 void WavPlayer::process(const ProcessArgs& args)
@@ -44,27 +45,21 @@ void WavPlayer::process(const ProcessArgs& args)
       oscilator.setFrequency(oscilator.defaultFrequency);
    }
 
-   if (playButton.isTriggered())
-   {
-      play ^= true;
-      playButton.setActive(play);
-      if (play)
-         oscilator.start();
-      else
-         oscilator.pause();
-   }
+   const bool play = playButton.isLatched();
+   playButton.setActive(play);
+   if (play)
+      oscilator.start();
+   else
+      oscilator.pause();
 
-   if (loopButton.isTriggered())
-   {
-      loop ^= true;
-      loopButton.setActive(loop);
-      oscilator.setLooping(loop);
-   }
+   const bool loop = loopButton.isLatched();
+   loopButton.setActive(loop);
+   oscilator.setLooping(loop);
 
-   if (resetButton.isTriggered())
-   {
+   if (resetInput.isConnected() && resetInput.isTriggered())
       oscilator.reset();
-   }
+   else if (resetButton.isTriggered())
+      oscilator.reset();
 
    uint8_t channelCount = oscilator.getMeta().noOfChannels;
    if (channelCount > 16)
@@ -75,10 +70,9 @@ void WavPlayer::process(const ProcessArgs& args)
    oscilator.createSound();
 
    for (uint8_t channel = 0; channel < channelCount; channel++)
-      polyOutput.setVoltage(oscilator.getSound(channel), channel);
+      polyOutput.setVoltage(8.0 * oscilator.getSound(channel), channel);
 
-   const float valueRight = oscilator.getSound();
-   rightOutput.setVoltage(valueRight);
+   rightOutput.setVoltage(8.0 * oscilator.getSound());
 }
 
 void WavPlayer::updateDisplays()
@@ -129,25 +123,18 @@ void WavPlayer::setWavFileName(const std::string& newFileName)
 
 void WavPlayer::load()
 {
-   oscilator.init(fileName, sampleRate);
-
-   if (play)
-      oscilator.start();
-   else
-      oscilator.pause();
-
-   oscilator.setLooping(loop);
+   oscilator.init(fileName, sampleRate);   
 }
 
 void WavPlayer::load(const Svin::Json::Object& rootObject)
 {
    fileName = rootObject.get("fileName").toString();
 
-   play = rootObject.get("play").toBool();
-   playButton.setActive(play);
+   const bool play = rootObject.get("play").toBool();
+   playButton.setLatched(play);
 
-   loop = rootObject.get("loop").toBool();
-   loopButton.setActive(loop);
+   const bool loop = rootObject.get("loop").toBool();
+   loopButton.setLatched(loop);
 
    load();
 }
@@ -155,8 +142,8 @@ void WavPlayer::load(const Svin::Json::Object& rootObject)
 void WavPlayer::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("fileName", fileName);
-   rootObject.set("play", play);
-   rootObject.set("loop", loop);
+   rootObject.set("play", playButton.isLatched(false));
+   rootObject.set("loop", loopButton.isLatched(false));
 }
 
 void WavPlayer::onSampleRateChange(const SampleRateChangeEvent& event)

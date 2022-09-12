@@ -1,5 +1,5 @@
-#include "BitBusCounterPanel.h"
 #include "BitBusCounter.h"
+#include "BitBusCounterPanel.h"
 
 #include <SvinOrigin.h>
 #include <limits>
@@ -7,6 +7,8 @@
 void BitBusCounter::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
+
+   configSwitch(Panel::Threshold, 0.0f, 1.0f, 0.0f, "Threshold");
 
    configInput(Panel::Reset, "Reset");
    configInput(Panel::Down, "Down");
@@ -19,9 +21,11 @@ void BitBusCounterWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeInput(this, Vec(24.17, 299.21), BitBusCounter::Panel::Reset, false);
-   makeInput(this, Vec(24.17, 215.77), BitBusCounter::Panel::Down, false);
-   makeInput(this, Vec(24.17, 159.97), BitBusCounter::Panel::Up, false);
+   makeSlider(this, Vec(23.72, 130.24), BitBusCounter::Panel::Threshold, BitBusCounter::Panel::RGB_Threshold);
+
+   makeInput(this, Vec(23.72, 344.87),  BitBusCounter::Panel::Reset, false);
+   makeInput(this, Vec(23.72, 261.44),  BitBusCounter::Panel::Down, false);
+   makeInput(this, Vec(23.72, 205.64),  BitBusCounter::Panel::Up, false);
 
    makeLED(this, Vec(65.77, 337.02), BitBusCounter::Panel::RGB_Bit8_Indicator);
    makeLED(this, Vec(65.77, 303.38), BitBusCounter::Panel::RGB_Bit7_Indicator);
@@ -35,3 +39,4 @@ void BitBusCounterWidget::setup()
 
    makeLCD(this, Vec(20.00, 42.49), 3, BitBusCounter::Panel::Text_Number, 18);
 }
+

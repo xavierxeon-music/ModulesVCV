@@ -13,7 +13,7 @@ void Svin::Slider::setRange(const float& minValue, const float& maxValue)
 {
    rack::engine::ParamQuantity* knob = module->getParamQuantity(paramIndex);
 
-   module->configParam(paramIndex, minValue, maxValue, 0.f, knob->name);
+   module->configParam(paramIndex, minValue, maxValue, minValue, knob->name);
 }
 
 void Svin::Slider::enableSteps(bool enabled, const float& newScale)

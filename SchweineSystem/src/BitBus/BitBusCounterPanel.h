@@ -6,6 +6,7 @@
 #include <SvinCommon.h>
 #include <SvinDisplayLCD.h>
 #include <SvinLED.h>
+#include <SvinSlider.h>
 #include <SvinInput.h>
 
 struct BitBusCounter::Panel
@@ -16,7 +17,9 @@ struct BitBusCounter::Panel
       // switches
       // ledbuttons
       // knobs
-      PARAMS_LEN = 0
+      // sliders
+      Threshold = 0,
+      PARAMS_LEN = 1
    };
 
    enum DisplayId
@@ -58,8 +61,8 @@ struct BitBusCounter::Panel
       RGB_Bit1_Indicator = 21,
       RGB_BusOut = 24,
       // ledbuttons
-      // lcds
-      RGB_Number = 27,
+      // sliders
+      RGB_Threshold = 27,
       LIGHTS_LEN = 30
    };
 

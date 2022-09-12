@@ -40,28 +40,27 @@ private:
 
 private:
    Svin::DisplayOLED::Controller displayController;
+   // file
    Sample::Oscilator oscilator;
    float sampleRate;
+   std::string fileName;
 
+   // play
+   Svin::ButtonLED playButton;
    Svin::Input playInput;
-   Svin::Input loopInput;
+
+   // reset
+   Svin::Button resetButton;
    Svin::Input resetInput;
+
+   // loop
+   Svin::ButtonLED loopButton;
+   Svin::Input loopInput;
 
    Svin::Input pitchInput;
 
    Svin::Output polyOutput;
    Svin::Output rightOutput;
-
-   // file
-   std::string fileName;
-   // play
-   bool play;
-   Svin::ButtonLED playButton;
-   // reset
-   Svin::Button resetButton;
-   // loop
-   bool loop;
-   Svin::ButtonLED loopButton;
 };
 
 // widget

@@ -9,8 +9,10 @@
 BitBusCounter::BitBusCounter()
    : Svin::Module()
    , Svin::Exapnder<BitBusMessage>(this)
-   , upTrigger()
-   , downTrigger()
+   , upInput(this, Panel::Up)
+   , downInput(this, Panel::Down)
+   , resetInput(this, Panel::Reset)
+   , thresholdSlider(this, Panel::Threshold, Panel::RGB_Threshold)
    , counter(0)
    , counterController(this, Panel::Text_Number)
    , bitIndicatorList(this)
@@ -34,34 +36,43 @@ BitBusCounter::BitBusCounter()
    }
 
    counterController.setColor(Svin::Color{0, 255, 255});
+   thresholdSlider.setOff();
+   thresholdSlider.setRange(1.0, 10.0);
+   thresholdSlider.setValue(3.0);
 }
 
 void BitBusCounter::load(const Svin::Json::Object& rootObject)
 {
    counter = rootObject.get("counter").toInt();
+
+   const float threshold = rootObject.get("threshold").toReal();
+   thresholdSlider.setValue(threshold);
 }
 
 void BitBusCounter::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("counter", counter);
+
+   const float threshold = thresholdSlider.getValue();
+   rootObject.set("threshold", threshold);
 }
 
 void BitBusCounter::process(const ProcessArgs& args)
 {
-   const bool resetActive = (inputs[Panel::Reset].getVoltage() > 3.0);
-   if (resetActive)
+   const float threshold = thresholdSlider.getValue();
+   upInput.setTriggerThreshold(threshold);
+   downInput.setTriggerThreshold(threshold);
+
+   if (resetInput.isTriggered())
    {
       counter = 0;
    }
    else
    {
-      const bool upActive = (inputs[Panel::Up].getVoltage() > 3.0);
-      const bool downActive = (inputs[Panel::Down].getVoltage() > 3.0);
-
       Variable::Integer<uint8_t> var(counter, 0, 255, true);
-      if (upTrigger.process(upActive))
+      if (upInput.isTriggered())
          var.increment();
-      else if (downTrigger.process(downActive))
+      else if (downInput.isTriggered())
          var.decrement();
    }
 

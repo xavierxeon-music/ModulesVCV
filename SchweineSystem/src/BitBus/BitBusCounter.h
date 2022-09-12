@@ -13,6 +13,7 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinLED.h>
 #include <SvinOutput.h>
+#include <SvinSlider.h>
 
 class BitBusCounter : public Svin::Module, public Svin::Exapnder<BitBusMessage>
 {
@@ -32,12 +33,15 @@ private:
    void save(Svin::Json::Object& rootObject) override;
 
 private:
-   dsp::BooleanTrigger upTrigger;
-   dsp::BooleanTrigger downTrigger;
+   Svin::Input upInput;
+   Svin::Input downInput;
+   Svin::Input resetInput;
+
+   Svin::Slider thresholdSlider;
 
    uint8_t counter;
    Svin::DisplayLCD::Controller counterController;
-   Svin::LED ::List bitIndicatorList;
+   Svin::LED::List bitIndicatorList;
 
    Svin::LED busOutIndicator;
 };
