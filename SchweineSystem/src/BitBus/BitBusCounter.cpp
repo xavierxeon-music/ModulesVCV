@@ -81,7 +81,10 @@ void BitBusCounter::process(const ProcessArgs& args)
    for (uint8_t index = 0; index < 8; index++)
       bitIndicatorList[index]->setActive(boolField.get(index));
 
-   sendToRight(BitBusMessage{boolField});
+   BitBusMessage message;
+   message.byte[0] = counter;
+
+   sendToRight(message);
 }
 
 // widget

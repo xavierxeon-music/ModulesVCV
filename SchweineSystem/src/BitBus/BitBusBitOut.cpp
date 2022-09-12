@@ -25,12 +25,13 @@ BitBusBitOut::~BitBusBitOut()
 
 void BitBusBitOut::process(const ProcessArgs& args)
 {
+   BitBusMessage message;
+
    if (canCommunicatWithRight())
       busOutIndicator.setOn();
    else
       busOutIndicator.setOff();
 
-   BoolField8 boolField = 0;
    if (!canCommunicatWithLeft())
    {
       busInIndicator.setOff();
@@ -38,17 +39,25 @@ void BitBusBitOut::process(const ProcessArgs& args)
    else
    {
       busInIndicator.setOn();
-      boolField = receiveFromLeft().byte;
+      message = receiveFromLeft();
    }
 
+   // sound
    for (uint8_t index = 0; index < 8; index++)
+      outputList[index]->setNumberOfChannels(message.channelCount);
+
+   for (uint8_t channel = 0; channel < message.channelCount; channel++)
    {
-      const bool value = boolField.get(index);
-      outputList[index]->setVoltage(value ? 5.0 : 0.0);
+      const BoolField8 boolField = message.byte[channel];
+      for (uint8_t index = 0; index < 8; index++)
+      {
+         const bool value = boolField.get(index);
+         outputList[index]->setVoltage(value ? 5.0 : 0.0);
+      }
    }
 
    if (canCommunicatWithRight())
-      sendToRight(BitBusMessage{boolField});
+      sendToRight(message);
 }
 
 // widget

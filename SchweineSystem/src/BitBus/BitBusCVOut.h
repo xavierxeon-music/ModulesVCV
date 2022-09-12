@@ -32,6 +32,7 @@ private:
    void setup();
 
 private:
+   Svin::Output cvOutput;
    Range::Mapper outputMapper;
 
    Svin::LED busInIndicator;

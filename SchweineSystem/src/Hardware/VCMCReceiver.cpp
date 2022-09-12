@@ -88,11 +88,8 @@ void VCMCReceiver::process(const ProcessArgs& args)
    if (connectionButton.isTriggered())
       connectToMidiDevice();
 
-   if (16 != gateOutput.getNumberOfChannels())
-      gateOutput.setNumberOfChannels(16);
-
-   if (16 != cvOutput.getNumberOfChannels())
-      cvOutput.setNumberOfChannels(16);
+   gateOutput.setNumberOfChannels(16);
+   cvOutput.setNumberOfChannels(16);
 
    for (uint8_t index = 0; index < 8; index++)
    {

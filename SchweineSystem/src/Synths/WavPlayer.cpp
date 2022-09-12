@@ -70,8 +70,7 @@ void WavPlayer::process(const ProcessArgs& args)
    if (channelCount > 16)
       channelCount = 16;
 
-   if (polyOutput.getNumberOfChannels() != channelCount)
-      polyOutput.setNumberOfChannels(channelCount);
+   polyOutput.setNumberOfChannels(channelCount);
 
    oscilator.createSound();
 

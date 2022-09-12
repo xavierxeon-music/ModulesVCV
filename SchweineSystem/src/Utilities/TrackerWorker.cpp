@@ -70,10 +70,7 @@ void TrackerWorker::process(const ProcessArgs& args)
    }
 
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
-   {
-      if (16 != outputList[groupIndex]->getNumberOfChannels())
-         outputList[groupIndex]->setNumberOfChannels(16);
-   }
+      outputList[groupIndex]->setNumberOfChannels(16);
 
    // do stuff
    if (OperationMode::Passthrough == operationMode)

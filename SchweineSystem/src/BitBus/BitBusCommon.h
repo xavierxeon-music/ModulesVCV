@@ -6,7 +6,10 @@
 struct BitBusMessage
 {
    uint8_t byte[16];
-   uint8_t channelCount = 1;
+   uint8_t channelCount;
+
+   BitBusMessage();
+   BitBusMessage& operator=(const BitBusMessage& other);
 };
 
 #endif // NOT BitBusCommonH

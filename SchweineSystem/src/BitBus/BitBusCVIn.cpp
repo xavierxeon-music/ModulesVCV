@@ -8,6 +8,7 @@
 BitBusCVIn::BitBusCVIn()
    : Svin::Module()
    , Svin::Exapnder<BitBusMessage>(this)
+   , cvInput(this, Panel::CVIn)
    , inputMapper(-5.0, 5.0, 0.0, 255.0)
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
@@ -21,6 +22,7 @@ BitBusCVIn::~BitBusCVIn()
 
 void BitBusCVIn::process(const ProcessArgs& args)
 {
+   // optics
    if (!canCommunicatWithRight())
    {
       busOutIndicator.setOff();
@@ -29,14 +31,19 @@ void BitBusCVIn::process(const ProcessArgs& args)
 
    busOutIndicator.setOn();
 
-   BoolField8 boolField = 0;
-   if (inputs[Panel::CVIn].isConnected())
+   // sound
+   BitBusMessage message;
+   if (cvInput.isConnected())
    {
-      const float voltageInput = inputs[Panel::CVIn].getVoltage(); // from -5.0 V to + 5.0 V
-      boolField = static_cast<uint8_t>(inputMapper(voltageInput));
+      message.channelCount = cvInput.getNumberOfChannels();
+      for (uint8_t channel = 0; channel < message.channelCount; channel++)
+      {
+         const float voltageInput = cvInput.getVoltage(channel); // from -5.0 V to + 5.0 V
+         message.byte[channel] = static_cast<uint8_t>(inputMapper(voltageInput));
+      }
    }
 
-   sendToRight(BitBusMessage{boolField});
+   sendToRight(message);
 }
 
 // widget
