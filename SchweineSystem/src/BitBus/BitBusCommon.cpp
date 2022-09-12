@@ -6,6 +6,12 @@ BitBusMessage::BitBusMessage()
 {
 }
 
+BitBusMessage::BitBusMessage(const BitBusMessage& other)
+   : BitBusMessage()
+{
+   *this = other;
+}
+
 BitBusMessage& BitBusMessage::operator=(const BitBusMessage& other)
 {
    for (uint8_t channel = 0; channel < 16; channel++)

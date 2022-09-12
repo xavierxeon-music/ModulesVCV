@@ -9,6 +9,7 @@ struct BitBusMessage
    uint8_t channelCount;
 
    BitBusMessage();
+   BitBusMessage(const BitBusMessage& other);
    BitBusMessage& operator=(const BitBusMessage& other);
 };
 

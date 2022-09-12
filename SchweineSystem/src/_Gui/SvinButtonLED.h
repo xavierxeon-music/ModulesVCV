@@ -7,6 +7,7 @@
 namespace Svin
 {
    class Module;
+   class Input;
 
    class ButtonLED : private LED
    {
@@ -18,6 +19,7 @@ namespace Svin
 
    public:
       bool isTriggered();
+      void setTriggerBuddy(Input* input);
 
       using LED::setActive;
       using LED::setBrightness;
@@ -29,6 +31,7 @@ namespace Svin
    private:
       uint16_t paramIndex;
       rack::dsp::BooleanTrigger trigger;
+      Input* triggerBuddy;
    };
 
 } // namespace Svin

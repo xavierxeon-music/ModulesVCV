@@ -25,10 +25,14 @@ namespace Svin
       // gate
       bool isOn(const uint8_t channel = 0) const;
       bool isOff(const uint8_t channel = 0) const;
+      // threshold
+      const float& getTriggerThreshold() const;
+      void setTriggerThreshold(const float& value);
 
    private:
       Module* module;
       uint16_t inputIndex;
+      float triggerThreshold;
       mutable rack::dsp::BooleanTrigger triggers[16];
    };
 } // namespace Svin

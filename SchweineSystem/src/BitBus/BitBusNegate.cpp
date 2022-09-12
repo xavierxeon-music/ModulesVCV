@@ -79,31 +79,36 @@ void BitBusNegate::process(const ProcessArgs& args)
    if (!canCommunicatWithRight() || !canCommunicatWithLeft())
       return;
 
-   BoolField8 boolField = receiveFromLeft().byte;
+   BitBusMessage message = receiveFromLeft();
 
-   for (uint8_t index = 0; index < 8; index++)
+   for (uint8_t channel = 0; channel < message.channelCount; channel++)
    {
-      bool negateValue = latchList[index]->isTriggered();
-      if (gateList[index]->isConnected())
-         negateValue = gateList[index]->isOn();
-
-      if (gateTrigger[index].process(negateValue))
-         gates[index] ^= true;
-
-      if (gates[index])
-         latchList[index]->setOn();
-      else
-         latchList[index]->setOff();
-
-      if (gates[index]) // negate value
+      BoolField8 boolField = message.byte[channel];
+      for (uint8_t index = 0; index < 8; index++)
       {
-         bool value = boolField.get(index);
-         value ^= true;
-         boolField.set(index, value);
+         bool negateValue = latchList[index]->isTriggered();
+         if (gateList[index]->isConnected())
+            negateValue = gateList[index]->isOn(channel);
+
+         if (gateTrigger[index].process(negateValue))
+            gates[index] ^= true;
+
+         if (gates[index])
+            latchList[index]->setOn();
+         else
+            latchList[index]->setOff();
+
+         if (gates[index]) // negate value
+         {
+            bool value = boolField.get(index);
+            value ^= true;
+            boolField.set(index, value);
+         }
       }
+      message.byte[channel] = boolField;
    }
 
-   sendToRight(BitBusMessage{boolField});
+   sendToRight(message);
 }
 
 // widget

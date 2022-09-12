@@ -12,6 +12,7 @@ using namespace rack;
 #include <Tools/BoolField.h>
 #include <Tools/RingBuffer.h>
 
+#include <SvinButtonLED.h>
 #include <SvinCommon.h>
 #include <SvinInput.h>
 #include <SvinLED.h>
@@ -38,10 +39,12 @@ private:
 
 private:
    Svin::LED::List lightList;
-   dsp::BooleanTrigger freezTrigger;
+   Svin::ButtonLED freezeButton;
+   Svin::Input freezeInput;
    bool freezeMode;
-   BoolField8 freezeBuffer;
-   dsp::BooleanTrigger sampleTrigger;
+   BoolField8 freezeBuffer[16];
+   Svin::ButtonLED sampleButton;
+   Svin::Input sampleInput;
 
    Svin::LED busInIndicator;
    Svin::LED busOutIndicator;

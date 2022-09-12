@@ -5,6 +5,7 @@
 Svin::Input::Input(Module* module, const uint16_t& inputIndex)
    : module(module)
    , inputIndex(inputIndex)
+   , triggerThreshold(3.0)
    , triggers{}
 {
 }
@@ -26,17 +27,27 @@ float Svin::Input::getVoltage(const uint8_t channel) const
 
 bool Svin::Input::isTriggered(const uint8_t channel) const
 {
-   const bool on = (getVoltage(channel) > 3.0);
+   const bool on = (getVoltage(channel) > triggerThreshold);
    return triggers[channel].process(on);
 }
 
 bool Svin::Input::isOn(const uint8_t channel) const
 {
-   const bool on = (getVoltage(channel) > 3.0);
+   const bool on = (getVoltage(channel) > triggerThreshold);
    return on;
 }
 
 bool Svin::Input::isOff(const uint8_t channel) const
 {
    return !isOn(channel);
+}
+
+const float& Svin::Input::getTriggerThreshold() const
+{
+   return triggerThreshold;
+}
+
+void Svin::Input::setTriggerThreshold(const float& value)
+{
+   triggerThreshold = value;
 }

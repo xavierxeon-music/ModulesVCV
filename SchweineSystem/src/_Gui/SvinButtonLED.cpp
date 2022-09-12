@@ -6,6 +6,7 @@ Svin::ButtonLED::ButtonLED(Module* module, const uint16_t& paramIndex, const uin
    : LED(module, rgbIndex)
    , paramIndex(paramIndex)
    , trigger()
+   , triggerBuddy(nullptr)
 {
 }
 
@@ -15,3 +16,6 @@ bool Svin::ButtonLED::isTriggered()
    return trigger.process(pressed);
 }
 
+void Svin::ButtonLED::setTriggerBuddy(Input* input)
+{
+}

@@ -1,5 +1,5 @@
-#include "BitBusNegate.h"
 #include "BitBusNegatePanel.h"
+#include "BitBusNegate.h"
 
 #include <SvinOrigin.h>
 
@@ -41,16 +41,15 @@ void BitBusNegateWidget::setup()
    makeLEDButton(this, Vec(29.65, 129.96), BitBusNegate::Panel::Bit2_Latch, BitBusNegate::Panel::RGB_Bit2_Latch);
    makeLEDButton(this, Vec(29.65, 94.23), BitBusNegate::Panel::Bit1_Latch, BitBusNegate::Panel::RGB_Bit1_Latch);
 
-   makeInput(this, Vec(61.19, 337.29),  BitBusNegate::Panel::Bit8_GateIn, false);
-   makeInput(this, Vec(61.19, 303.54),  BitBusNegate::Panel::Bit7_GateIn, true);
-   makeInput(this, Vec(61.19, 268.25),  BitBusNegate::Panel::Bit6_GateIn, true);
-   makeInput(this, Vec(61.19, 232.77),  BitBusNegate::Panel::Bit5_GateIn, true);
-   makeInput(this, Vec(61.19, 164.64),  BitBusNegate::Panel::Bit4_GateIn, true);
-   makeInput(this, Vec(61.19, 199.42),  BitBusNegate::Panel::Bit3_GateIn, true);
-   makeInput(this, Vec(61.19, 130.28),  BitBusNegate::Panel::Bit2_GateIn, true);
-   makeInput(this, Vec(61.19, 94.54),  BitBusNegate::Panel::Bit1_GateIn, true);
+   makeInput(this, Vec(61.19, 337.29), BitBusNegate::Panel::Bit8_GateIn, true);
+   makeInput(this, Vec(61.19, 303.54), BitBusNegate::Panel::Bit7_GateIn, true);
+   makeInput(this, Vec(61.19, 268.25), BitBusNegate::Panel::Bit6_GateIn, true);
+   makeInput(this, Vec(61.19, 232.77), BitBusNegate::Panel::Bit5_GateIn, true);
+   makeInput(this, Vec(61.19, 164.64), BitBusNegate::Panel::Bit4_GateIn, true);
+   makeInput(this, Vec(61.19, 199.42), BitBusNegate::Panel::Bit3_GateIn, true);
+   makeInput(this, Vec(61.19, 130.28), BitBusNegate::Panel::Bit2_GateIn, true);
+   makeInput(this, Vec(61.19, 94.54), BitBusNegate::Panel::Bit1_GateIn, true);
 
    makeLED(this, Vec(9.92, 46.77), BitBusNegate::Panel::RGB_BusIn);
    makeLED(this, Vec(79.92, 46.77), BitBusNegate::Panel::RGB_BusOut);
 }
-
