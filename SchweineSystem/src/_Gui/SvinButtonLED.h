@@ -19,7 +19,9 @@ namespace Svin
 
    public:
       bool isTriggered();
-      void setTriggerBuddy(Input* input);
+      bool isLatched(const bool update = true);
+      void setLatched(bool on);
+      void setLatchBuddy(Input* input);
 
       using LED::setActive;
       using LED::setBrightness;
@@ -31,7 +33,8 @@ namespace Svin
    private:
       uint16_t paramIndex;
       rack::dsp::BooleanTrigger trigger;
-      Input* triggerBuddy;
+      bool latched;
+      Input* latchBuddy;
    };
 
 } // namespace Svin

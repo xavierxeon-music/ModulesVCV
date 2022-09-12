@@ -10,8 +10,6 @@ BitBusNegate::BitBusNegate()
    , Svin::Exapnder<BitBusMessage>(this)
    , latchList(this)
    , gateList(this)
-   , gateTrigger()
-   , gates{}
    , busInIndicator(this, Panel::RGB_BusIn)
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
@@ -28,9 +26,6 @@ BitBusNegate::BitBusNegate()
                      {Panel::Bit2_Latch, Panel::RGB_Bit2_Latch},
                      {Panel::Bit1_Latch, Panel::RGB_Bit1_Latch}});
 
-   for (uint8_t index = 0; index < 8; index++)
-      latchList[index]->setDefaultColor({0, 0, 255});
-
    gateList.append({Panel::Bit8_GateIn,
                     Panel::Bit7_GateIn,
                     Panel::Bit6_GateIn,
@@ -39,6 +34,12 @@ BitBusNegate::BitBusNegate()
                     Panel::Bit3_GateIn,
                     Panel::Bit2_GateIn,
                     Panel::Bit1_GateIn});
+
+   for (uint8_t index = 0; index < 8; index++)
+   {
+      latchList[index]->setDefaultColor({0, 0, 255});
+      latchList[index]->setLatchBuddy(gateList[index]);
+   }
 }
 
 BitBusNegate::~BitBusNegate()
@@ -50,8 +51,8 @@ void BitBusNegate::load(const Svin::Json::Object& rootObject)
    for (uint8_t index = 0; index < 8; index++)
    {
       const std::string key = "negate" + std::to_string(index);
-      gates[index] = rootObject.get(key).toBool();
-      latchList[index]->setActive(gates[index]);
+      const bool active = rootObject.get(key).toBool();
+      latchList[index]->setLatched(active);
    }
 }
 
@@ -60,7 +61,7 @@ void BitBusNegate::save(Svin::Json::Object& rootObject)
    for (uint8_t index = 0; index < 8; index++)
    {
       const std::string key = "negate" + std::to_string(index);
-      rootObject.set(key, gates[index]);
+      rootObject.set(key, latchList[index]->isLatched(false));
    }
 }
 
@@ -86,24 +87,11 @@ void BitBusNegate::process(const ProcessArgs& args)
       BoolField8 boolField = message.byte[channel];
       for (uint8_t index = 0; index < 8; index++)
       {
-         bool negateValue = latchList[index]->isTriggered();
-         if (gateList[index]->isConnected())
-            negateValue = gateList[index]->isOn(channel);
+         const bool active = latchList[index]->isLatched();
+         latchList[index]->setActive(active);
 
-         if (gateTrigger[index].process(negateValue))
-            gates[index] ^= true;
-
-         if (gates[index])
-            latchList[index]->setOn();
-         else
-            latchList[index]->setOff();
-
-         if (gates[index]) // negate value
-         {
-            bool value = boolField.get(index);
-            value ^= true;
-            boolField.set(index, value);
-         }
+         if (active) // negate value
+            boolField.flip(index);
       }
       message.byte[channel] = boolField;
    }

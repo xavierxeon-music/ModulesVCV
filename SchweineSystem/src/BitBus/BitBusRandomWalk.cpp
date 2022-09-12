@@ -114,22 +114,26 @@ void BitBusRandomWalk::process(const ProcessArgs& args)
    mixSlider.setBrightness(mix);
    displayController.setText(std::to_string(seed));
 
-   const uint8_t valueIn = receiveFromLeft().byte;
-   if (seedCount == seed + 1)
-   {
-      const uint8_t valueOut = tables[seed][valueIn];
-      sendToRight(BitBusMessage{valueOut});
-   }
-   else
-   {
-      const float valueOutA = static_cast<float>(tables[seed + 0][valueIn]);
-      const float valueOutB = static_cast<float>(tables[seed + 1][valueIn]);
+   BitBusMessage message = receiveFromLeft();
 
-      const float valueMix = valueOutA + (mix * (valueOutB - valueOutA));
+   for (uint8_t channel = 0; channel < message.channelCount; channel++)
+   {
+      const uint8_t valueIn = message.byte[channel];
+      uint8_t valueOut = tables[seed][valueIn];
+      if (seedCount != seed + 1)
+      {
+         const float valueOutA = static_cast<float>(tables[seed + 0][valueIn]);
+         const float valueOutB = static_cast<float>(tables[seed + 1][valueIn]);
 
-      const uint8_t valueOut = static_cast<uint8_t>(valueMix);
-      sendToRight(BitBusMessage{valueOut});
+         const float valueMix = valueOutA + (mix * (valueOutB - valueOutA));
+
+         valueOut = static_cast<uint8_t>(valueMix);
+      }
+
+      message.byte[channel] = valueOut;
    }
+
+   sendToRight(message);
 }
 
 // widget

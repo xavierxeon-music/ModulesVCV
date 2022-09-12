@@ -34,8 +34,6 @@ private:
 private:
    Svin::ButtonLED::List latchList;
    Svin::Input::List gateList;
-   dsp::BooleanTrigger gateTrigger[8];
-   bool gates[8];
 
    Svin::LED busInIndicator;
    Svin::LED busOutIndicator;

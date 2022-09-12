@@ -9,9 +9,11 @@ BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    : Svin::Module()
    , Svin::Exapnder<BitBusMessage>(this)
    , lightList(this)
-   , freezTrigger()
-   , freezeMode(false)
-   , sampleTrigger()
+   , freezeButton(this, Panel::FlipFreeze, Panel::RGB_FlipFreeze)
+   , freezeInput(this, Panel::GateFreeze)
+   , freezeBuffer{}
+   , sampleButton(this, Panel::FlipSample, Panel::RGB_FlipSample)
+   , sampleInput(this, Panel::GateSample)
    , busInIndicator(this, Panel::RGB_BusIn)
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
@@ -30,6 +32,14 @@ BitBusMeterAndFreeze::BitBusMeterAndFreeze()
 
    for (uint8_t index = 0; index < 8; index++)
       lightList[index]->setDefaultColor(Svin::Color{0, 255, 0});
+
+   freezeButton.setLatchBuddy(&freezeInput);
+   freezeButton.setDefaultColor(Svin::Color{0, 0, 255});
+   freezeButton.setOff();
+
+   sampleButton.setLatchBuddy(&sampleInput);
+   sampleButton.setDefaultColor(Svin::Color{0, 0, 255});
+   sampleButton.setOff();
 }
 
 BitBusMeterAndFreeze::~BitBusMeterAndFreeze()
@@ -38,13 +48,13 @@ BitBusMeterAndFreeze::~BitBusMeterAndFreeze()
 
 void BitBusMeterAndFreeze::load(const Svin::Json::Object& rootObject)
 {
-   freezeMode = rootObject.get("freeze").toBool();
-   lights[Panel::RGB_FlipFreeze + 2].setBrightness(freezeMode);
+   const bool freezeMode = rootObject.get("freeze").toBool();
+   freezeButton.setLatched(freezeMode);
 }
 
 void BitBusMeterAndFreeze::save(Svin::Json::Object& rootObject)
 {
-   rootObject.set("freeze", freezeMode);
+   rootObject.set("freeze", freezeButton.isLatched(false));
 }
 
 void BitBusMeterAndFreeze::process(const ProcessArgs& args)
@@ -54,44 +64,35 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
    else
       busOutIndicator.setOff();
 
-   BoolField8 boolField = 0;
    if (!canCommunicatWithLeft())
-   {
       busInIndicator.setOff();
-   }
    else
-   {
       busInIndicator.setOn();
-      boolField = receiveFromLeft().byte;
+
+   if (!canCommunicatWithLeft() && !canCommunicatWithRight())
+      return;
+
+   BitBusMessage message = receiveFromLeft();
+
+   const bool freezeMode = freezeButton.isLatched();
+   freezeButton.setActive(freezeMode);
+
+   const bool sample = sampleButton.isLatched();
+   for (uint8_t channel = 0; channel < message.channelCount; channel++)
+   {
+      if (!freezeMode || (freezeMode && sample))
+         freezeBuffer[channel] = message.byte[channel];
+
+      message.byte[channel] = freezeBuffer[channel];
    }
-
-   bool freezeValue = params[Panel::GateFreeze].getValue();
-   if (inputs[Panel::GateFreeze].isConnected())
-      freezeValue = (inputs[Panel::GateFreeze].getVoltage() > 3.0);
-
-   if (freezTrigger.process(freezeValue))
-      freezeMode ^= true;
-   lights[Panel::RGB_FlipFreeze + 2].setBrightness(freezeMode);
-
-   bool sampleValue = params[Panel::GateSample].getValue();
-   if (inputs[Panel::GateSample].isConnected())
-      sampleValue = (inputs[Panel::GateSample].getVoltage() > 3.0);
-
-   const bool sample = sampleTrigger.process(sampleValue);
-   if (!freezeMode || (freezeMode && sample))
-      freezeBuffer = boolField;
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      const bool value = freezeBuffer.get(index);
-      if (value)
-         lightList[index]->setOn();
-      else
-         lightList[index]->setOff();
+      const bool value = freezeBuffer[0].get(index);
+      lightList[index]->setActive(value);
    }
 
-   if (canCommunicatWithRight())
-      sendToRight(BitBusMessage{freezeBuffer});
+   sendToRight(message);
 }
 
 BitBusMeterAndFreezeWidget::BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module)

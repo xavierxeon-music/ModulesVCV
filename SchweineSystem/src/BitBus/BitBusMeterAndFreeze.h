@@ -39,10 +39,11 @@ private:
 
 private:
    Svin::LED::List lightList;
+
    Svin::ButtonLED freezeButton;
    Svin::Input freezeInput;
-   bool freezeMode;
    BoolField8 freezeBuffer[16];
+
    Svin::ButtonLED sampleButton;
    Svin::Input sampleInput;
 
