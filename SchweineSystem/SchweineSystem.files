@@ -23,7 +23,6 @@
 ./src/_Base/SvinRenderInstruction.h
 ./src/_Base/SvinOrigin.h
 ./src/_Base/SvinModuleWidget.h
-./src/_Base/BioFeedbackDummy.h
 ./src/_Base/SvinExapnder.h
 ./src/Synths/MeshStack.h
 ./src/Synths/WavPlayerPanel.h
@@ -52,6 +51,7 @@
 ./src/_MusicTools/Include/Blocks/PolyRamp.h
 ./src/_MusicTools/Include/Blocks/Trapezoid.h
 ./src/_MusicTools/Include/Blocks/CvSwitch.h
+./src/_MusicTools/Include/Blocks/BioFeedbackDummy.h
 ./src/_MusicTools/Include/Sound/Spectrum.h
 ./src/_MusicTools/Include/Sound/StandardTable.h
 ./src/_MusicTools/Include/Sound/GateOscilator.h
@@ -135,7 +135,6 @@
 ./src/_Base/SvinCommon.hpp
 ./src/_Base/SvinUiElement.hpp
 ./src/_Base/SvinOrigin.hpp
-./src/_Base/BioFeedbackDummy.hpp
 ./src/_Base/SvinExapnder.hpp
 ./src/_MusicTools/DoubleBuffer.hpp
 ./src/_MusicTools/MidiToolGate.hpp
@@ -166,6 +165,7 @@
 ./src/_MusicTools/RememberDummy/Remember.hpp
 ./src/_MusicTools/RememberDummy/RememberArray.hpp
 ./src/_MusicTools/RememberDummy/RememberList.hpp
+./src/_MusicTools/BioFeedbackDummy.hpp
 ./src/_MusicTools/SquareSignal.hpp
 ./src/_MusicTools/MidiInterfaceInput.hpp
 ./src/_MusicTools/Sequencer.hpp

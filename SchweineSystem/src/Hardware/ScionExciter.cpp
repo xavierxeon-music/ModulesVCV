@@ -9,9 +9,8 @@
 
 // section
 
-ScionExciter::Section::Section(ScionExciter* parent, const BioFeedbackDummy::FunctionId& id, const uint16_t sliderValueParam, const uint16_t& sliderColorParam, const uint16_t& modInputParam, const uint16_t& modAttenuatorParam, const uint16_t& modLFOParam)
+ScionExciter::Section::Section(ScionExciter* parent, const uint16_t sliderValueParam, const uint16_t& sliderColorParam, const uint16_t& modInputParam, const uint16_t& modAttenuatorParam, const uint16_t& modLFOParam)
    : parent(parent)
-   , id(id)
    , slider(parent, sliderValueParam, sliderColorParam)
    , modInput(parent, modInputParam)
    , modAttenuator(parent, modAttenuatorParam)
@@ -33,12 +32,12 @@ void ScionExciter::Section::updateSampleRate()
    lfo.init(&parent->sineTable, parent->getSampleRate());
 }
 
-void ScionExciter::Section::process()
+void ScionExciter::Section::process(const BioFeedbackDummy::FunctionId& id, const float& scale)
 {
    lfo.setFrequency(lfoPitchKnob.getValue());
 
    const float mod = modInput.isConnected() ? 0.1 * modInput.getVoltage() : lfo.createSound();
-   float value = slider.getValue() + mod * modAttenuator.getValue();
+   float value = slider.getValue() + (scale * mod * modAttenuator.getValue());
    parent->exciter.setState(id, value);
 }
 
@@ -74,21 +73,30 @@ ScionExciter::ScionExciter()
 {
    setup();
 
-   sections[BioFeedbackDummy::BaseFrequency] = new Section(this, BioFeedbackDummy::BaseFrequency, Panel::Base1_Pitch_Value, Panel::RGB_Base1_Pitch_Value, Panel::Base1_Pitch_Modulate, Panel::Base1_Pitch_Attenuate, Panel::Base1_Pitch_LFO);
+   sections[BioFeedbackDummy::BaseFrequency] = new Section(this, Panel::Base1_Pitch_Value, Panel::RGB_Base1_Pitch_Value, Panel::Base1_Pitch_Modulate, Panel::Base1_Pitch_Attenuate, Panel::Base1_Pitch_LFO);
    sections[BioFeedbackDummy::BaseFrequency]->setup(45.0, 55.0, 50.0);
+   sections[BioFeedbackDummy::BaseAmplitude] = new Section(this, Panel::Base1_Amplitude2_Value, Panel::RGB_Base1_Amplitude2_Value, Panel::Base1_Amplitude2_Modulate, Panel::Base1_Amplitude2_Attenuate, Panel::Base1_Amplitude2_LFO);
+   sections[BioFeedbackDummy::BaseAmplitude]->setup(0.0, 1.0, 0.5);
 
-   /*
-   sections[Section::BaseAmplitude]->setup();
-   sections[Section::NoiseSmooth]->setup();
-   sections[Section::NoiseAmplitude]->setup();
-   sections[Section::MasterSmooth]->setup();
-   sections[Section::MasterAmplitude]->setup();
-*/
+   // noise
+   sections[BioFeedbackDummy::NoiseSmooth] = new Section(this, Panel::Noise_Smooth1_Value, Panel::RGB_Noise_Smooth1_Value, Panel::Noise_Smooth1_Modulate, Panel::Noise_Smooth1_Attenuate, Panel::Noise_Smooth1_LFO);
+   sections[BioFeedbackDummy::NoiseSmooth]->setup(0.0, 1.0, 0.5);
+   sections[BioFeedbackDummy::NoiseAmplitude] = new Section(this, Panel::Noise_Amplitude1_Value, Panel::RGB_Noise_Amplitude1_Value, Panel::Noise_Amplitude1_Modulate, Panel::Noise_Amplitude1_Attenuate, Panel::Noise_Amplitude1_LFO);
+   sections[BioFeedbackDummy::NoiseAmplitude]->setup(0.0, 1.0, 0.5);
+
+   // master
+   sections[BioFeedbackDummy::MasterSmooth] = new Section(this, Panel::Master_Smooth_Value, Panel::RGB_Master_Smooth_Value, Panel::Master_Smooth_Modulate, Panel::Master_Amplitude_Attenuate, Panel::Master_Amplitude_LFO);
+   sections[BioFeedbackDummy::MasterSmooth]->setup(0.0, 1.0, 0.5);
+   sections[BioFeedbackDummy::MasterAmplitude] = new Section(this, Panel::Master_Amplitude_Value, Panel::RGB_Noise_Amplitude1_Value, Panel::Master_Amplitude_Modulate, Panel::Master_Smooth_Attenuate, Panel::Master_Amplitude_LFO);
+   sections[BioFeedbackDummy::MasterAmplitude]->setup(0.0, 1.0, 0.5);
 }
 
 void ScionExciter::process(const ProcessArgs& args)
 {
-   sections[BioFeedbackDummy::BaseFrequency]->process();
+   for (const BioFeedbackDummy::FunctionId& id : {BioFeedbackDummy::BaseFrequency, BioFeedbackDummy::BaseAmplitude, BioFeedbackDummy::NoiseSmooth, BioFeedbackDummy::NoiseAmplitude, BioFeedbackDummy::MasterSmooth, BioFeedbackDummy::MasterAmplitude})
+   {
+      sections[id]->process(id);
+   }
 
    float baseSoundVoltage = 0;
    const float voltage = exciter.compileSignalVoltage(&baseSoundVoltage);

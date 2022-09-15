@@ -6,7 +6,7 @@ using namespace rack;
 
 #include <map>
 
-#include <BioFeedbackDummy.h>
+#include <Blocks/BioFeedbackDummy.h>
 #include <Sound/StandardTable.h>
 #include <Sound/WaveTable.h>
 
@@ -36,16 +36,15 @@ private:
       using Map = std::map<BioFeedbackDummy::FunctionId, Section*>;
 
    public:
-      Section(ScionExciter* parent, const BioFeedbackDummy::FunctionId& id, const uint16_t sliderValueParam, const uint16_t& sliderColorParam, const uint16_t& modInputParam, const uint16_t& modAttenuatorParam, const uint16_t& modLFOParam);
+      Section(ScionExciter* parent, const uint16_t sliderValueParam, const uint16_t& sliderColorParam, const uint16_t& modInputParam, const uint16_t& modAttenuatorParam, const uint16_t& modLFOParam);
 
    public:
       void setup(const float& minValue, const float& maxValue, const float& defaultValue);
       void updateSampleRate();
-      void process();
+      void process(const BioFeedbackDummy::FunctionId& id, const float& scale = 1.0);
 
    public:
       ScionExciter* parent;
-      const BioFeedbackDummy::FunctionId id;
       Svin::Slider slider;
       Svin::Input modInput;
       Svin::Knob modAttenuator;
