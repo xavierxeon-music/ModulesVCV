@@ -4,7 +4,10 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <map>
+
 #include <Effect/StateVariableFilter.h>
+#include <Sound/StandardTable.h>
 #include <Sound/WaveTable.h>
 #include <Tools/FastRandom.h>
 
@@ -28,17 +31,51 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
+   class Section
+   {
+   public:
+      enum ID
+      {
+         BasePitch,
+         BaseAmplitude,
+         NoiseSmooth,
+         NoiseAmplitude,
+         MasterSmooth,
+         MasterAmplitude
+      };
+      using Map = std::map<ID, Section*>;
+
+   public:
+      Section(ScionExciter* parent, const uint16_t sliderValueParam, const uint16_t& sliderColorParam, const uint16_t& modInputParam, const uint16_t& modAttenuatorParam, const uint16_t& modLFOParam);
+
+   public:
+      void setup(const float& minValue, const float& maxValue, const float& defaultValue);
+
+   public:
+      ScionExciter* parent;
+      Svin::Slider slider;
+      Svin::Input modInput;
+      Svin::Knob modAttenuator;
+      Svin::Knob lfoPitchKnob;
+      WaveTable::Oscilator modLFO;
+   };
+
+private:
    void setup();
 
 private:
+   Section::Map sections;
+   Standard::Table sineTable;
    // base
+   Standard::Table sawTable;
+   WaveTable::Oscilator baseOscilator;
+
    Svin::Slider basePitchSlider;
    Svin::Input basePitchModInput;
    Svin::Knob basePitchModAttenuator;
    Svin::Slider baseAmplitudeSlider;
    Svin::Input baseAmplitudehModInput;
    Svin::Knob baseAmplitudeModAttenuator;
-   WaveTable::Oscilator baseOscilator;
    // noise
    Svin::Slider noiseSmoothSlider;
    Svin::Input noiseSmoothModInput;

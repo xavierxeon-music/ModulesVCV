@@ -5,16 +5,41 @@
 
 #include <SvinOrigin.h>
 
+// section
+
+ScionExciter::Section::Section(ScionExciter* parent, const uint16_t sliderValueParam, const uint16_t& sliderColorParam, const uint16_t& modInputParam, const uint16_t& modAttenuatorParam, const uint16_t& modLFOParam)
+   : parent(parent)
+   , slider(parent, sliderValueParam, sliderColorParam)
+   , modInput(parent, modInputParam)
+   , modAttenuator(parent, modAttenuatorParam)
+   , lfoPitchKnob(parent, modLFOParam)
+   , modLFO()
+{
+}
+
+void ScionExciter::Section::setup(const float& minValue, const float& maxValue, const float& defaultValue)
+{
+   slider.setRange(minValue, maxValue, defaultValue);
+   modAttenuator.setRange(0.0, 1.0);
+
+   modLFO.init(&parent->sineTable, parent->getSampleRate());
+}
+
+// main
+
 ScionExciter::ScionExciter()
    : Svin::Module()
+   , sections()
+   , sineTable()
    // base
+   , sawTable()
+   , baseOscilator()
    , basePitchSlider(this, Panel::Base1_Pitch_Value, Panel::RGB_Base1_Pitch_Value)
    , basePitchModInput(this, Panel::Base1_Pitch_Modulate)
    , basePitchModAttenuator(this, Panel::Base1_Pitch_Attenuate)
    , baseAmplitudeSlider(this, Panel::Base1_Amplitude2_Value, Panel::RGB_Base1_Amplitude2_Value)
    , baseAmplitudehModInput(this, Panel::Base1_Amplitude2_Modulate)
    , baseAmplitudeModAttenuator(this, Panel::Base1_Amplitude2_Attenuate)
-   , baseOscilator()
    // noise
    , noiseSmoothSlider(this, Panel::Noise_Smooth1_Value, Panel::RGB_Noise_Smooth1_Value)
    , noiseSmoothModInput(this, Panel::Noise_Smooth1_Modulate)
@@ -36,13 +61,24 @@ ScionExciter::ScionExciter()
    , baseOutput(this, Panel::Master_Base_Out)
 {
    setup();
+   sineTable.setWaveform(Standard::Waveform::Sine);
+   sawTable.setWaveform(Standard::Waveform::Saw);
+
+   sections[Section::BasePitch] = new Section(this, Panel::Base1_Pitch_Value, Panel::RGB_Base1_Pitch_Value, Panel::Base1_Pitch_Modulate, Panel::Base1_Pitch_Attenuate, Panel::Base1_Pitch_LFO);
+   sections[Section::BasePitch]->setup(45.0, 55.0, 50.0);
+
+   /*
+   sections[Section::BaseAmplitude]->setup();
+   sections[Section::NoiseSmooth]->setup();
+   sections[Section::NoiseAmplitude]->setup();
+   sections[Section::MasterSmooth]->setup();
+   sections[Section::MasterAmplitude]->setup();
+*/
 
    basePitchSlider.setRange(45.0, 55.0, 50.0);
    basePitchModAttenuator.setRange(0.0, 1.0);
 
-   Standard::Table* triangleTable = new Standard::Table();
-   triangleTable->setWaveform(Standard::Waveform::Saw);
-   baseOscilator.init(triangleTable, getSampleRate());
+   baseOscilator.init(&sawTable, getSampleRate());
    baseOscilator.setFrequency(50.0);
 }
 
