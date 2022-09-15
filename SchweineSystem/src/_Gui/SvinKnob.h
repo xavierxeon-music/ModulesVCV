@@ -16,7 +16,8 @@ namespace Svin
       Knob(Module* module, const uint16_t& paramIndex);
 
    public:
-      void setRange(const float& minValue, const float& maxValue); // pre scale
+      void setRange(const float& minValue, const float& maxValue);                            // pre scale
+      void setRange(const float& minValue, const float& maxValue, const float& defaultValue); // pre scale
       void enableSteps(bool enabled, const float& newScale = 1.0);
       float getValue() const;
       void setValue(const float& value);

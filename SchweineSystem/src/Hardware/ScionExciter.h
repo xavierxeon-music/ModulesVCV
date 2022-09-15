@@ -6,18 +6,17 @@ using namespace rack;
 
 #include <map>
 
-#include <Effect/StateVariableFilter.h>
+#include <BioFeedbackDummy.h>
 #include <Sound/StandardTable.h>
 #include <Sound/WaveTable.h>
-#include <Tools/FastRandom.h>
 
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
-#include <SvinKnob.h>
-#include <SvinSlider.h>
 #include <SvinInput.h>
+#include <SvinKnob.h>
 #include <SvinOutput.h>
+#include <SvinSlider.h>
 
 class ScionExciter : public Svin::Module
 {
@@ -34,42 +33,34 @@ private:
    class Section
    {
    public:
-      enum ID
-      {
-         BasePitch,
-         BaseAmplitude,
-         NoiseSmooth,
-         NoiseAmplitude,
-         MasterSmooth,
-         MasterAmplitude
-      };
-      using Map = std::map<ID, Section*>;
+      using Map = std::map<BioFeedbackDummy::FunctionId, Section*>;
 
    public:
-      Section(ScionExciter* parent, const uint16_t sliderValueParam, const uint16_t& sliderColorParam, const uint16_t& modInputParam, const uint16_t& modAttenuatorParam, const uint16_t& modLFOParam);
+      Section(ScionExciter* parent, const BioFeedbackDummy::FunctionId& id, const uint16_t sliderValueParam, const uint16_t& sliderColorParam, const uint16_t& modInputParam, const uint16_t& modAttenuatorParam, const uint16_t& modLFOParam);
 
    public:
       void setup(const float& minValue, const float& maxValue, const float& defaultValue);
+      void updateSampleRate();
+      void process();
 
    public:
       ScionExciter* parent;
+      const BioFeedbackDummy::FunctionId id;
       Svin::Slider slider;
       Svin::Input modInput;
       Svin::Knob modAttenuator;
       Svin::Knob lfoPitchKnob;
-      WaveTable::Oscilator modLFO;
+      WaveTable::Oscilator lfo;
    };
 
 private:
    void setup();
 
 private:
-   Section::Map sections;
+   BioFeedbackDummy exciter;
    Standard::Table sineTable;
+   Section::Map sections;
    // base
-   Standard::Table sawTable;
-   WaveTable::Oscilator baseOscilator;
-
    Svin::Slider basePitchSlider;
    Svin::Input basePitchModInput;
    Svin::Knob basePitchModAttenuator;
@@ -83,8 +74,6 @@ private:
    Svin::Slider noiseAmplitudeSlider;
    Svin::Input noiseAmplitudeModInput;
    Svin::Knob noiseAmplitudeModAttenuator;
-   FastRandom noiseGenerator;
-   StateVariableFilter nosieFilter;
    // master
    Svin::Slider masterSmoothSlider;
    Svin::Input masterSmoothModInput;
@@ -92,7 +81,6 @@ private:
    Svin::Slider masterAmplitudeSlider;
    Svin::Input masterAmplitudeModInput;
    Svin::Knob masterAmplitudeModAttenuator;
-   StateVariableFilter exciterFilter;
    Svin::Output exciterOutput;
    Svin::Output baseOutput;
 };

@@ -11,9 +11,14 @@ Svin::Knob::Knob(Module* module, const uint16_t& paramIndex)
 
 void Svin::Knob::setRange(const float& minValue, const float& maxValue)
 {
+   setRange(minValue, maxValue, minValue);
+}
+
+void Svin::Knob::setRange(const float& minValue, const float& maxValue, const float& defaultValue)
+{
    rack::engine::ParamQuantity* knob = module->getParamQuantity(paramIndex);
 
-   module->configParam(paramIndex, minValue, maxValue, 0.f, knob->name);
+   module->configParam(paramIndex, minValue, maxValue, defaultValue, knob->name);
 }
 
 void Svin::Knob::enableSteps(bool enabled, const float& newScale)
