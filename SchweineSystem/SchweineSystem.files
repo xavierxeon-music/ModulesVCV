@@ -76,6 +76,7 @@
 ./src/_MusicTools/Include/Blocks/Trapezoid.h
 ./src/_MusicTools/Include/Blocks/PolyRamp.h
 ./src/_MusicTools/Include/Blocks/CvSwitch.h
+./src/_MusicTools/Include/Blocks/BioFeedbackDummy.h
 ./src/_MusicTools/Include/Blocks/Sequencer.h
 ./src/_MusicTools/Include/Blocks/TrackerLane.h
 ./src/_MusicTools/Include/Abstract/AbstractEffect.h
@@ -151,6 +152,7 @@
 ./src/_MusicTools/RememberDummy/RememberList.hpp
 ./src/_MusicTools/RememberDummy/Remember.hpp
 ./src/_MusicTools/RememberDummy/RememberArray.hpp
+./src/_MusicTools/BioFeedbackDummy.hpp
 ./src/_MusicTools/Revoice.hpp
 ./src/_MusicTools/Counter.hpp
 ./src/_MusicTools/MidiInterfaceInput.hpp
