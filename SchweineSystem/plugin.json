@@ -220,6 +220,12 @@
          "name": "ScionExciter",
          "description": "",
          "tags": []
+      },
+      {
+         "slug": "Multifilter",
+         "name": "Multifilter",
+         "description": "",
+         "tags": []
       }
    ]
 }

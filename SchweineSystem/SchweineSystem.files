@@ -56,6 +56,8 @@
 ./src/BitBus/BitBusBitInPanel.h
 ./src/BitBus/BitBusCVOut.h
 ./src/BitBus/BitBusNegate.h
+./src/Effects/Multifilter.h
+./src/Effects/MultifilterPanel.h
 ./src/Effects/RevoicerPanel.h
 ./src/Effects/Revoicer.h
 ./src/_Base/SvinModule.h
@@ -249,6 +251,8 @@
 ./src/BitBus/BitBusBitOut.cpp
 ./src/BitBus/BitBusCVOutPanel.cpp
 ./src/Effects/Revoicer.cpp
+./src/Effects/MultifilterPanel.cpp
+./src/Effects/Multifilter.cpp
 ./src/Effects/RevoicerPanel.cpp
 ./src/_Base/SvinModule.cpp
 ./src/_Base/SvinJson.cpp
