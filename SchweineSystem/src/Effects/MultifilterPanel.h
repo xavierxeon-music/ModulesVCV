@@ -21,10 +21,12 @@ struct Multifilter::Panel
       // knobs
       Offset = 1,
       Drive = 2,
-      Reso = 3,
+      DriveAttenuate = 3,
+      Reso = 4,
+      ResoAttenuator = 5,
       // sliders
-      Mode = 4,
-      PARAMS_LEN = 5
+      Mode = 6,
+      PARAMS_LEN = 7
    };
 
    enum DisplayId
@@ -44,8 +46,8 @@ struct Multifilter::Panel
       In = 0,
       Pitch = 1,
       OffsetOverride = 2,
-      DriveOverride = 3,
-      ResoOverride = 4,
+      DriveModulate = 3,
+      ResoModulate = 4,
       INPUTS_LEN = 5
    };
 

@@ -13,13 +13,15 @@ void Multifilter::setup()
 
    configParam(Panel::Offset, -1.f, 1.f, 0.f, "Offset");
    configParam(Panel::Drive, -1.f, 1.f, 0.f, "Drive");
+   configParam(Panel::DriveAttenuate, -1.f, 1.f, 0.f, "DriveAttenuate");
    configParam(Panel::Reso, -1.f, 1.f, 0.f, "Reso");
+   configParam(Panel::ResoAttenuator, -1.f, 1.f, 0.f, "ResoAttenuator");
 
    configInput(Panel::In, "In");
    configInput(Panel::Pitch, "Pitch");
    configInput(Panel::OffsetOverride, "OffsetOverride");
-   configInput(Panel::DriveOverride, "DriveOverride");
-   configInput(Panel::ResoOverride, "ResoOverride");
+   configInput(Panel::DriveModulate, "DriveModulate");
+   configInput(Panel::ResoModulate, "ResoModulate");
 
    configOutput(Panel::Out, "Out");
 }
@@ -30,19 +32,21 @@ void MultifilterWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeSlider(this, Vec(85.20, 330.00), Multifilter::Panel::Mode, Multifilter::Panel::RGB_Mode);
+   makeSlider(this, Vec(107.14, 330.00), Multifilter::Panel::Mode, Multifilter::Panel::RGB_Mode);
 
-   makeLEDButton(this, Vec(85.09, 263.91), Multifilter::Panel::Quantize, Multifilter::Panel::RGB_Quantize);
+   makeLEDButton(this, Vec(121.03, 257.54), Multifilter::Panel::Quantize, Multifilter::Panel::RGB_Quantize);
 
-   makeKnob(this, Vec(107.14, 227.36), Multifilter::Panel::Offset, 3);
-   makeKnob(this, Vec(107.14, 145.09), Multifilter::Panel::Drive, 4);
+   makeKnob(this, Vec(107.14, 222.36), Multifilter::Panel::Offset, 3);
+   makeKnob(this, Vec(107.14, 149.09), Multifilter::Panel::Drive, 4);
+   makeKnob(this, Vec(52.60, 167.94), Multifilter::Panel::DriveAttenuate, 1);
    makeKnob(this, Vec(107.14, 75.82), Multifilter::Panel::Reso, 5);
+   makeKnob(this, Vec(52.60, 94.66), Multifilter::Panel::ResoAttenuator, 1);
 
    makeInput(this, Vec(51.09, 318.30),  Multifilter::Panel::In, true);
-   makeInput(this, Vec(51.09, 264.34),  Multifilter::Panel::Pitch, true);
-   makeInput(this, Vec(50.97, 227.36),  Multifilter::Panel::OffsetOverride, false);
-   makeInput(this, Vec(52.60, 143.66),  Multifilter::Panel::DriveOverride, false);
-   makeInput(this, Vec(52.60, 74.38),  Multifilter::Panel::ResoOverride, false);
+   makeInput(this, Vec(51.09, 259.34),  Multifilter::Panel::Pitch, true);
+   makeInput(this, Vec(50.97, 222.36),  Multifilter::Panel::OffsetOverride, false);
+   makeInput(this, Vec(52.60, 141.44),  Multifilter::Panel::DriveModulate, false);
+   makeInput(this, Vec(52.60, 68.12),  Multifilter::Panel::ResoModulate, false);
 
    makeOutput(this, Vec(51.09, 355.83), Multifilter::Panel::Out, true);
 }
