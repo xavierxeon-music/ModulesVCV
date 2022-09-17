@@ -36,18 +36,27 @@ void ScionExciter::Section::process(const BioFeedbackDummy::FunctionId& id, cons
 {
    lfo.setFrequency(lfoPitchKnob.getValue());
 
-   const float mod = modInput.isConnected() ? 0.1 * modInput.getVoltage() : lfo.createSound();
-   float value = slider.getValue() + (scale * mod * modAttenuator.getValue());
-   parent->exciter.setState(id, value);
+   float mod = 0.0;
+   if ((BioFeedbackDummy::BaseAmplitude == id || BioFeedbackDummy::NoiseAmplitude == id) && 0.0 == slider.getValue())
+   {
+      parent->exciter.setState(id, 0.0);
+   }
+   else
+   {
+      mod = modInput.isConnected() ? 0.1 * modInput.getVoltage() : lfo.createSound();
+      mod *= modAttenuator.getValue();
+      float value = slider.getValue() + (scale * mod);
+      parent->exciter.setState(id, value);
+   }
 
    if (0.0 <= mod)
    {
-      const uint8_t green = static_cast<uint8_t>(255.0 * mod * modAttenuator.getValue());
+      const uint8_t green = static_cast<uint8_t>(255.0 * mod);
       slider.setColor(Svin::Color{0, green, 0});
    }
    else
    {
-      const uint8_t red = static_cast<uint8_t>(-255.0 * mod * modAttenuator.getValue());
+      const uint8_t red = static_cast<uint8_t>(-255.0 * mod);
       slider.setColor(Svin::Color{red, 0, 0});
    }
 }
@@ -117,7 +126,7 @@ ScionExciter::ScionExciter()
                                                          Panel::Noise_Smooth1_Modulate,
                                                          Panel::Noise_Smooth1_Attenuate,
                                                          Panel::Noise_Smooth1_LFO);
-   sections[BioFeedbackDummy::NoiseSmooth]->setup(0.7, 1.0, 0.7);
+   sections[BioFeedbackDummy::NoiseSmooth]->setup(0.7, 0.99, 0.7);
 
    sections[BioFeedbackDummy::NoiseAmplitude] = new Section(this,
                                                             Panel::Noise_Amplitude1_Value,
@@ -134,7 +143,7 @@ ScionExciter::ScionExciter()
                                                           Panel::Master_Smooth_Modulate,
                                                           Panel::Master_Smooth_Attenuate,
                                                           Panel::Master_Smooth_LFO);
-   sections[BioFeedbackDummy::MasterSmooth]->setup(0.0, 1.0, 0.0);
+   sections[BioFeedbackDummy::MasterSmooth]->setup(0.6, 0.99, 0.6);
 
    sections[BioFeedbackDummy::MasterAmplitude] = new Section(this,
                                                              Panel::Master_Amplitude_Value,
@@ -147,8 +156,13 @@ ScionExciter::ScionExciter()
 
 void ScionExciter::process(const ProcessArgs& args)
 {
-   for (const BioFeedbackDummy::FunctionId& id : {BioFeedbackDummy::BaseFrequency, BioFeedbackDummy::BaseAmplitude, BioFeedbackDummy::NoiseSmooth, BioFeedbackDummy::NoiseAmplitude, BioFeedbackDummy::MasterSmooth, BioFeedbackDummy::MasterAmplitude})
+   sections[BioFeedbackDummy::BaseFrequency]->process(BioFeedbackDummy::BaseFrequency, 2.0);
+
+   for (const BioFeedbackDummy::FunctionId& id : {BioFeedbackDummy::BaseAmplitude, BioFeedbackDummy::NoiseAmplitude, BioFeedbackDummy::MasterAmplitude})
       sections[id]->process(id);
+
+   for (const BioFeedbackDummy::FunctionId& id : {BioFeedbackDummy::NoiseSmooth, BioFeedbackDummy::MasterSmooth})
+      sections[id]->process(id, 0.1);
 
    float baseSoundVoltage = 0;
    const float voltage = exciter.compileSignalVoltage(&baseSoundVoltage);
