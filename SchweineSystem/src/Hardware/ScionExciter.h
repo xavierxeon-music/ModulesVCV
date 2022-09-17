@@ -43,7 +43,13 @@ private:
       void updateSampleRate();
       void process(const BioFeedbackDummy::FunctionId& id, const float& scale = 1.0);
 
-   public:
+      void load(const BioFeedbackDummy::FunctionId& id, const Svin::Json::Object& rootObject);
+      void save(const BioFeedbackDummy::FunctionId& id, Svin::Json::Object& rootObject);
+
+   private:
+      std::string getName(const BioFeedbackDummy::FunctionId& id) const;
+
+   private:
       ScionExciter* parent;
       Svin::Slider slider;
       Svin::Input modInput;
@@ -55,31 +61,14 @@ private:
 private:
    void setup();
 
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
+
 private:
    BioFeedbackDummy exciter;
    Standard::Table sineTable;
    Section::Map sections;
-   // base
-   Svin::Slider basePitchSlider;
-   Svin::Input basePitchModInput;
-   Svin::Knob basePitchModAttenuator;
-   Svin::Slider baseAmplitudeSlider;
-   Svin::Input baseAmplitudehModInput;
-   Svin::Knob baseAmplitudeModAttenuator;
-   // noise
-   Svin::Slider noiseSmoothSlider;
-   Svin::Input noiseSmoothModInput;
-   Svin::Knob noiseSmoothModAttenuator;
-   Svin::Slider noiseAmplitudeSlider;
-   Svin::Input noiseAmplitudeModInput;
-   Svin::Knob noiseAmplitudeModAttenuator;
-   // master
-   Svin::Slider masterSmoothSlider;
-   Svin::Input masterSmoothModInput;
-   Svin::Knob masterSmoothModAttenuator;
-   Svin::Slider masterAmplitudeSlider;
-   Svin::Input masterAmplitudeModInput;
-   Svin::Knob masterAmplitudeModAttenuator;
+
    Svin::Output exciterOutput;
    Svin::Output baseOutput;
 };

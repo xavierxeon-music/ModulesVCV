@@ -14,7 +14,7 @@ void MidiCV::setup()
 
 void MidiCVWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Utilities/MidiCV.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Sequencer/MidiCV.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

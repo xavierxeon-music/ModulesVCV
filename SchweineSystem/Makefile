@@ -20,16 +20,16 @@ FLAGS += \
 
 # Add .cpp files to the build
 SOURCES += \
+	$(wildcard src/_Base/*.cpp) \
+	$(wildcard src/_Gui/*.cpp) \
+	$(wildcard src/_MusicTools/*.cpp) \
 	$(wildcard src/BitBus/*.cpp) \
 	$(wildcard src/Effects/*.cpp) \
 	$(wildcard src/Hardware/*.cpp) \
 	$(wildcard src/Morpher/*.cpp) \
+	$(wildcard src/Sequencer/*.cpp) \
 	$(wildcard src/Synths/*.cpp) \
 	$(wildcard src/Utilities/*.cpp) \
-	$(wildcard src/_Base/*.cpp) \
-	$(wildcard src/_Gui/*.cpp) \
-	$(wildcard src/_MusicTools/*.cpp) \
-	$(wildcard src/TimeLord/*.cpp) \
 
 
 # Add files to the ZIP package when running `make dist`

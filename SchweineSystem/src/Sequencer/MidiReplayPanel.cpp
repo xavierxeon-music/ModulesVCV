@@ -19,7 +19,7 @@ void MidiReplay::setup()
 
 void MidiReplayWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Utilities/MidiReplay.svg");
+   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Sequencer/MidiReplay.svg");
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 

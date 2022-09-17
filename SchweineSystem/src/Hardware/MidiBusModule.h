@@ -8,7 +8,7 @@ using namespace rack;
 #include <SvinMidi.h>
 #include <SvinModule.h>
 
-#include "../Utilities/MidiReplay.h"
+#include "../Sequencer/MidiReplay.h"
 
 class MidiBusModule : protected Svin::Midi::Output, public Svin::Exapnder<BusMidi>
 {
