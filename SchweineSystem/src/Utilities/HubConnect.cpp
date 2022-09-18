@@ -1,5 +1,4 @@
 #include "HubConnect.h"
-#include "HubConnectPanel.h"
 
 #include <SvinOrigin.h>
 
@@ -27,4 +26,6 @@ HubConnectWidget::HubConnectWidget(HubConnect* module)
    setup();
 }
 
+// creete module
 Model* modelHubConnect = Svin::Origin::the()->addModule<HubConnect, HubConnectWidget>("HubConnect");
+

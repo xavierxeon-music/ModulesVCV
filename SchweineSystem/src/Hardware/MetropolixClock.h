@@ -30,7 +30,7 @@ public:
    void updateDisplays() override;
 
 private:
-   void setup();
+   inline void setup();
    void connectToMidiDevice();
 
    void clockTick() override;
@@ -61,7 +61,11 @@ public:
    MetropolixClockWidget(MetropolixClock* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef MetropolixClockHPP
+#include "MetropolixClock.hpp"
+#endif // NOT MetropolixClockHPP
 
 #endif // NOT MetropolixClockH

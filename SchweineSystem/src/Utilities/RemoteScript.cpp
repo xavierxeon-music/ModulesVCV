@@ -1,5 +1,4 @@
 #include "RemoteScript.h"
-#include "RemoteScriptPanel.h"
 
 #include <Tools/File.h>
 #include <Tools/SevenBit.h>
@@ -131,5 +130,6 @@ void RemoteScriptWidget::preDraw()
 
    logoWidget->visible = myModule->scriptExists();
 }
-
+// creete module
 Model* modelRemoteScript = Svin::Origin::the()->addModule<RemoteScript, RemoteScriptWidget>("RemoteScript");
+

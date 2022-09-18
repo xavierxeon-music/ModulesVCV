@@ -1,5 +1,4 @@
 #include "BitBusBitIn.h"
-#include "BitBusBitInPanel.h"
 
 #include <Tools/BoolField.h>
 
@@ -78,4 +77,6 @@ BitBusBitInWidget::BitBusBitInWidget(BitBusBitIn* module)
    setup();
 }
 
+// creete module
 Model* modelBitBusBitIn = Svin::Origin::the()->addModule<BitBusBitIn, BitBusBitInWidget>("BitBusBitIn");
+

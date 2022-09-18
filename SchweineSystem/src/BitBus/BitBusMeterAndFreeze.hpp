@@ -100,6 +100,4 @@ void BitBusMeterAndFreezeWidget::setup()
    makeLED(this, Vec(65.00, 46.77), BitBusMeterAndFreeze::Panel::RGB_BusOut);
 }
 
-Model* modelBitBusMeterAndFreeze = Svin::Origin::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");
-
 #endif // NOT BitBusMeterAndFreezeHPP

@@ -1,5 +1,4 @@
 #include "BitBusNegate.h"
-#include "BitBusNegatePanel.h"
 
 #include <Tools/BoolField.h>
 
@@ -107,4 +106,6 @@ BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
    setup();
 }
 
+// creete module
 Model* modelBitBusNegate = Svin::Origin::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");
+

@@ -29,7 +29,7 @@ public:
    void setWavFileName(const std::string& newFileName);
 
 private:
-   void setup();
+   inline void setup();
    void load();
 
    void load(const Svin::Json::Object& rootObject) override;
@@ -71,8 +71,12 @@ public:
    WavPlayerWidget(WavPlayer* module);
 
 private:
-   void setup();
+   inline void setup();
    void displayClicked(const float& x, const float& y);
 };
+
+#ifndef WavPlayerHPP
+#include "WavPlayer.hpp"
+#endif // NOT WavPlayerHPP
 
 #endif // NOT WavPlayerH

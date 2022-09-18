@@ -1,5 +1,4 @@
 #include "BitBusCounter.h"
-#include "BitBusCounterPanel.h"
 
 #include <Tools/BoolField.h>
 #include <Tools/Variable.h>
@@ -106,4 +105,6 @@ BitBusCounterWidget::BitBusCounterWidget(BitBusCounter* module)
    setup();
 }
 
+// creete module
 Model* modelBitBusCounter = Svin::Origin::the()->addModule<BitBusCounter, BitBusCounterWidget>("BitBusCounter");
+

@@ -1,5 +1,4 @@
 #include "Revoicer.h"
-#include "RevoicerPanel.h"
 
 #include <Tools/Variable.h>
 
@@ -70,4 +69,6 @@ RevoicerWidget::RevoicerWidget(Revoicer* module)
    setup();
 }
 
+// creete module
 Model* modelRevoicer = Svin::Origin::the()->addModule<Revoicer, RevoicerWidget>("Revoicer");
+

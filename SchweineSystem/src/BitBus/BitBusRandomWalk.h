@@ -32,7 +32,7 @@ private:
    static constexpr uint16_t seedCount = 256;
 
 private:
-   void setup();
+   inline void setup();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -61,7 +61,11 @@ public:
    BitBusRandomWalkWidget(BitBusRandomWalk* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef BitBusRandomWalkHPP
+#include "BitBusRandomWalk.hpp"
+#endif // NOT BitBusRandomWalkHPP
 
 #endif // NOT BitBusRandomWalkH

@@ -26,7 +26,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -47,7 +47,11 @@ public:
    BitBusNegateWidget(BitBusNegate* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef BitBusNegateHPP
+#include "BitBusNegate.hpp"
+#endif // NOT BitBusNegateHPP
 
 #endif // NOT BitBusNegateH

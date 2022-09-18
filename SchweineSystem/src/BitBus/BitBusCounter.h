@@ -27,7 +27,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -54,7 +54,11 @@ public:
    BitBusCounterWidget(BitBusCounter* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef BitBusCounterHPP
+#include "BitBusCounter.hpp"
+#endif // NOT BitBusCounterHPP
 
 #endif // NOT BitBusCounterH

@@ -1,5 +1,4 @@
 #include "VCMCReceiver.h"
-#include "VCMCReceiverPanel.h"
 
 #include <Midi/MidiCommon.h>
 
@@ -182,5 +181,6 @@ VCMCReceiverWidget::VCMCReceiverWidget(VCMCReceiver* module)
 {
    setup();
 }
-
+// creete module
 Model* modelVCMCReceiver = Svin::Origin::the()->addModule<VCMCReceiver, VCMCReceiverWidget>("VCMCReceiver");
+

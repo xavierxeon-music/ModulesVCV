@@ -1,5 +1,4 @@
 #include "MidiReplay.h"
-#include "MidiReplayPanel.h"
 
 #include <Music/Note.h>
 #include <Tools/File.h>
@@ -282,5 +281,6 @@ MidiReplayWidget::MidiReplayWidget(MidiReplay* module)
 {
    setup();
 }
-
+// creete module
 Model* modelMidiReplay = Svin::Origin::the()->addModule<MidiReplay, MidiReplayWidget>("MidiReplay");
+

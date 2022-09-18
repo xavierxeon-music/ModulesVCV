@@ -21,7 +21,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
 
 private:
    Svin::ButtonLED connectionButton;
@@ -35,7 +35,11 @@ public:
    HubConnectWidget(HubConnect* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef HubConnectHPP
+#include "HubConnect.hpp"
+#endif // NOT HubConnectHPP
 
 #endif // NOT HubConnectH

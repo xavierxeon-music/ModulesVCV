@@ -1,5 +1,4 @@
 #include "MeshStack.h"
-#include "MeshStackPanel.h"
 
 #include <SvinOrigin.h>
 
@@ -68,5 +67,6 @@ MeshStackWidget::MeshStackWidget(MeshStack* module)
 {
    setup();
 }
-
+// creete module
 Model* modelMeshStack = Svin::Origin::the()->addModule<MeshStack, MeshStackWidget>("MeshStack");
+

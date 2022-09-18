@@ -1,5 +1,4 @@
 #include "ScionExciter.h"
-#include "ScionExciterPanel.h"
 
 #include <Sound/StandardTable.h>
 
@@ -189,5 +188,6 @@ ScionExciterWidget::ScionExciterWidget(ScionExciter* module)
 {
    setup();
 }
-
+// creete module
 Model* modelScionExciter = Svin::Origin::the()->addModule<ScionExciter, ScionExciterWidget>("ScionExciter");
+

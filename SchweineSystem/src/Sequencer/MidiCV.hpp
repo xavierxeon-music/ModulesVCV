@@ -72,6 +72,4 @@ void MidiCVWidget::setup()
    makeOutput(this, Vec(30.00, 215.52), MidiCV::Panel::Pitch, true);
 }
 
-Model* modelMidiCV = Svin::Origin::the()->addModule<MidiCV, MidiCVWidget>("MidiCV");
-
 #endif // NOT MidiCVHPP

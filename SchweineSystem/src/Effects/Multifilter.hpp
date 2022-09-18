@@ -112,6 +112,4 @@ void MultifilterWidget::setup()
    makeOutput(this, Vec(51.09, 355.83), Multifilter::Panel::Out, true);
 }
 
-Model* modelMultifilter = Svin::Origin::the()->addModule<Multifilter, MultifilterWidget>("Multifilter");
-
 #endif // NOT MultifilterHPP

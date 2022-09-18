@@ -1,5 +1,4 @@
 #include "MidiCV.h"
-#include "MidiCVPanel.h"
 
 #include <Music/Note.h>
 
@@ -100,5 +99,6 @@ MidiCVWidget::MidiCVWidget(MidiCV* module)
 {
    setup();
 }
-
+// creete module
 Model* modelMidiCV = Svin::Origin::the()->addModule<MidiCV, MidiCVWidget>("MidiCV");
+

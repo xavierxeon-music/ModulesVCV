@@ -126,6 +126,4 @@ void BitBusNegateWidget::setup()
    makeLED(this, Vec(79.92, 46.77), BitBusNegate::Panel::RGB_BusOut);
 }
 
-Model* modelBitBusNegate = Svin::Origin::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");
-
 #endif // NOT BitBusNegateHPP

@@ -1,5 +1,4 @@
 #include "WavPlayer.h"
-#include "WavPlayerPanel.h"
 
 #include <Tools/Convert.h>
 
@@ -167,5 +166,6 @@ WavPlayerWidget::WavPlayerWidget(WavPlayer* module)
 {
    setup();
 }
-
+// creete module
 Model* modelWavPlayer = Svin::Origin::the()->addModule<WavPlayer, WavPlayerWidget>("WavPlayer");
+

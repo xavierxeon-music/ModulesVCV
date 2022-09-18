@@ -67,6 +67,4 @@ void DoepferQuadWidget::setup()
    makeLEDButton(this, Vec(30.00, 340.14), DoepferQuad::Panel::Connect, DoepferQuad::Panel::RGB_Connect);
 }
 
-Model* modelDoepferQuad = Svin::Origin::the()->addModule<DoepferQuad, DoepferQuadWidget>("DoepferQuad");
-
 #endif // NOT DoepferQuadHPP

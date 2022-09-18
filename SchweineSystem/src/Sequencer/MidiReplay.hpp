@@ -88,6 +88,4 @@ void MidiReplayWidget::setup()
    makeOLED(this, Vec(9.00, 68.57), MidiReplay::Panel::Pixels_Display, 100, 135);
 }
 
-Model* modelMidiReplay = Svin::Origin::the()->addModule<MidiReplay, MidiReplayWidget>("MidiReplay");
-
 #endif // NOT MidiReplayHPP

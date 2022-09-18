@@ -88,6 +88,4 @@ void BitBusRandomWalkWidget::setup()
    makeLCD(this, Vec(20.44, 220.55), 3, BitBusRandomWalk::Panel::Text_Bank, 18);
 }
 
-Model* modelBitBusRandomWalk = Svin::Origin::the()->addModule<BitBusRandomWalk, BitBusRandomWalkWidget>("BitBusRandomWalk");
-
 #endif // NOT BitBusRandomWalkHPP

@@ -153,6 +153,4 @@ void ScionExciterWidget::setup()
    makeOutput(this, Vec(64.94, 355.83), ScionExciter::Panel::Master_Exciter_Out, false);
 }
 
-Model* modelScionExciter = Svin::Origin::the()->addModule<ScionExciter, ScionExciterWidget>("ScionExciter");
-
 #endif // NOT ScionExciterHPP

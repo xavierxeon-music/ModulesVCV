@@ -83,6 +83,4 @@ void MetropolixClockWidget::setup()
    makeOLED(this, Vec(10.00, 61.98), MetropolixClock::Panel::Pixels_Display, 83, 170);
 }
 
-Model* modelMetropolixClock = Svin::Origin::the()->addModule<MetropolixClock, MetropolixClockWidget>("MetropolixClock");
-
 #endif // NOT MetropolixClockHPP

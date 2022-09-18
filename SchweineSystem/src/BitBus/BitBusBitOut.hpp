@@ -92,6 +92,4 @@ void BitBusBitOutWidget::setup()
    makeLED(this, Vec(49.50, 46.77), BitBusBitOut::Panel::RGB_BusOut);
 }
 
-Model* modelBitBusBitOut = Svin::Origin::the()->addModule<BitBusBitOut, BitBusBitOutWidget>("BitBusBitOut");
-
 #endif // NOT BitBusBitOutHPP

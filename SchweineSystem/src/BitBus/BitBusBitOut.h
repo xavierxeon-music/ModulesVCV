@@ -25,7 +25,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
 
 private:
    Svin::Output::List outputList;
@@ -42,7 +42,11 @@ public:
    BitBusBitOutWidget(BitBusBitOut* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef BitBusBitOutHPP
+#include "BitBusBitOut.hpp"
+#endif // NOT BitBusBitOutHPP
 
 #endif // BitBusBitOutH

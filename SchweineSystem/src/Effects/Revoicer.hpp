@@ -82,6 +82,4 @@ void RevoicerWidget::setup()
    makeLCD(this, Vec(11.00, 147.27), 2, Revoicer::Panel::Text_Quality_Value, 18);
 }
 
-Model* modelRevoicer = Svin::Origin::the()->addModule<Revoicer, RevoicerWidget>("Revoicer");
-
 #endif // NOT RevoicerHPP

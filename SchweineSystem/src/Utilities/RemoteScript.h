@@ -28,7 +28,7 @@ public:
    bool scriptExists() const;
 
 private:
-   void setup();
+   inline void setup();
    void updateDisplays() override;
 
    void load(const Svin::Json::Object& rootObject) override;
@@ -57,11 +57,15 @@ public:
    RemoteScriptWidget(RemoteScript* module);
 
 private:
-   void setup();
+   inline void setup();
    void preDraw() override;
 
 private:
    Svin::SvgImage* logoWidget;
 };
+
+#ifndef RemoteScriptHPP
+#include "RemoteScript.hpp"
+#endif // NOT RemoteScriptHPP
 
 #endif // NOT RemoteScriptH

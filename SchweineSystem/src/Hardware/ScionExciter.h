@@ -59,7 +59,7 @@ private:
    };
 
 private:
-   void setup();
+   inline void setup();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -81,7 +81,11 @@ public:
    ScionExciterWidget(ScionExciter* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef ScionExciterHPP
+#include "ScionExciter.hpp"
+#endif // NOT ScionExciterHPP
 
 #endif // NOT ScionExciterH

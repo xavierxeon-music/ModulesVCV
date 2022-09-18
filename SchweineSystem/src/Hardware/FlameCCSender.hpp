@@ -77,6 +77,4 @@ void FlameCCSenderWidget::setup()
    makeInput(this, Vec(30.00, 261.36),  FlameCCSender::Panel::Voltages, true);
 }
 
-Model* modelFlameCCSender = Svin::Origin::the()->addModule<FlameCCSender, FlameCCSenderWidget>("FlameCCSender");
-
 #endif // NOT FlameCCSenderHPP

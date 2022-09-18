@@ -138,6 +138,4 @@ void GateLatchWidget::setup()
    makeLED(this, Vec(45.00, 63.81), GateLatch::Panel::RGB_Row1_Status);
 }
 
-Model* modelGateLatch = Svin::Origin::the()->addModule<GateLatch, GateLatchWidget>("GateLatch");
-
 #endif // NOT GateLatchHPP

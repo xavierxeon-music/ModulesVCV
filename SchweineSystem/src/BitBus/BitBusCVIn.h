@@ -28,7 +28,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
 
 private:
    Svin::Input cvInput;
@@ -45,7 +45,11 @@ public:
    BitBusCVInWidget(BitBusCVIn* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef BitBusCVInHPP
+#include "BitBusCVIn.hpp"
+#endif // NOT BitBusCVInHPP
 
 #endif // BitBusCVInH

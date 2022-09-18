@@ -1,5 +1,4 @@
 #include "BitBusMeterAndFreeze.h"
-#include "BitBusMeterAndFreezePanel.h"
 
 #include <SvinOrigin.h>
 
@@ -95,10 +94,14 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
    sendToRight(message);
 }
 
+// widget
+
 BitBusMeterAndFreezeWidget::BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
+// creete module
 Model* modelBitBusMeterAndFreeze = Svin::Origin::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");
+

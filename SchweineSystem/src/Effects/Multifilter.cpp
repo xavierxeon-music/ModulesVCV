@@ -1,5 +1,4 @@
 #include "Multifilter.h"
-#include "MultifilterPanel.h"
 
 #include <Abstract/AbstractOscilator.h>
 #include <Tools/Range.h>
@@ -155,4 +154,6 @@ MultifilterWidget::MultifilterWidget(Multifilter* module)
    setup();
 }
 
+// creete module
 Model* modelMultifilter = Svin::Origin::the()->addModule<Multifilter, MultifilterWidget>("Multifilter");
+

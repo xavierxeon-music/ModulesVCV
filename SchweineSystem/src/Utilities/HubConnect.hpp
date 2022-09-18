@@ -67,6 +67,4 @@ void HubConnectWidget::setup()
    makeLEDButton(this, Vec(30.00, 350.06), HubConnect::Panel::Connect, HubConnect::Panel::RGB_Connect);
 }
 
-Model* modelHubConnect = Svin::Origin::the()->addModule<HubConnect, HubConnectWidget>("HubConnect");
-
 #endif // NOT HubConnectHPP

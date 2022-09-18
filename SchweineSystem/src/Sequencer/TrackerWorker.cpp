@@ -1,5 +1,4 @@
 #include "TrackerWorker.h"
-#include "TrackerWorkerPanel.h"
 
 #include <Midi/MidiCommon.h>
 #include <Tools/Convert.h>
@@ -471,5 +470,6 @@ TrackerWorkerWidget::TrackerWorkerWidget(TrackerWorker* module)
 {
    setup();
 }
-
+// creete module
 Model* modelTrackerWorker = Svin::Origin::the()->addModule<TrackerWorker, TrackerWorkerWidget>("TrackerWorker");
+

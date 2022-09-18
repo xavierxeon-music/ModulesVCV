@@ -32,7 +32,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -57,7 +57,11 @@ public:
    BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef BitBusMeterAndFreezeHPP
+#include "BitBusMeterAndFreeze.hpp"
+#endif // NOT BitBusMeterAndFreezeHPP
 
 #endif // NOT BitBusMeterAndFreezeH

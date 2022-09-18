@@ -1,5 +1,4 @@
 #include "BitBusRandomWalk.h"
-#include "BitBusRandomWalkPanel.h"
 
 #include <Maths.h>
 #include <Sound/StandardTable.h>
@@ -144,4 +143,6 @@ BitBusRandomWalkWidget::BitBusRandomWalkWidget(BitBusRandomWalk* module)
    setup();
 }
 
+// creete module
 Model* modelBitBusRandomWalk = Svin::Origin::the()->addModule<BitBusRandomWalk, BitBusRandomWalkWidget>("BitBusRandomWalk");
+

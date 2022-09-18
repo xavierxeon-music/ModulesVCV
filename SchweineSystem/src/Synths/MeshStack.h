@@ -26,7 +26,7 @@ public:
    void updateDisplays() override;
 
 private:
-   void setup();
+   inline void setup();
 
 private:
    Svin::Knob knob;
@@ -42,7 +42,11 @@ public:
    MeshStackWidget(MeshStack* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef MeshStackHPP
+#include "MeshStack.hpp"
+#endif // NOT MeshStackHPP
 
 #endif // NOT MeshStackH

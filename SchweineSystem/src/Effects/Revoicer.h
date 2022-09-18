@@ -27,7 +27,7 @@ public:
    void onSampleRateChange(const SampleRateChangeEvent& e) override;
 
 private:
-   void setup();
+   inline void setup();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -48,7 +48,11 @@ public:
    RevoicerWidget(Revoicer* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef RevoicerHPP
+#include "Revoicer.hpp"
+#endif // NOT RevoicerHPP
 
 #endif // NOT RevoicerH

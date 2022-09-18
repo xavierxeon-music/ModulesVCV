@@ -23,7 +23,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
 };
 
 // widget
@@ -34,7 +34,11 @@ public:
    MidiCVWidget(MidiCV* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef MidiCVHPP
+#include "MidiCV.hpp"
+#endif // NOT MidiCVHPP
 
 #endif // NOT MidiCVH

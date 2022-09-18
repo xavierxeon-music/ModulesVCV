@@ -1,5 +1,4 @@
 #include "GateLatch.h"
-#include "GateLatchPanel.h"
 
 #include <SvinJson.h>
 #include <SvinOrigin.h>
@@ -116,4 +115,6 @@ GateLatchWidget::GateLatchWidget(GateLatch* module)
    setup();
 }
 
+// creete module
 Model* modelGateLatch = Svin::Origin::the()->addModule<GateLatch, GateLatchWidget>("GateLatch");
+

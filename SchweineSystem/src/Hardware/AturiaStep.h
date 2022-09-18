@@ -29,7 +29,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
    void connectToMidiDevice();
    void sendProgramChange(uint8_t channel);
    void sendClock();
@@ -64,7 +64,11 @@ public:
    AturiaStepWidget(AturiaStep* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef AturiaStepHPP
+#include "AturiaStep.hpp"
+#endif // NOT AturiaStepHPP
 
 #endif // NOT AturiaStepH

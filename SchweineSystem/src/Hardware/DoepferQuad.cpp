@@ -1,5 +1,4 @@
 #include "DoepferQuad.h"
-#include "DoepferQuadPanel.h"
 
 #include <SvinOrigin.h>
 
@@ -53,4 +52,6 @@ DoepferQuadWidget::DoepferQuadWidget(DoepferQuad* module)
    setup();
 }
 
+// creete module
 Model* modelDoepferQuad = Svin::Origin::the()->addModule<DoepferQuad, DoepferQuadWidget>("DoepferQuad");
+

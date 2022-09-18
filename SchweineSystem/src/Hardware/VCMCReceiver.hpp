@@ -151,6 +151,4 @@ void VCMCReceiverWidget::setup()
    makeMeter(this, Vec(10.95, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel1);
 }
 
-Model* modelVCMCReceiver = Svin::Origin::the()->addModule<VCMCReceiver, VCMCReceiverWidget>("VCMCReceiver");
-
 #endif // NOT VCMCReceiverHPP

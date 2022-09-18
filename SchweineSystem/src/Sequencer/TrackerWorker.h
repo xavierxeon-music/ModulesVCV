@@ -99,4 +99,8 @@ private:
    inline void setup();
 };
 
+#ifndef TrackerWorkerHPP
+#include "TrackerWorker.hpp"
+#endif // NOT TrackerWorkerHPP
+
 #endif // NOT TrackerWorkerH

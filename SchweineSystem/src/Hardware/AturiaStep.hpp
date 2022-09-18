@@ -120,6 +120,4 @@ void AturiaStepWidget::setup()
    makeLCD(this, Vec(61.00, 64.03), 2, AturiaStep::Panel::Text_Channel1_Pattern, 18);
 }
 
-Model* modelAturiaStep = Svin::Origin::the()->addModule<AturiaStep, AturiaStepWidget>("AturiaStep");
-
 #endif // NOT AturiaStepHPP

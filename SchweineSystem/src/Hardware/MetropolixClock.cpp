@@ -1,5 +1,4 @@
 #include "MetropolixClock.h"
-#include "MetropolixClockPanel.h"
 
 #include <SvinOrigin.h>
 
@@ -138,5 +137,6 @@ MetropolixClockWidget::MetropolixClockWidget(MetropolixClock* module)
 {
    setup();
 }
-
+// creete module
 Model* modelMetropolixClock = Svin::Origin::the()->addModule<MetropolixClock, MetropolixClockWidget>("MetropolixClock");
+

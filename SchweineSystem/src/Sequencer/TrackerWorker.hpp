@@ -94,6 +94,4 @@ void TrackerWorkerWidget::setup()
    makeOLED(this, Vec(9.00, 32.00), TrackerWorker::Panel::Pixels_Display, 100, 180);
 }
 
-Model* modelTrackerWorker = Svin::Origin::the()->addModule<TrackerWorker, TrackerWorkerWidget>("TrackerWorker");
-
 #endif // NOT TrackerWorkerHPP

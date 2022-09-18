@@ -1,5 +1,4 @@
 #include "FlameCCSender.h"
-#include "FlameCCSenderPanel.h"
 
 #include <SvinOrigin.h>
 
@@ -109,5 +108,6 @@ FlameCCSenderWidget::FlameCCSenderWidget(FlameCCSender* module)
 {
    setup();
 }
-
+// creete module
 Model* modelFlameCCSender = Svin::Origin::the()->addModule<FlameCCSender, FlameCCSenderWidget>("FlameCCSender");
+

@@ -5,13 +5,6 @@
 
 #include <SvinOrigin.h>
 
-#include <SvinCommon.h>
-#include <SvinKnob.h>
-#include <SvinLED.h>
-#include <SvinSlider.h>
-#include <SvinInput.h>
-#include <SvinOutput.h>
-
 struct MeshStack::Panel
 {
    enum ParamId
@@ -99,7 +92,5 @@ void MeshStackWidget::setup()
 
    makeLED(this, Vec(105.25, 147.50), MeshStack::Panel::RGB_Color);
 }
-
-Model* modelMeshStack = Svin::Origin::the()->addModule<MeshStack, MeshStackWidget>("MeshStack");
 
 #endif // NOT MeshStackHPP

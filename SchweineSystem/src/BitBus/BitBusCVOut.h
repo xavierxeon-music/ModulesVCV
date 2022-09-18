@@ -29,7 +29,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
 
 private:
    Svin::Output cvOutput;
@@ -44,7 +44,11 @@ public:
    BitBusCVOutWidget(BitBusCVOut* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef BitBusCVOutHPP
+#include "BitBusCVOut.hpp"
+#endif // NOT BitBusCVOutHPP
 
 #endif // BitBusCVOutH

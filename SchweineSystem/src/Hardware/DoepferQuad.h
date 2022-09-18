@@ -4,9 +4,10 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SvinButtonLED.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
+
+#include <SvinButtonLED.h>
 
 #include "MidiBusModule.h"
 
@@ -22,7 +23,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
    void connectToMidiDevice();
 
 private:
@@ -37,7 +38,11 @@ public:
    DoepferQuadWidget(DoepferQuad* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef DoepferQuadHPP
+#include "DoepferQuad.hpp"
+#endif // NOT DoepferQuadHPP
 
 #endif // NOT DoepferQuadH

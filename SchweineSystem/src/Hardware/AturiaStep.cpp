@@ -1,5 +1,4 @@
 #include "AturiaStep.h"
-#include "AturiaStepPanel.h"
 
 #include <Tools/Variable.h>
 
@@ -220,4 +219,6 @@ AturiaStepWidget::AturiaStepWidget(AturiaStep* module)
    setup();
 }
 
+// creete module
 Model* modelAturiaStep = Svin::Origin::the()->addModule<AturiaStep, AturiaStepWidget>("AturiaStep");
+

@@ -1,5 +1,4 @@
 #include "BitBusCVOut.h"
-#include "BitBusCVOutPanel.h"
 
 #include <Tools/BoolField.h>
 
@@ -52,4 +51,6 @@ BitBusCVOutWidget::BitBusCVOutWidget(BitBusCVOut* module)
    setup();
 }
 
+// creete module
 Model* modelBitBusCVOut = Svin::Origin::the()->addModule<BitBusCVOut, BitBusCVOutWidget>("BitBusCVOut");
+

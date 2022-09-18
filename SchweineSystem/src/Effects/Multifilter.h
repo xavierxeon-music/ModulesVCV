@@ -43,7 +43,7 @@ private:
    };
 
 private:
-   void setup();
+   inline void setup();
    void reinit();
    void onSampleRateChange(const SampleRateChangeEvent& e) override;
 
@@ -74,7 +74,11 @@ public:
    MultifilterWidget(Multifilter* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef MultifilterHPP
+#include "Multifilter.hpp"
+#endif // NOT MultifilterHPP
 
 #endif // NOT MultifilterH

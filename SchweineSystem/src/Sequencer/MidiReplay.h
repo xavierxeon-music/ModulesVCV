@@ -65,7 +65,7 @@ private:
    };
 
 private:
-   void setup();
+   inline void setup();
    void displayClicked(const float& x, const float& y);
 
 private:
@@ -101,7 +101,11 @@ public:
    MidiReplayWidget(MidiReplay* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef MidiReplayHPP
+#include "MidiReplay.hpp"
+#endif // NOT MidiReplayHPP
 
 #endif // NOT MidiReplayH

@@ -88,9 +88,9 @@ void MapperWidget::setup()
    makeSwitch(this, Vec(30.00, 295.52), Mapper::Panel::Output_Range);
    makeSwitch(this, Vec(30.00, 140.43), Mapper::Panel::Input_Range);
 
-   makeInput(this, Vec(30.00, 175.83),  Mapper::Panel::Input_In, false);
+   makeInput(this, Vec(30.00, 175.83),  Mapper::Panel::Input_In, true);
 
-   makeOutput(this, Vec(30.00, 330.92), Mapper::Panel::Output_Out, false);
+   makeOutput(this, Vec(30.00, 330.92), Mapper::Panel::Output_Out, true);
 
    makeLED(this, Vec(30.00, 271.23), Mapper::Panel::RGB_Output_10V);
    makeLED(this, Vec(30.00, 257.73), Mapper::Panel::RGB_Output_8V);
@@ -99,7 +99,5 @@ void MapperWidget::setup()
    makeLED(this, Vec(30.00, 102.64), Mapper::Panel::RGB_Input_8V);
    makeLED(this, Vec(30.00, 89.14), Mapper::Panel::RGB_Input_5V);
 }
-
-Model* modelMapper = Svin::Origin::the()->addModule<Mapper, MapperWidget>("Mapper");
 
 #endif // NOT MapperHPP

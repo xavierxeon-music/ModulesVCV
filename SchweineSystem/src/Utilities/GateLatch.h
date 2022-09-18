@@ -4,11 +4,13 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <SvinModule.h>
+#include <SvinModuleWidget.h>
+
+#include <SvinButton.h>
 #include <SvinCommon.h>
 #include <SvinInput.h>
 #include <SvinLED.h>
-#include <SvinModule.h>
-#include <SvinModuleWidget.h>
 #include <SvinOutput.h>
 
 class GateLatch : public Svin::Module
@@ -23,7 +25,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -46,7 +48,11 @@ public:
    GateLatchWidget(GateLatch* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef GateLatchHPP
+#include "GateLatch.hpp"
+#endif // NOT GateLatchHPP
 
 #endif // NOT GateLatchH

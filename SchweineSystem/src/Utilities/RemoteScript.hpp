@@ -75,6 +75,4 @@ void RemoteScriptWidget::setup()
    makeOLED(this, Vec(9.00, 62.34), RemoteScript::Panel::Pixels_Display, 40, 40);
 }
 
-Model* modelRemoteScript = Svin::Origin::the()->addModule<RemoteScript, RemoteScriptWidget>("RemoteScript");
-
 #endif // NOT RemoteScriptHPP

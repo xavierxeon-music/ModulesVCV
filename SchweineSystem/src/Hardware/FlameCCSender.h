@@ -26,7 +26,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
    void connectToMidiDevice();
    void sendSysEx();
 
@@ -52,7 +52,11 @@ public:
    FlameCCSenderWidget(FlameCCSender* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef FlameCCSenderHPP
+#include "FlameCCSender.hpp"
+#endif // NOT FlameCCSenderHPP
 
 #endif // NOT FlameCCSenderH

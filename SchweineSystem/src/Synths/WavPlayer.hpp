@@ -101,6 +101,4 @@ void WavPlayerWidget::setup()
    makeOLED(this, Vec(10.00, 34.24), WavPlayer::Panel::Pixels_Display, 83, 60);
 }
 
-Model* modelWavPlayer = Svin::Origin::the()->addModule<WavPlayer, WavPlayerWidget>("WavPlayer");
-
 #endif // NOT WavPlayerHPP

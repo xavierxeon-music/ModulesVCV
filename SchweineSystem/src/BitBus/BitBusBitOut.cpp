@@ -1,5 +1,4 @@
 #include "BitBusBitOut.h"
-#include "BitBusBitOutPanel.h"
 
 #include <Tools/BoolField.h>
 
@@ -67,5 +66,6 @@ BitBusBitOutWidget::BitBusBitOutWidget(BitBusBitOut* module)
 {
    setup();
 }
-
+// creete module
 Model* modelBitBusBitOut = Svin::Origin::the()->addModule<BitBusBitOut, BitBusBitOutWidget>("BitBusBitOut");
+

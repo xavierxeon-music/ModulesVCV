@@ -27,7 +27,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
    void connectToMidiDevice();
    void noteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity) override;
    void controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
@@ -65,7 +65,11 @@ public:
    VCMCReceiverWidget(VCMCReceiver* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef VCMCReceiverHPP
+#include "VCMCReceiver.hpp"
+#endif // NOT VCMCReceiverHPP
 
 #endif // NOT VCMCReceiverH

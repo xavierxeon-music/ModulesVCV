@@ -25,7 +25,7 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   void setup();
+   inline void setup();
 
 private:
    Svin::Input::List inputList;
@@ -40,7 +40,11 @@ public:
    BitBusBitInWidget(BitBusBitIn* module);
 
 private:
-   void setup();
+   inline void setup();
 };
+
+#ifndef BitBusBitInHPP
+#include "BitBusBitIn.hpp"
+#endif // NOT BitBusBitInHPP
 
 #endif // BitBusBitInH

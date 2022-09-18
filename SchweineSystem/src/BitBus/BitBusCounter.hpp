@@ -100,6 +100,4 @@ void BitBusCounterWidget::setup()
    makeLCD(this, Vec(20.00, 42.49), 3, BitBusCounter::Panel::Text_Number, 18);
 }
 
-Model* modelBitBusCounter = Svin::Origin::the()->addModule<BitBusCounter, BitBusCounterWidget>("BitBusCounter");
-
 #endif // NOT BitBusCounterHPP

@@ -48,3 +48,7 @@ class Source(Common):
             line(1, 'setup();')
             line(0, '}')
             line(0)
+
+            line(0, '// creete module')
+            line(0, f'Model* model{self.moduleName} = Svin::Origin::the()->addModule<{self.moduleName}, {self.moduleName}Widget>("{self.moduleName}");')
+            line(0)
