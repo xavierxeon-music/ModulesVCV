@@ -6,13 +6,11 @@ import pathlib
 import shutil
 import json
 
-from lib import createPanel, getPanelComponents
-from lib import Headers, Sources
+from libmodule import createPanel, getPanelComponents
+from libmodule import Header, Source, Panel
 
-scriptPath = os.path.realpath(__file__)
-scriptPath = os.path.dirname(scriptPath)
-
-modulesPath = os.path.abspath(scriptPath + '/../SchweineSystem')
+modulesPath = os.path.realpath(__file__)
+modulesPath = os.path.dirname(modulesPath)
 
 
 class Module:
@@ -52,15 +50,15 @@ class Module:
                     addSourceInformation(entry.path)
                 elif not entry.is_file():
                     continue
-                if not entry.name.endswith('Panel.h'):
+                if not entry.name.endswith('.hpp'):
                     continue
 
-                name = entry.name.replace('Panel.h', '')
+                name = entry.name.replace('.hpp', '')
                 if not name in self._modules:
                     continue
                 mtime = os.path.getmtime(entry.path)
                 self._modules[name]['source_path'] = os.path.dirname(entry.path)
-                self._modules[name]['header_mtime'] = mtime
+                self._modules[name]['panel_mtime'] = mtime
 
         buildResourceDict(modulesPath + '/res/')
         addSourceInformation(modulesPath + '/src/')
@@ -77,7 +75,7 @@ class Module:
             self._updateModule(module)
 
         for module, data in self._modules.items():
-            if not 'header_mtime' in data:
+            if not 'panel_mtime' in data:
                 sourcePath = os.path.dirname(data['rc_path'])
                 sourcePath = sourcePath.replace('/res/', '/src/')
                 os.makedirs(sourcePath, exist_ok=True)
@@ -85,7 +83,7 @@ class Module:
 
                 self._updateModule(module)
             else:
-                diffTime = data['rc_mtime'] - data['header_mtime']
+                diffTime = data['rc_mtime'] - data['panel_mtime']
                 if diffTime < 0:
                     continue
 
@@ -106,11 +104,15 @@ class Module:
 
         sourcePath = self._modules[moduleName]['source_path']
         panelFileName = panelFileName.replace(modulesPath + '/', '')
-        headers = Headers(sourcePath, moduleName, panelFileName, components)
+
+        headers = Header(sourcePath, moduleName, panelFileName, components)
         headers.write()
 
-        sources = Sources(sourcePath,  moduleName, panelFileName, components)
+        sources = Source(sourcePath,  moduleName, panelFileName, components)
         sources.write()
+
+        panel = Panel(sourcePath,  moduleName, panelFileName, components)
+        panel.write()
 
         with open(modulesPath + '/plugin.json', 'r') as infile:
             content = json.load(infile)

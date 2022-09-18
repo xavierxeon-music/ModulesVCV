@@ -237,6 +237,12 @@
             "Filter",
             "Polyphonic"
          ]
+      },
+      {
+         "slug": "Mapper",
+         "name": "Mapper",
+         "description": "",
+         "tags": []
       }
    ]
 }
