@@ -159,6 +159,22 @@ void VCMCReceiver::controllerChange(const Midi::Channel& channel, const Midi::Co
       cvValues[index] = value;
 }
 
+void VCMCReceiver::load(const Svin::Json::Object& rootObject)
+{
+   Svin::Json::Array latchesArray = rootObject.get("latches").toArray();
+   for (uint8_t index = 0; index < 8; index++)
+      latches[index] = latchesArray.at(index).toBool();
+}
+
+void VCMCReceiver::save(Svin::Json::Object& rootObject)
+{
+   Svin::Json::Array latchesArray;
+   for (uint8_t index = 0; index < 8; index++)
+      latchesArray.append(latches[index]);
+
+   rootObject.set("latches", latchesArray);
+}
+
 // widget
 
 VCMCReceiverWidget::VCMCReceiverWidget(VCMCReceiver* module)

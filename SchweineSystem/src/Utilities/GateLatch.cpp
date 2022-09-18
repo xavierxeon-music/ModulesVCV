@@ -96,18 +96,14 @@ void GateLatch::load(const Svin::Json::Object& rootObject)
 {
    Svin::Json::Array latchArray = rootObject.get("latches").toArray();
    for (uint8_t index = 0; index < 8; index++)
-   {
-      latches[index] = latchArray.get(index).toBool();
-   }
+      latches[index] = latchArray.at(index).toBool();
 }
 
 void GateLatch::save(Svin::Json::Object& rootObject)
 {
    Svin::Json::Array latchArray;
    for (uint8_t index = 0; index < 8; index++)
-   {
       latchArray.append(latches[index]);
-   }
 
    rootObject.set("latches", latchArray);
 }

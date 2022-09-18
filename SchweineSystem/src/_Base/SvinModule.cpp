@@ -131,17 +131,19 @@ bool Svin::Module::registerHubClient(const std::string& name)
    return majordomo->add(this, name);
 }
 
-void Svin::Module::sendDocumentToHub(const ::Midi::Channel& channel, const Json::Object& object)
+void Svin::Module::sendDocumentToHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex)
 {
    if (!majordomo)
       return;
 
-   majordomo->sendDocument(channel, object);
+   majordomo->sendDocument(channel, object, docIndex);
 }
 
-void Svin::Module::receivedDocumentFromHub(const Json::Object& object)
+void Svin::Module::receivedDocumentFromHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex)
 {
+   (void)channel;
    (void)object;
+   (void)docIndex;
    // do nothing
 }
 

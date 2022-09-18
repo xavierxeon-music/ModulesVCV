@@ -18,7 +18,7 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinOutput.h>
 
-class TrackerWorker : public Svin::Module, public Svin::Midi::Input, public Svin::Midi::Output, public Svin::MasterClock::Client
+class TrackerWorker : public Svin::Module, public Svin::MasterClock::Client
 {
 public:
    struct Panel;
@@ -40,7 +40,7 @@ private:
    };
 
 private:
-   void setup();
+   inline void setup();
 
    void processPassthrough();
    void proccessRemote();
@@ -52,7 +52,7 @@ private:
    void updateInternalOverview();
    void updateInternalCurrent();
 
-   void document(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
+   void receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -96,7 +96,7 @@ public:
    TrackerWorkerWidget(TrackerWorker* module);
 
 private:
-   void setup();
+   inline void setup();
 };
 
 #endif // NOT TrackerWorkerH

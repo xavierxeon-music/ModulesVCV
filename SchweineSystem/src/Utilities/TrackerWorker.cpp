@@ -11,8 +11,6 @@
 
 TrackerWorker::TrackerWorker()
    : Svin::Module()
-   , Svin::Midi::Input("Tracker", true)
-   , Svin::Midi::Output("Tracker", true)
    , Svin::MasterClock::Client()
    , fileName()
    , project()
@@ -36,6 +34,8 @@ TrackerWorker::TrackerWorker()
    , lastNamedSegement()
 {
    setup();
+   registerHubClient("Tracker");
+
    controller.onClickedOpenFileFunction(this, &TrackerWorker::loadProject, "Projects:json");
 
    inputList.append({Panel::Group1_Pass, Panel::Group2_Pass});
@@ -66,7 +66,7 @@ void TrackerWorker::process(const ProcessArgs& args)
       object.set("_Type", "Mode");
       object.set("mode", static_cast<uint8_t>(operationMode));
 
-      sendDocument(1, object);
+      sendDocumentToHub(1, object);
    }
 
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
@@ -114,7 +114,7 @@ void TrackerWorker::loadProject(const std::string& newFileName)
       const Array eventArray = rootObject.get("events").toArray();
       eventNameList.resize(eventArray.size());
       for (size_t index = 0; index < eventArray.size(); index++)
-         eventNameList[index] = eventArray.get(index).toString();
+         eventNameList[index] = eventArray.at(index).toString();
    }
    {
       const Object projectObject = rootObject.get("project").toObject();
@@ -136,7 +136,7 @@ void TrackerWorker::loadProject(const std::string& newFileName)
       for (uint8_t laneIndex = 0; laneIndex < project.getLaneCount(); laneIndex++)
       {
          Tracker::Lane& lane = project.getLane(laneIndex);
-         Object laneObject = laneArray.get(laneIndex).toObject();
+         Object laneObject = laneArray.at(laneIndex).toObject();
          lane.setName(laneObject.get("name").toString());
 
          for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
@@ -188,7 +188,7 @@ void TrackerWorker::processPassthrough()
       object.set("_Type", "State");
       object.set("state", stateArray);
 
-      sendDocument(1, object);
+      sendDocumentToHub(1, object);
    }
 }
 
@@ -251,7 +251,7 @@ void TrackerWorker::updateDisplays()
    object.set("index", index);
    object.set("mode", static_cast<uint8_t>(operationMode));
 
-   sendDocument(1, object);
+   sendDocumentToHub(1, object);
 }
 
 void TrackerWorker::updatePassthrough()
@@ -412,7 +412,7 @@ void TrackerWorker::updateInternalCurrent()
    }
 }
 
-void TrackerWorker::document(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
+void TrackerWorker::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
 {
    if (1 != channel || 0 != docIndex)
       return;
@@ -431,7 +431,7 @@ void TrackerWorker::document(const ::Midi::Channel& channel, const Svin::Json::O
 
       for (uint8_t laneIndex = 0; laneIndex < 32; laneIndex++)
       {
-         const uint8_t value = stateArray.get(laneIndex).toInt();
+         const uint8_t value = stateArray.at(laneIndex).toInt();
          remoteValues[laneIndex] = value;
       }
 

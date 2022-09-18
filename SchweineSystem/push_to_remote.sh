@@ -4,7 +4,7 @@ make
 make install
 
 cd /Applications
-open -W "VCV Rack 2 Pro.app" &
+open -W "VCV Rack 2 Pro.app"
 
 cd ~/Documents/Rack2/plugins/SchweineSystem
 if [ ! -f .fsync ]

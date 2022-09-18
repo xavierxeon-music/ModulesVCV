@@ -193,7 +193,7 @@ void AturiaStep::load(const Svin::Json::Object& rootObject)
    Svin::Json::Array patternArray = rootObject.get("patterns").toArray();
    for (uint8_t channel = 0; channel < 4; channel++)
    {
-      patterns[channel] = patternArray.get(channel).toInt();
+      patterns[channel] = patternArray.at(channel).toInt();
       if (connected())
          sendProgramChange(channel);
       updateDisplay(channel);

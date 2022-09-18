@@ -33,8 +33,8 @@ namespace Svin
       bool hubConnected();
       void connectToHub();
       bool registerHubClient(const std::string& name);
-      void sendDocumentToHub(const ::Midi::Channel& channel, const Json::Object& object);
-      virtual void receivedDocumentFromHub(const Json::Object& object);
+      void sendDocumentToHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex = 0);
+      virtual void receivedDocumentFromHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex);
 
    private:
       using Map = std::map<std::string, Module*>;

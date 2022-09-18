@@ -111,7 +111,7 @@ void Svin::Json::Array::append(const Value& value)
    json_array_append_new(json, value.toJson());
 }
 
-Svin::Json::Value Svin::Json::Array::get(const size_t& index) const
+Svin::Json::Value Svin::Json::Array::at(const size_t& index) const
 {
    return Value(json_array_get(json, index));
 }

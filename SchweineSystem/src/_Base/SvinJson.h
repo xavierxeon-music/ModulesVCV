@@ -48,7 +48,7 @@ namespace Svin
       public:
          size_t size() const;
          void append(const Value& value);
-         Value get(const size_t& index) const;
+         Value at(const size_t& index) const;
       };
 
       class Object : public Value
