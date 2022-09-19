@@ -26,9 +26,13 @@ namespace Svin
    };
 } // namespace Svin
 
-inline void makeSwitch(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId)
+inline void makeSwitch(rack::ModuleWidget* widget, rack::math::Vec pos, int paramId, bool threeWay)
 {
-   rack::app::ParamWidget* paramWidget = rack::createParamCentered<rack::CKSS>(pos, widget->getModule(), paramId);
+   rack::app::ParamWidget* paramWidget = nullptr;
+   if (threeWay)
+      paramWidget = rack::createParamCentered<rack::CKSSThree>(pos, widget->getModule(), paramId);
+   else
+      paramWidget = rack::createParamCentered<rack::CKSS>(pos, widget->getModule(), paramId);
    widget->addParam(paramWidget);
 }
 

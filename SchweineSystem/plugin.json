@@ -241,8 +241,19 @@
       {
          "slug": "Mapper",
          "name": "Mapper",
-         "description": "",
-         "tags": []
+         "description": "map voltage ranges",
+         "tags": [
+            "Utility",
+            "Polyphonic"
+         ]
+      },
+      {
+         "slug": "Nosferatu",
+         "name": "Nosferatu",
+         "description": "a metropolix style sequencer",
+         "tags": [
+            "Sequencer"
+         ]
       }
    ]
 }

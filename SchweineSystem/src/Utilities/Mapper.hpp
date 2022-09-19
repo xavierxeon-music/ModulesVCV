@@ -85,8 +85,8 @@ void MapperWidget::setup()
    makeButton(this, Vec(30.00, 228.71), Mapper::Panel::Output_Max);
    makeButton(this, Vec(30.00, 73.62), Mapper::Panel::Input_Max);
 
-   makeSwitch(this, Vec(30.00, 295.52), Mapper::Panel::Output_Range);
-   makeSwitch(this, Vec(30.00, 140.43), Mapper::Panel::Input_Range);
+   makeSwitch(this, Vec(30.00, 295.52), Mapper::Panel::Output_Range, false);
+   makeSwitch(this, Vec(30.00, 140.43), Mapper::Panel::Input_Range, false);
 
    makeInput(this, Vec(30.00, 175.83),  Mapper::Panel::Input_In, true);
 

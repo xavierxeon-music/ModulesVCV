@@ -244,7 +244,8 @@ class Panel(Common):
             name = switch['name']
             x = switch['cx']
             y = switch['cy']
-            line(1, f'makeSwitch(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name});')
+            threeWay = 'true' if switch['count'] != 1 else 'false'
+            line(1, f'makeSwitch(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {threeWay});')
 
         if self.ledbuttons:
             line(0)
