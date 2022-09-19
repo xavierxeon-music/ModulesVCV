@@ -105,7 +105,7 @@ void MidiReplay::process(const ProcessArgs& args)
    }
 
    // play
-   currentTick = midiReplay.toTick(duration, tempo.getPercentage(Tempo::Sixteenth));
+   currentTick = midiReplay.toTick(duration, tempo.getPercentage());
 
    busMessage.startTick = lastTick;
    busMessage.endTick = currentTick;
@@ -283,4 +283,3 @@ MidiReplayWidget::MidiReplayWidget(MidiReplay* module)
 }
 // creete module
 Model* modelMidiReplay = Svin::Origin::the()->addModule<MidiReplay, MidiReplayWidget>("MidiReplay");
-

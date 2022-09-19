@@ -212,7 +212,8 @@ void TrackerWorker::processInternal()
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
    const uint32_t currentIndex = project.getCurrentSegmentIndex();
-   const float percentage = tempo.getPercentage(project.getDivison());
+   const float tickPercentage = tempo.getPercentage();
+   const float segmentPercentage = project.getCurrentSegmentPrecentage(tickPercentage);
 
    for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
    {
@@ -221,7 +222,7 @@ void TrackerWorker::processInternal()
          const uint8_t laneIndex = 16 * groupIndex + channelIndex;
          const Tracker::Lane& lane = project.getLane(laneIndex);
 
-         const uint8_t value = on ? lane.getSegmentValue(currentIndex, percentage) : 0.0;
+         const uint8_t value = on ? lane.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
 
          const float voltage = valueToVoltage(value);
          outputList[groupIndex]->setVoltage(voltage, channelIndex);
@@ -260,7 +261,6 @@ void TrackerWorker::updatePassthrough()
 
    controller.setColor(Svin::Color{0, 0, 0});
    controller.writeText(50, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
-
 
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
@@ -347,8 +347,8 @@ void TrackerWorker::updateInternalOverview()
    const uint32_t segmentCount = project.getSegmentCount();
    controller.writeText(5, 15, std::to_string(segmentCount) + " segments", Svin::DisplayOLED::Font::Normal);
 
-   const std::string divName = Tempo::getName(project.getDivison());
-   controller.writeText(5, 30, "@ " + divName, Svin::DisplayOLED::Font::Normal);
+   //const std::string divName = Tempo::getName(project.getDefaultDivison());
+   //controller.writeText(5, 30, "@ " + divName, Svin::DisplayOLED::Font::Normal);
 
    const uint32_t index = project.getCurrentSegmentIndex();
    if (index < segmentCount)
@@ -382,7 +382,8 @@ void TrackerWorker::updateInternalCurrent()
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
    const uint32_t currentIndex = project.getCurrentSegmentIndex();
-   const float percentage = tempo.getPercentage(project.getDivison());
+   const float tickPercentage = tempo.getPercentage();
+   const float segmentPercentage = project.getCurrentSegmentPrecentage(tickPercentage);
 
    for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
    {
@@ -403,7 +404,7 @@ void TrackerWorker::updateInternalCurrent()
 
          controller.setColor(Svin::Color{255, 255, 255});
 
-         const uint8_t value = on ? lane.getSegmentValue(currentIndex, percentage) : 0.0;
+         const uint8_t value = on ? lane.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
          const std::string valueText = on ? Convert::text(value) : "off";
          const uint8_t xVoltage = 46 + groupIndex * 50;
          controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
@@ -472,4 +473,3 @@ TrackerWorkerWidget::TrackerWorkerWidget(TrackerWorker* module)
 }
 // creete module
 Model* modelTrackerWorker = Svin::Origin::the()->addModule<TrackerWorker, TrackerWorkerWidget>("TrackerWorker");
-
