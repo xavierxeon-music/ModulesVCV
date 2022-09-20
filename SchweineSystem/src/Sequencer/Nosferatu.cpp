@@ -1,8 +1,20 @@
 #include "Nosferatu.h"
 
-#include <Music/Note.h>
 #include <Tools/Text.h>
 #include <Tools/Variable.h>
+
+const Nosferatu::ColorMap Nosferatu::colorMap = {{Note::C, Svin::Color{255, 255, 255}},
+                                                 {Note::Cs, Svin::Color{90, 90, 90}},
+                                                 {Note::D, Svin::Color{255, 0, 0}},
+                                                 {Note::Ds, Svin::Color{90, 0, 0}},
+                                                 {Note::E, Svin::Color{255, 30, 200}},
+                                                 {Note::F, Svin::Color{0, 255, 0}},
+                                                 {Note::Fs, Svin::Color{0, 90, 0}},
+                                                 {Note::G, Svin::Color{0, 0, 255}},
+                                                 {Note::Gs, Svin::Color{0, 0, 90}},
+                                                 {Note::A, Svin::Color{255, 255, 0}},
+                                                 {Note::As, Svin::Color{90, 90, 0}},
+                                                 {Note::B, Svin::Color{0, 0, 0}}};
 
 Nosferatu::Nosferatu()
    : Svin::Module()
@@ -11,6 +23,8 @@ Nosferatu::Nosferatu()
    , banks{}
    , bankIndex(0)
    , currentSegmentIndex(0)
+   , tickCounter(0)
+   , noiseGenerator()
    // display
    , displayType(DisplayType::Bank)
    , displayValue(0)
@@ -20,6 +34,7 @@ Nosferatu::Nosferatu()
    , pitchSliderList(this)
    , tickSliderList(this)
    , lengthKnobList(this)
+   , chanceKnobList(this)
    , activeButtonList(this)
    // bank
    , bankInput(this, Panel::BankSelect)
@@ -103,6 +118,23 @@ Nosferatu::Nosferatu()
                           Panel::Seg15_Length,
                           Panel::Seg16_Length});
 
+   chanceKnobList.append({Panel::Seg01_Chance,
+                          Panel::Seg02_Chance,
+                          Panel::Seg03_Chance,
+                          Panel::Seg04_Chance,
+                          Panel::Seg05_Chance,
+                          Panel::Seg06_Chance,
+                          Panel::Seg07_Chance,
+                          Panel::Seg08_Chance,
+                          Panel::Seg09_Chance,
+                          Panel::Seg10_Chance,
+                          Panel::Seg11_Chance,
+                          Panel::Seg12_Chance,
+                          Panel::Seg13_Chance,
+                          Panel::Seg14_Chance,
+                          Panel::Seg15_Chance,
+                          Panel::Seg16_Chance});
+
    activeButtonList.append({{Panel::Seg01_Active, Panel::RGB_Seg01_Active},
                             {Panel::Seg02_Active, Panel::RGB_Seg02_Active},
                             {Panel::Seg03_Active, Panel::RGB_Seg03_Active},
@@ -136,6 +168,9 @@ Nosferatu::Nosferatu()
 
       lengthKnobList[index]->setRange(0.0, 1.0, 0.5);
       lengthKnobList[index]->enableSteps(true, 0.1);
+
+      chanceKnobList[index]->setRange(0.0, 1.0, 1.0);
+      chanceKnobList[index]->enableSteps(true, 0.05);
 
       activeButtonList[index]->setDefaultColor(Svin::Color{0, 255, 0});
       activeButtonList[index]->setOn();
@@ -177,13 +212,16 @@ void Nosferatu::process(const ProcessArgs& args)
    {
       currentSegmentIndex = 0;
       tickCounter = 0;
+      updateSegment();
       return;
    }
 
    firstOutput.setActive(0 == currentSegmentIndex);
 
+   const Segment& currentSegment = currentBank.segments[currentSegmentIndex];
+
    static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
-   const uint8_t midiValue = noteBaseValue + currentBank.offset + currentBank.segments[currentSegmentIndex].pitch;
+   const uint8_t midiValue = noteBaseValue + currentBank.offset + currentSegment.pitch;
    const Note note = Note::fromMidi(midiValue);
    pitchOutput.setVoltage(note.voltage);
 
@@ -191,13 +229,13 @@ void Nosferatu::process(const ProcessArgs& args)
    const float tickPercentage = tempo.getPercentage();
 
    float currentTick = tickCounter;
-   const float maxTick = currentBank.segments[currentSegmentIndex].ticks;
+   const float maxTick = currentSegment.ticks;
    if (currentTick != maxTick && 0.0 < tickPercentage && 1.0 > tickPercentage)
       currentTick += tickPercentage;
 
    const float segmentPercentage = currentTick / maxTick;
-   const float segmentLength = currentBank.segments[currentSegmentIndex].length;
-   const bool on = (segmentPercentage <= segmentLength);
+   const float segmentLength = currentSegment.length;
+   const bool on = (segmentPercentage <= segmentLength) && currentSegment.play;
    if (tempo.isRunningOrFirstTick())
       gateOutput.setActive(on);
    else
@@ -217,6 +255,8 @@ void Nosferatu::process(const ProcessArgs& args)
 
          if (currentSegmentIndex >= currentBank.maxActive)
             currentSegmentIndex = 0;
+
+         updateSegment();
       }
    }
 }
@@ -244,6 +284,7 @@ const Nosferatu::Bank& Nosferatu::updateBank()
          setDisplay(DisplayType::Ticks, ticks);
       }
       currentBank.segments[index].length = lengthKnobList[index]->getValue();
+      currentBank.segments[index].chance = chanceKnobList[index]->getValue();
    }
 
    const uint8_t offset = offsetKnob.getValue();
@@ -258,18 +299,23 @@ const Nosferatu::Bank& Nosferatu::updateBank()
 
 void Nosferatu::updateDisplays()
 {
+   static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
+
    // lights
    const Bank& currentBank = banks[bankIndex];
    for (uint8_t index = 0; index < 16; index++)
    {
       currentLightList[index]->setActive(index == currentSegmentIndex);
-      activeButtonList[index]->setActive(index < currentBank.maxActive);
+
+      const Note note = Note::fromMidi(noteBaseValue + currentBank.offset + currentBank.segments[index].pitch);
+      pitchSliderList[index]->setColor(colorMap.at(note.value));
 
       const bool evenTick = (0 == (currentBank.segments[index].ticks % 2));
       tickSliderList[index]->setBrightness(evenTick ? 1.0 : 0.2);
+
+      activeButtonList[index]->setActive(index < currentBank.maxActive);
    }
 
-   static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
    if (DisplayType::Bank == displayType)
    {
       displayController.setColor(Svin::Color{255, 255, 0});
@@ -302,6 +348,7 @@ void Nosferatu::bankChange()
    if (currentSegmentIndex >= currentBank.maxActive) // bank may have changed
    {
       currentSegmentIndex = 0;
+      updateSegment();
       if (tickCounter >= currentBank.segments[currentSegmentIndex].ticks)
          tickCounter = 0;
    }
@@ -312,6 +359,7 @@ void Nosferatu::bankChange()
       pitchSliderList[index]->setValue(segment.pitch);
       tickSliderList[index]->setValue(segment.ticks);
       lengthKnobList[index]->setValue(segment.length);
+      chanceKnobList[index]->setValue(segment.chance);
    }
 
    offsetKnob.setValue(currentBank.offset);
@@ -325,6 +373,18 @@ void Nosferatu::setDisplay(const DisplayType newType, const uint8_t value)
    displayType = newType;
    displayValue = value;
    displayOverride.trigger(3.0);
+}
+
+void Nosferatu::updateSegment()
+{
+   Bank& currentBank = banks[bankIndex];
+
+   for (uint8_t index = 0; index < 16; index++)
+   {
+      Segment& currentSegment = currentBank.segments[currentSegmentIndex];
+      const float random = 2.0 * noiseGenerator.value() - 1.0;
+      currentSegment.play = (random <= currentSegment.chance);
+   }
 }
 
 void Nosferatu::load(const Svin::Json::Object& rootObject)
@@ -349,6 +409,7 @@ void Nosferatu::load(const Svin::Json::Object& rootObject)
          currentBank.segments[index].pitch = segmentObject.get("pitch").toInt();
          currentBank.segments[index].ticks = segmentObject.get("ticks").toInt();
          currentBank.segments[index].length = segmentObject.get("length").toReal();
+         currentBank.segments[index].chance = segmentObject.get("chance").toReal();
       }
    }
 
@@ -378,6 +439,7 @@ void Nosferatu::save(Svin::Json::Object& rootObject)
          segmentObject.set("pitch", currentBank.segments[index].pitch);
          segmentObject.set("ticks", currentBank.segments[index].ticks);
          segmentObject.set("length", currentBank.segments[index].length);
+         segmentObject.set("chance", currentBank.segments[index].chance);
 
          const std::string segmentKey = "s" + Text::pad(std::to_string(index), 2);
          bankObject.set(segmentKey, segmentObject);

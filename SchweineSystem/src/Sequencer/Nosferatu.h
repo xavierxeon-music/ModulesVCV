@@ -8,6 +8,9 @@ using namespace rack;
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
+#include <Music/Note.h>
+#include <Tools/FastRandom.h>
+
 #include <SvinButton.h>
 #include <SvinButtonLED.h>
 #include <SvinDisplayLCD.h>
@@ -36,6 +39,8 @@ private:
       uint8_t pitch = 0;  // 0 - 24 (2 octaves)
       uint8_t ticks = 2;  // 1 - 16
       float length = 0.5; // 0.0 - 1.0
+      float chance = 1.0; // 0.0 - 1.0
+      bool play = true;
    };
 
    struct Bank
@@ -50,14 +55,17 @@ private:
       Bank,
       Pitch,
       Ticks,
-      Offset
+      Offset,
    };
+
+   using ColorMap = std::map<Note::Value, Svin::Color>;
 
 private:
    inline void setup();
    const Bank& updateBank();
    void bankChange();
    void setDisplay(const DisplayType newType, const uint8_t value);
+   void updateSegment();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
@@ -68,6 +76,7 @@ private:
    uint8_t bankIndex;
    uint16_t currentSegmentIndex;
    uint8_t tickCounter;
+   FastRandom noiseGenerator;
    // display
    DisplayType displayType;
    uint8_t displayValue;
@@ -77,6 +86,7 @@ private:
    Svin::Slider::List pitchSliderList;
    Svin::Slider::List tickSliderList;
    Svin::Knob::List lengthKnobList;
+   Svin::Knob::List chanceKnobList;
    Svin::ButtonLED::List activeButtonList;
    // bank
    Svin::Input bankInput;
@@ -89,6 +99,8 @@ private:
    Svin::Output firstOutput;
    Svin::Output pitchOutput;
    Svin::Output gateOutput;
+   //
+   static const ColorMap colorMap;
 };
 
 // widget

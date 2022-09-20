@@ -10,8 +10,8 @@ struct Nosferatu::Panel
    enum ParamId
    {
       // buttons
-      Up = 0,
-      Down = 1,
+      Down = 0,
+      Up = 1,
       // switches
       // ledbuttons
       Seg16_Active = 2,
@@ -31,57 +31,73 @@ struct Nosferatu::Panel
       Seg02_Active = 16,
       Seg01_Active = 17,
       // knobs
-      Offset = 18,
-      Seg16_Length = 19,
+      Seg16_Length = 18,
+      Seg16_Chance = 19,
       Seg15_Length = 20,
-      Seg14_Length = 21,
-      Seg13_Length = 22,
-      Seg12_Length = 23,
-      Seg11_Length = 24,
-      Seg10_Length = 25,
-      Seg09_Length = 26,
-      Seg08_Length = 27,
-      Seg07_Length = 28,
-      Seg06_Length = 29,
-      Seg05_Length = 30,
-      Seg04_Length = 31,
-      Seg03_Length = 32,
-      Seg02_Length = 33,
-      Seg01_Length = 34,
+      Seg15_Chance = 21,
+      Seg14_Length = 22,
+      Seg14_Chance = 23,
+      Seg13_Length = 24,
+      Seg13_Chance = 25,
+      Seg12_Length = 26,
+      Seg12_Chance = 27,
+      Seg11_Length = 28,
+      Seg11_Chance = 29,
+      Seg10_Length = 30,
+      Seg10_Chance = 31,
+      Seg09_Length = 32,
+      Seg09_Chance = 33,
+      Seg08_Length = 34,
+      Seg08_Chance = 35,
+      Seg07_Length = 36,
+      Seg07_Chance = 37,
+      Seg06_Length = 38,
+      Seg06_Chance = 39,
+      Seg05_Length = 40,
+      Seg05_Chance = 41,
+      Seg04_Length = 42,
+      Seg04_Chance = 43,
+      Seg03_Length = 44,
+      Seg03_Chance = 45,
+      Seg02_Length = 46,
+      Seg02_Chance = 47,
+      Seg01_Length = 48,
+      Seg01_Chance = 49,
+      Offset = 50,
       // sliders
-      Seg16_Ticks = 35,
-      Seg16_Pitch = 36,
-      Seg15_Ticks = 37,
-      Seg15_Pitch = 38,
-      Seg14_Ticks = 39,
-      Seg14_Pitch = 40,
-      Seg13_Ticks = 41,
-      Seg13_Pitch = 42,
-      Seg12_Ticks = 43,
-      Seg12_Pitch = 44,
-      Seg11_Ticks = 45,
-      Seg11_Pitch = 46,
-      Seg10_Ticks = 47,
-      Seg10_Pitch = 48,
-      Seg09_Ticks = 49,
-      Seg09_Pitch = 50,
-      Seg08_Ticks = 51,
-      Seg08_Pitch = 52,
-      Seg07_Ticks = 53,
-      Seg07_Pitch = 54,
-      Seg06_Ticks = 55,
-      Seg06_Pitch = 56,
-      Seg05_Ticks = 57,
-      Seg05_Pitch = 58,
-      Seg04_Ticks = 59,
-      Seg04_Pitch = 60,
-      Seg03_Ticks = 61,
-      Seg03_Pitch = 62,
-      Seg02_Ticks = 63,
-      Seg02_Pitch = 64,
-      Seg01_Ticks = 65,
-      Seg01_Pitch = 66,
-      PARAMS_LEN = 67
+      Seg16_Ticks = 51,
+      Seg16_Pitch = 52,
+      Seg15_Ticks = 53,
+      Seg15_Pitch = 54,
+      Seg14_Ticks = 55,
+      Seg14_Pitch = 56,
+      Seg13_Ticks = 57,
+      Seg13_Pitch = 58,
+      Seg12_Ticks = 59,
+      Seg12_Pitch = 60,
+      Seg11_Ticks = 61,
+      Seg11_Pitch = 62,
+      Seg10_Ticks = 63,
+      Seg10_Pitch = 64,
+      Seg09_Ticks = 65,
+      Seg09_Pitch = 66,
+      Seg08_Ticks = 67,
+      Seg08_Pitch = 68,
+      Seg07_Ticks = 69,
+      Seg07_Pitch = 70,
+      Seg06_Ticks = 71,
+      Seg06_Pitch = 72,
+      Seg05_Ticks = 73,
+      Seg05_Pitch = 74,
+      Seg04_Ticks = 75,
+      Seg04_Pitch = 76,
+      Seg03_Ticks = 77,
+      Seg03_Pitch = 78,
+      Seg02_Ticks = 79,
+      Seg02_Pitch = 80,
+      Seg01_Ticks = 81,
+      Seg01_Pitch = 82,
+      PARAMS_LEN = 83
    };
 
    enum DisplayId
@@ -189,8 +205,8 @@ void Nosferatu::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configButton(Panel::Up, "Up");
    configButton(Panel::Down, "Down");
+   configButton(Panel::Up, "Up");
 
    configSwitch(Panel::Seg16_Ticks, 0.0f, 1.0f, 0.0f, "Seg16_Ticks");
    configSwitch(Panel::Seg16_Pitch, 0.0f, 1.0f, 0.0f, "Seg16_Pitch");
@@ -242,23 +258,39 @@ void Nosferatu::setup()
    configButton(Panel::Seg02_Active, "Seg02_Active");
    configButton(Panel::Seg01_Active, "Seg01_Active");
 
-   configParam(Panel::Offset, -1.f, 1.f, 0.f, "Offset");
    configParam(Panel::Seg16_Length, -1.f, 1.f, 0.f, "Seg16_Length");
+   configParam(Panel::Seg16_Chance, -1.f, 1.f, 0.f, "Seg16_Chance");
    configParam(Panel::Seg15_Length, -1.f, 1.f, 0.f, "Seg15_Length");
+   configParam(Panel::Seg15_Chance, -1.f, 1.f, 0.f, "Seg15_Chance");
    configParam(Panel::Seg14_Length, -1.f, 1.f, 0.f, "Seg14_Length");
+   configParam(Panel::Seg14_Chance, -1.f, 1.f, 0.f, "Seg14_Chance");
    configParam(Panel::Seg13_Length, -1.f, 1.f, 0.f, "Seg13_Length");
+   configParam(Panel::Seg13_Chance, -1.f, 1.f, 0.f, "Seg13_Chance");
    configParam(Panel::Seg12_Length, -1.f, 1.f, 0.f, "Seg12_Length");
+   configParam(Panel::Seg12_Chance, -1.f, 1.f, 0.f, "Seg12_Chance");
    configParam(Panel::Seg11_Length, -1.f, 1.f, 0.f, "Seg11_Length");
+   configParam(Panel::Seg11_Chance, -1.f, 1.f, 0.f, "Seg11_Chance");
    configParam(Panel::Seg10_Length, -1.f, 1.f, 0.f, "Seg10_Length");
+   configParam(Panel::Seg10_Chance, -1.f, 1.f, 0.f, "Seg10_Chance");
    configParam(Panel::Seg09_Length, -1.f, 1.f, 0.f, "Seg09_Length");
+   configParam(Panel::Seg09_Chance, -1.f, 1.f, 0.f, "Seg09_Chance");
    configParam(Panel::Seg08_Length, -1.f, 1.f, 0.f, "Seg08_Length");
+   configParam(Panel::Seg08_Chance, -1.f, 1.f, 0.f, "Seg08_Chance");
    configParam(Panel::Seg07_Length, -1.f, 1.f, 0.f, "Seg07_Length");
+   configParam(Panel::Seg07_Chance, -1.f, 1.f, 0.f, "Seg07_Chance");
    configParam(Panel::Seg06_Length, -1.f, 1.f, 0.f, "Seg06_Length");
+   configParam(Panel::Seg06_Chance, -1.f, 1.f, 0.f, "Seg06_Chance");
    configParam(Panel::Seg05_Length, -1.f, 1.f, 0.f, "Seg05_Length");
+   configParam(Panel::Seg05_Chance, -1.f, 1.f, 0.f, "Seg05_Chance");
    configParam(Panel::Seg04_Length, -1.f, 1.f, 0.f, "Seg04_Length");
+   configParam(Panel::Seg04_Chance, -1.f, 1.f, 0.f, "Seg04_Chance");
    configParam(Panel::Seg03_Length, -1.f, 1.f, 0.f, "Seg03_Length");
+   configParam(Panel::Seg03_Chance, -1.f, 1.f, 0.f, "Seg03_Chance");
    configParam(Panel::Seg02_Length, -1.f, 1.f, 0.f, "Seg02_Length");
+   configParam(Panel::Seg02_Chance, -1.f, 1.f, 0.f, "Seg02_Chance");
    configParam(Panel::Seg01_Length, -1.f, 1.f, 0.f, "Seg01_Length");
+   configParam(Panel::Seg01_Chance, -1.f, 1.f, 0.f, "Seg01_Chance");
+   configParam(Panel::Offset, -1.f, 1.f, 0.f, "Offset");
 
    configInput(Panel::BankSelect, "BankSelect");
 
@@ -273,101 +305,117 @@ void NosferatuWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
-   makeButton(this, Vec(93.27, 355.83), Nosferatu::Panel::Up);
-   makeButton(this, Vec(74.95, 355.83), Nosferatu::Panel::Down);
+   makeButton(this, Vec(35.00, 197.46), Nosferatu::Panel::Down);
+   makeButton(this, Vec(35.00, 179.98), Nosferatu::Panel::Up);
 
-   makeSlider(this, Vec(431.08, 195.67), Nosferatu::Panel::Seg16_Ticks, Nosferatu::Panel::RGB_Seg16_Ticks);
-   makeSlider(this, Vec(431.08, 104.05), Nosferatu::Panel::Seg16_Pitch, Nosferatu::Panel::RGB_Seg16_Pitch);
-   makeSlider(this, Vec(405.29, 195.67), Nosferatu::Panel::Seg15_Ticks, Nosferatu::Panel::RGB_Seg15_Ticks);
-   makeSlider(this, Vec(405.29, 104.05), Nosferatu::Panel::Seg15_Pitch, Nosferatu::Panel::RGB_Seg15_Pitch);
-   makeSlider(this, Vec(379.51, 195.67), Nosferatu::Panel::Seg14_Ticks, Nosferatu::Panel::RGB_Seg14_Ticks);
-   makeSlider(this, Vec(379.51, 104.05), Nosferatu::Panel::Seg14_Pitch, Nosferatu::Panel::RGB_Seg14_Pitch);
-   makeSlider(this, Vec(353.72, 195.67), Nosferatu::Panel::Seg13_Ticks, Nosferatu::Panel::RGB_Seg13_Ticks);
-   makeSlider(this, Vec(353.72, 104.05), Nosferatu::Panel::Seg13_Pitch, Nosferatu::Panel::RGB_Seg13_Pitch);
-   makeSlider(this, Vec(327.93, 195.67), Nosferatu::Panel::Seg12_Ticks, Nosferatu::Panel::RGB_Seg12_Ticks);
-   makeSlider(this, Vec(327.93, 104.05), Nosferatu::Panel::Seg12_Pitch, Nosferatu::Panel::RGB_Seg12_Pitch);
-   makeSlider(this, Vec(302.15, 195.67), Nosferatu::Panel::Seg11_Ticks, Nosferatu::Panel::RGB_Seg11_Ticks);
-   makeSlider(this, Vec(302.15, 104.05), Nosferatu::Panel::Seg11_Pitch, Nosferatu::Panel::RGB_Seg11_Pitch);
-   makeSlider(this, Vec(276.36, 195.67), Nosferatu::Panel::Seg10_Ticks, Nosferatu::Panel::RGB_Seg10_Ticks);
-   makeSlider(this, Vec(276.36, 104.05), Nosferatu::Panel::Seg10_Pitch, Nosferatu::Panel::RGB_Seg10_Pitch);
-   makeSlider(this, Vec(250.57, 195.67), Nosferatu::Panel::Seg09_Ticks, Nosferatu::Panel::RGB_Seg09_Ticks);
-   makeSlider(this, Vec(250.57, 104.05), Nosferatu::Panel::Seg09_Pitch, Nosferatu::Panel::RGB_Seg09_Pitch);
-   makeSlider(this, Vec(224.79, 195.45), Nosferatu::Panel::Seg08_Ticks, Nosferatu::Panel::RGB_Seg08_Ticks);
-   makeSlider(this, Vec(224.79, 103.82), Nosferatu::Panel::Seg08_Pitch, Nosferatu::Panel::RGB_Seg08_Pitch);
-   makeSlider(this, Vec(199.00, 195.45), Nosferatu::Panel::Seg07_Ticks, Nosferatu::Panel::RGB_Seg07_Ticks);
-   makeSlider(this, Vec(199.00, 103.82), Nosferatu::Panel::Seg07_Pitch, Nosferatu::Panel::RGB_Seg07_Pitch);
-   makeSlider(this, Vec(173.22, 195.45), Nosferatu::Panel::Seg06_Ticks, Nosferatu::Panel::RGB_Seg06_Ticks);
-   makeSlider(this, Vec(173.22, 103.82), Nosferatu::Panel::Seg06_Pitch, Nosferatu::Panel::RGB_Seg06_Pitch);
-   makeSlider(this, Vec(147.43, 195.45), Nosferatu::Panel::Seg05_Ticks, Nosferatu::Panel::RGB_Seg05_Ticks);
-   makeSlider(this, Vec(147.43, 103.82), Nosferatu::Panel::Seg05_Pitch, Nosferatu::Panel::RGB_Seg05_Pitch);
-   makeSlider(this, Vec(121.64, 195.45), Nosferatu::Panel::Seg04_Ticks, Nosferatu::Panel::RGB_Seg04_Ticks);
-   makeSlider(this, Vec(121.64, 103.82), Nosferatu::Panel::Seg04_Pitch, Nosferatu::Panel::RGB_Seg04_Pitch);
-   makeSlider(this, Vec(95.86, 195.45), Nosferatu::Panel::Seg03_Ticks, Nosferatu::Panel::RGB_Seg03_Ticks);
-   makeSlider(this, Vec(95.86, 103.82), Nosferatu::Panel::Seg03_Pitch, Nosferatu::Panel::RGB_Seg03_Pitch);
-   makeSlider(this, Vec(70.07, 195.45), Nosferatu::Panel::Seg02_Ticks, Nosferatu::Panel::RGB_Seg02_Ticks);
-   makeSlider(this, Vec(70.07, 103.82), Nosferatu::Panel::Seg02_Pitch, Nosferatu::Panel::RGB_Seg02_Pitch);
-   makeSlider(this, Vec(44.28, 195.45), Nosferatu::Panel::Seg01_Ticks, Nosferatu::Panel::RGB_Seg01_Ticks);
-   makeSlider(this, Vec(44.28, 103.82), Nosferatu::Panel::Seg01_Pitch, Nosferatu::Panel::RGB_Seg01_Pitch);
+   makeSlider(this, Vec(490.08, 235.67), Nosferatu::Panel::Seg16_Ticks, Nosferatu::Panel::RGB_Seg16_Ticks);
+   makeSlider(this, Vec(490.08, 144.05), Nosferatu::Panel::Seg16_Pitch, Nosferatu::Panel::RGB_Seg16_Pitch);
+   makeSlider(this, Vec(464.29, 235.67), Nosferatu::Panel::Seg15_Ticks, Nosferatu::Panel::RGB_Seg15_Ticks);
+   makeSlider(this, Vec(464.29, 144.05), Nosferatu::Panel::Seg15_Pitch, Nosferatu::Panel::RGB_Seg15_Pitch);
+   makeSlider(this, Vec(438.51, 235.67), Nosferatu::Panel::Seg14_Ticks, Nosferatu::Panel::RGB_Seg14_Ticks);
+   makeSlider(this, Vec(438.51, 144.05), Nosferatu::Panel::Seg14_Pitch, Nosferatu::Panel::RGB_Seg14_Pitch);
+   makeSlider(this, Vec(412.72, 235.67), Nosferatu::Panel::Seg13_Ticks, Nosferatu::Panel::RGB_Seg13_Ticks);
+   makeSlider(this, Vec(412.72, 144.05), Nosferatu::Panel::Seg13_Pitch, Nosferatu::Panel::RGB_Seg13_Pitch);
+   makeSlider(this, Vec(386.93, 235.67), Nosferatu::Panel::Seg12_Ticks, Nosferatu::Panel::RGB_Seg12_Ticks);
+   makeSlider(this, Vec(386.93, 144.05), Nosferatu::Panel::Seg12_Pitch, Nosferatu::Panel::RGB_Seg12_Pitch);
+   makeSlider(this, Vec(361.15, 235.67), Nosferatu::Panel::Seg11_Ticks, Nosferatu::Panel::RGB_Seg11_Ticks);
+   makeSlider(this, Vec(361.15, 144.05), Nosferatu::Panel::Seg11_Pitch, Nosferatu::Panel::RGB_Seg11_Pitch);
+   makeSlider(this, Vec(335.36, 235.67), Nosferatu::Panel::Seg10_Ticks, Nosferatu::Panel::RGB_Seg10_Ticks);
+   makeSlider(this, Vec(335.36, 144.05), Nosferatu::Panel::Seg10_Pitch, Nosferatu::Panel::RGB_Seg10_Pitch);
+   makeSlider(this, Vec(309.57, 235.67), Nosferatu::Panel::Seg09_Ticks, Nosferatu::Panel::RGB_Seg09_Ticks);
+   makeSlider(this, Vec(309.57, 144.05), Nosferatu::Panel::Seg09_Pitch, Nosferatu::Panel::RGB_Seg09_Pitch);
+   makeSlider(this, Vec(283.79, 235.45), Nosferatu::Panel::Seg08_Ticks, Nosferatu::Panel::RGB_Seg08_Ticks);
+   makeSlider(this, Vec(283.79, 143.82), Nosferatu::Panel::Seg08_Pitch, Nosferatu::Panel::RGB_Seg08_Pitch);
+   makeSlider(this, Vec(258.00, 235.45), Nosferatu::Panel::Seg07_Ticks, Nosferatu::Panel::RGB_Seg07_Ticks);
+   makeSlider(this, Vec(258.00, 143.82), Nosferatu::Panel::Seg07_Pitch, Nosferatu::Panel::RGB_Seg07_Pitch);
+   makeSlider(this, Vec(232.22, 235.45), Nosferatu::Panel::Seg06_Ticks, Nosferatu::Panel::RGB_Seg06_Ticks);
+   makeSlider(this, Vec(232.22, 143.82), Nosferatu::Panel::Seg06_Pitch, Nosferatu::Panel::RGB_Seg06_Pitch);
+   makeSlider(this, Vec(206.43, 235.45), Nosferatu::Panel::Seg05_Ticks, Nosferatu::Panel::RGB_Seg05_Ticks);
+   makeSlider(this, Vec(206.43, 143.82), Nosferatu::Panel::Seg05_Pitch, Nosferatu::Panel::RGB_Seg05_Pitch);
+   makeSlider(this, Vec(180.64, 235.45), Nosferatu::Panel::Seg04_Ticks, Nosferatu::Panel::RGB_Seg04_Ticks);
+   makeSlider(this, Vec(180.64, 143.82), Nosferatu::Panel::Seg04_Pitch, Nosferatu::Panel::RGB_Seg04_Pitch);
+   makeSlider(this, Vec(154.86, 235.45), Nosferatu::Panel::Seg03_Ticks, Nosferatu::Panel::RGB_Seg03_Ticks);
+   makeSlider(this, Vec(154.86, 143.82), Nosferatu::Panel::Seg03_Pitch, Nosferatu::Panel::RGB_Seg03_Pitch);
+   makeSlider(this, Vec(129.07, 235.45), Nosferatu::Panel::Seg02_Ticks, Nosferatu::Panel::RGB_Seg02_Ticks);
+   makeSlider(this, Vec(129.07, 143.82), Nosferatu::Panel::Seg02_Pitch, Nosferatu::Panel::RGB_Seg02_Pitch);
+   makeSlider(this, Vec(103.28, 235.45), Nosferatu::Panel::Seg01_Ticks, Nosferatu::Panel::RGB_Seg01_Ticks);
+   makeSlider(this, Vec(103.28, 143.82), Nosferatu::Panel::Seg01_Pitch, Nosferatu::Panel::RGB_Seg01_Pitch);
 
-   makeLEDButton(this, Vec(431.08, 301.17), Nosferatu::Panel::Seg16_Active, Nosferatu::Panel::RGB_Seg16_Active);
-   makeLEDButton(this, Vec(405.29, 301.17), Nosferatu::Panel::Seg15_Active, Nosferatu::Panel::RGB_Seg15_Active);
-   makeLEDButton(this, Vec(379.51, 301.17), Nosferatu::Panel::Seg14_Active, Nosferatu::Panel::RGB_Seg14_Active);
-   makeLEDButton(this, Vec(353.72, 301.17), Nosferatu::Panel::Seg13_Active, Nosferatu::Panel::RGB_Seg13_Active);
-   makeLEDButton(this, Vec(327.93, 301.17), Nosferatu::Panel::Seg12_Active, Nosferatu::Panel::RGB_Seg12_Active);
-   makeLEDButton(this, Vec(302.15, 301.17), Nosferatu::Panel::Seg11_Active, Nosferatu::Panel::RGB_Seg11_Active);
-   makeLEDButton(this, Vec(276.36, 301.17), Nosferatu::Panel::Seg10_Active, Nosferatu::Panel::RGB_Seg10_Active);
-   makeLEDButton(this, Vec(250.57, 301.17), Nosferatu::Panel::Seg09_Active, Nosferatu::Panel::RGB_Seg09_Active);
-   makeLEDButton(this, Vec(224.79, 300.94), Nosferatu::Panel::Seg08_Active, Nosferatu::Panel::RGB_Seg08_Active);
-   makeLEDButton(this, Vec(199.00, 300.94), Nosferatu::Panel::Seg07_Active, Nosferatu::Panel::RGB_Seg07_Active);
-   makeLEDButton(this, Vec(173.22, 300.94), Nosferatu::Panel::Seg06_Active, Nosferatu::Panel::RGB_Seg06_Active);
-   makeLEDButton(this, Vec(147.43, 300.94), Nosferatu::Panel::Seg05_Active, Nosferatu::Panel::RGB_Seg05_Active);
-   makeLEDButton(this, Vec(121.64, 300.94), Nosferatu::Panel::Seg04_Active, Nosferatu::Panel::RGB_Seg04_Active);
-   makeLEDButton(this, Vec(95.86, 300.94), Nosferatu::Panel::Seg03_Active, Nosferatu::Panel::RGB_Seg03_Active);
-   makeLEDButton(this, Vec(70.07, 300.94), Nosferatu::Panel::Seg02_Active, Nosferatu::Panel::RGB_Seg02_Active);
-   makeLEDButton(this, Vec(44.28, 300.94), Nosferatu::Panel::Seg01_Active, Nosferatu::Panel::RGB_Seg01_Active);
+   makeLEDButton(this, Vec(490.08, 344.17), Nosferatu::Panel::Seg16_Active, Nosferatu::Panel::RGB_Seg16_Active);
+   makeLEDButton(this, Vec(464.29, 344.17), Nosferatu::Panel::Seg15_Active, Nosferatu::Panel::RGB_Seg15_Active);
+   makeLEDButton(this, Vec(438.51, 344.17), Nosferatu::Panel::Seg14_Active, Nosferatu::Panel::RGB_Seg14_Active);
+   makeLEDButton(this, Vec(412.72, 344.17), Nosferatu::Panel::Seg13_Active, Nosferatu::Panel::RGB_Seg13_Active);
+   makeLEDButton(this, Vec(386.93, 344.17), Nosferatu::Panel::Seg12_Active, Nosferatu::Panel::RGB_Seg12_Active);
+   makeLEDButton(this, Vec(361.15, 344.17), Nosferatu::Panel::Seg11_Active, Nosferatu::Panel::RGB_Seg11_Active);
+   makeLEDButton(this, Vec(335.36, 344.17), Nosferatu::Panel::Seg10_Active, Nosferatu::Panel::RGB_Seg10_Active);
+   makeLEDButton(this, Vec(309.57, 344.17), Nosferatu::Panel::Seg09_Active, Nosferatu::Panel::RGB_Seg09_Active);
+   makeLEDButton(this, Vec(283.79, 343.94), Nosferatu::Panel::Seg08_Active, Nosferatu::Panel::RGB_Seg08_Active);
+   makeLEDButton(this, Vec(258.00, 343.94), Nosferatu::Panel::Seg07_Active, Nosferatu::Panel::RGB_Seg07_Active);
+   makeLEDButton(this, Vec(232.22, 343.94), Nosferatu::Panel::Seg06_Active, Nosferatu::Panel::RGB_Seg06_Active);
+   makeLEDButton(this, Vec(206.43, 343.94), Nosferatu::Panel::Seg05_Active, Nosferatu::Panel::RGB_Seg05_Active);
+   makeLEDButton(this, Vec(180.64, 343.94), Nosferatu::Panel::Seg04_Active, Nosferatu::Panel::RGB_Seg04_Active);
+   makeLEDButton(this, Vec(154.86, 343.94), Nosferatu::Panel::Seg03_Active, Nosferatu::Panel::RGB_Seg03_Active);
+   makeLEDButton(this, Vec(129.07, 343.94), Nosferatu::Panel::Seg02_Active, Nosferatu::Panel::RGB_Seg02_Active);
+   makeLEDButton(this, Vec(103.28, 343.94), Nosferatu::Panel::Seg01_Active, Nosferatu::Panel::RGB_Seg01_Active);
 
-   makeKnob(this, Vec(217.28, 355.99), Nosferatu::Panel::Offset, 2);
-   makeKnob(this, Vec(430.41, 273.57), Nosferatu::Panel::Seg16_Length, 2);
-   makeKnob(this, Vec(404.62, 256.57), Nosferatu::Panel::Seg15_Length, 2);
-   makeKnob(this, Vec(378.83, 273.57), Nosferatu::Panel::Seg14_Length, 2);
-   makeKnob(this, Vec(353.05, 256.57), Nosferatu::Panel::Seg13_Length, 2);
-   makeKnob(this, Vec(327.26, 273.57), Nosferatu::Panel::Seg12_Length, 2);
-   makeKnob(this, Vec(301.47, 256.57), Nosferatu::Panel::Seg11_Length, 2);
-   makeKnob(this, Vec(275.69, 273.57), Nosferatu::Panel::Seg10_Length, 2);
-   makeKnob(this, Vec(249.90, 256.57), Nosferatu::Panel::Seg09_Length, 2);
-   makeKnob(this, Vec(224.12, 273.34), Nosferatu::Panel::Seg08_Length, 2);
-   makeKnob(this, Vec(198.33, 256.34), Nosferatu::Panel::Seg07_Length, 2);
-   makeKnob(this, Vec(172.54, 273.34), Nosferatu::Panel::Seg06_Length, 2);
-   makeKnob(this, Vec(146.76, 256.34), Nosferatu::Panel::Seg05_Length, 2);
-   makeKnob(this, Vec(120.97, 273.34), Nosferatu::Panel::Seg04_Length, 2);
-   makeKnob(this, Vec(95.18, 256.34), Nosferatu::Panel::Seg03_Length, 2);
-   makeKnob(this, Vec(69.40, 273.34), Nosferatu::Panel::Seg02_Length, 2);
-   makeKnob(this, Vec(43.61, 256.34), Nosferatu::Panel::Seg01_Length, 2);
+   makeKnob(this, Vec(489.41, 313.57), Nosferatu::Panel::Seg16_Length, 2);
+   makeKnob(this, Vec(489.41, 91.57), Nosferatu::Panel::Seg16_Chance, 1);
+   makeKnob(this, Vec(463.62, 296.57), Nosferatu::Panel::Seg15_Length, 2);
+   makeKnob(this, Vec(463.62, 74.57), Nosferatu::Panel::Seg15_Chance, 1);
+   makeKnob(this, Vec(437.83, 313.57), Nosferatu::Panel::Seg14_Length, 2);
+   makeKnob(this, Vec(437.83, 91.57), Nosferatu::Panel::Seg14_Chance, 1);
+   makeKnob(this, Vec(412.05, 296.57), Nosferatu::Panel::Seg13_Length, 2);
+   makeKnob(this, Vec(412.05, 74.57), Nosferatu::Panel::Seg13_Chance, 1);
+   makeKnob(this, Vec(386.26, 313.57), Nosferatu::Panel::Seg12_Length, 2);
+   makeKnob(this, Vec(386.26, 91.57), Nosferatu::Panel::Seg12_Chance, 1);
+   makeKnob(this, Vec(360.47, 296.57), Nosferatu::Panel::Seg11_Length, 2);
+   makeKnob(this, Vec(360.47, 74.57), Nosferatu::Panel::Seg11_Chance, 1);
+   makeKnob(this, Vec(334.69, 313.57), Nosferatu::Panel::Seg10_Length, 2);
+   makeKnob(this, Vec(334.69, 91.57), Nosferatu::Panel::Seg10_Chance, 1);
+   makeKnob(this, Vec(308.90, 296.57), Nosferatu::Panel::Seg09_Length, 2);
+   makeKnob(this, Vec(308.90, 74.57), Nosferatu::Panel::Seg09_Chance, 1);
+   makeKnob(this, Vec(283.12, 313.34), Nosferatu::Panel::Seg08_Length, 2);
+   makeKnob(this, Vec(283.12, 91.34), Nosferatu::Panel::Seg08_Chance, 1);
+   makeKnob(this, Vec(257.33, 296.34), Nosferatu::Panel::Seg07_Length, 2);
+   makeKnob(this, Vec(257.33, 74.34), Nosferatu::Panel::Seg07_Chance, 1);
+   makeKnob(this, Vec(231.54, 313.34), Nosferatu::Panel::Seg06_Length, 2);
+   makeKnob(this, Vec(231.54, 91.34), Nosferatu::Panel::Seg06_Chance, 1);
+   makeKnob(this, Vec(205.76, 296.34), Nosferatu::Panel::Seg05_Length, 2);
+   makeKnob(this, Vec(205.76, 74.34), Nosferatu::Panel::Seg05_Chance, 1);
+   makeKnob(this, Vec(179.97, 313.34), Nosferatu::Panel::Seg04_Length, 2);
+   makeKnob(this, Vec(179.97, 91.34), Nosferatu::Panel::Seg04_Chance, 1);
+   makeKnob(this, Vec(154.18, 296.34), Nosferatu::Panel::Seg03_Length, 2);
+   makeKnob(this, Vec(154.18, 74.34), Nosferatu::Panel::Seg03_Chance, 1);
+   makeKnob(this, Vec(128.40, 313.34), Nosferatu::Panel::Seg02_Length, 2);
+   makeKnob(this, Vec(128.40, 91.34), Nosferatu::Panel::Seg02_Chance, 1);
+   makeKnob(this, Vec(102.61, 296.34), Nosferatu::Panel::Seg01_Length, 2);
+   makeKnob(this, Vec(102.61, 74.34), Nosferatu::Panel::Seg01_Chance, 1);
+   makeKnob(this, Vec(35.00, 99.80), Nosferatu::Panel::Offset, 3);
 
-   makeInput(this, Vec(44.99, 355.83),  Nosferatu::Panel::BankSelect, false);
+   makeInput(this, Vec(35.00, 151.44),  Nosferatu::Panel::BankSelect, false);
 
-   makeOutput(this, Vec(425.83, 355.83), Nosferatu::Panel::Gate, false);
-   makeOutput(this, Vec(373.40, 355.83), Nosferatu::Panel::Pitch, false);
-   makeOutput(this, Vec(299.43, 355.83), Nosferatu::Panel::First, false);
+   makeOutput(this, Vec(35.00, 355.83), Nosferatu::Panel::Gate, false);
+   makeOutput(this, Vec(35.00, 310.08), Nosferatu::Panel::Pitch, false);
+   makeOutput(this, Vec(35.00, 247.42), Nosferatu::Panel::First, false);
 
-   makeLED(this, Vec(431.08, 53.75), Nosferatu::Panel::RGB_Seg16_Current);
-   makeLED(this, Vec(405.29, 53.75), Nosferatu::Panel::RGB_Seg15_Current);
-   makeLED(this, Vec(379.51, 53.75), Nosferatu::Panel::RGB_Seg14_Current);
-   makeLED(this, Vec(353.72, 53.75), Nosferatu::Panel::RGB_Seg13_Current);
-   makeLED(this, Vec(327.93, 53.75), Nosferatu::Panel::RGB_Seg12_Current);
-   makeLED(this, Vec(302.15, 53.75), Nosferatu::Panel::RGB_Seg11_Current);
-   makeLED(this, Vec(276.36, 53.75), Nosferatu::Panel::RGB_Seg10_Current);
-   makeLED(this, Vec(250.57, 53.75), Nosferatu::Panel::RGB_Seg09_Current);
-   makeLED(this, Vec(224.79, 53.52), Nosferatu::Panel::RGB_Seg08_Current);
-   makeLED(this, Vec(199.00, 53.52), Nosferatu::Panel::RGB_Seg07_Current);
-   makeLED(this, Vec(173.22, 53.52), Nosferatu::Panel::RGB_Seg06_Current);
-   makeLED(this, Vec(147.43, 53.52), Nosferatu::Panel::RGB_Seg05_Current);
-   makeLED(this, Vec(121.64, 53.52), Nosferatu::Panel::RGB_Seg04_Current);
-   makeLED(this, Vec(95.86, 53.52), Nosferatu::Panel::RGB_Seg03_Current);
-   makeLED(this, Vec(70.07, 53.52), Nosferatu::Panel::RGB_Seg02_Current);
-   makeLED(this, Vec(44.28, 53.52), Nosferatu::Panel::RGB_Seg01_Current);
+   makeLED(this, Vec(490.08, 57.75), Nosferatu::Panel::RGB_Seg16_Current);
+   makeLED(this, Vec(464.29, 57.75), Nosferatu::Panel::RGB_Seg15_Current);
+   makeLED(this, Vec(438.51, 57.75), Nosferatu::Panel::RGB_Seg14_Current);
+   makeLED(this, Vec(412.72, 57.75), Nosferatu::Panel::RGB_Seg13_Current);
+   makeLED(this, Vec(386.93, 57.75), Nosferatu::Panel::RGB_Seg12_Current);
+   makeLED(this, Vec(361.15, 57.75), Nosferatu::Panel::RGB_Seg11_Current);
+   makeLED(this, Vec(335.36, 57.75), Nosferatu::Panel::RGB_Seg10_Current);
+   makeLED(this, Vec(309.57, 57.75), Nosferatu::Panel::RGB_Seg09_Current);
+   makeLED(this, Vec(283.79, 57.52), Nosferatu::Panel::RGB_Seg08_Current);
+   makeLED(this, Vec(258.00, 57.52), Nosferatu::Panel::RGB_Seg07_Current);
+   makeLED(this, Vec(232.22, 57.52), Nosferatu::Panel::RGB_Seg06_Current);
+   makeLED(this, Vec(206.43, 57.52), Nosferatu::Panel::RGB_Seg05_Current);
+   makeLED(this, Vec(180.64, 57.52), Nosferatu::Panel::RGB_Seg04_Current);
+   makeLED(this, Vec(154.86, 57.52), Nosferatu::Panel::RGB_Seg03_Current);
+   makeLED(this, Vec(129.07, 57.52), Nosferatu::Panel::RGB_Seg02_Current);
+   makeLED(this, Vec(103.28, 57.52), Nosferatu::Panel::RGB_Seg01_Current);
 
-   makeLCD(this, Vec(146.19, 343.83), 2, Nosferatu::Panel::Text_Bank, 18);
+   makeLCD(this, Vec(10.00, 51.13), 2, Nosferatu::Panel::Text_Bank, 18);
 }
 
 #endif // NOT NosferatuHPP
