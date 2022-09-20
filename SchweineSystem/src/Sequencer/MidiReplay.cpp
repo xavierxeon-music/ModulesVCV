@@ -10,7 +10,7 @@
 
 MidiReplay::MidiReplay()
    : Svin::Module()
-   , Svin::Exapnder<BusMidi>(this)
+   , Svin::Exapnder<MidiBus>(this)
    , Svin::MasterClock::Client()
    , fileName()
    , midiReplay()
@@ -95,7 +95,7 @@ void MidiReplay::process(const ProcessArgs& args)
       }
    }
 
-   BusMidi busMessage;
+   MidiBus busMessage;
    const Tempo tempo = getTempo();
    busMessage.runState = tempo.getRunState();
    if (!tempo.isRunningOrFirstTick())
@@ -119,7 +119,7 @@ void MidiReplay::process(const ProcessArgs& args)
    {
       for (uint8_t index = 0; index < noOfChannels; index++)
       {
-         BusMidi::Channel& busChannel = busMessage.channels[index];
+         MidiBus::Channel& busChannel = busMessage.channels[index];
          const Sequencer::Track& track = midiReplay.getTrackList().at(index);
          busChannel.isMonophoic = track.isMonophonic;
 

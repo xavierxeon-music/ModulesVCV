@@ -5,7 +5,7 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SvinExapnder.h>
+#include <SvinExpander.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 

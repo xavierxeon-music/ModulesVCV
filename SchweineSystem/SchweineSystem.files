@@ -45,8 +45,8 @@
 ./src/_Base/SvinJson.h
 ./src/_Base/SvinMasterClock.h
 ./src/_Base/SvinMidi.h
-./src/_Base/SvinExapnder.h
 ./src/_Base/SvinOrigin.h
+./src/_Base/SvinExpander.h
 ./src/_MusicTools/RememberDummy/Remember.h
 ./src/_MusicTools/RememberDummy/RememberArray.h
 ./src/_MusicTools/RememberDummy/RememberList.h
@@ -66,13 +66,13 @@
 ./src/_MusicTools/Include/Tools/BoolField.h
 ./src/_MusicTools/Include/Tools/Range.h
 ./src/_MusicTools/Include/Tools/Glide.h
+./src/_MusicTools/Include/Tools/Text.h
 ./src/_MusicTools/Include/Tools/Counter.h
 ./src/_MusicTools/Include/Tools/FastRandom.h
 ./src/_MusicTools/Include/Tools/SevenBit.h
 ./src/_MusicTools/Include/Tools/File.h
 ./src/_MusicTools/Include/Tools/Variable.h
 ./src/_MusicTools/Include/Tools/SquareSignal.h
-./src/_MusicTools/Include/Tools/Convert.h
 ./src/_MusicTools/Include/Tools/DoubleBuffer.h
 ./src/_MusicTools/Include/Tools/RingBuffer.h
 ./src/_MusicTools/Include/Midi/MidiFile.h
@@ -141,8 +141,8 @@
 ./src/Effects/Revoicer.hpp
 ./src/_Base/SvinOrigin.hpp
 ./src/_Base/SvinCommon.hpp
+./src/_Base/SvinExpander.hpp
 ./src/_Base/SvinUiElement.hpp
-./src/_Base/SvinExapnder.hpp
 ./src/_MusicTools/Variable.hpp
 ./src/_MusicTools/BoolField.hpp
 ./src/_MusicTools/RingBuffer.hpp
@@ -194,9 +194,9 @@
 ./src/_MusicTools/Range.hpp
 ./src/_MusicTools/Sequencer.hpp
 ./src/_MusicTools/MidiFileReader.hpp
+./src/_MusicTools/Text.hpp
 ./src/_MusicTools/CvSwitch.hpp
 ./src/_MusicTools/WaveTable.hpp
-./src/_MusicTools/Convert.hpp
 ./src/_MusicTools/StandardTable.hpp
 ./src/Hardware/MetropolixClock.cpp
 ./src/Hardware/AturiaStep.cpp

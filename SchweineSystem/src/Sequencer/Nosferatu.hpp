@@ -415,7 +415,7 @@ void NosferatuWidget::setup()
    makeLED(this, Vec(129.07, 57.52), Nosferatu::Panel::RGB_Seg02_Current);
    makeLED(this, Vec(103.28, 57.52), Nosferatu::Panel::RGB_Seg01_Current);
 
-   makeLCD(this, Vec(10.00, 51.13), 2, Nosferatu::Panel::Text_Bank, 18);
+   makeLCD(this, Vec(10.00, 51.13), 3, Nosferatu::Panel::Text_Bank, 18);
 }
 
 #endif // NOT NosferatuHPP

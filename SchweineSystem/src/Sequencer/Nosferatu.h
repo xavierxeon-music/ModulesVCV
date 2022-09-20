@@ -4,6 +4,7 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <SvinExpander.h>
 #include <SvinMasterClock.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
@@ -21,7 +22,11 @@ using namespace rack;
 #include <SvinSlider.h>
 #include <SvinSwitch.h>
 
-class Nosferatu : public Svin::Module, public Svin::MasterClock::Client
+struct NosferatuBus
+{
+};
+
+class Nosferatu : public Svin::Module, public Svin::Exapnder<NosferatuBus>, public Svin::MasterClock::Client
 {
 public:
    struct Panel;

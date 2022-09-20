@@ -17,7 +17,7 @@ DoepferQuad::DoepferQuad()
 
 void DoepferQuad::process(const ProcessArgs& args)
 {
-   BusMidi busMessage = receiveFromLeft();
+   MidiBus busMessage = receiveFromLeft();
    sendToRight(busMessage);
 
    if (connectionButton.isTriggered())

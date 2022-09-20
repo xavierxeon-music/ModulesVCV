@@ -26,14 +26,14 @@ std::ostream& operator<<(std::ostream& os, const MidiBusModule::NoteBuffer& buff
 
 MidiBusModule::MidiBusModule(const Midi::Device::Channel& deviceChannel, Svin::Module* module)
    : Svin::Midi::Output(deviceChannel)
-   , Svin::Exapnder<BusMidi>(module)
+   , Svin::Exapnder<MidiBus>(module)
    , bufferList()
    , wasRunning(false)
 
 {
 }
 
-void MidiBusModule::processBusMessage(const BusMidi& busMessage)
+void MidiBusModule::processBusMessage(const MidiBus& busMessage)
 {
    const bool isRunning = (Tempo::Running == busMessage.runState) || (Tempo::FirstTick == busMessage.runState);
 
@@ -67,7 +67,7 @@ void MidiBusModule::processBusMessage(const BusMidi& busMessage)
    {
       for (uint8_t index = 0; index < 16; index++)
       {
-         const BusMidi::Channel& busChannel = busMessage.channels[index];
+         const MidiBus::Channel& busChannel = busMessage.channels[index];
 
          if (busChannel.noteOffEventMap.find(tick) != busChannel.noteOffEventMap.end())
          {

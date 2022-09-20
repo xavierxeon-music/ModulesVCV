@@ -6,7 +6,7 @@
 
 MidiCV::MidiCV()
    : Svin::Module()
-   , Svin::Exapnder<BusMidi>(this)
+   , Svin::Exapnder<MidiBus>(this)
 {
    setup();
    allowExpanderOnLeft();
@@ -15,7 +15,7 @@ MidiCV::MidiCV()
 
 void MidiCV::process(const ProcessArgs& args)
 {
-   BusMidi busMessage = receiveFromLeft();
+   MidiBus busMessage = receiveFromLeft();
    sendToRight(busMessage);
 
    const bool isRunning = (Tempo::Running == busMessage.runState) || (Tempo::FirstTick == busMessage.runState);
@@ -51,7 +51,7 @@ void MidiCV::process(const ProcessArgs& args)
       Sequencer::Track::NoteEvent lastEvent;
       bool foundEvent = false;
 
-      const BusMidi::Channel& busChannel = busMessage.channels[index];
+      const MidiBus::Channel& busChannel = busMessage.channels[index];
       using ConstIterator = Sequencer::Track::NoteEvent::TimeMap::const_iterator;
 
       ConstIterator itOff = busChannel.noteOffEventMap.find(busMessage.endTick);

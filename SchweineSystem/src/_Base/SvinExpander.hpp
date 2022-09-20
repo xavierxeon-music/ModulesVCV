@@ -1,7 +1,7 @@
 #ifndef SvinExapnderHPP
 #define SvinExapnderHPP
 
-#include "SvinExapnder.h"
+#include "SvinExpander.h"
 
 template <typename MessageType>
 typename Svin::Exapnder<MessageType>::InstanceMap Svin::Exapnder<MessageType>::instanceMap;

@@ -8,16 +8,17 @@ const Nosferatu::ColorMap Nosferatu::colorMap = {{Note::C, Svin::Color{255, 255,
                                                  {Note::D, Svin::Color{255, 0, 0}},
                                                  {Note::Ds, Svin::Color{90, 0, 0}},
                                                  {Note::E, Svin::Color{255, 30, 200}},
-                                                 {Note::F, Svin::Color{0, 255, 0}},
-                                                 {Note::Fs, Svin::Color{0, 90, 0}},
-                                                 {Note::G, Svin::Color{0, 0, 255}},
-                                                 {Note::Gs, Svin::Color{0, 0, 90}},
+                                                 {Note::F, Svin::Color{0, 0, 255}},
+                                                 {Note::Fs, Svin::Color{0, 0, 90}},
+                                                 {Note::G, Svin::Color{0, 255, 0}},
+                                                 {Note::Gs, Svin::Color{0, 90, 0}},
                                                  {Note::A, Svin::Color{255, 255, 0}},
                                                  {Note::As, Svin::Color{90, 90, 0}},
                                                  {Note::B, Svin::Color{0, 0, 0}}};
 
 Nosferatu::Nosferatu()
    : Svin::Module()
+   , Svin::Exapnder<NosferatuBus>(this)
    , Svin::MasterClock::Client()
    // operation
    , banks{}
@@ -49,6 +50,7 @@ Nosferatu::Nosferatu()
    , gateOutput(this, Panel::Gate)
 {
    setup();
+   allowExpanderOnRight();
 
    currentLightList.append({Panel::RGB_Seg01_Current,
                             Panel::RGB_Seg02_Current,

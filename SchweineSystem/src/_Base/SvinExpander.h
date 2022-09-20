@@ -42,7 +42,7 @@ namespace Svin
 } // namespace Svin
 
 #ifndef SvinExapnderHPP
-#include "SvinExapnder.hpp"
+#include "SvinExpander.hpp"
 #endif // NOT SvinExapnderHPP
 
 #endif // NOT SvinExapnderH
