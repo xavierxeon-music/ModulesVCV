@@ -1,9 +1,9 @@
 #include "TrackerWorker.h"
 
 #include <Midi/MidiCommon.h>
-#include <Tools/Convert.h>
 #include <Tools/File.h>
 #include <Tools/SevenBit.h>
+#include <Tools/Text.h>
 #include <Tools/Variable.h>
 
 #include <SvinOrigin.h>
@@ -84,18 +84,17 @@ void TrackerWorker::process(const ProcessArgs& args)
    if (hasReset())
    {
       project.clockReset();
+      return;
    }
-   else
+
+   bool doProcess = true;
+   while (hasTick())
    {
-      bool doProcess = true;
-      while (hasTick())
-      {
-         project.clockTick();
-         doProcess = false;
-      }
-      if (doProcess)
-         processInternal();
+      project.clockTick();
+      doProcess = false;
    }
+   if (doProcess)
+      processInternal();
 }
 
 void TrackerWorker::loadProject(const std::string& newFileName)
@@ -120,7 +119,7 @@ void TrackerWorker::loadProject(const std::string& newFileName)
 
       const Tempo::Division division = static_cast<Tempo::Division>(projectObject.get("division").toInt());
       const uint32_t segmentCount = projectObject.get("segments").toInt();
-      const uint16_t digitCount = Convert::compileDigitCount(segmentCount);
+      const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
 
       project.clear();
       project.update(division, segmentCount);
@@ -286,7 +285,7 @@ void TrackerWorker::updatePassthrough()
 
          const float voltage = inputList[groupIndex]->getVoltage(channelIndex);
          const uint8_t value = voltageToValue(voltage);
-         const std::string valueText = on ? Convert::text(value) : "off";
+         const std::string valueText = on ? Text::convert(value) : "off";
          const uint8_t xVoltage = 46 + groupIndex * 50;
          controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
       }
@@ -326,7 +325,7 @@ void TrackerWorker::updateRemote()
          controller.setColor(Svin::Color{255, 255, 255});
 
          const uint8_t value = remoteValues[laneIndex];
-         const std::string valueText = on ? Convert::text(value) : "off";
+         const std::string valueText = on ? Text::convert(value) : "off";
          const uint8_t xValue = 46 + groupIndex * 50;
          controller.writeText(xValue, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
       }
@@ -405,7 +404,7 @@ void TrackerWorker::updateInternalCurrent()
          controller.setColor(Svin::Color{255, 255, 255});
 
          const uint8_t value = on ? lane.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
-         const std::string valueText = on ? Convert::text(value) : "off";
+         const std::string valueText = on ? Text::convert(value) : "off";
          const uint8_t xVoltage = 46 + groupIndex * 50;
          controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
       }

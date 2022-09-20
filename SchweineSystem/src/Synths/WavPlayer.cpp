@@ -1,6 +1,6 @@
 #include "WavPlayer.h"
 
-#include <Tools/Convert.h>
+#include <Tools/Text.h>
 
 #include <SvinJson.h>
 #include <SvinOrigin.h>
@@ -87,7 +87,7 @@ void WavPlayer::updateDisplays()
 
    displayController.setColor(Svin::Color{0, 0, 0});
    std::string message = std::to_string(oscilator.getMeta().noOfChannels) + " ch";
-   message += " @ " + Convert::text(oscilator.getMeta().sampleRate / 1000.0, 1);
+   message += " @ " + Text::convert(oscilator.getMeta().sampleRate / 1000.0, 1);
    displayController.writeText(1, 11, message, Svin::DisplayOLED::Font::Small);
 
    displayController.setColor(Svin::Color{255, 255, 255});
@@ -110,7 +110,7 @@ void WavPlayer::updateDisplays()
 
    displayController.writeText(75, 26, timeDisplay(oscilator.getSamplePlayhead()), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Right);
 
-   displayController.writeText(1, 51, "x" + Convert::text(oscilator.getPlaybackSpeed(), 2), Svin::DisplayOLED::Font::Small);
+   displayController.writeText(1, 51, "x" + Text::convert(oscilator.getPlaybackSpeed(), 2), Svin::DisplayOLED::Font::Small);
    displayController.writeText(80, 50, timeDisplay(oscilator.getMeta().numberOfSamples), Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
 }
 

@@ -21,19 +21,21 @@ void Svin::Knob::setRange(const float& minValue, const float& maxValue, const fl
    module->configParam(paramIndex, minValue, maxValue, defaultValue, knob->name);
 }
 
-void Svin::Knob::enableSteps(bool enabled, const float& newScale)
+void Svin::Knob::enableSteps(bool enabled, const float& setpSize)
 {
    rack::engine::ParamQuantity* knob = module->getParamQuantity(paramIndex);
 
    // unscale
    knob->minValue *= scale;
    knob->maxValue *= scale;
+   knob->defaultValue *= scale;
 
    // new scale
-   scale = enabled ? newScale : 1.0;
+   scale = enabled ? setpSize : 1.0;
 
    knob->minValue /= scale;
    knob->maxValue /= scale;
+   knob->defaultValue /= scale;
 
    knob->snapEnabled = enabled;
    knob->displayMultiplier = scale;
