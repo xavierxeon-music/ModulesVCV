@@ -26,6 +26,13 @@ namespace Svin
       std::string getOpenFileName(const std::string& filter) const;
 
    protected:
+      enum class Side
+      {
+         Left,
+         Right
+      };
+
+   protected:
       virtual void load(const Json::Object& rootObject);
       virtual void save(Json::Object& rootObject);
       float getSampleRate() const;
@@ -35,6 +42,18 @@ namespace Svin
       bool registerHubClient(const std::string& name);
       void sendDocumentToHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex = 0);
       virtual void receivedDocumentFromHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex);
+      // bus
+      template <typename MessageType>
+      void resisterAsBusModule();
+
+      template <typename MessageType>
+      Module* busModule(const Side& side) const;
+
+      template <typename MessageType>
+      void sendBusMessage(const Side& side, const MessageType& message);
+
+      template <typename MessageType>
+      MessageType getBusMessage(const Side& side);
 
    private:
       using Map = std::map<std::string, Module*>;
@@ -46,7 +65,7 @@ namespace Svin
          ~Majordomo();
 
       public:
-         bool add(Module* module, const std::string& name); // true if name not aready registerred
+         bool add(Module* module, const std::string& name); // true if name not already registerred
          bool remove(Module* module);                       // true if no more modules are registerred
          bool connected();
          void tryConnect();
@@ -58,6 +77,13 @@ namespace Svin
          Map moduleMap;
       };
 
+      template <typename MessageType>
+      struct BusManager
+      {
+         using InstanceList = std::list<rack::Module*>;
+         static InstanceList instanceList;
+      };
+
    private:
       void dataFromJson(json_t* rootJson) override final;
       json_t* dataToJson() override final;
@@ -66,5 +92,9 @@ namespace Svin
       static Majordomo* majordomo;
    };
 } // namespace Svin
+
+#ifndef SvinModuleHPP
+#include "SvinModule.hpp"
+#endif // NOT SvinModuleHPP
 
 #endif // NOT SvinModuleH

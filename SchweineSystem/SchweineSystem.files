@@ -143,6 +143,7 @@
 ./src/_Base/SvinCommon.hpp
 ./src/_Base/SvinExpander.hpp
 ./src/_Base/SvinUiElement.hpp
+./src/_Base/SvinModule.hpp
 ./src/_MusicTools/Variable.hpp
 ./src/_MusicTools/BoolField.hpp
 ./src/_MusicTools/RingBuffer.hpp
