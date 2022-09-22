@@ -1,18 +1,16 @@
 #include "NosferatuAcolyte.h"
 
-#include "Nosferatu.h"
-
-NosferatuAcolyte::NosferatuAcolyte()
+Nosferatu::Acolyte::Acolyte()
    : Svin::Module()
-   , display(this, Panel::Text_Number)
 {
    setup();
+
    registerAsBusModule<NosferatuBus>();
 
    display.setColor(Svin::Color{255, 255, 0});
 }
 
-void NosferatuAcolyte::process(const ProcessArgs& args)
+void Nosferatu::Acolyte::process(const ProcessArgs& args)
 {
    uint8_t counter = 0;
    Module* module = nullptr;
@@ -31,11 +29,11 @@ void NosferatuAcolyte::process(const ProcessArgs& args)
 
 // widget
 
-NosferatuAcolyteWidget::NosferatuAcolyteWidget(NosferatuAcolyte* module)
+Nosferatu::AcolyteWidget::AcolyteWidget(Acolyte* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // creete module
-Model* modelNosferatuAcolyte = Svin::Origin::the()->addModule<NosferatuAcolyte, NosferatuAcolyteWidget>("NosferatuAcolyte");
+Model* modelNosferatuAcolyte = Svin::Origin::the()->addModule<Nosferatu::Acolyte, Nosferatu::AcolyteWidget>("NosferatuAcolyte");

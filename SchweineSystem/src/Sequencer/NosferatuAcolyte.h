@@ -7,40 +7,40 @@ using namespace rack;
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
-#include <SvinButtonLED.h>
-#include <SvinDisplayLCD.h>
 #include <SvinKnob.h>
+#include <SvinDisplayLCD.h>
+#include <SvinButtonLED.h>
 #include <SvinLED.h>
 #include <SvinSlider.h>
 
-class NosferatuAcolyte : public Svin::Module
+namespace Nosferatu
 {
-public:
-   struct Panel;
+   class Acolyte : public Svin::Module
+   {
+   public:
+      struct Panel;
 
-public:
-   NosferatuAcolyte();
+   public:
+      Acolyte();
+   
+   public:
+      void process(const ProcessArgs& args) override;
 
-public:
-   void process(const ProcessArgs& args) override;
+   private:
+      inline void setup();
+   };
 
-private:
-   inline void setup();
+   // widget
 
-private:
-   Svin::DisplayLCD::Controller display;
-};
+   class AcolyteWidget : public Svin::ModuleWidget
+   {
+   public:
+      AcolyteWidget(Acolyte* module);
 
-// widget
-
-class NosferatuAcolyteWidget : public Svin::ModuleWidget
-{
-public:
-   NosferatuAcolyteWidget(NosferatuAcolyte* module);
-
-private:
-   inline void setup();
-};
+   private:
+      inline void setup();
+   };
+}
 
 #ifndef NosferatuAcolyteHPP
 #include "NosferatuAcolyte.hpp"

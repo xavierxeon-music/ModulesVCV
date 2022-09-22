@@ -7,9 +7,9 @@ from .common_code import Common
 
 class Source(Common):
 
-    def __init__(self, sourcePath, moduleName, panelFileName, components):
+    def __init__(self, sourcePath, moduleName, panelFileName, components, metaMap):
 
-        Common.__init__(self, sourcePath, moduleName, panelFileName, components)
+        Common.__init__(self, sourcePath, moduleName, panelFileName, components, metaMap)
 
     def write(self):
 
@@ -23,17 +23,23 @@ class Source(Common):
 
             line = self._lineFunction(sourcefile)
 
+            className = self.moduleName
+            fullClassName = self.moduleName
+            if self.namespace:
+                className = className.replace(self.namespace, '')
+                fullClassName = fullClassName.replace(self.namespace, self.namespace + '::')
+
             line(0, f'#include "{self.moduleName}.h"')
             line(0)
 
-            line(0, f'{self.moduleName}::{self.moduleName}()')
+            line(0, f'{fullClassName}::{className}()')
             line(1, ': Svin::Module()')
             line(0, '{')
             line(1, 'setup();')
             line(0, '}')
             line(0)
 
-            line(0, f'void {self.moduleName}::process(const ProcessArgs& args)')
+            line(0, f'void {fullClassName}::process(const ProcessArgs& args)')
             line(0, '{')
             line(0, '}')
             line(0)
@@ -42,7 +48,7 @@ class Source(Common):
             line(0, '// widget')
             line(0)
 
-            line(0, f'{self.moduleName}Widget::{self.moduleName}Widget({self.moduleName}* module)')
+            line(0, f'{fullClassName}Widget::{className}Widget({className}* module)')
             line(0, f': Svin::ModuleWidget(module)')
             line(0, '{')
             line(1, 'setup();')
@@ -50,5 +56,5 @@ class Source(Common):
             line(0)
 
             line(0, '// creete module')
-            line(0, f'Model* model{self.moduleName} = Svin::Origin::the()->addModule<{self.moduleName}, {self.moduleName}Widget>("{self.moduleName}");')
+            line(0, f'Model* model{self.moduleName} = Svin::Origin::the()->addModule<{fullClassName}, {fullClassName}Widget>("{self.moduleName}");')
             line(0)

@@ -7,9 +7,9 @@ from .common_code import Common
 
 class Header(Common):
 
-    def __init__(self,  sourcePath, moduleName, panelFileName, components):
+    def __init__(self,  sourcePath, moduleName, panelFileName, components, metaMap):
 
-        Common.__init__(self,  sourcePath, moduleName, panelFileName, components)
+        Common.__init__(self,  sourcePath, moduleName, panelFileName, components, metaMap)
 
     def write(self):
 
@@ -57,35 +57,46 @@ class Header(Common):
                 line(0, '#include <SvinOutput.h>')
             line(0)
 
-            line(0, f'class {self.moduleName} : public Svin::Module')
-            line(0, '{')
-            line(0, 'public:')
-            line(1, 'struct Panel;')
+            baseIndent = 0
+            className = self.moduleName
+            if self.namespace:
+                line(0, f'namespace {self.namespace}')
+                line(0, '{')
+                baseIndent = 1
+                className = className.replace(self.namespace, '')
+
+            line(baseIndent, f'class {className} : public Svin::Module')
+            line(baseIndent, '{')
+            line(baseIndent, 'public:')
+            line(baseIndent + 1, 'struct Panel;')
             line(0)
-            line(0, 'public:')
-            line(1, f'{self.moduleName}();')
+            line(baseIndent, 'public:')
+            line(baseIndent + 1, f'{className}();')
+            line(baseIndent)
+            line(baseIndent, 'public:')
+            line(baseIndent + 1, 'void process(const ProcessArgs& args) override;')
             line(0)
-            line(0, 'public:')
-            line(1, 'void process(const ProcessArgs& args) override;')
-            line(0)
-            line(0, 'private:')
-            line(1, 'inline void setup();')
-            line(0, '};')
+            line(baseIndent, 'private:')
+            line(baseIndent + 1, 'inline void setup();')
+            line(baseIndent, '};')
 
             line(0)
-            line(0, '// widget')
+            line(baseIndent, '// widget')
             line(0)
 
-            line(0, f'class {self.moduleName}Widget : public Svin::ModuleWidget')
-            line(0, '{')
-            line(0, 'public:')
-            line(1, f'{self.moduleName}Widget({self.moduleName}* module);')
+            line(baseIndent, f'class {className}Widget : public Svin::ModuleWidget')
+            line(baseIndent, '{')
+            line(baseIndent, 'public:')
+            line(baseIndent + 1, f'{className}Widget({className}* module);')
             line(0)
-            line(0, 'private:')
-            line(1, 'inline void setup();')
-            line(0, '};')
-            line(0)
+            line(baseIndent, 'private:')
+            line(baseIndent + 1, 'inline void setup();')
+            line(baseIndent, '};')
 
+            if self.namespace:
+                line(0, '}')
+
+            line(0)
             line(0, f'#ifndef {self.moduleName}HPP')
             line(0, f'#include "{self.moduleName}.hpp"')
             line(0, f'#endif // NOT {self.moduleName}HPP')

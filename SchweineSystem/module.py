@@ -97,21 +97,21 @@ class Module:
 
         print(moduleName)
         panelFileName = self._modules[moduleName]['rc_path']
-        components = getPanelComponents(panelFileName)
-        for key, value in components.items():
+        [componentMap, metaMap] = getPanelComponents(panelFileName)
+        for key, value in componentMap.items():
             print(f'* {key} x {len(value)}')
             # print(value)
 
         sourcePath = self._modules[moduleName]['source_path']
         panelFileName = panelFileName.replace(modulesPath + '/', '')
 
-        headers = Header(sourcePath, moduleName, panelFileName, components)
+        headers = Header(sourcePath, moduleName, panelFileName, componentMap, metaMap)
         headers.write()
 
-        sources = Source(sourcePath,  moduleName, panelFileName, components)
+        sources = Source(sourcePath,  moduleName, panelFileName, componentMap, metaMap)
         sources.write()
 
-        panel = Panel(sourcePath,  moduleName, panelFileName, components)
+        panel = Panel(sourcePath,  moduleName, panelFileName, componentMap, metaMap)
         panel.write()
 
         with open(modulesPath + '/plugin.json', 'r') as infile:

@@ -5,23 +5,25 @@ import os
 
 class Common:
 
-    def __init__(self, sourcePath,  moduleName, panelFileName, components):
+    def __init__(self, sourcePath,  moduleName, panelFileName, componentMap, metaMap):
 
         self.moduleName = moduleName
         self.panelFileName = panelFileName
         self._fileNameBase = sourcePath + '/' + moduleName
 
-        self.buttons = components['button'] if components and 'button' in components else list()
-        self.inputs = components['input'] if components and 'input' in components else list()
-        self.knobs = components['knob'] if components and 'knob' in components else list()
-        self.lcds = components['lcd'] if components and 'lcd' in components else list()
-        self.ledbuttons = components['ledbutton'] if components and 'ledbutton' in components else list()
-        self.leds = components['led'] if components and 'led' in components else list()
-        self.meters = components['meter'] if components and 'meter' in components else list()
-        self.oleds = components['oled'] if components and 'oled' in components else list()
-        self.outputs = components['output'] if components and 'output' in components else list()
-        self.sliders = components['slider'] if components and 'slider' in components else list()
-        self.switches = components['switch'] if components and 'switch' in components else list()
+        self.namespace = metaMap['namespace'] if metaMap and 'namespace' in metaMap else None
+
+        self.buttons = componentMap['button'] if componentMap and 'button' in componentMap else list()
+        self.inputs = componentMap['input'] if componentMap and 'input' in componentMap else list()
+        self.knobs = componentMap['knob'] if componentMap and 'knob' in componentMap else list()
+        self.lcds = componentMap['lcd'] if componentMap and 'lcd' in componentMap else list()
+        self.ledbuttons = componentMap['ledbutton'] if componentMap and 'ledbutton' in componentMap else list()
+        self.leds = componentMap['led'] if componentMap and 'led' in componentMap else list()
+        self.meters = componentMap['meter'] if componentMap and 'meter' in componentMap else list()
+        self.oleds = componentMap['oled'] if componentMap and 'oled' in componentMap else list()
+        self.outputs = componentMap['output'] if componentMap and 'output' in componentMap else list()
+        self.sliders = componentMap['slider'] if componentMap and 'slider' in componentMap else list()
+        self.switches = componentMap['switch'] if componentMap and 'switch' in componentMap else list()
 
     def compileFileName(self, rest):
 

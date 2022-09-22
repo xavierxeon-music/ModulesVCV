@@ -40,7 +40,7 @@ def getPanelComponents(panelFileName):
     root = tree.getroot()
 
     # _removeXMLNamespace(root)
-    componentMap = _compileComponentMap(root)
+    [componentMap, metaMap] = _compileComponentMap(root)
 
     for componentList in componentMap.values():
         for component in componentList:
@@ -62,7 +62,7 @@ def getPanelComponents(panelFileName):
 
             del component['hierachy']
 
-    return componentMap
+    return [componentMap, metaMap]
 
 
 def _compileFullName(component):
@@ -114,6 +114,7 @@ def _compileComponentMap(root):
     buildParentMap(root)
 
     componentMap = dict()
+    metaMap = dict()
 
     def groupCrawl(parent):
 
@@ -123,6 +124,12 @@ def _compileComponentMap(root):
             groupId = group.get('{http://www.serif.com/}id')
             if None == groupId:
                 continue
+
+            if '@' in groupId:
+                index = groupId.index('@')
+                key = groupId[:index]
+                name = groupId[index + 1:]
+                metaMap[key] = name
 
             if not '#' in groupId:
                 continue
@@ -150,7 +157,7 @@ def _compileComponentMap(root):
 
     groupCrawl(root)
 
-    return componentMap
+    return [componentMap, metaMap]
 
 
 def _compileCoordinates(hierachtList):
