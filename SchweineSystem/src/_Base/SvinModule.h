@@ -54,6 +54,12 @@ namespace Svin
       template <typename MessageType>
       MessageType getBusMessage(const Side& side);
 
+      template <typename MessageType>
+      void pushMessage(const MessageType& message, const Module* receiver = nullptr); // if receiver is nullptr, then send to all
+
+      template <typename MessageType>
+      virtual void receivedMessage(const MessageType& message, const Module* sender);
+
    private:
       using Map = std::map<std::string, Module*>;
 
