@@ -1,6 +1,8 @@
 #ifndef SvinMessageH
 #define SvinMessageH
 
+#include <list>
+
 namespace Svin
 {
    template <typename MessageType>
@@ -17,7 +19,7 @@ namespace Svin
    private:
       std::list<Publisher*> publisherList;
       std::list<Subscriber*> subscriberList;
-   } // namespace Message
+   };
 } // namespace Svin
 
 #ifndef SvinMessageHPP

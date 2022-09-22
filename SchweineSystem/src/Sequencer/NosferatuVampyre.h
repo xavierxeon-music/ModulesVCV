@@ -5,6 +5,7 @@
 using namespace rack;
 
 #include <SvinMasterClock.h>
+#include <SvinMessageSubscriber.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -23,12 +24,32 @@ using namespace rack;
 
 namespace Nosferatu
 {
-   struct Bus
+   struct Segment
    {
-      uint8_t bankIndex;
+      uint8_t pitch = 0;  // 0 - 24 (2 octaves)
+      uint8_t ticks = 2;  // 1 - 16
+      float length = 0.5; // 0.0 - 1.0
+      float chance = 1.0; // 0.0 - 1.0
+      bool play = true;
    };
 
-   class Vampyre : public Svin::Module, public Svin::MasterClock::Client
+   struct Bank
+   {
+      Segment segments[8];
+      uint8_t maxActive = 8; // 1 - 16
+      uint8_t offset = 0;    // 0-11
+   };
+
+   struct Bus
+   {
+      uint8_t bankIndex = 0;
+      uint16_t currentSegmentIndex = 0;
+      uint8_t offset = 0;
+   };
+
+   //
+
+   class Vampyre : public Svin::Module, public Svin::MasterClock::Client, public Svin::Message<Bank>::Subscriber
    {
    public:
       struct Panel;
@@ -41,21 +62,6 @@ namespace Nosferatu
       void updateDisplays() override;
 
    private:
-      struct Segment
-      {
-         uint8_t pitch = 0;  // 0 - 24 (2 octaves)
-         uint8_t ticks = 2;  // 1 - 16
-         float length = 0.5; // 0.0 - 1.0
-         float chance = 1.0; // 0.0 - 1.0
-         bool play = true;
-      };
-
-      struct Bank
-      {
-         Segment segments[16];
-         uint8_t maxActive = 8; // 1 - 16
-         uint8_t offset = 0;    // 0-11
-      };
 
       enum class DisplayType : uint8_t
       {
@@ -65,7 +71,6 @@ namespace Nosferatu
          Offset,
       };
 
-      using ColorMap = std::map<Note::Value, Svin::Color>;
 
    private:
       inline void setup();
@@ -76,6 +81,7 @@ namespace Nosferatu
 
       void load(const Svin::Json::Object& rootObject) override;
       void save(Svin::Json::Object& rootObject) override;
+      void receive(const Bank& bank, Module* sender) override;
 
    private:
       // operation
@@ -106,8 +112,6 @@ namespace Nosferatu
       Svin::Output firstOutput;
       Svin::Output pitchOutput;
       Svin::Output gateOutput;
-      //
-      static const ColorMap colorMap;
    };
 
    // widget

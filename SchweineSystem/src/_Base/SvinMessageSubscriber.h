@@ -8,7 +8,7 @@ namespace Svin
    class Module;
 
    template <typename MessageType>
-   class Message::Subscriber
+   class Message<MessageType>::Subscriber
    {
    public:
       inline Subscriber(Module* module);

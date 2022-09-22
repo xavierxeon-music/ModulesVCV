@@ -3,22 +3,10 @@
 #include <Tools/Text.h>
 #include <Tools/Variable.h>
 
-const Nosferatu::Vampyre::ColorMap Nosferatu::Vampyre::colorMap = {{Note::C, Svin::Color{255, 255, 255}},
-                                                                   {Note::Cs, Svin::Color{90, 90, 90}},
-                                                                   {Note::D, Svin::Color{255, 0, 0}},
-                                                                   {Note::Ds, Svin::Color{90, 0, 0}},
-                                                                   {Note::E, Svin::Color{255, 30, 200}},
-                                                                   {Note::F, Svin::Color{0, 0, 255}},
-                                                                   {Note::Fs, Svin::Color{0, 0, 90}},
-                                                                   {Note::G, Svin::Color{0, 255, 0}},
-                                                                   {Note::Gs, Svin::Color{0, 90, 0}},
-                                                                   {Note::A, Svin::Color{255, 255, 0}},
-                                                                   {Note::As, Svin::Color{90, 90, 0}},
-                                                                   {Note::B, Svin::Color{0, 0, 0}}};
-
 Nosferatu::Vampyre::Vampyre()
    : Svin::Module()
    , Svin::MasterClock::Client()
+   , Svin::Message<Bank>::Subscriber(this)
    // operation
    , banks{}
    , bankIndex(0)
@@ -58,15 +46,7 @@ Nosferatu::Vampyre::Vampyre()
                             Panel::RGB_Seg05_Current,
                             Panel::RGB_Seg06_Current,
                             Panel::RGB_Seg07_Current,
-                            Panel::RGB_Seg08_Current,
-                            Panel::RGB_Seg09_Current,
-                            Panel::RGB_Seg10_Current,
-                            Panel::RGB_Seg11_Current,
-                            Panel::RGB_Seg12_Current,
-                            Panel::RGB_Seg13_Current,
-                            Panel::RGB_Seg14_Current,
-                            Panel::RGB_Seg15_Current,
-                            Panel::RGB_Seg16_Current});
+                            Panel::RGB_Seg08_Current});
 
    pitchSliderList.append({{Panel::Seg01_Pitch, Panel::RGB_Seg01_Pitch},
                            {Panel::Seg02_Pitch, Panel::RGB_Seg02_Pitch},
@@ -75,15 +55,7 @@ Nosferatu::Vampyre::Vampyre()
                            {Panel::Seg05_Pitch, Panel::RGB_Seg05_Pitch},
                            {Panel::Seg06_Pitch, Panel::RGB_Seg06_Pitch},
                            {Panel::Seg07_Pitch, Panel::RGB_Seg07_Pitch},
-                           {Panel::Seg08_Pitch, Panel::RGB_Seg08_Pitch},
-                           {Panel::Seg09_Pitch, Panel::RGB_Seg09_Pitch},
-                           {Panel::Seg10_Pitch, Panel::RGB_Seg10_Pitch},
-                           {Panel::Seg11_Pitch, Panel::RGB_Seg11_Pitch},
-                           {Panel::Seg12_Pitch, Panel::RGB_Seg12_Pitch},
-                           {Panel::Seg13_Pitch, Panel::RGB_Seg13_Pitch},
-                           {Panel::Seg14_Pitch, Panel::RGB_Seg14_Pitch},
-                           {Panel::Seg15_Pitch, Panel::RGB_Seg15_Pitch},
-                           {Panel::Seg16_Pitch, Panel::RGB_Seg16_Pitch}});
+                           {Panel::Seg08_Pitch, Panel::RGB_Seg08_Pitch}});
 
    tickSliderList.append({{Panel::Seg01_Ticks, Panel::RGB_Seg01_Ticks},
                           {Panel::Seg02_Ticks, Panel::RGB_Seg02_Ticks},
@@ -92,15 +64,7 @@ Nosferatu::Vampyre::Vampyre()
                           {Panel::Seg05_Ticks, Panel::RGB_Seg05_Ticks},
                           {Panel::Seg06_Ticks, Panel::RGB_Seg06_Ticks},
                           {Panel::Seg07_Ticks, Panel::RGB_Seg07_Ticks},
-                          {Panel::Seg08_Ticks, Panel::RGB_Seg08_Ticks},
-                          {Panel::Seg09_Ticks, Panel::RGB_Seg09_Ticks},
-                          {Panel::Seg10_Ticks, Panel::RGB_Seg10_Ticks},
-                          {Panel::Seg11_Ticks, Panel::RGB_Seg11_Ticks},
-                          {Panel::Seg12_Ticks, Panel::RGB_Seg12_Ticks},
-                          {Panel::Seg13_Ticks, Panel::RGB_Seg13_Ticks},
-                          {Panel::Seg14_Ticks, Panel::RGB_Seg14_Ticks},
-                          {Panel::Seg15_Ticks, Panel::RGB_Seg15_Ticks},
-                          {Panel::Seg16_Ticks, Panel::RGB_Seg16_Ticks}});
+                          {Panel::Seg08_Ticks, Panel::RGB_Seg08_Ticks}});
 
    lengthKnobList.append({Panel::Seg01_Length,
                           Panel::Seg02_Length,
@@ -109,15 +73,7 @@ Nosferatu::Vampyre::Vampyre()
                           Panel::Seg05_Length,
                           Panel::Seg06_Length,
                           Panel::Seg07_Length,
-                          Panel::Seg08_Length,
-                          Panel::Seg09_Length,
-                          Panel::Seg10_Length,
-                          Panel::Seg11_Length,
-                          Panel::Seg12_Length,
-                          Panel::Seg13_Length,
-                          Panel::Seg14_Length,
-                          Panel::Seg15_Length,
-                          Panel::Seg16_Length});
+                          Panel::Seg08_Length});
 
    chanceKnobList.append({Panel::Seg01_Chance,
                           Panel::Seg02_Chance,
@@ -126,15 +82,7 @@ Nosferatu::Vampyre::Vampyre()
                           Panel::Seg05_Chance,
                           Panel::Seg06_Chance,
                           Panel::Seg07_Chance,
-                          Panel::Seg08_Chance,
-                          Panel::Seg09_Chance,
-                          Panel::Seg10_Chance,
-                          Panel::Seg11_Chance,
-                          Panel::Seg12_Chance,
-                          Panel::Seg13_Chance,
-                          Panel::Seg14_Chance,
-                          Panel::Seg15_Chance,
-                          Panel::Seg16_Chance});
+                          Panel::Seg08_Chance});
 
    activeButtonList.append({{Panel::Seg01_Active, Panel::RGB_Seg01_Active},
                             {Panel::Seg02_Active, Panel::RGB_Seg02_Active},
@@ -143,17 +91,9 @@ Nosferatu::Vampyre::Vampyre()
                             {Panel::Seg05_Active, Panel::RGB_Seg05_Active},
                             {Panel::Seg06_Active, Panel::RGB_Seg06_Active},
                             {Panel::Seg07_Active, Panel::RGB_Seg07_Active},
-                            {Panel::Seg08_Active, Panel::RGB_Seg08_Active},
-                            {Panel::Seg09_Active, Panel::RGB_Seg09_Active},
-                            {Panel::Seg10_Active, Panel::RGB_Seg10_Active},
-                            {Panel::Seg11_Active, Panel::RGB_Seg11_Active},
-                            {Panel::Seg12_Active, Panel::RGB_Seg12_Active},
-                            {Panel::Seg13_Active, Panel::RGB_Seg13_Active},
-                            {Panel::Seg14_Active, Panel::RGB_Seg14_Active},
-                            {Panel::Seg15_Active, Panel::RGB_Seg15_Active},
-                            {Panel::Seg16_Active, Panel::RGB_Seg16_Active}});
+                            {Panel::Seg08_Active, Panel::RGB_Seg08_Active}});
 
-   for (uint8_t index = 0; index < 16; index++)
+   for (uint8_t index = 0; index < 8; index++)
    {
       currentLightList[index]->setDefaultColor(Svin::Color{255, 255, 0});
       currentLightList[index]->setOn();
@@ -185,8 +125,6 @@ Nosferatu::Vampyre::Vampyre()
 
 void Nosferatu::Vampyre::process(const ProcessArgs& args)
 {
-   Nosferatu::Bus message = getBusMessage<Nosferatu::Bus>(Side::Right);
-
    // user interaction
    if (bankInput.isConnected())
    {
@@ -264,11 +202,11 @@ void Nosferatu::Vampyre::process(const ProcessArgs& args)
    }
 }
 
-const Nosferatu::Vampyre::Bank& Nosferatu::Vampyre::updateBank()
+const Nosferatu::Bank& Nosferatu::Vampyre::updateBank()
 {
    Bank& currentBank = banks[bankIndex];
 
-   for (uint8_t index = 0; index < 16; index++)
+   for (uint8_t index = 0; index < 8; index++)
    {
       if (activeButtonList[index]->isTriggered())
          currentBank.maxActive = index + 1;
@@ -306,12 +244,12 @@ void Nosferatu::Vampyre::updateDisplays()
 
    // lights
    const Bank& currentBank = banks[bankIndex];
-   for (uint8_t index = 0; index < 16; index++)
+   for (uint8_t index = 0; index < 8; index++)
    {
       currentLightList[index]->setActive(index == currentSegmentIndex);
 
       const Note note = Note::fromMidi(noteBaseValue + currentBank.offset + currentBank.segments[index].pitch);
-      pitchSliderList[index]->setColor(colorMap.at(note.value));
+      pitchSliderList[index]->setColor(Svin::Color::noteMap.at(note.value));
 
       const bool evenTick = (0 == (currentBank.segments[index].ticks % 2));
       tickSliderList[index]->setBrightness(evenTick ? 1.0 : 0.2);
@@ -348,7 +286,7 @@ void Nosferatu::Vampyre::updateDisplays()
 void Nosferatu::Vampyre::bankChange()
 {
    const Bank& currentBank = banks[bankIndex];
-   if (currentSegmentIndex >= currentBank.maxActive) // bank may have changed
+   if (currentSegmentIndex >= currentBank.maxActive)
    {
       currentSegmentIndex = 0;
       updateSegment();
@@ -356,7 +294,7 @@ void Nosferatu::Vampyre::bankChange()
          tickCounter = 0;
    }
 
-   for (uint8_t index = 0; index < 16; index++)
+   for (uint8_t index = 0; index < 8; index++)
    {
       const Segment& segment = currentBank.segments[index];
       pitchSliderList[index]->setValue(segment.pitch);
@@ -369,6 +307,10 @@ void Nosferatu::Vampyre::bankChange()
 
    displayType = DisplayType::Bank;
    displayOverride.reset();
+
+   Nosferatu::Bus message;
+   message.bankIndex = bankIndex;
+   sendBusMessage(Side::Right, message);
 }
 
 void Nosferatu::Vampyre::setDisplay(const DisplayType newType, const uint8_t value)
@@ -404,7 +346,7 @@ void Nosferatu::Vampyre::load(const Svin::Json::Object& rootObject)
       currentBank.maxActive = bankObject.get("max").toInt();
       currentBank.offset = bankObject.get("offset").toInt();
 
-      for (uint8_t index = 0; index < 16; index++)
+      for (uint8_t index = 0; index < 8; index++)
       {
          const std::string segmentKey = "s" + Text::pad(std::to_string(index), 2);
          Svin::Json::Object segmentObject = bankObject.get(segmentKey).toObject();
@@ -428,7 +370,7 @@ void Nosferatu::Vampyre::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("currentBank", bankIndex);
 
-   for (uint8_t bankIndex = 0; bankIndex < 16; bankIndex++)
+   for (uint8_t bankIndex = 0; bankIndex < 8; bankIndex++)
    {
       const Bank& currentBank = banks[bankIndex];
 
@@ -451,6 +393,10 @@ void Nosferatu::Vampyre::save(Svin::Json::Object& rootObject)
       const std::string bankKey = "b" + Text::pad(std::to_string(bankIndex), 2);
       rootObject.set(bankKey, bankObject);
    }
+}
+
+void Nosferatu::Vampyre::receive(const Bank& bank, Module* sender)
+{
 }
 
 // widget

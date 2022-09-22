@@ -1,10 +1,13 @@
-#ifndef SvinMessageBrokerHPP
-#define SvinMessageBrokerHPP
+#ifndef SvinMessageHPP
+#define SvinMessageHPP
 
-#include "SvinMessageBroker.h"
+#include "SvinMessage.h"
 
-Svin::Message::Broker::Broker()
+template <typename MessageType>
+Svin::Message<MessageType>::Message()
+   : publisherList()
+   , subscriberList()
 {
 }
 
-#endif // NOT SvinMessageBrokerHPP
+#endif // NOT SvinMessageHPP

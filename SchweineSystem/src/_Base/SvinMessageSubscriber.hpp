@@ -3,7 +3,9 @@
 
 #include "SvinMessageSubscriber.h"
 
-Svin::Message::Subscriber::Subscriber()
+template <typename MessageType>
+Svin::Message<MessageType>::Subscriber::Subscriber(Module* module)
+   : module(module)
 {
 }
 

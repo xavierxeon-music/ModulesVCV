@@ -47,7 +47,7 @@ namespace Svin
          const uint8_t digitCount;
          std::shared_ptr<rack::Font> font;
          std::string fontPath;
-         uint8_t fontSize;
+         const uint8_t fontSize;
       };
    } // namespace DisplayLCD
 } // namespace Svin

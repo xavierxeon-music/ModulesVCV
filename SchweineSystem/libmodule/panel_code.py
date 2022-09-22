@@ -309,6 +309,8 @@ class Panel(Common):
             x = lcd['rx']
             y = lcd['ry']
             fontSize = 18
+            if 'x' in count:
+                count, fontSize = count.split('x')
             line(baseIndent + 1, f'makeLCD(this, Vec({x:.2f}, {y:.2f}), {count}, {className}::Panel::Text_{name}, {fontSize});')
 
         if self.oleds:
