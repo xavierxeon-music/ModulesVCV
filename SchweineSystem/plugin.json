@@ -258,7 +258,7 @@
       {
          "slug": "NosferatuAcolyte",
          "name": "Nosferatu Acolyte",
-         "description": "Extend Nosferatus Influence",
+         "description": "extend Nosferatus influence",
          "tags": [
             "Sequencer",
             "Expander"
