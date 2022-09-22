@@ -3,14 +3,17 @@
 
 #include <MusicTools.h>
 
-struct BitBusMessage
+namespace BitBus
 {
-   uint8_t byte[16];
-   uint8_t channelCount;
+   struct Message
+   {
+      uint8_t byte[16];
+      uint8_t channelCount;
 
-   BitBusMessage();
-   BitBusMessage(const BitBusMessage& other);
-   BitBusMessage& operator=(const BitBusMessage& other);
-};
+      Message();
+      Message(const Message& other);
+      Message& operator=(const Message& other);
+   };
+} // namespace BitBus
 
 #endif // NOT BitBusCommonH

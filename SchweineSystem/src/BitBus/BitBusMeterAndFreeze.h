@@ -5,7 +5,6 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SvinExpander.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -17,48 +16,51 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinLED.h>
 
-static constexpr uint16_t AverageBufferSize = 4800;
-
-class BitBusMeterAndFreeze : public Svin::Module, public Svin::Exapnder<BitBusMessage>
+namespace BitBus
 {
-public:
-   struct Panel;
+   static constexpr uint16_t AverageBufferSize = 4800;
 
-public:
-   BitBusMeterAndFreeze();
-   ~BitBusMeterAndFreeze();
+   class MeterAndFreeze : public Svin::Module
+   {
+   public:
+      struct Panel;
 
-public:
-   void process(const ProcessArgs& args) override;
+   public:
+      MeterAndFreeze();
+      ~MeterAndFreeze();
 
-private:
-   inline void setup();
+   public:
+      void process(const ProcessArgs& args) override;
 
-   void load(const Svin::Json::Object& rootObject) override;
-   void save(Svin::Json::Object& rootObject) override;
+   private:
+      inline void setup();
 
-private:
-   Svin::LED::List lightList;
+      void load(const Svin::Json::Object& rootObject) override;
+      void save(Svin::Json::Object& rootObject) override;
 
-   Svin::ButtonLED freezeButton;
-   Svin::Input freezeInput;
-   BoolField8 freezeBuffer[16];
+   private:
+      Svin::LED::List lightList;
 
-   Svin::ButtonLED sampleButton;
-   Svin::Input sampleInput;
+      Svin::ButtonLED freezeButton;
+      Svin::Input freezeInput;
+      BoolField8 freezeBuffer[16];
 
-   Svin::LED busInIndicator;
-   Svin::LED busOutIndicator;
-};
+      Svin::ButtonLED sampleButton;
+      Svin::Input sampleInput;
 
-class BitBusMeterAndFreezeWidget : public Svin::ModuleWidget
-{
-public:
-   BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module);
+      Svin::LED busInIndicator;
+      Svin::LED busOutIndicator;
+   };
 
-private:
-   inline void setup();
-};
+   class MeterAndFreezeWidget : public Svin::ModuleWidget
+   {
+   public:
+      MeterAndFreezeWidget(MeterAndFreeze* module);
+
+   private:
+      inline void setup();
+   };
+} // namespace BitBus
 
 #ifndef BitBusMeterAndFreezeHPP
 #include "BitBusMeterAndFreeze.hpp"

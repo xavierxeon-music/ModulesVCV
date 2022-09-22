@@ -4,41 +4,39 @@
 
 #include <SvinOrigin.h>
 
-BitBusBitOut::BitBusBitOut()
+BitBus::BitOut::BitOut()
    : Svin::Module()
-   , Svin::Exapnder<BitBusMessage>(this)
    , outputList(this)
    , busInIndicator(this, Panel::RGB_BusIn)
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
-   allowExpanderOnLeft();
-   allowExpanderOnRight();
+   registerAsBusModule<Message>();
 
    outputList.append({Panel::BitOut8, Panel::BitOut7, Panel::BitOut6, Panel::BitOut5, Panel::BitOut4, Panel::BitOut3, Panel::BitOut2, Panel::BitOut1});
 }
 
-BitBusBitOut::~BitBusBitOut()
+BitBus::BitOut::~BitOut()
 {
 }
 
-void BitBusBitOut::process(const ProcessArgs& args)
+void BitBus::BitOut::process(const ProcessArgs& args)
 {
-   BitBusMessage message;
+   Message message;
 
-   if (canCommunicatWithRight())
+   if (busModule<Message>(Side::Right))
       busOutIndicator.setOn();
    else
       busOutIndicator.setOff();
 
-   if (!canCommunicatWithLeft())
+   if (!busModule<Message>(Side::Left))
    {
       busInIndicator.setOff();
    }
    else
    {
       busInIndicator.setOn();
-      message = receiveFromLeft();
+      message = getBusMessage<Message>(Side::Left);
    }
 
    // sound
@@ -55,17 +53,16 @@ void BitBusBitOut::process(const ProcessArgs& args)
       }
    }
 
-   if (canCommunicatWithRight())
-      sendToRight(message);
+   if (busModule<Message>(Side::Right))
+      sendBusMessage<Message>(Side::Right, message);
 }
 
 // widget
 
-BitBusBitOutWidget::BitBusBitOutWidget(BitBusBitOut* module)
+BitBus::BitOutWidget::BitOutWidget(BitBus::BitOut* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 // creete module
-Model* modelBitBusBitOut = Svin::Origin::the()->addModule<BitBusBitOut, BitBusBitOutWidget>("BitBusBitOut");
-
+Model* modelBitBusBitOut = Svin::Origin::the()->addModule<BitBus::BitOut, BitBus::BitOutWidget>("BitBusBitOut");

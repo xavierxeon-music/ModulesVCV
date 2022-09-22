@@ -5,9 +5,8 @@
 
 #include <SvinOrigin.h>
 
-BitBusCounter::BitBusCounter()
+BitBus::Counter::Counter()
    : Svin::Module()
-   , Svin::Exapnder<BitBusMessage>(this)
    , upInput(this, Panel::Up)
    , downInput(this, Panel::Down)
    , resetInput(this, Panel::Reset)
@@ -18,7 +17,7 @@ BitBusCounter::BitBusCounter()
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
-   allowExpanderOnRight();
+   registerAsBusModule<Message>();
 
    bitIndicatorList.append({Panel::RGB_Bit8_Indicator,
                             Panel::RGB_Bit7_Indicator,
@@ -40,7 +39,7 @@ BitBusCounter::BitBusCounter()
    thresholdSlider.setValue(3.0);
 }
 
-void BitBusCounter::load(const Svin::Json::Object& rootObject)
+void BitBus::Counter::load(const Svin::Json::Object& rootObject)
 {
    counter = rootObject.get("counter").toInt();
 
@@ -48,7 +47,7 @@ void BitBusCounter::load(const Svin::Json::Object& rootObject)
    thresholdSlider.setValue(threshold);
 }
 
-void BitBusCounter::save(Svin::Json::Object& rootObject)
+void BitBus::Counter::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("counter", counter);
 
@@ -56,7 +55,7 @@ void BitBusCounter::save(Svin::Json::Object& rootObject)
    rootObject.set("threshold", threshold);
 }
 
-void BitBusCounter::process(const ProcessArgs& args)
+void BitBus::Counter::process(const ProcessArgs& args)
 {
    const float threshold = thresholdSlider.getValue();
    upInput.setTriggerThreshold(threshold);
@@ -77,7 +76,7 @@ void BitBusCounter::process(const ProcessArgs& args)
 
    counterController.setText(std::to_string(counter));
 
-   if (!canCommunicatWithRight())
+   if (!busModule<Message>(Side::Right))
    {
       busOutIndicator.setOff();
       return;
@@ -91,20 +90,19 @@ void BitBusCounter::process(const ProcessArgs& args)
    for (uint8_t index = 0; index < 8; index++)
       bitIndicatorList[index]->setActive(boolField.get(index));
 
-   BitBusMessage message;
+   Message message;
    message.byte[0] = counter;
 
-   sendToRight(message);
+   sendBusMessage<Message>(Side::Right, message);
 }
 
 // widget
 
-BitBusCounterWidget::BitBusCounterWidget(BitBusCounter* module)
+BitBus::CounterWidget::CounterWidget(Counter* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // creete module
-Model* modelBitBusCounter = Svin::Origin::the()->addModule<BitBusCounter, BitBusCounterWidget>("BitBusCounter");
-
+Model* modelBitBusCounter = Svin::Origin::the()->addModule<BitBus::Counter, BitBus::CounterWidget>("BitBusCounter");

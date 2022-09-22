@@ -5,68 +5,71 @@
 
 #include <SvinOrigin.h>
 
-struct BitBusCVIn::Panel
+namespace BitBus
 {
-   enum ParamId
+   struct CVIn::Panel
    {
-      // buttons
-      // switches
-      // ledbuttons
-      // knobs
-      // sliders
-      PARAMS_LEN = 0
+      enum ParamId
+      {
+         // buttons
+         // switches
+         // ledbuttons
+         // knobs
+         // sliders
+         PARAMS_LEN = 0
+      };
+
+      enum DisplayId
+      {
+         // lcd
+         // oled
+         DISPLAYS_LEN = 0
+      };
+
+      enum MeterId
+      {
+         METERS_LEN = 0
+      };
+
+      enum InputId
+      {
+         CVIn = 0,
+         INPUTS_LEN = 1
+      };
+
+      enum OutputId
+      {
+         OUTPUTS_LEN = 0
+      };
+
+      enum LightId
+      {
+         // leds
+         RGB_BusOut = 0,
+         // ledbuttons
+         // sliders
+         LIGHTS_LEN = 3
+      };
+
    };
 
-   enum DisplayId
+   void CVIn::setup()
    {
-      // lcd
-      // oled
-      DISPLAYS_LEN = 0
-   };
+      config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   enum MeterId
+      configInput(Panel::CVIn, "CVIn");
+   }
+
+   void CVInWidget::setup()
    {
-      METERS_LEN = 0
-   };
+      std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusCVIn.svg");
+      SvgPanel* mainPanel = createPanel(panelPath);
+      setPanel(mainPanel);
 
-   enum InputId
-   {
-      CVIn = 0,
-      INPUTS_LEN = 1
-   };
+      makeInput(this, Vec(24.17, 215.77),  CVIn::Panel::CVIn, true);
 
-   enum OutputId
-   {
-      OUTPUTS_LEN = 0
-   };
-
-   enum LightId
-   {
-      // leds
-      RGB_BusOut = 0,
-      // ledbuttons
-      // sliders
-      LIGHTS_LEN = 3
-   };
-
-};
-
-void BitBusCVIn::setup()
-{
-   config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
-
-   configInput(Panel::CVIn, "CVIn");
-}
-
-void BitBusCVInWidget::setup()
-{
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusCVIn.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
-
-   makeInput(this, Vec(24.17, 215.77),  BitBusCVIn::Panel::CVIn, true);
-
-   makeLED(this, Vec(49.50, 46.77), BitBusCVIn::Panel::RGB_BusOut);
+      makeLED(this, Vec(49.50, 46.77), CVIn::Panel::RGB_BusOut);
+   }
 }
 
 #endif // NOT BitBusCVInHPP

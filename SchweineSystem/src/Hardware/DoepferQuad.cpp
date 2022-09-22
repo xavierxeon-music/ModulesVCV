@@ -8,8 +8,7 @@ DoepferQuad::DoepferQuad()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
 {
    setup();
-   allowExpanderOnLeft();
-   allowExpanderOnRight();
+   registerAsBusModule<MidiBus>();
 
    connectionButton.setDefaultColor(Svin::Color{0, 255, 0});
    connectToMidiDevice();
@@ -17,8 +16,8 @@ DoepferQuad::DoepferQuad()
 
 void DoepferQuad::process(const ProcessArgs& args)
 {
-   MidiBus busMessage = receiveFromLeft();
-   sendToRight(busMessage);
+   MidiBus busMessage = getBusMessage<MidiBus>(Side::Left);
+   sendBusMessage<MidiBus>(Side::Right, busMessage);
 
    if (connectionButton.isTriggered())
       connectToMidiDevice();

@@ -4,7 +4,6 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SvinExpander.h>
 #include <SvinMasterClock.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
@@ -40,7 +39,7 @@ struct MidiBus
    Channel channels[16];
 };
 
-class MidiReplay : public Svin::Module, public Svin::Exapnder<MidiBus>, public Svin::MasterClock::Client
+class MidiReplay : public Svin::Module, public Svin::MasterClock::Client
 {
 public:
    struct Panel;

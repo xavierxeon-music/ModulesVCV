@@ -10,7 +10,6 @@
 
 MidiReplay::MidiReplay()
    : Svin::Module()
-   , Svin::Exapnder<MidiBus>(this)
    , Svin::MasterClock::Client()
    , fileName()
    , midiReplay()
@@ -32,7 +31,7 @@ MidiReplay::MidiReplay()
    , lastTick(0)
 {
    setup();
-   allowExpanderOnRight();
+   registerAsBusModule<MidiBus>();
 
    displayController.onClicked(this, &MidiReplay::displayClicked);
 
@@ -100,7 +99,7 @@ void MidiReplay::process(const ProcessArgs& args)
    busMessage.runState = tempo.getRunState();
    if (!tempo.isRunningOrFirstTick())
    {
-      sendToRight(busMessage);
+      sendBusMessage<MidiBus>(Side::Right, busMessage);
       return;
    }
 
@@ -142,7 +141,7 @@ void MidiReplay::process(const ProcessArgs& args)
 
       lastTick = currentTick;
    }
-   sendToRight(busMessage);
+   sendBusMessage<MidiBus>(Side::Right, busMessage);
 }
 
 void MidiReplay::updateDisplays()

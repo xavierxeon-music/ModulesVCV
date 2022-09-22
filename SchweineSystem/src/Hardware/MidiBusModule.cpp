@@ -26,10 +26,8 @@ std::ostream& operator<<(std::ostream& os, const MidiBusModule::NoteBuffer& buff
 
 MidiBusModule::MidiBusModule(const Midi::Device::Channel& deviceChannel, Svin::Module* module)
    : Svin::Midi::Output(deviceChannel)
-   , Svin::Exapnder<MidiBus>(module)
    , bufferList()
    , wasRunning(false)
-
 {
 }
 

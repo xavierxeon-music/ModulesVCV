@@ -5,7 +5,6 @@
 using namespace rack;
 
 #include "BitBusCommon.h"
-#include <SvinExpander.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -15,47 +14,50 @@ using namespace rack;
 #include <SvinOutput.h>
 #include <SvinSlider.h>
 
-class BitBusCounter : public Svin::Module, public Svin::Exapnder<BitBusMessage>
+namespace BitBus
 {
-public:
-   struct Panel;
+   class Counter : public Svin::Module
+   {
+   public:
+      struct Panel;
 
-public:
-   BitBusCounter();
+   public:
+      Counter();
 
-public:
-   void process(const ProcessArgs& args) override;
+   public:
+      void process(const ProcessArgs& args) override;
 
-private:
-   inline void setup();
+   private:
+      inline void setup();
 
-   void load(const Svin::Json::Object& rootObject) override;
-   void save(Svin::Json::Object& rootObject) override;
+      void load(const Svin::Json::Object& rootObject) override;
+      void save(Svin::Json::Object& rootObject) override;
 
-private:
-   Svin::Input upInput;
-   Svin::Input downInput;
-   Svin::Input resetInput;
+   private:
+      Svin::Input upInput;
+      Svin::Input downInput;
+      Svin::Input resetInput;
 
-   Svin::Slider thresholdSlider;
+      Svin::Slider thresholdSlider;
 
-   uint8_t counter;
-   Svin::DisplayLCD::Controller counterController;
-   Svin::LED::List bitIndicatorList;
+      uint8_t counter;
+      Svin::DisplayLCD::Controller counterController;
+      Svin::LED::List bitIndicatorList;
 
-   Svin::LED busOutIndicator;
-};
+      Svin::LED busOutIndicator;
+   };
 
-// widget
+   // widget
 
-class BitBusCounterWidget : public Svin::ModuleWidget
-{
-public:
-   BitBusCounterWidget(BitBusCounter* module);
+   class CounterWidget : public Svin::ModuleWidget
+   {
+   public:
+      CounterWidget(Counter* module);
 
-private:
-   inline void setup();
-};
+   private:
+      inline void setup();
+   };
+} // namespace BitBus
 
 #ifndef BitBusCounterHPP
 #include "BitBusCounter.hpp"

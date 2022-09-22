@@ -4,17 +4,15 @@
 
 #include <SvinOrigin.h>
 
-BitBusNegate::BitBusNegate()
+BitBus::Negate::Negate()
    : Svin::Module()
-   , Svin::Exapnder<BitBusMessage>(this)
    , latchList(this)
    , gateList(this)
    , busInIndicator(this, Panel::RGB_BusIn)
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
-   allowExpanderOnLeft();
-   allowExpanderOnRight();
+   registerAsBusModule<Message>();
 
    latchList.append({{Panel::Bit8_GateIn, Panel::RGB_Bit8_Latch},
                      {Panel::Bit7_Latch, Panel::RGB_Bit7_Latch},
@@ -41,11 +39,11 @@ BitBusNegate::BitBusNegate()
    }
 }
 
-BitBusNegate::~BitBusNegate()
+BitBus::Negate::~Negate()
 {
 }
 
-void BitBusNegate::load(const Svin::Json::Object& rootObject)
+void BitBus::Negate::load(const Svin::Json::Object& rootObject)
 {
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -55,7 +53,7 @@ void BitBusNegate::load(const Svin::Json::Object& rootObject)
    }
 }
 
-void BitBusNegate::save(Svin::Json::Object& rootObject)
+void BitBus::Negate::save(Svin::Json::Object& rootObject)
 {
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -64,22 +62,22 @@ void BitBusNegate::save(Svin::Json::Object& rootObject)
    }
 }
 
-void BitBusNegate::process(const ProcessArgs& args)
+void BitBus::Negate::process(const ProcessArgs& args)
 {
-   if (!canCommunicatWithRight())
+   if (!busModule<Message>(Side::Right))
       busOutIndicator.setOff();
    else
       busOutIndicator.setOn();
 
-   if (!canCommunicatWithLeft())
+   if (!busModule<Message>(Side::Left))
       busInIndicator.setOff();
    else
       busInIndicator.setOn();
 
-   if (!canCommunicatWithRight() || !canCommunicatWithLeft())
+   if (!busModule<Message>(Side::Right) || !busModule<Message>(Side::Left))
       return;
 
-   BitBusMessage message = receiveFromLeft();
+   Message message = getBusMessage<Message>(Side::Left);
 
    for (uint8_t channel = 0; channel < message.channelCount; channel++)
    {
@@ -95,17 +93,16 @@ void BitBusNegate::process(const ProcessArgs& args)
       message.byte[channel] = boolField;
    }
 
-   sendToRight(message);
+   sendBusMessage<Message>(Side::Right, message);
 }
 
 // widget
 
-BitBusNegateWidget::BitBusNegateWidget(BitBusNegate* module)
+BitBus::NegateWidget::NegateWidget(Negate* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // creete module
-Model* modelBitBusNegate = Svin::Origin::the()->addModule<BitBusNegate, BitBusNegateWidget>("BitBusNegate");
-
+Model* modelBitBusNegate = Svin::Origin::the()->addModule<BitBus::Negate, BitBus::NegateWidget>("BitBusNegate");

@@ -56,8 +56,8 @@ AturiaStep::AturiaStep()
 
 void AturiaStep::process(const ProcessArgs& args)
 {
-   MidiBus busMessage = receiveFromLeft();
-   sendToRight(busMessage);
+   MidiBus busMessage = getBusMessage<MidiBus>(Side::Left);
+   sendBusMessage<MidiBus>(Side::Right, busMessage);
 
    if (connectionButton.isTriggered())
       connectToMidiDevice();

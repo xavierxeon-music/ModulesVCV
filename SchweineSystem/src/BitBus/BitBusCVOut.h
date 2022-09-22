@@ -6,7 +6,6 @@ using namespace rack;
 
 #include "BitBusCommon.h"
 #include <SvinCommon.h>
-#include <SvinExpander.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -16,36 +15,39 @@ using namespace rack;
 #include <SvinLED.h>
 #include <SvinOutput.h>
 
-class BitBusCVOut : public Svin::Module, public Svin::Exapnder<BitBusMessage>
+namespace BitBus
 {
-public:
-   struct Panel;
+   class CVOut : public Svin::Module
+   {
+   public:
+      struct Panel;
 
-public:
-   BitBusCVOut();
-   ~BitBusCVOut();
+   public:
+      CVOut();
+      ~CVOut();
 
-public:
-   void process(const ProcessArgs& args) override;
+   public:
+      void process(const ProcessArgs& args) override;
 
-private:
-   inline void setup();
+   private:
+      inline void setup();
 
-private:
-   Svin::Output cvOutput;
-   Range::Mapper outputMapper;
+   private:
+      Svin::Output cvOutput;
+      Range::Mapper outputMapper;
 
-   Svin::LED busInIndicator;
-};
+      Svin::LED busInIndicator;
+   };
 
-class BitBusCVOutWidget : public Svin::ModuleWidget
-{
-public:
-   BitBusCVOutWidget(BitBusCVOut* module);
+   class CVOutWidget : public Svin::ModuleWidget
+   {
+   public:
+      CVOutWidget(CVOut* module);
 
-private:
-   inline void setup();
-};
+   private:
+      inline void setup();
+   };
+} // namespace BitBus
 
 #ifndef BitBusCVOutHPP
 #include "BitBusCVOut.hpp"

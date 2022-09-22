@@ -4,9 +4,8 @@
 
 // meter and freeze
 
-BitBusMeterAndFreeze::BitBusMeterAndFreeze()
+BitBus::MeterAndFreeze::MeterAndFreeze()
    : Svin::Module()
-   , Svin::Exapnder<BitBusMessage>(this)
    , lightList(this)
    , freezeButton(this, Panel::FlipFreeze, Panel::RGB_FlipFreeze)
    , freezeInput(this, Panel::GateFreeze)
@@ -17,8 +16,7 @@ BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
-   allowExpanderOnLeft();
-   allowExpanderOnRight();
+   registerAsBusModule<Message>();
 
    lightList.append({Panel::RGB_Bit8_Status1,
                      Panel::RGB_Bit7_Status1,
@@ -41,37 +39,37 @@ BitBusMeterAndFreeze::BitBusMeterAndFreeze()
    sampleButton.setOff();
 }
 
-BitBusMeterAndFreeze::~BitBusMeterAndFreeze()
+BitBus::MeterAndFreeze::~MeterAndFreeze()
 {
 }
 
-void BitBusMeterAndFreeze::load(const Svin::Json::Object& rootObject)
+void BitBus::MeterAndFreeze::load(const Svin::Json::Object& rootObject)
 {
    const bool freezeMode = rootObject.get("freeze").toBool();
    freezeButton.setLatched(freezeMode);
 }
 
-void BitBusMeterAndFreeze::save(Svin::Json::Object& rootObject)
+void BitBus::MeterAndFreeze::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("freeze", freezeButton.isLatched(false));
 }
 
-void BitBusMeterAndFreeze::process(const ProcessArgs& args)
+void BitBus::MeterAndFreeze::process(const ProcessArgs& args)
 {
-   if (canCommunicatWithRight())
+   if (busModule<Message>(Side::Right))
       busOutIndicator.setOn();
    else
       busOutIndicator.setOff();
 
-   if (!canCommunicatWithLeft())
+   if (!busModule<Message>(Side::Left))
       busInIndicator.setOff();
    else
       busInIndicator.setOn();
 
-   if (!canCommunicatWithLeft() && !canCommunicatWithRight())
+   if (!busModule<Message>(Side::Left) && !busModule<Message>(Side::Right))
       return;
 
-   BitBusMessage message = receiveFromLeft();
+   Message message = getBusMessage<Message>(Side::Left);
 
    const bool freezeMode = freezeButton.isLatched();
    freezeButton.setActive(freezeMode);
@@ -91,17 +89,16 @@ void BitBusMeterAndFreeze::process(const ProcessArgs& args)
       lightList[index]->setActive(value);
    }
 
-   sendToRight(message);
+   sendBusMessage<Message>(Side::Right, message);
 }
 
 // widget
 
-BitBusMeterAndFreezeWidget::BitBusMeterAndFreezeWidget(BitBusMeterAndFreeze* module)
+BitBus::MeterAndFreezeWidget::MeterAndFreezeWidget(MeterAndFreeze* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // creete module
-Model* modelBitBusMeterAndFreeze = Svin::Origin::the()->addModule<BitBusMeterAndFreeze, BitBusMeterAndFreezeWidget>("BitBusMeterAndFreeze");
-
+Model* modelBitBusMeterAndFreeze = Svin::Origin::the()->addModule<BitBus::MeterAndFreeze, BitBus::MeterAndFreezeWidget>("BitBusMeterAndFreeze");

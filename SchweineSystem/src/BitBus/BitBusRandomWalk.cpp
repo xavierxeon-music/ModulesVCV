@@ -8,9 +8,8 @@
 
 #include <SvinOrigin.h>
 
-BitBusRandomWalk::BitBusRandomWalk()
+BitBus::RandomWalk::RandomWalk()
    : Svin::Module()
-   , Svin::Exapnder<BitBusMessage>(this)
    , busInIndicator(this, Panel::RGB_BusIn)
    , busOutIndicator(this, Panel::RGB_BusOut)
    , mixSlider(this, Panel::Mix, Panel::RGB_Mix)
@@ -24,11 +23,10 @@ BitBusRandomWalk::BitBusRandomWalk()
    , tables{}
 {
    setup();
+   registerAsBusModule<Message>();
+
    displayController.setColor(Svin::Color{255, 255, 0});
    mixSlider.setDefaultColor(Svin::Color{255, 255, 0});
-
-   allowExpanderOnLeft();
-   allowExpanderOnRight();
 
    const float size = 0.3;
    for (uint16_t tmpSeed = 0; tmpSeed < seedCount; tmpSeed++)
@@ -67,26 +65,26 @@ BitBusRandomWalk::BitBusRandomWalk()
    }
 }
 
-void BitBusRandomWalk::load(const Svin::Json::Object& rootObject)
+void BitBus::RandomWalk::load(const Svin::Json::Object& rootObject)
 {
    seed = rootObject.get("seed").toInt();
    mix = rootObject.get("mix").toReal();
 }
 
-void BitBusRandomWalk::save(Svin::Json::Object& rootObject)
+void BitBus::RandomWalk::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("seed", seed);
    rootObject.set("mix", mix);
 }
 
-void BitBusRandomWalk::process(const ProcessArgs& args)
+void BitBus::RandomWalk::process(const ProcessArgs& args)
 {
-   if (!canCommunicatWithLeft())
+   if (!busModule<Message>(Side::Left))
       return busInIndicator.setOff();
    else
       busInIndicator.setOn();
 
-   if (!canCommunicatWithRight())
+   if (!busModule<Message>(Side::Right))
       return busOutIndicator.setOff();
    else
       busOutIndicator.setOn();
@@ -113,7 +111,7 @@ void BitBusRandomWalk::process(const ProcessArgs& args)
    mixSlider.setBrightness(mix);
    displayController.setText(std::to_string(seed));
 
-   BitBusMessage message = receiveFromLeft();
+   Message message = getBusMessage<Message>(Side::Left);
 
    for (uint8_t channel = 0; channel < message.channelCount; channel++)
    {
@@ -132,17 +130,16 @@ void BitBusRandomWalk::process(const ProcessArgs& args)
       message.byte[channel] = valueOut;
    }
 
-   sendToRight(message);
+   sendBusMessage<Message>(Side::Right, message);
 }
 
 // widget
 
-BitBusRandomWalkWidget::BitBusRandomWalkWidget(BitBusRandomWalk* module)
+BitBus::RandomWalkWidget::RandomWalkWidget(RandomWalk* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // creete module
-Model* modelBitBusRandomWalk = Svin::Origin::the()->addModule<BitBusRandomWalk, BitBusRandomWalkWidget>("BitBusRandomWalk");
-
+Model* modelBitBusRandomWalk = Svin::Origin::the()->addModule<BitBus::RandomWalk, BitBus::RandomWalkWidget>("BitBusRandomWalk");

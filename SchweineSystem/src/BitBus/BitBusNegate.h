@@ -7,48 +7,50 @@ using namespace rack;
 #include "BitBusCommon.h"
 #include <SvinButtonLED.h>
 #include <SvinCommon.h>
-#include <SvinExpander.h>
 #include <SvinInput.h>
 #include <SvinLED.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
-class BitBusNegate : public Svin::Module, public Svin::Exapnder<BitBusMessage>
+namespace BitBus
 {
-public:
-   struct Panel;
+   class Negate : public Svin::Module
+   {
+   public:
+      struct Panel;
 
-public:
-   BitBusNegate();
-   ~BitBusNegate();
+   public:
+      Negate();
+      ~Negate();
 
-public:
-   void process(const ProcessArgs& args) override;
+   public:
+      void process(const ProcessArgs& args) override;
 
-private:
-   inline void setup();
+   private:
+      inline void setup();
 
-   void load(const Svin::Json::Object& rootObject) override;
-   void save(Svin::Json::Object& rootObject) override;
+      void load(const Svin::Json::Object& rootObject) override;
+      void save(Svin::Json::Object& rootObject) override;
 
-private:
-   Svin::ButtonLED::List latchList;
-   Svin::Input::List gateList;
+   private:
+      Svin::ButtonLED::List latchList;
+      Svin::Input::List gateList;
 
-   Svin::LED busInIndicator;
-   Svin::LED busOutIndicator;
-};
+      Svin::LED busInIndicator;
+      Svin::LED busOutIndicator;
+   };
 
-// widget
+   // widget
 
-class BitBusNegateWidget : public Svin::ModuleWidget
-{
-public:
-   BitBusNegateWidget(BitBusNegate* module);
+   class NegateWidget : public Svin::ModuleWidget
+   {
+   public:
+      NegateWidget(Negate* module);
 
-private:
-   inline void setup();
-};
+   private:
+      inline void setup();
+   };
+} // namespace BitBus
 
 #ifndef BitBusNegateHPP
 #include "BitBusNegate.hpp"

@@ -4,13 +4,12 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SvinExpander.h>
 #include <SvinMidi.h>
 #include <SvinModule.h>
 
 #include "../Sequencer/MidiReplay.h"
 
-class MidiBusModule : protected Svin::Midi::Output, public Svin::Exapnder<MidiBus>
+class MidiBusModule : protected Svin::Midi::Output
 {
 public:
    MidiBusModule(const Midi::Device::Channel& deviceChannel, Svin::Module* module);

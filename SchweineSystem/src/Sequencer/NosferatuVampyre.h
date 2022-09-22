@@ -4,7 +4,6 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SvinExpander.h>
 #include <SvinMasterClock.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>

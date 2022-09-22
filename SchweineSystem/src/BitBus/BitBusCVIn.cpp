@@ -4,25 +4,24 @@
 
 #include <SvinOrigin.h>
 
-BitBusCVIn::BitBusCVIn()
+BitBus::CVIn::CVIn()
    : Svin::Module()
-   , Svin::Exapnder<BitBusMessage>(this)
    , cvInput(this, Panel::CVIn)
    , inputMapper(-5.0, 5.0, 0.0, 255.0)
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
-   allowExpanderOnRight();
+   registerAsBusModule<Message>();
 }
 
-BitBusCVIn::~BitBusCVIn()
+BitBus::CVIn::~CVIn()
 {
 }
 
-void BitBusCVIn::process(const ProcessArgs& args)
+void BitBus::CVIn::process(const ProcessArgs& args)
 {
    // optics
-   if (!canCommunicatWithRight())
+   if (!busModule<Message>(Side::Right))
    {
       busOutIndicator.setOff();
       return;
@@ -31,7 +30,7 @@ void BitBusCVIn::process(const ProcessArgs& args)
    busOutIndicator.setOn();
 
    // sound
-   BitBusMessage message;
+   Message message;
    if (cvInput.isConnected())
    {
       message.channelCount = cvInput.getNumberOfChannels();
@@ -42,17 +41,16 @@ void BitBusCVIn::process(const ProcessArgs& args)
       }
    }
 
-   sendToRight(message);
+   sendBusMessage<Message>(Side::Right, message);
 }
 
 // widget
 
-BitBusCVInWidget::BitBusCVInWidget(BitBusCVIn* module)
+BitBus::CVInWidget::CVInWidget(CVIn* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // creete module
-Model* modelBitBusCVIn = Svin::Origin::the()->addModule<BitBusCVIn, BitBusCVInWidget>("BitBusCVIn");
-
+Model* modelBitBusCVIn = Svin::Origin::the()->addModule<BitBus::CVIn, BitBus::CVInWidget>("BitBusCVIn");

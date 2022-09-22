@@ -6,44 +6,46 @@ using namespace rack;
 
 #include "BitBusCommon.h"
 #include <SvinCommon.h>
-#include <SvinExpander.h>
 #include <SvinLED.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 #include <SvinOutput.h>
 
-class BitBusBitOut : public Svin::Module, public Svin::Exapnder<BitBusMessage>
+namespace BitBus
 {
-public:
-   struct Panel;
+   class BitOut : public Svin::Module
+   {
+   public:
+      struct Panel;
 
-public:
-   BitBusBitOut();
-   ~BitBusBitOut();
+   public:
+      BitOut();
+      ~BitOut();
 
-public:
-   void process(const ProcessArgs& args) override;
+   public:
+      void process(const ProcessArgs& args) override;
 
-private:
-   inline void setup();
+   private:
+      inline void setup();
 
-private:
-   Svin::Output::List outputList;
+   private:
+      Svin::Output::List outputList;
 
-   Svin::LED busInIndicator;
-   Svin::LED busOutIndicator;
-};
+      Svin::LED busInIndicator;
+      Svin::LED busOutIndicator;
+   };
 
-// widget
+   // widget
 
-class BitBusBitOutWidget : public Svin::ModuleWidget
-{
-public:
-   BitBusBitOutWidget(BitBusBitOut* module);
+   class BitOutWidget : public Svin::ModuleWidget
+   {
+   public:
+      BitOutWidget(BitOut* module);
 
-private:
-   inline void setup();
-};
+   private:
+      inline void setup();
+   };
+} // namespace BitBus
 
 #ifndef BitBusBitOutHPP
 #include "BitBusBitOut.hpp"

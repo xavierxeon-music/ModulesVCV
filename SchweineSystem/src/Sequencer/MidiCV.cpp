@@ -6,17 +6,15 @@
 
 MidiCV::MidiCV()
    : Svin::Module()
-   , Svin::Exapnder<MidiBus>(this)
 {
    setup();
-   allowExpanderOnLeft();
-   allowExpanderOnRight();
+   registerAsBusModule<MidiBus>();
 }
 
 void MidiCV::process(const ProcessArgs& args)
 {
-   MidiBus busMessage = receiveFromLeft();
-   sendToRight(busMessage);
+   MidiBus busMessage = getBusMessage<MidiBus>(Side::Left);
+   sendBusMessage<MidiBus>(Side::Right, busMessage);
 
    const bool isRunning = (Tempo::Running == busMessage.runState) || (Tempo::FirstTick == busMessage.runState);
    if (!isRunning)

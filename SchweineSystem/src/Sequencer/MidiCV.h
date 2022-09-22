@@ -5,13 +5,12 @@
 using namespace rack;
 
 #include "MidiReplay.h"
-#include <SvinExpander.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
 #include <SvinOutput.h>
 
-class MidiCV : public Svin::Module, public Svin::Exapnder<MidiBus>
+class MidiCV : public Svin::Module
 {
 public:
    struct Panel;
