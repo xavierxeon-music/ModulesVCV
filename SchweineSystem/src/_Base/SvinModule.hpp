@@ -3,13 +3,53 @@
 
 #include "SvinModule.h"
 
+// bus
 template <typename MessageType>
-typename Svin::Module::BusManager<MessageType>::InstanceList Svin::Module::BusManager<MessageType>::instanceList;
+typename Svin::Module::Bus<MessageType>* Svin::Module::Bus<MessageType>::me = nullptr;
 
 template <typename MessageType>
-void Svin::Module::resisterAsBusModule()
+Svin::Module::Bus<MessageType>::Bus()
+   : BusAbstract()
 {
-   BusManager<MessageType>::instanceList.append(this);
+   busList.push_back(this);
+}
+
+template <typename MessageType>
+Svin::Module::Bus<MessageType>* Svin::Module::Bus<MessageType>::the()
+{
+   if (!me)
+      me = new Bus<MessageType>();
+
+   return me;
+}
+
+template <typename MessageType>
+void Svin::Module::Bus<MessageType>::append(Module* module)
+{
+   instanceList.push_back(module);
+}
+
+template <typename MessageType>
+bool Svin::Module::Bus<MessageType>::contains(Module* module)
+{
+   if (std::find(instanceList.cbegin(), instanceList.cend(), module) == instanceList.cend())
+      return false;
+
+   return true;
+}
+
+template <typename MessageType>
+void Svin::Module::Bus<MessageType>::removeModule(Module* module)
+{
+   instanceList.remove(module);
+}
+
+// module
+
+template <typename MessageType>
+void Svin::Module::registerAsBusModule()
+{
+   Bus<MessageType>::the()->append(this);
 
    leftExpander.producerMessage = new MessageType{};
    leftExpander.consumerMessage = new MessageType{};
@@ -29,8 +69,7 @@ Svin::Module* Svin::Module::busModule(const Side& side) const
    if (!module)
       return nullptr;
 
-   const auto& list = BusManager<MessageType>::instanceList;
-   if (list.find(module) == list.cend())
+   if (!Bus<MessageType>::the()->contains(module))
       return nullptr;
 
    return module;

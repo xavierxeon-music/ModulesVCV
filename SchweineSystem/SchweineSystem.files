@@ -23,6 +23,7 @@
 ./src/Utilities/HubConnect.h
 ./src/Utilities/Mapper.h
 ./src/Utilities/GateLatch.h
+./src/Sequencer/NosferatuAcolyte.h
 ./src/Sequencer/MidiCV.h
 ./src/Sequencer/TrackerWorker.h
 ./src/Sequencer/MidiReplay.h
@@ -129,6 +130,7 @@
 ./src/Sequencer/Nosferatu.hpp
 ./src/Sequencer/TrackerWorker.hpp
 ./src/Sequencer/MidiCV.hpp
+./src/Sequencer/NosferatuAcolyte.hpp
 ./src/BitBus/BitBusBitOut.hpp
 ./src/BitBus/BitBusCVOut.hpp
 ./src/BitBus/BitBusMeterAndFreeze.hpp
@@ -224,6 +226,7 @@
 ./src/Utilities/RemoteScript.cpp
 ./src/Utilities/GateLatch.cpp
 ./src/Utilities/HubConnect.cpp
+./src/Sequencer/NosferatuAcolyte.cpp
 ./src/Sequencer/MidiCV.cpp
 ./src/Sequencer/Nosferatu.cpp
 ./src/Sequencer/TrackerWorker.cpp

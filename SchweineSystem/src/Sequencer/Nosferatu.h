@@ -26,7 +26,7 @@ struct NosferatuBus
 {
 };
 
-class Nosferatu : public Svin::Module, public Svin::Exapnder<NosferatuBus>, public Svin::MasterClock::Client
+class Nosferatu : public Svin::Module, public Svin::MasterClock::Client
 {
 public:
    struct Panel;

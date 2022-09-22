@@ -59,6 +59,24 @@ void Svin::Module::Majordomo::document(const ::Midi::Channel& channel, const Jso
 {
 }
 
+// bus abstract
+
+Svin::Module::BusAbstract::List Svin::Module::BusAbstract::busList;
+
+Svin::Module::BusAbstract::BusAbstract()
+{
+}
+
+Svin::Module::BusAbstract::~BusAbstract()
+{
+}
+
+void Svin::Module::BusAbstract::removeModuleFromAllBuses(Module* module)
+{
+   for (BusAbstract* bus : busList)
+      bus->removeModule(module);
+}
+
 // module
 
 Svin::Module::Majordomo* Svin::Module::majordomo = nullptr;
@@ -75,6 +93,8 @@ Svin::Module::~Module()
       delete majordomo;
       majordomo = nullptr;
    }
+
+   BusAbstract::removeModuleFromAllBuses(this);
 }
 
 void Svin::Module::updateDisplays()

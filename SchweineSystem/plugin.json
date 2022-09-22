@@ -254,6 +254,15 @@
          "tags": [
             "Sequencer"
          ]
+      },
+      {
+         "slug": "NosferatuAcolyte",
+         "name": "NosferatuAcolyte",
+         "description": "Extend Nosferatus Influence",
+         "tags": [
+            "Sequencer",
+            "Expander"
+         ]
       }
    ]
 }

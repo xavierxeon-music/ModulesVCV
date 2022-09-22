@@ -18,7 +18,6 @@ const Nosferatu::ColorMap Nosferatu::colorMap = {{Note::C, Svin::Color{255, 255,
 
 Nosferatu::Nosferatu()
    : Svin::Module()
-   , Svin::Exapnder<NosferatuBus>(this)
    , Svin::MasterClock::Client()
    // operation
    , banks{}
@@ -50,7 +49,7 @@ Nosferatu::Nosferatu()
    , gateOutput(this, Panel::Gate)
 {
    setup();
-   allowExpanderOnRight();
+   registerAsBusModule<NosferatuBus>();
 
    currentLightList.append({Panel::RGB_Seg01_Current,
                             Panel::RGB_Seg02_Current,
@@ -186,6 +185,8 @@ Nosferatu::Nosferatu()
 
 void Nosferatu::process(const ProcessArgs& args)
 {
+   NosferatuBus message = getBusMessage<NosferatuBus>(Side::Right);
+
    // user interaction
    if (bankInput.isConnected())
    {

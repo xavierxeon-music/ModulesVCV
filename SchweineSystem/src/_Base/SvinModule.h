@@ -17,6 +17,12 @@ namespace Svin
    public:
       using Queue = std::list<Bytes>;
 
+      enum class Side
+      {
+         Left,
+         Right
+      };
+
    public:
       Module();
       ~Module();
@@ -25,12 +31,8 @@ namespace Svin
       virtual void updateDisplays();
       std::string getOpenFileName(const std::string& filter) const;
 
-   protected:
-      enum class Side
-      {
-         Left,
-         Right
-      };
+      template <typename MessageType>
+      Module* busModule(const Side& side) const;
 
    protected:
       virtual void load(const Json::Object& rootObject);
@@ -44,10 +46,7 @@ namespace Svin
       virtual void receivedDocumentFromHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex);
       // bus
       template <typename MessageType>
-      void resisterAsBusModule();
-
-      template <typename MessageType>
-      Module* busModule(const Side& side) const;
+      void registerAsBusModule();
 
       template <typename MessageType>
       void sendBusMessage(const Side& side, const MessageType& message);
@@ -77,11 +76,48 @@ namespace Svin
          Map moduleMap;
       };
 
-      template <typename MessageType>
-      struct BusManager
+      class BusAbstract
       {
-         using InstanceList = std::list<rack::Module*>;
-         static InstanceList instanceList;
+      public:
+         using List = std::list<BusAbstract*>;
+
+      public:
+         BusAbstract();
+         virtual ~BusAbstract();
+
+      public:
+         static void removeModuleFromAllBuses(Module* module);
+
+      protected:
+         virtual void removeModule(Module* module) = 0;
+
+      protected:
+         static List busList;
+      };
+
+      template <typename MessageType>
+      class Bus : public BusAbstract
+      {
+      public:
+         using InstanceList = std::list<Module*>;
+
+      public:
+         static Bus* the();
+         void append(Module* module);
+         bool contains(Module* module);
+
+      private:
+         friend class BusAbstract;
+
+      private:
+         Bus();
+
+      private:
+         void removeModule(Module* module) override final;
+
+      private:
+         static Bus* me;
+         InstanceList instanceList;
       };
 
    private:
