@@ -26,15 +26,16 @@ namespace Nosferatu
 {
    struct Bus
    {
+      uint8_t bankIndex;
    };
 
-   class Nosferatu : public Svin::Module, public Svin::MasterClock::Client
+   class Vampyre : public Svin::Module, public Svin::MasterClock::Client
    {
    public:
       struct Panel;
 
    public:
-      Nosferatu();
+      Vampyre();
 
    public:
       void process(const ProcessArgs& args) override;
@@ -110,18 +111,18 @@ namespace Nosferatu
       static const ColorMap colorMap;
    };
 
+   // widget
+
+   class Widget : public Svin::ModuleWidget
+   {
+   public:
+      Widget(Vampyre* module);
+
+   private:
+      inline void setup();
+   };
+
 } // namespace Nosferatu
-
-// widget
-
-class NosferatuWidget : public Svin::ModuleWidget
-{
-public:
-   NosferatuWidget(Nosferatu* module);
-
-private:
-   inline void setup();
-};
 
 #ifndef NosferatuHPP
 #include "Nosferatu.hpp"
