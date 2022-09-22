@@ -239,7 +239,7 @@ class Panel(Common):
             name = button['name']
             x = button['cx']
             y = button['cy']
-            line(baseIndent + 1, f'makeButton(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name});')
+            line(baseIndent + 1, f'makeButton(this, Vec({x:.2f}, {y:.2f}), {className}::Panel::{name});')
 
         if self.sliders:
             line(0)
@@ -247,7 +247,7 @@ class Panel(Common):
             name = slider['name']
             x = slider['cx']
             y = slider['cy']
-            line(baseIndent + 1, f'makeSlider(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {self.moduleName}::Panel::RGB_{name});')
+            line(baseIndent + 1, f'makeSlider(this, Vec({x:.2f}, {y:.2f}), {className}::Panel::{name}, {className}::Panel::RGB_{name});')
 
         if self.switches:
             line(0)
@@ -256,7 +256,7 @@ class Panel(Common):
             x = switch['cx']
             y = switch['cy']
             threeWay = 'true' if switch['count'] != 1 else 'false'
-            line(baseIndent + 1, f'makeSwitch(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {threeWay});')
+            line(baseIndent + 1, f'makeSwitch(this, Vec({x:.2f}, {y:.2f}), {className}::Panel::{name}, {threeWay});')
 
         if self.ledbuttons:
             line(0)
@@ -264,7 +264,7 @@ class Panel(Common):
             name = ledbutton['name']
             x = ledbutton['cx']
             y = ledbutton['cy']
-            line(baseIndent + 1, f'makeLEDButton(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {self.moduleName}::Panel::RGB_{name});')
+            line(baseIndent + 1, f'makeLEDButton(this, Vec({x:.2f}, {y:.2f}), {className}::Panel::{name}, {className}::Panel::RGB_{name});')
 
         if self.knobs:
             line(0)
@@ -273,7 +273,7 @@ class Panel(Common):
             x = knob['cx']
             y = knob['cy']
             size = knob['count']
-            line(baseIndent + 1, f'makeKnob(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {size});')
+            line(baseIndent + 1, f'makeKnob(this, Vec({x:.2f}, {y:.2f}), {className}::Panel::{name}, {size});')
 
         if self.inputs:
             line(0)
@@ -282,7 +282,7 @@ class Panel(Common):
             x = input['cx']
             y = input['cy']
             poly = 'true' if input['count'] != 1 else 'false'
-            line(baseIndent + 1, f'makeInput(this, Vec({x:.2f}, {y:.2f}),  {self.moduleName}::Panel::{name}, {poly});')
+            line(baseIndent + 1, f'makeInput(this, Vec({x:.2f}, {y:.2f}),  {className}::Panel::{name}, {poly});')
 
         if self.outputs:
             line(0)
@@ -291,7 +291,7 @@ class Panel(Common):
             x = output['cx']
             y = output['cy']
             poly = 'true' if output['count'] != 1 else 'false'
-            line(baseIndent + 1, f'makeOutput(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::{name}, {poly});')
+            line(baseIndent + 1, f'makeOutput(this, Vec({x:.2f}, {y:.2f}), {className}::Panel::{name}, {poly});')
 
         if self.leds:
             line(0)
@@ -299,7 +299,7 @@ class Panel(Common):
             name = led['name']
             x = led['cx']
             y = led['cy']
-            line(baseIndent + 1, f'makeLED(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::RGB_{name});')
+            line(baseIndent + 1, f'makeLED(this, Vec({x:.2f}, {y:.2f}), {className}::Panel::RGB_{name});')
 
         if self.lcds:
             line(0)
@@ -309,7 +309,7 @@ class Panel(Common):
             x = lcd['rx']
             y = lcd['ry']
             fontSize = 18
-            line(baseIndent + 1, f'makeLCD(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Text_{name}, {fontSize});')
+            line(baseIndent + 1, f'makeLCD(this, Vec({x:.2f}, {y:.2f}), {count}, {className}::Panel::Text_{name}, {fontSize});')
 
         if self.oleds:
             line(0)
@@ -319,7 +319,7 @@ class Panel(Common):
             y = oled['ry']
             count = oled['count']
             width, height = count.split('x')
-            line(baseIndent + 1, f'makeOLED(this, Vec({x:.2f}, {y:.2f}), {self.moduleName}::Panel::Pixels_{name}, {width}, {height});')
+            line(baseIndent + 1, f'makeOLED(this, Vec({x:.2f}, {y:.2f}), {className}::Panel::Pixels_{name}, {width}, {height});')
 
         if self.meters:
             line(0)
@@ -328,6 +328,6 @@ class Panel(Common):
             count = meter['count']
             x = meter['rx']
             y = meter['ry']
-            line(baseIndent + 1, f'makeMeter(this, Vec({x:.2f}, {y:.2f}), {count}, {self.moduleName}::Panel::Value_{name});')
+            line(baseIndent + 1, f'makeMeter(this, Vec({x:.2f}, {y:.2f}), {count}, {className}::Panel::Value_{name});')
 
         line(baseIndent, '}')

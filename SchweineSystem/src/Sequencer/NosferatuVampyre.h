@@ -1,5 +1,5 @@
-#ifndef NosferatuH
-#define NosferatuH
+#ifndef NosferatuVampyreH
+#define NosferatuVampyreH
 
 #include <rack.hpp>
 using namespace rack;
@@ -113,10 +113,10 @@ namespace Nosferatu
 
    // widget
 
-   class Widget : public Svin::ModuleWidget
+   class VampyreWidget : public Svin::ModuleWidget
    {
    public:
-      Widget(Vampyre* module);
+      VampyreWidget(Vampyre* module);
 
    private:
       inline void setup();
@@ -124,8 +124,8 @@ namespace Nosferatu
 
 } // namespace Nosferatu
 
-#ifndef NosferatuHPP
-#include "Nosferatu.hpp"
-#endif // NOT NosferatuHPP
+#ifndef NosferatuVampyreHPP
+#include "NosferatuVampyre.hpp"
+#endif // NOT NosferatuVampyreHPP
 
-#endif // NOT NosferatuH
+#endif // NOT NosferatuVampyreH

@@ -1,22 +1,22 @@
-#include "Nosferatu.h"
+#include "NosferatuVampyre.h"
 
 #include <Tools/Text.h>
 #include <Tools/Variable.h>
 
-const Nosferatu::ColorMap Nosferatu::colorMap = {{Note::C, Svin::Color{255, 255, 255}},
-                                                 {Note::Cs, Svin::Color{90, 90, 90}},
-                                                 {Note::D, Svin::Color{255, 0, 0}},
-                                                 {Note::Ds, Svin::Color{90, 0, 0}},
-                                                 {Note::E, Svin::Color{255, 30, 200}},
-                                                 {Note::F, Svin::Color{0, 0, 255}},
-                                                 {Note::Fs, Svin::Color{0, 0, 90}},
-                                                 {Note::G, Svin::Color{0, 255, 0}},
-                                                 {Note::Gs, Svin::Color{0, 90, 0}},
-                                                 {Note::A, Svin::Color{255, 255, 0}},
-                                                 {Note::As, Svin::Color{90, 90, 0}},
-                                                 {Note::B, Svin::Color{0, 0, 0}}};
+const Nosferatu::Vampyre::ColorMap Nosferatu::Vampyre::colorMap = {{Note::C, Svin::Color{255, 255, 255}},
+                                                                   {Note::Cs, Svin::Color{90, 90, 90}},
+                                                                   {Note::D, Svin::Color{255, 0, 0}},
+                                                                   {Note::Ds, Svin::Color{90, 0, 0}},
+                                                                   {Note::E, Svin::Color{255, 30, 200}},
+                                                                   {Note::F, Svin::Color{0, 0, 255}},
+                                                                   {Note::Fs, Svin::Color{0, 0, 90}},
+                                                                   {Note::G, Svin::Color{0, 255, 0}},
+                                                                   {Note::Gs, Svin::Color{0, 90, 0}},
+                                                                   {Note::A, Svin::Color{255, 255, 0}},
+                                                                   {Note::As, Svin::Color{90, 90, 0}},
+                                                                   {Note::B, Svin::Color{0, 0, 0}}};
 
-Nosferatu::Nosferatu()
+Nosferatu::Vampyre::Vampyre()
    : Svin::Module()
    , Svin::MasterClock::Client()
    // operation
@@ -49,7 +49,7 @@ Nosferatu::Nosferatu()
    , gateOutput(this, Panel::Gate)
 {
    setup();
-   registerAsBusModule<NosferatuBus>();
+   registerAsBusModule<Nosferatu::Bus>();
 
    currentLightList.append({Panel::RGB_Seg01_Current,
                             Panel::RGB_Seg02_Current,
@@ -183,9 +183,9 @@ Nosferatu::Nosferatu()
    offsetKnob.enableSteps(true);
 }
 
-void Nosferatu::process(const ProcessArgs& args)
+void Nosferatu::Vampyre::process(const ProcessArgs& args)
 {
-   NosferatuBus message = getBusMessage<NosferatuBus>(Side::Right);
+   Nosferatu::Bus message = getBusMessage<Nosferatu::Bus>(Side::Right);
 
    // user interaction
    if (bankInput.isConnected())
@@ -264,7 +264,7 @@ void Nosferatu::process(const ProcessArgs& args)
    }
 }
 
-const Nosferatu::Bank& Nosferatu::updateBank()
+const Nosferatu::Vampyre::Bank& Nosferatu::Vampyre::updateBank()
 {
    Bank& currentBank = banks[bankIndex];
 
@@ -300,7 +300,7 @@ const Nosferatu::Bank& Nosferatu::updateBank()
    return currentBank;
 }
 
-void Nosferatu::updateDisplays()
+void Nosferatu::Vampyre::updateDisplays()
 {
    static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
 
@@ -345,7 +345,7 @@ void Nosferatu::updateDisplays()
    }
 }
 
-void Nosferatu::bankChange()
+void Nosferatu::Vampyre::bankChange()
 {
    const Bank& currentBank = banks[bankIndex];
    if (currentSegmentIndex >= currentBank.maxActive) // bank may have changed
@@ -371,14 +371,14 @@ void Nosferatu::bankChange()
    displayOverride.reset();
 }
 
-void Nosferatu::setDisplay(const DisplayType newType, const uint8_t value)
+void Nosferatu::Vampyre::setDisplay(const DisplayType newType, const uint8_t value)
 {
    displayType = newType;
    displayValue = value;
    displayOverride.trigger(3.0);
 }
 
-void Nosferatu::updateSegment()
+void Nosferatu::Vampyre::updateSegment()
 {
    Bank& currentBank = banks[bankIndex];
 
@@ -390,7 +390,7 @@ void Nosferatu::updateSegment()
    }
 }
 
-void Nosferatu::load(const Svin::Json::Object& rootObject)
+void Nosferatu::Vampyre::load(const Svin::Json::Object& rootObject)
 {
    bankIndex = rootObject.get("currentBank").toInt();
 
@@ -424,7 +424,7 @@ void Nosferatu::load(const Svin::Json::Object& rootObject)
    bankChange();
 }
 
-void Nosferatu::save(Svin::Json::Object& rootObject)
+void Nosferatu::Vampyre::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("currentBank", bankIndex);
 
@@ -455,12 +455,11 @@ void Nosferatu::save(Svin::Json::Object& rootObject)
 
 // widget
 
-NosferatuWidget::NosferatuWidget(Nosferatu* module)
+Nosferatu::VampyreWidget::VampyreWidget(Vampyre* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // creete module
-Model* modelNosferatu = Svin::Origin::the()->addModule<Nosferatu, NosferatuWidget>("Nosferatu");
-
+Model* modelNosferatuVampyre = Svin::Origin::the()->addModule<Nosferatu::Vampyre, Nosferatu::VampyreWidget>("NosferatuVampyre");

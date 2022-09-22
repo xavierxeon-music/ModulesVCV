@@ -111,7 +111,7 @@
 ./src/Sequencer/TrackerWorker.h
 ./src/Sequencer/MidiReplay.h
 ./src/Sequencer/NosferatuAcolyte.h
-./src/Sequencer/Nosferatu.h
+./src/Sequencer/NosferatuVampyre.h
 ./src/Utilities/Mapper.h
 ./src/Utilities/HubConnect.h
 ./src/Utilities/GateLatch.h
@@ -202,7 +202,7 @@
 ./src/Sequencer/TrackerWorker.hpp
 ./src/Sequencer/MidiCV.hpp
 ./src/Sequencer/MidiReplay.hpp
-./src/Sequencer/Nosferatu.hpp
+./src/Sequencer/NosferatuVampyre.hpp
 ./src/Utilities/Mapper.hpp
 ./src/Utilities/RemoteScript.hpp
 ./src/Utilities/HubConnect.hpp
@@ -255,9 +255,9 @@
 ./src/Effects/Revoicer.cpp
 ./src/Sequencer/MidiReplay.cpp
 ./src/Sequencer/MidiCV.cpp
+./src/Sequencer/NosferatuVampyre.cpp
 ./src/Sequencer/NosferatuAcolyte.cpp
 ./src/Sequencer/TrackerWorker.cpp
-./src/Sequencer/Nosferatu.cpp
 ./src/Utilities/RemoteScript.cpp
 ./src/Utilities/Mapper.cpp
 ./src/Utilities/HubConnect.cpp

@@ -7,9 +7,9 @@ using namespace rack;
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
-#include <SvinKnob.h>
-#include <SvinDisplayLCD.h>
 #include <SvinButtonLED.h>
+#include <SvinDisplayLCD.h>
+#include <SvinKnob.h>
 #include <SvinLED.h>
 #include <SvinSlider.h>
 
@@ -22,12 +22,15 @@ namespace Nosferatu
 
    public:
       Acolyte();
-   
+
    public:
       void process(const ProcessArgs& args) override;
 
    private:
       inline void setup();
+
+   private:
+      Svin::DisplayLCD::Controller display;
    };
 
    // widget
@@ -40,7 +43,7 @@ namespace Nosferatu
    private:
       inline void setup();
    };
-}
+} // namespace Nosferatu
 
 #ifndef NosferatuAcolyteHPP
 #include "NosferatuAcolyte.hpp"

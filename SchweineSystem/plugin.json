@@ -248,8 +248,8 @@
          ]
       },
       {
-         "slug": "Nosferatu",
-         "name": "Nosferatu",
+         "slug": "NosferatuVampyre",
+         "name": "Nosferatu Vampyre",
          "description": "a metropolis inspired sequencer",
          "tags": [
             "Sequencer"
@@ -257,18 +257,12 @@
       },
       {
          "slug": "NosferatuAcolyte",
-         "name": "NosferatuAcolyte",
+         "name": "Nosferatu Acolyte",
          "description": "Extend Nosferatus Influence",
          "tags": [
             "Sequencer",
             "Expander"
          ]
-      },
-      {
-         "slug": "NosferatuVampyre",
-         "name": "NosferatuVampyre",
-         "description": "",
-         "tags": []
       }
    ]
 }
