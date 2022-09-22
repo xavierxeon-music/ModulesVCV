@@ -5,9 +5,15 @@
 
 template <typename MessageType>
 Svin::Message<MessageType>::Message()
-   : publisherList()
-   , subscriberList()
+   : subscriberList()
 {
+}
+
+template <typename MessageType>
+Svin::Message<MessageType>* Svin::Message<MessageType>::broker()
+{
+   static Message<MessageType>* me = new Message<MessageType>();
+   return me;
 }
 
 #endif // NOT SvinMessageHPP

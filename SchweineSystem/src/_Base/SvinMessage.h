@@ -17,7 +17,6 @@ namespace Svin
       inline static Message* broker();
 
    private:
-      std::list<Publisher*> publisherList;
       std::list<Subscriber*> subscriberList;
    };
 } // namespace Svin

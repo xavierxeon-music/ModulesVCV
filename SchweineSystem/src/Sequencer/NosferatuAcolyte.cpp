@@ -4,6 +4,7 @@
 
 Nosferatu::Acolyte::Acolyte()
    : Svin::Module()
+   , Svin::Message<Bank>::Publisher(this)
    // operation
    , banks{}
    , bankIndex(0)
@@ -125,6 +126,16 @@ void Nosferatu::Acolyte::process(const ProcessArgs& args)
       counter = 0;
 
    display.setText(std::to_string(counter));
+
+   Bank& currentBank = banks[bankIndex];
+   for (uint8_t index = 0; index < 8; index++)
+   {
+      if (activeButtonList[index]->isTriggered())
+      {
+         currentBank.maxActive = index + 1;
+         publishMessage(currentBank);
+      }
+   }
 }
 
 void Nosferatu::Acolyte::updateDisplays()

@@ -81,7 +81,7 @@ namespace Nosferatu
 
       void load(const Svin::Json::Object& rootObject) override;
       void save(Svin::Json::Object& rootObject) override;
-      void receive(const Bank& bank, Module* sender) override;
+      void receiveMessage(const Bank& bank, Module* sender) override;
 
    private:
       // operation

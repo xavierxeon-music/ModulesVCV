@@ -4,6 +4,7 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <SvinMessagePublisher.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -17,7 +18,7 @@ using namespace rack;
 
 namespace Nosferatu
 {
-   class Acolyte : public Svin::Module
+   class Acolyte : public Svin::Module, public Svin::Message<Bank>::Publisher
    {
    public:
       struct Panel;

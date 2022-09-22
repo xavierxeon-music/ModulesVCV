@@ -158,6 +158,7 @@ void Nosferatu::Vampyre::process(const ProcessArgs& args)
    }
 
    firstOutput.setActive(0 == currentSegmentIndex);
+   processMessageBuffer();
 
    const Segment& currentSegment = currentBank.segments[currentSegmentIndex];
 
@@ -395,8 +396,28 @@ void Nosferatu::Vampyre::save(Svin::Json::Object& rootObject)
    }
 }
 
-void Nosferatu::Vampyre::receive(const Bank& bank, Module* sender)
+void Nosferatu::Vampyre::receiveMessage(const Bank& bank, Module* sender)
 {
+   auto findSender = [&]() -> uint8_t
+   {
+      uint8_t counter = 0;
+      Module* module = nullptr;
+
+      for (module = busModule<Nosferatu::Bus>(Side::Right); module != nullptr; module = module->busModule<Nosferatu::Bus>(Side::Right))
+      {
+         counter++;
+         if (module == sender)
+            return counter;
+      }
+
+      return 0;
+   };
+
+   uint8_t counter = findSender();
+   if (0 == counter)
+      return;
+
+   std::cout << (uint16_t)bank.maxActive << " " << (uint16_t)counter << std::endl;
 }
 
 // widget
