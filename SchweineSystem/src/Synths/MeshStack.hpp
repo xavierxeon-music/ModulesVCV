@@ -56,7 +56,6 @@ struct MeshStack::Panel
       RGB_Red = 9,
       LIGHTS_LEN = 12
    };
-
 };
 
 void MeshStack::setup()
@@ -80,13 +79,22 @@ void MeshStackWidget::setup()
    SvgPanel* mainPanel = createPanel(panelPath);
    setPanel(mainPanel);
 
+   /*
+   		// Main panel from Inkscape
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/panels/AdaptiveQuantizer.svg")));
+		SvgPanel* svgPanel = (SvgPanel*)getPanel();
+		svgPanel->fb->addChildBottom(new PanelBaseWidget(svgPanel->box.size, cont));
+		svgPanel->fb->addChild(new InverterWidget(svgPanel->box.size, mode));	
+		
+   */
+
    makeSlider(this, Vec(83.74, 147.50), MeshStack::Panel::Blue, MeshStack::Panel::RGB_Blue);
    makeSlider(this, Vec(68.50, 147.50), MeshStack::Panel::Green, MeshStack::Panel::RGB_Green);
    makeSlider(this, Vec(53.26, 147.50), MeshStack::Panel::Red, MeshStack::Panel::RGB_Red);
 
    makeKnob(this, Vec(216.14, 319.36), MeshStack::Panel::Mode, 3);
 
-   makeInput(this, Vec(94.38, 290.07),  MeshStack::Panel::Pitch, false);
+   makeInput(this, Vec(94.38, 290.07), MeshStack::Panel::Pitch, false);
 
    makeOutput(this, Vec(94.38, 332.98), MeshStack::Panel::Out, false);
 
