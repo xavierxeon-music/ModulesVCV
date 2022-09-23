@@ -66,9 +66,7 @@ void FlameCCSender::setup()
 
 void FlameCCSenderWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Hardware/FlameCCSender.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Hardware/FlameCCSender.svg");
 
    makeSwitch(this, Vec(37.78, 194.76), FlameCCSender::Panel::Half, false);
 

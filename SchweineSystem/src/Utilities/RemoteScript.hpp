@@ -63,9 +63,7 @@ void RemoteScript::setup()
 
 void RemoteScriptWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Utilities/RemoteScript.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Utilities/RemoteScript.svg");
 
    makeButton(this, Vec(29.50, 227.25), RemoteScript::Panel::Kill);
    makeButton(this, Vec(30.00, 170.36), RemoteScript::Panel::Restart);

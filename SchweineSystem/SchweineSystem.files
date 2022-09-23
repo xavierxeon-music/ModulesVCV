@@ -95,6 +95,7 @@
 ./src/_MusicTools/Include/Maths.h
 ./src/_MusicTools/Include/Sound/WaveTableMorpher.h
 ./src/_MusicTools/Include/Sound/WaveTable.h
+./src/_MusicTools/Include/Sound/WaveTableOscilator.h
 ./src/_MusicTools/Include/Sound/SampleRecorder.h
 ./src/_MusicTools/Include/Sound/Spectrum.h
 ./src/_MusicTools/Include/Sound/FunctionTable.h
@@ -181,6 +182,7 @@
 ./src/_MusicTools/ffft/FFTRealUseTrigo.hpp
 ./src/_MusicTools/ffft/FFTRealFixLen.hpp
 ./src/_MusicTools/MidiTargetFlameCC.hpp
+./src/_MusicTools/WaveTableOscilator.hpp
 ./src/_MusicTools/WaveTableMorpher.hpp
 ./src/_MusicTools/SoundMesh.hpp
 ./src/_MusicTools/TimeCode.hpp

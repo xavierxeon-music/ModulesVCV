@@ -89,9 +89,7 @@ void Multifilter::setup()
 
 void MultifilterWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Effects/Multifilter.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Effects/Multifilter.svg");
 
    makeSlider(this, Vec(107.14, 330.00), Multifilter::Panel::Mode, Multifilter::Panel::RGB_Mode);
 

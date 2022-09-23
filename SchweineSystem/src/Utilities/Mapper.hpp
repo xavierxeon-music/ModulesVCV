@@ -78,9 +78,7 @@ void Mapper::setup()
 
 void MapperWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Utilities/Mapper.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Utilities/Mapper.svg");
 
    makeButton(this, Vec(30.00, 228.71), Mapper::Panel::Output_Max);
    makeButton(this, Vec(30.00, 73.62), Mapper::Panel::Input_Max);

@@ -103,9 +103,7 @@ void VCMCReceiver::setup()
 
 void VCMCReceiverWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Hardware/VCMCReceiver.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Hardware/VCMCReceiver.svg");
 
    makeLEDButton(this, Vec(59.87, 360.10), VCMCReceiver::Panel::Connect, VCMCReceiver::Panel::RGB_Connect);
 

@@ -118,9 +118,7 @@ void ScionExciter::setup()
 
 void ScionExciterWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Hardware/ScionExciter.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Hardware/ScionExciter.svg");
 
    makeSlider(this, Vec(164.00, 288.78), ScionExciter::Panel::Master_Amplitude_Value, ScionExciter::Panel::RGB_Master_Amplitude_Value);
    makeSlider(this, Vec(87.17, 288.78), ScionExciter::Panel::Master_Smooth_Value, ScionExciter::Panel::RGB_Master_Smooth_Value);

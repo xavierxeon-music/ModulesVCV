@@ -62,9 +62,7 @@ namespace BitBus
 
    void CVInWidget::setup()
    {
-      std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusCVIn.svg");
-      SvgPanel* mainPanel = createPanel(panelPath);
-      setPanel(mainPanel);
+      makePanel("res/BitBus/BitBusCVIn.svg");
 
       makeInput(this, Vec(24.17, 215.77),  CVIn::Panel::CVIn, true);
 

@@ -34,6 +34,9 @@ namespace Svin
       template <typename MessageType>
       Module* busModule(const Side& side) const;
 
+      template <typename MessageType>
+      uint16_t moduleCount(const Side& side) const;
+
    protected:
       virtual void load(const Json::Object& rootObject);
       virtual void save(Json::Object& rootObject);

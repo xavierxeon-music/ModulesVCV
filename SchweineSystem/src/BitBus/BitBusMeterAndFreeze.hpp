@@ -80,9 +80,7 @@ namespace BitBus
 
    void MeterAndFreezeWidget::setup()
    {
-      std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusMeterAndFreeze.svg");
-      SvgPanel* mainPanel = createPanel(panelPath);
-      setPanel(mainPanel);
+      makePanel("res/BitBus/BitBusMeterAndFreeze.svg");
 
       makeLEDButton(this, Vec(44.94, 290.74), MeterAndFreeze::Panel::FlipSample, MeterAndFreeze::Panel::RGB_FlipSample);
       makeLEDButton(this, Vec(44.94, 191.75), MeterAndFreeze::Panel::FlipFreeze, MeterAndFreeze::Panel::RGB_FlipFreeze);

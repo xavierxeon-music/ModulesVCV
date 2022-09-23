@@ -68,9 +68,7 @@ void Revoicer::setup()
 
 void RevoicerWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Effects/Revoicer.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Effects/Revoicer.svg");
 
    makeButton(this, Vec(30.33, 183.71), Revoicer::Panel::Quality_Down);
    makeButton(this, Vec(30.33, 134.83), Revoicer::Panel::Quality_Up);

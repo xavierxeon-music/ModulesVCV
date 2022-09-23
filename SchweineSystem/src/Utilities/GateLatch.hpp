@@ -103,9 +103,7 @@ void GateLatch::setup()
 
 void GateLatchWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Utilities/GateLatch.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Utilities/GateLatch.svg");
 
    makeButton(this, Vec(65.84, 355.83), GateLatch::Panel::Reset_Button);
 

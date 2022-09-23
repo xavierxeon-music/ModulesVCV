@@ -93,9 +93,7 @@ void AturiaStep::setup()
 
 void AturiaStepWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Hardware/AturiaStep.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Hardware/AturiaStep.svg");
 
    makeButton(this, Vec(78.00, 261.39), AturiaStep::Panel::Channel4_Up);
    makeButton(this, Vec(78.00, 305.90), AturiaStep::Panel::Channel4_Down);

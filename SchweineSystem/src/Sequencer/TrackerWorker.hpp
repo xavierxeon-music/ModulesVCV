@@ -76,9 +76,7 @@ void TrackerWorker::setup()
 
 void TrackerWorkerWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Sequencer/TrackerWorker.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Sequencer/TrackerWorker.svg");
 
    makeButton(this, Vec(97.56, 232.00), TrackerWorker::Panel::Mode);
 

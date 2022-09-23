@@ -47,18 +47,6 @@ void Svin::Module::Bus<MessageType>::removeModule(Module* module)
 // module
 
 template <typename MessageType>
-void Svin::Module::registerAsBusModule()
-{
-   Bus<MessageType>::the()->append(this);
-
-   leftExpander.producerMessage = new MessageType{};
-   leftExpander.consumerMessage = new MessageType{};
-
-   rightExpander.producerMessage = new MessageType{};
-   rightExpander.consumerMessage = new MessageType{};
-}
-
-template <typename MessageType>
 Svin::Module* Svin::Module::busModule(const Side& side) const
 {
    rack::Module* expanderModule = (Side::Left == side) ? expanderModule = leftExpander.module : expanderModule = rightExpander.module;
@@ -74,6 +62,25 @@ Svin::Module* Svin::Module::busModule(const Side& side) const
 
    return module;
 }
+
+template <typename MessageType>
+uint16_t Svin::Module::moduleCount(const Side& side) const
+{
+   return 0;
+}
+
+template <typename MessageType>
+void Svin::Module::registerAsBusModule()
+{
+   Bus<MessageType>::the()->append(this);
+
+   leftExpander.producerMessage = new MessageType{};
+   leftExpander.consumerMessage = new MessageType{};
+
+   rightExpander.producerMessage = new MessageType{};
+   rightExpander.consumerMessage = new MessageType{};
+}
+
 
 template <typename MessageType>
 void Svin::Module::sendBusMessage(const Side& side, const MessageType& message)

@@ -60,9 +60,7 @@ void HubConnect::setup()
 
 void HubConnectWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Utilities/HubConnect.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Utilities/HubConnect.svg");
 
    makeLEDButton(this, Vec(30.00, 350.06), HubConnect::Panel::Connect, HubConnect::Panel::RGB_Connect);
 }

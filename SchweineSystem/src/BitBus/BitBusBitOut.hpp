@@ -77,9 +77,7 @@ namespace BitBus
 
    void BitOutWidget::setup()
    {
-      std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusBitOut.svg");
-      SvgPanel* mainPanel = createPanel(panelPath);
-      setPanel(mainPanel);
+      makePanel("res/BitBus/BitBusBitOut.svg");
 
       makeOutput(this, Vec(30.00, 337.40), BitOut::Panel::BitOut8, true);
       makeOutput(this, Vec(30.00, 302.65), BitOut::Panel::BitOut7, true);

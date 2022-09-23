@@ -81,9 +81,7 @@ void WavPlayer::setup()
 
 void WavPlayerWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Synths/WavPlayer.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Synths/WavPlayer.svg");
 
    makeButton(this, Vec(85.16, 171.53), WavPlayer::Panel::ManualReset);
 

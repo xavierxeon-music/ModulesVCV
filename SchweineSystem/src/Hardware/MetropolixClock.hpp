@@ -69,9 +69,7 @@ void MetropolixClock::setup()
 
 void MetropolixClockWidget::setup()
 {
-   std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Hardware/MetropolixClock.svg");
-   SvgPanel* mainPanel = createPanel(panelPath);
-   setPanel(mainPanel);
+   makePanel("res/Hardware/MetropolixClock.svg");
 
    makeLEDButton(this, Vec(76.53, 261.21), MetropolixClock::Panel::Connect, MetropolixClock::Panel::RGB_Connect);
 

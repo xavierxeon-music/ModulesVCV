@@ -79,9 +79,7 @@ namespace BitBus
 
    void CounterWidget::setup()
    {
-      std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusCounter.svg");
-      SvgPanel* mainPanel = createPanel(panelPath);
-      setPanel(mainPanel);
+      makePanel("res/BitBus/BitBusCounter.svg");
 
       makeSlider(this, Vec(23.72, 130.24), Counter::Panel::Threshold, Counter::Panel::RGB_Threshold);
 
