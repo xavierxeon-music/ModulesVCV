@@ -3,15 +3,24 @@
 #include <SvinModule.h>
 #include <SvinOrigin.h>
 
-class PanelWidget : public rack::widget::TransparentWidget
+struct PanelWidget : rack::widget::TransparentWidget
 {
-public:
-   PanelBaseWidget(Vec _size, float* _panelContrastSrc)
+   PanelWidget(Vec _size)
+      : rack::widget::TransparentWidget()
    {
       box.size = _size;
-      panelContrastSrc = _panelContrastSrc;
    }
-   void draw(const DrawArgs& args) override;
+
+   void draw(const DrawArgs& args) override
+   {
+      nvgBeginPath(args.vg);
+      NVGcolor baseColor = nvgRGB(255, 200, 200);
+
+      nvgFillColor(args.vg, baseColor);
+      nvgRect(args.vg, 0, 0, box.size.x, box.size.y);
+      nvgFill(args.vg);
+      TransparentWidget::draw(args);
+   }
 };
 
 // module widget
@@ -59,5 +68,5 @@ void Svin::ModuleWidget::makePanel(const std::string& resPath)
    setPanel(svg);
 
    SvgPanel* svgPanel = (SvgPanel*)getPanel();
-   //svgPanel->fb->addChildBottom(new PanelBaseWidget(svgPanel->box.size, cont));
+   svgPanel->fb->addChildBottom(new PanelWidget(svgPanel->box.size));
 }
