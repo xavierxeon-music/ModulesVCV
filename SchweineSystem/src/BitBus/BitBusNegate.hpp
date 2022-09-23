@@ -102,9 +102,7 @@ namespace BitBus
 
    void NegateWidget::setup()
    {
-      std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusNegate.svg");
-      SvgPanel* mainPanel = createPanel(panelPath);
-      setPanel(mainPanel);
+      makePanel("res/BitBus/BitBusNegate.svg");
 
       makeLEDButton(this, Vec(29.65, 336.97), Negate::Panel::Bit8_Latch, Negate::Panel::RGB_Bit8_Latch);
       makeLEDButton(this, Vec(29.65, 303.22), Negate::Panel::Bit7_Latch, Negate::Panel::RGB_Bit7_Latch);

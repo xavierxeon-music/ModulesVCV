@@ -174,9 +174,7 @@ namespace Nosferatu
 
    void AcolyteWidget::setup()
    {
-      std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Sequencer/NosferatuAcolyte.svg");
-      SvgPanel* mainPanel = createPanel(panelPath);
-      setPanel(mainPanel);
+      makePanel("res/Sequencer/NosferatuAcolyte.svg");
 
       makeSlider(this, Vec(202.75, 235.72), Acolyte::Panel::Seg08_Ticks, Acolyte::Panel::RGB_Seg08_Ticks);
       makeSlider(this, Vec(202.75, 144.09), Acolyte::Panel::Seg08_Pitch, Acolyte::Panel::RGB_Seg08_Pitch);

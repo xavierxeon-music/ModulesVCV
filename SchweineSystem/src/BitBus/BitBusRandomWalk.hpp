@@ -73,9 +73,7 @@ namespace BitBus
 
    void RandomWalkWidget::setup()
    {
-      std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/BitBus/BitBusRandomWalk.svg");
-      SvgPanel* mainPanel = createPanel(panelPath);
-      setPanel(mainPanel);
+      makePanel("res/BitBus/BitBusRandomWalk.svg");
 
       makeButton(this, Vec(45.44, 255.81), RandomWalk::Panel::Down);
       makeButton(this, Vec(45.44, 210.30), RandomWalk::Panel::Up);

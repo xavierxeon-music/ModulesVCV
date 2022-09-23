@@ -229,9 +229,7 @@ class Panel(Common):
 
         line(baseIndent, f'void {className}Widget::setup()')
         line(baseIndent, '{')
-        line(baseIndent + 1, f'std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "{self.panelFileName}");')
-        line(baseIndent + 1, 'SvgPanel* mainPanel = createPanel(panelPath);')
-        line(baseIndent + 1, 'setPanel(mainPanel);')
+        line(baseIndent + 1, f'makePanel("{self.panelFileName}");')
 
         if self.buttons:
             line(0)

@@ -191,9 +191,7 @@ namespace Nosferatu
 
    void VampyreWidget::setup()
    {
-      std::string panelPath = asset::plugin(Svin::Origin::the()->instance(), "res/Sequencer/NosferatuVampyre.svg");
-      SvgPanel* mainPanel = createPanel(panelPath);
-      setPanel(mainPanel);
+      makePanel("res/Sequencer/NosferatuVampyre.svg");
 
       makeButton(this, Vec(35.00, 197.46), Vampyre::Panel::Down);
       makeButton(this, Vec(35.00, 179.98), Vampyre::Panel::Up);
