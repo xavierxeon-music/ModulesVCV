@@ -230,15 +230,6 @@
          ]
       },
       {
-         "slug": "Multifilter",
-         "name": "Multifilter",
-         "description": "Pitch controlled filterbank",
-         "tags": [
-            "Filter",
-            "Polyphonic"
-         ]
-      },
-      {
          "slug": "Mapper",
          "name": "Mapper",
          "description": "map voltage ranges",
@@ -266,15 +257,30 @@
       },
       {
          "slug": "SixPack",
-         "name": "SixPack",
-         "description": "",
-         "tags": []
+         "name": "Six Pack",
+         "description": "Six stereo saw oscilators with pahse and pan modulation",
+         "tags": [
+            "Oscillator",
+            "Polyphonic"
+         ]
       },
       {
          "slug": "Boilerplate",
          "name": "Boilerplate",
-         "description": "",
-         "tags": []
+         "description": "Standard polyphonic wave table oscilator",
+         "tags": [
+            "Oscillator",
+            "Polyphonic"
+         ]
+      },
+      {
+         "slug": "Multifilter",
+         "name": "Multifilter",
+         "description": "Pitch controlled filterbank",
+         "tags": [
+            "Filter",
+            "Polyphonic"
+         ]
       }
    ]
 }
