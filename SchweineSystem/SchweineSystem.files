@@ -7,6 +7,7 @@
 ./src/Hardware/VCMCReceiver.h
 ./src/Synths/MeshStack.h
 ./src/Synths/WavPlayer.h
+./src/Synths/SixPack.h
 ./src/_Gui/SvinSwitch.h
 ./src/_Gui/SvinKnob.h
 ./src/_Gui/SvinButtonLED.h
@@ -122,6 +123,7 @@
 ./src/Hardware/ScionExciter.hpp
 ./src/Hardware/FlameCCSender.hpp
 ./src/Hardware/MetropolixClock.hpp
+./src/Synths/SixPack.hpp
 ./src/Synths/MeshStack.hpp
 ./src/Synths/WavPlayer.hpp
 ./src/_Gui/SvinDisplayOLED.hpp
@@ -216,6 +218,7 @@
 ./src/Hardware/DoepferQuad.cpp
 ./src/Synths/MeshStack.cpp
 ./src/Synths/WavPlayer.cpp
+./src/Synths/SixPack.cpp
 ./src/_Gui/SvinSvgImage.cpp
 ./src/_Gui/SvinOutput.cpp
 ./src/_Gui/SvinSwitch.cpp

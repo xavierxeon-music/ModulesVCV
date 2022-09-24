@@ -3,50 +3,53 @@
 #include <SvinModule.h>
 #include <SvinOrigin.h>
 
-struct PanelWidget : rack::widget::TransparentWidget
+namespace Svin
 {
-   PanelWidget(Vec _size)
-      : rack::widget::TransparentWidget()
+   struct ModuleWidget::PanelBackground : rack::widget::TransparentWidget
    {
-      box.size = _size;
-   }
+      PanelBackground(Vec _size)
+         : rack::widget::TransparentWidget()
+      {
+         box.size = _size;
+      }
 
-   void draw(const DrawArgs& args) override
+      void draw(const DrawArgs& args) override
+      {
+         NVGcolor baseColor = nvgRGB(230, 230, 235);
+
+         nvgBeginPath(args.vg);
+         nvgFillColor(args.vg, baseColor);
+         nvgRect(args.vg, 0, 0, box.size.x, box.size.y);
+         nvgFill(args.vg);
+         TransparentWidget::draw(args);
+      }
+   };
+
+   struct ModuleWidget::PanelFrame : rack::widget::TransparentWidget
    {
-      NVGcolor baseColor = nvgRGB(180, 210, 230);
+      PanelFrame(Vec _size)
+         : rack::widget::TransparentWidget()
+      {
+         box.size = _size;
+      }
 
-      nvgBeginPath(args.vg);
-      nvgFillColor(args.vg, baseColor);
-      nvgRect(args.vg, 0, 0, box.size.x, box.size.y);
-      nvgFill(args.vg);
-      TransparentWidget::draw(args);
-   }
-};
+      void draw(const DrawArgs& args) override
+      {
+         nvgBeginPath(args.vg);
+         NVGcolor frameColor = nvgRGB(50, 50, 70);
 
-struct FrameWidget : rack::widget::TransparentWidget
-{
-   FrameWidget(Vec _size)
-      : rack::widget::TransparentWidget()
-   {
-      box.size = _size;
-   }
+         static const uint8_t padding = 2;
 
-   void draw(const DrawArgs& args) override
-   {
-      nvgBeginPath(args.vg);
-      NVGcolor frameColor = nvgRGB(50, 50, 70);
-
-      static const uint8_t padding = 2;
-
-      nvgFillColor(args.vg, frameColor);
-      nvgRect(args.vg, 0, 0, padding, box.size.y);
-      nvgRect(args.vg, box.size.x - padding, 0, padding, box.size.y);
-      nvgRect(args.vg, 0, 0, box.size.x, padding);
-      nvgRect(args.vg, 0, box.size.y - padding, box.size.x, padding);
-      nvgFill(args.vg);
-      TransparentWidget::draw(args);
-   }
-};
+         nvgFillColor(args.vg, frameColor);
+         nvgRect(args.vg, 0, 0, padding, box.size.y);
+         nvgRect(args.vg, box.size.x - padding, 0, padding, box.size.y);
+         nvgRect(args.vg, 0, 0, box.size.x, padding);
+         nvgRect(args.vg, 0, box.size.y - padding, box.size.x, padding);
+         nvgFill(args.vg);
+         TransparentWidget::draw(args);
+      }
+   };
+} // namespace Svin
 
 // module widget
 
@@ -89,6 +92,7 @@ void Svin::ModuleWidget::makePanel(const std::string& resPath)
    setPanel(svg);
 
    SvgPanel* svgPanel = (SvgPanel*)getPanel();
-   svgPanel->fb->addChildBottom(new PanelWidget(svgPanel->box.size));
-   svgPanel->fb->addChild(new FrameWidget(svgPanel->box.size));
+
+   svgPanel->fb->addChildBottom(new PanelBackground(svgPanel->box.size));
+   svgPanel->fb->addChild(new PanelFrame(svgPanel->box.size));
 }

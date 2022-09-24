@@ -23,6 +23,10 @@ namespace Svin
 
    protected:
       Module* schweineModule;
+
+   private:
+      struct PanelBackground;
+      struct PanelFrame;
    };
 } // namespace Svin
 

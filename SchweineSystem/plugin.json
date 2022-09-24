@@ -263,6 +263,12 @@
             "Sequencer",
             "Expander"
          ]
+      },
+      {
+         "slug": "SixPack",
+         "name": "SixPack",
+         "description": "",
+         "tags": []
       }
    ]
 }
