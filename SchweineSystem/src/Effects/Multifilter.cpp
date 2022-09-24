@@ -77,7 +77,7 @@ Multifilter::Multifilter()
 
    offsetKnob.setRange(-2.0, 2.0, 0.0);
 
-   modeSlider.setRange(0.0, 5.0);
+   modeSlider.setRange(0.0, 5.0, 1.0);
    modeSlider.enableSteps(true);
    modeSlider.setDefaultColor(Svin::Color{255, 255, 0});
    modeSlider.setOn();
@@ -144,6 +144,34 @@ void Multifilter::reinit()
    {
       voices[channel].init(getSampleRate(), filterMode);
    }
+}
+
+void Multifilter::load(const Svin::Json::Object& rootObject)
+{
+   resoAttenuateKnob.setValue(rootObject.get("resoAttenuate").toReal());
+   resoKnob.setValue(rootObject.get("reso").toReal());
+
+   driveAttenuateKnob.setValue(rootObject.get("driveAttenuate").toReal());
+   driveKnob.setValue(rootObject.get("drive").toReal());
+
+   offsetKnob.setValue(rootObject.get("offseet").toReal());
+   quantizeButton.setLatched(rootObject.get("quantize").toBool());
+
+   modeSlider.setValue(rootObject.get("mode").toReal());
+}
+
+void Multifilter::save(Svin::Json::Object& rootObject)
+{
+   rootObject.set("resoAttenuate", resoAttenuateKnob.getValue());
+   rootObject.set("reso", resoKnob.getValue());
+
+   rootObject.set("driveAttenuate", driveAttenuateKnob.getValue());
+   rootObject.set("drive", driveKnob.getValue());
+
+   rootObject.set("offseet", offsetKnob.getValue());
+   rootObject.set("quantize", quantizeButton.isLatched());
+
+   rootObject.set("mode", modeSlider.getValue());
 }
 
 void Multifilter::onSampleRateChange(const SampleRateChangeEvent& e)

@@ -45,6 +45,9 @@ private:
 private:
    inline void setup();
    void reinit();
+
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
    void onSampleRateChange(const SampleRateChangeEvent& e) override;
 
 private:
