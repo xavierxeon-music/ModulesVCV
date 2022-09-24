@@ -116,6 +116,7 @@ void Multifilter::process(const ProcessArgs& args)
       filterMode = sliderMode;
       reinit();
    }
+   modeSlider.setActive(filterMode != FilterMode::Off);
 
    const bool quantize = quantizeButton.isLatched();
    quantizeButton.setActive(quantize);
