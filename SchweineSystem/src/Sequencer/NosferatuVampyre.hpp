@@ -193,8 +193,8 @@ namespace Nosferatu
    {
       makePanel("res/Sequencer/NosferatuVampyre.svg");
 
-      makeButton(this, Vec(35.00, 197.46), Vampyre::Panel::Down);
-      makeButton(this, Vec(35.00, 179.98), Vampyre::Panel::Up);
+      makeButton(this, Vec(65.59, 198.74), Vampyre::Panel::Down);
+      makeButton(this, Vec(65.59, 176.26), Vampyre::Panel::Up);
 
       makeSlider(this, Vec(295.10, 235.72), Vampyre::Panel::Seg08_Ticks, Vampyre::Panel::RGB_Seg08_Ticks);
       makeSlider(this, Vec(295.10, 144.09), Vampyre::Panel::Seg08_Pitch, Vampyre::Panel::RGB_Seg08_Pitch);
@@ -238,9 +238,9 @@ namespace Nosferatu
       makeKnob(this, Vec(139.71, 91.61), Vampyre::Panel::Seg02_Chance, 1);
       makeKnob(this, Vec(113.93, 296.61), Vampyre::Panel::Seg01_Length, 2);
       makeKnob(this, Vec(113.93, 74.61), Vampyre::Panel::Seg01_Chance, 1);
-      makeKnob(this, Vec(35.00, 99.80), Vampyre::Panel::Offset, 3);
+      makeKnob(this, Vec(35.00, 119.41), Vampyre::Panel::Offset, 3);
 
-      makeInput(this, Vec(35.00, 151.44),  Vampyre::Panel::BankSelect, false);
+      makeInput(this, Vec(35.00, 190.58),  Vampyre::Panel::BankSelect, false);
 
       makeOutput(this, Vec(35.00, 355.83), Vampyre::Panel::Gate, false);
       makeOutput(this, Vec(35.00, 310.08), Vampyre::Panel::Pitch, false);

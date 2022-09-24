@@ -66,6 +66,9 @@
             </g>
         </g>
         <g transform="matrix(1,0,0,1,-8.59677,-48.8627)">
+            <g id="FMAttenuate-knob-2" serif:id="FMAttenuate#knob$2" transform="matrix(0.381474,0,0,0.381474,10.7918,159.054)">
+                <circle cx="55.661" cy="308.513" r="7.929"/>
+            </g>
             <g id="FM-input" serif:id="FM#input" transform="matrix(0.175002,0,0,0.175002,9.15717,210.558)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(217,217,217);"/>
             </g>

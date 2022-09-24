@@ -8,6 +8,7 @@
 ./src/Synths/MeshStack.h
 ./src/Synths/WavPlayer.h
 ./src/Synths/SixPack.h
+./src/Synths/Boilerplate.h
 ./src/_Gui/SvinSwitch.h
 ./src/_Gui/SvinKnob.h
 ./src/_Gui/SvinButtonLED.h
@@ -126,6 +127,7 @@
 ./src/Synths/SixPack.hpp
 ./src/Synths/MeshStack.hpp
 ./src/Synths/WavPlayer.hpp
+./src/Synths/Boilerplate.hpp
 ./src/_Gui/SvinDisplayOLED.hpp
 ./src/Utilities/HubConnect.hpp
 ./src/Utilities/GateLatch.hpp
@@ -216,6 +218,7 @@
 ./src/Hardware/VCMCReceiver.cpp
 ./src/Hardware/MidiBusModule.cpp
 ./src/Hardware/DoepferQuad.cpp
+./src/Synths/Boilerplate.cpp
 ./src/Synths/MeshStack.cpp
 ./src/Synths/WavPlayer.cpp
 ./src/Synths/SixPack.cpp

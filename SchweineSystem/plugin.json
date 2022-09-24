@@ -269,6 +269,12 @@
          "name": "SixPack",
          "description": "",
          "tags": []
+      },
+      {
+         "slug": "Boilerplate",
+         "name": "Boilerplate",
+         "description": "",
+         "tags": []
       }
    ]
 }

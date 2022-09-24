@@ -350,12 +350,12 @@ void Nosferatu::Vampyre::load(const Svin::Json::Object& rootObject)
       for (uint8_t index = 0; index < 8; index++)
       {
          const std::string segmentKey = "s" + Text::pad(std::to_string(index), 2);
-         Svin::Json::Object segmentObject = bankObject.get(segmentKey).toObject();
+         Svin::Json::Array segmentArray = bankObject.get(segmentKey).toArray();
 
-         currentBank.segments[index].pitch = segmentObject.get("pitch").toInt();
-         currentBank.segments[index].ticks = segmentObject.get("ticks").toInt();
-         currentBank.segments[index].length = segmentObject.get("length").toReal();
-         currentBank.segments[index].chance = segmentObject.get("chance").toReal();
+         currentBank.segments[index].pitch = segmentArray.at(0).toInt();
+         currentBank.segments[index].ticks = segmentArray.at(1).toInt();
+         currentBank.segments[index].length = segmentArray.at(2).toReal();
+         currentBank.segments[index].chance = segmentArray.at(3).toReal();
       }
    }
 
@@ -381,14 +381,14 @@ void Nosferatu::Vampyre::save(Svin::Json::Object& rootObject)
 
       for (uint8_t index = 0; index < 16; index++)
       {
-         Svin::Json::Object segmentObject;
-         segmentObject.set("pitch", currentBank.segments[index].pitch);
-         segmentObject.set("ticks", currentBank.segments[index].ticks);
-         segmentObject.set("length", currentBank.segments[index].length);
-         segmentObject.set("chance", currentBank.segments[index].chance);
+         Svin::Json::Array segmentArray;
+         segmentArray.append(currentBank.segments[index].pitch);
+         segmentArray.append(currentBank.segments[index].ticks);
+         segmentArray.append(currentBank.segments[index].length);
+         segmentArray.append(currentBank.segments[index].chance);
 
          const std::string segmentKey = "s" + Text::pad(std::to_string(index), 2);
-         bankObject.set(segmentKey, segmentObject);
+         bankObject.set(segmentKey, segmentArray);
       }
 
       const std::string bankKey = "b" + Text::pad(std::to_string(bankIndex), 2);

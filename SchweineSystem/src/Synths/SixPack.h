@@ -30,6 +30,11 @@ public:
 private:
    inline void setup();
 
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
+
+   void onSampleRateChange(const SampleRateChangeEvent& event) override;
+
 private:
    Svin::Knob::List panValueList;
    Svin::Knob::List panAttenuateList;
@@ -51,6 +56,7 @@ private:
 
    Svin::Input syncInput;
    Svin::Input fmInput;
+   Svin::Knob fmAttenutate;
 
    Svin::Input pitchInput;
    Svin::Knob pitchKnob;

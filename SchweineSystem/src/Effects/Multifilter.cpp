@@ -74,8 +74,13 @@ Multifilter::Multifilter()
    resoKnob.setRange(0.0, 1.0);
    driveKnob.setRange(0.0, 1.0);
    quantizeButton.setDefaultColor(Svin::Color{0, 0, 255});
-   modeSlider.setRange(0.0, 4.0);
+
+   offsetKnob.setRange(-2.0, 2.0, 0.0);
+
+   modeSlider.setRange(0.0, 5.0);
    modeSlider.enableSteps(true);
+   modeSlider.setDefaultColor(Svin::Color{255, 255, 0});
+   modeSlider.setOn();
 
    reinit();
 }

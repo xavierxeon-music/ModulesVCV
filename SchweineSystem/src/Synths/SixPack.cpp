@@ -19,6 +19,7 @@ SixPack::SixPack()
    , detuneModLFO{}
    , syncInput(this, Panel::Sync)
    , fmInput(this, Panel::FM)
+   , fmAttenutate(this, Panel::FMAttenuate)
    , pitchInput(this, Panel::Pitch)
    , pitchKnob(this, Panel::Offset)
    , oscilator{}
@@ -98,6 +99,7 @@ SixPack::SixPack()
    sawTable.setWaveform(Standard::Waveform::Saw);
    squareTable.setWaveform(Standard::Waveform::Square);
 
+   fmAttenutate.setRange(-1.0, 1.0, 0.0);
    pitchKnob.setRange(0.0, 5.0);
    coreOscilator.init(&squareTable, getSampleRate());
 
@@ -124,12 +126,21 @@ SixPack::SixPack()
 
 void SixPack::process(const ProcessArgs& args)
 {
+   if (syncInput.isTriggered())
+   {
+      coreOscilator.reset();
+      for (uint8_t voice = 0; voice < 6; voice++)
+         oscilator[voice].reset();
+   }
+
    const float pitchVoltage = pitchInput.getVoltage() + pitchKnob.getValue();
    const float coreFrequency = Abstract::Oscilator::frequencyFromCV(pitchVoltage);
 
    coreOscilator.setFrequency(coreFrequency);
    const float core = coreOscilator.createSound();
    coreOutput.setVoltage(core * 10.0);
+
+   float fmVoltage = fmInput.getVoltage() * fmAttenutate.getValue();
 
    float left = 0.0;
    float right = 0.0;
@@ -168,7 +179,7 @@ void SixPack::process(const ProcessArgs& args)
          detuneModLFO[voice].setFrequency(detunePitchList[voice]->getValue());
          detune += detuneModLFO[voice].createSound() * detuneAttenuateList[voice]->getValue();
       }
-      const float voltage = pitchVoltage + detune;
+      const float voltage = pitchVoltage + detune + fmVoltage;
       const float frequency = Abstract::Oscilator::frequencyFromCV(voltage);
       oscilator[voice].setFrequency(frequency);
 
@@ -185,6 +196,99 @@ void SixPack::process(const ProcessArgs& args)
    stereoOutput.setVoltage(right * 10.0, 1);
 }
 
+void SixPack::load(const Svin::Json::Object& rootObject)
+{
+   pitchKnob.setValue(rootObject.get("offset").toReal());
+   fmAttenutate.setValue(rootObject.get("fmAttenuate").toReal());
+
+   const Svin::Json::Object panObject = rootObject.get("pan").toObject();
+   const Svin::Json::Array panValueArray = panObject.get("value").toArray();
+   const Svin::Json::Array panAttenuateArray = panObject.get("attenuate").toArray();
+   const Svin::Json::Array panPitchArray = panObject.get("pitch").toArray();
+
+   const Svin::Json::Object phaseObject = rootObject.get("phase").toObject();
+   const Svin::Json::Array phaseValueArray = phaseObject.get("value").toArray();
+   const Svin::Json::Array phaseAttenuateArray = phaseObject.get("attenuate").toArray();
+   const Svin::Json::Array phasePitchArray = phaseObject.get("pitch").toArray();
+
+   const Svin::Json::Object detuneObject = rootObject.get("detune").toObject();
+   const Svin::Json::Array detuneValueArray = detuneObject.get("value").toArray();
+   const Svin::Json::Array detuneAttenuateArray = detuneObject.get("attenuate").toArray();
+   const Svin::Json::Array detunePitchArray = detuneObject.get("pitch").toArray();
+
+   for (uint8_t voice = 0; voice < 6; voice++)
+   {
+      panValueList[voice]->setValue(panValueArray.at(voice).toReal());
+      panAttenuateList[voice]->setValue(panAttenuateArray.at(voice).toReal());
+      panPitchList[voice]->setValue(panPitchArray.at(voice).toReal());
+
+      phaseValueList[voice]->setValue(phaseValueArray.at(voice).toReal());
+      phaseAttenuateList[voice]->setValue(phaseAttenuateArray.at(voice).toReal());
+      phasePitchList[voice]->setValue(phasePitchArray.at(voice).toReal());
+
+      detuneValueList[voice]->setValue(detuneValueArray.at(voice).toReal());
+      detuneAttenuateList[voice]->setValue(detuneAttenuateArray.at(voice).toReal());
+      detunePitchList[voice]->setValue(detunePitchArray.at(voice).toReal());
+   }
+}
+
+void SixPack::save(Svin::Json::Object& rootObject)
+{
+   Svin::Json::Array panValueArray;
+   Svin::Json::Array panAttenuateArray;
+   Svin::Json::Array panPitchArray;
+
+   Svin::Json::Array phaseValueArray;
+   Svin::Json::Array phaseAttenuateArray;
+   Svin::Json::Array phasePitchArray;
+
+   Svin::Json::Array detuneValueArray;
+   Svin::Json::Array detuneAttenuateArray;
+   Svin::Json::Array detunePitchArray;
+
+   for (uint8_t voice = 0; voice < 6; voice++)
+   {
+      panValueArray.append(panValueList[voice]->getValue());
+      panAttenuateArray.append(panAttenuateList[voice]->getValue());
+      panPitchArray.append(panPitchList[voice]->getValue());
+
+      phaseValueArray.append(phaseValueList[voice]->getValue());
+      phaseAttenuateArray.append(phaseAttenuateList[voice]->getValue());
+      phasePitchArray.append(phasePitchList[voice]->getValue());
+
+      detuneValueArray.append(detuneValueList[voice]->getValue());
+      detuneAttenuateArray.append(detuneAttenuateList[voice]->getValue());
+      detunePitchArray.append(detunePitchList[voice]->getValue());
+   }
+
+   Svin::Json::Object panObject;
+   panObject.set("value", panValueArray);
+   panObject.set("attenuate", panAttenuateArray);
+   panObject.set("pitch", panPitchArray);
+
+   Svin::Json::Object phaseObject;
+   phaseObject.set("value", phaseValueArray);
+   phaseObject.set("attenuate", phaseAttenuateArray);
+   phaseObject.set("pitch", phasePitchArray);
+
+   Svin::Json::Object detuneObject;
+   detuneObject.set("value", detuneValueArray);
+   detuneObject.set("attenuate", detuneAttenuateArray);
+   detuneObject.set("pitch", detunePitchArray);
+
+   rootObject.set("offset", pitchKnob.getValue());
+   rootObject.set("fmAttenuate", fmAttenutate.getValue());
+   rootObject.set("pan", panObject);
+   rootObject.set("phase", phaseObject);
+   rootObject.set("detune", detuneObject);
+}
+
+void SixPack::onSampleRateChange(const SampleRateChangeEvent& event)
+{
+   const float sampleRate = event.sampleRate;
+   for (uint8_t voice = 0; voice < 6; voice++)
+      oscilator[voice].init(&sawTable, sampleRate);
+}
 
 // widget
 

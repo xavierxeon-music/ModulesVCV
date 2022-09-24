@@ -15,7 +15,7 @@ namespace Svin
 
       void draw(const DrawArgs& args) override
       {
-         NVGcolor baseColor = nvgRGB(230, 230, 235);
+         NVGcolor baseColor = nvgRGB(230, 232, 235);
 
          nvgBeginPath(args.vg);
          nvgFillColor(args.vg, baseColor);
@@ -36,7 +36,7 @@ namespace Svin
       void draw(const DrawArgs& args) override
       {
          nvgBeginPath(args.vg);
-         NVGcolor frameColor = nvgRGB(50, 50, 70);
+         NVGcolor frameColor = nvgRGB(150, 150, 170);
 
          static const uint8_t padding = 2;
 
