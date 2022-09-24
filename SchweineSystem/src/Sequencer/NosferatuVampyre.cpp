@@ -121,6 +121,8 @@ Nosferatu::Vampyre::Vampyre()
 
    offsetKnob.setRange(0.0, 11.0);
    offsetKnob.enableSteps(true);
+
+   bankChange();
 }
 
 void Nosferatu::Vampyre::process(const ProcessArgs& args)
@@ -335,6 +337,8 @@ void Nosferatu::Vampyre::updateSegment()
 
 void Nosferatu::Vampyre::load(const Svin::Json::Object& rootObject)
 {
+   return;
+
    bankIndex = rootObject.get("currentBank").toInt();
 
    for (uint8_t bankIndex = 0; bankIndex < 16; bankIndex++)

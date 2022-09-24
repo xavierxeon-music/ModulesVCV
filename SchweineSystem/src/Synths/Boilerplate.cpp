@@ -9,6 +9,7 @@ Boilerplate::Boilerplate()
    , pitchInput(this, Panel::Pitch)
    , pitchKnob(this, Panel::Offset)
    , output(this, Panel::Out)
+   , stallZeroButton(this, Panel::StallZero, Panel::RGB_StallZero)
    , oscilator{}
    , table()
 {
@@ -22,12 +23,17 @@ Boilerplate::Boilerplate()
    fmAttenutate.setRange(-1.0, 1.0, 0.0);
    pitchKnob.setRange(0.0, 5.0);
 
+   stallZeroButton.setDefaultColor(Svin::Color{0, 0, 255});
+   stallZeroButton.setOff();
+
    for (uint8_t voice = 0; voice < 16; voice++)
       oscilator[voice].init(&table, getSampleRate());
 }
 
 void Boilerplate::process(const ProcessArgs& args)
 {
+   stallZeroButton.setActive(stallZeroButton.isLatched());
+
    const Standard::Waveform::Shape shape = static_cast<Standard::Waveform::Shape>(shapeSlider.getValue());
    table.setWaveform(shape);
 
@@ -46,8 +52,15 @@ void Boilerplate::process(const ProcessArgs& args)
    {
       const float pitchVoltage = pitchInput.getVoltage(voice) + pitchKnob.getValue();
       const float voltage = pitchVoltage + fmVoltage;
-      const float frequency = Abstract::Oscilator::frequencyFromCV(voltage);
-      oscilator[voice].setFrequency(frequency);
+      if (0 == voltage && stallZeroButton.isLatched())
+      {
+         oscilator[voice].setFrequency(0.0);
+      }
+      else
+      {
+         const float frequency = Abstract::Oscilator::frequencyFromCV(voltage);
+         oscilator[voice].setFrequency(frequency);
+      }
 
       value += oscilator[voice].createSound();
    }
@@ -60,6 +73,7 @@ void Boilerplate::load(const Svin::Json::Object& rootObject)
    shapeSlider.setValue(rootObject.get("shape").toReal());
    pitchKnob.setValue(rootObject.get("offset").toReal());
    fmAttenutate.setValue(rootObject.get("fmAttenuate").toReal());
+   stallZeroButton.setLatched(rootObject.get("stallZero").toBool());
 }
 
 void Boilerplate::save(Svin::Json::Object& rootObject)
@@ -67,6 +81,7 @@ void Boilerplate::save(Svin::Json::Object& rootObject)
    rootObject.set("shape", shapeSlider.getValue());
    rootObject.set("offset", pitchKnob.getValue());
    rootObject.set("fmAttenuate", fmAttenutate.getValue());
+   rootObject.set("stallZero", stallZeroButton.isLatched());
 }
 
 void Boilerplate::onSampleRateChange(const SampleRateChangeEvent& event)

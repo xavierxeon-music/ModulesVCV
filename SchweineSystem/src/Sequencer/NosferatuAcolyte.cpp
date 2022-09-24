@@ -101,6 +101,8 @@ Nosferatu::Acolyte::Acolyte()
    }
 
    display.setColor(Svin::Color{255, 255, 0});
+
+   bankChange();
 }
 
 void Nosferatu::Acolyte::process(const ProcessArgs& args)

@@ -10,6 +10,7 @@ using namespace rack;
 #include <Sound/StandardTable.h>
 #include <Sound/WaveTableOscilator.h>
 
+#include <SvinButtonLED.h>
 #include <SvinInput.h>
 #include <SvinKnob.h>
 #include <SvinOutput.h>
@@ -45,6 +46,7 @@ private:
    Svin::Knob pitchKnob;
 
    Svin::Output output;
+   Svin::ButtonLED stallZeroButton;
    WaveTable::Oscilator oscilator[16];
    Standard::Table table;
 };

@@ -108,15 +108,6 @@
          ]
       },
       {
-         "slug": "Revoicer",
-         "name": "Revoicer",
-         "description": "",
-         "tags": [
-            "Noise",
-            "Effect"
-         ]
-      },
-      {
          "slug": "WavPlayer",
          "name": "Wav Player",
          "description": "Play WAV files",
@@ -280,6 +271,14 @@
          "tags": [
             "Filter",
             "Polyphonic"
+         ]
+      },
+      {
+         "slug": "Extract",
+         "name": "Extract",
+         "description": "Exract pitch from audio",
+         "tags": [
+            "Utility"
          ]
       }
    ]

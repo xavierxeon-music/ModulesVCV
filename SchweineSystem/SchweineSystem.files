@@ -24,6 +24,7 @@
 ./src/Utilities/RemoteScript.h
 ./src/Utilities/HubConnect.h
 ./src/Utilities/Mapper.h
+./src/Utilities/Extract.h
 ./src/Utilities/GateLatch.h
 ./src/Sequencer/NosferatuAcolyte.h
 ./src/Sequencer/NosferatuVampyre.h
@@ -40,7 +41,6 @@
 ./src/BitBus/BitBusCVOut.h
 ./src/BitBus/BitBusNegate.h
 ./src/Effects/Multifilter.h
-./src/Effects/Revoicer.h
 ./src/_Base/SvinModule.h
 ./src/_Base/SvinMessage.h
 ./src/_Base/SvinRenderInstruction.h
@@ -91,7 +91,6 @@
 ./src/_MusicTools/Include/Midi/MidiCommon.h
 ./src/_MusicTools/Include/Midi/MidiTargetFlameCC.h
 ./src/_MusicTools/Include/MusicTools.h
-./src/_MusicTools/Include/Effect/Revoice.h
 ./src/_MusicTools/Include/Effect/StateVariableFilter.h
 ./src/_MusicTools/Include/Effect/Compressor.h
 ./src/_MusicTools/Include/Maths.h
@@ -129,6 +128,7 @@
 ./src/Synths/WavPlayer.hpp
 ./src/Synths/Boilerplate.hpp
 ./src/_Gui/SvinDisplayOLED.hpp
+./src/Utilities/Extract.hpp
 ./src/Utilities/HubConnect.hpp
 ./src/Utilities/GateLatch.hpp
 ./src/Utilities/RemoteScript.hpp
@@ -147,7 +147,6 @@
 ./src/BitBus/BitBusRandomWalk.hpp
 ./src/BitBus/BitBusBitIn.hpp
 ./src/Effects/Multifilter.hpp
-./src/Effects/Revoicer.hpp
 ./src/_Base/SvinMessage.hpp
 ./src/_Base/SvinOrigin.hpp
 ./src/_Base/SvinMessageSubscriber.hpp
@@ -169,7 +168,6 @@
 ./src/_MusicTools/RememberDummy/Remember.hpp
 ./src/_MusicTools/RememberDummy/RememberArray.hpp
 ./src/_MusicTools/BioFeedbackDummy.hpp
-./src/_MusicTools/Revoice.hpp
 ./src/_MusicTools/Counter.hpp
 ./src/_MusicTools/MidiInterfaceInput.hpp
 ./src/_MusicTools/Tempo.hpp
@@ -237,6 +235,7 @@
 ./src/Utilities/Mapper.cpp
 ./src/Utilities/RemoteScript.cpp
 ./src/Utilities/GateLatch.cpp
+./src/Utilities/Extract.cpp
 ./src/Utilities/HubConnect.cpp
 ./src/Sequencer/NosferatuVampyre.cpp
 ./src/Sequencer/MidiCV.cpp
@@ -252,7 +251,6 @@
 ./src/BitBus/BitBusMeterAndFreeze.cpp
 ./src/BitBus/BitBusCommon.cpp
 ./src/BitBus/BitBusBitOut.cpp
-./src/Effects/Revoicer.cpp
 ./src/Effects/Multifilter.cpp
 ./src/_Base/SvinModule.cpp
 ./src/_Base/SvinJson.cpp
