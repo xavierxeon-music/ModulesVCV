@@ -280,6 +280,14 @@
          "tags": [
             "Utility"
          ]
+      },
+      {
+         "slug": "Cutoff",
+         "name": "Cutoff",
+         "description": "Zero voltages below threshold",
+         "tags": [
+            "Utility"
+         ]
       }
    ]
 }

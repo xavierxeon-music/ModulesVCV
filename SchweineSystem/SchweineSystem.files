@@ -26,6 +26,7 @@
 ./src/Utilities/Mapper.h
 ./src/Utilities/Extract.h
 ./src/Utilities/GateLatch.h
+./src/Utilities/Cutoff.h
 ./src/Sequencer/NosferatuAcolyte.h
 ./src/Sequencer/NosferatuVampyre.h
 ./src/Sequencer/MidiCV.h
@@ -132,6 +133,7 @@
 ./src/Utilities/HubConnect.hpp
 ./src/Utilities/GateLatch.hpp
 ./src/Utilities/RemoteScript.hpp
+./src/Utilities/Cutoff.hpp
 ./src/Utilities/Mapper.hpp
 ./src/Sequencer/MidiReplay.hpp
 ./src/Sequencer/TrackerWorker.hpp
@@ -234,6 +236,7 @@
 ./src/_Gui/SvinDisplayLCD.cpp
 ./src/Utilities/Mapper.cpp
 ./src/Utilities/RemoteScript.cpp
+./src/Utilities/Cutoff.cpp
 ./src/Utilities/GateLatch.cpp
 ./src/Utilities/Extract.cpp
 ./src/Utilities/HubConnect.cpp
