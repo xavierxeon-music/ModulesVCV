@@ -16,7 +16,7 @@ BitBus::MeterAndFreeze::MeterAndFreeze()
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
-   registerAsBusModule<Message>();
+   registerAsBusModule<Data>();
 
    lightList.append({Panel::RGB_Bit8_Status1,
                      Panel::RGB_Bit7_Status1,
@@ -56,31 +56,31 @@ void BitBus::MeterAndFreeze::save(Svin::Json::Object& rootObject)
 
 void BitBus::MeterAndFreeze::process(const ProcessArgs& args)
 {
-   if (busModule<Message>(Side::Right))
+   if (busModule<Data>(Side::Right))
       busOutIndicator.setOn();
    else
       busOutIndicator.setOff();
 
-   if (!busModule<Message>(Side::Left))
+   if (!busModule<Data>(Side::Left))
       busInIndicator.setOff();
    else
       busInIndicator.setOn();
 
-   if (!busModule<Message>(Side::Left) && !busModule<Message>(Side::Right))
+   if (!busModule<Data>(Side::Left) && !busModule<Data>(Side::Right))
       return;
 
-   Message message = getBusMessage<Message>(Side::Left);
+   Data data = getBusData<Data>(Side::Left);
 
    const bool freezeMode = freezeButton.isLatched();
    freezeButton.setActive(freezeMode);
 
    const bool sample = sampleButton.isLatched();
-   for (uint8_t channel = 0; channel < message.channelCount; channel++)
+   for (uint8_t channel = 0; channel < data.channelCount; channel++)
    {
       if (!freezeMode || (freezeMode && sample))
-         freezeBuffer[channel] = message.byte[channel];
+         freezeBuffer[channel] = data.byte[channel];
 
-      message.byte[channel] = freezeBuffer[channel];
+      data.byte[channel] = freezeBuffer[channel];
    }
 
    for (uint8_t index = 0; index < 8; index++)
@@ -89,7 +89,7 @@ void BitBus::MeterAndFreeze::process(const ProcessArgs& args)
       lightList[index]->setActive(value);
    }
 
-   sendBusMessage<Message>(Side::Right, message);
+   sendBusData<Data>(Side::Right, data);
 }
 
 // widget

@@ -3,10 +3,11 @@
 #include <Tools/Text.h>
 #include <Tools/Variable.h>
 
+#include "NosferatuAcolyte.h"
+
 Nosferatu::Vampyre::Vampyre()
    : Svin::Module()
    , Svin::MasterClock::Client()
-   , Svin::Message<Bank>::Subscriber(this)
    // operation
    , banks{}
    , bankIndex(0)
@@ -160,7 +161,6 @@ void Nosferatu::Vampyre::process(const ProcessArgs& args)
    }
 
    firstOutput.setActive(0 == currentSegmentIndex);
-   processMessageBuffer();
 
    const Segment& currentSegment = currentBank.segments[currentSegmentIndex];
 
@@ -284,6 +284,13 @@ void Nosferatu::Vampyre::updateDisplays()
       const Note note = Note::fromMidi(noteBaseValue + displayValue);
       displayController.setText(note.name);
    }
+
+   /*
+   Acolyte* lastExpanderModule = findLastBusModule<Nosferatu::Bus, Acolyte>(Side::Right, true);
+   uint8_t counter = indexOfBusModule<Nosferatu::Bus>(Side::Right, lastExpanderModule);
+
+   displayController.setText(std::to_string(counter));
+   */
 }
 
 void Nosferatu::Vampyre::bankChange()
@@ -313,7 +320,7 @@ void Nosferatu::Vampyre::bankChange()
 
    Nosferatu::Bus message;
    message.bankIndex = bankIndex;
-   sendBusMessage(Side::Right, message);
+   sendBusData<Nosferatu::Bus>(Side::Right, message);
 }
 
 void Nosferatu::Vampyre::setDisplay(const DisplayType newType, const uint8_t value)
@@ -398,30 +405,6 @@ void Nosferatu::Vampyre::save(Svin::Json::Object& rootObject)
       const std::string bankKey = "b" + Text::pad(std::to_string(bankIndex), 2);
       rootObject.set(bankKey, bankObject);
    }
-}
-
-void Nosferatu::Vampyre::receiveMessage(const Bank& bank, Module* sender)
-{
-   auto findSender = [&]() -> uint8_t
-   {
-      uint8_t counter = 0;
-      Module* module = nullptr;
-
-      for (module = busModule<Nosferatu::Bus>(Side::Right); module != nullptr; module = module->busModule<Nosferatu::Bus>(Side::Right))
-      {
-         counter++;
-         if (module == sender)
-            return counter;
-      }
-
-      return 0;
-   };
-
-   uint8_t counter = findSender();
-   if (0 == counter)
-      return;
-
-   std::cout << (uint16_t)bank.maxActive << " " << (uint16_t)counter << std::endl;
 }
 
 // widget

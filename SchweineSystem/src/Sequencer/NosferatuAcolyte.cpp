@@ -4,7 +4,6 @@
 
 Nosferatu::Acolyte::Acolyte()
    : Svin::Module()
-   , Svin::Message<Bank>::Publisher(this)
    // operation
    , banks{}
    , bankIndex(0)
@@ -107,26 +106,16 @@ Nosferatu::Acolyte::Acolyte()
 
 void Nosferatu::Acolyte::process(const ProcessArgs& args)
 {
-   const Nosferatu::Bus message = getBusMessage<Nosferatu::Bus>(Side::Left);
+   const Nosferatu::Bus message = getBusData<Nosferatu::Bus>(Side::Left);
    if (message.bankIndex != bankIndex)
    {
       bankIndex = message.bankIndex;
       bankChange();
    }
-   sendBusMessage(Side::Right, message);
+   sendBusData<Nosferatu::Bus>(Side::Right, message);
 
-   uint8_t counter = 0;
-   Module* module = nullptr;
-
-   for (module = busModule<Nosferatu::Bus>(Side::Left); module != nullptr; module = module->busModule<Nosferatu::Bus>(Side::Left))
-   {
-      counter++;
-      if (dynamic_cast<Vampyre*>(module))
-         break;
-   }
-   if (!module)
-      counter = 0;
-
+   Vampyre* mainModule = findFirstBusModule<Nosferatu::Bus, Vampyre>(Side::Left);
+   uint8_t counter = indexOfBusModule<Nosferatu::Bus>(Side::Left, mainModule);
    display.setText(std::to_string(counter));
 
    Bank& currentBank = banks[bankIndex];
@@ -135,7 +124,7 @@ void Nosferatu::Acolyte::process(const ProcessArgs& args)
       if (activeButtonList[index]->isTriggered())
       {
          currentBank.maxActive = index + 1;
-         publishMessage(currentBank);
+         //publishMessage(currentBank);
       }
    }
 }

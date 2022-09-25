@@ -23,7 +23,7 @@ BitBus::RandomWalk::RandomWalk()
    , tables{}
 {
    setup();
-   registerAsBusModule<Message>();
+   registerAsBusModule<Data>();
 
    displayController.setColor(Svin::Color{255, 255, 0});
    mixSlider.setDefaultColor(Svin::Color{255, 255, 0});
@@ -79,12 +79,12 @@ void BitBus::RandomWalk::save(Svin::Json::Object& rootObject)
 
 void BitBus::RandomWalk::process(const ProcessArgs& args)
 {
-   if (!busModule<Message>(Side::Left))
+   if (!busModule<Data>(Side::Left))
       return busInIndicator.setOff();
    else
       busInIndicator.setOn();
 
-   if (!busModule<Message>(Side::Right))
+   if (!busModule<Data>(Side::Right))
       return busOutIndicator.setOff();
    else
       busOutIndicator.setOn();
@@ -111,11 +111,11 @@ void BitBus::RandomWalk::process(const ProcessArgs& args)
    mixSlider.setBrightness(mix);
    displayController.setText(std::to_string(seed));
 
-   Message message = getBusMessage<Message>(Side::Left);
+   Data data = getBusData<Data>(Side::Left);
 
-   for (uint8_t channel = 0; channel < message.channelCount; channel++)
+   for (uint8_t channel = 0; channel < data.channelCount; channel++)
    {
-      const uint8_t valueIn = message.byte[channel];
+      const uint8_t valueIn = data.byte[channel];
       uint8_t valueOut = tables[seed][valueIn];
       if (seedCount != seed + 1)
       {
@@ -127,10 +127,10 @@ void BitBus::RandomWalk::process(const ProcessArgs& args)
          valueOut = static_cast<uint8_t>(valueMix);
       }
 
-      message.byte[channel] = valueOut;
+      data.byte[channel] = valueOut;
    }
 
-   sendBusMessage<Message>(Side::Right, message);
+   sendBusData<Data>(Side::Right, data);
 }
 
 // widget

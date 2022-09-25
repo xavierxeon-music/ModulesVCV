@@ -12,7 +12,7 @@ BitBus::BitIn::BitIn()
 
 {
    setup();
-   registerAsBusModule<Message>();
+   registerAsBusModule<Data>();
 
    inputList.append({Panel::BitIn8, Panel::BitIn7, Panel::BitIn6, Panel::BitIn5, Panel::BitIn4, Panel::BitIn3, Panel::BitIn2, Panel::BitIn1});
 }
@@ -23,20 +23,20 @@ BitBus::BitIn::~BitIn()
 
 void BitBus::BitIn::process(const ProcessArgs& args)
 {
-   Message message;
+   Data data;
 
-   if (busModule<Message>(Side::Left))
+   if (busModule<Data>(Side::Left))
    {
       busInIndicator.setOn();
-      message = getBusMessage<Message>(Side::Left);
+      data = getBusData<Data>(Side::Left);
    }
    else
    {
       busInIndicator.setOff();
-      message.channelCount = inputList[0]->getNumberOfChannels();
+      data.channelCount = inputList[0]->getNumberOfChannels();
    }
 
-   if (!busModule<Message>(Side::Right))
+   if (!busModule<Data>(Side::Right))
    {
       busOutIndicator.setOff();
       return;
@@ -47,9 +47,9 @@ void BitBus::BitIn::process(const ProcessArgs& args)
    }
 
    // sound
-   for (uint8_t channel = 0; channel < message.channelCount; channel++)
+   for (uint8_t channel = 0; channel < data.channelCount; channel++)
    {
-      BoolField8 boolField = message.byte[channel];
+      BoolField8 boolField = data.byte[channel];
       for (uint8_t index = 0; index < 8; index++)
       {
          if (!inputList[index]->isConnected())
@@ -58,13 +58,13 @@ void BitBus::BitIn::process(const ProcessArgs& args)
          const bool value = (inputList[index]->getVoltage() > 3.0);
          boolField.set(index, value);
       }
-      message.byte[channel] = boolField;
+      data.byte[channel] = boolField;
 
-      sendBusMessage<Message>(Side::Right, message);
+      sendBusData<Data>(Side::Right, data);
    }
 
-   if (busModule<Message>(Side::Right))
-      sendBusMessage<Message>(Side::Right, message);
+   if (busModule<Data>(Side::Right))
+      sendBusData<Data>(Side::Right, data);
 }
 
 // widget

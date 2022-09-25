@@ -60,8 +60,8 @@ struct ScionExciter::Panel
 
    enum OutputId
    {
-      Master_Base_Out = 0,
-      Master_Exciter_Out = 1,
+      Master_Exciter_Out = 0,
+      Master_Base_Out = 1,
       OUTPUTS_LEN = 2
    };
 
@@ -112,8 +112,8 @@ void ScionExciter::setup()
    configInput(Panel::Base1_Amplitude2_Modulate, "Base1_Amplitude2_Modulate");
    configInput(Panel::Base1_Pitch_Modulate, "Base1_Pitch_Modulate");
 
-   configOutput(Panel::Master_Base_Out, "Master_Base_Out");
    configOutput(Panel::Master_Exciter_Out, "Master_Exciter_Out");
+   configOutput(Panel::Master_Base_Out, "Master_Base_Out");
 }
 
 void ScionExciterWidget::setup()
@@ -147,8 +147,8 @@ void ScionExciterWidget::setup()
    makeInput(this, Vec(136.00, 106.00),  ScionExciter::Panel::Base1_Amplitude2_Modulate, false);
    makeInput(this, Vec(59.17, 106.00),  ScionExciter::Panel::Base1_Pitch_Modulate, false);
 
-   makeOutput(this, Vec(125.83, 355.83), ScionExciter::Panel::Master_Base_Out, false);
-   makeOutput(this, Vec(64.94, 355.83), ScionExciter::Panel::Master_Exciter_Out, false);
+   makeOutput(this, Vec(136.17, 355.83), ScionExciter::Panel::Master_Exciter_Out, false);
+   makeOutput(this, Vec(58.44, 355.83), ScionExciter::Panel::Master_Base_Out, false);
 }
 
 #endif // NOT ScionExciterHPP

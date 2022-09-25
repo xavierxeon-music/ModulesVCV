@@ -5,14 +5,14 @@
 
 namespace BitBus
 {
-   struct Message
+   struct Data
    {
       uint8_t byte[16];
       uint8_t channelCount;
 
-      Message();
-      Message(const Message& other);
-      Message& operator=(const Message& other);
+      Data();
+      Data(const Data& other);
+      Data& operator=(const Data& other);
    };
 } // namespace BitBus
 

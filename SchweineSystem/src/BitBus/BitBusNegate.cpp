@@ -12,7 +12,7 @@ BitBus::Negate::Negate()
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
-   registerAsBusModule<Message>();
+   registerAsBusModule<Data>();
 
    latchList.append({{Panel::Bit8_GateIn, Panel::RGB_Bit8_Latch},
                      {Panel::Bit7_Latch, Panel::RGB_Bit7_Latch},
@@ -64,24 +64,24 @@ void BitBus::Negate::save(Svin::Json::Object& rootObject)
 
 void BitBus::Negate::process(const ProcessArgs& args)
 {
-   if (!busModule<Message>(Side::Right))
+   if (!busModule<Data>(Side::Right))
       busOutIndicator.setOff();
    else
       busOutIndicator.setOn();
 
-   if (!busModule<Message>(Side::Left))
+   if (!busModule<Data>(Side::Left))
       busInIndicator.setOff();
    else
       busInIndicator.setOn();
 
-   if (!busModule<Message>(Side::Right) || !busModule<Message>(Side::Left))
+   if (!busModule<Data>(Side::Right) || !busModule<Data>(Side::Left))
       return;
 
-   Message message = getBusMessage<Message>(Side::Left);
+   Data data = getBusData<Data>(Side::Left);
 
-   for (uint8_t channel = 0; channel < message.channelCount; channel++)
+   for (uint8_t channel = 0; channel < data.channelCount; channel++)
    {
-      BoolField8 boolField = message.byte[channel];
+      BoolField8 boolField = data.byte[channel];
       for (uint8_t index = 0; index < 8; index++)
       {
          const bool active = latchList[index]->isLatched();
@@ -90,10 +90,10 @@ void BitBus::Negate::process(const ProcessArgs& args)
          if (active) // negate value
             boolField.flip(index);
       }
-      message.byte[channel] = boolField;
+      data.byte[channel] = boolField;
    }
 
-   sendBusMessage<Message>(Side::Right, message);
+   sendBusData<Data>(Side::Right, data);
 }
 
 // widget

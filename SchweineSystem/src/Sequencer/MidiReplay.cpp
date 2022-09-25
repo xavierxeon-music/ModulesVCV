@@ -99,7 +99,7 @@ void MidiReplay::process(const ProcessArgs& args)
    busMessage.runState = tempo.getRunState();
    if (!tempo.isRunningOrFirstTick())
    {
-      sendBusMessage<MidiBus>(Side::Right, busMessage);
+      sendBusData<MidiBus>(Side::Right, busMessage);
       return;
    }
 
@@ -141,7 +141,7 @@ void MidiReplay::process(const ProcessArgs& args)
 
       lastTick = currentTick;
    }
-   sendBusMessage<MidiBus>(Side::Right, busMessage);
+   sendBusData<MidiBus>(Side::Right, busMessage);
 }
 
 void MidiReplay::updateDisplays()

@@ -17,7 +17,7 @@ BitBus::Counter::Counter()
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
-   registerAsBusModule<Message>();
+   registerAsBusModule<Data>();
 
    bitIndicatorList.append({Panel::RGB_Bit8_Indicator,
                             Panel::RGB_Bit7_Indicator,
@@ -76,7 +76,7 @@ void BitBus::Counter::process(const ProcessArgs& args)
 
    counterController.setText(std::to_string(counter));
 
-   if (!busModule<Message>(Side::Right))
+   if (!busModule<Data>(Side::Right))
    {
       busOutIndicator.setOff();
       return;
@@ -90,10 +90,10 @@ void BitBus::Counter::process(const ProcessArgs& args)
    for (uint8_t index = 0; index < 8; index++)
       bitIndicatorList[index]->setActive(boolField.get(index));
 
-   Message message;
-   message.byte[0] = counter;
+   Data data;
+   data.byte[0] = counter;
 
-   sendBusMessage<Message>(Side::Right, message);
+   sendBusData<Data>(Side::Right, data);
 }
 
 // widget

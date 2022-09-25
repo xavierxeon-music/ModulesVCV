@@ -4,49 +4,49 @@
 #include "SvinModule.h"
 
 // bus
-template <typename MessageType>
-typename Svin::Module::Bus<MessageType>* Svin::Module::Bus<MessageType>::me = nullptr;
+template <typename DataType>
+typename Svin::Module::Bus<DataType>* Svin::Module::Bus<DataType>::me = nullptr;
 
-template <typename MessageType>
-Svin::Module::Bus<MessageType>::Bus()
+template <typename DataType>
+Svin::Module::Bus<DataType>::Bus()
    : BusAbstract()
 {
    busList.push_back(this);
 }
 
-template <typename MessageType>
-Svin::Module::Bus<MessageType>* Svin::Module::Bus<MessageType>::the()
+template <typename DataType>
+Svin::Module::Bus<DataType>* Svin::Module::Bus<DataType>::the()
 {
    if (!me)
-      me = new Bus<MessageType>();
+      me = new Bus<DataType>();
 
    return me;
 }
 
-template <typename MessageType>
-void Svin::Module::Bus<MessageType>::append(Module* module)
+template <typename DataType>
+void Svin::Module::Bus<DataType>::append(Module* module)
 {
-   instanceList.push_back(module);
+   instanceMap[module] = typename Message<DataType>::List();
 }
 
-template <typename MessageType>
-bool Svin::Module::Bus<MessageType>::contains(Module* module)
+template <typename DataType>
+bool Svin::Module::Bus<DataType>::contains(Module* module)
 {
-   if (std::find(instanceList.cbegin(), instanceList.cend(), module) == instanceList.cend())
+   if (instanceMap.find(module) == instanceMap.cend())
       return false;
 
    return true;
 }
 
-template <typename MessageType>
-void Svin::Module::Bus<MessageType>::removeModule(Module* module)
+template <typename DataType>
+void Svin::Module::Bus<DataType>::removeModule(Module* module)
 {
-   instanceList.remove(module);
+   instanceMap.erase(module);
 }
 
 // module
 
-template <typename MessageType>
+template <typename DataType>
 Svin::Module* Svin::Module::busModule(const Side& side) const
 {
    rack::Module* expanderModule = (Side::Left == side) ? expanderModule = leftExpander.module : expanderModule = rightExpander.module;
@@ -57,54 +57,115 @@ Svin::Module* Svin::Module::busModule(const Side& side) const
    if (!module)
       return nullptr;
 
-   if (!Bus<MessageType>::the()->contains(module))
+   if (!Bus<DataType>::the()->contains(module))
       return nullptr;
 
    return module;
 }
 
-template <typename MessageType>
+template <typename DataType>
 uint16_t Svin::Module::moduleCount(const Side& side) const
 {
    return 0;
 }
 
-template <typename MessageType>
+template <typename DataType>
 void Svin::Module::registerAsBusModule()
 {
-   Bus<MessageType>::the()->append(this);
+   Bus<DataType>::the()->append(this);
 
-   leftExpander.producerMessage = new MessageType{};
-   leftExpander.consumerMessage = new MessageType{};
+   leftExpander.producerMessage = new DataType{};
+   leftExpander.consumerMessage = new DataType{};
 
-   rightExpander.producerMessage = new MessageType{};
-   rightExpander.consumerMessage = new MessageType{};
+   rightExpander.producerMessage = new DataType{};
+   rightExpander.consumerMessage = new DataType{};
 }
 
-
-template <typename MessageType>
-void Svin::Module::sendBusMessage(const Side& side, const MessageType& message)
+template <typename DataType>
+void Svin::Module::sendBusData(const Side& side, const DataType& data)
 {
-   if (!busModule<MessageType>(side))
+   if (!busModule<DataType>(side))
       return;
 
    Module::Expander& target = (Side::Left == side) ? leftExpander.module->rightExpander : rightExpander.module->leftExpander;
-   MessageType* busMessage = reinterpret_cast<MessageType*>(target.producerMessage);
-   *busMessage = message;
+   DataType* busData = reinterpret_cast<DataType*>(target.producerMessage);
+   *busData = data;
 
    target.requestMessageFlip();
 }
 
-template <typename MessageType>
-MessageType Svin::Module::getBusMessage(const Side& side)
+template <typename DataType>
+DataType Svin::Module::getBusData(const Side& side)
 {
-   if (!busModule<MessageType>(side))
-      return MessageType{};
+   if (!busModule<DataType>(side))
+      return DataType{};
 
    Module::Expander& source = (Side::Left == side) ? leftExpander : rightExpander;
-   MessageType* busMessage = reinterpret_cast<MessageType*>(source.consumerMessage);
+   DataType* busData = reinterpret_cast<DataType*>(source.consumerMessage);
 
-   return *busMessage;
+   return *busData;
+}
+
+template <typename DataType>
+void Svin::Module::broadcastMessage(const Json::Object& message, const Module* receiver)
+{
+}
+
+template <typename DataType>
+uint8_t Svin::Module::indexOfBusModule(const Side& side, Module* module)
+{
+   if (!module)
+      return 0;
+
+   uint8_t counter = 0;
+   for (Module* searchModule = busModule<DataType>(side); searchModule != nullptr; searchModule = searchModule->busModule<DataType>(side))
+   {
+      counter++;
+      if (searchModule == module)
+         return counter;
+   }
+
+   return 0;
+}
+
+template <typename DataType, typename ModuleType>
+ModuleType* Svin::Module::findFirstBusModule(const Side& side)
+{
+   for (Module* module = busModule<DataType>(side); module != nullptr; module = module->busModule<DataType>(side))
+   {
+      ModuleType* targetModule = dynamic_cast<ModuleType*>(module);
+      if (targetModule)
+         return targetModule;
+   }
+
+   return nullptr;
+}
+
+template <typename DataType, typename ModuleType>
+ModuleType* Svin::Module::findLastBusModule(const Side& side, bool consecutive)
+{
+   ModuleType* foundModule = nullptr;
+   for (Module* module = busModule<DataType>(side); module != nullptr; module = module->busModule<DataType>(side))
+   {
+      ModuleType* targetModule = dynamic_cast<ModuleType*>(module);
+      if (targetModule)
+         foundModule = targetModule;
+      else if (foundModule && consecutive)
+         break;
+   }
+
+   return foundModule;
+}
+
+template <typename DataType>
+bool Svin::Module::hasMessage()
+{
+   return false;
+}
+
+template <typename DataType>
+Svin::Module::Message<DataType> Svin::Module::popMessage()
+{
 }
 
 #endif // NOT SvinModuleHPP

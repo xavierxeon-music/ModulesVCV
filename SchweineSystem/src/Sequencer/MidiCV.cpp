@@ -13,8 +13,8 @@ MidiCV::MidiCV()
 
 void MidiCV::process(const ProcessArgs& args)
 {
-   MidiBus busMessage = getBusMessage<MidiBus>(Side::Left);
-   sendBusMessage<MidiBus>(Side::Right, busMessage);
+   MidiBus busMessage = getBusData<MidiBus>(Side::Left);
+   sendBusData<MidiBus>(Side::Right, busMessage);
 
    const bool isRunning = (Tempo::Running == busMessage.runState) || (Tempo::FirstTick == busMessage.runState);
    if (!isRunning)

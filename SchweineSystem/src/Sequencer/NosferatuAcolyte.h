@@ -18,7 +18,7 @@ using namespace rack;
 
 namespace Nosferatu
 {
-   class Acolyte : public Svin::Module, public Svin::Message<Bank>::Publisher
+   class Acolyte : public Svin::Module
    {
    public:
       struct Panel;

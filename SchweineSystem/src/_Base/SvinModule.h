@@ -31,11 +31,21 @@ namespace Svin
       virtual void updateDisplays();
       std::string getOpenFileName(const std::string& filter) const;
 
-      template <typename MessageType>
+      template <typename DataType>
       Module* busModule(const Side& side) const;
 
-      template <typename MessageType>
+      template <typename DataType>
       uint16_t moduleCount(const Side& side) const;
+
+   protected:
+      template <typename DataType>
+      struct Message
+      {
+         Json::Object message;
+         Module* sender;
+
+         using List = std::list<Message>;
+      };
 
    protected:
       virtual void load(const Json::Object& rootObject);
@@ -48,14 +58,32 @@ namespace Svin
       void sendDocumentToHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex = 0);
       virtual void receivedDocumentFromHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex);
       // bus
-      template <typename MessageType>
+      template <typename DataType>
       void registerAsBusModule();
 
-      template <typename MessageType>
-      void sendBusMessage(const Side& side, const MessageType& message);
+      template <typename DataType>
+      void sendBusData(const Side& side, const DataType& data);
+
+      template <typename DataType>
+      DataType getBusData(const Side& side);
+
+      template <typename DataType>
+      void broadcastMessage(const Json::Object& message, const Module* receiver = nullptr);
+
+      template <typename DataType>
+      uint8_t indexOfBusModule(const Side& side, Module* module);
+
+      template <typename DataType, typename ModuleType>
+      ModuleType* findFirstBusModule(const Side& side);
+
+      template <typename DataType, typename ModuleType>
+      ModuleType* findLastBusModule(const Side& side, bool consecutive);
+
+      template <typename DataType>
+      bool hasMessage();
 
       template <typename MessageType>
-      MessageType getBusMessage(const Side& side);
+      Message<MessageType> popMessage();
 
    private:
       using Map = std::map<std::string, Module*>;
@@ -98,16 +126,18 @@ namespace Svin
          static List busList;
       };
 
-      template <typename MessageType>
+      template <typename DataType>
       class Bus : public BusAbstract
       {
       public:
-         using InstanceList = std::list<Module*>;
+         using InstanceMap = std::map<Module*, typename Message<DataType>::List>;
 
       public:
          static Bus* the();
          void append(Module* module);
          bool contains(Module* module);
+
+         void queue(const Json::Object& message, const Module* sender, const Module* target);
 
       private:
          friend class BusAbstract;
@@ -120,7 +150,7 @@ namespace Svin
 
       private:
          static Bus* me;
-         InstanceList instanceList;
+         InstanceMap instanceMap;
       };
 
    private:

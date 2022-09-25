@@ -1,18 +1,18 @@
 #include "BitBusCommon.h"
 
-BitBus::Message::Message()
+BitBus::Data::Data()
    : byte{}
    , channelCount(1)
 {
 }
 
-BitBus::Message::Message(const Message& other)
-   : Message()
+BitBus::Data::Data(const Data& other)
+   : Data()
 {
    *this = other;
 }
 
-BitBus::Message& BitBus::Message::operator=(const Message& other)
+BitBus::Data& BitBus::Data::operator=(const Data& other)
 {
    for (uint8_t channel = 0; channel < 16; channel++)
       byte[channel] = other.byte[channel];

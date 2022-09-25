@@ -49,7 +49,7 @@ namespace Nosferatu
 
    //
 
-   class Vampyre : public Svin::Module, public Svin::MasterClock::Client, public Svin::Message<Bank>::Subscriber
+   class Vampyre : public Svin::Module, public Svin::MasterClock::Client
    {
    public:
       struct Panel;
@@ -81,7 +81,6 @@ namespace Nosferatu
 
       void load(const Svin::Json::Object& rootObject) override;
       void save(Svin::Json::Object& rootObject) override;
-      void receiveMessage(const Bank& bank, Module* sender) override;
 
    private:
       // operation

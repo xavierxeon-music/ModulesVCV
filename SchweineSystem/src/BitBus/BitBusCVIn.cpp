@@ -11,7 +11,7 @@ BitBus::CVIn::CVIn()
    , busOutIndicator(this, Panel::RGB_BusOut)
 {
    setup();
-   registerAsBusModule<Message>();
+   registerAsBusModule<Data>();
 }
 
 BitBus::CVIn::~CVIn()
@@ -21,7 +21,7 @@ BitBus::CVIn::~CVIn()
 void BitBus::CVIn::process(const ProcessArgs& args)
 {
    // optics
-   if (!busModule<Message>(Side::Right))
+   if (!busModule<Data>(Side::Right))
    {
       busOutIndicator.setOff();
       return;
@@ -30,18 +30,18 @@ void BitBus::CVIn::process(const ProcessArgs& args)
    busOutIndicator.setOn();
 
    // sound
-   Message message;
+   Data data;
    if (cvInput.isConnected())
    {
-      message.channelCount = cvInput.getNumberOfChannels();
-      for (uint8_t channel = 0; channel < message.channelCount; channel++)
+      data.channelCount = cvInput.getNumberOfChannels();
+      for (uint8_t channel = 0; channel < data.channelCount; channel++)
       {
          const float voltageInput = cvInput.getVoltage(channel); // from -5.0 V to + 5.0 V
-         message.byte[channel] = static_cast<uint8_t>(inputMapper(voltageInput));
+         data.byte[channel] = static_cast<uint8_t>(inputMapper(voltageInput));
       }
    }
 
-   sendBusMessage<Message>(Side::Right, message);
+   sendBusData<Data>(Side::Right, data);
 }
 
 // widget
