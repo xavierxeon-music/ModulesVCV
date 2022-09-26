@@ -5,7 +5,6 @@
 using namespace rack;
 
 #include <SvinMasterClock.h>
-#include <SvinMessageSubscriber.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 

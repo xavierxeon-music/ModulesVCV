@@ -17,7 +17,6 @@ namespace Svin
       Module* getSchweineModule() const;
 
    protected:
-      virtual void preDraw();
       void draw(const DrawArgs& args) override;
       void makePanel(const std::string& resPath);
 

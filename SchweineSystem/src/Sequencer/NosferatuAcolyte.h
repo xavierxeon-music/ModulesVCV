@@ -4,7 +4,6 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <SvinMessagePublisher.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 

@@ -166,14 +166,6 @@
          ]
       },
       {
-         "slug": "RemoteScript",
-         "name": "Remote Script",
-         "description": "Execute a remote python script",
-         "tags": [
-            "Utility"
-         ]
-      },
-      {
          "slug": "VCMCReceiver",
          "name": "VCMCReceiver",
          "description": "Receive data from a Befaco VCMC",
@@ -288,6 +280,20 @@
          "tags": [
             "Utility"
          ]
+      },
+      {
+         "slug": "PythonScript",
+         "name": " PythonScript",
+         "description": "Execute a python script on this computer (need running HubVCV)",
+         "tags": [
+            "Utility"
+         ]
+      },
+      {
+         "slug": "MaxPatch",
+         "name": "MaxPatch",
+         "description": "",
+         "tags": []
       }
    ]
 }

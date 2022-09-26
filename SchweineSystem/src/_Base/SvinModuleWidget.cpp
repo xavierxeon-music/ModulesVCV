@@ -69,15 +69,8 @@ Svin::Module* Svin::ModuleWidget::getSchweineModule() const
    return schweineModule;
 }
 
-void Svin::ModuleWidget::preDraw()
-{
-   // do nothing
-}
-
 void Svin::ModuleWidget::draw(const DrawArgs& args)
 {
-   preDraw();
-
    if (schweineModule)
       schweineModule->updateDisplays();
 

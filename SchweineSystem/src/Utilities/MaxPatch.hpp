@@ -1,11 +1,11 @@
-#ifndef RemoteScriptHPP
-#define RemoteScriptHPP
+#ifndef MaxPatchHPP
+#define MaxPatchHPP
 
-#include "RemoteScript.h"
+#include "MaxPatch.h"
 
 #include <SvinOrigin.h>
 
-struct RemoteScript::Panel
+struct MaxPatch::Panel
 {
    enum ParamId
    {
@@ -53,7 +53,7 @@ struct RemoteScript::Panel
 
 };
 
-void RemoteScript::setup()
+void MaxPatch::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
@@ -61,16 +61,16 @@ void RemoteScript::setup()
    configButton(Panel::Restart, "Restart");
 }
 
-void RemoteScriptWidget::setup()
+void MaxPatchWidget::setup()
 {
-   makePanel("res/Utilities/RemoteScript.svg");
+   makePanel("res/Utilities/MaxPatch.svg");
 
-   makeButton(this, Vec(29.50, 227.25), RemoteScript::Panel::Kill);
-   makeButton(this, Vec(30.00, 170.36), RemoteScript::Panel::Restart);
+   makeButton(this, Vec(29.50, 290.25), MaxPatch::Panel::Kill);
+   makeButton(this, Vec(30.00, 233.36), MaxPatch::Panel::Restart);
 
-   makeLED(this, Vec(30.00, 352.32), RemoteScript::Panel::RGB_Connected);
+   makeLED(this, Vec(30.00, 352.32), MaxPatch::Panel::RGB_Connected);
 
-   makeOLED(this, Vec(9.00, 62.34), RemoteScript::Panel::Pixels_Display, 40, 40);
+   makeOLED(this, Vec(9.00, 125.34), MaxPatch::Panel::Pixels_Display, 40, 60);
 }
 
-#endif // NOT RemoteScriptHPP
+#endif // NOT MaxPatchHPP

@@ -1,5 +1,5 @@
-#ifndef RemoteScriptH
-#define RemoteScriptH
+#ifndef PythonScriptH
+#define PythonScriptH
 
 #include <rack.hpp>
 using namespace rack;
@@ -13,19 +13,18 @@ using namespace rack;
 #include <SvinModuleWidget.h>
 #include <SvinSvgImage.h>
 
-class RemoteScript : public Svin::Module
+class PythonScript : public Svin::Module
 {
 public:
    struct Panel;
 
 public:
-   RemoteScript();
-   ~RemoteScript();
+   PythonScript();
+   ~PythonScript();
 
 public:
    void process(const ProcessArgs& args) override;
    void setScriptFileName(const std::string& newFileName);
-   bool scriptExists() const;
 
 private:
    inline void setup();
@@ -36,8 +35,6 @@ private:
 
    void sendStart();
    void sendKill();
-
-   void displayClicked(const float& x, const float& y);
 
 private:
    Svin::DisplayOLED::Controller displayController;
@@ -51,21 +48,18 @@ private:
 
 // widget
 
-class RemoteScriptWidget : public Svin::ModuleWidget
+class PythonScriptWidget : public Svin::ModuleWidget
 {
 public:
-   RemoteScriptWidget(RemoteScript* module);
+   PythonScriptWidget(PythonScript* module);
 
 private:
    inline void setup();
-   void preDraw() override;
 
-private:
-   Svin::SvgImage* logoWidget;
 };
 
-#ifndef RemoteScriptHPP
-#include "RemoteScript.hpp"
-#endif // NOT RemoteScriptHPP
+#ifndef PythonScriptHPP
+#include "PythonScript.hpp"
+#endif // NOT PythonScriptHPP
 
-#endif // NOT RemoteScriptH
+#endif // NOT PythonScriptH
