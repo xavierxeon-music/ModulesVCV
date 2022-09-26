@@ -3,9 +3,7 @@
 ./src/Hardware/MetropolixClock.h
 ./src/Hardware/MidiBusModule.h
 ./src/Hardware/FlameCCSender.h
-./src/Hardware/ScionExciter.h
 ./src/Hardware/VCMCReceiver.h
-./src/Synths/MeshStack.h
 ./src/Synths/WavPlayer.h
 ./src/Synths/SixPack.h
 ./src/Synths/Boilerplate.h
@@ -29,6 +27,7 @@
 ./src/Utilities/Cutoff.h
 ./src/Utilities/MaxPatch.h
 ./src/Sequencer/NosferatuAcolyte.h
+./src/Sequencer/MidiMize.h
 ./src/Sequencer/NosferatuVampyre.h
 ./src/Sequencer/MidiCV.h
 ./src/Sequencer/TrackerWorker.h
@@ -119,11 +118,9 @@
 ./src/Hardware/VCMCReceiver.hpp
 ./src/Hardware/DoepferQuad.hpp
 ./src/Hardware/AturiaStep.hpp
-./src/Hardware/ScionExciter.hpp
 ./src/Hardware/FlameCCSender.hpp
 ./src/Hardware/MetropolixClock.hpp
 ./src/Synths/SixPack.hpp
-./src/Synths/MeshStack.hpp
 ./src/Synths/WavPlayer.hpp
 ./src/Synths/Boilerplate.hpp
 ./src/_Gui/SvinDisplayOLED.hpp
@@ -135,6 +132,7 @@
 ./src/Utilities/Cutoff.hpp
 ./src/Utilities/Mapper.hpp
 ./src/Sequencer/MidiReplay.hpp
+./src/Sequencer/MidiMize.hpp
 ./src/Sequencer/TrackerWorker.hpp
 ./src/Sequencer/MidiCV.hpp
 ./src/Sequencer/NosferatuAcolyte.hpp
@@ -209,13 +207,11 @@
 ./src/_MusicTools/StandardTable.hpp
 ./src/Hardware/MetropolixClock.cpp
 ./src/Hardware/AturiaStep.cpp
-./src/Hardware/ScionExciter.cpp
 ./src/Hardware/FlameCCSender.cpp
 ./src/Hardware/VCMCReceiver.cpp
 ./src/Hardware/MidiBusModule.cpp
 ./src/Hardware/DoepferQuad.cpp
 ./src/Synths/Boilerplate.cpp
-./src/Synths/MeshStack.cpp
 ./src/Synths/WavPlayer.cpp
 ./src/Synths/SixPack.cpp
 ./src/_Gui/SvinSvgImage.cpp
@@ -242,6 +238,7 @@
 ./src/Sequencer/NosferatuAcolyte.cpp
 ./src/Sequencer/TrackerWorker.cpp
 ./src/Sequencer/MidiReplay.cpp
+./src/Sequencer/MidiMize.cpp
 ./src/BitBus/BitBusRandomWalk.cpp
 ./src/BitBus/BitBusBitIn.cpp
 ./src/BitBus/BitBusCounter.cpp

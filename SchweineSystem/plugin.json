@@ -117,6 +117,15 @@
          ]
       },
       {
+         "slug": "MidiMize",
+         "name": "MidiMize",
+         "description": "Convert CV to Midi",
+         "tags": [
+            "Midi",
+            "Utility"
+         ]
+      },
+      {
          "slug": "MidiReplay",
          "name": " MidiReplay",
          "description": "Playback Midi files",
@@ -157,15 +166,6 @@
          ]
       },
       {
-         "slug": "MeshStack",
-         "name": "Mesh Stack",
-         "description": "",
-         "tags": [
-            "Oscillator",
-            "Polyphonic"
-         ]
-      },
-      {
          "slug": "VCMCReceiver",
          "name": "VCMCReceiver",
          "description": "Receive data from a Befaco VCMC",
@@ -177,7 +177,7 @@
       },
       {
          "slug": "TrackerWorker",
-         "name": "TrackerWorker",
+         "name": "Tracker Worker",
          "description": "A CV tracker, companion to Tracker UI",
          "tags": [
             "Sequencer",
@@ -201,15 +201,6 @@
          "tags": [
             "External",
             "Utility"
-         ]
-      },
-      {
-         "slug": "ScionExciter",
-         "name": "ScionExciter",
-         "description": "Artificial bio feedback signal",
-         "tags": [
-            "External",
-            "LFO"
          ]
       },
       {
@@ -248,6 +239,14 @@
          ]
       },
       {
+         "slug": "Extract",
+         "name": "Extract",
+         "description": "Exract pitch from audio",
+         "tags": [
+            "Utility"
+         ]
+      },
+      {
          "slug": "Boilerplate",
          "name": "Boilerplate",
          "description": "Standard polyphonic wave table oscilator",
@@ -263,14 +262,6 @@
          "tags": [
             "Filter",
             "Polyphonic"
-         ]
-      },
-      {
-         "slug": "Extract",
-         "name": "Extract",
-         "description": "Exract pitch from audio",
-         "tags": [
-            "Utility"
          ]
       },
       {
@@ -292,8 +283,10 @@
       {
          "slug": "MaxPatch",
          "name": "MaxPatch",
-         "description": "",
-         "tags": []
+         "description": "Run a max patch on this computer (need running HubVCV)",
+         "tags": [
+            "Utility"
+         ]
       }
    ]
 }
