@@ -38,8 +38,9 @@ struct Extract::Panel
    enum OutputId
    {
       AudioOutput = 0,
-      Pitch = 1,
-      OUTPUTS_LEN = 2
+      Gate = 1,
+      Pitch = 2,
+      OUTPUTS_LEN = 3
    };
 
    enum LightId
@@ -59,6 +60,7 @@ void Extract::setup()
    configInput(Panel::AudioInput, "AudioInput");
 
    configOutput(Panel::AudioOutput, "AudioOutput");
+   configOutput(Panel::Gate, "Gate");
    configOutput(Panel::Pitch, "Pitch");
 }
 
@@ -69,7 +71,8 @@ void ExtractWidget::setup()
    makeInput(this, Vec(30.00, 311.60),  Extract::Panel::AudioInput, false);
 
    makeOutput(this, Vec(30.00, 355.83), Extract::Panel::AudioOutput, false);
-   makeOutput(this, Vec(30.24, 206.38), Extract::Panel::Pitch, true);
+   makeOutput(this, Vec(30.24, 206.38), Extract::Panel::Gate, true);
+   makeOutput(this, Vec(29.71, 159.32), Extract::Panel::Pitch, true);
 }
 
 #endif // NOT ExtractHPP

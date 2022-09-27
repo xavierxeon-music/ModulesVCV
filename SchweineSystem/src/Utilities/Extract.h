@@ -8,7 +8,7 @@ using namespace rack;
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
-#include <Sound/Spectrum.h>
+#include <Utility/Spectrum.h>
 
 #include <SvinInput.h>
 #include <SvinOutput.h>
@@ -33,6 +33,7 @@ private:
    Svin::Input audioInput;
    Svin::Output audioPassthrough;
    Svin::Output pitchOutput;
+   Svin::Output gateOutput;
 
    Spectrum spectrum;
    float voltages[16];

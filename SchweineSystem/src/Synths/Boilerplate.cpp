@@ -8,14 +8,15 @@ Boilerplate::Boilerplate()
    , fmAttenutate(this, Panel::FMAttenuate)
    , pitchInput(this, Panel::Pitch)
    , pitchKnob(this, Panel::Offset)
+   , gateInput(this, Panel::Gate)
    , output(this, Panel::Out)
-   , stallZeroButton(this, Panel::StallZero, Panel::RGB_StallZero)
+   , polyButton(this, Panel::Poly, Panel::RGB_Poly)
    , oscilator{}
    , table()
 {
    setup();
 
-   shapeSlider.setRange(0.0, 5.0);
+   shapeSlider.setRange(0.0, 4.0);
    shapeSlider.enableSteps(true);
    shapeSlider.setDefaultColor(Svin::Color{255, 255, 0});
    shapeSlider.setOn();
@@ -23,8 +24,8 @@ Boilerplate::Boilerplate()
    fmAttenutate.setRange(-1.0, 1.0, 0.0);
    pitchKnob.setRange(0.0, 5.0);
 
-   stallZeroButton.setDefaultColor(Svin::Color{0, 0, 255});
-   stallZeroButton.setOff();
+   polyButton.setDefaultColor(Svin::Color{0, 255, 0});
+   polyButton.setOff();
 
    for (uint8_t voice = 0; voice < 16; voice++)
       oscilator[voice].init(&table, getSampleRate());
@@ -32,7 +33,8 @@ Boilerplate::Boilerplate()
 
 void Boilerplate::process(const ProcessArgs& args)
 {
-   stallZeroButton.setActive(stallZeroButton.isLatched());
+   const bool polyMode = polyButton.isLatched();
+   polyButton.setActive(polyMode);
 
    const Standard::Waveform::Shape shape = static_cast<Standard::Waveform::Shape>(shapeSlider.getValue());
    table.setWaveform(shape);
@@ -46,26 +48,34 @@ void Boilerplate::process(const ProcessArgs& args)
    float fmVoltage = fmInput.getVoltage() * fmAttenutate.getValue();
 
    const uint8_t noOfVoices = pitchInput.isConnected() ? pitchInput.getNumberOfChannels() : 1;
+   if (polyMode)
+      output.setNumberOfChannels(noOfVoices);
+   else
+      output.setNumberOfChannels(1);
 
-   float value = 0.0;
+   float sumValue = 0.0;
    for (uint8_t voice = 0; voice < noOfVoices; voice++)
    {
       const float pitchVoltage = pitchInput.getVoltage(voice) + pitchKnob.getValue();
       const float voltage = pitchVoltage + fmVoltage;
-      if (0 == voltage && stallZeroButton.isLatched())
-      {
-         oscilator[voice].setFrequency(0.0);
-      }
-      else
-      {
-         const float frequency = Abstract::Oscilator::frequencyFromCV(voltage);
-         oscilator[voice].setFrequency(frequency);
-      }
 
-      value += oscilator[voice].createSound();
+      const float frequency = Abstract::Oscilator::frequencyFromCV(voltage);
+      oscilator[voice].setFrequency(frequency);
+
+      float value = oscilator[voice].createSound();
+      if (gateInput.isConnected() && gateInput.isOff(voice))
+         value = 0.0;
+
+      if (!polyMode)
+         sumValue += value;
+      else
+         output.setVoltage(value * 10.0, voice);
    }
-   value /= noOfVoices;
-   output.setVoltage(value * 10.0);
+   if (!polyMode)
+   {
+      sumValue /= noOfVoices;
+      output.setVoltage(sumValue * 10.0);
+   }
 }
 
 void Boilerplate::load(const Svin::Json::Object& rootObject)
@@ -73,7 +83,7 @@ void Boilerplate::load(const Svin::Json::Object& rootObject)
    shapeSlider.setValue(rootObject.get("shape").toReal());
    pitchKnob.setValue(rootObject.get("offset").toReal());
    fmAttenutate.setValue(rootObject.get("fmAttenuate").toReal());
-   stallZeroButton.setLatched(rootObject.get("stallZero").toBool());
+   polyButton.setLatched(rootObject.get("poly").toBool());
 }
 
 void Boilerplate::save(Svin::Json::Object& rootObject)
@@ -81,7 +91,7 @@ void Boilerplate::save(Svin::Json::Object& rootObject)
    rootObject.set("shape", shapeSlider.getValue());
    rootObject.set("offset", pitchKnob.getValue());
    rootObject.set("fmAttenuate", fmAttenutate.getValue());
-   rootObject.set("stallZero", stallZeroButton.isLatched());
+   rootObject.set("poly", polyButton.isLatched());
 }
 
 void Boilerplate::onSampleRateChange(const SampleRateChangeEvent& event)

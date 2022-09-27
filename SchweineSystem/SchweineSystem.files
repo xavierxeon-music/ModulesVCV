@@ -75,7 +75,6 @@
 ./src/_MusicTools/Include/Tools/SevenBit.h
 ./src/_MusicTools/Include/Tools/File.h
 ./src/_MusicTools/Include/Tools/Variable.h
-./src/_MusicTools/Include/Tools/SquareSignal.h
 ./src/_MusicTools/Include/Tools/DoubleBuffer.h
 ./src/_MusicTools/Include/Tools/RingBuffer.h
 ./src/_MusicTools/Include/Midi/MidiFile.h
@@ -93,16 +92,19 @@
 ./src/_MusicTools/Include/Effect/Compressor.h
 ./src/_MusicTools/Include/Maths.h
 ./src/_MusicTools/Include/Sound/WaveTableMorpher.h
+./src/_MusicTools/Include/Sound/Noise.h
 ./src/_MusicTools/Include/Sound/WaveTable.h
 ./src/_MusicTools/Include/Sound/WaveTableOscilator.h
 ./src/_MusicTools/Include/Sound/SampleRecorder.h
-./src/_MusicTools/Include/Sound/Spectrum.h
 ./src/_MusicTools/Include/Sound/FunctionTable.h
 ./src/_MusicTools/Include/Sound/GateOscilator.h
 ./src/_MusicTools/Include/Sound/SoundMesh.h
 ./src/_MusicTools/Include/Sound/SampleOscilator.h
 ./src/_MusicTools/Include/Sound/Sample.h
 ./src/_MusicTools/Include/Sound/StandardTable.h
+./src/_MusicTools/Include/Utility/RandomWalk.h
+./src/_MusicTools/Include/Utility/Spectrum.h
+./src/_MusicTools/Include/Utility/SquareSignal.h
 ./src/_MusicTools/ffft/FFTRealFixLen.h
 ./src/_MusicTools/ffft/FFTReal.h
 ./src/_MusicTools/ffft/FFTRealFixLenParam.h
@@ -154,6 +156,7 @@
 ./src/_MusicTools/BoolField.hpp
 ./src/_MusicTools/RingBuffer.hpp
 ./src/_MusicTools/DoubleBuffer.hpp
+./src/_MusicTools/RandomWalk.hpp
 ./src/_MusicTools/FastRandom.hpp
 ./src/_MusicTools/MidiToolTempo.hpp
 ./src/_MusicTools/MidiFile.hpp
@@ -190,6 +193,7 @@
 ./src/_MusicTools/MidiInterfaceOutput.hpp
 ./src/_MusicTools/SampleOscilator.hpp
 ./src/_MusicTools/Sample.hpp
+./src/_MusicTools/Noise.hpp
 ./src/_MusicTools/FunctionTable.hpp
 ./src/_MusicTools/MusicTools.hpp
 ./src/_MusicTools/Compressor.hpp

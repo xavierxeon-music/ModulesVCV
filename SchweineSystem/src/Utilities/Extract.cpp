@@ -8,6 +8,7 @@ Extract::Extract()
    , audioInput(this, Panel::AudioInput)
    , audioPassthrough(this, Panel::AudioOutput)
    , pitchOutput(this, Panel::Pitch)
+   , gateOutput(this, Panel::Gate)
    , spectrum(quality)
    , voltages{}
    , sampleRate(getSampleRate())
@@ -27,12 +28,19 @@ void Extract::process(const ProcessArgs& args)
    changeSound(0.1 * voltage);
 
    pitchOutput.setNumberOfChannels(16);
+   gateOutput.setNumberOfChannels(16);
    for (uint8_t index = 0; index < 16; index++)
    {
       if (index < numberOfVoices)
+      {
          pitchOutput.setVoltage(voltages[index], index);
+         gateOutput.setOn(index);
+      }
       else
+      {
          pitchOutput.setVoltage(0.0, index);
+         gateOutput.setOff(index);
+      }
    }
 }
 

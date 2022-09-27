@@ -44,9 +44,10 @@ private:
 
    Svin::Input pitchInput;
    Svin::Knob pitchKnob;
+   Svin::Input gateInput;
 
    Svin::Output output;
-   Svin::ButtonLED stallZeroButton;
+   Svin::ButtonLED polyButton;
    WaveTable::Oscilator oscilator[16];
    Standard::Table table;
 };
