@@ -127,7 +127,7 @@
       },
       {
          "slug": "MidiReplay",
-         "name": " MidiReplay",
+         "name": " Midi Replay",
          "description": "Playback Midi files",
          "tags": [
             "Midi",
@@ -147,7 +147,7 @@
       },
       {
          "slug": "DoepferQuad",
-         "name": "DoepferQuad",
+         "name": "Doepfer Quad",
          "description": "Send midi (from Midi Replay) to Dopefer Quad Midi Interface",
          "tags": [
             "Midi",
@@ -157,7 +157,7 @@
       },
       {
          "slug": "AturiaStep",
-         "name": "AturiaStep",
+         "name": "Aturia Step",
          "description": "Send midi (from Midi Replay) to Aturia Keystep Pro change program banks",
          "tags": [
             "Midi",
@@ -167,7 +167,7 @@
       },
       {
          "slug": "VCMCReceiver",
-         "name": "VCMCReceiver",
+         "name": "VCMC Receiver",
          "description": "Receive data from a Befaco VCMC",
          "tags": [
             "External",
@@ -176,9 +176,9 @@
          ]
       },
       {
-         "slug": "TrackerWorker",
-         "name": "Tracker Worker",
-         "description": "A CV tracker, companion to Tracker UI",
+         "slug": "Maestro",
+         "name": "Maestro",
+         "description": "A CV tracker, companion to Maestro UI",
          "tags": [
             "Sequencer",
             "Utility"

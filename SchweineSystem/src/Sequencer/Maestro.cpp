@@ -1,4 +1,4 @@
-#include "TrackerWorker.h"
+#include "Maestro.h"
 
 #include <Midi/MidiCommon.h>
 #include <Tools/File.h>
@@ -8,7 +8,7 @@
 
 #include <SvinOrigin.h>
 
-TrackerWorker::TrackerWorker()
+Maestro::Maestro()
    : Svin::Module()
    , Svin::MasterClock::Client()
    , fileName()
@@ -29,13 +29,13 @@ TrackerWorker::TrackerWorker()
    , operationMode(OperationMode::Passthrough)
    , operationModeButton(this, Panel::Mode)
    , remoteValues{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-   , controller(this, TrackerWorker::Panel::Pixels_Display)
+   , controller(this, Maestro::Panel::Pixels_Display)
    , lastNamedSegement()
 {
    setup();
    registerHubClient("Tracker");
 
-   controller.onClickedOpenFileFunction(this, &TrackerWorker::loadProject, "Projects:json");
+   controller.onClickedOpenFileFunction(this, &Maestro::loadProject, "Projects:json");
 
    inputList.append({Panel::Group1_Pass, Panel::Group2_Pass});
    outputList.append({Panel::Group1_Output, Panel::Group2_Output});
@@ -43,7 +43,7 @@ TrackerWorker::TrackerWorker()
    loopButton.setDefaultColor(Svin::Color{0, 255, 0});
 }
 
-void TrackerWorker::process(const ProcessArgs& args)
+void Maestro::process(const ProcessArgs& args)
 {
    if (loopButton.isTriggered())
    {
@@ -97,7 +97,7 @@ void TrackerWorker::process(const ProcessArgs& args)
       processInternal();
 }
 
-void TrackerWorker::loadProject(const std::string& newFileName)
+void Maestro::loadProject(const std::string& newFileName)
 {
    fileName = newFileName;
 
@@ -158,7 +158,7 @@ void TrackerWorker::loadProject(const std::string& newFileName)
    }
 }
 
-void TrackerWorker::processPassthrough()
+void Maestro::processPassthrough()
 {
    const bool on = getTempo().isRunningOrFirstTick();
 
@@ -190,7 +190,7 @@ void TrackerWorker::processPassthrough()
    }
 }
 
-void TrackerWorker::proccessRemote()
+void Maestro::proccessRemote()
 {
    const bool on = getTempo().isRunningOrFirstTick();
 
@@ -206,7 +206,7 @@ void TrackerWorker::proccessRemote()
    }
 }
 
-void TrackerWorker::processInternal()
+void Maestro::processInternal()
 {
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
@@ -229,17 +229,17 @@ void TrackerWorker::processInternal()
    }
 }
 
-void TrackerWorker::updateDisplays()
+void Maestro::updateDisplays()
 {
    controller.fill();
 
-   if (TrackerWorker::OperationMode::Passthrough == operationMode)
+   if (Maestro::OperationMode::Passthrough == operationMode)
       updatePassthrough();
-   else if (TrackerWorker::OperationMode::Remote == operationMode)
+   else if (Maestro::OperationMode::Remote == operationMode)
       updateRemote();
-   else if (TrackerWorker::OperationMode::InternalOverview == operationMode)
+   else if (Maestro::OperationMode::InternalOverview == operationMode)
       updateInternalOverview();
-   else if (TrackerWorker::OperationMode::InternalCurrent == operationMode)
+   else if (Maestro::OperationMode::InternalCurrent == operationMode)
       updateInternalCurrent();
 
    const uint32_t index = project.getCurrentSegmentIndex();
@@ -253,7 +253,7 @@ void TrackerWorker::updateDisplays()
    sendDocumentToHub(1, object);
 }
 
-void TrackerWorker::updatePassthrough()
+void Maestro::updatePassthrough()
 {
    controller.setColor(Svin::Color{0, 255, 0});
    controller.drawRect(0, 0, 100, 10, true);
@@ -292,7 +292,7 @@ void TrackerWorker::updatePassthrough()
    }
 }
 
-void TrackerWorker::updateRemote()
+void Maestro::updateRemote()
 {
    controller.setColor(Svin::Color{0, 255, 255});
    controller.drawRect(0, 0, 100, 10, true);
@@ -332,7 +332,7 @@ void TrackerWorker::updateRemote()
    }
 }
 
-void TrackerWorker::updateInternalOverview()
+void Maestro::updateInternalOverview()
 {
    controller.setColor(Svin::Color{255, 255, 0});
    controller.drawRect(0, 0, 100, 10, true);
@@ -370,7 +370,7 @@ void TrackerWorker::updateInternalOverview()
    }
 }
 
-void TrackerWorker::updateInternalCurrent()
+void Maestro::updateInternalCurrent()
 {
    controller.setColor(Svin::Color{255, 0, 255});
    controller.drawRect(0, 0, 100, 10, true);
@@ -411,7 +411,7 @@ void TrackerWorker::updateInternalCurrent()
    }
 }
 
-void TrackerWorker::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
+void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
 {
    if (1 != channel || 0 != docIndex)
       return;
@@ -444,7 +444,7 @@ void TrackerWorker::receivedDocumentFromHub(const ::Midi::Channel& channel, cons
    }
 }
 
-void TrackerWorker::load(const Svin::Json::Object& rootObject)
+void Maestro::load(const Svin::Json::Object& rootObject)
 {
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
 
@@ -455,7 +455,7 @@ void TrackerWorker::load(const Svin::Json::Object& rootObject)
    loadProject(newFileName);
 }
 
-void TrackerWorker::save(Svin::Json::Object& rootObject)
+void Maestro::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
    rootObject.set("loop", project.isLooping());
@@ -465,10 +465,10 @@ void TrackerWorker::save(Svin::Json::Object& rootObject)
 
 // widget
 
-TrackerWorkerWidget::TrackerWorkerWidget(TrackerWorker* module)
+MaestroWidget::MaestroWidget(Maestro* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 // creete module
-Model* modelTrackerWorker = Svin::Origin::the()->addModule<TrackerWorker, TrackerWorkerWidget>("TrackerWorker");
+Model* modelMaestro = Svin::Origin::the()->addModule<Maestro, MaestroWidget>("Maestro");

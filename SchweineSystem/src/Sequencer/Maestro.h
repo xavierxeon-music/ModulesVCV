@@ -1,5 +1,5 @@
-#ifndef TrackerWorkerH
-#define TrackerWorkerH
+#ifndef MaestroH
+#define MaestroH
 
 #include <rack.hpp>
 using namespace rack;
@@ -18,13 +18,13 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinOutput.h>
 
-class TrackerWorker : public Svin::Module, public Svin::MasterClock::Client
+class Maestro : public Svin::Module, public Svin::MasterClock::Client
 {
 public:
    struct Panel;
 
 public:
-   TrackerWorker();
+   Maestro();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -90,17 +90,17 @@ private:
 
 // widget
 
-class TrackerWorkerWidget : public Svin::ModuleWidget
+class MaestroWidget : public Svin::ModuleWidget
 {
 public:
-   TrackerWorkerWidget(TrackerWorker* module);
+   MaestroWidget(Maestro* module);
 
 private:
    inline void setup();
 };
 
-#ifndef TrackerWorkerHPP
-#include "TrackerWorker.hpp"
-#endif // NOT TrackerWorkerHPP
+#ifndef MaestroHPP
+#include "Maestro.hpp"
+#endif // NOT MaestroHPP
 
-#endif // NOT TrackerWorkerH
+#endif // NOT MaestroH
