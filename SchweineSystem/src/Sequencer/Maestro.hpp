@@ -15,7 +15,7 @@ struct Maestro::Panel
       Mode = 2,
       // switches
       // ledbuttons
-      Group2_Loop = 3,
+      Loop = 3,
       // knobs
       // sliders
       PARAMS_LEN = 4
@@ -36,14 +36,14 @@ struct Maestro::Panel
 
    enum InputId
    {
-      Group2_Pass = 0,
+      Pass = 0,
       Upload = 1,
       INPUTS_LEN = 2
    };
 
    enum OutputId
    {
-      Group2_Output = 0,
+      Output = 0,
       OUTPUTS_LEN = 1
    };
 
@@ -51,11 +51,10 @@ struct Maestro::Panel
    {
       // leds
       // ledbuttons
-      RGB_Group2_Loop = 0,
+      RGB_Loop = 0,
       // sliders
       LIGHTS_LEN = 3
    };
-
 };
 
 void Maestro::setup()
@@ -66,12 +65,12 @@ void Maestro::setup()
    configButton(Panel::BankUp, "BankUp");
    configButton(Panel::Mode, "Mode");
 
-   configButton(Panel::Group2_Loop, "Group2_Loop");
+   configButton(Panel::Loop, "Loop");
 
-   configInput(Panel::Group2_Pass, "Group2_Pass");
+   configInput(Panel::Pass, "Pass");
    configInput(Panel::Upload, "Upload");
 
-   configOutput(Panel::Group2_Output, "Group2_Output");
+   configOutput(Panel::Output, "Output");
 }
 
 void MaestroWidget::setup()
@@ -82,12 +81,12 @@ void MaestroWidget::setup()
    makeButton(this, Vec(95.85, 242.82), Maestro::Panel::BankUp);
    makeButton(this, Vec(23.93, 242.82), Maestro::Panel::Mode);
 
-   makeLEDButton(this, Vec(60.00, 354.73), Maestro::Panel::Group2_Loop, Maestro::Panel::RGB_Group2_Loop);
+   makeLEDButton(this, Vec(60.00, 354.73), Maestro::Panel::Loop, Maestro::Panel::RGB_Loop);
 
-   makeInput(this, Vec(24.17, 355.83),  Maestro::Panel::Group2_Pass, true);
-   makeInput(this, Vec(60.00, 249.04),  Maestro::Panel::Upload, false);
+   makeInput(this, Vec(24.17, 355.83), Maestro::Panel::Pass, true);
+   makeInput(this, Vec(60.00, 249.04), Maestro::Panel::Upload, false);
 
-   makeOutput(this, Vec(95.83, 355.83), Maestro::Panel::Group2_Output, true);
+   makeOutput(this, Vec(95.83, 355.83), Maestro::Panel::Output, true);
 
    makeOLED(this, Vec(9.00, 32.00), Maestro::Panel::Pixels_Display, 100, 180);
 }

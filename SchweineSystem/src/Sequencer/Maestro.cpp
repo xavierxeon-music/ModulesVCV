@@ -17,28 +17,25 @@ Maestro::Maestro()
    // midi
    , buffer()
    // input
-   , inputList(this)
+   , input(this, Panel::Pass)
    , voltageToValue(0.0, 10.0, 0, 255)
    // upload
    , uploadInput(this, Panel::Upload)
    // outout
    , valueToVoltage(0.0, 255.0, 0.0, 10.0)
-   , outputList(this)
+   , output(this, Panel::Output)
    // mode
    , loopButton(this, Panel::Loop, Panel::RGB_Loop)
    , operationMode(OperationMode::Passthrough)
    , operationModeButton(this, Panel::Mode)
-   , remoteValues{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+   , remoteValues{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
    , controller(this, Maestro::Panel::Pixels_Display)
    , lastNamedSegement()
 {
    setup();
-   registerHubClient("Tracker");
+   registerHubClient("Maestro");
 
    controller.onClickedOpenFileFunction(this, &Maestro::loadProject, "Projects:json");
-
-   inputList.append({Panel::Group1_Pass, Panel::Group2_Pass});
-   outputList.append({Panel::Group1_Output, Panel::Group2_Output});
 
    loopButton.setDefaultColor(Svin::Color{0, 255, 0});
 }
@@ -61,15 +58,14 @@ void Maestro::process(const ProcessArgs& args)
       variable.increment();
 
       Svin::Json::Object object;
-      object.set("_Application", "Tracker");
+      object.set("_Application", "Maestro");
       object.set("_Type", "Mode");
       object.set("mode", static_cast<uint8_t>(operationMode));
 
       sendDocumentToHub(1, object);
    }
 
-   for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
-      outputList[groupIndex]->setNumberOfChannels(16);
+   output.setNumberOfChannels(16);
 
    // do stuff
    if (OperationMode::Passthrough == operationMode)
@@ -163,16 +159,12 @@ void Maestro::processPassthrough()
    const bool on = getTempo().isRunningOrFirstTick();
 
    uint8_t passthroughValues[Tracker::Project::laneCount];
-   for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
    {
-      for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
-      {
-         const float value = on ? inputList[groupIndex]->getVoltage(channelIndex) : 0.0;
-         outputList[groupIndex]->setVoltage(value, channelIndex);
+      const float value = on ? input.getVoltage(laneIndex) : 0.0;
+      output.setVoltage(value, laneIndex);
 
-         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
-         passthroughValues[laneIndex] = voltageToValue(value);
-      }
+      passthroughValues[laneIndex] = voltageToValue(value);
    }
 
    if (uploadInput.isTriggered())
@@ -194,15 +186,11 @@ void Maestro::proccessRemote()
 {
    const bool on = getTempo().isRunningOrFirstTick();
 
-   for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
    {
-      for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
-      {
-         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
-         const uint8_t value = on ? remoteValues[laneIndex] : 0;
-         const float voltage = valueToVoltage(value);
-         outputList[groupIndex]->setVoltage(voltage, channelIndex);
-      }
+      const uint8_t value = on ? remoteValues[laneIndex] : 0;
+      const float voltage = valueToVoltage(value);
+      output.setVoltage(voltage, laneIndex);
    }
 }
 
@@ -214,18 +202,14 @@ void Maestro::processInternal()
    const float tickPercentage = tempo.getPercentage();
    const float segmentPercentage = project.getCurrentSegmentPrecentage(tickPercentage);
 
-   for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
+   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
    {
-      for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
-      {
-         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
-         const Tracker::Lane& lane = project.getLane(laneIndex);
+      const Tracker::Lane& lane = project.getLane(laneIndex);
 
-         const uint8_t value = on ? lane.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
+      const uint8_t value = on ? lane.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
 
-         const float voltage = valueToVoltage(value);
-         outputList[groupIndex]->setVoltage(voltage, channelIndex);
-      }
+      const float voltage = valueToVoltage(value);
+      output.setVoltage(voltage, laneIndex);
    }
 }
 
@@ -264,31 +248,27 @@ void Maestro::updatePassthrough()
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
 
-   for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
    {
-      const uint8_t y = 15 + 10 * channelIndex;
+      const uint8_t y = 15 + 10 * laneIndex;
 
-      for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
-      {
-         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
-         const Tracker::Lane& lane = project.getLane(laneIndex);
+      const Tracker::Lane& lane = project.getLane(laneIndex);
 
-         controller.setColor(Svin::Color{155, 155, 155});
+      controller.setColor(Svin::Color{155, 155, 155});
 
-         std::string name = lane.getName();
-         if (name.length() > 4)
-            name = name.substr(0, 4);
-         const uint8_t xName = 4 + groupIndex * 50;
-         controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
+      std::string name = lane.getName();
+      if (name.length() > 4)
+         name = name.substr(0, 4);
+      const uint8_t xName = 4 + laneIndex * 50;
+      controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
-         controller.setColor(Svin::Color{255, 255, 255});
+      controller.setColor(Svin::Color{255, 255, 255});
 
-         const float voltage = inputList[groupIndex]->getVoltage(channelIndex);
-         const uint8_t value = voltageToValue(voltage);
-         const std::string valueText = on ? Text::convert(value) : "off";
-         const uint8_t xVoltage = 46 + groupIndex * 50;
-         controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
-      }
+      const float voltage = input.getVoltage(laneIndex);
+      const uint8_t value = voltageToValue(voltage);
+      const std::string valueText = on ? Text::convert(value) : "off";
+      const uint8_t xVoltage = 46 + laneIndex * 50;
+      controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
    }
 }
 
@@ -305,30 +285,26 @@ void Maestro::updateRemote()
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
 
-   for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
    {
-      const uint8_t y = 15 + 10 * channelIndex;
+      const uint8_t y = 15 + 10 * laneIndex;
 
-      for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
-      {
-         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
-         const Tracker::Lane& lane = project.getLane(laneIndex);
+      const Tracker::Lane& lane = project.getLane(laneIndex);
 
-         controller.setColor(Svin::Color{155, 155, 155});
+      controller.setColor(Svin::Color{155, 155, 155});
 
-         std::string name = lane.getName();
-         if (name.length() > 4)
-            name = name.substr(0, 4);
-         const uint8_t xName = 4 + groupIndex * 50;
-         controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
+      std::string name = lane.getName();
+      if (name.length() > 4)
+         name = name.substr(0, 4);
+      const uint8_t xName = 4 + laneIndex * 50;
+      controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
-         controller.setColor(Svin::Color{255, 255, 255});
+      controller.setColor(Svin::Color{255, 255, 255});
 
-         const uint8_t value = remoteValues[laneIndex];
-         const std::string valueText = on ? Text::convert(value) : "off";
-         const uint8_t xValue = 46 + groupIndex * 50;
-         controller.writeText(xValue, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
-      }
+      const uint8_t value = remoteValues[laneIndex];
+      const std::string valueText = on ? Text::convert(value) : "off";
+      const uint8_t xValue = 46 + laneIndex * 50;
+      controller.writeText(xValue, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
    }
 }
 
@@ -384,30 +360,26 @@ void Maestro::updateInternalCurrent()
    const float tickPercentage = tempo.getPercentage();
    const float segmentPercentage = project.getCurrentSegmentPrecentage(tickPercentage);
 
-   for (uint8_t channelIndex = 0; channelIndex < 16; channelIndex++)
+   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
    {
-      const uint8_t y = 15 + 10 * channelIndex;
+      const uint8_t y = 15 + 10 * laneIndex;
 
-      for (uint8_t groupIndex = 0; groupIndex < 2; groupIndex++)
-      {
-         const uint8_t laneIndex = 16 * groupIndex + channelIndex;
-         const Tracker::Lane& lane = project.getLane(laneIndex);
+      const Tracker::Lane& lane = project.getLane(laneIndex);
 
-         controller.setColor(Svin::Color{155, 155, 155});
+      controller.setColor(Svin::Color{155, 155, 155});
 
-         std::string name = lane.getName();
-         if (name.length() > 4)
-            name = name.substr(0, 4);
-         const uint8_t xName = 4 + groupIndex * 50;
-         controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
+      std::string name = lane.getName();
+      if (name.length() > 4)
+         name = name.substr(0, 4);
+      const uint8_t xName = 4 + laneIndex * 50;
+      controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
-         controller.setColor(Svin::Color{255, 255, 255});
+      controller.setColor(Svin::Color{255, 255, 255});
 
-         const uint8_t value = on ? lane.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
-         const std::string valueText = on ? Text::convert(value) : "off";
-         const uint8_t xVoltage = 46 + groupIndex * 50;
-         controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
-      }
+      const uint8_t value = on ? lane.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
+      const std::string valueText = on ? Text::convert(value) : "off";
+      const uint8_t xVoltage = 46 + laneIndex * 50;
+      controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
    }
 }
 

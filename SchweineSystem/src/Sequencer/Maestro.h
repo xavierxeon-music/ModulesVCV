@@ -66,7 +66,7 @@ private:
    std::string buffer;
 
    // input
-   Svin::Input::List inputList;
+   Svin::Input input;
    Range::Mapper voltageToValue;
 
    // upload
@@ -74,7 +74,7 @@ private:
 
    // outpt
    Range::Mapper valueToVoltage;
-   Svin::Output::List outputList;
+   Svin::Output output;
 
    // mode
    Svin::ButtonLED loopButton;
