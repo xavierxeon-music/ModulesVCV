@@ -17,6 +17,7 @@ const Svin::Midi::Common::InterfaceMap Svin::Midi::Common::interfaceMap = {
    {::Midi::Device::Daisy, "ESI M4U eX Port 4"},
    {::Midi::Device::DrumTrigger, "ESI M4U eX Port 5"},
    {::Midi::Device::VCMC, "VCMC"},
+   {::Midi::Device::ACDC, "OWL-ACDC"},
    {::Midi::Device::Metropolix, "Metropolix"},
    {::Midi::Device::FlameCC, "ESI M4U eX Port 7"},
    {::Midi::Device::BitBox, "ESI M4U eX Port 4"},
@@ -59,14 +60,15 @@ Svin::Midi::Output::~Output()
    close();
 }
 
-bool Svin::Midi::Output::open()
+bool Svin::Midi::Output::open(bool verbose)
 {
    if (!isVirtual)
    {
       for (unsigned int port = 0; port < midiOutput.getPortCount(); port++)
       {
          const std::string deviceName = midiOutput.getPortName(port);
-         //std::cout << deviceName << std::endl;
+         if (verbose)
+            std::cout << deviceName << std::endl;
 
          if (targetDeviceName == deviceName)
          {
@@ -190,14 +192,15 @@ Svin::Midi::Input::~Input()
    close();
 }
 
-bool Svin::Midi::Input::open()
+bool Svin::Midi::Input::open(bool verbose)
 {
    if (!isVirtual)
    {
       for (unsigned int port = 0; port < midiInput.getPortCount(); port++)
       {
          const std::string deviceName = midiInput.getPortName(port);
-         //std::cout << deviceName << std::endl;
+         if (verbose)
+            std::cout << deviceName << std::endl;
 
          if (targetDeviceName == deviceName)
          {

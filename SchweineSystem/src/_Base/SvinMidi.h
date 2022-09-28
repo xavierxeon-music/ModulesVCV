@@ -43,7 +43,7 @@ namespace Svin
          virtual ~Output();
 
       public:
-         bool open();
+         bool open(bool verbose = false);
          void close();
          bool connected();
 
@@ -67,7 +67,7 @@ namespace Svin
          virtual ~Input();
 
       public:
-         bool open();
+         bool open(bool verbose = false);
          void close();
          bool connected();
 

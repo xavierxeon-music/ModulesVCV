@@ -4,12 +4,12 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <Tools/Range.h>
-
 #include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 #include <SvinOutput.h>
+
+#include <Tools/Range.h>
 
 #include <SvinButtonLED.h>
 #include <SvinLED.h>
