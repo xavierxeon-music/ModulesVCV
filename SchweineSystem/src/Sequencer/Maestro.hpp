@@ -10,13 +10,15 @@ struct Maestro::Panel
    enum ParamId
    {
       // buttons
-      Mode = 0,
+      BankDown = 0,
+      BankUp = 1,
+      Mode = 2,
       // switches
       // ledbuttons
-      Loop = 1,
+      Group2_Loop = 3,
       // knobs
       // sliders
-      PARAMS_LEN = 2
+      PARAMS_LEN = 4
    };
 
    enum DisplayId
@@ -34,24 +36,22 @@ struct Maestro::Panel
 
    enum InputId
    {
-      Upload = 0,
-      Group2_Pass = 1,
-      Group1_Pass = 2,
-      INPUTS_LEN = 3
+      Group2_Pass = 0,
+      Upload = 1,
+      INPUTS_LEN = 2
    };
 
    enum OutputId
    {
       Group2_Output = 0,
-      Group1_Output = 1,
-      OUTPUTS_LEN = 2
+      OUTPUTS_LEN = 1
    };
 
    enum LightId
    {
       // leds
       // ledbuttons
-      RGB_Loop = 0,
+      RGB_Group2_Loop = 0,
       // sliders
       LIGHTS_LEN = 3
    };
@@ -62,32 +62,32 @@ void Maestro::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
+   configButton(Panel::BankDown, "BankDown");
+   configButton(Panel::BankUp, "BankUp");
    configButton(Panel::Mode, "Mode");
 
-   configButton(Panel::Loop, "Loop");
+   configButton(Panel::Group2_Loop, "Group2_Loop");
 
-   configInput(Panel::Upload, "Upload");
    configInput(Panel::Group2_Pass, "Group2_Pass");
-   configInput(Panel::Group1_Pass, "Group1_Pass");
+   configInput(Panel::Upload, "Upload");
 
    configOutput(Panel::Group2_Output, "Group2_Output");
-   configOutput(Panel::Group1_Output, "Group1_Output");
 }
 
 void MaestroWidget::setup()
 {
    makePanel("res/Sequencer/Maestro.svg");
 
-   makeButton(this, Vec(97.56, 232.00), Maestro::Panel::Mode);
+   makeButton(this, Vec(95.85, 261.47), Maestro::Panel::BankDown);
+   makeButton(this, Vec(95.85, 242.82), Maestro::Panel::BankUp);
+   makeButton(this, Vec(23.93, 242.82), Maestro::Panel::Mode);
 
-   makeLEDButton(this, Vec(43.21, 232.00), Maestro::Panel::Loop, Maestro::Panel::RGB_Loop);
+   makeLEDButton(this, Vec(60.00, 354.73), Maestro::Panel::Group2_Loop, Maestro::Panel::RGB_Group2_Loop);
 
-   makeInput(this, Vec(95.83, 355.81),  Maestro::Panel::Upload, false);
-   makeInput(this, Vec(24.17, 302.21),  Maestro::Panel::Group2_Pass, true);
-   makeInput(this, Vec(24.17, 268.71),  Maestro::Panel::Group1_Pass, true);
+   makeInput(this, Vec(24.17, 355.83),  Maestro::Panel::Group2_Pass, true);
+   makeInput(this, Vec(60.00, 249.04),  Maestro::Panel::Upload, false);
 
-   makeOutput(this, Vec(95.83, 302.21), Maestro::Panel::Group2_Output, true);
-   makeOutput(this, Vec(95.83, 268.71), Maestro::Panel::Group1_Output, true);
+   makeOutput(this, Vec(95.83, 355.83), Maestro::Panel::Group2_Output, true);
 
    makeOLED(this, Vec(9.00, 32.00), Maestro::Panel::Pixels_Display, 100, 180);
 }
