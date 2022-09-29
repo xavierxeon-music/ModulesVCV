@@ -15,6 +15,7 @@ FLAGS += \
 	-Isrc/_Gui \
 	-Isrc/_MusicTools \
 	-Isrc/_MusicTools/Include \
+	-Isrc/_MusicTools/Memory \
 	-Isrc/_MusicTools/RememberDummy \
 
 
@@ -23,6 +24,7 @@ SOURCES += \
 	$(wildcard src/_Base/*.cpp) \
 	$(wildcard src/_Gui/*.cpp) \
 	$(wildcard src/_MusicTools/*.cpp) \
+	$(wildcard src/_MusicTools/Memory/*.cpp) \
 	$(wildcard src/BitBus/*.cpp) \
 	$(wildcard src/Effects/*.cpp) \
 	$(wildcard src/Hardware/*.cpp) \

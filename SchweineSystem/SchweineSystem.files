@@ -32,6 +32,7 @@
 ./src/Sequencer/MidiMize.h
 ./src/Sequencer/NosferatuVampyre.h
 ./src/Sequencer/MidiCV.h
+./src/Sequencer/GateKeeper.h
 ./src/Sequencer/MidiReplay.h
 ./src/BitBus/BitBusCommon.h
 ./src/BitBus/BitBusMeterAndFreeze.h
@@ -51,6 +52,10 @@
 ./src/_Base/SvinMasterClock.h
 ./src/_Base/SvinMidi.h
 ./src/_Base/SvinOrigin.h
+./src/_MusicTools/Memory/MemoryManager.h
+./src/_MusicTools/Memory/MemoryBlock.h
+./src/_MusicTools/Memory/MemoryArray.h
+./src/_MusicTools/Memory/MemoryValue.h
 ./src/_MusicTools/RememberDummy/Remember.h
 ./src/_MusicTools/RememberDummy/RememberArray.h
 ./src/_MusicTools/RememberDummy/RememberList.h
@@ -138,6 +143,7 @@
 ./src/Sequencer/MidiMize.hpp
 ./src/Sequencer/Maestro.hpp
 ./src/Sequencer/MidiCV.hpp
+./src/Sequencer/GateKeeper.hpp
 ./src/Sequencer/NosferatuAcolyte.hpp
 ./src/Sequencer/NosferatuVampyre.hpp
 ./src/BitBus/BitBusBitOut.hpp
@@ -162,6 +168,9 @@
 ./src/_MusicTools/MidiToolTempo.hpp
 ./src/_MusicTools/MidiFile.hpp
 ./src/_MusicTools/GateOscilator.hpp
+./src/_MusicTools/Memory/MemoryArray.hpp
+./src/_MusicTools/Memory/MemoryValue.hpp
+./src/_MusicTools/Memory/MemoryBlock.hpp
 ./src/_MusicTools/TrackerLane.hpp
 ./src/_MusicTools/SampleRecorder.hpp
 ./src/_MusicTools/RememberDummy/RememberList.hpp
@@ -241,6 +250,7 @@
 ./src/Sequencer/NosferatuVampyre.cpp
 ./src/Sequencer/MidiCV.cpp
 ./src/Sequencer/NosferatuAcolyte.cpp
+./src/Sequencer/GateKeeper.cpp
 ./src/Sequencer/Maestro.cpp
 ./src/Sequencer/MidiReplay.cpp
 ./src/Sequencer/MidiMize.cpp
@@ -263,6 +273,7 @@
 ./src/_Base/SvinMidi.cpp
 ./src/_Base/SvinOrigin.cpp
 ./src/_MusicTools/AbstractSoundSource.cpp
+./src/_MusicTools/Memory/MemoryManager.cpp
 ./src/_MusicTools/Spectrum.cpp
 ./src/_MusicTools/AbstractEffect.cpp
 ./src/_MusicTools/AbstractOscilator.cpp

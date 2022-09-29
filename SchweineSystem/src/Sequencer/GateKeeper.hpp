@@ -14,8 +14,8 @@ struct GateKeeper::Panel
       BankUp = 1,
       Mode = 2,
       // switches
-      Offset = 3,
       // ledbuttons
+      Connect = 3,
       Loop = 4,
       // knobs
       // sliders
@@ -59,9 +59,10 @@ struct GateKeeper::Panel
    {
       // leds
       // ledbuttons
-      RGB_Loop = 0,
+      RGB_Connect = 0,
+      RGB_Loop = 3,
       // sliders
-      LIGHTS_LEN = 3
+      LIGHTS_LEN = 6
    };
 
 };
@@ -74,8 +75,7 @@ void GateKeeper::setup()
    configButton(Panel::BankUp, "BankUp");
    configButton(Panel::Mode, "Mode");
 
-   configSwitch(Panel::Offset, 0.0f, 1.0f, 0.0f, "Offset");
-
+   configButton(Panel::Connect, "Connect");
    configButton(Panel::Loop, "Loop");
 
    configInput(Panel::Pass, "Pass");
@@ -95,13 +95,12 @@ void GateKeeperWidget::setup()
 {
    makePanel("res/Sequencer/GateKeeper.svg");
 
-   makeButton(this, Vec(112.64, 207.02), GateKeeper::Panel::BankDown);
-   makeButton(this, Vec(112.64, 188.37), GateKeeper::Panel::BankUp);
-   makeButton(this, Vec(40.71, 188.37), GateKeeper::Panel::Mode);
+   makeButton(this, Vec(79.81, 204.72), GateKeeper::Panel::BankDown);
+   makeButton(this, Vec(79.81, 186.08), GateKeeper::Panel::BankUp);
+   makeButton(this, Vec(36.97, 185.76), GateKeeper::Panel::Mode);
 
-   makeSwitch(this, Vec(46.67, 355.40), GateKeeper::Panel::Offset, false);
-
-   makeLEDButton(this, Vec(24.17, 249.48), GateKeeper::Panel::Loop, GateKeeper::Panel::RGB_Loop);
+   makeLEDButton(this, Vec(24.17, 249.48), GateKeeper::Panel::Connect, GateKeeper::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(125.82, 189.16), GateKeeper::Panel::Loop, GateKeeper::Panel::RGB_Loop);
 
    makeInput(this, Vec(24.17, 355.83),  GateKeeper::Panel::Pass, true);
    makeInput(this, Vec(24.17, 305.92),  GateKeeper::Panel::Upload, false);
