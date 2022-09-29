@@ -167,24 +167,24 @@ void Nosferatu::Acolyte::load(const Svin::Json::Object& rootObject)
 {
    bankIndex = rootObject.get("currentBank").toInt();
 
-   for (uint8_t bankIndex = 0; bankIndex < 16; bankIndex++)
+   for (uint8_t index = 0; index < 16; index++)
    {
-      Bank& currentBank = banks[bankIndex];
+      Bank& currentBank = banks[index];
 
-      const std::string bankKey = "b" + Text::pad(std::to_string(bankIndex), 2);
+      const std::string bankKey = "b" + Text::pad(std::to_string(index), 2);
       const Svin::Json::Object bankObject = rootObject.get(bankKey).toObject();
 
       currentBank.maxActive = bankObject.get("max").toInt();
 
-      for (uint8_t index = 0; index < 8; index++)
+      for (uint8_t segmentIndex = 0; segmentIndex < 8; segmentIndex++)
       {
-         const std::string segmentKey = "s" + Text::pad(std::to_string(index), 2);
+         const std::string segmentKey = "s" + Text::pad(std::to_string(segmentIndex), 2);
          Svin::Json::Array segmentArray = bankObject.get(segmentKey).toArray();
 
-         currentBank.segments[index].pitch = segmentArray.at(0).toInt();
-         currentBank.segments[index].ticks = segmentArray.at(1).toInt();
-         currentBank.segments[index].length = segmentArray.at(2).toReal();
-         currentBank.segments[index].chance = segmentArray.at(3).toReal();
+         currentBank.segments[segmentIndex].pitch = segmentArray.at(0).toInt();
+         currentBank.segments[segmentIndex].ticks = segmentArray.at(1).toInt();
+         currentBank.segments[segmentIndex].length = segmentArray.at(2).toReal();
+         currentBank.segments[segmentIndex].chance = segmentArray.at(3).toReal();
       }
    }
 
@@ -196,22 +196,22 @@ void Nosferatu::Acolyte::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("currentBank", bankIndex);
 
-   for (uint8_t bankIndex = 0; bankIndex < 8; bankIndex++)
+   for (uint8_t bankIndex = 0; bankIndex < 16; bankIndex++)
    {
       const Bank& currentBank = banks[bankIndex];
 
       Svin::Json::Object bankObject;
       bankObject.set("max", currentBank.maxActive);
 
-      for (uint8_t index = 0; index < 16; index++)
+      for (uint8_t segmentIndex = 0; segmentIndex < 8; segmentIndex++)
       {
          Svin::Json::Array segmentArray;
-         segmentArray.append(currentBank.segments[index].pitch);
-         segmentArray.append(currentBank.segments[index].ticks);
-         segmentArray.append(currentBank.segments[index].length);
-         segmentArray.append(currentBank.segments[index].chance);
+         segmentArray.append(currentBank.segments[segmentIndex].pitch);
+         segmentArray.append(currentBank.segments[segmentIndex].ticks);
+         segmentArray.append(currentBank.segments[segmentIndex].length);
+         segmentArray.append(currentBank.segments[segmentIndex].chance);
 
-         const std::string segmentKey = "s" + Text::pad(std::to_string(index), 2);
+         const std::string segmentKey = "s" + Text::pad(std::to_string(segmentIndex), 2);
          bankObject.set(segmentKey, segmentArray);
       }
 
