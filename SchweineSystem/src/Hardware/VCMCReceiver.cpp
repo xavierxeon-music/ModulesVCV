@@ -15,6 +15,7 @@ VCMCReceiver::VCMCReceiver()
    , gateOutput(this, Panel::Gate)
    , gateLights(this)
    , latchLights(this)
+   , latchReset(this, Panel::Reset)
    , cvValues{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
    , cvOutput(this, Panel::CV)
    , aOutput(this, Panel::External_A)
@@ -86,6 +87,12 @@ void VCMCReceiver::process(const ProcessArgs& args)
 {
    if (connectionButton.isTriggered())
       connectToMidiDevice();
+
+   if (latchReset.isTriggered())
+   {
+      for (uint8_t index = 0; index < 8; index++)
+         latches[index] = false;
+   }
 
    gateOutput.setNumberOfChannels(16);
    cvOutput.setNumberOfChannels(16);

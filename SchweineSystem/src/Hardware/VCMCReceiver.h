@@ -7,13 +7,14 @@ using namespace rack;
 #include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
-#include <SvinOutput.h>
 
 #include <Tools/Range.h>
 
 #include <SvinButtonLED.h>
+#include <SvinInput.h>
 #include <SvinLED.h>
 #include <SvinLightMeter.h>
+#include <SvinOutput.h>
 
 class VCMCReceiver : public Svin::Module, public Svin::Midi::Input
 {
@@ -46,6 +47,7 @@ private:
    Svin::Output gateOutput;
    Svin::LED::List gateLights;
    Svin::LED::List latchLights;
+   Svin::Input latchReset;
 
    // cv
    uint8_t cvValues[18]; // cv = 0-7, sliders = 8-15, A = 16, B = 17

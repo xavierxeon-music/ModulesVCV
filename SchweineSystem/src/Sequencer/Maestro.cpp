@@ -14,6 +14,10 @@ Maestro::Maestro()
    , fileName()
    , project()
    , eventNameList()
+   // bank
+   , bankIndex(0)
+   , bankUpButton(this, Panel::BankUp)
+   , bankDownButton(this, Panel::BankDown)
    // midi
    , buffer()
    // input
@@ -50,6 +54,12 @@ void Maestro::process(const ProcessArgs& args)
    }
    loopButton.setActive(project.isLooping());
 
+   Variable::Integer<uint8_t> varBank(bankIndex, 0, 15, true);
+   if (bankUpButton.isTriggered())
+      varBank.increment();
+   else if (bankDownButton.isTriggered())
+      varBank.decrement();
+
    // operation mode
    if (operationModeButton.isTriggered())
    {
@@ -60,6 +70,7 @@ void Maestro::process(const ProcessArgs& args)
       Svin::Json::Object object;
       object.set("_Application", "Maestro");
       object.set("_Type", "Mode");
+      object.set("bank", bankIndex);
       object.set("mode", static_cast<uint8_t>(operationMode));
 
       sendDocumentToHub(1, object);
@@ -176,6 +187,7 @@ void Maestro::processPassthrough()
       Svin::Json::Object object;
       object.set("_Application", "Tracker");
       object.set("_Type", "State");
+      object.set("bank", bankIndex);
       object.set("state", stateArray);
 
       sendDocumentToHub(1, object);
@@ -232,6 +244,7 @@ void Maestro::updateDisplays()
    object.set("_Application", "Tracker");
    object.set("_Type", "Index");
    object.set("index", index);
+   object.set("bank", bankIndex);
    object.set("mode", static_cast<uint8_t>(operationMode));
 
    sendDocumentToHub(1, object);
@@ -242,6 +255,8 @@ void Maestro::updatePassthrough()
    controller.setColor(Svin::Color{0, 255, 0});
    controller.drawRect(0, 0, 100, 10, true);
 
+   controller.writeText(50, 20, std::to_string(bankIndex), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+
    controller.setColor(Svin::Color{0, 0, 0});
    controller.writeText(50, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
@@ -250,16 +265,18 @@ void Maestro::updatePassthrough()
 
    for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
    {
-      const uint8_t y = 15 + 10 * laneIndex;
-
       const Tracker::Lane& lane = project.getLane(laneIndex);
-
       controller.setColor(Svin::Color{155, 155, 155});
+
+      const uint8_t column = (laneIndex < 8) ? 0 : 1;
+      const uint8_t row = (laneIndex < 8) ? laneIndex : laneIndex - 8;
+
+      const uint8_t y = 55 + 10 * row;
 
       std::string name = lane.getName();
       if (name.length() > 4)
          name = name.substr(0, 4);
-      const uint8_t xName = 4 + laneIndex * 50;
+      const uint8_t xName = 4 + (column * 50);
       controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
       controller.setColor(Svin::Color{255, 255, 255});
@@ -267,7 +284,7 @@ void Maestro::updatePassthrough()
       const float voltage = input.getVoltage(laneIndex);
       const uint8_t value = voltageToValue(voltage);
       const std::string valueText = on ? Text::convert(value) : "off";
-      const uint8_t xVoltage = 46 + laneIndex * 50;
+      const uint8_t xVoltage = 46 + (column * 50);
       controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
    }
 }
@@ -276,6 +293,8 @@ void Maestro::updateRemote()
 {
    controller.setColor(Svin::Color{0, 255, 255});
    controller.drawRect(0, 0, 100, 10, true);
+
+   controller.writeText(50, 20, std::to_string(bankIndex), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 
    controller.setColor(Svin::Color{0, 0, 0});
    controller.writeText(50, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
@@ -287,23 +306,25 @@ void Maestro::updateRemote()
 
    for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
    {
-      const uint8_t y = 15 + 10 * laneIndex;
-
       const Tracker::Lane& lane = project.getLane(laneIndex);
-
       controller.setColor(Svin::Color{155, 155, 155});
+
+      const uint8_t column = (laneIndex < 8) ? 0 : 1;
+      const uint8_t row = (laneIndex < 8) ? laneIndex : laneIndex - 8;
+
+      const uint8_t y = 55 + 10 * row;
 
       std::string name = lane.getName();
       if (name.length() > 4)
          name = name.substr(0, 4);
-      const uint8_t xName = 4 + laneIndex * 50;
+      const uint8_t xName = 4 + (column * 50);
       controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
       controller.setColor(Svin::Color{255, 255, 255});
 
       const uint8_t value = remoteValues[laneIndex];
       const std::string valueText = on ? Text::convert(value) : "off";
-      const uint8_t xValue = 46 + laneIndex * 50;
+      const uint8_t xValue = 46 + (column * 50);
       controller.writeText(xValue, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
    }
 }
@@ -351,6 +372,8 @@ void Maestro::updateInternalCurrent()
    controller.setColor(Svin::Color{255, 0, 255});
    controller.drawRect(0, 0, 100, 10, true);
 
+   controller.writeText(50, 20, std::to_string(bankIndex), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+
    controller.setColor(Svin::Color{0, 0, 0});
    controller.writeText(50, 0, "Current", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
@@ -362,23 +385,25 @@ void Maestro::updateInternalCurrent()
 
    for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
    {
-      const uint8_t y = 15 + 10 * laneIndex;
-
       const Tracker::Lane& lane = project.getLane(laneIndex);
-
       controller.setColor(Svin::Color{155, 155, 155});
+
+      const uint8_t column = (laneIndex < 8) ? 0 : 1;
+      const uint8_t row = (laneIndex < 8) ? laneIndex : laneIndex - 8;
+
+      const uint8_t y = 55 + 10 * row;
 
       std::string name = lane.getName();
       if (name.length() > 4)
          name = name.substr(0, 4);
-      const uint8_t xName = 4 + laneIndex * 50;
+      const uint8_t xName = 4 + (column * 50);
       controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
       controller.setColor(Svin::Color{255, 255, 255});
 
       const uint8_t value = on ? lane.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
       const std::string valueText = on ? Text::convert(value) : "off";
-      const uint8_t xVoltage = 46 + laneIndex * 50;
+      const uint8_t xVoltage = 46 + (column * 50);
       controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
    }
 }
@@ -400,6 +425,10 @@ void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin
          return;
       }
 
+      const uint8_t objectBankIndex = object.get("bank").toInt();
+      if (objectBankIndex != bankIndex)
+         return;
+
       for (uint8_t laneIndex = 0; laneIndex < 32; laneIndex++)
       {
          const uint8_t value = stateArray.at(laneIndex).toInt();
@@ -411,6 +440,10 @@ void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin
    }
    else if ("Reload" == object.get("_Type").toString())
    {
+      const uint8_t objectBankIndex = object.get("bank").toInt();
+      if (objectBankIndex != bankIndex)
+         return;
+
       const std::string fileName = object.get("fileName").toString();
       loadProject(fileName);
    }
@@ -418,7 +451,8 @@ void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin
 
 void Maestro::load(const Svin::Json::Object& rootObject)
 {
-   operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
+   bankIndex = rootObject.get("bank").toInt();
+   operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());   
 
    bool loop = rootObject.get("loop").toBool();
    project.setLooping(loop);
@@ -429,6 +463,7 @@ void Maestro::load(const Svin::Json::Object& rootObject)
 
 void Maestro::save(Svin::Json::Object& rootObject)
 {
+   rootObject.set("bank", bankIndex);
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
    rootObject.set("loop", project.isLooping());
 

@@ -16,7 +16,7 @@ BefacoACDC::BefacoACDC()
 
    for (uint8_t index = 0; index < 4; index++)
    {
-      cvMeterList[index]->setMaxValue(127);
+      cvMeterList[index]->setMaxValue(126);
       cvMeterList[index]->setValue(0);
    }
 

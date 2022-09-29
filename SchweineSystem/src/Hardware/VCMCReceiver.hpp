@@ -50,7 +50,8 @@ struct VCMCReceiver::Panel
 
    enum InputId
    {
-      INPUTS_LEN = 0
+      Reset = 0,
+      INPUTS_LEN = 1
    };
 
    enum OutputId
@@ -95,6 +96,8 @@ void VCMCReceiver::setup()
 
    configButton(Panel::Connect, "Connect");
 
+   configInput(Panel::Reset, "Reset");
+
    configOutput(Panel::External_B, "External_B");
    configOutput(Panel::External_A, "External_A");
    configOutput(Panel::CV, "CV");
@@ -107,10 +110,12 @@ void VCMCReceiverWidget::setup()
 
    makeLEDButton(this, Vec(59.87, 360.10), VCMCReceiver::Panel::Connect, VCMCReceiver::Panel::RGB_Connect);
 
-   makeOutput(this, Vec(65.83, 322.31), VCMCReceiver::Panel::External_B, false);
-   makeOutput(this, Vec(65.83, 290.93), VCMCReceiver::Panel::External_A, false);
-   makeOutput(this, Vec(65.12, 239.81), VCMCReceiver::Panel::CV, true);
-   makeOutput(this, Vec(65.83, 106.47), VCMCReceiver::Panel::Gate, true);
+   makeInput(this, Vec(24.17, 127.79),  VCMCReceiver::Panel::Reset, false);
+
+   makeOutput(this, Vec(55.83, 325.31), VCMCReceiver::Panel::External_B, false);
+   makeOutput(this, Vec(55.12, 289.54), VCMCReceiver::Panel::External_A, false);
+   makeOutput(this, Vec(65.12, 248.81), VCMCReceiver::Panel::CV, true);
+   makeOutput(this, Vec(65.83, 102.47), VCMCReceiver::Panel::Gate, true);
 
    makeLED(this, Vec(76.18, 77.76), VCMCReceiver::Panel::RGB_Latch_Channel8);
    makeLED(this, Vec(67.31, 77.76), VCMCReceiver::Panel::RGB_Latch_Channel7);
@@ -129,24 +134,24 @@ void VCMCReceiverWidget::setup()
    makeLED(this, Vec(22.94, 53.44), VCMCReceiver::Panel::RGB_Gate_Channel2);
    makeLED(this, Vec(14.06, 53.44), VCMCReceiver::Panel::RGB_Gate_Channel1);
 
-   makeMeter(this, Vec(43.75, 309.45), 5, VCMCReceiver::Panel::Value_External_B);
-   makeMeter(this, Vec(43.42, 277.75), 5, VCMCReceiver::Panel::Value_External_A);
-   makeMeter(this, Vec(73.29, 190.90), 5, VCMCReceiver::Panel::Value_Slider_Channel8);
-   makeMeter(this, Vec(64.38, 190.90), 5, VCMCReceiver::Panel::Value_Slider_Channel7);
-   makeMeter(this, Vec(55.48, 190.90), 5, VCMCReceiver::Panel::Value_Slider_Channel6);
-   makeMeter(this, Vec(46.57, 190.90), 5, VCMCReceiver::Panel::Value_Slider_Channel5);
-   makeMeter(this, Vec(37.67, 190.90), 5, VCMCReceiver::Panel::Value_Slider_Channel4);
-   makeMeter(this, Vec(28.76, 190.90), 5, VCMCReceiver::Panel::Value_Slider_Channel3);
-   makeMeter(this, Vec(19.86, 190.90), 5, VCMCReceiver::Panel::Value_Slider_Channel2);
-   makeMeter(this, Vec(10.95, 190.90), 5, VCMCReceiver::Panel::Value_Slider_Channel1);
-   makeMeter(this, Vec(73.29, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel8);
-   makeMeter(this, Vec(64.38, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel7);
-   makeMeter(this, Vec(55.48, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel6);
-   makeMeter(this, Vec(46.57, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel5);
-   makeMeter(this, Vec(37.67, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel4);
-   makeMeter(this, Vec(28.76, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel3);
-   makeMeter(this, Vec(19.86, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel2);
-   makeMeter(this, Vec(10.95, 148.05), 5, VCMCReceiver::Panel::Value_CV_Channel1);
+   makeMeter(this, Vec(74.00, 312.47), 5, VCMCReceiver::Panel::Value_External_B);
+   makeMeter(this, Vec(73.29, 276.54), 5, VCMCReceiver::Panel::Value_External_A);
+   makeMeter(this, Vec(73.29, 202.90), 5, VCMCReceiver::Panel::Value_Slider_Channel8);
+   makeMeter(this, Vec(64.38, 202.90), 5, VCMCReceiver::Panel::Value_Slider_Channel7);
+   makeMeter(this, Vec(55.48, 202.90), 5, VCMCReceiver::Panel::Value_Slider_Channel6);
+   makeMeter(this, Vec(46.57, 202.90), 5, VCMCReceiver::Panel::Value_Slider_Channel5);
+   makeMeter(this, Vec(37.67, 202.90), 5, VCMCReceiver::Panel::Value_Slider_Channel4);
+   makeMeter(this, Vec(28.76, 202.90), 5, VCMCReceiver::Panel::Value_Slider_Channel3);
+   makeMeter(this, Vec(19.86, 202.90), 5, VCMCReceiver::Panel::Value_Slider_Channel2);
+   makeMeter(this, Vec(10.95, 202.90), 5, VCMCReceiver::Panel::Value_Slider_Channel1);
+   makeMeter(this, Vec(73.29, 160.05), 5, VCMCReceiver::Panel::Value_CV_Channel8);
+   makeMeter(this, Vec(64.38, 160.05), 5, VCMCReceiver::Panel::Value_CV_Channel7);
+   makeMeter(this, Vec(55.48, 160.05), 5, VCMCReceiver::Panel::Value_CV_Channel6);
+   makeMeter(this, Vec(46.57, 160.05), 5, VCMCReceiver::Panel::Value_CV_Channel5);
+   makeMeter(this, Vec(37.67, 160.05), 5, VCMCReceiver::Panel::Value_CV_Channel4);
+   makeMeter(this, Vec(28.76, 160.05), 5, VCMCReceiver::Panel::Value_CV_Channel3);
+   makeMeter(this, Vec(19.86, 160.05), 5, VCMCReceiver::Panel::Value_CV_Channel2);
+   makeMeter(this, Vec(10.95, 160.05), 5, VCMCReceiver::Panel::Value_CV_Channel1);
 }
 
 #endif // NOT VCMCReceiverHPP

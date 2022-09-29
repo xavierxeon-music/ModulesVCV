@@ -62,6 +62,11 @@ private:
    Tracker::Project project;
    std::vector<std::string> eventNameList;
 
+   // bank
+   uint8_t bankIndex;
+   Svin::Button bankUpButton;
+   Svin::Button bankDownButton;
+
    // midi
    std::string buffer;
 

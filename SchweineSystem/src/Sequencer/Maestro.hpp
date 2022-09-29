@@ -55,6 +55,7 @@ struct Maestro::Panel
       // sliders
       LIGHTS_LEN = 3
    };
+
 };
 
 void Maestro::setup()
@@ -77,18 +78,18 @@ void MaestroWidget::setup()
 {
    makePanel("res/Sequencer/Maestro.svg");
 
-   makeButton(this, Vec(95.85, 261.47), Maestro::Panel::BankDown);
-   makeButton(this, Vec(95.85, 242.82), Maestro::Panel::BankUp);
-   makeButton(this, Vec(23.93, 242.82), Maestro::Panel::Mode);
+   makeButton(this, Vec(97.64, 227.61), Maestro::Panel::BankDown);
+   makeButton(this, Vec(97.64, 208.97), Maestro::Panel::BankUp);
+   makeButton(this, Vec(25.71, 208.97), Maestro::Panel::Mode);
 
-   makeLEDButton(this, Vec(60.00, 354.73), Maestro::Panel::Loop, Maestro::Panel::RGB_Loop);
+   makeLEDButton(this, Vec(95.83, 285.59), Maestro::Panel::Loop, Maestro::Panel::RGB_Loop);
 
-   makeInput(this, Vec(24.17, 355.83), Maestro::Panel::Pass, true);
-   makeInput(this, Vec(60.00, 249.04), Maestro::Panel::Upload, false);
+   makeInput(this, Vec(24.17, 355.83),  Maestro::Panel::Pass, true);
+   makeInput(this, Vec(24.17, 285.02),  Maestro::Panel::Upload, false);
 
    makeOutput(this, Vec(95.83, 355.83), Maestro::Panel::Output, true);
 
-   makeOLED(this, Vec(9.00, 32.00), Maestro::Panel::Pixels_Display, 100, 180);
+   makeOLED(this, Vec(9.00, 32.00), Maestro::Panel::Pixels_Display, 100, 140);
 }
 
 #endif // NOT MaestroHPP
