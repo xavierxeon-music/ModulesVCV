@@ -14,12 +14,13 @@ struct GateKeeper::Panel
       BankUp = 1,
       Mode = 2,
       // switches
+      NoOffset = 3,
       // ledbuttons
-      Connect = 3,
-      Loop = 4,
+      Connect = 4,
+      Loop = 5,
       // knobs
       // sliders
-      PARAMS_LEN = 5
+      PARAMS_LEN = 6
    };
 
    enum DisplayId
@@ -38,8 +39,7 @@ struct GateKeeper::Panel
    enum InputId
    {
       Pass = 0,
-      Upload = 1,
-      INPUTS_LEN = 2
+      INPUTS_LEN = 1
    };
 
    enum OutputId
@@ -75,11 +75,12 @@ void GateKeeper::setup()
    configButton(Panel::BankUp, "BankUp");
    configButton(Panel::Mode, "Mode");
 
+   configSwitch(Panel::NoOffset, 0.0f, 1.0f, 0.0f, "NoOffset");
+
    configButton(Panel::Connect, "Connect");
    configButton(Panel::Loop, "Loop");
 
    configInput(Panel::Pass, "Pass");
-   configInput(Panel::Upload, "Upload");
 
    configOutput(Panel::Eight_Output, "Eight_Output");
    configOutput(Panel::Seven_Output, "Seven_Output");
@@ -99,11 +100,12 @@ void GateKeeperWidget::setup()
    makeButton(this, Vec(79.81, 186.08), GateKeeper::Panel::BankUp);
    makeButton(this, Vec(36.97, 185.76), GateKeeper::Panel::Mode);
 
+   makeSwitch(this, Vec(16.23, 322.51), GateKeeper::Panel::NoOffset, false);
+
    makeLEDButton(this, Vec(24.17, 249.48), GateKeeper::Panel::Connect, GateKeeper::Panel::RGB_Connect);
    makeLEDButton(this, Vec(125.82, 189.16), GateKeeper::Panel::Loop, GateKeeper::Panel::RGB_Loop);
 
    makeInput(this, Vec(24.17, 355.83),  GateKeeper::Panel::Pass, true);
-   makeInput(this, Vec(24.17, 305.92),  GateKeeper::Panel::Upload, false);
 
    makeOutput(this, Vec(125.83, 355.83), GateKeeper::Panel::Eight_Output, true);
    makeOutput(this, Vec(125.83, 317.16), GateKeeper::Panel::Seven_Output, true);

@@ -57,6 +57,12 @@ void Svin::Module::Majordomo::tryConnect()
 
 void Svin::Module::Majordomo::document(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex)
 {
+   const std::string appName = object.get("_Application").toString();
+
+   if (moduleMap.find(appName) != moduleMap.end()) // already resgistered  mdoule with that name
+      return;
+
+   moduleMap[appName]->receivedDocumentFromHub(channel, object, docIndex);
 }
 
 // bus abstract

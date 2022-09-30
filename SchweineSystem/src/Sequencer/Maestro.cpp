@@ -1,8 +1,6 @@
 #include "Maestro.h"
 
-#include <Midi/MidiCommon.h>
 #include <Tools/File.h>
-#include <Tools/SevenBit.h>
 #include <Tools/Text.h>
 #include <Tools/Variable.h>
 
@@ -18,8 +16,6 @@ Maestro::Maestro()
    , bankIndex(0)
    , bankUpButton(this, Panel::BankUp)
    , bankDownButton(this, Panel::BankDown)
-   // midi
-   , buffer()
    // input
    , input(this, Panel::Pass)
    , voltageToValue(0.0, 10.0, 0, 255)
@@ -33,7 +29,8 @@ Maestro::Maestro()
    , operationMode(OperationMode::Passthrough)
    , operationModeButton(this, Panel::Mode)
    , remoteValues{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-   , controller(this, Maestro::Panel::Pixels_Display)
+   // display
+   , controller(this, Panel::Pixels_Display)
    , lastNamedSegement()
 {
    setup();
@@ -80,13 +77,9 @@ void Maestro::process(const ProcessArgs& args)
 
    // do stuff
    if (OperationMode::Passthrough == operationMode)
-   {
       return processPassthrough();
-   }
    else if (OperationMode::Remote == operationMode)
-   {
       return proccessRemote();
-   }
 
    if (hasReset())
    {
@@ -131,18 +124,18 @@ void Maestro::loadProject(const std::string& newFileName)
       project.clear();
       project.update(division, segmentCount);
 
-      Array laneArray = projectObject.get("lanes").toArray();
-      if (project.getLaneCount() != laneArray.size())
+      Array contourArray = projectObject.get("contours").toArray();
+      if (project.getContourCount() != contourArray.size())
       {
-         std::cout << newFileName << " " << (uint16_t)project.getLaneCount() << " " << laneArray.size() << std::endl;
+         std::cout << newFileName << " " << (uint16_t)project.getContourCount() << " " << contourArray.size() << std::endl;
          return;
       }
 
-      for (uint8_t laneIndex = 0; laneIndex < project.getLaneCount(); laneIndex++)
+      for (uint8_t contourIndex = 0; contourIndex < project.getContourCount(); contourIndex++)
       {
-         Tracker::Lane& lane = project.getLane(laneIndex);
-         Object laneObject = laneArray.at(laneIndex).toObject();
-         lane.setName(laneObject.get("name").toString());
+         Contour& contour = project.getContour(contourIndex);
+         Object contourObject = contourArray.at(contourIndex).toObject();
+         contour.setName(contourObject.get("name").toString());
 
          for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
          {
@@ -150,16 +143,16 @@ void Maestro::loadProject(const std::string& newFileName)
             while (segmentKey.length() < digitCount)
                segmentKey = "0" + segmentKey;
 
-            if (!laneObject.hasKey(segmentKey))
+            if (!contourObject.hasKey(segmentKey))
                continue;
 
-            Object segmentObject = laneObject.get(segmentKey).toObject();
-            lane.setSegmentSteady(segmentIndex, segmentObject.get("steady").toBool());
+            Object segmentObject = contourObject.get(segmentKey).toObject();
+            contour.setSegmentSteady(segmentIndex, segmentObject.get("steady").toBool());
 
             if (segmentObject.hasKey("start"))
-               lane.setSegmentStartValue(segmentIndex, segmentObject.get("start").toInt());
+               contour.setSegmentStartValue(segmentIndex, segmentObject.get("start").toInt());
             if (segmentObject.hasKey("end"))
-               lane.setSegmentEndValue(segmentIndex, segmentObject.get("end").toInt());
+               contour.setSegmentEndValue(segmentIndex, segmentObject.get("end").toInt());
          }
       }
    }
@@ -169,20 +162,20 @@ void Maestro::processPassthrough()
 {
    const bool on = getTempo().isRunningOrFirstTick();
 
-   uint8_t passthroughValues[Tracker::Project::laneCount];
-   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
+   uint8_t passthroughValues[Contour::Poly::contourCount];
+   for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
-      const float value = on ? input.getVoltage(laneIndex) : 0.0;
-      output.setVoltage(value, laneIndex);
+      const float value = on ? input.getVoltage(contourIndex) : 0.0;
+      output.setVoltage(value, contourIndex);
 
-      passthroughValues[laneIndex] = voltageToValue(value);
+      passthroughValues[contourIndex] = voltageToValue(value);
    }
 
    if (uploadInput.isTriggered())
    {
       Svin::Json::Array stateArray;
-      for (uint8_t laneIndex = 0; laneIndex < Tracker::Project::laneCount; laneIndex++)
-         stateArray.append(passthroughValues[laneIndex]);
+      for (uint8_t contourIndex = 0; contourIndex < Contour::Poly::contourCount; contourIndex++)
+         stateArray.append(passthroughValues[contourIndex]);
 
       Svin::Json::Object object;
       object.set("_Application", "Tracker");
@@ -198,11 +191,11 @@ void Maestro::proccessRemote()
 {
    const bool on = getTempo().isRunningOrFirstTick();
 
-   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
+   for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
-      const uint8_t value = on ? remoteValues[laneIndex] : 0;
+      const uint8_t value = on ? remoteValues[contourIndex] : 0;
       const float voltage = valueToVoltage(value);
-      output.setVoltage(voltage, laneIndex);
+      output.setVoltage(voltage, contourIndex);
    }
 }
 
@@ -214,14 +207,14 @@ void Maestro::processInternal()
    const float tickPercentage = tempo.getPercentage();
    const float segmentPercentage = project.getCurrentSegmentPrecentage(tickPercentage);
 
-   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
+   for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
-      const Tracker::Lane& lane = project.getLane(laneIndex);
+      const Contour& contour = project.getContour(contourIndex);
 
-      const uint8_t value = on ? lane.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
+      const uint8_t value = on ? contour.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
 
       const float voltage = valueToVoltage(value);
-      output.setVoltage(voltage, laneIndex);
+      output.setVoltage(voltage, contourIndex);
    }
 }
 
@@ -263,17 +256,17 @@ void Maestro::updatePassthrough()
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
 
-   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
+   for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
-      const Tracker::Lane& lane = project.getLane(laneIndex);
+      const Contour& contour = project.getContour(contourIndex);
       controller.setColor(Svin::Color{155, 155, 155});
 
-      const uint8_t column = (laneIndex < 8) ? 0 : 1;
-      const uint8_t row = (laneIndex < 8) ? laneIndex : laneIndex - 8;
+      const uint8_t column = (contourIndex < 8) ? 0 : 1;
+      const uint8_t row = (contourIndex < 8) ? contourIndex : contourIndex - 8;
 
       const uint8_t y = 55 + 10 * row;
 
-      std::string name = lane.getName();
+      std::string name = contour.getName();
       if (name.length() > 4)
          name = name.substr(0, 4);
       const uint8_t xName = 4 + (column * 50);
@@ -281,7 +274,7 @@ void Maestro::updatePassthrough()
 
       controller.setColor(Svin::Color{255, 255, 255});
 
-      const float voltage = input.getVoltage(laneIndex);
+      const float voltage = input.getVoltage(contourIndex);
       const uint8_t value = voltageToValue(voltage);
       const std::string valueText = on ? Text::convert(value) : "off";
       const uint8_t xVoltage = 46 + (column * 50);
@@ -304,17 +297,17 @@ void Maestro::updateRemote()
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
 
-   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
+   for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
-      const Tracker::Lane& lane = project.getLane(laneIndex);
+      const Contour& contour = project.getContour(contourIndex);
       controller.setColor(Svin::Color{155, 155, 155});
 
-      const uint8_t column = (laneIndex < 8) ? 0 : 1;
-      const uint8_t row = (laneIndex < 8) ? laneIndex : laneIndex - 8;
+      const uint8_t column = (contourIndex < 8) ? 0 : 1;
+      const uint8_t row = (contourIndex < 8) ? contourIndex : contourIndex - 8;
 
       const uint8_t y = 55 + 10 * row;
 
-      std::string name = lane.getName();
+      std::string name = contour.getName();
       if (name.length() > 4)
          name = name.substr(0, 4);
       const uint8_t xName = 4 + (column * 50);
@@ -322,7 +315,7 @@ void Maestro::updateRemote()
 
       controller.setColor(Svin::Color{255, 255, 255});
 
-      const uint8_t value = remoteValues[laneIndex];
+      const uint8_t value = remoteValues[contourIndex];
       const std::string valueText = on ? Text::convert(value) : "off";
       const uint8_t xValue = 46 + (column * 50);
       controller.writeText(xValue, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
@@ -383,17 +376,17 @@ void Maestro::updateInternalCurrent()
    const float tickPercentage = tempo.getPercentage();
    const float segmentPercentage = project.getCurrentSegmentPrecentage(tickPercentage);
 
-   for (uint8_t laneIndex = 0; laneIndex < 16; laneIndex++)
+   for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
-      const Tracker::Lane& lane = project.getLane(laneIndex);
+      const Contour& contour = project.getContour(contourIndex);
       controller.setColor(Svin::Color{155, 155, 155});
 
-      const uint8_t column = (laneIndex < 8) ? 0 : 1;
-      const uint8_t row = (laneIndex < 8) ? laneIndex : laneIndex - 8;
+      const uint8_t column = (contourIndex < 8) ? 0 : 1;
+      const uint8_t row = (contourIndex < 8) ? contourIndex : contourIndex - 8;
 
       const uint8_t y = 55 + 10 * row;
 
-      std::string name = lane.getName();
+      std::string name = contour.getName();
       if (name.length() > 4)
          name = name.substr(0, 4);
       const uint8_t xName = 4 + (column * 50);
@@ -401,7 +394,7 @@ void Maestro::updateInternalCurrent()
 
       controller.setColor(Svin::Color{255, 255, 255});
 
-      const uint8_t value = on ? lane.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
+      const uint8_t value = on ? contour.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
       const std::string valueText = on ? Text::convert(value) : "off";
       const uint8_t xVoltage = 46 + (column * 50);
       controller.writeText(xVoltage, y, valueText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Right);
@@ -411,9 +404,6 @@ void Maestro::updateInternalCurrent()
 void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
 {
    if (1 != channel || 0 != docIndex)
-      return;
-
-   if ("Tracker" != object.get("_Application").toString())
       return;
 
    if ("Remote" == object.get("_Type").toString())
@@ -429,10 +419,10 @@ void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin
       if (objectBankIndex != bankIndex)
          return;
 
-      for (uint8_t laneIndex = 0; laneIndex < 32; laneIndex++)
+      for (uint8_t contourIndex = 0; contourIndex < 32; contourIndex++)
       {
-         const uint8_t value = stateArray.at(laneIndex).toInt();
-         remoteValues[laneIndex] = value;
+         const uint8_t value = stateArray.at(contourIndex).toInt();
+         remoteValues[contourIndex] = value;
       }
 
       const uint32_t index = object.get("index").toInt();

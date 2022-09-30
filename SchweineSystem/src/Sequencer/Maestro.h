@@ -4,13 +4,12 @@
 #include <rack.hpp>
 using namespace rack;
 
-#include <Blocks/TrackerProject.h>
-#include <Tools/Range.h>
-
 #include <SvinMasterClock.h>
-#include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
+
+#include <Blocks/Contour.h>
+#include <Tools/Range.h>
 
 #include <SvinButton.h>
 #include <SvinButtonLED.h>
@@ -59,16 +58,13 @@ private:
 
 private:
    std::string fileName;
-   Tracker::Project project;
+   Contour::Poly project;
    std::vector<std::string> eventNameList;
 
    // bank
    uint8_t bankIndex;
    Svin::Button bankUpButton;
    Svin::Button bankDownButton;
-
-   // midi
-   std::string buffer;
 
    // input
    Svin::Input input;
@@ -86,7 +82,7 @@ private:
 
    OperationMode operationMode;
    Svin::Button operationModeButton;
-   uint8_t remoteValues[Tracker::Project::laneCount];
+   uint8_t remoteValues[Contour::Poly::contourCount];
 
    // display
    Svin::DisplayOLED::Controller controller;

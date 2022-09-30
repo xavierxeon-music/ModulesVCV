@@ -14,6 +14,19 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinSwitch.h>
 
+/* --------- !! IMPORTANT !! ---------
+Daisy Pahch uses TRS A, whereas FlameCC uses TRS B
+see https://minimidi.world
+
+either use a [TRS A to MIDI] -> [Midi Cable] -> [TRS B to MIDI],
+
+or make your own custom cable
+  Type A          Type B
+ Sink   /_\     Source /_\
+ Source |_|     Sink   |_|
+ Shield | |     Shield | |
+*/
+
 class FlameCCSender : public Svin::Module, private Svin::Midi::Output
 {
 public:
