@@ -37,9 +37,9 @@ namespace Svin
 
       public:
          uint16_t compileIndex(const uint8_t x, const uint8_t y) const;
-         void fill(const Color& fillColor = Color{0, 0, 0}); // set all pixels to fill color
+         void fill(const Colour& fillColor = Colour{0, 0, 0}); // set all pixels to fill color
 
-         void setColor(const Color& newColor);
+         void setColor(const Colour& newColor);
          void drawPixel(const uint8_t x, const uint8_t y);
 
          void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);

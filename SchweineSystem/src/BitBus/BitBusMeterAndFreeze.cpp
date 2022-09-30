@@ -28,14 +28,14 @@ BitBus::MeterAndFreeze::MeterAndFreeze()
                      Panel::RGB_Bit1_Status1});
 
    for (uint8_t index = 0; index < 8; index++)
-      lightList[index]->setDefaultColor(Color{0, 255, 0});
+      lightList[index]->setDefaultColor(Colour{0, 255, 0});
 
    freezeButton.setLatchBuddy(&freezeInput);
-   freezeButton.setDefaultColor(Color{0, 0, 255});
+   freezeButton.setDefaultColor(Colour{0, 0, 255});
    freezeButton.setOff();
 
    sampleButton.setLatchBuddy(&sampleInput);
-   sampleButton.setDefaultColor(Color{0, 0, 255});
+   sampleButton.setDefaultColor(Colour{0, 0, 255});
    sampleButton.setOff();
 }
 

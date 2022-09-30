@@ -77,7 +77,7 @@ Nosferatu::Acolyte::Acolyte()
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      currentLightList[index]->setDefaultColor(Color{255, 255, 0});
+      currentLightList[index]->setDefaultColor(Colour{255, 255, 0});
       currentLightList[index]->setOn();
 
       pitchSliderList[index]->setRange(0.0, 24.0);
@@ -86,7 +86,7 @@ Nosferatu::Acolyte::Acolyte()
 
       tickSliderList[index]->setRange(1.0, 16.0, 2.0);
       tickSliderList[index]->enableSteps(true);
-      tickSliderList[index]->setDefaultColor(Color{0, 0, 255});
+      tickSliderList[index]->setDefaultColor(Colour{0, 0, 255});
       tickSliderList[index]->setOn();
 
       lengthKnobList[index]->setRange(0.0, 1.0, 0.5);
@@ -95,11 +95,11 @@ Nosferatu::Acolyte::Acolyte()
       chanceKnobList[index]->setRange(0.0, 1.0, 1.0);
       chanceKnobList[index]->enableSteps(true, 0.05);
 
-      activeButtonList[index]->setDefaultColor(Color{0, 255, 0});
+      activeButtonList[index]->setDefaultColor(Colour{0, 255, 0});
       activeButtonList[index]->setOn();
    }
 
-   display.setColor(Color{255, 255, 0});
+   display.setColor(Colour{255, 255, 0});
 
    bankChange();
 }
@@ -140,7 +140,7 @@ void Nosferatu::Acolyte::updateDisplays()
       currentLightList[index]->setActive(index == currentSegmentIndex);
 
       const Note note = Note::fromMidi(noteBaseValue + currentBank.offset + currentBank.segments[index].pitch);
-      pitchSliderList[index]->setColor(Color::noteMap.at(note.value));
+      pitchSliderList[index]->setColor(Colour::noteMap.at(note.value));
 
       const bool evenTick = (0 == (currentBank.segments[index].ticks % 2));
       tickSliderList[index]->setBrightness(evenTick ? 1.0 : 0.2);

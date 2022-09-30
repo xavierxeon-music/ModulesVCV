@@ -5,12 +5,12 @@
 Svin::LED::LED(Module* module, const uint16_t& rgbIndex)
    : module(module)
    , rgbIndex(rgbIndex)
-   , defaultColor(Color{255, 255, 255})
+   , defaultColor(Colour{255, 255, 255})
    , brightness(1.0)
 {
 }
 
-void Svin::LED::setColor(const Color& color)
+void Svin::LED::setColor(const Colour& color)
 {
    const float red = static_cast<float>(color.red) / 255.0;
    module->lights[rgbIndex + 0].setBrightness(red);
@@ -22,7 +22,7 @@ void Svin::LED::setColor(const Color& color)
    module->lights[rgbIndex + 2].setBrightness(blue);
 }
 
-void Svin::LED::setDefaultColor(const Color& color)
+void Svin::LED::setDefaultColor(const Colour& color)
 {
    defaultColor = color;
 }
@@ -62,7 +62,7 @@ void Svin::LED::setBrightness(const float newBrightness)
    const uint8_t green = static_cast<uint8_t>(fgreen);
    const uint8_t blue = static_cast<uint8_t>(fblue);
 
-   setColor(Color{red, green, blue});
+   setColor(Colour{red, green, blue});
 }
 
 // list

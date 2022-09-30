@@ -20,9 +20,9 @@ namespace Svin
 
    public:
       // set color directly
-      void setColor(const Color& color);
+      void setColor(const Colour& color);
       // use default color
-      void setDefaultColor(const Color& color);
+      void setDefaultColor(const Colour& color);
       void setOn();
       void setOff();
       void setActive(bool on);
@@ -33,7 +33,7 @@ namespace Svin
 
    private:
       const uint16_t rgbIndex;
-      Color defaultColor;
+      Colour defaultColor;
       float brightness;
    };
 

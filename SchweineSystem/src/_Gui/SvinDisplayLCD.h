@@ -27,7 +27,7 @@ namespace Svin
 
       public:
          void setText(const std::string& newText);
-         void setColor(const Color& newColor);
+         void setColor(const Colour& newColor);
 
       private:
          friend class Widget;
