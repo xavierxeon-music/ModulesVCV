@@ -3,6 +3,8 @@
 
 #include <rack.hpp>
 
+#include <Tools/Colour.h>
+
 #include <SvinCommon.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>

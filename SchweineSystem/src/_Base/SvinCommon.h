@@ -5,19 +5,8 @@
 
 #include <MusicTools.h>
 
-#include <Music/Note.h>
-
 namespace Svin
 {   
-   struct Color
-   {
-      uint8_t red;
-      uint8_t green;
-      uint8_t blue;
-
-      using NoteMap = std::map<Note::Value, Color>;
-      static const NoteMap noteMap;
-   };
 
    class Module;
 

@@ -35,7 +35,7 @@ MidiReplay::MidiReplay()
 
    displayController.onClicked(this, &MidiReplay::displayClicked);
 
-   loopButton.setDefaultColor(Svin::Color{0, 255, 0});
+   loopButton.setDefaultColor(Color{0, 255, 0});
 }
 
 void MidiReplay::process(const ProcessArgs& args)
@@ -150,12 +150,12 @@ void MidiReplay::updateDisplays()
 
    if (DisplayMode::Overview == displayMode)
    {
-      displayController.setColor(Svin::Color{255, 255, 255});
+      displayController.setColor(Color{255, 255, 255});
       displayController.drawRect(0, 0, 99, 10, true);
       displayController.drawRect(0, 34, 99, 43, true);
       displayController.drawRect(0, 84, 99, 93, true);
 
-      displayController.setColor(Svin::Color{0, 0, 0});
+      displayController.setColor(Color{0, 0, 0});
       const std::size_t posSlash = fileName.rfind("/");
       const std::string fileNameEnd = fileName.substr(1 + posSlash);
       displayController.writeText(1, 1, fileNameEnd, Svin::DisplayOLED::Font::Normal);
@@ -163,7 +163,7 @@ void MidiReplay::updateDisplays()
       displayController.writeText(1, 35, " b a r s", Svin::DisplayOLED::Font::Normal);
       displayController.writeText(1, 85, " t i m e", Svin::DisplayOLED::Font::Normal);
 
-      displayController.setColor(Svin::Color{255, 255, 255});
+      displayController.setColor(Color{255, 255, 255});
 
       const Tempo tempo = getTempo();
       const uint8_t bpm = tempo.getBeatsPerMinute();
@@ -205,13 +205,13 @@ void MidiReplay::updateDisplays()
    }
    else if (DisplayMode::Tracks == displayMode)
    {
-      displayController.setColor(Svin::Color{255, 255, 255});
+      displayController.setColor(Color{255, 255, 255});
       displayController.drawRect(0, 0, 99, 10, true);
 
-      displayController.setColor(Svin::Color{0, 0, 0});
+      displayController.setColor(Color{0, 0, 0});
       displayController.writeText(1, 1, "Tracks", Svin::DisplayOLED::Font::Normal);
 
-      displayController.setColor(Svin::Color{255, 255, 255});
+      displayController.setColor(Color{255, 255, 255});
 
       const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
       for (uint8_t index = 0; index < noOfSequencerChannels; index++)
@@ -224,13 +224,13 @@ void MidiReplay::updateDisplays()
    }
    else if (DisplayMode::Current == displayMode)
    {
-      displayController.setColor(Svin::Color{255, 255, 255});
+      displayController.setColor(Color{255, 255, 255});
       displayController.drawRect(0, 0, 99, 10, true);
 
-      displayController.setColor(Svin::Color{0, 0, 0});
+      displayController.setColor(Color{0, 0, 0});
       displayController.writeText(1, 1, "Current", Svin::DisplayOLED::Font::Normal);
 
-      displayController.setColor(Svin::Color{255, 255, 255});
+      displayController.setColor(Color{255, 255, 255});
    }
 }
 

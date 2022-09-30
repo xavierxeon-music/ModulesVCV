@@ -57,7 +57,7 @@ void GateLatch::process(const ProcessArgs& args)
          triggers[index].reset();
          latches[index] = false;
          activity[index].reset();
-         lightList[index]->setColor(Svin::Color{0, 0, 0});
+         lightList[index]->setColor(Color{0, 0, 0});
       }
       return;
    }
@@ -83,11 +83,11 @@ void GateLatch::process(const ProcessArgs& args)
 
       outputList[index]->setVoltage(latches[index] ? 10.0f : 0.0f);
       if (activity[index].process(args.sampleTime))
-         lightList[index]->setColor(Svin::Color{255, 0, 255});
+         lightList[index]->setColor(Color{255, 0, 255});
       else if (latches[index])
-         lightList[index]->setColor(Svin::Color{255, 255, 0});
+         lightList[index]->setColor(Color{255, 255, 0});
       else
-         lightList[index]->setColor(Svin::Color{0, 0, 0});
+         lightList[index]->setColor(Color{0, 0, 0});
    }
 }
 

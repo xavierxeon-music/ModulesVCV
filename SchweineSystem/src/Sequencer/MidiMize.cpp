@@ -120,7 +120,7 @@ MidiMize::MidiMize()
       selectKnobList[voice]->setRange(1.0, 16.0, voice + 1);
       selectKnobList[voice]->enableSteps(true);
 
-      channelDisplayList[voice]->setColor(Svin::Color{255, 255, 0});
+      channelDisplayList[voice]->setColor(Color{255, 255, 0});
    }
 }
 

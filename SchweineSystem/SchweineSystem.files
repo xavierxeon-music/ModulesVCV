@@ -59,7 +59,6 @@
 ./src/_MusicTools/RememberDummy/Remember.h
 ./src/_MusicTools/RememberDummy/RememberArray.h
 ./src/_MusicTools/RememberDummy/RememberList.h
-./src/_MusicTools/Include/Blocks/Trapezoid.h
 ./src/_MusicTools/Include/Blocks/CvSwitch.h
 ./src/_MusicTools/Include/Blocks/BioFeedbackDummy.h
 ./src/_MusicTools/Include/Blocks/Contour.h
@@ -179,7 +178,6 @@
 ./src/_MusicTools/Counter.hpp
 ./src/_MusicTools/MidiInterfaceInput.hpp
 ./src/_MusicTools/Tempo.hpp
-./src/_MusicTools/Trapezoid.hpp
 ./src/_MusicTools/File.hpp
 ./src/_MusicTools/Grooves.hpp
 ./src/_MusicTools/Contour.hpp
@@ -277,3 +275,5 @@
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp
+src/_MusicTools/Colour.cpp
+src/_MusicTools/Include/Tools/Colour.h

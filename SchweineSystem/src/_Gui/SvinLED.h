@@ -3,7 +3,7 @@
 
 #include <rack.hpp>
 
-#include "SvinCommon.h"
+#include <Tools/Colour.h>
 
 namespace Svin
 {

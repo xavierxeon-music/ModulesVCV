@@ -47,9 +47,9 @@ GateKeeper::GateKeeper()
                           Panel::Seven_Output,
                           Panel::Eight_Output});
 
-   loopButton.setDefaultColor(Svin::Color{0, 255, 0});
+   loopButton.setDefaultColor(Color{0, 255, 0});
 
-   connectionButton.setDefaultColor(Svin::Color{0, 255, 0});
+   connectionButton.setDefaultColor(Color{0, 255, 0});
    connectToMidiDevice();
 }
 
@@ -197,12 +197,12 @@ void GateKeeper::updateDisplays()
 
 void GateKeeper::updatePassthrough()
 {
-   controller.setColor(Svin::Color{0, 255, 0});
+   controller.setColor(Color{0, 255, 0});
    controller.drawRect(0, 0, 130, 10, true);
 
    controller.writeText(10, 50, std::to_string(bankIndex), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Left);
 
-   controller.setColor(Svin::Color{0, 0, 0});
+   controller.setColor(Color{0, 0, 0});
    controller.writeText(65, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    const Tempo tempo = getTempo();
@@ -216,10 +216,10 @@ void GateKeeper::updatePassthrough()
       const uint8_t x = 50 + column * 50;
       const uint8_t y = 25 + row * 20;
 
-      controller.setColor(Svin::Color{155, 155, 155});
+      controller.setColor(Color{155, 155, 155});
       controller.writeText(x, y, std::to_string(index + 1), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Right);
 
-      controller.setColor(Svin::Color{255, 255, 255});
+      controller.setColor(Color{255, 255, 255});
       if (!on)
          controller.writeText(x + 10, y, ".", Svin::DisplayOLED::Font::Large);
       else if (gateOutputList[index]->getVoltage(index) > 3.0)
@@ -231,10 +231,10 @@ void GateKeeper::updatePassthrough()
 
 void GateKeeper::updateInternal()
 {
-   controller.setColor(Svin::Color{255, 0, 255});
+   controller.setColor(Color{255, 0, 255});
    controller.drawRect(0, 0, 130, 10, true);
 
-   controller.setColor(Svin::Color{0, 0, 0});
+   controller.setColor(Color{0, 0, 0});
    controller.writeText(65, 0, "Current", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    const Tempo tempo = getTempo();

@@ -3,6 +3,8 @@
 
 #include <rack.hpp>
 
+#include <Tools/Colour.h>
+
 #include <SvinCommon.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
@@ -25,7 +27,7 @@ namespace Svin
 
       public:
          void setText(const std::string& newText);
-         void setColor(const Svin::Color& newColor);
+         void setColor(const Color& newColor);
 
       private:
          friend class Widget;
