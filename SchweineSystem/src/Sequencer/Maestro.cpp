@@ -38,7 +38,7 @@ Maestro::Maestro()
 
    controller.onClickedOpenFileFunction(this, &Maestro::loadProject, "Projects:json");
 
-   loopButton.setDefaultColor(Colour{0, 255, 0});
+   loopButton.setDefaultColor(Color{0, 255, 0});
 }
 
 void Maestro::process(const ProcessArgs& args)
@@ -245,12 +245,12 @@ void Maestro::updateDisplays()
 
 void Maestro::updatePassthrough()
 {
-   controller.setColor(Colour{0, 255, 0});
+   controller.setColor(Color{0, 255, 0});
    controller.drawRect(0, 0, 100, 10, true);
 
    controller.writeText(50, 20, std::to_string(bankIndex), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 
-   controller.setColor(Colour{0, 0, 0});
+   controller.setColor(Color{0, 0, 0});
    controller.writeText(50, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    const Tempo tempo = getTempo();
@@ -259,7 +259,7 @@ void Maestro::updatePassthrough()
    for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
       const Contour& contour = project.getContour(contourIndex);
-      controller.setColor(Colour{155, 155, 155});
+      controller.setColor(Color{155, 155, 155});
 
       const uint8_t column = (contourIndex < 8) ? 0 : 1;
       const uint8_t row = (contourIndex < 8) ? contourIndex : contourIndex - 8;
@@ -272,7 +272,7 @@ void Maestro::updatePassthrough()
       const uint8_t xName = 4 + (column * 50);
       controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
-      controller.setColor(Colour{255, 255, 255});
+      controller.setColor(Color{255, 255, 255});
 
       const float voltage = input.getVoltage(contourIndex);
       const uint8_t value = voltageToValue(voltage);
@@ -284,15 +284,15 @@ void Maestro::updatePassthrough()
 
 void Maestro::updateRemote()
 {
-   controller.setColor(Colour{0, 255, 255});
+   controller.setColor(Color{0, 255, 255});
    controller.drawRect(0, 0, 100, 10, true);
 
    controller.writeText(50, 20, std::to_string(bankIndex), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 
-   controller.setColor(Colour{0, 0, 0});
+   controller.setColor(Color{0, 0, 0});
    controller.writeText(50, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   controller.setColor(Colour{255, 255, 255});
+   controller.setColor(Color{255, 255, 255});
 
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
@@ -300,7 +300,7 @@ void Maestro::updateRemote()
    for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
       const Contour& contour = project.getContour(contourIndex);
-      controller.setColor(Colour{155, 155, 155});
+      controller.setColor(Color{155, 155, 155});
 
       const uint8_t column = (contourIndex < 8) ? 0 : 1;
       const uint8_t row = (contourIndex < 8) ? contourIndex : contourIndex - 8;
@@ -313,7 +313,7 @@ void Maestro::updateRemote()
       const uint8_t xName = 4 + (column * 50);
       controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
-      controller.setColor(Colour{255, 255, 255});
+      controller.setColor(Color{255, 255, 255});
 
       const uint8_t value = remoteValues[contourIndex];
       const std::string valueText = on ? Text::convert(value) : "off";
@@ -324,13 +324,13 @@ void Maestro::updateRemote()
 
 void Maestro::updateInternalOverview()
 {
-   controller.setColor(Colour{255, 255, 0});
+   controller.setColor(Color{255, 255, 0});
    controller.drawRect(0, 0, 100, 10, true);
 
-   controller.setColor(Colour{0, 0, 0});
+   controller.setColor(Color{0, 0, 0});
    controller.writeText(50, 0, "Overview", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   controller.setColor(Colour{255, 255, 255});
+   controller.setColor(Color{255, 255, 255});
    controller.writeText(0, 175, fileName, 3);
 
    const uint32_t segmentCount = project.getSegmentCount();
@@ -355,19 +355,19 @@ void Maestro::updateInternalOverview()
    }
    else
    {
-      controller.setColor(Colour{255, 255, 0});
+      controller.setColor(Color{255, 255, 0});
       controller.writeText(50, 70, "END", Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
    }
 }
 
 void Maestro::updateInternalCurrent()
 {
-   controller.setColor(Colour{255, 0, 255});
+   controller.setColor(Color{255, 0, 255});
    controller.drawRect(0, 0, 100, 10, true);
 
    controller.writeText(50, 20, std::to_string(bankIndex), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 
-   controller.setColor(Colour{0, 0, 0});
+   controller.setColor(Color{0, 0, 0});
    controller.writeText(50, 0, "Current", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    const Tempo tempo = getTempo();
@@ -379,7 +379,7 @@ void Maestro::updateInternalCurrent()
    for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
       const Contour& contour = project.getContour(contourIndex);
-      controller.setColor(Colour{155, 155, 155});
+      controller.setColor(Color{155, 155, 155});
 
       const uint8_t column = (contourIndex < 8) ? 0 : 1;
       const uint8_t row = (contourIndex < 8) ? contourIndex : contourIndex - 8;
@@ -392,7 +392,7 @@ void Maestro::updateInternalCurrent()
       const uint8_t xName = 4 + (column * 50);
       controller.writeText(xName, y + 1, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
-      controller.setColor(Colour{255, 255, 255});
+      controller.setColor(Color{255, 255, 255});
 
       const uint8_t value = on ? contour.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
       const std::string valueText = on ? Text::convert(value) : "off";

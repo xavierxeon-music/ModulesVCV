@@ -3,7 +3,7 @@
 
 #include <rack.hpp>
 
-#include <Tools/Colour.h>
+#include <MusicTools.h>
 
 namespace Svin
 {
@@ -20,9 +20,9 @@ namespace Svin
 
    public:
       // set color directly
-      void setColor(const Colour& color);
+      void setColor(const Color& color);
       // use default color
-      void setDefaultColor(const Colour& color);
+      void setDefaultColor(const Color& color);
       void setOn();
       void setOff();
       void setActive(bool on);
@@ -33,7 +33,7 @@ namespace Svin
 
    private:
       const uint16_t rgbIndex;
-      Colour defaultColor;
+      Color defaultColor;
       float brightness;
    };
 

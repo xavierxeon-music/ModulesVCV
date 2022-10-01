@@ -174,7 +174,7 @@ Svin::DisplayOLED::Controller::Controller(Module* module, const uint16_t& pixelI
 {
 }
 
-void Svin::DisplayOLED::Controller::setColor(const Colour& newColor)
+void Svin::DisplayOLED::Controller::setColor(const Color& newColor)
 {
    currentColor = nvgRGB(newColor.red, newColor.green, newColor.blue);
 }
@@ -184,7 +184,7 @@ uint16_t Svin::DisplayOLED::Controller::compileIndex(const uint8_t x, const uint
    return x + (width * y);
 }
 
-void Svin::DisplayOLED::Controller::fill(const Colour& fillColor)
+void Svin::DisplayOLED::Controller::fill(const Color& fillColor)
 {
    NVGcolor color = nvgRGB(fillColor.red, fillColor.green, fillColor.red);
 

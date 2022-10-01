@@ -30,10 +30,10 @@ BitBus::Counter::Counter()
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      bitIndicatorList[index]->setDefaultColor(Colour{0, 255, 255});
+      bitIndicatorList[index]->setDefaultColor(Color{0, 255, 255});
    }
 
-   counterController.setColor(Colour{0, 255, 255});
+   counterController.setColor(Color{0, 255, 255});
    thresholdSlider.setOff();
    thresholdSlider.setRange(1.0, 10.0);
    thresholdSlider.setValue(3.0);

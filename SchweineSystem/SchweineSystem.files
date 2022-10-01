@@ -275,5 +275,3 @@
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp
-src/_MusicTools/Colour.cpp
-src/_MusicTools/Include/Tools/Colour.h
