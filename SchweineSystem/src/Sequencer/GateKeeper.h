@@ -53,8 +53,8 @@ private:
 private:
    std::string fileName;
    Grooves grooves;
-   BoolField8 spikes;
-   BoolField8 state;
+   BoolField8 tickTriggers;
+   BoolField8 segmentGates;
 
    // bank
    uint8_t bankIndex;

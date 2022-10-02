@@ -10,8 +10,8 @@ GateKeeper::GateKeeper()
    , Svin::Midi::Output(Midi::Device::DrumTrigger)
    , fileName()
    , grooves()
-   , spikes(0)
-   , state(0)
+   , tickTriggers(0)
+   , segmentGates(0)
    // bank
    , bankIndex(0)
    , bankUpButton(this, Panel::BankUp)
@@ -36,7 +36,7 @@ GateKeeper::GateKeeper()
    setup();
    registerHubClient("GateKeeper");
 
-   controller.onClickedOpenFileFunction(this, &GateKeeper::loadProject, "Projects:json");
+   controller.onClickedOpenFileFunction(this, &GateKeeper::loadProject, "Projects:gatekeeper");
 
    gateOutputList.append({Panel::One_Output,
                           Panel::Two_Output,
@@ -112,8 +112,8 @@ void GateKeeper::process(const ProcessArgs& args)
 
       const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
       const uint32_t currentTick = grooves.getCurrentSegmentTick();
-      spikes = grooves.getSpikes(segmentIndex, currentTick);
-      state = grooves.getState(segmentIndex);
+      tickTriggers = grooves.getTriggers(segmentIndex, currentTick);
+      segmentGates = grooves.getGates(segmentIndex);
 
       triggerGenerator.trigger();
    }
@@ -123,9 +123,9 @@ void GateKeeper::process(const ProcessArgs& args)
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      gateOutputList[index]->setActive(state.get(index));
+      gateOutputList[index]->setActive(segmentGates.get(index));
 
-      if (!spikes.get(index))
+      if (!tickTriggers.get(index))
          continue;
 
       if (pulse == pulseActive.get(index))
