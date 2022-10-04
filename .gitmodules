@@ -13,3 +13,24 @@
 [submodule "3rdParty/BogaudioModules"]
 	path = 3rdParty/BogaudioModules
 	url = https://github.com/bogaudio/BogaudioModules
+[submodule "Applications/HubVCV"]
+	path = Applications/HubVCV
+	url = https://github.com/xavierxeon-music/HubVCV.git
+[submodule "Applications/_Common/Remember"]
+	path = Applications/_Common/Remember
+	url = https://github.com/xavierxeon-helper/Remember.git
+[submodule "Applications/_Common/JSONTools"]
+	path = Applications/_Common/JSONTools
+	url = https://github.com/xavierxeon-helper/JSONTools.git
+[submodule "Applications/_Common/MidiDevice"]
+	path = Applications/_Common/MidiDevice
+	url = https://github.com/xavierxeon-music/MidiDevice.git
+[submodule "Applications/_Common/AudioDevice"]
+	path = Applications/_Common/AudioDevice
+	url = https://github.com/xavierxeon-music/AudioDevice.git
+[submodule "Applications/GateKeeper"]
+	path = Applications/GateKeeper
+	url = https://github.com/xavierxeon-music/GateKeeper.git
+[submodule "Applications/Maestro"]
+	path = Applications/Maestro
+	url = https://github.com/xavierxeon-music/Maestro.git
