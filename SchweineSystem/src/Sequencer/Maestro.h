@@ -58,8 +58,7 @@ private:
 
 private:
    std::string fileName;
-   Contour::Poly project;
-   std::vector<std::string> eventNameList;
+   Contour::Poly contourPoly;
 
    // bank
    uint8_t bankIndex;

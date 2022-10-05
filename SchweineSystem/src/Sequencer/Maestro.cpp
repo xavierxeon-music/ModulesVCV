@@ -10,8 +10,7 @@ Maestro::Maestro()
    : Svin::Module()
    , Svin::MasterClock::Client()
    , fileName()
-   , project()
-   , eventNameList()
+   , contourPoly()
    // bank
    , bankIndex(0)
    , bankUpButton(this, Panel::BankUp)
@@ -45,11 +44,11 @@ void Maestro::process(const ProcessArgs& args)
 {
    if (loopButton.isTriggered())
    {
-      bool loop = project.isLooping();
+      bool loop = contourPoly.isLooping();
       loop ^= true;
-      project.setLooping(loop);
+      contourPoly.setLooping(loop);
    }
-   loopButton.setActive(project.isLooping());
+   loopButton.setActive(contourPoly.isLooping());
 
    Variable::Integer<uint8_t> varBank(bankIndex, 0, 15, true);
    if (bankUpButton.isTriggered())
@@ -83,14 +82,14 @@ void Maestro::process(const ProcessArgs& args)
 
    if (hasReset())
    {
-      project.clockReset();
+      contourPoly.clockReset();
       return;
    }
 
    bool doProcess = true;
    while (hasTick())
    {
-      project.clockTick();
+      contourPoly.clockTick();
       doProcess = false;
    }
    if (doProcess)
@@ -108,41 +107,77 @@ void Maestro::loadProject(const std::string& newFileName)
    using namespace Svin::Json;
 
    const Object rootObject(data);
+   const Object projectObject = rootObject.get("project").toObject();
+
+   const uint32_t segmentCount = projectObject.get("segments").toInt();
+   const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
+   const uint8_t division = projectObject.get("division").toInt();
+
+   auto compileSegmentKey = [&](const uint32_t segmentIndex)
    {
-      const Array eventArray = rootObject.get("events").toArray();
-      eventNameList.resize(eventArray.size());
-      for (size_t index = 0; index < eventArray.size(); index++)
-         eventNameList[index] = eventArray.at(index).toString();
-   }
+      return Text::pad(std::to_string(segmentIndex), digitCount);
+   };
+
+   auto compileColor = [](const Svin::Json::Array& array)
    {
-      const Object projectObject = rootObject.get("project").toObject();
+      uint8_t red = array.at(0).toInt();
+      uint8_t green = array.at(1).toInt();
+      uint8_t blue = array.at(2).toInt();
 
-      const Tempo::Division division = static_cast<Tempo::Division>(projectObject.get("division").toInt());
-      const uint32_t segmentCount = projectObject.get("segments").toInt();
-      const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
+      return Color{red, green, blue};
+   };
 
-      project.clear();
-      project.update(division, segmentCount);
+   contourPoly.clear();
+   contourPoly.update(division, segmentCount);
 
-      Array contourArray = projectObject.get("contours").toArray();
-      if (project.getContourCount() != contourArray.size())
+   // header
+   {
+      Svin::Json::Object headerObject = projectObject.get("header").toObject();
+      for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
       {
-         std::cout << newFileName << " " << (uint16_t)project.getContourCount() << " " << contourArray.size() << std::endl;
+         const std::string segmentKey = compileSegmentKey(segmentIndex);
+         if (!headerObject.hasKey(segmentKey))
+            continue;
+
+         Svin::Json::Object segmentObject = headerObject.get(segmentKey).toObject();
+         contourPoly.setSegmentName(segmentIndex, segmentObject.get("name").toString());
+
+         if (segmentObject.hasKey("length"))
+         {
+            contourPoly.setSegmentLength(segmentIndex, segmentObject.get("length").toInt());
+         }
+         if (segmentObject.hasKey("fgColor"))
+         {
+            const Svin::Json::Array colorArray = segmentObject.get("fgColor").toArray();
+            contourPoly.setSegmentForegroundColor(segmentIndex, compileColor(colorArray));
+         }
+
+         if (segmentObject.hasKey("bgColor"))
+         {
+            const Svin::Json::Array colorArray = segmentObject.get("bgColor").toArray();
+            contourPoly.setSegmentBackgroundColor(segmentIndex, compileColor(colorArray));
+         }
+      }
+   }
+
+   // cells
+   {
+      Array contourArray = projectObject.get("contours").toArray();
+      if (contourPoly.getContourCount() != contourArray.size())
+      {
+         std::cout << newFileName << " " << (uint16_t)contourPoly.getContourCount() << " " << contourArray.size() << std::endl;
          return;
       }
 
-      for (uint8_t contourIndex = 0; contourIndex < project.getContourCount(); contourIndex++)
+      for (uint8_t contourIndex = 0; contourIndex < contourPoly.getContourCount(); contourIndex++)
       {
-         Contour& contour = project.getContour(contourIndex);
+         Contour& contour = contourPoly.getContour(contourIndex);
          Object contourObject = contourArray.at(contourIndex).toObject();
          contour.setName(contourObject.get("name").toString());
 
          for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
          {
-            std::string segmentKey = std::to_string(segmentIndex);
-            while (segmentKey.length() < digitCount)
-               segmentKey = "0" + segmentKey;
-
+            const std::string segmentKey = compileSegmentKey(segmentIndex);
             if (!contourObject.hasKey(segmentKey))
                continue;
 
@@ -203,13 +238,13 @@ void Maestro::processInternal()
 {
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
-   const uint32_t currentIndex = project.getCurrentSegmentIndex();
+   const uint32_t currentIndex = contourPoly.getCurrentSegmentIndex();
    const float tickPercentage = tempo.getPercentage();
-   const float segmentPercentage = project.getCurrentSegmentPrecentage(tickPercentage);
+   const float segmentPercentage = contourPoly.getCurrentSegmentPrecentage(tickPercentage);
 
    for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
-      const Contour& contour = project.getContour(contourIndex);
+      const Contour& contour = contourPoly.getContour(contourIndex);
 
       const uint8_t value = on ? contour.getSegmentValue(currentIndex, segmentPercentage) : 0.0;
 
@@ -231,7 +266,7 @@ void Maestro::updateDisplays()
    else if (Maestro::OperationMode::InternalCurrent == operationMode)
       updateInternalCurrent();
 
-   const uint32_t index = project.getCurrentSegmentIndex();
+   const uint32_t index = contourPoly.getCurrentSegmentIndex();
 
    Svin::Json::Object object;
    object.set("_Application", "Tracker");
@@ -245,7 +280,7 @@ void Maestro::updateDisplays()
 
 void Maestro::updatePassthrough()
 {
-   controller.setColor(Color{0, 255, 0});
+   controller.setColor(Color{255, 255, 0});
    controller.drawRect(0, 0, 100, 10, true);
 
    controller.writeText(50, 20, std::to_string(bankIndex), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
@@ -258,7 +293,7 @@ void Maestro::updatePassthrough()
 
    for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
-      const Contour& contour = project.getContour(contourIndex);
+      const Contour& contour = contourPoly.getContour(contourIndex);
       controller.setColor(Color{155, 155, 155});
 
       const uint8_t column = (contourIndex < 8) ? 0 : 1;
@@ -299,7 +334,7 @@ void Maestro::updateRemote()
 
    for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
-      const Contour& contour = project.getContour(contourIndex);
+      const Contour& contour = contourPoly.getContour(contourIndex);
       controller.setColor(Color{155, 155, 155});
 
       const uint8_t column = (contourIndex < 8) ? 0 : 1;
@@ -324,32 +359,60 @@ void Maestro::updateRemote()
 
 void Maestro::updateInternalOverview()
 {
-   controller.setColor(Color{255, 255, 0});
+   controller.setColor(Color{255, 0, 255});
    controller.drawRect(0, 0, 100, 10, true);
 
    controller.setColor(Color{0, 0, 0});
    controller.writeText(50, 0, "Overview", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
+   const Tempo tempo = getTempo();
+   const bool on = tempo.isRunningOrFirstTick();
+
+   const uint32_t segmentCount = contourPoly.getSegmentCount();
+   const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
+
    controller.setColor(Color{255, 255, 255});
-   controller.writeText(0, 175, fileName, 3);
+   controller.writeText(5, 12, Text::pad(std::to_string(segmentCount), digitCount), Svin::DisplayOLED::Font::Large);
+   controller.writeText(7 + 12 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
 
-   const uint32_t segmentCount = project.getSegmentCount();
-   controller.writeText(5, 15, std::to_string(segmentCount) + " segments", Svin::DisplayOLED::Font::Normal);
+   if (0 == segmentCount || !on)
+   {
+      const uint8_t noOfLines = 10;
+      const uint8_t noOfLetters = 14;
 
-   //const std::string divName = Tempo::getName(project.getDefaultDivison());
-   //controller.writeText(5, 30, "@ " + divName, Svin::DisplayOLED::Font::Normal);
+      const uint8_t x = 5;
+      for (uint8_t counter = 0; counter < noOfLines; counter++)
+      {
+         const uint8_t row = noOfLines - (counter + 1);
+         const uint8_t y = 30 + 10 * row;
+         const int8_t index = fileName.length() - ((noOfLines - row) * noOfLetters);
+         if (index >= 0)
+         {
+            const std::string text = fileName.substr(index, noOfLetters);
+            controller.writeText(x, y, text, 10);
+         }
+         else
+         {
+            const std::string text = fileName.substr(0, noOfLetters + index);
+            controller.writeText(x, y, Text::pad(text, noOfLetters, " "), 10);
+            break;
+         }
+      }
 
-   const uint32_t index = project.getCurrentSegmentIndex();
+      return;
+   }
+
+   const uint32_t index = contourPoly.getCurrentSegmentIndex();
    if (index < segmentCount)
    {
-      controller.writeText(50, 70, std::to_string(index), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
+      controller.writeText(50, 50, Text::pad(std::to_string(index), digitCount), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
 
-      const std::string eventName = eventNameList.at(index);
+      const std::string eventName = contourPoly.getSegmentName(index);
       const std::string eventText = eventName.empty() ? "--" : eventName;
-      controller.writeText(50, 100, eventText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+      controller.writeText(50, 80, eventText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 
       if (eventName.empty())
-         controller.writeText(50, 125, lastNamedSegement, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+         controller.writeText(50, 105, lastNamedSegement, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
       else
          lastNamedSegement = eventName;
    }
@@ -362,23 +425,28 @@ void Maestro::updateInternalOverview()
 
 void Maestro::updateInternalCurrent()
 {
-   controller.setColor(Color{255, 0, 255});
+   controller.setColor(Color{0, 255, 0});
    controller.drawRect(0, 0, 100, 10, true);
-
-   controller.writeText(50, 20, std::to_string(bankIndex), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 
    controller.setColor(Color{0, 0, 0});
    controller.writeText(50, 0, "Current", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
-   const uint32_t currentIndex = project.getCurrentSegmentIndex();
+   const uint32_t segmentCount = contourPoly.getSegmentCount();
+   const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
+
+   const uint32_t currentIndex = contourPoly.getCurrentSegmentIndex();
+
+   controller.setColor(Color{255, 255, 255});
+   controller.writeText(50, 20, Text::pad(std::to_string(currentIndex), digitCount), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+
    const float tickPercentage = tempo.getPercentage();
-   const float segmentPercentage = project.getCurrentSegmentPrecentage(tickPercentage);
+   const float segmentPercentage = contourPoly.getCurrentSegmentPrecentage(tickPercentage);
 
    for (uint8_t contourIndex = 0; contourIndex < 16; contourIndex++)
    {
-      const Contour& contour = project.getContour(contourIndex);
+      const Contour& contour = contourPoly.getContour(contourIndex);
       controller.setColor(Color{155, 155, 155});
 
       const uint8_t column = (contourIndex < 8) ? 0 : 1;
@@ -426,7 +494,7 @@ void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin
       }
 
       const uint32_t index = object.get("index").toInt();
-      project.setCurrentSegmentIndex(index);
+      contourPoly.setCurrentSegmentIndex(index);
    }
    else if ("Reload" == object.get("_Type").toString())
    {
@@ -445,7 +513,7 @@ void Maestro::load(const Svin::Json::Object& rootObject)
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());   
 
    bool loop = rootObject.get("loop").toBool();
-   project.setLooping(loop);
+   contourPoly.setLooping(loop);
 
    const std::string newFileName = rootObject.get("fileName").toString();
    loadProject(newFileName);
@@ -455,7 +523,7 @@ void Maestro::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("bank", bankIndex);
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
-   rootObject.set("loop", project.isLooping());
+   rootObject.set("loop", contourPoly.isLooping());
 
    rootObject.set("fileName", fileName);
 }

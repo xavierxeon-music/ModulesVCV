@@ -27,8 +27,6 @@ GateKeeper::GateKeeper()
    , operationModeButton(this, Panel::Mode)
    // display
    , controller(this, Panel::Pixels_Display)
-   , lastNamedSegement()
-
 {
    setup();
    registerHubClient("GateKeeper");
@@ -133,7 +131,6 @@ void GateKeeper::loadProject(const std::string& newFileName)
       return;
 
    const Svin::Json::Object rootObject(data);
-
    Svin::Json::Object projectObject = rootObject.get("project").toObject();
 
    const uint32_t segmentCount = projectObject.get("segments").toInt();
@@ -154,6 +151,7 @@ void GateKeeper::loadProject(const std::string& newFileName)
       return Color{red, green, blue};
    };
 
+   grooves.clear();
    grooves.update(division, segmentCount);
 
    // header
@@ -299,8 +297,8 @@ void GateKeeper::updateInternal()
    if (0 == segmentCount || !on)
    {
       controller.setColor(Color{255, 255, 255});
-      controller.writeText(5, 12, std::to_string(segmentCount), Svin::DisplayOLED::Font::Large);
-      controller.writeText(7 + 15 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
+      controller.writeText(5, 12, Text::pad(std::to_string(segmentCount), digitCount), Svin::DisplayOLED::Font::Large);
+      controller.writeText(7 + 12 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
 
       const uint8_t noOfLines = 10;
       const uint8_t noOfLetters = 15;
@@ -335,14 +333,7 @@ void GateKeeper::updateInternal()
 
    const std::string eventName = grooves.getSegmentName(segmentIndex);
    const std::string eventText = eventName.empty() ? "--" : eventName;
-   controller.writeText(50, 12, eventText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
-
-   controller.setColor(Color{150, 150, 150});
-
-   if (eventName.empty())
-      controller.writeText(100, 12, lastNamedSegement, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
-   else
-      lastNamedSegement = eventName;
+   controller.writeText(7 + 12 * digitCount, 17, eventText, Svin::DisplayOLED::Font::Normal);
 
    // the grid
    const Grooves::Gates& gates = grooves.getGates(segmentIndex);

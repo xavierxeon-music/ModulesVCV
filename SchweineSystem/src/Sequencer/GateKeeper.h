@@ -75,7 +75,6 @@ private:
 
    // display
    Svin::DisplayOLED::Controller controller;
-   std::string lastNamedSegement;
 };
 
 // widget

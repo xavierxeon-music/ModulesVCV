@@ -59,7 +59,7 @@ void Svin::Module::Majordomo::document(const ::Midi::Channel& channel, const Jso
 {
    const std::string appName = object.get("_Application").toString();
 
-   if (moduleMap.find(appName) != moduleMap.end()) // already resgistered  mdoule with that name
+   if (moduleMap.find(appName) == moduleMap.end())
       return;
 
    moduleMap[appName]->receivedDocumentFromHub(channel, object, docIndex);
