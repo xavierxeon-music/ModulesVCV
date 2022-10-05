@@ -66,7 +66,6 @@ private:
    // output
    Svin::Output output;
    dsp::PulseGenerator triggerGenerator;
-   BoolField8 pulseActive;
 
    // mode
    Svin::ButtonLED loopButton;

@@ -55,7 +55,6 @@ struct GateKeeper::Panel
       // sliders
       LIGHTS_LEN = 3
    };
-
 };
 
 void GateKeeper::setup()
@@ -87,11 +86,11 @@ void GateKeeperWidget::setup()
 
    makeLEDButton(this, Vec(75.00, 270.80), GateKeeper::Panel::Loop, GateKeeper::Panel::RGB_Loop);
 
-   makeInput(this, Vec(24.17, 355.83),  GateKeeper::Panel::Pass, true);
+   makeInput(this, Vec(24.17, 355.83), GateKeeper::Panel::Pass, true);
 
    makeOutput(this, Vec(125.83, 355.83), GateKeeper::Panel::One_Output, true);
 
-   makeOLED(this, Vec(9.00, 32.00), GateKeeper::Panel::Pixels_Display, 130, 120);
+   makeOLED(this, Vec(9.00, 32.00), GateKeeper::Panel::Pixels_Display, 130, 130);
 }
 
 #endif // NOT GateKeeperHPP
