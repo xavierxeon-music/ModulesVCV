@@ -299,6 +299,12 @@
          "name": "GateKeeper",
          "description": "",
          "tags": []
+      },
+      {
+         "slug": "DrumTrigger",
+         "name": "DrumTrigger",
+         "description": "",
+         "tags": []
       }
    ]
 }
