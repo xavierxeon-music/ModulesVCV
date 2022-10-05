@@ -141,11 +141,100 @@ void GateKeeper::loadProject(const std::string& newFileName)
    if (data.empty())
       return;
 
-   using namespace Svin::Json;
+   const Svin::Json::Object rootObject(data);
 
-   const Object rootObject(data);
+   Svin::Json::Object projectObject = rootObject.get("project").toObject();
 
-   // TODO
+   const uint32_t segmentCount = projectObject.get("segments").toInt();
+   const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
+   const uint8_t division = projectObject.get("division").toInt();
+
+   auto compileSegmentKey = [&](const uint32_t segmentIndex)
+   {
+      return Text::pad(std::to_string(segmentIndex), digitCount);
+   };
+
+   auto compileColor = [](const Svin::Json::Array& array)
+   {
+      uint8_t red = array.at(0).toInt();
+      uint8_t green = array.at(1).toInt();
+      uint8_t blue = array.at(2).toInt();
+
+      return Color{red, green, blue};
+   };
+
+   grooves.update(division, segmentCount);
+
+   // header
+   {
+      Svin::Json::Object headerObject = projectObject.get("header").toObject();
+      for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
+      {
+         const std::string segmentKey = compileSegmentKey(segmentIndex);
+         if (!headerObject.hasKey(segmentKey))
+            continue;
+
+         Svin::Json::Object segmentObject = headerObject.get(segmentKey).toObject();
+         grooves.setSegmentName(segmentIndex, segmentObject.get("name").toString());
+
+         if (segmentObject.hasKey("length"))
+         {
+            grooves.setSegmentLength(segmentIndex, segmentObject.get("length").toInt());
+         }
+         if (segmentObject.hasKey("fgColor"))
+         {
+            const Svin::Json::Array colorArray = segmentObject.get("fgColor").toArray();
+            grooves.setSegmentForegroundColor(segmentIndex, compileColor(colorArray));
+         }
+
+         if (segmentObject.hasKey("bgColor"))
+         {
+            const Svin::Json::Array colorArray = segmentObject.get("bgColor").toArray();
+            grooves.setSegmentBackgroundColor(segmentIndex, compileColor(colorArray));
+         }
+      }
+   }
+
+   // gates
+   {
+      Svin::Json::Object gatesObject = projectObject.get("gates").toObject();
+      for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
+      {
+         const std::string segmentKey = compileSegmentKey(segmentIndex);
+         if (!gatesObject.hasKey(segmentKey))
+            continue;
+
+         const BoolField8 gates = gatesObject.get(segmentKey).toInt();
+         grooves.setGates(segmentIndex, gates);
+      }
+   }
+
+   // beats
+   {
+      Svin::Json::Object beatsObject = projectObject.get("beats").toObject();
+      for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
+      {
+         const std::string segmentKey = compileSegmentKey(segmentIndex);
+         if (!beatsObject.hasKey(segmentKey))
+            continue;
+
+         Svin::Json::Array beatArray = beatsObject.get(segmentKey).toArray();
+
+         const uint8_t beatLength = beatArray.size();
+         if (beatLength != grooves.getSegmentLength(segmentIndex))
+            continue;
+
+         Grooves::Beat beat(beatLength, BoolField8(0));
+         for (uint8_t tick = 0; tick < beatLength; tick++)
+         {
+            const BoolField8 triggers = beatArray.at(tick).toInt();
+            beat[tick] = triggers;
+         }
+         grooves.setBeat(segmentIndex, beat);
+      }
+   }
+
+   bankIndex = rootObject.get("bank").toInt();
 }
 
 void GateKeeper::updateDisplays()
@@ -213,6 +302,28 @@ void GateKeeper::updateInternal()
 
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
+   const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
+
+   controller.setColor(Color{255, 255, 255});
+   controller.writeText(5, 12, std::to_string(segmentIndex), Svin::DisplayOLED::Font::Large);
+
+   const std::string eventName = grooves.getSegmentName(segmentIndex);
+   const std::string eventText = eventName.empty() ? "--" : eventName;
+   controller.writeText(50, 12, eventText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+
+   if (eventName.empty())
+      controller.writeText(100, 12, lastNamedSegement, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+   else
+      lastNamedSegement = eventName;
+
+   for (uint8_t index = 0; index < 8; index++)
+   {
+      controller.setColor(Color{255, 255, 255});
+
+      const uint8_t y = 40 + index * 10;
+
+      controller.writeText(5, y, std::to_string(index), Svin::DisplayOLED::Font::Normal);
+   }
 }
 
 void GateKeeper::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
