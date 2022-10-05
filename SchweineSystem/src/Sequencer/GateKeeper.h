@@ -5,7 +5,6 @@
 using namespace rack;
 
 #include <SvinMasterClock.h>
-#include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -14,11 +13,11 @@ using namespace rack;
 #include <SvinButton.h>
 #include <SvinButtonLED.h>
 #include <SvinDisplayOLED.h>
-#include <SvinSwitch.h>
 #include <SvinInput.h>
 #include <SvinOutput.h>
+#include <SvinSwitch.h>
 
-class GateKeeper : public Svin::Module, public Svin::MasterClock::Client, public Svin::Midi::Output
+class GateKeeper : public Svin::Module, public Svin::MasterClock::Client
 {
 public:
    struct Panel;
@@ -39,7 +38,6 @@ private:
 
 private:
    inline void setup();
-   void connectToMidiDevice();
 
    void updateDisplays() override;
    void updatePassthrough();
@@ -66,8 +64,7 @@ private:
    Svin::Switch noOffsetSwitch;
 
    // output
-   Svin::ButtonLED connectionButton;
-   Svin::Output::List gateOutputList;
+   Svin::Output output;
    dsp::PulseGenerator triggerGenerator;
    BoolField8 pulseActive;
 

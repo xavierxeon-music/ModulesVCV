@@ -7,7 +7,6 @@
 GateKeeper::GateKeeper()
    : Svin::Module()
    , Svin::MasterClock::Client()
-   , Svin::Midi::Output(Midi::Device::DrumTrigger)
    , fileName()
    , grooves()
    , tickTriggers(0)
@@ -20,8 +19,7 @@ GateKeeper::GateKeeper()
    , passInput(this, Panel::Pass)
    , noOffsetSwitch(this, Panel::NoOffset)
    // output
-   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
-   , gateOutputList(this)
+   , output(this, Panel::One_Output)
    , triggerGenerator()
    , pulseActive(0)
    // mode
@@ -38,26 +36,11 @@ GateKeeper::GateKeeper()
 
    controller.onClickedOpenFileFunction(this, &GateKeeper::loadProject, "Projects:gatekeeper");
 
-   gateOutputList.append({Panel::One_Output,
-                          Panel::Two_Output,
-                          Panel::Three_Output,
-                          Panel::Four_Output,
-                          Panel::Five_Output,
-                          Panel::Six_Output,
-                          Panel::Seven_Output,
-                          Panel::Eight_Output});
-
    loopButton.setDefaultColor(Color{0, 255, 0});
-
-   connectionButton.setDefaultColor(Color{0, 255, 0});
-   connectToMidiDevice();
 }
 
 void GateKeeper::process(const ProcessArgs& args)
 {
-   if (connectionButton.isTriggered())
-      connectToMidiDevice();
-
    if (loopButton.isTriggered())
    {
       bool loop = grooves.isLooping();
@@ -80,6 +63,8 @@ void GateKeeper::process(const ProcessArgs& args)
       variable.increment();
    }
 
+   output.setNumberOfChannels(16);
+
    // do stuff
    const bool on = getTempo().isRunningOrFirstTick();
 
@@ -89,13 +74,15 @@ void GateKeeper::process(const ProcessArgs& args)
       {
          if (!passInput.isConnected() || !on)
          {
-            gateOutputList[index]->setActive(0.0);
+            output.setOff(index);
+            output.setOff(index + 8);
             continue;
          }
 
          const uint8_t inputIndex = noOffsetSwitch.isOn() ? index : index + 8;
          const float voltage = (inputIndex < passInput.getNumberOfChannels()) ? passInput.getVoltage(inputIndex) : 0.0;
-         gateOutputList[index]->setActive(voltage > 3.0);
+         output.setOff(index);
+         output.setActive(voltage > 3.0, index + 8);
       }
       return;
    }
@@ -119,25 +106,27 @@ void GateKeeper::process(const ProcessArgs& args)
    }
 
    const bool pulse = triggerGenerator.process(args.sampleTime);
-   static const uint8_t midiBaseNote = Note::availableNotes.at(1).midiValue + 12;
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      gateOutputList[index]->setActive(segmentGates.get(index));
+      output.setActive(segmentGates.get(index), index + 8);
 
       if (!tickTriggers.get(index))
+      {
+         output.setOff(index);
          continue;
+      }
 
       if (pulse == pulseActive.get(index))
          continue;
 
-      if (pulse && !pulseActive.get(index)) // send note on messages
+      if (pulse && !pulseActive.get(index)) // send on
       {
-         sendNoteOn(10, Note::fromMidi(midiBaseNote + index), 127);
+         output.setOn(index);
       }
-      else if (!pulse && pulseActive.get(index)) // send note off messsages
+      else if (!pulse && pulseActive.get(index)) // send off
       {
-         sendNoteOff(10, Note::fromMidi(midiBaseNote + index));
+         output.setOff(index);
       }
 
       pulseActive.set(index, pulse);
@@ -157,21 +146,6 @@ void GateKeeper::loadProject(const std::string& newFileName)
    const Object rootObject(data);
 
    // TODO
-}
-
-void GateKeeper::connectToMidiDevice()
-{
-   if (connected())
-   {
-      connectionButton.setOn();
-      return;
-   }
-
-   connectionButton.setOff();
-   if (!open())
-      return;
-
-   connectionButton.setOn();
 }
 
 void GateKeeper::updateDisplays()
@@ -197,7 +171,7 @@ void GateKeeper::updateDisplays()
 
 void GateKeeper::updatePassthrough()
 {
-   controller.setColor(Color{0, 255, 0});
+   controller.setColor(Color{255, 255, 0});
    controller.drawRect(0, 0, 130, 10, true);
 
    controller.writeText(10, 50, std::to_string(bankIndex), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Left);
@@ -222,7 +196,7 @@ void GateKeeper::updatePassthrough()
       controller.setColor(Color{255, 255, 255});
       if (!on)
          controller.writeText(x + 10, y, ".", Svin::DisplayOLED::Font::Large);
-      else if (gateOutputList[index]->getVoltage(index) > 3.0)
+      else if (output.getVoltage(index + 8) > 3.0)
          controller.writeText(x + 10, y, "H", Svin::DisplayOLED::Font::Large);
       else
          controller.writeText(x + 10, y, "_", Svin::DisplayOLED::Font::Large);
@@ -231,7 +205,7 @@ void GateKeeper::updatePassthrough()
 
 void GateKeeper::updateInternal()
 {
-   controller.setColor(Color{255, 0, 255});
+   controller.setColor(Color{0, 255, 0});
    controller.drawRect(0, 0, 130, 10, true);
 
    controller.setColor(Color{0, 0, 0});
@@ -285,11 +259,10 @@ void GateKeeper::save(Svin::Json::Object& rootObject)
 // widget
 
 GateKeeperWidget::GateKeeperWidget(GateKeeper* module)
-: Svin::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // creete module
 Model* modelGateKeeper = Svin::Origin::the()->addModule<GateKeeper, GateKeeperWidget>("GateKeeper");
-

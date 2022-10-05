@@ -4,13 +4,14 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
 #include <SvinButtonLED.h>
 #include <SvinInput.h>
 
-class DrumTrigger : public Svin::Module
+class DrumTrigger : public Svin::Module, public Svin::Midi::Output
 {
 public:
    struct Panel;
@@ -20,9 +21,14 @@ public:
 
 public:
    void process(const ProcessArgs& args) override;
+   void connectToMidiDevice();
 
 private:
    inline void setup();
+
+private:
+   Svin::Input input;
+   Svin::ButtonLED connectionButton;
 };
 
 // widget

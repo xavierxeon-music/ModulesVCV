@@ -55,6 +55,6 @@ class Source(Common):
             line(0, '}')
             line(0)
 
-            line(0, '// creete module')
+            line(0, '// create module')
             line(0, f'Model* model{self.moduleName} = Svin::Origin::the()->addModule<{fullClassName}, {fullClassName}Widget>("{self.moduleName}");')
             line(0)
