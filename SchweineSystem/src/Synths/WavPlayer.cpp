@@ -166,6 +166,6 @@ WavPlayerWidget::WavPlayerWidget(WavPlayer* module)
 {
    setup();
 }
-// creete module
+// create module
 Model* modelWavPlayer = Svin::Origin::the()->addModule<WavPlayer, WavPlayerWidget>("WavPlayer");
 

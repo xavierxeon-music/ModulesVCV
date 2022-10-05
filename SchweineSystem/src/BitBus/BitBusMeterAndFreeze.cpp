@@ -100,5 +100,5 @@ BitBus::MeterAndFreezeWidget::MeterAndFreezeWidget(MeterAndFreeze* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelBitBusMeterAndFreeze = Svin::Origin::the()->addModule<BitBus::MeterAndFreeze, BitBus::MeterAndFreezeWidget>("BitBusMeterAndFreeze");

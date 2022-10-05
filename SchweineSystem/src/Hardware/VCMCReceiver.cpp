@@ -188,6 +188,6 @@ VCMCReceiverWidget::VCMCReceiverWidget(VCMCReceiver* module)
 {
    setup();
 }
-// creete module
+// create module
 Model* modelVCMCReceiver = Svin::Origin::the()->addModule<VCMCReceiver, VCMCReceiverWidget>("VCMCReceiver");
 

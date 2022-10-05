@@ -75,5 +75,5 @@ BitBus::BitInWidget::BitInWidget(BitIn* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelBitBusBitIn = Svin::Origin::the()->addModule<BitBus::BitIn, BitBus::BitInWidget>("BitBusBitIn");

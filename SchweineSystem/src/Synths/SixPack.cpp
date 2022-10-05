@@ -298,6 +298,6 @@ SixPackWidget::SixPackWidget(SixPack* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelSixPack = Svin::Origin::the()->addModule<SixPack, SixPackWidget>("SixPack");
 

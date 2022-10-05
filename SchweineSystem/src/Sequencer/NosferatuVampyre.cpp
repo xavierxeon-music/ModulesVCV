@@ -415,5 +415,5 @@ Nosferatu::VampyreWidget::VampyreWidget(Vampyre* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelNosferatuVampyre = Svin::Origin::the()->addModule<Nosferatu::Vampyre, Nosferatu::VampyreWidget>("NosferatuVampyre");

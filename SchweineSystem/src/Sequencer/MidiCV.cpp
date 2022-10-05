@@ -97,6 +97,6 @@ MidiCVWidget::MidiCVWidget(MidiCV* module)
 {
    setup();
 }
-// creete module
+// create module
 Model* modelMidiCV = Svin::Origin::the()->addModule<MidiCV, MidiCVWidget>("MidiCV");
 

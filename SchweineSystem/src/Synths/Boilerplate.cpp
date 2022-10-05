@@ -110,6 +110,6 @@ BoilerplateWidget::BoilerplateWidget(Boilerplate* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelBoilerplate = Svin::Origin::the()->addModule<Boilerplate, BoilerplateWidget>("Boilerplate");
 

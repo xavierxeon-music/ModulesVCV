@@ -51,6 +51,6 @@ DoepferQuadWidget::DoepferQuadWidget(DoepferQuad* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelDoepferQuad = Svin::Origin::the()->addModule<DoepferQuad, DoepferQuadWidget>("DoepferQuad");
 

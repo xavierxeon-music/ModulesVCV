@@ -104,5 +104,5 @@ BitBus::CounterWidget::CounterWidget(Counter* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelBitBusCounter = Svin::Origin::the()->addModule<BitBus::Counter, BitBus::CounterWidget>("BitBusCounter");

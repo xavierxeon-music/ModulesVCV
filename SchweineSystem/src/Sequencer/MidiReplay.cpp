@@ -280,5 +280,5 @@ MidiReplayWidget::MidiReplayWidget(MidiReplay* module)
 {
    setup();
 }
-// creete module
+// create module
 Model* modelMidiReplay = Svin::Origin::the()->addModule<MidiReplay, MidiReplayWidget>("MidiReplay");

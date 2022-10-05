@@ -219,6 +219,6 @@ AturiaStepWidget::AturiaStepWidget(AturiaStep* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelAturiaStep = Svin::Origin::the()->addModule<AturiaStep, AturiaStepWidget>("AturiaStep");
 

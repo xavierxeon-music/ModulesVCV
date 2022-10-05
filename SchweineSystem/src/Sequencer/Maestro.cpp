@@ -467,5 +467,5 @@ MaestroWidget::MaestroWidget(Maestro* module)
 {
    setup();
 }
-// creete module
+// create module
 Model* modelMaestro = Svin::Origin::the()->addModule<Maestro, MaestroWidget>("Maestro");

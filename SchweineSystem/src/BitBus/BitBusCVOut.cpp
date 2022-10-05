@@ -50,5 +50,5 @@ BitBus::CVOutWidget::CVOutWidget(CVOut* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelBitBusCVOut = Svin::Origin::the()->addModule<BitBus::CVOut, BitBus::CVOutWidget>("BitBusCVOut");

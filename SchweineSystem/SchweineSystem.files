@@ -81,6 +81,7 @@
 ./src/_MusicTools/Include/Tools/SevenBit.h
 ./src/_MusicTools/Include/Tools/File.h
 ./src/_MusicTools/Include/Tools/Variable.h
+./src/_MusicTools/Include/Tools/Flank.h
 ./src/_MusicTools/Include/Tools/DoubleBuffer.h
 ./src/_MusicTools/Include/Tools/RingBuffer.h
 ./src/_MusicTools/Include/Midi/MidiFile.h
@@ -197,6 +198,7 @@
 ./src/_MusicTools/SoundMesh.hpp
 ./src/_MusicTools/TimeCode.hpp
 ./src/_MusicTools/SevenBit.hpp
+./src/_MusicTools/Flank.hpp
 ./src/_MusicTools/SquareSignal.hpp
 ./src/_MusicTools/MidiInterfaceOutput.hpp
 ./src/_MusicTools/SampleOscilator.hpp

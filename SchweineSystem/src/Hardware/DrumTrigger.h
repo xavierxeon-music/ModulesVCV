@@ -8,6 +8,8 @@ using namespace rack;
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
+#include <Tools/Flank.h>
+
 #include <SvinButtonLED.h>
 #include <SvinInput.h>
 
@@ -29,6 +31,7 @@ private:
 private:
    Svin::Input input;
    Svin::ButtonLED connectionButton;
+   Flank flank[16];
 };
 
 // widget

@@ -228,5 +228,5 @@ Nosferatu::AcolyteWidget::AcolyteWidget(Acolyte* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelNosferatuAcolyte = Svin::Origin::the()->addModule<Nosferatu::Acolyte, Nosferatu::AcolyteWidget>("NosferatuAcolyte");

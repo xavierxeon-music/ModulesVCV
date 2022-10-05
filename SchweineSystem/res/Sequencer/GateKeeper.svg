@@ -118,7 +118,7 @@
             </g>
         </g>
     </g>
-    <g transform="matrix(1,0,0,1,-39.1799,-200.148)">
+    <g transform="matrix(1,0,0,1,-39.1799,-191.148)">
         <g id="Loop-ledbutton" serif:id="Loop#ledbutton" transform="matrix(1,0,0,1,12.872,160.708)">
             <circle cx="101.308" cy="310.24" r="9.898" style="fill:rgb(115,115,115);"/>
         </g>
@@ -137,7 +137,7 @@
             </g>
         </g>
     </g>
-    <g transform="matrix(1,0,0,1,-131.596,-107.85)">
+    <g transform="matrix(1,0,0,1,-131.596,-91.85)">
         <g transform="matrix(1,0,0,1,-16.6986,-5.69033)">
             <g id="BankDown-button" serif:id="BankDown#button" transform="matrix(0.758898,0,0,0.758898,204.147,84.2049)">
                 <circle cx="55.661" cy="308.513" r="7.929"/>
@@ -189,7 +189,7 @@
             </g>
         </g>
     </g>
-    <g id="Display-oled-130x120" serif:id="Display#oled$130x120" transform="matrix(2.75024,0,0,5.18897,-230.645,-331.329)">
+    <g id="Display-oled-130x130" serif:id="Display#oled$130x130" transform="matrix(2.75024,0,0,5.61429,-230.645,-361.11)">
         <rect x="87.136" y="70.02" width="47.996" height="23.511" style="fill:rgb(19,19,19);"/>
     </g>
     <g transform="matrix(0.816456,0,0,0.816456,23.4307,-226.739)">

@@ -113,6 +113,6 @@ MapperWidget::MapperWidget(Mapper* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelMapper = Svin::Origin::the()->addModule<Mapper, MapperWidget>("Mapper");
 

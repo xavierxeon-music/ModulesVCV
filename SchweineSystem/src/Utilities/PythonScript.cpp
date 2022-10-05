@@ -46,6 +46,7 @@ void PythonScript::setScriptFileName(const std::string& newFileName)
 void PythonScript::updateDisplays()
 {
    displayController.fill();
+
    for (uint8_t counter = 0; counter < 6; counter++)
    {
       const uint8_t row = 5 - counter;
@@ -117,5 +118,5 @@ PythonScriptWidget::PythonScriptWidget(PythonScript* module)
 }
 
 
-// creete module
+// create module
 Model* modelPythonScript = Svin::Origin::the()->addModule<PythonScript, PythonScriptWidget>("PythonScript");

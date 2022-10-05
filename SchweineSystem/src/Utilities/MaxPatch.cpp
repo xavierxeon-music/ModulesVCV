@@ -46,6 +46,7 @@ void MaxPatch::setPatchFileName(const std::string& newFileName)
 void MaxPatch::updateDisplays()
 {
    displayController.fill();
+
    for (uint8_t counter = 0; counter < 6; counter++)
    {
       const uint8_t row = 5 - counter;
@@ -116,6 +117,6 @@ MaxPatchWidget::MaxPatchWidget(MaxPatch* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelMaxPatch = Svin::Origin::the()->addModule<MaxPatch, MaxPatchWidget>("MaxPatch");
 

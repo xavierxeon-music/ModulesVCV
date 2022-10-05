@@ -42,6 +42,6 @@ CutoffWidget::CutoffWidget(Cutoff* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelCutoff = Svin::Origin::the()->addModule<Cutoff, CutoffWidget>("Cutoff");
 

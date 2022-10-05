@@ -137,6 +137,6 @@ MetropolixClockWidget::MetropolixClockWidget(MetropolixClock* module)
 {
    setup();
 }
-// creete module
+// create module
 Model* modelMetropolixClock = Svin::Origin::the()->addModule<MetropolixClock, MetropolixClockWidget>("MetropolixClock");
 

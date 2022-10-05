@@ -104,5 +104,5 @@ BitBus::NegateWidget::NegateWidget(Negate* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelBitBusNegate = Svin::Origin::the()->addModule<BitBus::Negate, BitBus::NegateWidget>("BitBusNegate");

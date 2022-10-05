@@ -52,5 +52,5 @@ BitBus::CVInWidget::CVInWidget(CVIn* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelBitBusCVIn = Svin::Origin::the()->addModule<BitBus::CVIn, BitBus::CVInWidget>("BitBusCVIn");

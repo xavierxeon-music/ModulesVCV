@@ -26,6 +26,6 @@ HubConnectWidget::HubConnectWidget(HubConnect* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelHubConnect = Svin::Origin::the()->addModule<HubConnect, HubConnectWidget>("HubConnect");
 

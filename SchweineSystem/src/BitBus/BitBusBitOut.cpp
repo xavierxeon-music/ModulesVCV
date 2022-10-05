@@ -64,5 +64,5 @@ BitBus::BitOutWidget::BitOutWidget(BitBus::BitOut* module)
 {
    setup();
 }
-// creete module
+// create module
 Model* modelBitBusBitOut = Svin::Origin::the()->addModule<BitBus::BitOut, BitBus::BitOutWidget>("BitBusBitOut");

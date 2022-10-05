@@ -55,6 +55,7 @@ struct GateKeeper::Panel
       // sliders
       LIGHTS_LEN = 3
    };
+
 };
 
 void GateKeeper::setup()
@@ -78,15 +79,15 @@ void GateKeeperWidget::setup()
 {
    makePanel("res/Sequencer/GateKeeper.svg");
 
-   makeButton(this, Vec(98.09, 204.79), GateKeeper::Panel::BankDown);
-   makeButton(this, Vec(98.09, 186.15), GateKeeper::Panel::BankUp);
-   makeButton(this, Vec(55.25, 185.83), GateKeeper::Panel::Mode);
+   makeButton(this, Vec(98.09, 220.79), GateKeeper::Panel::BankDown);
+   makeButton(this, Vec(98.09, 202.15), GateKeeper::Panel::BankUp);
+   makeButton(this, Vec(55.25, 201.83), GateKeeper::Panel::Mode);
 
    makeSwitch(this, Vec(49.56, 355.83), GateKeeper::Panel::NoOffset, false);
 
-   makeLEDButton(this, Vec(75.00, 270.80), GateKeeper::Panel::Loop, GateKeeper::Panel::RGB_Loop);
+   makeLEDButton(this, Vec(75.00, 279.80), GateKeeper::Panel::Loop, GateKeeper::Panel::RGB_Loop);
 
-   makeInput(this, Vec(24.17, 355.83), GateKeeper::Panel::Pass, true);
+   makeInput(this, Vec(24.17, 355.83),  GateKeeper::Panel::Pass, true);
 
    makeOutput(this, Vec(125.83, 355.83), GateKeeper::Panel::One_Output, true);
 

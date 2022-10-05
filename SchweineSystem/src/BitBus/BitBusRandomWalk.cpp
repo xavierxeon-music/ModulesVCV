@@ -141,5 +141,5 @@ BitBus::RandomWalkWidget::RandomWalkWidget(RandomWalk* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelBitBusRandomWalk = Svin::Origin::the()->addModule<BitBus::RandomWalk, BitBus::RandomWalkWidget>("BitBusRandomWalk");

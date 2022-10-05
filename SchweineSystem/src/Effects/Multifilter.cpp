@@ -188,6 +188,6 @@ MultifilterWidget::MultifilterWidget(Multifilter* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelMultifilter = Svin::Origin::the()->addModule<Multifilter, MultifilterWidget>("Multifilter");
 

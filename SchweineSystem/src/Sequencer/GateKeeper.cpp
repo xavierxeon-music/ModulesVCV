@@ -65,9 +65,18 @@ void GateKeeper::process(const ProcessArgs& args)
    output.setNumberOfChannels(16);
 
    // do stuff
-   const bool on = getTempo().isRunningOrFirstTick();
 
    BoolField16 values(0);
+
+   auto applyValues = [&]()
+   {
+      for (uint8_t index = 0; index < 16; index++)
+         output.setActive(values.get(index), index);
+   };
+
+   const bool on = getTempo().isRunningOrFirstTick();
+   if (!on)
+      return applyValues();
 
    if (OperationMode::Passthrough == operationMode)
    {
@@ -81,41 +90,38 @@ void GateKeeper::process(const ProcessArgs& args)
 
          values.set(index + 8, (voltage > 3.0));
       }
-      return;
+      return applyValues();
    }
-   else
+
+   if (hasReset())
    {
-      if (hasReset())
-      {
-         grooves.clockReset();
-         return;
-      }
-
-      while (hasTick())
-      {
-         grooves.clockTick();
-
-         const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
-         const uint32_t currentTick = grooves.getCurrentSegmentTick();
-         tickTriggers = grooves.getTriggers(segmentIndex, currentTick);
-         segmentGates = grooves.getGates(segmentIndex);
-
-         triggerGenerator.trigger();
-      }
-
-      const bool pulse = triggerGenerator.process(args.sampleTime);
-
-      for (uint8_t index = 0; index < 8; index++)
-      {
-         if (tickTriggers.get(index))
-            values.set(index + 0, pulse);
-
-         values.set(index + 8, segmentGates.get(index));
-      }
+      grooves.clockReset();
+      return applyValues();
    }
 
-   for (uint8_t index = 0; index < 16; index++)
-      output.setActive(values.get(index), index);
+   while (hasTick())
+   {
+      grooves.clockTick();
+
+      const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
+      const uint32_t currentTick = grooves.getCurrentSegmentTick();
+      tickTriggers = grooves.getTriggers(segmentIndex, currentTick);
+      segmentGates = grooves.getGates(segmentIndex);
+
+      triggerGenerator.trigger();
+   }
+
+   const bool pulse = triggerGenerator.process(args.sampleTime);
+
+   for (uint8_t index = 0; index < 8; index++)
+   {
+      if (tickTriggers.get(index))
+         values.set(index + 0, pulse);
+
+      values.set(index + 8, segmentGates.get(index));
+   }
+
+   return applyValues();
 }
 
 void GateKeeper::loadProject(const std::string& newFileName)
@@ -290,6 +296,37 @@ void GateKeeper::updateInternal()
    const uint32_t segmentCount = grooves.getSegmentCount();
    const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
 
+   if (0 == segmentCount || !on)
+   {
+      controller.setColor(Color{255, 255, 255});
+      controller.writeText(5, 12, std::to_string(segmentCount), Svin::DisplayOLED::Font::Large);
+      controller.writeText(7 + 15 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
+
+      const uint8_t noOfLines = 10;
+      const uint8_t noOfLetters = 15;
+
+      const uint8_t x = 20;
+      for (uint8_t counter = 0; counter < noOfLines; counter++)
+      {
+         const uint8_t row = noOfLines - (counter + 1);
+         const uint8_t y = 30 + 10 * row;
+         const int8_t index = fileName.length() - ((noOfLines - row) * noOfLetters);
+         if (index >= 0)
+         {
+            const std::string text = fileName.substr(index, noOfLetters);
+            controller.writeText(x, y, text, 10);
+         }
+         else
+         {
+            const std::string text = fileName.substr(0, noOfLetters + index);
+            controller.writeText(x, y, Text::pad(text, noOfLetters, " "), 10);
+            break;
+         }
+      }
+
+      return;
+   }
+
    // top row
    const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
 
@@ -299,6 +336,8 @@ void GateKeeper::updateInternal()
    const std::string eventName = grooves.getSegmentName(segmentIndex);
    const std::string eventText = eventName.empty() ? "--" : eventName;
    controller.writeText(50, 12, eventText, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   controller.setColor(Color{150, 150, 150});
 
    if (eventName.empty())
       controller.writeText(100, 12, lastNamedSegement, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
@@ -325,7 +364,7 @@ void GateKeeper::updateInternal()
 
       controller.setColor(Color{0, 255, 0});
 
-      const uint8_t x = 35 + col * 12;
+      const uint8_t x = 5 + col * 12;
       const uint8_t y = 30;
       controller.drawRect(x, y, x + 8, y + 4, true);
 
@@ -342,9 +381,9 @@ void GateKeeper::updateInternal()
          controller.setColor(Color{155, 155, 200});
 
       if (gates.get(row))
-         controller.drawRect(5, y, 20, y + 8, true);
+         controller.drawRect(115, y, 125, y + 8, true);
       else
-         controller.drawRect(5, y, 20, y + 8, false);
+         controller.drawRect(115, y, 125, y + 8, false);
 
       if (hasBeat)
          controller.setColor(Color{255, 255, 255});
@@ -354,7 +393,7 @@ void GateKeeper::updateInternal()
       for (uint8_t col = 0; col < 8; col++)
       {
          const uint tick = offset + col;
-         const uint8_t x = 35 + col * 12;
+         const uint8_t x = 5 + col * 12;
 
          if (tick >= length)
             break;
@@ -414,5 +453,5 @@ GateKeeperWidget::GateKeeperWidget(GateKeeper* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelGateKeeper = Svin::Origin::the()->addModule<GateKeeper, GateKeeperWidget>("GateKeeper");

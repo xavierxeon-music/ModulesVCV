@@ -180,6 +180,6 @@ MidiMizeWidget::MidiMizeWidget(MidiMize* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelMidiMize = Svin::Origin::the()->addModule<MidiMize, MidiMizeWidget>("MidiMize");
 

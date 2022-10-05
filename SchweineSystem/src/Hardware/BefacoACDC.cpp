@@ -90,6 +90,6 @@ BefacoACDCWidget::BefacoACDCWidget(BefacoACDC* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelBefacoACDC = Svin::Origin::the()->addModule<BefacoACDC, BefacoACDCWidget>("BefacoACDC");
 

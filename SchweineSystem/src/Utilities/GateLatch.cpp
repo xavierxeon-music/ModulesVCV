@@ -115,6 +115,6 @@ GateLatchWidget::GateLatchWidget(GateLatch* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelGateLatch = Svin::Origin::the()->addModule<GateLatch, GateLatchWidget>("GateLatch");
 

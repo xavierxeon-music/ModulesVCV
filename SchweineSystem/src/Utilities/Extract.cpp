@@ -87,6 +87,6 @@ ExtractWidget::ExtractWidget(Extract* module)
    setup();
 }
 
-// creete module
+// create module
 Model* modelExtract = Svin::Origin::the()->addModule<Extract, ExtractWidget>("Extract");
 
