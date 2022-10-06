@@ -29,20 +29,23 @@ namespace Nosferatu
       uint8_t ticks = 2;  // 1 - 16
       float length = 0.5; // 0.0 - 1.0
       float chance = 1.0; // 0.0 - 1.0
-      bool play = true;
+      bool play = true;   // random chance play
    };
 
    struct Bank
    {
       Segment segments[8];
-      uint8_t maxActive = 8; // 1 - 16
-      uint8_t offset = 0;    // 0 - 11, not used by expander
+      uint8_t pitchOffset = 0; // 0 - 11, not used by expander
+
+      using List = std::vector<Bank>;
    };
 
-   struct State
+   struct State // to be pushed to expanders
    {
       uint8_t bankIndex = 0;
+      uint8_t maxActive = 8; // 8 per base, expander
       uint16_t currentSegmentIndex = 0;
+      uint8_t pitchOffset = 0; // from base
    };
 
    //
@@ -72,10 +75,10 @@ namespace Nosferatu
 
    private:
       inline void setup();
-      const Bank& updateBank();
+      const Bank& updateCurrentBank();
       void bankChange();
       void setDisplay(const DisplayType newType, const uint8_t value);
-      void updateSegment();
+      void updateSegmentPlayChances();
 
       void load(const Svin::Json::Object& rootObject) override;
       void save(Svin::Json::Object& rootObject) override;
@@ -84,6 +87,7 @@ namespace Nosferatu
       // operation
       Bank banks[16];
       State state;
+      Bank::List playBanks; // the banks currently playing (including exapnders)
       uint8_t tickCounter;
       FastRandom noiseGenerator;
       // display

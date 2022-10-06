@@ -34,15 +34,12 @@ namespace Svin
       template <typename DataType>
       Module* busModule(const Side& side) const;
 
-      template <typename DataType>
-      uint16_t moduleCount(const Side& side) const;
-
    protected:
       template <typename DataType>
       struct Message
       {
          DataType data;
-         Json::Object message;
+         Json::Object document;
          const Module* sender;
 
          using List = std::list<Message>;
@@ -82,7 +79,7 @@ namespace Svin
 
       // bus broadcast
       template <typename DataType>
-      void broadcastMessage(const DataType& data, const Json::Object& message, const Module* target = nullptr);
+      void broadcastMessage(const DataType& data, const Json::Object& document, const Module* target = nullptr);
 
       template <typename DataType>
       bool hasMessage();
@@ -142,7 +139,7 @@ namespace Svin
          void append(Module* module);
          bool contains(Module* module);
 
-         void queue(const DataType& data, const Json::Object& message, const Module* sender, const Module* target);
+         void queue(const DataType& data, const Json::Object& document, const Module* sender, const Module* target);
          bool empty(Module* module) const;
          Message<DataType> takeFirst(Module* module);
 

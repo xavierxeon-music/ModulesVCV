@@ -41,11 +41,11 @@ bool Svin::Module::Bus<DataType>::contains(Module* module)
 }
 
 template <typename DataType>
-void Svin::Module::Bus<DataType>::queue(const DataType& data, const Json::Object& message, const Module* sender, const Module* target)
+void Svin::Module::Bus<DataType>::queue(const DataType& data, const Json::Object& document, const Module* sender, const Module* target)
 {
    std::lock_guard<std::mutex> guard(mutex);
 
-   Message<DataType> buffer = {data, message, sender};
+   Message<DataType> buffer = {data, document, sender};
 
    for (typename InstanceMap::iterator it = instanceMap.begin(); it != instanceMap.end(); it++)
    {
@@ -110,11 +110,6 @@ Svin::Module* Svin::Module::busModule(const Side& side) const
    return module;
 }
 
-template <typename DataType>
-uint16_t Svin::Module::moduleCount(const Side& side) const
-{
-   return 0;
-}
 
 template <typename DataType>
 void Svin::Module::registerAsBusModule()
@@ -200,10 +195,10 @@ ModuleType* Svin::Module::findLastBusModule(const Side& side, bool consecutive)
 }
 
 template <typename DataType>
-void Svin::Module::broadcastMessage(const DataType& data, const Json::Object& message, const Module* target)
+void Svin::Module::broadcastMessage(const DataType& data, const Json::Object& document, const Module* target)
 {
    const Module* sender = const_cast<const Module*>(this);
-   Bus<DataType>::the()->queue(data, message, sender, target);
+   Bus<DataType>::the()->queue(data, document, sender, target);
 }
 
 template <typename DataType>

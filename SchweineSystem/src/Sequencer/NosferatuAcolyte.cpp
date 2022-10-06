@@ -18,8 +18,8 @@ Nosferatu::Acolyte::Acolyte()
    , activeButtonList(this)
 {
    setup();
-   registerAsBusModule<Nosferatu::State>(); // from master
-   registerAsBusModule<Nosferatu::Bank>();  // to master
+   registerAsBusModule<State>(); // from master
+   registerAsBusModule<Bank>();  // to master
 
    currentLightList.append({Panel::RGB_Seg01_Current,
                             Panel::RGB_Seg02_Current,
@@ -106,56 +106,101 @@ Nosferatu::Acolyte::Acolyte()
 
 void Nosferatu::Acolyte::process(const ProcessArgs& args)
 {
-   const Nosferatu::State newState = getBusData<Nosferatu::State>(Side::Left);
-   if (newState.bankIndex != state.bankIndex)
+   const State newState = getBusData<State>(Side::Left);
+   const bool update = (newState.bankIndex != state.bankIndex);
+   state = newState;
+
+   if (update)
       bankChange();
 
-   state = newState;
-   sendBusData<Nosferatu::State>(Side::Right, newState);
+   sendBusData<State>(Side::Right, newState);
 
-   Vampyre* mainModule = findFirstBusModule<Nosferatu::State, Vampyre>(Side::Left);
-   uint8_t counter = indexOfBusModule<Nosferatu::State>(Side::Left, mainModule);
-   display.setText(std::to_string(counter));
+   Vampyre* mainModule = findFirstBusModule<State, Vampyre>(Side::Left);
+   uint8_t counter = indexOfBusModule<State>(Side::Left, mainModule);
+
+   Svin::Json::Object object;
+   object.set("index", counter);
 
    Bank& currentBank = banks[state.bankIndex];
+   bool hasChanges = false;
    for (uint8_t index = 0; index < 8; index++)
    {
       if (activeButtonList[index]->isTriggered())
       {
-         currentBank.maxActive = index + 1;
+         const uint8_t expanderActive = (8 * counter) + index + 1;
+         object.set("active", expanderActive);
+         hasChanges = true;
+
+         std::cout << __FUNCTION__ << " " << (uint16_t)expanderActive << std::endl;
       }
 
-      currentBank.segments[index].pitch = pitchSliderList[index]->getValue();
-      currentBank.segments[index].ticks = tickSliderList[index]->getValue();
-      currentBank.segments[index].length = lengthKnobList[index]->getValue();
-      currentBank.segments[index].chance = chanceKnobList[index]->getValue();
+      const uint8_t pitch = pitchSliderList[index]->getValue();
+      if (pitch != currentBank.segments[index].pitch)
+      {
+         currentBank.segments[index].pitch = pitch;
+         hasChanges = true;
+      }
+
+      const uint8_t ticks = tickSliderList[index]->getValue();
+      if (ticks != currentBank.segments[index].ticks)
+      {
+         currentBank.segments[index].ticks = ticks;
+         hasChanges = true;
+      }
+
+      const float length = lengthKnobList[index]->getValue();
+      if (length != currentBank.segments[index].length)
+      {
+         currentBank.segments[index].length = length;
+         hasChanges = true;
+      }
+
+      const float chance = chanceKnobList[index]->getValue();
+      if (chance != currentBank.segments[index].chance)
+      {
+         currentBank.segments[index].chance = chance;
+         hasChanges = true;
+      }
    }
 
-   if (mainModule)
-   {
-      Svin::Json::Object object;
-      object.set("index", counter);
+   if (mainModule && hasChanges)
       broadcastMessage<Bank>(currentBank, object, mainModule);
-   }
 }
 
 void Nosferatu::Acolyte::updateDisplays()
 {
    static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
 
+   Vampyre* mainModule = findFirstBusModule<State, Vampyre>(Side::Left);
+   uint8_t counter = indexOfBusModule<State>(Side::Left, mainModule);
+   display.setText(std::to_string(counter));
+
+   if (0 == counter)
+   {
+      for (uint8_t index = 0; index < 8; index++)
+      {
+         currentLightList[index]->setOff();
+         pitchSliderList[index]->setOff();
+         tickSliderList[index]->setOff();
+         activeButtonList[index]->setOff();
+      }
+      return;
+   }
+
    // lights
    const Bank& currentBank = banks[state.bankIndex];
    for (uint8_t index = 0; index < 8; index++)
    {
-      currentLightList[index]->setActive(index == state.currentSegmentIndex);
+      const uint8_t totalIndex = (8 * counter) + index;
+      currentLightList[index]->setActive(totalIndex == state.currentSegmentIndex);
 
-      const Note note = Note::fromMidi(noteBaseValue + currentBank.offset + currentBank.segments[index].pitch);
+      const Note note = Note::fromMidi(noteBaseValue + state.pitchOffset + currentBank.segments[index].pitch);
       pitchSliderList[index]->setColor(Note::colorMap.at(note.value));
 
       const bool evenTick = (0 == (currentBank.segments[index].ticks % 2));
       tickSliderList[index]->setBrightness(evenTick ? 1.0 : 0.2);
 
-      activeButtonList[index]->setActive(index < currentBank.maxActive);
+      activeButtonList[index]->setActive(totalIndex < state.maxActive);
    }
 }
 
@@ -171,20 +216,25 @@ void Nosferatu::Acolyte::bankChange()
       lengthKnobList[index]->setValue(segment.length);
       chanceKnobList[index]->setValue(segment.chance);
    }
+
+   Vampyre* mainModule = findFirstBusModule<State, Vampyre>(Side::Left);
+   uint8_t counter = indexOfBusModule<State>(Side::Left, mainModule);
+
+   Svin::Json::Object object;
+   object.set("index", counter);
+
+   if (mainModule)
+      broadcastMessage<Bank>(currentBank, object, mainModule);
 }
 
 void Nosferatu::Acolyte::load(const Svin::Json::Object& rootObject)
 {
-   state.bankIndex = rootObject.get("currentBank").toInt();
-
    for (uint8_t index = 0; index < 16; index++)
    {
       Bank& currentBank = banks[index];
 
       const std::string bankKey = "b" + Text::pad(std::to_string(index), 2);
       const Svin::Json::Object bankObject = rootObject.get(bankKey).toObject();
-
-      currentBank.maxActive = bankObject.get("max").toInt();
 
       for (uint8_t segmentIndex = 0; segmentIndex < 8; segmentIndex++)
       {
@@ -198,20 +248,16 @@ void Nosferatu::Acolyte::load(const Svin::Json::Object& rootObject)
       }
    }
 
-   state.currentSegmentIndex = 0;
    bankChange();
 }
 
 void Nosferatu::Acolyte::save(Svin::Json::Object& rootObject)
 {
-   rootObject.set("currentBank", state.bankIndex);
-
    for (uint8_t bankIndex = 0; bankIndex < 16; bankIndex++)
    {
       const Bank& currentBank = banks[bankIndex];
 
       Svin::Json::Object bankObject;
-      bankObject.set("max", currentBank.maxActive);
 
       for (uint8_t segmentIndex = 0; segmentIndex < 8; segmentIndex++)
       {

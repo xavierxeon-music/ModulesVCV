@@ -11,6 +11,7 @@ Nosferatu::Vampyre::Vampyre()
    // operation
    , banks{}
    , state{}
+   , playBanks()
    , tickCounter(0)
    , noiseGenerator()
    // display
@@ -37,8 +38,8 @@ Nosferatu::Vampyre::Vampyre()
    , gateOutput(this, Panel::Gate)
 {
    setup();
-   registerAsBusModule<Nosferatu::Bank>();  // from expander
-   registerAsBusModule<Nosferatu::State>(); // to expander
+   registerAsBusModule<Bank>();  // from expander
+   registerAsBusModule<State>(); // to expander
 
    currentLightList.append({Panel::RGB_Seg01_Current,
                             Panel::RGB_Seg02_Current,
@@ -147,37 +148,74 @@ void Nosferatu::Vampyre::process(const ProcessArgs& args)
       }
    }
 
-   const Bank& currentBank = updateBank();
    if (!displayOverride.process(args.sampleTime))
       displayType = DisplayType::Bank;
 
-   // sequence
    if (hasReset())
    {
       state.currentSegmentIndex = 0;
       tickCounter = 0;
-      updateSegment();
+      updateSegmentPlayChances();
       return;
+   }
+
+   // sequence length
+   {
+      Acolyte* lastAcolyte = findLastBusModule<State, Acolyte>(Side::Right, true);
+      const uint8_t bankCount = 1 + indexOfBusModule<State>(Side::Right, lastAcolyte);
+
+      while (playBanks.size() < bankCount)
+         playBanks.push_back(Bank{});
+      while (playBanks.size() > bankCount)
+         playBanks.pop_back();
+
+      const uint8_t maxSteps = 8 * bankCount;
+
+      if (maxSteps < state.maxActive)
+      {
+         std::cout << (uint16_t)state.maxActive << " " << (uint16_t)maxSteps << " " << (uint16_t)bankCount << std::endl;
+         state.maxActive = maxSteps;
+      }
+
+      if (maxSteps <= state.currentSegmentIndex)
+         state.currentSegmentIndex = maxSteps;
+      playBanks[0] = updateCurrentBank();
+
+      state.pitchOffset = playBanks[0].pitchOffset;
    }
 
    while (hasMessage<Bank>())
    {
       const Message<Bank> message = popMessage<Bank>();
-      uint8_t expanderIndex = message.message.get("index").toInt();
-      //std::cout << (uint16_t)expanderIndex << std::endl;
+
+      uint8_t expanderIndex = message.document.get("index").toInt();
+      playBanks[expanderIndex] = message.data;
+
+      if (message.document.hasKey("active"))
+      {
+         const uint8_t expanderActive = message.document.get("active").toInt();
+         state.maxActive = expanderActive;
+
+         std::cout << __FUNCTION__ << " " << (uint16_t)expanderActive << std::endl;
+      }
    }
 
    firstOutput.setActive(0 == state.currentSegmentIndex);
 
-   const Segment& currentSegment = currentBank.segments[state.currentSegmentIndex];
-
-   static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
-   const uint8_t midiValue = noteBaseValue + currentBank.offset + currentSegment.pitch;
-   const Note note = Note::fromMidi(midiValue);
-   pitchOutput.setVoltage(note.voltage);
-
    const Tempo tempo = getTempo();
    const float tickPercentage = tempo.getPercentage();
+
+   const uint8_t segmentIndex = state.currentSegmentIndex % 8;
+   const uint8_t expanderIndex = (state.currentSegmentIndex - segmentIndex) / 8;
+   const Bank& currentBank = playBanks[expanderIndex];
+
+   // pitch and gate
+   const Segment& currentSegment = currentBank.segments[segmentIndex];
+
+   static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
+   const uint8_t midiValue = noteBaseValue + currentBank.pitchOffset + currentSegment.pitch;
+   const Note note = Note::fromMidi(midiValue);
+   pitchOutput.setVoltage(note.voltage);
 
    float currentTick = tickCounter;
    const float maxTick = currentSegment.ticks;
@@ -199,27 +237,29 @@ void Nosferatu::Vampyre::process(const ProcessArgs& args)
          continue;
 
       tickCounter++;
-      if (tickCounter >= currentBank.segments[state.currentSegmentIndex].ticks)
+      if (tickCounter >= currentBank.segments[segmentIndex].ticks)
       {
          tickCounter = 0;
          state.currentSegmentIndex++;
 
-         if (state.currentSegmentIndex >= currentBank.maxActive)
+         if (state.currentSegmentIndex >= state.maxActive)
             state.currentSegmentIndex = 0;
 
-         updateSegment();
+         updateSegmentPlayChances();
       }
    }
+
+   sendBusData<State>(Side::Right, state);
 }
 
-const Nosferatu::Bank& Nosferatu::Vampyre::updateBank()
+const Nosferatu::Bank& Nosferatu::Vampyre::updateCurrentBank()
 {
    Bank& currentBank = banks[state.bankIndex];
 
    for (uint8_t index = 0; index < 8; index++)
    {
       if (activeButtonList[index]->isTriggered())
-         currentBank.maxActive = index + 1;
+         state.maxActive = index + 1;
 
       const uint8_t pitch = pitchSliderList[index]->getValue();
       if (pitch != currentBank.segments[index].pitch)
@@ -238,11 +278,11 @@ const Nosferatu::Bank& Nosferatu::Vampyre::updateBank()
       currentBank.segments[index].chance = chanceKnobList[index]->getValue();
    }
 
-   const uint8_t offset = offsetKnob.getValue();
-   if (offset != currentBank.offset)
+   const uint8_t pitchOffset = offsetKnob.getValue();
+   if (pitchOffset != currentBank.pitchOffset)
    {
-      currentBank.offset = offset;
-      setDisplay(DisplayType::Offset, offset);
+      currentBank.pitchOffset = pitchOffset;
+      setDisplay(DisplayType::Offset, pitchOffset);
    }
 
    return currentBank;
@@ -253,18 +293,18 @@ void Nosferatu::Vampyre::updateDisplays()
    static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
 
    // lights
-   const Bank& currentBank = banks[state.bankIndex];
+   const Bank& currentBank = playBanks[0];
    for (uint8_t index = 0; index < 8; index++)
    {
       currentLightList[index]->setActive(index == state.currentSegmentIndex);
 
-      const Note note = Note::fromMidi(noteBaseValue + currentBank.offset + currentBank.segments[index].pitch);
+      const Note note = Note::fromMidi(noteBaseValue + currentBank.pitchOffset + currentBank.segments[index].pitch);
       pitchSliderList[index]->setColor(Note::colorMap.at(note.value));
 
       const bool evenTick = (0 == (currentBank.segments[index].ticks % 2));
       tickSliderList[index]->setBrightness(evenTick ? 1.0 : 0.2);
 
-      activeButtonList[index]->setActive(index < currentBank.maxActive);
+      activeButtonList[index]->setActive(index < state.maxActive);
    }
 
    if (DisplayType::Bank == displayType)
@@ -276,7 +316,7 @@ void Nosferatu::Vampyre::updateDisplays()
    else if (DisplayType::Pitch == displayType)
    {
       displayController.setColor(Color{255, 255, 255});
-      const Note note = Note::fromMidi(noteBaseValue + currentBank.offset + displayValue);
+      const Note note = Note::fromMidi(noteBaseValue + currentBank.pitchOffset + displayValue);
       displayController.setText(note.name);
    }
    else if (DisplayType::Ticks == displayType)
@@ -291,25 +331,15 @@ void Nosferatu::Vampyre::updateDisplays()
       const Note note = Note::fromMidi(noteBaseValue + displayValue);
       displayController.setText(note.name);
    }
-
-   /*
-   Acolyte* lastExpanderModule = findLastBusModule<Nosferatu::Bus, Acolyte>(Side::Right, true);
-   uint8_t counter = indexOfBusModule<Nosferatu::Bus>(Side::Right, lastExpanderModule);
-
-   displayController.setText(std::to_string(counter));
-   */
 }
 
 void Nosferatu::Vampyre::bankChange()
 {
    const Bank& currentBank = banks[state.bankIndex];
-   if (state.currentSegmentIndex >= currentBank.maxActive)
-   {
-      state.currentSegmentIndex = 0;
-      updateSegment();
-      if (tickCounter >= currentBank.segments[state.currentSegmentIndex].ticks)
-         tickCounter = 0;
-   }
+
+   state.currentSegmentIndex = 0;
+   tickCounter = 0;
+   updateSegmentPlayChances();
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -320,12 +350,10 @@ void Nosferatu::Vampyre::bankChange()
       chanceKnobList[index]->setValue(segment.chance);
    }
 
-   offsetKnob.setValue(currentBank.offset);
+   offsetKnob.setValue(currentBank.pitchOffset);
 
    displayType = DisplayType::Bank;
    displayOverride.reset();
-
-   sendBusData<Nosferatu::State>(Side::Right, state);
 }
 
 void Nosferatu::Vampyre::setDisplay(const DisplayType newType, const uint8_t value)
@@ -335,9 +363,10 @@ void Nosferatu::Vampyre::setDisplay(const DisplayType newType, const uint8_t val
    displayOverride.trigger(3.0);
 }
 
-void Nosferatu::Vampyre::updateSegment()
+void Nosferatu::Vampyre::updateSegmentPlayChances()
 {
-   Bank& currentBank = banks[state.bankIndex];
+   return;
+   Bank& currentBank = banks[0];
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -349,9 +378,8 @@ void Nosferatu::Vampyre::updateSegment()
 
 void Nosferatu::Vampyre::load(const Svin::Json::Object& rootObject)
 {
-   return;
-
    state.bankIndex = rootObject.get("currentBank").toInt();
+   state.maxActive = rootObject.get("maxActive").toInt();
 
    for (uint8_t index = 0; index < 16; index++)
    {
@@ -360,8 +388,7 @@ void Nosferatu::Vampyre::load(const Svin::Json::Object& rootObject)
       const std::string bankKey = "b" + Text::pad(std::to_string(index), 2);
       const Svin::Json::Object bankObject = rootObject.get(bankKey).toObject();
 
-      currentBank.maxActive = bankObject.get("max").toInt();
-      currentBank.offset = bankObject.get("offset").toInt();
+      currentBank.pitchOffset = bankObject.get("pitchOffset").toInt();
 
       for (uint8_t segmentIndex = 0; segmentIndex < 8; segmentIndex++)
       {
@@ -386,14 +413,14 @@ void Nosferatu::Vampyre::load(const Svin::Json::Object& rootObject)
 void Nosferatu::Vampyre::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("currentBank", state.bankIndex);
+   rootObject.set("maxActive", state.maxActive);
 
    for (uint8_t index = 0; index < 16; index++)
    {
       const Bank& currentBank = banks[index];
 
       Svin::Json::Object bankObject;
-      bankObject.set("max", currentBank.maxActive);
-      bankObject.set("offset", currentBank.offset);
+      bankObject.set("pitchOffset", currentBank.pitchOffset);
 
       for (uint8_t segmentIndex = 0; segmentIndex < 8; segmentIndex++)
       {
