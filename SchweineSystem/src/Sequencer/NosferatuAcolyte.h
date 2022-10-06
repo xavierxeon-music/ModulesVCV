@@ -39,8 +39,7 @@ namespace Nosferatu
    private:
       // operation
       Bank banks[16];
-      uint8_t bankIndex;
-      int16_t currentSegmentIndex;
+      Nosferatu::State state;
       // display
       Svin::DisplayLCD::Controller display;
       // segments

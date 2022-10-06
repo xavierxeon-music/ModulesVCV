@@ -41,8 +41,9 @@ namespace Svin
       template <typename DataType>
       struct Message
       {
+         DataType data;
          Json::Object message;
-         Module* sender;
+         const Module* sender;
 
          using List = std::list<Message>;
       };
@@ -51,12 +52,14 @@ namespace Svin
       virtual void load(const Json::Object& rootObject);
       virtual void save(Json::Object& rootObject);
       float getSampleRate() const;
+
       // hub client
       bool hubConnected();
       void connectToHub();
       bool registerHubClient(const std::string& name);
       void sendDocumentToHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex = 0);
       virtual void receivedDocumentFromHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex);
+
       // bus
       template <typename DataType>
       void registerAsBusModule();
@@ -67,9 +70,7 @@ namespace Svin
       template <typename DataType>
       DataType getBusData(const Side& side);
 
-      template <typename DataType>
-      void broadcastMessage(const Json::Object& message, const Module* receiver = nullptr);
-
+      // bus search
       template <typename DataType>
       uint8_t indexOfBusModule(const Side& side, Module* module);
 
@@ -78,6 +79,10 @@ namespace Svin
 
       template <typename DataType, typename ModuleType>
       ModuleType* findLastBusModule(const Side& side, bool consecutive);
+
+      // bus broadcast
+      template <typename DataType>
+      void broadcastMessage(const DataType& data, const Json::Object& message, const Module* target = nullptr);
 
       template <typename DataType>
       bool hasMessage();
@@ -137,10 +142,13 @@ namespace Svin
          void append(Module* module);
          bool contains(Module* module);
 
-         void queue(const Json::Object& message, const Module* sender, const Module* target);
+         void queue(const DataType& data, const Json::Object& message, const Module* sender, const Module* target);
+         bool empty(Module* module) const;
+         Message<DataType> takeFirst(Module* module);
 
       private:
          friend class BusAbstract;
+         friend class Module;
 
       private:
          Bus();
@@ -151,6 +159,7 @@ namespace Svin
       private:
          static Bus* me;
          InstanceMap instanceMap;
+         mutable std::mutex mutex;
       };
 
    private:

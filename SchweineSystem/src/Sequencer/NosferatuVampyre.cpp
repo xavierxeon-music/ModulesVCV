@@ -10,8 +10,7 @@ Nosferatu::Vampyre::Vampyre()
    , Svin::MasterClock::Client()
    // operation
    , banks{}
-   , bankIndex(0)
-   , currentSegmentIndex(0)
+   , state{}
    , tickCounter(0)
    , noiseGenerator()
    // display
@@ -38,7 +37,8 @@ Nosferatu::Vampyre::Vampyre()
    , gateOutput(this, Panel::Gate)
 {
    setup();
-   registerAsBusModule<Nosferatu::Bus>();
+   registerAsBusModule<Nosferatu::Bank>();  // from expander
+   registerAsBusModule<Nosferatu::State>(); // to expander
 
    currentLightList.append({Panel::RGB_Seg01_Current,
                             Panel::RGB_Seg02_Current,
@@ -134,7 +134,7 @@ void Nosferatu::Vampyre::process(const ProcessArgs& args)
    }
    else
    {
-      Variable::Integer<uint8_t> var(bankIndex, 0, 15, true);
+      Variable::Integer<uint8_t> var(state.bankIndex, 0, 15, true);
       if (bankDownButton.isTriggered())
       {
          var.decrement();
@@ -154,15 +154,22 @@ void Nosferatu::Vampyre::process(const ProcessArgs& args)
    // sequence
    if (hasReset())
    {
-      currentSegmentIndex = 0;
+      state.currentSegmentIndex = 0;
       tickCounter = 0;
       updateSegment();
       return;
    }
 
-   firstOutput.setActive(0 == currentSegmentIndex);
+   while (hasMessage<Bank>())
+   {
+      const Message<Bank> message = popMessage<Bank>();
+      uint8_t expanderIndex = message.message.get("index").toInt();
+      //std::cout << (uint16_t)expanderIndex << std::endl;
+   }
 
-   const Segment& currentSegment = currentBank.segments[currentSegmentIndex];
+   firstOutput.setActive(0 == state.currentSegmentIndex);
+
+   const Segment& currentSegment = currentBank.segments[state.currentSegmentIndex];
 
    static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
    const uint8_t midiValue = noteBaseValue + currentBank.offset + currentSegment.pitch;
@@ -192,13 +199,13 @@ void Nosferatu::Vampyre::process(const ProcessArgs& args)
          continue;
 
       tickCounter++;
-      if (tickCounter >= currentBank.segments[currentSegmentIndex].ticks)
+      if (tickCounter >= currentBank.segments[state.currentSegmentIndex].ticks)
       {
          tickCounter = 0;
-         currentSegmentIndex++;
+         state.currentSegmentIndex++;
 
-         if (currentSegmentIndex >= currentBank.maxActive)
-            currentSegmentIndex = 0;
+         if (state.currentSegmentIndex >= currentBank.maxActive)
+            state.currentSegmentIndex = 0;
 
          updateSegment();
       }
@@ -207,7 +214,7 @@ void Nosferatu::Vampyre::process(const ProcessArgs& args)
 
 const Nosferatu::Bank& Nosferatu::Vampyre::updateBank()
 {
-   Bank& currentBank = banks[bankIndex];
+   Bank& currentBank = banks[state.bankIndex];
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -246,10 +253,10 @@ void Nosferatu::Vampyre::updateDisplays()
    static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
 
    // lights
-   const Bank& currentBank = banks[bankIndex];
+   const Bank& currentBank = banks[state.bankIndex];
    for (uint8_t index = 0; index < 8; index++)
    {
-      currentLightList[index]->setActive(index == currentSegmentIndex);
+      currentLightList[index]->setActive(index == state.currentSegmentIndex);
 
       const Note note = Note::fromMidi(noteBaseValue + currentBank.offset + currentBank.segments[index].pitch);
       pitchSliderList[index]->setColor(Note::colorMap.at(note.value));
@@ -263,7 +270,7 @@ void Nosferatu::Vampyre::updateDisplays()
    if (DisplayType::Bank == displayType)
    {
       displayController.setColor(Color{255, 255, 0});
-      const std::string displayText = "b" + Text::pad(std::to_string(bankIndex + 1), 2);
+      const std::string displayText = "b" + Text::pad(std::to_string(state.bankIndex + 1), 2);
       displayController.setText(displayText);
    }
    else if (DisplayType::Pitch == displayType)
@@ -295,12 +302,12 @@ void Nosferatu::Vampyre::updateDisplays()
 
 void Nosferatu::Vampyre::bankChange()
 {
-   const Bank& currentBank = banks[bankIndex];
-   if (currentSegmentIndex >= currentBank.maxActive)
+   const Bank& currentBank = banks[state.bankIndex];
+   if (state.currentSegmentIndex >= currentBank.maxActive)
    {
-      currentSegmentIndex = 0;
+      state.currentSegmentIndex = 0;
       updateSegment();
-      if (tickCounter >= currentBank.segments[currentSegmentIndex].ticks)
+      if (tickCounter >= currentBank.segments[state.currentSegmentIndex].ticks)
          tickCounter = 0;
    }
 
@@ -318,9 +325,7 @@ void Nosferatu::Vampyre::bankChange()
    displayType = DisplayType::Bank;
    displayOverride.reset();
 
-   Nosferatu::Bus message;
-   message.bankIndex = bankIndex;
-   sendBusData<Nosferatu::Bus>(Side::Right, message);
+   sendBusData<Nosferatu::State>(Side::Right, state);
 }
 
 void Nosferatu::Vampyre::setDisplay(const DisplayType newType, const uint8_t value)
@@ -332,11 +337,11 @@ void Nosferatu::Vampyre::setDisplay(const DisplayType newType, const uint8_t val
 
 void Nosferatu::Vampyre::updateSegment()
 {
-   Bank& currentBank = banks[bankIndex];
+   Bank& currentBank = banks[state.bankIndex];
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      Segment& currentSegment = currentBank.segments[currentSegmentIndex];
+      Segment& currentSegment = currentBank.segments[state.currentSegmentIndex];
       const float random = 2.0 * noiseGenerator.value() - 1.0;
       currentSegment.play = (random <= currentSegment.chance);
    }
@@ -346,7 +351,7 @@ void Nosferatu::Vampyre::load(const Svin::Json::Object& rootObject)
 {
    return;
 
-   bankIndex = rootObject.get("currentBank").toInt();
+   state.bankIndex = rootObject.get("currentBank").toInt();
 
    for (uint8_t index = 0; index < 16; index++)
    {
@@ -373,14 +378,14 @@ void Nosferatu::Vampyre::load(const Svin::Json::Object& rootObject)
    displayType = DisplayType::Bank;
    displayOverride.reset();
 
-   currentSegmentIndex = 0;
+   state.currentSegmentIndex = 0;
    tickCounter = 0;
    bankChange();
 }
 
 void Nosferatu::Vampyre::save(Svin::Json::Object& rootObject)
 {
-   rootObject.set("currentBank", bankIndex);
+   rootObject.set("currentBank", state.bankIndex);
 
    for (uint8_t index = 0; index < 16; index++)
    {

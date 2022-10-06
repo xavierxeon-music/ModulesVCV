@@ -36,14 +36,13 @@ namespace Nosferatu
    {
       Segment segments[8];
       uint8_t maxActive = 8; // 1 - 16
-      uint8_t offset = 0;    // 0-11
+      uint8_t offset = 0;    // 0 - 11, not used by expander
    };
 
-   struct Bus
+   struct State
    {
       uint8_t bankIndex = 0;
       uint16_t currentSegmentIndex = 0;
-      uint8_t offset = 0;
    };
 
    //
@@ -84,8 +83,7 @@ namespace Nosferatu
    private:
       // operation
       Bank banks[16];
-      uint8_t bankIndex;
-      uint16_t currentSegmentIndex;
+      State state;
       uint8_t tickCounter;
       FastRandom noiseGenerator;
       // display

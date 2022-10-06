@@ -6,8 +6,7 @@ Nosferatu::Acolyte::Acolyte()
    : Svin::Module()
    // operation
    , banks{}
-   , bankIndex(0)
-   , currentSegmentIndex(-1)
+   , state{}
    // display
    , display(this, Panel::Text_Number)
    // segments
@@ -19,7 +18,8 @@ Nosferatu::Acolyte::Acolyte()
    , activeButtonList(this)
 {
    setup();
-   registerAsBusModule<Nosferatu::Bus>();
+   registerAsBusModule<Nosferatu::State>(); // from master
+   registerAsBusModule<Nosferatu::Bank>();  // to master
 
    currentLightList.append({Panel::RGB_Seg01_Current,
                             Panel::RGB_Seg02_Current,
@@ -106,26 +106,36 @@ Nosferatu::Acolyte::Acolyte()
 
 void Nosferatu::Acolyte::process(const ProcessArgs& args)
 {
-   const Nosferatu::Bus message = getBusData<Nosferatu::Bus>(Side::Left);
-   if (message.bankIndex != bankIndex)
-   {
-      bankIndex = message.bankIndex;
+   const Nosferatu::State newState = getBusData<Nosferatu::State>(Side::Left);
+   if (newState.bankIndex != state.bankIndex)
       bankChange();
-   }
-   sendBusData<Nosferatu::Bus>(Side::Right, message);
 
-   Vampyre* mainModule = findFirstBusModule<Nosferatu::Bus, Vampyre>(Side::Left);
-   uint8_t counter = indexOfBusModule<Nosferatu::Bus>(Side::Left, mainModule);
+   state = newState;
+   sendBusData<Nosferatu::State>(Side::Right, newState);
+
+   Vampyre* mainModule = findFirstBusModule<Nosferatu::State, Vampyre>(Side::Left);
+   uint8_t counter = indexOfBusModule<Nosferatu::State>(Side::Left, mainModule);
    display.setText(std::to_string(counter));
 
-   Bank& currentBank = banks[bankIndex];
+   Bank& currentBank = banks[state.bankIndex];
    for (uint8_t index = 0; index < 8; index++)
    {
       if (activeButtonList[index]->isTriggered())
       {
          currentBank.maxActive = index + 1;
-         //publishMessage(currentBank);
       }
+
+      currentBank.segments[index].pitch = pitchSliderList[index]->getValue();
+      currentBank.segments[index].ticks = tickSliderList[index]->getValue();
+      currentBank.segments[index].length = lengthKnobList[index]->getValue();
+      currentBank.segments[index].chance = chanceKnobList[index]->getValue();
+   }
+
+   if (mainModule)
+   {
+      Svin::Json::Object object;
+      object.set("index", counter);
+      broadcastMessage<Bank>(currentBank, object, mainModule);
    }
 }
 
@@ -134,10 +144,10 @@ void Nosferatu::Acolyte::updateDisplays()
    static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
 
    // lights
-   const Bank& currentBank = banks[bankIndex];
+   const Bank& currentBank = banks[state.bankIndex];
    for (uint8_t index = 0; index < 8; index++)
    {
-      currentLightList[index]->setActive(index == currentSegmentIndex);
+      currentLightList[index]->setActive(index == state.currentSegmentIndex);
 
       const Note note = Note::fromMidi(noteBaseValue + currentBank.offset + currentBank.segments[index].pitch);
       pitchSliderList[index]->setColor(Note::colorMap.at(note.value));
@@ -151,7 +161,7 @@ void Nosferatu::Acolyte::updateDisplays()
 
 void Nosferatu::Acolyte::bankChange()
 {
-   const Bank& currentBank = banks[bankIndex];
+   const Bank& currentBank = banks[state.bankIndex];
 
    for (uint8_t index = 0; index < 8; index++)
    {
@@ -165,7 +175,7 @@ void Nosferatu::Acolyte::bankChange()
 
 void Nosferatu::Acolyte::load(const Svin::Json::Object& rootObject)
 {
-   bankIndex = rootObject.get("currentBank").toInt();
+   state.bankIndex = rootObject.get("currentBank").toInt();
 
    for (uint8_t index = 0; index < 16; index++)
    {
@@ -188,13 +198,13 @@ void Nosferatu::Acolyte::load(const Svin::Json::Object& rootObject)
       }
    }
 
-   currentSegmentIndex = -1;
+   state.currentSegmentIndex = 0;
    bankChange();
 }
 
 void Nosferatu::Acolyte::save(Svin::Json::Object& rootObject)
 {
-   rootObject.set("currentBank", bankIndex);
+   rootObject.set("currentBank", state.bankIndex);
 
    for (uint8_t bankIndex = 0; bankIndex < 16; bankIndex++)
    {

@@ -4,12 +4,14 @@
 #include "SvinModule.h"
 
 // bus
+
 template <typename DataType>
 typename Svin::Module::Bus<DataType>* Svin::Module::Bus<DataType>::me = nullptr;
 
 template <typename DataType>
 Svin::Module::Bus<DataType>::Bus()
    : BusAbstract()
+   , mutex()
 {
    busList.push_back(this);
 }
@@ -36,6 +38,51 @@ bool Svin::Module::Bus<DataType>::contains(Module* module)
       return false;
 
    return true;
+}
+
+template <typename DataType>
+void Svin::Module::Bus<DataType>::queue(const DataType& data, const Json::Object& message, const Module* sender, const Module* target)
+{
+   std::lock_guard<std::mutex> guard(mutex);
+
+   Message<DataType> buffer = {data, message, sender};
+
+   for (typename InstanceMap::iterator it = instanceMap.begin(); it != instanceMap.end(); it++)
+   {
+      Module* receiver = it->first;
+
+      if (receiver == sender)
+         continue;
+
+      if (target && (target != receiver))
+         continue;
+
+      it->second.push_back(buffer);
+   }
+}
+
+template <typename DataType>
+bool Svin::Module::Bus<DataType>::empty(Module* module) const
+{
+   std::lock_guard<std::mutex> guard(mutex);
+
+   if (instanceMap.find(module) == instanceMap.cend())
+      return true;
+
+   return instanceMap.at(module).empty();
+}
+
+template <typename DataType>
+Svin::Module::Message<DataType> Svin::Module::Bus<DataType>::takeFirst(Module* module)
+{
+   std::lock_guard<std::mutex> guard(mutex);
+
+   typename Message<DataType>::List& messageList = instanceMap[module];
+
+   const Message<DataType> message = messageList.front();
+   messageList.pop_front();
+
+   return message;
 }
 
 template <typename DataType>
@@ -107,11 +154,6 @@ DataType Svin::Module::getBusData(const Side& side)
 }
 
 template <typename DataType>
-void Svin::Module::broadcastMessage(const Json::Object& message, const Module* receiver)
-{
-}
-
-template <typename DataType>
 uint8_t Svin::Module::indexOfBusModule(const Side& side, Module* module)
 {
    if (!module)
@@ -158,14 +200,22 @@ ModuleType* Svin::Module::findLastBusModule(const Side& side, bool consecutive)
 }
 
 template <typename DataType>
+void Svin::Module::broadcastMessage(const DataType& data, const Json::Object& message, const Module* target)
+{
+   const Module* sender = const_cast<const Module*>(this);
+   Bus<DataType>::the()->queue(data, message, sender, target);
+}
+
+template <typename DataType>
 bool Svin::Module::hasMessage()
 {
-   return false;
+   return !Bus<DataType>::the()->empty(this);
 }
 
 template <typename DataType>
 Svin::Module::Message<DataType> Svin::Module::popMessage()
 {
+   return Bus<DataType>::the()->takeFirst(this);
 }
 
 #endif // NOT SvinModuleHPP
