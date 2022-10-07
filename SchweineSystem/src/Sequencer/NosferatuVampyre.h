@@ -76,7 +76,6 @@ namespace Nosferatu
 
    private:
       inline void setup();
-      const Bank& updateCurrentBank();
       void bankChange();
       void setDisplay(const DisplayType newType, const uint8_t value);
       void updateCurrentSegmentPlayChances();

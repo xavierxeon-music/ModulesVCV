@@ -40,6 +40,9 @@ namespace Nosferatu
       // operation
       Bank banks[16];
       Nosferatu::State state;
+      bool pushBank;
+      uint8_t expanderActive;
+
       // display
       Svin::DisplayLCD::Controller display;
       // segments

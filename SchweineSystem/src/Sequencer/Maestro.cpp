@@ -35,7 +35,7 @@ Maestro::Maestro()
    setup();
    registerHubClient("Maestro");
 
-   controller.onClickedOpenFileFunction(this, &Maestro::loadProject, "Projects:json");
+   controller.onClickedOpenFileFunction(this, &Maestro::loadProject, "Projects:maestro");
 
    loopButton.setDefaultColor(Color{0, 255, 0});
 }
