@@ -122,7 +122,7 @@ void Nosferatu::Acolyte::process(const ProcessArgs& args)
    object.set("index", counter);
 
    Bank& currentBank = banks[state.bankIndex];
-   bool hasChanges = false;
+   bool hasChanges = state.needsExpanderBanks;
    for (uint8_t index = 0; index < 8; index++)
    {
       if (activeButtonList[index]->isTriggered())
@@ -130,8 +130,6 @@ void Nosferatu::Acolyte::process(const ProcessArgs& args)
          const uint8_t expanderActive = (8 * counter) + index + 1;
          object.set("active", expanderActive);
          hasChanges = true;
-
-         std::cout << __FUNCTION__ << " " << (uint16_t)expanderActive << std::endl;
       }
 
       const uint8_t pitch = pitchSliderList[index]->getValue();
@@ -192,7 +190,16 @@ void Nosferatu::Acolyte::updateDisplays()
    for (uint8_t index = 0; index < 8; index++)
    {
       const uint8_t totalIndex = (8 * counter) + index;
-      currentLightList[index]->setActive(totalIndex == state.currentSegmentIndex);
+      const bool active = (totalIndex == state.currentSegmentIndex);
+      if (active)
+      {
+         if (!state.playCurrentSegment)
+            currentLightList[index]->setColor(Color{0, 0, 255});
+         else
+            currentLightList[index]->setOn(); // sets default color
+      }
+      else
+         currentLightList[index]->setOff();
 
       const Note note = Note::fromMidi(noteBaseValue + state.pitchOffset + currentBank.segments[index].pitch);
       pitchSliderList[index]->setColor(Note::colorMap.at(note.value));

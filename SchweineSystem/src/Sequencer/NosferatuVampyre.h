@@ -29,7 +29,6 @@ namespace Nosferatu
       uint8_t ticks = 2;  // 1 - 16
       float length = 0.5; // 0.0 - 1.0
       float chance = 1.0; // 0.0 - 1.0
-      bool play = true;   // random chance play
    };
 
    struct Bank
@@ -42,10 +41,12 @@ namespace Nosferatu
 
    struct State // to be pushed to expanders
    {
-      uint8_t bankIndex = 0;
-      uint8_t maxActive = 8; // 8 per base, expander
-      uint16_t currentSegmentIndex = 0;
-      uint8_t pitchOffset = 0; // from base
+      uint8_t bankIndex = 0;            // the current bank index 0 - 15
+      uint8_t maxActive = 8;            // 8 for base + 8 for each expander
+      uint16_t currentSegmentIndex = 0; // including expander
+      bool playCurrentSegment = true;   // if chances allows it
+      uint8_t pitchOffset = 0;          // copied from from base bank
+      bool needsExpanderBanks = false;  // expander should send current bank
    };
 
    //
@@ -63,7 +64,6 @@ namespace Nosferatu
       void updateDisplays() override;
 
    private:
-
       enum class DisplayType : uint8_t
       {
          Bank,
@@ -72,13 +72,14 @@ namespace Nosferatu
          Offset,
       };
 
+      using ActiveMap = std::map<uint8_t, uint8_t>; // bankCount vs maxActive
 
    private:
       inline void setup();
       const Bank& updateCurrentBank();
       void bankChange();
       void setDisplay(const DisplayType newType, const uint8_t value);
-      void updateSegmentPlayChances();
+      void updateCurrentSegmentPlayChances();
 
       void load(const Svin::Json::Object& rootObject) override;
       void save(Svin::Json::Object& rootObject) override;
@@ -87,7 +88,9 @@ namespace Nosferatu
       // operation
       Bank banks[16];
       State state;
-      Bank::List playBanks; // the banks currently playing (including exapnders)
+      Bank::List playBanks; // the banks currently available (including exapnders)
+      uint8_t bankCount;
+      ActiveMap activeMap;
       uint8_t tickCounter;
       FastRandom noiseGenerator;
       // display

@@ -72,6 +72,7 @@
 ./src/_MusicTools/Include/Music/TimeCode.h
 ./src/_MusicTools/Include/Music/Tempo.h
 ./src/_MusicTools/Include/Music/Note.h
+./src/_MusicTools/Include/debug.h
 ./src/_MusicTools/Include/Tools/BoolField.h
 ./src/_MusicTools/Include/Tools/Range.h
 ./src/_MusicTools/Include/Tools/Glide.h
@@ -184,6 +185,7 @@
 ./src/_MusicTools/File.hpp
 ./src/_MusicTools/Grooves.hpp
 ./src/_MusicTools/Contour.hpp
+./src/_MusicTools/debug.hpp
 ./src/_MusicTools/ffft/FFTRealSelect.hpp
 ./src/_MusicTools/ffft/OscSinCos.hpp
 ./src/_MusicTools/ffft/Array.hpp

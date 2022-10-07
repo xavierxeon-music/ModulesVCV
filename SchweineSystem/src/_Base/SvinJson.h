@@ -63,6 +63,7 @@ namespace Svin
          void set(const std::string& key, const char* text); // override for strings, else produces bool
          Value get(const std::string& key) const;
          bool hasKey(const std::string& key) const;
+         std::vector<std::string> compileKeyList() const;
 
          Bytes toBytes() const;
          std::string toString() const;

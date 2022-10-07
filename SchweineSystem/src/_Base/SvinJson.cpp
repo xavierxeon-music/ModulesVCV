@@ -160,6 +160,19 @@ bool Svin::Json::Object::hasKey(const std::string& key) const
    return (nullptr != json_object_get(json, key.c_str()));
 }
 
+std::vector<std::string> Svin::Json::Object::compileKeyList() const
+{
+   std::vector<std::string> keyList;
+
+   for (void* iter = json_object_iter(json); iter != nullptr; iter = json_object_iter_next(json, iter))
+   {
+      const char* key = json_object_iter_key(iter);
+      keyList.push_back(std::string(key));
+   }
+
+   return keyList;
+}
+
 Bytes Svin::Json::Object::toBytes() const
 {
    size_t size = json_dumpb(json, nullptr, 0, 0);
