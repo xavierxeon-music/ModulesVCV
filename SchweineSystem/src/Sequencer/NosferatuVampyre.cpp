@@ -277,7 +277,7 @@ void Nosferatu::Vampyre::updateDisplays()
 
    static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
 
-   // lights
+   // updatede bank 0and lights
    Bank& currentBank = playBanks[0];
    for (uint8_t index = 0; index < 8; index++)
    {
