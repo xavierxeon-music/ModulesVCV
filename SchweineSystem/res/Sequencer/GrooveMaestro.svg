@@ -121,7 +121,7 @@
     </g>
     <g transform="matrix(1,0,0,1,59.8586,-65.6391)">
         <g transform="matrix(1,0,0,1,44.5197,17.6601)">
-            <g id="Output-output-P" serif:id="Output#output$P" transform="matrix(0.175002,0,0,0.175002,42.5002,325.428)">
+            <g id="ContourOutput-output-P" serif:id="ContourOutput#output$P" transform="matrix(0.175002,0,0,0.175002,42.5002,325.428)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(77,77,77);"/>
             </g>
             <g transform="matrix(1,0,0,1,-32.0855,221.531)">
@@ -137,7 +137,7 @@
             </g>
         </g>
         <g transform="matrix(1,0,0,1,41.6958,17.6601)">
-            <g id="Pass-input-P" serif:id="Pass#input$P" transform="matrix(0.175002,0,0,0.175002,-29.1534,325.428)">
+            <g id="ContourPass-input-P" serif:id="ContourPass#input$P" transform="matrix(0.175002,0,0,0.175002,-29.1534,325.428)">
                 <rect x="53.94" y="106.916" width="161.978" height="161.978" style="fill:rgb(204,204,204);"/>
             </g>
             <g transform="matrix(1,0,0,1,-103.381,221.531)">

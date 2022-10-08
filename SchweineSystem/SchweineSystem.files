@@ -33,7 +33,6 @@
 ./src/Sequencer/MidiMize.h
 ./src/Sequencer/GrooveMaestro.h
 ./src/Sequencer/NosferatuVampyre.h
-./src/Sequencer/Conductor.h
 ./src/Sequencer/MidiCV.h
 ./src/Sequencer/GateKeeper.h
 ./src/Sequencer/MidiReplay.h

@@ -38,7 +38,7 @@ struct GrooveMaestro::Panel
    enum InputId
    {
       GatePass = 0,
-      Pass = 1,
+      ContourPass = 1,
       Upload = 2,
       INPUTS_LEN = 3
    };
@@ -46,7 +46,7 @@ struct GrooveMaestro::Panel
    enum OutputId
    {
       GateOutput = 0,
-      Output = 1,
+      ContourOutput = 1,
       OUTPUTS_LEN = 2
    };
 
@@ -74,11 +74,11 @@ void GrooveMaestro::setup()
    configButton(Panel::Loop, "Loop");
 
    configInput(Panel::GatePass, "GatePass");
-   configInput(Panel::Pass, "Pass");
+   configInput(Panel::ContourPass, "ContourPass");
    configInput(Panel::Upload, "Upload");
 
    configOutput(Panel::GateOutput, "GateOutput");
-   configOutput(Panel::Output, "Output");
+   configOutput(Panel::ContourOutput, "ContourOutput");
 }
 
 void GrooveMaestroWidget::setup()
@@ -94,11 +94,11 @@ void GrooveMaestroWidget::setup()
    makeLEDButton(this, Vec(24.17, 222.23), GrooveMaestro::Panel::Loop, GrooveMaestro::Panel::RGB_Loop);
 
    makeInput(this, Vec(96.01, 355.83),  GrooveMaestro::Panel::GatePass, true);
-   makeInput(this, Vec(96.01, 310.33),  GrooveMaestro::Panel::Pass, true);
+   makeInput(this, Vec(96.01, 310.33),  GrooveMaestro::Panel::ContourPass, true);
    makeInput(this, Vec(24.17, 355.83),  GrooveMaestro::Panel::Upload, false);
 
    makeOutput(this, Vec(170.49, 355.83), GrooveMaestro::Panel::GateOutput, true);
-   makeOutput(this, Vec(170.49, 310.33), GrooveMaestro::Panel::Output, true);
+   makeOutput(this, Vec(170.49, 310.33), GrooveMaestro::Panel::ContourOutput, true);
 
    makeOLED(this, Vec(53.00, 31.79), GrooveMaestro::Panel::Pixels_Display, 130, 250);
 }
