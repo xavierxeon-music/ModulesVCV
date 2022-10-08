@@ -31,6 +31,7 @@
 ./src/Sequencer/Maestro.h
 ./src/Sequencer/NosferatuAcolyte.h
 ./src/Sequencer/MidiMize.h
+./src/Sequencer/GrooveMaestro.h
 ./src/Sequencer/NosferatuVampyre.h
 ./src/Sequencer/MidiCV.h
 ./src/Sequencer/GateKeeper.h
@@ -147,6 +148,7 @@
 ./src/Sequencer/MidiCV.hpp
 ./src/Sequencer/GateKeeper.hpp
 ./src/Sequencer/NosferatuAcolyte.hpp
+./src/Sequencer/GrooveMaestro.hpp
 ./src/Sequencer/NosferatuVampyre.hpp
 ./src/BitBus/BitBusBitOut.hpp
 ./src/BitBus/BitBusCVOut.hpp
@@ -250,6 +252,7 @@
 ./src/Utilities/PythonScript.cpp
 ./src/Utilities/Extract.cpp
 ./src/Utilities/HubConnect.cpp
+./src/Sequencer/GrooveMaestro.cpp
 ./src/Sequencer/NosferatuVampyre.cpp
 ./src/Sequencer/MidiCV.cpp
 ./src/Sequencer/NosferatuAcolyte.cpp
