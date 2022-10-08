@@ -311,6 +311,12 @@
          "name": "GrooveMaestro",
          "description": "",
          "tags": []
+      },
+      {
+         "slug": "Launchpad",
+         "name": "Launchpad",
+         "description": "",
+         "tags": []
       }
    ]
 }

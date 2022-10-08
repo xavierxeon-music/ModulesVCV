@@ -24,6 +24,7 @@
 ./src/Utilities/PythonScript.h
 ./src/Utilities/HubConnect.h
 ./src/Utilities/Mapper.h
+./src/Utilities/Launchpad.h
 ./src/Utilities/Extract.h
 ./src/Utilities/GateLatch.h
 ./src/Utilities/Cutoff.h
@@ -140,6 +141,7 @@
 ./src/Utilities/GateLatch.hpp
 ./src/Utilities/MaxPatch.hpp
 ./src/Utilities/PythonScript.hpp
+./src/Utilities/Launchpad.hpp
 ./src/Utilities/Cutoff.hpp
 ./src/Utilities/Mapper.hpp
 ./src/Sequencer/MidiReplay.hpp
@@ -246,6 +248,7 @@
 ./src/_Gui/SvinDisplayOLED.cpp
 ./src/_Gui/SvinDisplayLCD.cpp
 ./src/Utilities/Mapper.cpp
+./src/Utilities/Launchpad.cpp
 ./src/Utilities/Cutoff.cpp
 ./src/Utilities/GateLatch.cpp
 ./src/Utilities/MaxPatch.cpp

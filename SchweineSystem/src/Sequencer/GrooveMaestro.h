@@ -37,6 +37,7 @@ using namespace rack;
 
 #include <SvinButton.h>
 #include <SvinButtonLED.h>
+#include <SvinDisplayLCD.h>
 #include <SvinDisplayOLED.h>
 #include <SvinInput.h>
 #include <SvinOutput.h>
@@ -81,9 +82,10 @@ private:
    BoolField8 segmentGates;
 
    // bank
-   uint8_t bankIndex;
-   Svin::Button bankUpButton;
-   Svin::Button bankDownButton;
+   uint8_t deviceId;
+   Svin::DisplayLCD::Controller deviceIdDisplay;
+   Svin::Button deviceIdUpButton;
+   Svin::Button deviceIdDownButton;
 
    // input
    Svin::Input gatePassInput;

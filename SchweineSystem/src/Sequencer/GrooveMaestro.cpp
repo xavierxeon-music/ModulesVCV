@@ -12,9 +12,10 @@ GrooveMaestro::GrooveMaestro()
    , tickTriggers(0)
    , segmentGates(0)
    // bank
-   , bankIndex(0)
-   , bankUpButton(this, Panel::BankUp)
-   , bankDownButton(this, Panel::BankDown)
+   , deviceId(0)
+   , deviceIdDisplay(this, Panel::Text_DeviceId)
+   , deviceIdUpButton(this, Panel::DeviceIdUp)
+   , deviceIdDownButton(this, Panel::DeviceIdDown)
    // input
    , gatePassInput(this, Panel::GatePass)
    , noOffsetSwitch(this, Panel::NoOffset)
@@ -33,6 +34,7 @@ GrooveMaestro::GrooveMaestro()
 
    registerHubClient("GrooveMaestro");
 
+   deviceIdDisplay.setColor(Color{255, 255, 0});
    controller.onClickedOpenFileFunction(this, &GrooveMaestro::loadProject, "Projects:grm");
 
    loopButton.setDefaultColor(Color{0, 255, 0});
@@ -48,10 +50,10 @@ void GrooveMaestro::process(const ProcessArgs& args)
    }
    loopButton.setActive(conductor.isLooping());
 
-   Variable::Integer<uint8_t> varBank(bankIndex, 0, 15, true);
-   if (bankUpButton.isTriggered())
+   Variable::Integer<uint8_t> varBank(deviceId, 0, 15, true);
+   if (deviceIdUpButton.isTriggered())
       varBank.increment();
-   else if (bankDownButton.isTriggered())
+   else if (deviceIdDownButton.isTriggered())
       varBank.decrement();
 
    // operation mode
@@ -225,12 +227,14 @@ void GrooveMaestro::loadProject(const std::string& newFileName)
       }
    }
 
-   bankIndex = rootObject.get("bank").toInt();
+   deviceId = rootObject.get("deviceId").toInt();
 }
 
 void GrooveMaestro::updateDisplays()
 {
    controller.fill();
+
+   deviceIdDisplay.setText(Text::pad(std::to_string(deviceId), 2));
 
    if (GrooveMaestro::OperationMode::Passthrough == operationMode)
       updatePassthrough();
@@ -243,7 +247,7 @@ void GrooveMaestro::updateDisplays()
    object.set("_Application", "GateKeeper");
    object.set("_Type", "Index");
    object.set("index", index);
-   object.set("bank", bankIndex);
+   object.set("deviceId", deviceId);
    object.set("mode", static_cast<uint8_t>(operationMode));
 
    sendDocumentToHub(1, object);
@@ -253,8 +257,6 @@ void GrooveMaestro::updatePassthrough()
 {
    controller.setColor(Color{255, 255, 0});
    controller.drawRect(0, 0, 130, 10, true);
-
-   controller.writeText(10, 50, std::to_string(bankIndex), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Left);
 
    controller.setColor(Color{0, 0, 0});
    controller.writeText(65, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
@@ -404,8 +406,8 @@ void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, cons
 
    if ("Reload" == object.get("_Type").toString())
    {
-      const uint8_t objectBankIndex = object.get("bank").toInt();
-      if (objectBankIndex != bankIndex)
+      const uint8_t objectDeviceId = object.get("deviceId").toInt();
+      if (objectDeviceId != deviceId)
          return;
 
       const std::string fileName = object.get("fileName").toString();
@@ -415,7 +417,7 @@ void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, cons
 
 void GrooveMaestro::load(const Svin::Json::Object& rootObject)
 {
-   bankIndex = rootObject.get("bank").toInt();
+   deviceId = rootObject.get("deviceId").toInt();
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
 
    const bool loop = rootObject.get("loop").toBool();
@@ -430,7 +432,7 @@ void GrooveMaestro::load(const Svin::Json::Object& rootObject)
 
 void GrooveMaestro::save(Svin::Json::Object& rootObject)
 {
-   rootObject.set("bank", bankIndex);
+   rootObject.set("deviceId", deviceId);
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
    rootObject.set("loop", conductor.isLooping());
    rootObject.set("no_offset", noOffsetSwitch.isOn());
