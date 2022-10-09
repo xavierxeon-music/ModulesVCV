@@ -52,6 +52,7 @@
 ./src/_Base/SvinJson.h
 ./src/_Base/SvinMasterClock.h
 ./src/_Base/SvinMidi.h
+./src/_Base/SvinLaunchpadClient.h
 ./src/_Base/SvinOrigin.h
 ./src/_MusicTools/Memory/MemoryManager.h
 ./src/_MusicTools/Memory/MemoryBlock.h
@@ -267,6 +268,7 @@
 ./src/BitBus/BitBusCommon.cpp
 ./src/BitBus/BitBusBitOut.cpp
 ./src/Effects/Multifilter.cpp
+./src/_Base/SvinLaunchpadClient.cpp
 ./src/_Base/SvinModule.cpp
 ./src/_Base/SvinJson.cpp
 ./src/_Base/SvinCommon.cpp

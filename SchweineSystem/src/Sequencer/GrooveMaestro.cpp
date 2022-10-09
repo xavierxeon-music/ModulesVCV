@@ -11,11 +11,13 @@ GrooveMaestro::GrooveMaestro()
    , conductor()
    , tickTriggers(0)
    , segmentGates(0)
-   // bank
+   // remote
    , deviceId(0)
    , deviceIdDisplay(this, Panel::Text_DeviceId)
    , deviceIdUpButton(this, Panel::DeviceIdUp)
    , deviceIdDownButton(this, Panel::DeviceIdDown)
+   , launchpad()
+   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    // input
    , gatePassInput(this, Panel::GatePass)
    , noOffsetSwitch(this, Panel::NoOffset)
@@ -28,7 +30,6 @@ GrooveMaestro::GrooveMaestro()
    , operationModeButton(this, Panel::Mode)
    // display
    , controller(this, Panel::Pixels_Display)
-
 {
    setup();
 
@@ -38,6 +39,9 @@ GrooveMaestro::GrooveMaestro()
    controller.onClickedOpenFileFunction(this, &GrooveMaestro::loadProject, "Projects:grm");
 
    loopButton.setDefaultColor(Color{0, 255, 0});
+
+   connectionButton.setDefaultColor(Color{0, 255, 0});
+   connectToLaunchpad();
 }
 
 void GrooveMaestro::process(const ProcessArgs& args)
@@ -59,7 +63,7 @@ void GrooveMaestro::process(const ProcessArgs& args)
    // operation mode
    if (operationModeButton.isTriggered())
    {
-      static const std::vector<OperationMode> order = {OperationMode::Passthrough, OperationMode::Internal};
+      static const std::vector<OperationMode> order = {OperationMode::Passthrough, OperationMode::Remote, OperationMode::Play};
       Variable::Enum<OperationMode> variable(operationMode, order, true);
       variable.increment();
    }
@@ -230,16 +234,22 @@ void GrooveMaestro::loadProject(const std::string& newFileName)
    deviceId = rootObject.get("deviceId").toInt();
 }
 
+void GrooveMaestro::connectToLaunchpad()
+{
+}
+
 void GrooveMaestro::updateDisplays()
 {
    controller.fill();
 
-   deviceIdDisplay.setText(Text::pad(std::to_string(deviceId), 2));
+   deviceIdDisplay.setText(Text::pad(std::to_string(deviceId + 1), 2));
 
-   if (GrooveMaestro::OperationMode::Passthrough == operationMode)
-      updatePassthrough();
-   else if (GrooveMaestro::OperationMode::Internal == operationMode)
-      updateInternal();
+   if (OperationMode::Passthrough == operationMode)
+      updateDisplayPassthrough();
+   else if (OperationMode::Remote == operationMode)
+      updateDisplayRemote();
+   else if (OperationMode::Play == operationMode)
+      updateDisplayPlay();
 
    const uint32_t index = conductor.getCurrentSegmentIndex();
 
@@ -253,7 +263,7 @@ void GrooveMaestro::updateDisplays()
    sendDocumentToHub(1, object);
 }
 
-void GrooveMaestro::updatePassthrough()
+void GrooveMaestro::updateDisplayPassthrough()
 {
    controller.setColor(Color{255, 255, 0});
    controller.drawRect(0, 0, 130, 10, true);
@@ -285,7 +295,11 @@ void GrooveMaestro::updatePassthrough()
    }
 }
 
-void GrooveMaestro::updateInternal()
+void GrooveMaestro::updateDisplayRemote()
+{
+}
+
+void GrooveMaestro::updateDisplayPlay()
 {
    controller.setColor(Color{0, 255, 0});
    controller.drawRect(0, 0, 130, 10, true);

@@ -25,10 +25,10 @@ const Svin::Midi::Common::InterfaceMap Svin::Midi::Common::interfaceMap = {
    {::Midi::Device::Unused, ""},
 };
 
-Svin::Midi::Common::Common(const std::string& targetDeviceName, bool isVirtual)
+Svin::Midi::Common::Common(bool isVirtual)
    : isVirtual(isVirtual)
    , virtualOpen(false)
-   , targetDeviceName(targetDeviceName)
+   , targetDeviceName()
 {
 }
 
@@ -39,14 +39,24 @@ void Svin::Midi::Common::midiError(RtMidiError::Type type, const std::string& er
    std::cout << "MIDI ERROR: " << type << ",  " << errorText << std::endl;
 }
 
+void Svin::Midi::Common::setTargetDeviceName(const std::string& newTargetDeviceName)
+{
+   targetDeviceName = newTargetDeviceName;
+}
+
 // output
 
-Svin::Midi::Output::Output(const std::string& targetDeviceName, bool isVirtual)
-   : Common(targetDeviceName, isVirtual)
+Svin::Midi::Output::Output(bool isVirtual)
+   : Common(isVirtual)
    , midiOutput()
 {
    midiOutput.setErrorCallback(&Common::midiError);
+}
 
+Svin::Midi::Output::Output(const std::string& targetDeviceName, bool isVirtual)
+   : Output(isVirtual)
+{
+   setTargetDeviceName(targetDeviceName);
    open();
 }
 
@@ -170,15 +180,20 @@ void Svin::Midi::Output::sendMessage(const std::vector<uint8_t>& message)
 
 // input
 
-Svin::Midi::Input::Input(const std::string& targetDeviceName, bool isVirtual)
-   : Common(targetDeviceName, isVirtual)
+Svin::Midi::Input::Input(bool isVirtual)
+   : Common(isVirtual)
    , midiInput()
    , docBufferMap()
 {
    midiInput.setErrorCallback(&Common::midiError);
    midiInput.setCallback(&Input::midiReceive, this);
    midiInput.ignoreTypes(false, false, false); // do not ignore anything
+}
 
+Svin::Midi::Input::Input(const std::string& targetDeviceName, bool isVirtual)
+   : Input(isVirtual)
+{
+   setTargetDeviceName(targetDeviceName);
    open();
 }
 

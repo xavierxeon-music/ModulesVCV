@@ -40,10 +40,11 @@ using namespace rack;
 #include <SvinDisplayLCD.h>
 #include <SvinDisplayOLED.h>
 #include <SvinInput.h>
+#include <SvinLaunchpadClient.h>
 #include <SvinOutput.h>
 #include <SvinSwitch.h>
 
-class GrooveMaestro : public Svin::Module, public Svin::MasterClock::Client
+class GrooveMaestro : public Svin::Module, private Svin::MasterClock::Client
 {
 public:
    struct Panel;
@@ -59,16 +60,18 @@ private:
    enum class OperationMode
    {
       Passthrough = 0,
-      External = 1,
-      Internal = 2
+      Remote = 1,
+      Play = 2
    };
 
 private:
    inline void setup();
+   void connectToLaunchpad();
 
    void updateDisplays() override;
-   void updatePassthrough();
-   void updateInternal();
+   void updateDisplayPassthrough();
+   void updateDisplayRemote();
+   void updateDisplayPlay();
 
    void receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
 
@@ -81,11 +84,13 @@ private:
    BoolField8 tickTriggers;
    BoolField8 segmentGates;
 
-   // bank
+   // remote
    uint8_t deviceId;
    Svin::DisplayLCD::Controller deviceIdDisplay;
    Svin::Button deviceIdUpButton;
    Svin::Button deviceIdDownButton;
+   Svin::LaunchpadClient launchpad;
+   Svin::ButtonLED connectionButton;
 
    // input
    Svin::Input gatePassInput;

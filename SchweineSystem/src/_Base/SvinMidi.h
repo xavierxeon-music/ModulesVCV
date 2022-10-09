@@ -24,20 +24,22 @@ namespace Svin
          static const InterfaceMap interfaceMap;
 
       protected:
-         Common(const std::string& targetDeviceName, bool isVirtual = false);
+         Common(bool isVirtual);
 
       protected:
          static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
+         void setTargetDeviceName(const std::string& newTargetDeviceName);
 
       protected:
          bool isVirtual;
          bool virtualOpen;
-         const std::string targetDeviceName;
+         std::string targetDeviceName;
       };
 
       class Output : public Common
       {
       public:
+         Output(bool isVirtual);
          Output(const std::string& targetDeviceName, bool isVirtual = false);
          Output(const ::Midi::Device::Channel& deviceChannel);
          virtual ~Output();
@@ -62,6 +64,7 @@ namespace Svin
       class Input : public Common
       {
       public:
+         Input(bool isVirtual);
          Input(const std::string& targetDeviceName, bool isVirtual = false);
          Input(const ::Midi::Device::Channel& deviceChannel);
          virtual ~Input();
