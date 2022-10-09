@@ -1,5 +1,5 @@
-#ifndef LaunchpadH
-#define LaunchpadH
+#ifndef LaunchpadImposterH
+#define LaunchpadImposterH
 
 #include <rack.hpp>
 using namespace rack;
@@ -12,13 +12,13 @@ using namespace rack;
 #include <SvinButtonLED.h>
 #include <SvinLED.h>
 
-class Launchpad : public Svin::Module
+class LaunchpadImposter : public Svin::Module
 {
 public:
    struct Panel;
 
 public:
-   Launchpad();
+   LaunchpadImposter();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -29,17 +29,17 @@ private:
 
 // widget
 
-class LaunchpadWidget : public Svin::ModuleWidget
+class LaunchpadImposterWidget : public Svin::ModuleWidget
 {
 public:
-   LaunchpadWidget(Launchpad* module);
+   LaunchpadImposterWidget(LaunchpadImposter* module);
 
 private:
    inline void setup();
 };
 
-#ifndef LaunchpadHPP
-#include "Launchpad.hpp"
-#endif // NOT LaunchpadHPP
+#ifndef LaunchpadImposterHPP
+#include "LaunchpadImposter.hpp"
+#endif // NOT LaunchpadImposterHPP
 
-#endif // NOT LaunchpadH
+#endif // NOT LaunchpadImposterH

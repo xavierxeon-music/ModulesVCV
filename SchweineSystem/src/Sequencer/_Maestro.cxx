@@ -510,7 +510,7 @@ void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin
 void Maestro::load(const Svin::Json::Object& rootObject)
 {
    bankIndex = rootObject.get("bank").toInt();
-   operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());   
+   operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
 
    bool loop = rootObject.get("loop").toBool();
    contourPoly.setLooping(loop);
@@ -527,13 +527,3 @@ void Maestro::save(Svin::Json::Object& rootObject)
 
    rootObject.set("fileName", fileName);
 }
-
-// widget
-
-MaestroWidget::MaestroWidget(Maestro* module)
-   : Svin::ModuleWidget(module)
-{
-   setup();
-}
-// create module
-Model* modelMaestro = Svin::Origin::the()->addModule<Maestro, MaestroWidget>("Maestro");

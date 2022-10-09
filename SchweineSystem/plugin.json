@@ -176,17 +176,8 @@
          ]
       },
       {
-         "slug": "Maestro",
-         "name": "Maestro",
-         "description": "A CV tracker, companion to Maestro UI",
-         "tags": [
-            "Sequencer",
-            "Utility"
-         ]
-      },
-      {
          "slug": "FlameCCSender",
-         "name": "FlameCCSender",
+         "name": "FlameCC Sender",
          "description": "Set voltages on Flamme CC",
          "tags": [
             "External",
@@ -206,7 +197,7 @@
       {
          "slug": "Mapper",
          "name": "Mapper",
-         "description": "map voltage ranges",
+         "description": "Map voltage ranges",
          "tags": [
             "Utility",
             "Polyphonic"
@@ -215,7 +206,7 @@
       {
          "slug": "NosferatuVampyre",
          "name": "Nosferatu Vampyre",
-         "description": "a metropolis inspired sequencer",
+         "description": "A metropolis inspired sequencer",
          "tags": [
             "Sequencer"
          ]
@@ -223,7 +214,7 @@
       {
          "slug": "NosferatuAcolyte",
          "name": "Nosferatu Acolyte",
-         "description": "extend Nosferatus influence",
+         "description": "Extend Nosferatus influence",
          "tags": [
             "Sequencer",
             "Expander"
@@ -241,7 +232,7 @@
       {
          "slug": "Extract",
          "name": "Extract",
-         "description": "Exract pitch from audio",
+         "description": "Extract pitch from audio",
          "tags": [
             "Utility"
          ]
@@ -274,7 +265,7 @@
       },
       {
          "slug": "PythonScript",
-         "name": " PythonScript",
+         "name": " Python Script",
          "description": "Execute a python script on this computer (need running HubVCV)",
          "tags": [
             "Utility"
@@ -282,41 +273,44 @@
       },
       {
          "slug": "MaxPatch",
-         "name": "MaxPatch",
-         "description": "Run a max patch on this computer (need running HubVCV)",
+         "name": "MaxP atch",
+         "description": "Run a max patch on this computer (needs running HubVCV)",
          "tags": [
             "Utility"
          ]
       },
       {
          "slug": "BefacoACDC",
-         "name": "BefacoACDC",
-         "description": "",
-         "tags": []
+         "name": "Befaco ACDC",
+         "description": "The midi component of the Befaco ACDC",
+         "tags": [
+            "Midi"
+         ]
       },
       {
-         "slug": "GateKeeper",
-         "name": "GateKeeper",
-         "description": "",
-         "tags": []
-      },
-      {
-         "slug": "DrumTrigger",
-         "name": "DrumTrigger",
-         "description": "",
-         "tags": []
+         "slug": "LaunchpadImposter",
+         "name": "Launchpad Imposter",
+         "description": "Pretends to be a Launchpad Mini",
+         "tags": [
+            "Utility",
+            "Midi"
+         ]
       },
       {
          "slug": "GrooveMaestro",
-         "name": "GrooveMaestro",
-         "description": "",
-         "tags": []
+         "name": "Groove Maestro",
+         "description": "The worker module of the CV and gate trigger (needs running HubVCV)",
+         "tags": [
+            "Sequencer"
+         ]
       },
       {
-         "slug": "Launchpad",
-         "name": "Launchpad",
-         "description": "",
-         "tags": []
+         "slug": "DrumTrigger",
+         "name": "Drum Trigger",
+         "description": "The drum trigger",
+         "tags": [
+            "Midi"
+         ]
       }
    ]
 }
