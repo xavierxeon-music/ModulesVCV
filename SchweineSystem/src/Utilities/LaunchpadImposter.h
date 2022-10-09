@@ -4,6 +4,7 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -12,7 +13,7 @@ using namespace rack;
 #include <SvinButtonLED.h>
 #include <SvinLED.h>
 
-class LaunchpadImposter : public Svin::Module
+class LaunchpadImposter : public Svin::Module, private Svin::Midi::Input, private Svin::Midi::Output
 {
 public:
    struct Panel;
@@ -25,6 +26,23 @@ public:
 
 private:
    inline void setup();
+
+   void updateDisplays() override;
+
+   void load(const Svin::Json::Object& rootObject) override;
+   void save(Svin::Json::Object& rootObject) override;
+
+private:
+   // id
+   uint8_t deviceId;
+   Svin::DisplayLCD::Controller deviceIdDisplay;
+   Svin::Button deviceIdUpButton;
+   Svin::Button deviceIdDownButton;
+
+   Svin::ButtonLED::List buttonList;
+   Svin::LED statusLED;
+   std::map<uint8_t, uint8_t> indexToMidiNote;
+   std::map<uint8_t, uint8_t> midiNoteToIndex;
 };
 
 // widget

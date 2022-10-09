@@ -46,6 +46,12 @@ ElementType* Svin::ElementList<ElementType>::operator[](const uint16_t& index)
    return instanceList[index];
 }
 
+template <typename ElementType>
+size_t Svin::ElementList<ElementType>::size() const
+{
+   return instanceList.size();
+}
+
 // InstanceMap::Access
 
 template <typename ContentType>

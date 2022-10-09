@@ -32,6 +32,7 @@ namespace Svin
       void append(const std::vector<uint16_t>& indexList);  // single id
       void append(const typename Params::List& paramsList); // two ids
       ElementType* operator[](const uint16_t& index);
+      size_t size() const;
 
    private:
       Module* module;
