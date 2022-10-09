@@ -5,7 +5,7 @@
 Svin::LED::LED(Module* module, const uint16_t& rgbIndex)
    : module(module)
    , rgbIndex(rgbIndex)
-   , defaultColor(Color(255, 255, 255))
+   , defaultColor(Color::Predefined::White)
    , brightness(1.0)
 {
 }

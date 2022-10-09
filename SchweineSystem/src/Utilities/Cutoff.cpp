@@ -9,7 +9,7 @@ Cutoff::Cutoff()
    setup();
 
    overSlider.setRange(0.1, 1.0);
-   overSlider.setDefaultColor(Color(0, 255, 0));
+   overSlider.setDefaultColor(Color::Predefined::Green);
    overSlider.setOff();
 }
 

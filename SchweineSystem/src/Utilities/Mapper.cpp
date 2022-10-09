@@ -16,7 +16,7 @@ Mapper::Section::Section(Mapper* module, const uint16_t modeId, const uint16_t& 
 void Mapper::Section::setup()
 {
    for (uint8_t index = 0; index < 3; index++)
-      voltLights[index]->setDefaultColor(Color(255, 255, 0));
+      voltLights[index]->setDefaultColor(Color::Predefined::Yellow);
 }
 
 Mapper::MinMax Mapper::Section::compileMinMax()

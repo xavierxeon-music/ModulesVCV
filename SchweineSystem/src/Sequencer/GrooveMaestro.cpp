@@ -35,12 +35,12 @@ GrooveMaestro::GrooveMaestro()
 
    registerHubClient("GrooveMaestro");
 
-   deviceIdDisplay.setColor(Color(255, 255, 0));
+   deviceIdDisplay.setColor(Color::Predefined::Yellow);
    controller.onClickedOpenFileFunction(this, &GrooveMaestro::loadProject, "Projects:grm");
 
-   loopButton.setDefaultColor(Color(0, 255, 0));
+   loopButton.setDefaultColor(Color::Predefined::Green);
 
-   connectionButton.setDefaultColor(Color(0, 255, 0));
+   connectionButton.setDefaultColor(Color::Predefined::Green);
    connectToLaunchpad();
 }
 
@@ -265,10 +265,10 @@ void GrooveMaestro::updateDisplays()
 
 void GrooveMaestro::updateDisplayPassthrough()
 {
-   controller.setColor(Color(255, 255, 0));
+   controller.setColor(Color::Predefined::Yellow);
    controller.drawRect(0, 0, 130, 10, true);
 
-   controller.setColor(Color(0, 0, 0));
+   controller.setColor(Color::Predefined::Black);
    controller.writeText(65, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    const Tempo tempo = getTempo();
@@ -285,7 +285,7 @@ void GrooveMaestro::updateDisplayPassthrough()
       controller.setColor(Color(155, 155, 155));
       controller.writeText(x, y, std::to_string(index + 1), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Right);
 
-      controller.setColor(Color(255, 255, 255));
+      controller.setColor(Color::Predefined::White);
       if (!on)
          controller.writeText(x + 10, y, ".", Svin::DisplayOLED::Font::Large);
       else if (gateOutput.getVoltage(index + 8) > 3.0)
@@ -301,10 +301,10 @@ void GrooveMaestro::updateDisplayRemote()
 
 void GrooveMaestro::updateDisplayPlay()
 {
-   controller.setColor(Color(0, 255, 0));
+   controller.setColor(Color::Predefined::Green);
    controller.drawRect(0, 0, 130, 10, true);
 
-   controller.setColor(Color(0, 0, 0));
+   controller.setColor(Color::Predefined::Black);
    controller.writeText(65, 0, "Current", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    const Tempo tempo = getTempo();
@@ -314,7 +314,7 @@ void GrooveMaestro::updateDisplayPlay()
 
    if (0 == segmentCount || !on)
    {
-      controller.setColor(Color(255, 255, 255));
+      controller.setColor(Color::Predefined::White);
       controller.writeText(5, 12, Text::pad(std::to_string(segmentCount), digitCount), Svin::DisplayOLED::Font::Large);
       controller.writeText(7 + 12 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
 
@@ -346,7 +346,7 @@ void GrooveMaestro::updateDisplayPlay()
    // top row
    const uint32_t segmentIndex = conductor.getCurrentSegmentIndex();
 
-   controller.setColor(Color(255, 255, 255));
+   controller.setColor(Color::Predefined::White);
    controller.writeText(5, 12, Text::pad(std::to_string(segmentIndex), digitCount), Svin::DisplayOLED::Font::Large);
 
    const std::string eventName = conductor.getSegmentName(segmentIndex);
@@ -371,7 +371,7 @@ void GrooveMaestro::updateDisplayPlay()
       if (tick != currentTick)
          continue;
 
-      controller.setColor(Color(0, 255, 0));
+      controller.setColor(Color::Predefined::Green);
 
       const uint8_t x = 5 + col * 12;
       const uint8_t y = 30;
@@ -385,7 +385,7 @@ void GrooveMaestro::updateDisplayPlay()
       const uint8_t y = 37 + row * 12;
 
       if (hasGates)
-         controller.setColor(Color(255, 255, 255));
+         controller.setColor(Color::Predefined::White);
       else
          controller.setColor(Color(155, 155, 200));
 
@@ -395,7 +395,7 @@ void GrooveMaestro::updateDisplayPlay()
          controller.drawRect(115, y, 125, y + 8, false);
 
       if (hasBeat)
-         controller.setColor(Color(255, 255, 255));
+         controller.setColor(Color::Predefined::White);
       else
          controller.setColor(Color(155, 155, 200));
 

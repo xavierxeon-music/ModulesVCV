@@ -7,7 +7,7 @@ HubConnect::HubConnect()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
 {
    setup();
-   connectionButton.setDefaultColor(Color(0, 255, 0));
+   connectionButton.setDefaultColor(Color::Predefined::Green);
 }
 
 void HubConnect::process(const ProcessArgs& args)

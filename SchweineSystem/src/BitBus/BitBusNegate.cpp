@@ -34,7 +34,7 @@ BitBus::Negate::Negate()
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      latchList[index]->setDefaultColor({0, 0, 255});
+      latchList[index]->setDefaultColor(Color(0, 0, 255));
       latchList[index]->setLatchBuddy(gateList[index]);
    }
 }

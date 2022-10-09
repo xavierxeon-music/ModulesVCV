@@ -24,10 +24,10 @@ WavPlayer::WavPlayer()
    setup();
    displayController.onClicked(this, &WavPlayer::displayClicked);
 
-   playButton.setDefaultColor(Color(0, 0, 255));
+   playButton.setDefaultColor(Color::Predefined::Blue);
    playButton.setLatchBuddy(&playInput);
 
-   loopButton.setDefaultColor(Color(0, 0, 255));
+   loopButton.setDefaultColor(Color::Predefined::Blue);
    loopButton.setLatchBuddy(&loopInput);
 }
 
@@ -80,17 +80,17 @@ void WavPlayer::updateDisplays()
 
    displayController.drawRect(0, 10, 82, 18, true);
 
-   displayController.setColor(Color(255, 255, 255));
+   displayController.setColor(Color::Predefined::White);
    const std::size_t posSlash = fileName.rfind("/");
    const std::string fileNameEnd = fileName.substr(1 + posSlash);
    displayController.writeText(1, 1, fileNameEnd, Svin::DisplayOLED::Font::Small);
 
-   displayController.setColor(Color(0, 0, 0));
+   displayController.setColor(Color::Predefined::Black);
    std::string message = std::to_string(oscilator.getMeta().noOfChannels) + " ch";
    message += " @ " + Text::convert(oscilator.getMeta().sampleRate / 1000.0, 1);
    displayController.writeText(1, 11, message, Svin::DisplayOLED::Font::Small);
 
-   displayController.setColor(Color(255, 255, 255));
+   displayController.setColor(Color::Predefined::White);
 
    auto timeDisplay = [&](const size_t value)
    {

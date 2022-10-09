@@ -19,7 +19,7 @@ MetropolixClock::MetropolixClock()
 {
    setup();
 
-   connectionButton.setDefaultColor(Color(0, 255, 0));
+   connectionButton.setDefaultColor(Color::Predefined::Green);
    connectToMidiDevice();
 }
 
@@ -59,12 +59,12 @@ void MetropolixClock::updateDisplays()
    displayController.drawRect(0, 95, 82, 105, true);
    displayController.drawRect(0, 135, 82, 145, true);
 
-   displayController.setColor(Color(0, 0, 0));
+   displayController.setColor(Color::Predefined::Black);
    displayController.writeText(1, 1, "counter", Svin::DisplayOLED::Font::Normal);
    displayController.writeText(1, 96, "tempo", Svin::DisplayOLED::Font::Normal);
    displayController.writeText(1, 136, "time", Svin::DisplayOLED::Font::Normal);
 
-   displayController.setColor(Color(255, 255, 255));
+   displayController.setColor(Color::Predefined::White);
 
    TimeCode timeCode(getDuration());
 

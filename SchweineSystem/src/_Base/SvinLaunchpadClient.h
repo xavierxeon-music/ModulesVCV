@@ -35,6 +35,8 @@ namespace Svin
       bool connect(const uint8_t& deviceId);
       void setPad(const uint8_t& row, const uint8_t& column, const Mode& mode = Mode::Off, const Color& color = Color());
 
+      static const std::vector<Color>& getPalette();
+
    private:
       void switchToProgramMode();
       void switchToLiveMode();
@@ -42,8 +44,10 @@ namespace Svin
       void noteOn(const ::Midi::Channel& channel, const Note& note, const ::Midi::Velocity& velocity) override;
       void controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
 
+      uint8_t getClosestPaletteIndex(const Color& color) const;
+
    private:
-      static const std::vector<std::string> hexColorsMk2;
+      static const std::vector<Color> paletteList; // color vs palette index
       Pad::List triggerCache;
       Tempo::RunState oldRunState;
    };
