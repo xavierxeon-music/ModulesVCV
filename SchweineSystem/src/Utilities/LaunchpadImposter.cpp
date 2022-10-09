@@ -281,7 +281,8 @@ void LaunchpadImposter::updateDisplays()
 
    deviceIdDisplay.setText(Text::pad(std::to_string(deviceId + 1), 2));
 
-   uint8_t colorIndex = 64;
+   const bool even = (0 == (deviceId % 2));
+   uint8_t colorIndex = even ? 0 : 64;
    for (uint8_t row = 0; row < 8; row++)
    {
       for (uint8_t column = 0; column < 8; column++)
