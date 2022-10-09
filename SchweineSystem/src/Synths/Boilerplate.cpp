@@ -18,13 +18,13 @@ Boilerplate::Boilerplate()
 
    shapeSlider.setRange(0.0, 4.0);
    shapeSlider.enableSteps(true);
-   shapeSlider.setDefaultColor(Color{255, 255, 0});
+   shapeSlider.setDefaultColor(Color(255, 255, 0));
    shapeSlider.setOn();
 
    fmAttenutate.setRange(-1.0, 1.0, 0.0);
    pitchKnob.setRange(0.0, 5.0);
 
-   polyButton.setDefaultColor(Color{0, 255, 0});
+   polyButton.setDefaultColor(Color(0, 255, 0));
    polyButton.setOff();
 
    for (uint8_t voice = 0; voice < 16; voice++)

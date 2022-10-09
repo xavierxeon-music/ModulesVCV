@@ -63,8 +63,8 @@ VCMCReceiver::VCMCReceiver()
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      gateLights[index]->setDefaultColor(Color{255, 255, 255});
-      latchLights[index]->setDefaultColor(Color{0, 255, 255});
+      gateLights[index]->setDefaultColor(Color(255, 255, 255));
+      latchLights[index]->setDefaultColor(Color(0, 255, 255));
    }
 
    for (uint8_t index = 0; index < 16; index++)
@@ -79,7 +79,7 @@ VCMCReceiver::VCMCReceiver()
    bMeter.setMaxValue(127);
    bMeter.setValue(0);
 
-   connectionButton.setDefaultColor(Color{0, 255, 0});
+   connectionButton.setDefaultColor(Color(0, 255, 0));
    connectToMidiDevice();
 }
 

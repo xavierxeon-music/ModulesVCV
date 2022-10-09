@@ -99,7 +99,7 @@ Nosferatu::Vampyre::Vampyre()
 
    for (uint8_t index = 0; index < 8; index++)
    {
-      currentLightList[index]->setDefaultColor(Color{255, 255, 0});
+      currentLightList[index]->setDefaultColor(Color(255, 255, 0));
       currentLightList[index]->setOn();
 
       pitchSliderList[index]->setRange(0.0, 24.0);
@@ -108,7 +108,7 @@ Nosferatu::Vampyre::Vampyre()
 
       tickSliderList[index]->setRange(1.0, 16.0, 2.0);
       tickSliderList[index]->enableSteps(true);
-      tickSliderList[index]->setDefaultColor(Color{0, 0, 255});
+      tickSliderList[index]->setDefaultColor(Color(0, 0, 255));
       tickSliderList[index]->setOn();
 
       lengthKnobList[index]->setRange(0.0, 1.0, 0.5);
@@ -117,11 +117,11 @@ Nosferatu::Vampyre::Vampyre()
       chanceKnobList[index]->setRange(0.0, 1.0, 1.0);
       chanceKnobList[index]->enableSteps(true, 0.05);
 
-      activeButtonList[index]->setDefaultColor(Color{0, 255, 0});
+      activeButtonList[index]->setDefaultColor(Color(0, 255, 0));
       activeButtonList[index]->setOn();
    }
 
-   displayController.setColor(Color{255, 255, 0});
+   displayController.setColor(Color(255, 255, 0));
 
    offsetKnob.setRange(0.0, 11.0);
    offsetKnob.enableSteps(true);
@@ -301,7 +301,7 @@ void Nosferatu::Vampyre::updateDisplays()
       if (active)
       {
          if (!state.playCurrentSegment)
-            currentLightList[index]->setColor(Color{0, 0, 255});
+            currentLightList[index]->setColor(Color(0, 0, 255));
          else
             currentLightList[index]->setOn(); // sets default color
       }
@@ -326,25 +326,25 @@ void Nosferatu::Vampyre::updateDisplays()
 
    if (DisplayType::Bank == displayType)
    {
-      displayController.setColor(Color{255, 255, 0});
+      displayController.setColor(Color(255, 255, 0));
       const std::string displayText = "b" + Text::pad(std::to_string(state.bankIndex + 1), 2);
       displayController.setText(displayText);
    }
    else if (DisplayType::Pitch == displayType)
    {
-      displayController.setColor(Color{255, 255, 255});
+      displayController.setColor(Color(255, 255, 255));
       const Note note = Note::fromMidi(noteBaseValue + currentBank.pitchOffset + displayValue);
       displayController.setText(note.name);
    }
    else if (DisplayType::Ticks == displayType)
    {
-      displayController.setColor(Color{0, 0, 255});
+      displayController.setColor(Color(0, 0, 255));
       const std::string displayText = "t" + Text::pad(std::to_string(displayValue), 2);
       displayController.setText(displayText);
    }
    else if (DisplayType::Offset == displayType)
    {
-      displayController.setColor(Color{255, 0, 255});
+      displayController.setColor(Color(255, 0, 255));
       const Note note = Note::fromMidi(noteBaseValue + displayValue);
       displayController.setText(note.name);
    }

@@ -22,7 +22,7 @@ void Svin::DisplayLCD::Controller::setText(const std::string& newText)
 
 void Svin::DisplayLCD::Controller::setColor(const Color& newColor)
 {
-   color = nvgRGB(newColor.red, newColor.green, newColor.blue);
+   color = nvgRGB(newColor.red(), newColor.green(), newColor.blue());
 }
 
 // widget

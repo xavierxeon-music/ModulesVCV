@@ -25,8 +25,8 @@ BitBus::RandomWalk::RandomWalk()
    setup();
    registerAsBusModule<Data>();
 
-   displayController.setColor(Color{255, 255, 0});
-   mixSlider.setDefaultColor(Color{255, 255, 0});
+   displayController.setColor(Color(255, 255, 0));
+   mixSlider.setDefaultColor(Color(255, 255, 0));
 
    const float size = 0.3;
    for (uint16_t tmpSeed = 0; tmpSeed < seedCount; tmpSeed++)

@@ -43,14 +43,14 @@ AturiaStep::AturiaStep()
 
    for (uint8_t channel = 0; channel < 4; channel++)
    {
-      displayList[channel]->setColor(Color{255, 255, 0});
+      displayList[channel]->setColor(Color(255, 255, 0));
       updateDisplay(channel);
    }
 
-   drumButon.setDefaultColor(Color{0, 0, 255});
+   drumButon.setDefaultColor(Color(0, 0, 255));
    drumButon.setActive(useDrumChannel);
 
-   connectionButton.setDefaultColor(Color{0, 255, 0});
+   connectionButton.setDefaultColor(Color(0, 255, 0));
    connectToMidiDevice();
 }
 

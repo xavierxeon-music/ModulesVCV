@@ -13,7 +13,7 @@ FlameCCSender::FlameCCSender()
 {
    setup();
 
-   connectionButton.setDefaultColor(Color{0, 255, 0});
+   connectionButton.setDefaultColor(Color(0, 255, 0));
    connectToMidiDevice();
 }
 

@@ -73,7 +73,7 @@
 ./src/_MusicTools/Include/Music/TimeCode.h
 ./src/_MusicTools/Include/Music/Tempo.h
 ./src/_MusicTools/Include/Music/Note.h
-./src/_MusicTools/Include/debug.h
+./src/_MusicTools/Include/Debug.h
 ./src/_MusicTools/Include/Tools/BoolField.h
 ./src/_MusicTools/Include/Tools/Range.h
 ./src/_MusicTools/Include/Tools/Glide.h
@@ -95,6 +95,7 @@
 ./src/_MusicTools/Include/Midi/MidiInterfaceInput.h
 ./src/_MusicTools/Include/Midi/MidiCommon.h
 ./src/_MusicTools/Include/MusicTools.h
+./src/_MusicTools/Include/Colour.h
 ./src/_MusicTools/Include/Effect/StateVariableFilter.h
 ./src/_MusicTools/Include/Effect/Compressor.h
 ./src/_MusicTools/Include/Maths.h
@@ -186,7 +187,7 @@
 ./src/_MusicTools/File.hpp
 ./src/_MusicTools/Grooves.hpp
 ./src/_MusicTools/Contour.hpp
-./src/_MusicTools/debug.hpp
+./src/_MusicTools/Debug.hpp
 ./src/_MusicTools/ffft/FFTRealSelect.hpp
 ./src/_MusicTools/ffft/OscSinCos.hpp
 ./src/_MusicTools/ffft/Array.hpp
@@ -281,6 +282,7 @@
 ./src/_MusicTools/Memory/MemoryManager.cpp
 ./src/_MusicTools/Spectrum.cpp
 ./src/_MusicTools/AbstractEffect.cpp
+./src/_MusicTools/Colour.cpp
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp

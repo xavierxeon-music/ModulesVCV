@@ -33,7 +33,7 @@ namespace Svin
       Pad::List update(); // send clock and return triggerd pads
 
       bool connect(const uint8_t& deviceId);
-      void setPad(const uint8_t& row, const uint8_t& column, const Mode& mode = Mode::Off, const Color& color = Color{0, 0, 0});
+      void setPad(const uint8_t& row, const uint8_t& column, const Mode& mode = Mode::Off, const Color& color = Color());
 
    private:
       void switchToProgramMode();

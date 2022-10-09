@@ -176,7 +176,7 @@ Svin::DisplayOLED::Controller::Controller(Module* module, const uint16_t& pixelI
 
 void Svin::DisplayOLED::Controller::setColor(const Color& newColor)
 {
-   currentColor = nvgRGB(newColor.red, newColor.green, newColor.blue);
+   currentColor = nvgRGB(newColor.red(), newColor.green(), newColor.blue());
 }
 
 uint16_t Svin::DisplayOLED::Controller::compileIndex(const uint8_t x, const uint8_t y) const
@@ -186,7 +186,7 @@ uint16_t Svin::DisplayOLED::Controller::compileIndex(const uint8_t x, const uint
 
 void Svin::DisplayOLED::Controller::fill(const Color& fillColor)
 {
-   NVGcolor color = nvgRGB(fillColor.red, fillColor.green, fillColor.red);
+   NVGcolor color = nvgRGB(fillColor.red(), fillColor.green(), fillColor.red());
 
    Instruction::Rect* instruction = new Instruction::Rect(color, 0, 0, width, height);
    renderInstructions.push_back(instruction);
