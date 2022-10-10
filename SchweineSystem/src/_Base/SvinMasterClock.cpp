@@ -52,7 +52,9 @@ Tempo Svin::MasterClock::Client::getTempo() const
    if (!MasterClock::me)
       return Tempo();
 
-   return MasterClock::me->tempo;
+   const Tempo tempo = MasterClock::me->tempo;
+   //debug() << __FUNCTION__ << tempo.getRunState();
+   return tempo;
 }
 
 TimeCode::Duration Svin::MasterClock::Client::getDuration() const
@@ -122,7 +124,7 @@ void Svin::MasterClock::reset()
 
 void Svin::MasterClock::advance(const float& sampleRate)
 {
-   tempo.advance(sampleRate);
+   tempo.advance(sampleRate, 3.0);
 }
 
 Tempo Svin::MasterClock::getTempo() const

@@ -176,9 +176,6 @@ void LaunchpadImposter::noteOn(const ::Midi::Channel& channel, const uint8_t& mi
    {
       const uint8_t index = midiNoteToIndex[midiNote];
       buttonList[index]->setColor(color);
-
-      //if (12 == midiNote)
-      debug() << __FUNCTION__ << index << midiNote << velocity;
    }
 }
 

@@ -26,7 +26,7 @@ const std::vector<Color> Svin::LaunchpadClient::paletteList = []
       const Color color(hexColorsMk2.at(index));
       paletteList.push_back(color);
 
-      //debug() << hexColorsMk2.at(index) << color.red() << color.green() << color.blue();
+      //debug() << index << hexColorsMk2.at(index) << color.red() << color.green() << color.blue();
    }
    return paletteList;
 }();
@@ -193,7 +193,8 @@ uint8_t Svin::LaunchpadClient::getClosestPaletteIndex(const Color& color) const
    std::vector<float> distanceList;
    for (uint8_t index = 0; index < paletteList.size(); index++)
    {
-      const float distance = color.distance(paletteList.at(index));
+      const Color testColor = paletteList.at(index);
+      const float distance = testColor.distance(color);
       distanceMap[distance] = index;
       distanceList.push_back(distance);
    }

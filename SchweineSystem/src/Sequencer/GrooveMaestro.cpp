@@ -19,10 +19,13 @@ GrooveMaestro::GrooveMaestro()
    , launchpad()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    // input
+   , contoutPassInput(this, Panel::ContourPass)
    , gatePassInput(this, Panel::GatePass)
    , noOffsetSwitch(this, Panel::NoOffset)
    // output
+   , contourOutput(this, Panel::ContourOutput)
    , gateOutput(this, Panel::GateOutput)
+   , valueToVoltage(0.0, 255.0, 0.0, 10.0)
    , triggerGenerator()
    // mode
    , loopButton(this, Panel::Loop, Panel::RGB_Loop)
@@ -30,6 +33,7 @@ GrooveMaestro::GrooveMaestro()
    , operationModeButton(this, Panel::Mode)
    // display
    , controller(this, Panel::Pixels_Display)
+   , voltageToValue(0.0, 10.0, 0.0, 255.0)
 {
    setup();
 
@@ -41,7 +45,7 @@ GrooveMaestro::GrooveMaestro()
    loopButton.setDefaultColor(Color::Predefined::Green);
 
    connectionButton.setDefaultColor(Color::Predefined::Green);
-   launchpad.connect(deviceId);
+   connectToLaunchpad();
 }
 
 void GrooveMaestro::process(const ProcessArgs& args)
@@ -64,11 +68,11 @@ void GrooveMaestro::process(const ProcessArgs& args)
    if (tmpDeviceId != deviceId)
    {
       deviceId = tmpDeviceId;
-      launchpad.connect(deviceId);
+      connectToLaunchpad();
    }
 
    if (connectionButton.isTriggered() && !launchpad.isConnected())
-      launchpad.connect(deviceId);
+      connectToLaunchpad();
 
    // operation mode
    if (operationModeButton.isTriggered())
@@ -78,66 +82,101 @@ void GrooveMaestro::process(const ProcessArgs& args)
       variable.increment();
    }
 
+   contourOutput.setNumberOfChannels(16);
    gateOutput.setNumberOfChannels(16);
 
    // do stuff
-
-   BoolField16 values(0);
+   std::vector<float> voltages(16, 0.0);
+   BoolField16 triggers(0);
 
    auto applyValues = [&]()
    {
       for (uint8_t index = 0; index < 16; index++)
-         gateOutput.setActive(values.get(index), index);
+      {
+         contourOutput.setVoltage(voltages[index], index);
+         gateOutput.setActive(triggers.get(index), index);
+      }
    };
 
-   const bool on = getTempo().isRunningOrFirstTick();
+   const Tempo tempo = getTempo();
+   const bool on = tempo.isRunningOrFirstTick();
    if (!on)
       return applyValues();
 
    if (OperationMode::Passthrough == operationMode)
    {
+      if (contoutPassInput.isConnected())
+      {
+         for (uint8_t index = 0; index < 16; index++)
+         {
+            voltages[index] = (index < contoutPassInput.getNumberOfChannels()) ? contoutPassInput.getVoltage(index) : 0.0;
+            if (voltages[index] < 0.0)
+               voltages[index] = 0.0;
+         }
+      }
+
+      if (gatePassInput.isConnected())
+      {
+         for (uint8_t index = 0; index < 8; index++)
+         {
+            const uint8_t inputIndex = noOffsetSwitch.isOn() ? index : index + 8;
+            const float voltage = (inputIndex < gatePassInput.getNumberOfChannels()) ? gatePassInput.getVoltage(inputIndex) : 0.0;
+
+            triggers.set(index + 8, (voltage > 3.0));
+         }
+      }
+
+      return applyValues();
+   }
+   else if (OperationMode::Remote == operationMode)
+   {
+      return applyValues();
+   }
+   else if (OperationMode::Play == operationMode)
+   {
+      if (hasReset())
+      {
+         conductor.clockReset();
+         return applyValues();
+      }
+
+      const float tickPercentage = tempo.getPercentage();
+
+      while (hasTick())
+      {
+         conductor.clockTick();
+
+         const uint32_t segmentIndex = conductor.getCurrentSegmentIndex();
+         const uint32_t currentTick = conductor.getCurrentSegmentTick();
+         tickTriggers = on ? conductor.getTriggers(segmentIndex, currentTick) : BoolField8(0);
+         segmentGates = on ? conductor.getGates(segmentIndex) : BoolField8(0);
+
+         triggerGenerator.trigger();
+      }
+
+      const bool pulse = triggerGenerator.process(args.sampleTime);
+
       for (uint8_t index = 0; index < 8; index++)
       {
-         if (!gatePassInput.isConnected() || !on)
-            continue;
+         if (tickTriggers.get(index))
+            triggers.set(index + 0, pulse);
 
-         const uint8_t inputIndex = noOffsetSwitch.isOn() ? index : index + 8;
-         const float voltage = (inputIndex < gatePassInput.getNumberOfChannels()) ? gatePassInput.getVoltage(inputIndex) : 0.0;
-
-         values.set(index + 8, (voltage > 3.0));
+         triggers.set(index + 8, segmentGates.get(index));
       }
-      return applyValues();
-   }
-
-   if (hasReset())
-   {
-      conductor.clockReset();
-      return applyValues();
-   }
-
-   while (hasTick())
-   {
-      conductor.clockTick();
 
       const uint32_t segmentIndex = conductor.getCurrentSegmentIndex();
-      const uint32_t currentTick = conductor.getCurrentSegmentTick();
-      tickTriggers = conductor.getTriggers(segmentIndex, currentTick);
-      segmentGates = conductor.getGates(segmentIndex);
+      const float segmentPercentage = conductor.getCurrentSegmentPrecentage(tickPercentage);
+      for (uint8_t laneIndex = 0; laneIndex < conductor.getContourCount(); laneIndex++)
+      {
+         const Contour& contour = conductor.getContour(laneIndex);
 
-      triggerGenerator.trigger();
+         const uint8_t value = on ? contour.getSegmentValue(segmentIndex, segmentPercentage) : 0.0;
+         const float voltage = valueToVoltage(value);
+         voltages[laneIndex] = voltage;
+      }
+
+      return applyValues();
    }
-
-   const bool pulse = triggerGenerator.process(args.sampleTime);
-
-   for (uint8_t index = 0; index < 8; index++)
-   {
-      if (tickTriggers.get(index))
-         values.set(index + 0, pulse);
-
-      values.set(index + 8, segmentGates.get(index));
-   }
-
-   return applyValues();
 }
 
 void GrooveMaestro::loadProject(const std::string& newFileName)
@@ -241,8 +280,40 @@ void GrooveMaestro::loadProject(const std::string& newFileName)
       }
    }
 
+   // lanes
+   {
+      Svin::Json::Array contourArray = projectObject.get("contours").toArray();
+      if (conductor.getContourCount() != contourArray.size())
+      {
+         std::cout << newFileName << " " << (uint16_t)conductor.getContourCount() << " " << contourArray.size() << std::endl;
+         return;
+      }
+
+      for (uint8_t contourIndex = 0; contourIndex < conductor.getContourCount(); contourIndex++)
+      {
+         Contour& contour = conductor.getContour(contourIndex);
+         Svin::Json::Object contourObject = contourArray.at(contourIndex).toObject();
+         contour.setName(contourObject.get("name").toString());
+
+         for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
+         {
+            const std::string segmentKey = compileSegmentKey(segmentIndex);
+            if (!contourObject.hasKey(segmentKey))
+               continue;
+
+            Svin::Json::Object segmentObject = contourObject.get(segmentKey).toObject();
+            contour.setSegmentSteady(segmentIndex, segmentObject.get("steady").toBool());
+
+            if (segmentObject.hasKey("start"))
+               contour.setSegmentStartValue(segmentIndex, segmentObject.get("start").toInt());
+            if (segmentObject.hasKey("end"))
+               contour.setSegmentEndValue(segmentIndex, segmentObject.get("end").toInt());
+         }
+      }
+   }
+
    deviceId = rootObject.get("deviceId").toInt();
-   launchpad.connect(deviceId);
+   connectToLaunchpad();
 }
 
 void GrooveMaestro::updateDisplays()
@@ -275,21 +346,24 @@ void GrooveMaestro::updateDisplays()
       debug() << pad.row << pad.column;
    }
 
-   static Counter counter(30);
-   static const std::vector<Color>& palette = Svin::LaunchpadClient::getPalette();
-
-   if (counter.nextAndIsMaxValue())
+   if (true)
    {
-      static uint8_t paletteIndex = 0;
-      for (uint8_t row = 0; row < 8; row++)
-      {
-         for (uint8_t col = 0; col < 8; col++)
-         {
-            launchpad.setPad(row, col, Svin::LaunchpadClient::Mode::Steady, palette.at(paletteIndex));
+      static Counter counter(30);
+      static const std::vector<Color>& palette = Svin::LaunchpadClient::getPalette();
 
-            paletteIndex++;
-            if (paletteIndex > 127)
-               paletteIndex = 0;
+      if (counter.nextAndIsMaxValue())
+      {
+         static uint8_t paletteIndex = 0;
+         for (uint8_t row = 0; row < 8; row++)
+         {
+            for (uint8_t col = 0; col < 8; col++)
+            {
+               launchpad.setPad(7 - row, col, Svin::LaunchpadClient::Mode::Steady, palette.at(paletteIndex));
+
+               paletteIndex++;
+               if (paletteIndex > 127)
+                  paletteIndex = 0;
+            }
          }
       }
    }
@@ -325,10 +399,19 @@ void GrooveMaestro::updateDisplayPassthrough()
       else
          controller.writeText(x + 10, y, "_", Svin::DisplayOLED::Font::Large);
    }
+
+   displayContours();
 }
 
 void GrooveMaestro::updateDisplayRemote()
 {
+   controller.setColor(Color::Predefined::Cyan);
+   controller.drawRect(0, 0, 130, 10, true);
+
+   controller.setColor(Color::Predefined::Black);
+   controller.writeText(65, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   displayContours();
 }
 
 void GrooveMaestro::updateDisplayPlay()
@@ -337,7 +420,7 @@ void GrooveMaestro::updateDisplayPlay()
    controller.drawRect(0, 0, 130, 10, true);
 
    controller.setColor(Color::Predefined::Black);
-   controller.writeText(65, 0, "Current", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+   controller.writeText(65, 0, "Play", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
@@ -443,6 +526,50 @@ void GrooveMaestro::updateDisplayPlay()
             controller.drawRect(x, y, x + 8, y + 8, true);
       }
    }
+
+   displayContours();
+}
+
+void GrooveMaestro::displayContours()
+{
+   for (uint8_t laneIndex = 0; laneIndex < conductor.getContourCount(); laneIndex++)
+   {
+      const Contour& contour = conductor.getContour(laneIndex);
+      controller.setColor(Color{155, 155, 155});
+
+      const uint8_t column = (laneIndex < 8) ? 0 : 1;
+      const uint8_t row = (laneIndex < 8) ? laneIndex : laneIndex - 8;
+
+      const uint8_t y = 133 + 14 * row;
+
+      std::string name = contour.getName();
+      if (name.length() > 4)
+         name = name.substr(0, 4);
+      const uint8_t xName = 5 + (column * 64);
+      controller.writeText(xName, y + 3, name, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Left);
+
+      controller.setColor(Color{255, 255, 255});
+
+      const float voltage = contourOutput.getVoltage(laneIndex);
+      const uint8_t value = voltageToValue(voltage);
+      const std::string valueText = Text::convert(value);
+      const uint8_t xVoltage = 55 + (column * 64);
+
+      controller.writeText(xVoltage, y, valueText, 14, Svin::DisplayOLED::Alignment::Right);
+   }
+}
+
+void GrooveMaestro::connectToLaunchpad()
+{
+   launchpad.connect(deviceId);
+   if (!launchpad.isConnected())
+      return;
+
+   for (uint8_t row = 0; row < 8; row++)
+      launchpad.setPad(row, 8, Svin::LaunchpadClient::Mode::Steady, Color::Predefined::White);
+
+   for (uint8_t col = 0; col < 8; col++)
+      launchpad.setPad(8, col, Svin::LaunchpadClient::Mode::Steady, Color::Predefined::White);
 }
 
 void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)

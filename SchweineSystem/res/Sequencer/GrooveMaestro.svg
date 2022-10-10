@@ -228,17 +228,17 @@
             </g>
         </g>
         <g transform="matrix(1,0,0,1,-64.3931,-99.8604)">
-            <g id="Connect-ledbutton" serif:id="Connect#ledbutton" transform="matrix(1,0,0,1,144.849,55.4573)">
+            <g id="Connect-ledbutton" serif:id="Connect#ledbutton" transform="matrix(1,0,0,1,144.849,49.4573)">
                 <circle cx="101.308" cy="310.24" r="9.898" style="fill:rgb(115,115,115);"/>
             </g>
-            <g id="DeviceIdDown-button" serif:id="DeviceIdDown#button" transform="matrix(0.758898,0,0,0.758898,203.916,103.854)">
+            <g id="DeviceIdDown-button" serif:id="DeviceIdDown#button" transform="matrix(0.758898,0,0,0.758898,203.916,98.8542)">
                 <circle cx="55.661" cy="308.513" r="7.929"/>
             </g>
-            <g id="DeviceIdUp-button" serif:id="DeviceIdUp#button" transform="matrix(0.758898,0,0,0.758898,203.916,85.207)">
-                <circle cx="55.661" cy="308.513" r="7.929"/>
-            </g>
-            <g id="DeviceId-lcd-2" serif:id="DeviceId#lcd$2" transform="matrix(0.53008,0,0,0.846667,137.415,31.5962)">
+            <g id="DeviceId-lcd-2" serif:id="DeviceId#lcd$2" transform="matrix(0.53008,0,0,0.846667,137.646,49.5161)">
                 <rect x="173.071" y="291.218" width="64.141" height="28.346" style="fill:rgb(13,13,13);"/>
+            </g>
+            <g id="DeviceIdUp-button" serif:id="DeviceIdUp#button" transform="matrix(0.758898,0,0,0.758898,204.147,49.0463)">
+                <circle cx="55.661" cy="308.513" r="7.929"/>
             </g>
             <g transform="matrix(1,0,0,1,146.789,151.29)">
                 <g transform="matrix(10,0,0,10,89.1979,118.306)">

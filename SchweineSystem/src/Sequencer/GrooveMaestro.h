@@ -72,6 +72,9 @@ private:
    void updateDisplayRemote();
    void updateDisplayPlay();
 
+   void displayContours();
+   void connectToLaunchpad();
+
    void receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
 
    void load(const Svin::Json::Object& rootObject) override;
@@ -92,11 +95,14 @@ private:
    Svin::ButtonLED connectionButton;
 
    // input
+   Svin::Input contoutPassInput;
    Svin::Input gatePassInput;
    Svin::Switch noOffsetSwitch;
 
    // output
+   Svin::Output contourOutput;
    Svin::Output gateOutput;
+   Range::Mapper valueToVoltage;
    dsp::PulseGenerator triggerGenerator;
 
    // mode
@@ -107,6 +113,7 @@ private:
 
    // display
    Svin::DisplayOLED::Controller controller;
+   Range::Mapper voltageToValue;
 };
 
 // widget
