@@ -138,14 +138,14 @@ void VCMCReceiver::connectToMidiDevice()
    connectionButton.setOn();
 }
 
-void VCMCReceiver::noteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity)
+void VCMCReceiver::noteOn(const Midi::Channel& channel, const uint8_t& midiNote, const Midi::Velocity& velocity)
 {
    if (Midi::Device::VCVRack != channel)
       return;
 
    // VCMC does not send note off, instead a second note on with velocity 0
 
-   const uint8_t gateIndex = note.midiValue - 60;
+   const uint8_t gateIndex = midiNote - 60;
    const bool on = (0 != velocity);
    gates[gateIndex] = on;
    if (on)

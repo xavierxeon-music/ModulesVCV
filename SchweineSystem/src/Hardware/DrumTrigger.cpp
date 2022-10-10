@@ -42,9 +42,9 @@ void DrumTrigger::process(const ProcessArgs& args)
       const Flank::State state = flank[index].observe(on);
 
       if (Flank::State::Rising == state)
-         sendNoteOn(10, Note::fromMidi(midiBaseNote + index), 127);
+         sendNoteOn(10, midiBaseNote + index, 127);
       else if (Flank::State::Falling == state)
-         sendNoteOff(10, Note::fromMidi(midiBaseNote + index));
+         sendNoteOff(10, midiBaseNote + index);
    }
 }
 

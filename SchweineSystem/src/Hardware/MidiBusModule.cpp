@@ -40,7 +40,7 @@ void MidiBusModule::processBusMessage(const MidiBus& busMessage)
       if (wasRunning)
       {
          for (const NoteBuffer& buffer : bufferList)
-            sendNoteOff(buffer.channel, Note::fromMidi(buffer.key));
+            sendNoteOff(buffer.channel, buffer.key);
       }
       wasRunning = isRunning;
       return;
@@ -50,7 +50,7 @@ void MidiBusModule::processBusMessage(const MidiBus& busMessage)
       if (!wasRunning)
       {
          for (const NoteBuffer& buffer : bufferList)
-            sendNoteOn(buffer.channel, Note::fromMidi(buffer.key), 100);
+            sendNoteOn(buffer.channel, buffer.key, 100);
       }
       wasRunning = isRunning;
    }
@@ -73,7 +73,7 @@ void MidiBusModule::processBusMessage(const MidiBus& busMessage)
             for (const Sequencer::Track::NoteEvent& noteEvent : eventList)
             {
                NoteBuffer buffer(noteEvent.channel, noteEvent.key);
-               sendNoteOff(noteEvent.channel, Note::fromMidi(noteEvent.key));
+               sendNoteOff(noteEvent.channel, noteEvent.key);
 
                bufferList.remove(buffer);
             }
@@ -85,7 +85,7 @@ void MidiBusModule::processBusMessage(const MidiBus& busMessage)
             for (const Sequencer::Track::NoteEvent& noteEvent : eventList)
             {
                NoteBuffer buffer(noteEvent.channel, noteEvent.key);
-               sendNoteOn(noteEvent.channel, Note::fromMidi(noteEvent.key), noteEvent.velocity);
+               sendNoteOn(noteEvent.channel, noteEvent.key, noteEvent.velocity);
 
                bufferList.push_back(buffer);
             }

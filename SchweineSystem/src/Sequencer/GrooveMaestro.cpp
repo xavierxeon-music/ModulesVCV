@@ -41,7 +41,7 @@ GrooveMaestro::GrooveMaestro()
    loopButton.setDefaultColor(Color::Predefined::Green);
 
    connectionButton.setDefaultColor(Color::Predefined::Green);
-   connectToLaunchpad();
+   launchpad.connect(deviceId);
 }
 
 void GrooveMaestro::process(const ProcessArgs& args)
@@ -54,11 +54,21 @@ void GrooveMaestro::process(const ProcessArgs& args)
    }
    loopButton.setActive(conductor.isLooping());
 
-   Variable::Integer<uint8_t> varBank(deviceId, 0, 15, true);
+   uint8_t tmpDeviceId = deviceId;
+   Variable::Integer<uint8_t> varBank(tmpDeviceId, 0, 15, true);
    if (deviceIdUpButton.isTriggered())
       varBank.increment();
    else if (deviceIdDownButton.isTriggered())
       varBank.decrement();
+
+   if (tmpDeviceId != deviceId)
+   {
+      deviceId = tmpDeviceId;
+      launchpad.connect(deviceId);
+   }
+
+   if (connectionButton.isTriggered() && !launchpad.isConnected())
+      launchpad.connect(deviceId);
 
    // operation mode
    if (operationModeButton.isTriggered())
@@ -232,16 +242,14 @@ void GrooveMaestro::loadProject(const std::string& newFileName)
    }
 
    deviceId = rootObject.get("deviceId").toInt();
-}
-
-void GrooveMaestro::connectToLaunchpad()
-{
+   launchpad.connect(deviceId);
 }
 
 void GrooveMaestro::updateDisplays()
 {
    controller.fill();
 
+   connectionButton.setActive(launchpad.isConnected());
    deviceIdDisplay.setText(Text::pad(std::to_string(deviceId + 1), 2));
 
    if (OperationMode::Passthrough == operationMode)
@@ -261,6 +269,30 @@ void GrooveMaestro::updateDisplays()
    object.set("mode", static_cast<uint8_t>(operationMode));
 
    sendDocumentToHub(1, object);
+
+   for (const Svin::LaunchpadClient::Pad& pad : launchpad.triggeredPads())
+   {
+      debug() << pad.row << pad.column;
+   }
+
+   static Counter counter(30);
+   static const std::vector<Color>& palette = Svin::LaunchpadClient::getPalette();
+
+   if (counter.nextAndIsMaxValue())
+   {
+      static uint8_t paletteIndex = 0;
+      for (uint8_t row = 0; row < 8; row++)
+      {
+         for (uint8_t col = 0; col < 8; col++)
+         {
+            launchpad.setPad(row, col, Svin::LaunchpadClient::Mode::Steady, palette.at(paletteIndex));
+
+            paletteIndex++;
+            if (paletteIndex > 127)
+               paletteIndex = 0;
+         }
+      }
+   }
 }
 
 void GrooveMaestro::updateDisplayPassthrough()

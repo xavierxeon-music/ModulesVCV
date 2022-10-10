@@ -49,8 +49,8 @@ namespace Svin
          void close();
          bool connected();
 
-         void sendNoteOn(const ::Midi::Channel& channel, const Note& note, const ::Midi::Velocity& velocity);
-         void sendNoteOff(const ::Midi::Channel& channel, const Note& note);
+         void sendNoteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity);
+         void sendNoteOff(const ::Midi::Channel& channel, const uint8_t& midiNote);
          void sendControllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value);
          void sendDocument(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex = 0);
 
@@ -77,8 +77,8 @@ namespace Svin
          virtual void clockTick();
          virtual void songPosition(const uint16_t position);
 
-         virtual void noteOn(const ::Midi::Channel& channel, const Note& note, const ::Midi::Velocity& velocity);
-         virtual void noteOff(const ::Midi::Channel& channel, const Note& note);
+         virtual void noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity);
+         virtual void noteOff(const ::Midi::Channel& channel, const uint8_t& midiNote);
          virtual void controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value);
          virtual void document(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex);
 

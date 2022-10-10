@@ -30,7 +30,7 @@ public:
 private:
    inline void setup();
    void connectToMidiDevice();
-   void noteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity) override;
+   void noteOn(const Midi::Channel& channel, const uint8_t& midiNote, const Midi::Velocity& velocity) override;
    void controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
 
    void load(const Svin::Json::Object& rootObject) override;

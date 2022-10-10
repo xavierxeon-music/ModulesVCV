@@ -59,8 +59,8 @@ void FlameCCSender::connectToMidiDevice()
 
    for (uint8_t output = 0; output < 16; output++)
    {
-      const Note note = Note::fromMidi(41 + output); // note F2
-      sendNoteOn(Midi::Device::FlameCC, note, 127);
+      const uint8_t midiNote = 41 + output; // note F2
+      sendNoteOn(Midi::Device::FlameCC, midiNote, 127);
    }
 }
 

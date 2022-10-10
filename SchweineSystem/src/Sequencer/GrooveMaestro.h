@@ -66,7 +66,6 @@ private:
 
 private:
    inline void setup();
-   void connectToLaunchpad();
 
    void updateDisplays() override;
    void updateDisplayPassthrough();

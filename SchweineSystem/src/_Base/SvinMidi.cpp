@@ -113,7 +113,7 @@ bool Svin::Midi::Output::connected()
    return midiOutput.isPortOpen();
 }
 
-void Svin::Midi::Output::sendNoteOn(const ::Midi::Channel& channel, const Note& note, const ::Midi::Velocity& velocity)
+void Svin::Midi::Output::sendNoteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity)
 {
    if (0 == channel || channel > 16)
    {
@@ -123,12 +123,12 @@ void Svin::Midi::Output::sendNoteOn(const ::Midi::Channel& channel, const Note& 
 
    std::vector<unsigned char> onMessage(3);
    onMessage[0] = (::Midi::Event::NoteOn | (channel - 1));
-   onMessage[1] = note.midiValue;
+   onMessage[1] = midiNote;
    onMessage[2] = velocity;
    sendMessage(onMessage);
 }
 
-void Svin::Midi::Output::sendNoteOff(const ::Midi::Channel& channel, const Note& note)
+void Svin::Midi::Output::sendNoteOff(const ::Midi::Channel& channel, const uint8_t& midiNote)
 {
    if (0 == channel || channel > 16)
    {
@@ -138,7 +138,7 @@ void Svin::Midi::Output::sendNoteOff(const ::Midi::Channel& channel, const Note&
 
    std::vector<unsigned char> offMessage(3);
    offMessage[0] = (::Midi::Event::NoteOff | (channel - 1));
-   offMessage[1] = note.midiValue;
+   offMessage[1] = midiNote;
    offMessage[2] = 64;
    sendMessage(offMessage);
 }
@@ -262,18 +262,18 @@ void Svin::Midi::Input::songPosition(const uint16_t position)
    // do nothing
 }
 
-void Svin::Midi::Input::noteOn(const ::Midi::Channel& channel, const Note& note, const ::Midi::Velocity& velocity)
+void Svin::Midi::Input::noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity)
 {
    (void)channel;
-   (void)note;
+   (void)midiNote;
    (void)velocity;
    // do nothing
 }
 
-void Svin::Midi::Input::noteOff(const ::Midi::Channel& channel, const Note& note)
+void Svin::Midi::Input::noteOff(const ::Midi::Channel& channel, const uint8_t& midiNote)
 {
    (void)channel;
-   (void)note;
+   (void)midiNote;
    // do nothing
 }
 
@@ -362,16 +362,16 @@ void Svin::Midi::Input::prcocess(const Bytes& buffer)
 
       if (::Midi::Event::NoteOn == event)
       {
-         const Note note = Note::fromMidi(buffer[1]);
+         const uint8_t midiNote = buffer[1];
          const ::Midi::Velocity velocity = buffer[2];
 
-         noteOn(channel, note, velocity);
+         noteOn(channel, midiNote, velocity);
       }
       else if (::Midi::Event::NoteOff == event)
       {
-         const Note note = Note::fromMidi(buffer[1]);
+         const uint8_t midiNote = buffer[1];
 
-         noteOff(channel, note);
+         noteOff(channel, midiNote);
       }
       else if (::Midi::Event::ControlChange == event)
       {

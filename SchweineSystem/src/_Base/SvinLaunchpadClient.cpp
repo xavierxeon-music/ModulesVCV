@@ -36,7 +36,6 @@ Svin::LaunchpadClient::LaunchpadClient()
    , Midi::Output(false)
    , MasterClock::Client()
    , triggerCache()
-   , oldRunState(Tempo::Off)
 {
 }
 
@@ -46,24 +45,8 @@ Svin::LaunchpadClient::~LaunchpadClient()
    switchToLiveMode();
 }
 
-Svin::LaunchpadClient::Pad::List Svin::LaunchpadClient::update()
+void Svin::LaunchpadClient::update()
 {
-   Pad::List triggerLsit = triggerCache;
-   triggerCache.clear();
-
-   const Tempo::RunState runState = getTempo().getRunState();
-   if (runState != oldRunState)
-   {
-      std::vector<unsigned char> clockMessage(1);
-      if (Tempo::Off == runState)
-         clockMessage[0] = ::Midi::Event::Stop;
-      else if (Tempo::FirstTick == runState || Tempo::Running == runState)
-         clockMessage[0] = ::Midi::Event::Continue;
-
-      sendMessage(clockMessage);
-      oldRunState = runState;
-   }
-
    if (hasReset())
    {
       std::vector<unsigned char> songPosMessage(3);
@@ -81,23 +64,59 @@ Svin::LaunchpadClient::Pad::List Svin::LaunchpadClient::update()
          sendMessage(clockMessage);
       }
    }
+}
+
+Svin::LaunchpadClient::Pad::List Svin::LaunchpadClient::triggeredPads()
+{
+   Pad::List triggerLsit = triggerCache;
+   triggerCache.clear();
 
    return triggerLsit;
 }
 
-bool Svin::LaunchpadClient::connect(const uint8_t& deviceId)
+void Svin::LaunchpadClient::disconnect()
 {
+   if (Midi::Input::connected())
+      Midi::Input::close();
+
+   if (Midi::Output::connected())
+      Midi::Output::close();
+}
+
+void Svin::LaunchpadClient::connect(const uint8_t& deviceId)
+{
+   static bool first = true;
+
+   const std::string deviceName = "LPMiniMK3 MIDI " + std::to_string(deviceId);
+
+   Midi::Input::setTargetDeviceName(deviceName);
+   Midi::Input::open(first);
+
+   Midi::Output::setTargetDeviceName(deviceName);
+   Midi::Output::open(first);
+
+   first = false;
+
    // TODO check if connected
    switchToProgramMode();
+}
 
-   return true;
+bool Svin::LaunchpadClient::isConnected()
+{
+   return (Midi::Input::connected() && Midi::Output::connected());
 }
 
 void Svin::LaunchpadClient::setPad(const uint8_t& row, const uint8_t& column, const Mode& mode, const Color& color)
 {
+   const uint8_t paletteIndex = getClosestPaletteIndex(color);
+   setPad(row, column, mode, paletteIndex);
+}
+
+void Svin::LaunchpadClient::setPad(const uint8_t& row, const uint8_t& column, const Mode& mode, const uint8_t& paletteIndex)
+{
    const uint8_t channel = static_cast<uint8_t>(mode);
    const uint8_t midiNote = (10 * (row + 1)) + (column + 1);
-   const uint8_t velocity = getClosestPaletteIndex(color);
+   const uint8_t velocity = paletteIndex;
 
    std::vector<unsigned char> onMessage(3);
    onMessage[0] = (::Midi::Event::NoteOn | channel);
@@ -151,12 +170,14 @@ void Svin::LaunchpadClient::switchToLiveMode()
    sendMessage(sysExMessage);
 }
 
-void Svin::LaunchpadClient::noteOn(const ::Midi::Channel& channel, const Note& note, const ::Midi::Velocity& velocity)
+void Svin::LaunchpadClient::noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity)
 {
+   // button pressed on device
 }
 
 void Svin::LaunchpadClient::controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value)
 {
+   // from device, maybe unnecessary
 }
 
 uint8_t Svin::LaunchpadClient::getClosestPaletteIndex(const Color& color) const

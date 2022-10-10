@@ -101,178 +101,39 @@ LaunchpadImposter::LaunchpadImposter()
                       {Panel::RowNine_ColSeven, Panel::RGB_RowNine_ColSeven},
                       {Panel::RowNine_ColEight, Panel::RGB_RowNine_ColEight}});
 
-   indexToMidiNote = {{0, 11},
-                      {1, 12},
-                      {2, 13},
-                      {3, 14},
-                      {4, 15},
-                      {5, 16},
-                      {6, 17},
-                      {7, 18},
-                      {8, 19},
-                      {9, 21},
-                      {10, 22},
-                      {11, 23},
-                      {12, 24},
-                      {13, 25},
-                      {14, 26},
-                      {15, 27},
-                      {16, 28},
-                      {17, 29},
-                      {18, 31},
-                      {19, 32},
-                      {20, 33},
-                      {21, 34},
-                      {22, 35},
-                      {23, 36},
-                      {24, 37},
-                      {25, 38},
-                      {26, 39},
-                      {27, 41},
-                      {28, 42},
-                      {29, 43},
-                      {30, 44},
-                      {31, 45},
-                      {32, 46},
-                      {33, 47},
-                      {34, 48},
-                      {35, 49},
-                      {36, 51},
-                      {37, 52},
-                      {38, 53},
-                      {39, 54},
-                      {40, 55},
-                      {41, 56},
-                      {42, 57},
-                      {43, 58},
-                      {44, 59},
-                      {45, 61},
-                      {46, 62},
-                      {47, 63},
-                      {48, 64},
-                      {49, 65},
-                      {50, 66},
-                      {51, 67},
-                      {52, 68},
-                      {53, 69},
-                      {54, 71},
-                      {55, 72},
-                      {56, 73},
-                      {57, 74},
-                      {58, 75},
-                      {59, 76},
-                      {60, 77},
-                      {61, 78},
-                      {62, 79},
-                      {63, 81},
-                      {64, 82},
-                      {65, 83},
-                      {66, 84},
-                      {67, 85},
-                      {68, 86},
-                      {69, 87},
-                      {70, 88},
-                      {71, 89},
-                      {72, 91},
-                      {73, 92},
-                      {74, 93},
-                      {75, 94},
-                      {76, 95},
-                      {77, 96},
-                      {78, 97},
-                      {79, 98},
-                      {80, 99}};
+   uint8_t buttonIndex = 0;
+   for (uint8_t row = 0; row < 9; row++)
+   {
+      for (uint8_t column = 0; column < 9; column++)
+      {
+         const uint8_t midiNote = (10 * (row + 1)) + (column + 1);
 
-   midiNoteToIndex = {{11, 0},
-                      {12, 1},
-                      {13, 2},
-                      {14, 3},
-                      {15, 4},
-                      {16, 5},
-                      {17, 6},
-                      {18, 7},
-                      {19, 8},
-                      {21, 9},
-                      {22, 10},
-                      {23, 11},
-                      {24, 12},
-                      {25, 13},
-                      {26, 14},
-                      {27, 15},
-                      {28, 16},
-                      {29, 17},
-                      {31, 18},
-                      {32, 19},
-                      {33, 20},
-                      {34, 21},
-                      {35, 22},
-                      {36, 23},
-                      {37, 24},
-                      {38, 25},
-                      {39, 26},
-                      {41, 27},
-                      {42, 28},
-                      {43, 29},
-                      {44, 30},
-                      {45, 31},
-                      {46, 32},
-                      {47, 33},
-                      {48, 34},
-                      {49, 35},
-                      {51, 36},
-                      {52, 37},
-                      {53, 38},
-                      {54, 39},
-                      {55, 40},
-                      {56, 41},
-                      {57, 42},
-                      {58, 43},
-                      {59, 44},
-                      {61, 45},
-                      {62, 46},
-                      {63, 47},
-                      {64, 48},
-                      {65, 49},
-                      {66, 50},
-                      {67, 51},
-                      {68, 52},
-                      {69, 53},
-                      {71, 54},
-                      {72, 55},
-                      {73, 56},
-                      {74, 57},
-                      {75, 58},
-                      {76, 59},
-                      {77, 60},
-                      {78, 61},
-                      {79, 62},
-                      {81, 63},
-                      {82, 64},
-                      {83, 65},
-                      {84, 66},
-                      {85, 67},
-                      {86, 68},
-                      {87, 69},
-                      {88, 70},
-                      {89, 71},
-                      {91, 72},
-                      {92, 73},
-                      {93, 74},
-                      {94, 75},
-                      {95, 76},
-                      {96, 77},
-                      {97, 78},
-                      {98, 79},
-                      {99, 80}};
+         indexToMidiNote[buttonIndex] = midiNote;
+         midiNoteToIndex[midiNote] = buttonIndex;
+
+         buttonIndex++;
+         if (buttonIndex >= buttonList.size())
+            break;
+      }
+   }
+
+   createLaunchpad();
 }
 
 void LaunchpadImposter::process(const ProcessArgs& args)
 {
-   Variable::Integer<uint8_t> varBank(deviceId, 0, 15, true);
+   uint8_t tmpDeviceId = deviceId;
+   Variable::Integer<uint8_t> varBank(tmpDeviceId, 0, 15, true);
    if (deviceIdUpButton.isTriggered())
       varBank.increment();
    else if (deviceIdDownButton.isTriggered())
       varBank.decrement();
+
+   if (tmpDeviceId != deviceId)
+   {
+      deviceId = tmpDeviceId;
+      createLaunchpad();
+   }
 }
 
 void LaunchpadImposter::updateDisplays()
@@ -280,24 +141,55 @@ void LaunchpadImposter::updateDisplays()
    static const std::vector<Color> palette = Svin::LaunchpadClient::getPalette();
 
    deviceIdDisplay.setText(Text::pad(std::to_string(deviceId + 1), 2));
+}
 
-   const bool even = (0 == (deviceId % 2));
-   uint8_t colorIndex = even ? 0 : 64;
-   for (uint8_t row = 0; row < 8; row++)
+void LaunchpadImposter::createLaunchpad()
+{
+   const std::string deviceName = "LPMiniMK3 MIDI " + std::to_string(deviceId);
+
+   if (Svin::Midi::Input::connected())
+      Svin::Midi::Input::close();
+   Svin::Midi::Input::setTargetDeviceName(deviceName);
+   Svin::Midi::Input::open();
+
+   if (Svin::Midi::Output::connected())
+      Svin::Midi::Output::close();
+   Svin::Midi::Output::setTargetDeviceName(deviceName);
+   Svin::Midi::Output::open();
+}
+
+void LaunchpadImposter::clockTick()
+{
+}
+
+void LaunchpadImposter::noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity)
+{
+   const Svin::LaunchpadClient::Mode mode = static_cast<Svin::LaunchpadClient::Mode>(channel - 1);
+   static const std::vector<Color>& palette = Svin::LaunchpadClient::getPalette();
+   const Color color = palette.at(velocity);
+
+   if (99 == midiNote)
    {
-      for (uint8_t column = 0; column < 8; column++)
-      {
-         const uint8_t buttonIndex = (9 * (7 - row)) + column;
-         buttonList[buttonIndex]->setColor(palette.at(colorIndex));
-
-         colorIndex++;
-      }
+      statusLED.setColor(color);
    }
+   else
+   {
+      const uint8_t index = midiNoteToIndex[midiNote];
+      buttonList[index]->setColor(color);
+
+      //if (12 == midiNote)
+      debug() << __FUNCTION__ << index << midiNote << velocity;
+   }
+}
+
+void LaunchpadImposter::controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value)
+{
 }
 
 void LaunchpadImposter::load(const Svin::Json::Object& rootObject)
 {
    deviceId = rootObject.get("deviceId").toInt();
+   createLaunchpad();
 }
 
 void LaunchpadImposter::save(Svin::Json::Object& rootObject)
