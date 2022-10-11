@@ -15,6 +15,7 @@ LaunchpadImposter::LaunchpadImposter()
    , deviceIdDownButton(this, Panel::DeviceIdDown)
    , buttonList(this)
    , statusLED(this, Panel::RGB_RowNine_Logo)
+   , flanks()
 {
    setup();
 
@@ -117,6 +118,8 @@ LaunchpadImposter::LaunchpadImposter()
       }
    }
 
+   flanks = std::vector<Flank>(buttonList.size(), Flank());
+
    createLaunchpad();
 }
 
@@ -133,6 +136,17 @@ void LaunchpadImposter::process(const ProcessArgs& args)
    {
       deviceId = tmpDeviceId;
       createLaunchpad();
+   }
+
+   for (uint8_t index = 0; index < buttonList.size(); index++)
+   {
+      const bool on = buttonList[index]->isTriggered();
+      const Flank::State state = flanks[index].observe(on);
+
+      if (Flank::State::Rising == state)
+         sendNoteOn(1, indexToMidiNote[index], 127);
+      else if (Flank::State::Falling == state)
+         sendNoteOn(1, indexToMidiNote[index], 0);
    }
 }
 

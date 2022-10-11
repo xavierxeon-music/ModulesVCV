@@ -8,6 +8,8 @@ using namespace rack;
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
+#include <Tools/Flank.h>
+
 #include <SvinButton.h>
 #include <SvinDisplayLCD.h>
 #include <SvinButtonLED.h>
@@ -48,6 +50,7 @@ private:
    Svin::LED statusLED;
    std::map<uint8_t, uint8_t> indexToMidiNote;
    std::map<uint8_t, uint8_t> midiNoteToIndex;
+   std::vector<Flank> flanks;
 };
 
 // widget

@@ -35,7 +35,7 @@ Svin::LaunchpadClient::LaunchpadClient()
    : Midi::Input(false)
    , Midi::Output(false)
    , MasterClock::Client()
-   , triggerCache()
+   , padCache()
 {
 }
 
@@ -68,10 +68,29 @@ void Svin::LaunchpadClient::update()
 
 Svin::LaunchpadClient::Pad::List Svin::LaunchpadClient::triggeredPads()
 {
-   Pad::List triggerLsit = triggerCache;
-   triggerCache.clear();
+   auto copyValue = [](const Pad::Map::value_type& pair)
+   {
+      return pair.second;
+   };
 
-   return triggerLsit;
+   Pad::List padList;
+   std::transform(padCache.begin(), padCache.end(), std::back_inserter(padList), copyValue);
+   padCache.clear();
+
+   return padList;
+}
+
+void Svin::LaunchpadClient::showColorTest(bool firstPage)
+{
+   uint8_t paletteIndex = firstPage ? 0 : 63;
+   for (uint8_t row = 0; row < 8; row++)
+   {
+      for (uint8_t col = 0; col < 8; col++)
+      {
+         setPad(7 - row, col, Svin::LaunchpadClient::Mode::Steady, paletteList.at(paletteIndex));
+         paletteIndex++;
+      }
+   }
 }
 
 void Svin::LaunchpadClient::disconnect()
@@ -172,7 +191,21 @@ void Svin::LaunchpadClient::switchToLiveMode()
 
 void Svin::LaunchpadClient::noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity)
 {
-   // button pressed on device
+   if (padCache.find(midiNote) == padCache.end())
+   {
+      const uint8_t column = (midiNote % 10) - 1;
+      const uint8_t row = ((midiNote - (midiNote % 10)) / 10) - 1;
+      const Button button = (0 == velocity) ? Button::Off : Button::On;
+      padCache[midiNote] = {row, column, button};
+   }
+   else
+   {
+      Pad& pad = padCache[midiNote];
+      if (0 != velocity)
+         pad.button = Button::On;
+      else if (Button::On == pad.button)
+         pad.button = Button::Triggerd;
+   }
 }
 
 void Svin::LaunchpadClient::controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value)

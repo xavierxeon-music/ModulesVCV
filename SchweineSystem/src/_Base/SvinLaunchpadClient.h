@@ -17,11 +17,21 @@ namespace Svin
          Pulse = 3
       };
 
+      enum class Button : uint8_t //
+      {
+         Off,
+         On,
+         Triggerd
+
+      };
+
       struct Pad
       {
-         const uint8_t row;
-         const uint8_t column;
+         uint8_t row;
+         uint8_t column;
+         Button button;
 
+         using Map = std::map<uint8_t, Pad>; // midiNote vs Pad
          using List = std::vector<Pad>;
       };
 
@@ -32,6 +42,8 @@ namespace Svin
    public:
       void update();             // send clock
       Pad::List triggeredPads(); // return triggerd pads
+
+      void showColorTest(bool firstPage);
 
       void disconnect();
       void connect(const uint8_t& deviceId);
@@ -53,7 +65,7 @@ namespace Svin
 
    private:
       static const std::vector<Color> paletteList; // color vs palette index
-      Pad::List triggerCache;
+      Pad::Map padCache;
    };
 } // namespace Svin
 

@@ -50,6 +50,8 @@ GrooveMaestro::GrooveMaestro()
 
 void GrooveMaestro::process(const ProcessArgs& args)
 {
+   launchpad.update();
+
    if (loopButton.isTriggered())
    {
       bool loop = conductor.isLooping();
@@ -343,29 +345,18 @@ void GrooveMaestro::updateDisplays()
 
    for (const Svin::LaunchpadClient::Pad& pad : launchpad.triggeredPads())
    {
-      debug() << pad.row << pad.column;
+      debug() << pad.row << pad.column << (Svin::LaunchpadClient::Button::Off != pad.button);
    }
 
    if (true)
    {
       static Counter counter(30);
-      static const std::vector<Color>& palette = Svin::LaunchpadClient::getPalette();
+      static bool firstPage = true;
 
       if (counter.nextAndIsMaxValue())
-      {
-         static uint8_t paletteIndex = 0;
-         for (uint8_t row = 0; row < 8; row++)
-         {
-            for (uint8_t col = 0; col < 8; col++)
-            {
-               launchpad.setPad(7 - row, col, Svin::LaunchpadClient::Mode::Steady, palette.at(paletteIndex));
+         firstPage ^= true;
 
-               paletteIndex++;
-               if (paletteIndex > 127)
-                  paletteIndex = 0;
-            }
-         }
-      }
+      launchpad.showColorTest(firstPage);
    }
 }
 
