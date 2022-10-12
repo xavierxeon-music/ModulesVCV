@@ -41,8 +41,8 @@ Svin::LaunchpadClient::LaunchpadClient()
 
 Svin::LaunchpadClient::~LaunchpadClient()
 {
-   // TODO if connected
-   switchToLiveMode();
+   switchToProgramMode(false);
+   disconnect();
 }
 
 void Svin::LaunchpadClient::update()
@@ -95,29 +95,41 @@ void Svin::LaunchpadClient::showColorTest(bool firstPage)
 
 void Svin::LaunchpadClient::disconnect()
 {
+   std::cout << __FUNCTION__ << std::endl;
+
    if (Midi::Input::connected())
       Midi::Input::close();
 
    if (Midi::Output::connected())
       Midi::Output::close();
+
+   switchToProgramMode(false);
 }
 
 void Svin::LaunchpadClient::connect(const uint8_t& deviceId)
 {
+   disconnect();
+
    static bool first = true;
 
-   const std::string deviceName = "LPMiniMK3 MIDI " + std::to_string(deviceId);
+   std::string deviceName = "LPMiniMK3 MIDI " + std::to_string(deviceId);
+   if (0 == deviceId)
+      deviceName = "Launchpad Mini MK3 LPMiniMK3 MIDI Out";
+
+   debug() << __FUNCTION__ << deviceId << isConnected() << deviceName;
 
    Midi::Input::setTargetDeviceName(deviceName);
    Midi::Input::open(first);
+
+   if (0 == deviceId)
+      deviceName = "Launchpad Mini MK3 LPMiniMK3 MIDI In";
 
    Midi::Output::setTargetDeviceName(deviceName);
    Midi::Output::open(first);
 
    first = false;
 
-   // TODO check if connected
-   switchToProgramMode();
+   switchToProgramMode(true);
 }
 
 bool Svin::LaunchpadClient::isConnected()
@@ -149,9 +161,10 @@ const std::vector<Color>& Svin::LaunchpadClient::getPalette()
    return paletteList;
 }
 
-void Svin::LaunchpadClient::switchToProgramMode()
+void Svin::LaunchpadClient::switchToProgramMode(bool on)
 {
-   //F0h 00h 20h 29h 02h 0Dh 0Eh 1 F7h
+   //F0h 00h 20h 29h 02h 0Dh 0Eh 1 F7h // program mode
+   //F0h 00h 20h 29h 02h 0Dh 0Eh 0 F7h // =live mode
 
    std::vector<uint8_t> sysExMessage(9);
 
@@ -163,54 +176,48 @@ void Svin::LaunchpadClient::switchToProgramMode()
    sysExMessage[5] = 0x0D;
    sysExMessage[6] = 0x0E;
 
-   sysExMessage[7] = 1;
-
+   sysExMessage[7] = on ? 0x01 : 0x00;
    sysExMessage[8] = static_cast<uint8_t>(::Midi::Event::SysExEnd); // End of Exclusive
+
    sendMessage(sysExMessage);
 }
 
-void Svin::LaunchpadClient::switchToLiveMode()
-{
-   //F0h 00h 20h 29h 02h 0Dh 0Eh 0 F7h
-
-   std::vector<uint8_t> sysExMessage(9);
-
-   sysExMessage[0] = static_cast<uint8_t>(::Midi::Event::System); // Exclusive Status
-   sysExMessage[1] = 0x00;
-   sysExMessage[2] = 0x20;
-   sysExMessage[3] = 0x29;
-   sysExMessage[4] = 0x02;
-   sysExMessage[5] = 0x0D;
-   sysExMessage[6] = 0x0E;
-
-   sysExMessage[7] = 0;
-
-   sysExMessage[8] = static_cast<uint8_t>(::Midi::Event::SysExEnd); // End of Exclusive
-   sendMessage(sysExMessage);
-}
 
 void Svin::LaunchpadClient::noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity)
+{
+   // sent by 8x8 central grid
+   if (1 != channel)
+      return;
+
+   buttonActive(midiNote, velocity != 0);
+}
+
+void Svin::LaunchpadClient::controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value)
+{
+   // sent by outer controll buttons
+   if (1 != channel)
+      return;
+
+   buttonActive(controllerMessage, value != 0);
+}
+
+void Svin::LaunchpadClient::buttonActive(const uint8_t& midiNote, bool down)
 {
    if (padCache.find(midiNote) == padCache.end())
    {
       const uint8_t column = (midiNote % 10) - 1;
       const uint8_t row = ((midiNote - (midiNote % 10)) / 10) - 1;
-      const Button button = (0 == velocity) ? Button::Off : Button::On;
+      const Button button = down ? Button::On : Button::Off;
       padCache[midiNote] = {row, column, button};
    }
    else
    {
       Pad& pad = padCache[midiNote];
-      if (0 != velocity)
+      if (down)
          pad.button = Button::On;
       else if (Button::On == pad.button)
          pad.button = Button::Triggerd;
    }
-}
-
-void Svin::LaunchpadClient::controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value)
-{
-   // from device, maybe unnecessary
 }
 
 uint8_t Svin::LaunchpadClient::getClosestPaletteIndex(const Color& color) const

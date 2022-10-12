@@ -14,8 +14,6 @@ GrooveMaestro::GrooveMaestro()
    // remote
    , deviceId(0)
    , deviceIdDisplay(this, Panel::Text_DeviceId)
-   , deviceIdUpButton(this, Panel::DeviceIdUp)
-   , deviceIdDownButton(this, Panel::DeviceIdDown)
    , launchpad()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    // input
@@ -59,19 +57,6 @@ void GrooveMaestro::process(const ProcessArgs& args)
       conductor.setLooping(loop);
    }
    loopButton.setActive(conductor.isLooping());
-
-   uint8_t tmpDeviceId = deviceId;
-   Variable::Integer<uint8_t> varBank(tmpDeviceId, 0, 15, true);
-   if (deviceIdUpButton.isTriggered())
-      varBank.increment();
-   else if (deviceIdDownButton.isTriggered())
-      varBank.decrement();
-
-   if (tmpDeviceId != deviceId)
-   {
-      deviceId = tmpDeviceId;
-      connectToLaunchpad();
-   }
 
    if (connectionButton.isTriggered() && !launchpad.isConnected())
       connectToLaunchpad();
@@ -350,7 +335,7 @@ void GrooveMaestro::updateDisplays()
 
    if (true)
    {
-      static Counter counter(30);
+      static Counter counter(60);
       static bool firstPage = true;
 
       if (counter.nextAndIsMaxValue())
@@ -581,7 +566,6 @@ void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, cons
 
 void GrooveMaestro::load(const Svin::Json::Object& rootObject)
 {
-   deviceId = rootObject.get("deviceId").toInt();
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
 
    const bool loop = rootObject.get("loop").toBool();
@@ -596,7 +580,6 @@ void GrooveMaestro::load(const Svin::Json::Object& rootObject)
 
 void GrooveMaestro::save(Svin::Json::Object& rootObject)
 {
-   rootObject.set("deviceId", deviceId);
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
    rootObject.set("loop", conductor.isLooping());
    rootObject.set("no_offset", noOffsetSwitch.isOn());

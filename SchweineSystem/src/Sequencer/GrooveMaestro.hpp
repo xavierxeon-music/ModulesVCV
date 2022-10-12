@@ -10,17 +10,15 @@ struct GrooveMaestro::Panel
    enum ParamId
    {
       // buttons
-      DeviceIdDown = 0,
-      DeviceIdUp = 1,
-      Mode = 2,
+      Mode = 0,
       // switches
-      NoOffset = 3,
+      NoOffset = 1,
       // ledbuttons
-      Loop = 4,
-      Connect = 5,
+      Loop = 2,
+      Connect = 3,
       // knobs
       // sliders
-      PARAMS_LEN = 6
+      PARAMS_LEN = 4
    };
 
    enum DisplayId
@@ -68,8 +66,6 @@ void GrooveMaestro::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configButton(Panel::DeviceIdDown, "DeviceIdDown");
-   configButton(Panel::DeviceIdUp, "DeviceIdUp");
    configButton(Panel::Mode, "Mode");
 
    configSwitch(Panel::NoOffset, 0.0f, 1.0f, 0.0f, "NoOffset");
@@ -89,14 +85,12 @@ void GrooveMaestroWidget::setup()
 {
    makePanel("res/Sequencer/GrooveMaestro.svg");
 
-   makeButton(this, Vec(27.32, 164.41), GrooveMaestro::Panel::DeviceIdDown);
-   makeButton(this, Vec(27.55, 114.60), GrooveMaestro::Panel::DeviceIdUp);
    makeButton(this, Vec(27.55, 68.92), GrooveMaestro::Panel::Mode);
 
    makeSwitch(this, Vec(121.40, 355.83), GrooveMaestro::Panel::NoOffset, false);
 
    makeLEDButton(this, Vec(27.32, 267.06), GrooveMaestro::Panel::Loop, GrooveMaestro::Panel::RGB_Loop);
-   makeLEDButton(this, Vec(27.32, 191.12), GrooveMaestro::Panel::Connect, GrooveMaestro::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(27.55, 165.57), GrooveMaestro::Panel::Connect, GrooveMaestro::Panel::RGB_Connect);
 
    makeInput(this, Vec(96.01, 355.83),  GrooveMaestro::Panel::GatePass, true);
    makeInput(this, Vec(96.01, 310.33),  GrooveMaestro::Panel::ContourPass, true);
@@ -105,7 +99,7 @@ void GrooveMaestroWidget::setup()
    makeOutput(this, Vec(170.49, 355.83), GrooveMaestro::Panel::GateOutput, true);
    makeOutput(this, Vec(170.49, 310.33), GrooveMaestro::Panel::ContourOutput, true);
 
-   makeLCD(this, Vec(10.55, 127.50), 2, GrooveMaestro::Panel::Text_DeviceId, 18);
+   makeLCD(this, Vec(16.41, 133.09), 2, GrooveMaestro::Panel::Text_DeviceId, 10);
 
    makeOLED(this, Vec(53.00, 31.79), GrooveMaestro::Panel::Pixels_Display, 130, 250);
 }

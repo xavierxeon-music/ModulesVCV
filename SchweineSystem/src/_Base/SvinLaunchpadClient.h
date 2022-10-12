@@ -12,9 +12,9 @@ namespace Svin
       enum class Mode : uint8_t //
       {
          Off = 0,
-         Steady = 1,
-         Flash = 2,
-         Pulse = 3
+         Steady = 0,
+         Flash = 1,
+         Pulse = 2
       };
 
       enum class Button : uint8_t //
@@ -55,11 +55,11 @@ namespace Svin
       static const std::vector<Color>& getPalette();
 
    private:
-      void switchToProgramMode();
-      void switchToLiveMode();
+      void switchToProgramMode(bool on);
 
       void noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity) override;
       void controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
+      void buttonActive(const uint8_t& midiNote, bool down);
 
       uint8_t getClosestPaletteIndex(const Color& color) const;
 

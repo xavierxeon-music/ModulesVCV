@@ -89,8 +89,6 @@ private:
    // remote
    uint8_t deviceId;
    Svin::DisplayLCD::Controller deviceIdDisplay;
-   Svin::Button deviceIdUpButton;
-   Svin::Button deviceIdDownButton;
    Svin::LaunchpadClient launchpad;
    Svin::ButtonLED connectionButton;
 
