@@ -36,6 +36,7 @@ Svin::LaunchpadClient::LaunchpadClient()
    , Midi::Output(false)
    , MasterClock::Client()
    , padCache()
+   , outChangeMap()
 {
 }
 
@@ -95,8 +96,6 @@ void Svin::LaunchpadClient::showColorTest(bool firstPage)
 
 void Svin::LaunchpadClient::disconnect()
 {
-   std::cout << __FUNCTION__ << std::endl;
-
    if (Midi::Input::connected())
       Midi::Input::close();
 
@@ -149,11 +148,17 @@ void Svin::LaunchpadClient::setPad(const uint8_t& row, const uint8_t& column, co
    const uint8_t midiNote = (10 * (row + 1)) + (column + 1);
    const uint8_t velocity = paletteIndex;
 
+   const uint16_t test = (channel * 256) + velocity;
+   if (outChangeMap.find(midiNote) != outChangeMap.end() && outChangeMap.at(midiNote) == test)
+      return;
+
    std::vector<unsigned char> onMessage(3);
    onMessage[0] = (::Midi::Event::NoteOn | channel);
    onMessage[1] = midiNote;
    onMessage[2] = velocity;
    sendMessage(onMessage);
+
+   outChangeMap[midiNote] = test;
 }
 
 const std::vector<Color>& Svin::LaunchpadClient::getPalette()

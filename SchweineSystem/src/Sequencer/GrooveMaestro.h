@@ -72,8 +72,13 @@ private:
    void updateDisplayRemote();
    void updateDisplayPlay();
 
+   void displayStoped();
+   bool displayGroove(const Grooves& grooves);
    void displayContours();
+
    void connectToLaunchpad();
+   void updateLaunchpad(const Grooves& grooves);
+   void clearLaunchpad();
 
    void receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
 
@@ -83,6 +88,8 @@ private:
 private:
    std::string fileName;
    Conductor conductor;
+   Grooves localGrooves;
+   std::vector<float> voltages;
    BoolField8 tickTriggers;
    BoolField8 segmentGates;
 
@@ -91,6 +98,7 @@ private:
    Svin::DisplayLCD::Controller deviceIdDisplay;
    Svin::LaunchpadClient launchpad;
    Svin::ButtonLED connectionButton;
+   uint8_t launchpadOffset;
 
    // input
    Svin::Input contoutPassInput;

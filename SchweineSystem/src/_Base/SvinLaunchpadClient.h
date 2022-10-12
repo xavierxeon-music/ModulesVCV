@@ -55,6 +55,9 @@ namespace Svin
       static const std::vector<Color>& getPalette();
 
    private:
+      using OutChangeMap = std::map<uint8_t, uint16_t>;
+
+   private:
       void switchToProgramMode(bool on);
 
       void noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity) override;
@@ -66,6 +69,7 @@ namespace Svin
    private:
       static const std::vector<Color> paletteList; // color vs palette index
       Pad::Map padCache;
+      OutChangeMap outChangeMap;
    };
 } // namespace Svin
 
