@@ -36,7 +36,6 @@ private:
    void save(Svin::Json::Object& rootObject) override;
 
    void onSampleRateChange(const SampleRateChangeEvent& event) override;
-   void displayClicked(const float& x, const float& y);
 
 private:
    Svin::DisplayOLED::Controller displayController;
@@ -72,7 +71,6 @@ public:
 
 private:
    inline void setup();
-   void displayClicked(const float& x, const float& y);
 };
 
 #ifndef WavPlayerHPP

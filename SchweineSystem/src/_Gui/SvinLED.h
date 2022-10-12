@@ -3,7 +3,7 @@
 
 #include <rack.hpp>
 
-#include <MusicTools.h>
+#include <SvinCommon.h>
 
 namespace Svin
 {
@@ -13,7 +13,7 @@ namespace Svin
    class LED
    {
    public:
-      class List;
+      using List = ElementList<LED>;
 
    public:
       LED(Module* module, const uint16_t& rgbIndex);
@@ -37,19 +37,6 @@ namespace Svin
       float brightness;
    };
 
-   class LED::List
-   {
-   public:
-      List(Module* module);
-
-   public:
-      void append(const std::vector<uint16_t>& rgbIndexList);
-      LED* operator[](const uint16_t& index);
-
-   private:
-      Module* module;
-      std::vector<LED> instanceList;
-   };
 } // namespace Svin
 
 inline void makeLED(rack::ModuleWidget* widget, rack::math::Vec pos, int rgbIndex)

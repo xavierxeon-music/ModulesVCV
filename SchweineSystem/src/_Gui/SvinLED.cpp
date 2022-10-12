@@ -56,25 +56,3 @@ void Svin::LED::setBrightness(const float newBrightness)
 
    setColor(defaultColor.dim(brightness));
 }
-
-// list
-
-Svin::LED::List::List(Module* module)
-   : module(module)
-   , instanceList()
-{
-}
-
-void Svin::LED::List::append(const std::vector<uint16_t>& rgbIndexList)
-{
-   for (const uint16_t rgbIndex : rgbIndexList)
-   {
-      LED led(module, rgbIndex);
-      instanceList.push_back(led);
-   }
-}
-
-Svin::LED* Svin::LED::List::operator[](const uint16_t& index)
-{
-   return &instanceList[index];
-}

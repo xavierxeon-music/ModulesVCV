@@ -33,6 +33,10 @@ namespace Svin
       class Controller : public InstanceMap<Controller>
       {
       public:
+         using List = ElementList<Controller>;
+         using ClickedFunction = std::function<void(const float& x, const float& y)>;
+
+      public:
          Controller(Module* module, const uint16_t& pixelId);
 
       public:
@@ -46,14 +50,18 @@ namespace Svin
          void drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill);
          void writeText(const uint8_t x, const uint8_t y, const std::string& text, const uint8_t& fontHeigth, const Alignment& alignment = Alignment::Left);
 
-         template <typename ClassType>
-         void onClicked(ClassType* instance, void (ClassType::*functionPointer)(const float&, const float&));
+         void onPressed(ClickedFunction clickedFunction);
+         void onReleased(ClickedFunction clickedFunction);
 
          template <typename ClassType>
-         void onClickedOpenFileFunction(ClassType* instance, void (ClassType::*functionPointer)(const std::string& fileName), const std::string& filter);
+         void onPressed(ClassType* instance, void (ClassType::*functionPointer)(const float&, const float&));
+
+         template <typename ClassType>
+         void onPressedOpenFileFunction(ClassType* instance, void (ClassType::*functionPointer)(const std::string& fileName), const std::string& filter);
 
       private:
-         void clicked(const float& x, const float& y);
+         void pressed(const float& x, const float& y);
+         void released(const float& x, const float& y);
 
       private:
          class Instruction
@@ -76,7 +84,6 @@ namespace Svin
             NVGcolor color;
          };
 
-         using ClickedFunction = std::function<void(const float& x, const float& y)>;
 
          struct OpenFile
          {
@@ -97,7 +104,8 @@ namespace Svin
          uint8_t width;
          uint8_t height;
 
-         std::vector<ClickedFunction> clickedFunctionList;
+         std::vector<ClickedFunction> pressedFunctionList;
+         std::vector<ClickedFunction> releasedFunctionList;
          OpenFile::List openFileList;
       };
 

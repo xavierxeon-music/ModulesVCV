@@ -33,7 +33,7 @@ MidiReplay::MidiReplay()
    setup();
    registerAsBusModule<MidiBus>();
 
-   displayController.onClicked(this, &MidiReplay::displayClicked);
+   displayController.onPressedOpenFileFunction(this, &MidiReplay::loadMidiFile, "MIDI:mid");
 
    loopButton.setDefaultColor(Color::Predefined::Green);
 }
@@ -263,14 +263,6 @@ void MidiReplay::save(Svin::Json::Object& rootObject)
    rootObject.set("fileName", fileName);
    rootObject.set("loop", isLooping);
    rootObject.set("displayMode", static_cast<uint8_t>(displayMode));
-}
-
-void MidiReplay::displayClicked(const float& x, const float& y)
-{
-   (void)x;
-   (void)y;
-
-   loadMidiFile(getOpenFileName("MIDI:mid"));
 }
 
 // widget

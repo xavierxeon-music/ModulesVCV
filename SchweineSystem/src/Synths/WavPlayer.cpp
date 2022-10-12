@@ -22,7 +22,7 @@ WavPlayer::WavPlayer()
    , rightOutput(this, Panel::Right)
 {
    setup();
-   displayController.onClicked(this, &WavPlayer::displayClicked);
+   displayController.onPressedOpenFileFunction(this, &WavPlayer::setWavFileName, "Wav:wav");
 
    playButton.setDefaultColor(Color::Predefined::Blue);
    playButton.setLatchBuddy(&playInput);
@@ -151,14 +151,6 @@ void WavPlayer::onSampleRateChange(const SampleRateChangeEvent& event)
    load();
 }
 
-void WavPlayer::displayClicked(const float& x, const float& y)
-{
-   (void)x;
-   (void)y;
-
-   setWavFileName(getOpenFileName("Wav:wav"));
-}
-
 // widget
 
 WavPlayerWidget::WavPlayerWidget(WavPlayer* module)
@@ -166,6 +158,7 @@ WavPlayerWidget::WavPlayerWidget(WavPlayer* module)
 {
    setup();
 }
+
 // create module
 Model* modelWavPlayer = Svin::Origin::the()->addModule<WavPlayer, WavPlayerWidget>("WavPlayer");
 

@@ -14,93 +14,92 @@ LaunchpadImposter::LaunchpadImposter()
    , deviceIdUpButton(this, Panel::DeviceIdUp)
    , deviceIdDownButton(this, Panel::DeviceIdDown)
    , buttonList(this)
-   , statusLED(this, Panel::RGB_RowNine_Logo)
-   , flanks()
+   , statusLED(this, Panel::RGB_Logo)
 {
    setup();
 
    deviceIdDisplay.setColor(Color::Predefined::Yellow);
 
-   buttonList.append({{Panel::RowOne_ColOne, Panel::RGB_RowOne_ColOne},
-                      {Panel::RowOne_ColTwo, Panel::RGB_RowOne_ColTwo},
-                      {Panel::RowOne_ColThree, Panel::RGB_RowOne_ColThree},
-                      {Panel::RowOne_ColFour, Panel::RGB_RowOne_ColFour},
-                      {Panel::RowOne_ColFive, Panel::RGB_RowOne_ColFive},
-                      {Panel::RowOne_ColSix, Panel::RGB_RowOne_ColSix},
-                      {Panel::RowOne_ColSeven, Panel::RGB_RowOne_ColSeven},
-                      {Panel::RowOne_ColEight, Panel::RGB_RowOne_ColEight},
-                      {Panel::RowOne_ColNine, Panel::RGB_RowOne_ColNine},
-                      {Panel::RowTwo_ColOne, Panel::RGB_RowTwo_ColOne},
-                      {Panel::RowTwo_ColTwo, Panel::RGB_RowTwo_ColTwo},
-                      {Panel::RowTwo_ColThree, Panel::RGB_RowTwo_ColThree},
-                      {Panel::RowTwo_ColFour, Panel::RGB_RowTwo_ColFour},
-                      {Panel::RowTwo_ColFive, Panel::RGB_RowTwo_ColFive},
-                      {Panel::RowTwo_ColSix, Panel::RGB_RowTwo_ColSix},
-                      {Panel::RowTwo_ColSeven, Panel::RGB_RowTwo_ColSeven},
-                      {Panel::RowTwo_ColEight, Panel::RGB_RowTwo_ColEight},
-                      {Panel::RowTwo_ColNine, Panel::RGB_RowTwo_ColNine},
-                      {Panel::RowThree_ColOne, Panel::RGB_RowThree_ColOne},
-                      {Panel::RowThree_ColTwo, Panel::RGB_RowThree_ColTwo},
-                      {Panel::RowThree_ColThree, Panel::RGB_RowThree_ColThree},
-                      {Panel::RowThree_ColFour, Panel::RGB_RowThree_ColFour},
-                      {Panel::RowThree_ColFive, Panel::RGB_RowThree_ColFive},
-                      {Panel::RowThree_ColSix, Panel::RGB_RowThree_ColSix},
-                      {Panel::RowThree_ColSeven, Panel::RGB_RowThree_ColSeven},
-                      {Panel::RowThree_ColEight, Panel::RGB_RowThree_ColEight},
-                      {Panel::RowThree_ColNine, Panel::RGB_RowThree_ColNine},
-                      {Panel::RowFour_ColOne, Panel::RGB_RowFour_ColOne},
-                      {Panel::RowFour_ColTwo, Panel::RGB_RowFour_ColTwo},
-                      {Panel::RowFour_ColThree, Panel::RGB_RowFour_ColThree},
-                      {Panel::RowFour_ColFour, Panel::RGB_RowFour_ColFour},
-                      {Panel::RowFour_ColFive, Panel::RGB_RowFour_ColFive},
-                      {Panel::RowFour_ColSix, Panel::RGB_RowFour_ColSix},
-                      {Panel::RowFour_ColSeven, Panel::RGB_RowFour_ColSeven},
-                      {Panel::RowFour_ColEight, Panel::RGB_RowFour_ColEight},
-                      {Panel::RowFour_ColNine, Panel::RGB_RowFour_ColNine},
-                      {Panel::RowFive_ColOne, Panel::RGB_RowFive_ColOne},
-                      {Panel::RowFive_ColTwo, Panel::RGB_RowFive_ColTwo},
-                      {Panel::RowFive_ColThree, Panel::RGB_RowFive_ColThree},
-                      {Panel::RowFive_ColFour, Panel::RGB_RowFive_ColFour},
-                      {Panel::RowFive_ColFive, Panel::RGB_RowFive_ColFive},
-                      {Panel::RowFive_ColSix, Panel::RGB_RowFive_ColSix},
-                      {Panel::RowFive_ColSeven, Panel::RGB_RowFive_ColSeven},
-                      {Panel::RowFive_ColEight, Panel::RGB_RowFive_ColEight},
-                      {Panel::RowFive_ColNine, Panel::RGB_RowFive_ColNine},
-                      {Panel::RowSix_ColOne, Panel::RGB_RowSix_ColOne},
-                      {Panel::RowSix_ColTwo, Panel::RGB_RowSix_ColTwo},
-                      {Panel::RowSix_ColThree, Panel::RGB_RowSix_ColThree},
-                      {Panel::RowSix_ColFour, Panel::RGB_RowSix_ColFour},
-                      {Panel::RowSix_ColFive, Panel::RGB_RowSix_ColFive},
-                      {Panel::RowSix_ColSix, Panel::RGB_RowSix_ColSix},
-                      {Panel::RowSix_ColSeven, Panel::RGB_RowSix_ColSeven},
-                      {Panel::RowSix_ColEight, Panel::RGB_RowSix_ColEight},
-                      {Panel::RowSix_ColNine, Panel::RGB_RowSix_ColNine},
-                      {Panel::RowSeven_ColOne, Panel::RGB_RowSeven_ColOne},
-                      {Panel::RowSeven_ColTwo, Panel::RGB_RowSeven_ColTwo},
-                      {Panel::RowSeven_ColThree, Panel::RGB_RowSeven_ColThree},
-                      {Panel::RowSeven_ColFour, Panel::RGB_RowSeven_ColFour},
-                      {Panel::RowSeven_ColFive, Panel::RGB_RowSeven_ColFive},
-                      {Panel::RowSeven_ColSix, Panel::RGB_RowSeven_ColSix},
-                      {Panel::RowSeven_ColSeven, Panel::RGB_RowSeven_ColSeven},
-                      {Panel::RowSeven_ColEight, Panel::RGB_RowSeven_ColEight},
-                      {Panel::RowSeven_ColNine, Panel::RGB_RowSeven_ColNine},
-                      {Panel::RowEight_ColOne, Panel::RGB_RowEight_ColOne},
-                      {Panel::RowEight_ColTwo, Panel::RGB_RowEight_ColTwo},
-                      {Panel::RowEight_ColThree, Panel::RGB_RowEight_ColThree},
-                      {Panel::RowEight_ColFour, Panel::RGB_RowEight_ColFour},
-                      {Panel::RowEight_ColFive, Panel::RGB_RowEight_ColFive},
-                      {Panel::RowEight_ColSix, Panel::RGB_RowEight_ColSix},
-                      {Panel::RowEight_ColSeven, Panel::RGB_RowEight_ColSeven},
-                      {Panel::RowEight_ColEight, Panel::RGB_RowEight_ColEight},
-                      {Panel::RowEight_ColNine, Panel::RGB_RowEight_ColNine},
-                      {Panel::RowNine_ColOne, Panel::RGB_RowNine_ColOne},
-                      {Panel::RowNine_ColTwo, Panel::RGB_RowNine_ColTwo},
-                      {Panel::RowNine_ColThree, Panel::RGB_RowNine_ColThree},
-                      {Panel::RowNine_ColFour, Panel::RGB_RowNine_ColFour},
-                      {Panel::RowNine_ColFive, Panel::RGB_RowNine_ColFive},
-                      {Panel::RowNine_ColSix, Panel::RGB_RowNine_ColSix},
-                      {Panel::RowNine_ColSeven, Panel::RGB_RowNine_ColSeven},
-                      {Panel::RowNine_ColEight, Panel::RGB_RowNine_ColEight}});
+   buttonList.append({Panel::Pixels_RowOne_ColOne,
+                      Panel::Pixels_RowOne_ColTwo,
+                      Panel::Pixels_RowOne_ColThree,
+                      Panel::Pixels_RowOne_ColFour,
+                      Panel::Pixels_RowOne_ColFive,
+                      Panel::Pixels_RowOne_ColSix,
+                      Panel::Pixels_RowOne_ColSeven,
+                      Panel::Pixels_RowOne_ColEight,
+                      Panel::Pixels_RowOne_ColNine,
+                      Panel::Pixels_RowTwo_ColOne,
+                      Panel::Pixels_RowTwo_ColTwo,
+                      Panel::Pixels_RowTwo_ColThree,
+                      Panel::Pixels_RowTwo_ColFour,
+                      Panel::Pixels_RowTwo_ColFive,
+                      Panel::Pixels_RowTwo_ColSix,
+                      Panel::Pixels_RowTwo_ColSeven,
+                      Panel::Pixels_RowTwo_ColEight,
+                      Panel::Pixels_RowTwo_ColNine,
+                      Panel::Pixels_RowThree_ColOne,
+                      Panel::Pixels_RowThree_ColTwo,
+                      Panel::Pixels_RowThree_ColThree,
+                      Panel::Pixels_RowThree_ColFour,
+                      Panel::Pixels_RowThree_ColFive,
+                      Panel::Pixels_RowThree_ColSix,
+                      Panel::Pixels_RowThree_ColSeven,
+                      Panel::Pixels_RowThree_ColEight,
+                      Panel::Pixels_RowThree_ColNine,
+                      Panel::Pixels_RowFour_ColOne,
+                      Panel::Pixels_RowFour_ColTwo,
+                      Panel::Pixels_RowFour_ColThree,
+                      Panel::Pixels_RowFour_ColFour,
+                      Panel::Pixels_RowFour_ColFive,
+                      Panel::Pixels_RowFour_ColSix,
+                      Panel::Pixels_RowFour_ColSeven,
+                      Panel::Pixels_RowFour_ColEight,
+                      Panel::Pixels_RowFour_ColNine,
+                      Panel::Pixels_RowFive_ColOne,
+                      Panel::Pixels_RowFive_ColTwo,
+                      Panel::Pixels_RowFive_ColThree,
+                      Panel::Pixels_RowFive_ColFour,
+                      Panel::Pixels_RowFive_ColFive,
+                      Panel::Pixels_RowFive_ColSix,
+                      Panel::Pixels_RowFive_ColSeven,
+                      Panel::Pixels_RowFive_ColEight,
+                      Panel::Pixels_RowFive_ColNine,
+                      Panel::Pixels_RowSix_ColOne,
+                      Panel::Pixels_RowSix_ColTwo,
+                      Panel::Pixels_RowSix_ColThree,
+                      Panel::Pixels_RowSix_ColFour,
+                      Panel::Pixels_RowSix_ColFive,
+                      Panel::Pixels_RowSix_ColSix,
+                      Panel::Pixels_RowSix_ColSeven,
+                      Panel::Pixels_RowSix_ColEight,
+                      Panel::Pixels_RowSix_ColNine,
+                      Panel::Pixels_RowSeven_ColOne,
+                      Panel::Pixels_RowSeven_ColTwo,
+                      Panel::Pixels_RowSeven_ColThree,
+                      Panel::Pixels_RowSeven_ColFour,
+                      Panel::Pixels_RowSeven_ColFive,
+                      Panel::Pixels_RowSeven_ColSix,
+                      Panel::Pixels_RowSeven_ColSeven,
+                      Panel::Pixels_RowSeven_ColEight,
+                      Panel::Pixels_RowSeven_ColNine,
+                      Panel::Pixels_RowEight_ColOne,
+                      Panel::Pixels_RowEight_ColTwo,
+                      Panel::Pixels_RowEight_ColThree,
+                      Panel::Pixels_RowEight_ColFour,
+                      Panel::Pixels_RowEight_ColFive,
+                      Panel::Pixels_RowEight_ColSix,
+                      Panel::Pixels_RowEight_ColSeven,
+                      Panel::Pixels_RowEight_ColEight,
+                      Panel::Pixels_RowEight_ColNine,
+                      Panel::Pixels_RowNine_ColOne,
+                      Panel::Pixels_RowNine_ColTwo,
+                      Panel::Pixels_RowNine_ColThree,
+                      Panel::Pixels_RowNine_ColFour,
+                      Panel::Pixels_RowNine_ColFive,
+                      Panel::Pixels_RowNine_ColSix,
+                      Panel::Pixels_RowNine_ColSeven,
+                      Panel::Pixels_RowNine_ColEight});
 
    uint8_t buttonIndex = 0;
    for (uint8_t row = 0; row < 9; row++)
@@ -112,13 +111,17 @@ LaunchpadImposter::LaunchpadImposter()
          indexToMidiNote[buttonIndex] = midiNote;
          midiNoteToIndex[midiNote] = buttonIndex;
 
+         Svin::DisplayOLED::Controller::ClickedFunction pressedFunction = std::bind(&LaunchpadImposter::buttonPressed, this, buttonIndex, std::placeholders::_1, std::placeholders::_2);
+         buttonList[buttonIndex]->onPressed(pressedFunction);
+
+         Svin::DisplayOLED::Controller::ClickedFunction releasedFunction = std::bind(&LaunchpadImposter::buttonReleased, this, buttonIndex, std::placeholders::_1, std::placeholders::_2);
+         buttonList[buttonIndex]->onReleased(releasedFunction);
+
          buttonIndex++;
          if (buttonIndex >= buttonList.size())
             break;
       }
    }
-
-   flanks = std::vector<Flank>(buttonList.size(), Flank());
 
    createLaunchpad();
 }
@@ -137,17 +140,6 @@ void LaunchpadImposter::process(const ProcessArgs& args)
       deviceId = tmpDeviceId;
       createLaunchpad();
    }
-
-   for (uint8_t index = 0; index < buttonList.size(); index++)
-   {
-      const bool on = buttonList[index]->isTriggered();
-      const Flank::State state = flanks[index].observe(on);
-
-      if (Flank::State::Rising == state)
-         sendNoteOn(1, indexToMidiNote[index], 127);
-      else if (Flank::State::Falling == state)
-         sendNoteOn(1, indexToMidiNote[index], 0);
-   }
 }
 
 void LaunchpadImposter::updateDisplays()
@@ -155,6 +147,25 @@ void LaunchpadImposter::updateDisplays()
    static const std::vector<Color> palette = Svin::LaunchpadClient::getPalette();
 
    deviceIdDisplay.setText(Text::pad(std::to_string(deviceId + 1), 2));
+
+   using TextMap = std::map<uint8_t, std::string>; // midiNote to text
+   static const TextMap textMap = {{19, u8"\u2022"}, {29, ">"}, {39, ">"}, {49, ">"}, {59, ">"}, {69, ">"}, {79, ">"}, {89, ">"}, {91, u8"\u25b2"}, {92, u8"\u25bc"}, {93, u8"\u25c0"}, {94, u8"\u25b6"}, {95, "S"}, {96, "D"}, {97, "K"}, {98, "U"}};
+
+   for (uint8_t index = 0; index < buttonList.size(); index++)
+   {
+      Svin::DisplayOLED::Controller* controller = buttonList[index];
+      controller->fill();
+
+      const uint8_t midiNote = indexToMidiNote[index];
+      if (textMap.find(midiNote) == textMap.end())
+      {
+         controller->drawRect(0, 0, 20, 20, true);
+      }
+      else
+      {
+         controller->writeText(5, 0, textMap.at(midiNote), 20);
+      }
+   }
 }
 
 void LaunchpadImposter::createLaunchpad()
@@ -197,6 +208,20 @@ void LaunchpadImposter::controllerChange(const ::Midi::Channel& channel, const :
 {
 }
 
+void LaunchpadImposter::buttonPressed(const uint8_t index, const float& x, const float& y)
+{
+   (void)x;
+   (void)y;
+   sendNoteOn(1, indexToMidiNote[index], 127);
+}
+
+void LaunchpadImposter::buttonReleased(const uint8_t index, const float& x, const float& y)
+{
+   (void)x;
+   (void)y;
+   sendNoteOn(1, indexToMidiNote[index], 0);
+}
+
 void LaunchpadImposter::load(const Svin::Json::Object& rootObject)
 {
    deviceId = rootObject.get("deviceId").toInt();
@@ -218,4 +243,3 @@ LaunchpadImposterWidget::LaunchpadImposterWidget(LaunchpadImposter* module)
 
 // create module
 Model* modelLaunchpadImposter = Svin::Origin::the()->addModule<LaunchpadImposter, LaunchpadImposterWidget>("LaunchpadImposter");
-

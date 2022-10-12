@@ -40,7 +40,7 @@ GrooveMaestro::GrooveMaestro()
    registerHubClient("GrooveMaestro");
 
    deviceIdDisplay.setColor(Color::Predefined::Yellow);
-   controller.onClickedOpenFileFunction(this, &GrooveMaestro::loadProject, "Projects:grm");
+   controller.onPressedOpenFileFunction(this, &GrooveMaestro::loadProject, "Projects:grm");
 
    loopButton.setDefaultColor(Color::Predefined::Green);
 

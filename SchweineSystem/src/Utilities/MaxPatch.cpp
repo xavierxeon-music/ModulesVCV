@@ -14,7 +14,7 @@ MaxPatch::MaxPatch()
    setup();
    registerHubClient("MaxPatch");
 
-   displayController.onClickedOpenFileFunction(this, &MaxPatch::setPatchFileName, "Max:maxpat");
+   displayController.onPressedOpenFileFunction(this, &MaxPatch::setPatchFileName, "Max:maxpat");
    connectedLight.setDefaultColor(Color::Predefined::Green);
 
    if (hubConnected())

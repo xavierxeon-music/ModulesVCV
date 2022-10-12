@@ -12,7 +12,7 @@ using namespace rack;
 
 #include <SvinButton.h>
 #include <SvinDisplayLCD.h>
-#include <SvinButtonLED.h>
+#include <SvinDisplayOLED.h>
 #include <SvinLED.h>
 
 class LaunchpadImposter : public Svin::Module, private Svin::Midi::Input, private Svin::Midi::Output
@@ -36,6 +36,9 @@ private:
    void noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity) override;
    void controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
 
+   void buttonPressed(const uint8_t index, const float& x, const float& y);
+   void buttonReleased(const uint8_t index, const float& x, const float& y);
+
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
 
@@ -46,11 +49,10 @@ private:
    Svin::Button deviceIdUpButton;
    Svin::Button deviceIdDownButton;
 
-   Svin::ButtonLED::List buttonList;
+   Svin::DisplayOLED::Controller::List buttonList;
    Svin::LED statusLED;
    std::map<uint8_t, uint8_t> indexToMidiNote;
    std::map<uint8_t, uint8_t> midiNoteToIndex;
-   std::vector<Flank> flanks;
 };
 
 // widget

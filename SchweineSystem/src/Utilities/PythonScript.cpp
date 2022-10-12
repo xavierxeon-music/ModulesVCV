@@ -14,7 +14,7 @@ PythonScript::PythonScript()
    setup();
    registerHubClient("PythonScript");
 
-   displayController.onClickedOpenFileFunction(this, &PythonScript::setScriptFileName, "Python:py");
+   displayController.onPressedOpenFileFunction(this, &PythonScript::setScriptFileName, "Python:py");
    connectedLight.setDefaultColor(Color::Predefined::Green);
 
    if (hubConnected())

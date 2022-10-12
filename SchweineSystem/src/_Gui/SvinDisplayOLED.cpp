@@ -169,7 +169,8 @@ Svin::DisplayOLED::Controller::Controller(Module* module, const uint16_t& pixelI
    , currentColor(nvgRGB(255, 255, 255))
    , width(1)
    , height(1)
-   , clickedFunctionList()
+   , pressedFunctionList()
+   , releasedFunctionList()
    , openFileList()
 {
 }
@@ -237,9 +238,19 @@ void Svin::DisplayOLED::Controller::writeText(const uint8_t x, const uint8_t y, 
    renderInstructions.push_back(instruction);
 }
 
-void Svin::DisplayOLED::Controller::clicked(const float& x, const float& y)
+void Svin::DisplayOLED::Controller::onPressed(ClickedFunction clickedFunction)
 {
-   for (ClickedFunction& clickedFunction : clickedFunctionList)
+   pressedFunctionList.push_back(clickedFunction);
+}
+
+void Svin::DisplayOLED::Controller::onReleased(ClickedFunction clickedFunction)
+{
+   releasedFunctionList.push_back(clickedFunction);
+}
+
+void Svin::DisplayOLED::Controller::pressed(const float& x, const float& y)
+{
+   for (ClickedFunction& clickedFunction : pressedFunctionList)
       clickedFunction(x, y);
 
    for (OpenFile& openFile : openFileList)
@@ -250,6 +261,12 @@ void Svin::DisplayOLED::Controller::clicked(const float& x, const float& y)
 
       openFile.function(fileName);
    }
+}
+
+void Svin::DisplayOLED::Controller::released(const float& x, const float& y)
+{
+   for (ClickedFunction& clickedFunction : releasedFunctionList)
+      clickedFunction(x, y);
 }
 
 // widget
@@ -298,9 +315,17 @@ void Svin::DisplayOLED::Widget::onButton(const rack::event::Button& buttonEvent)
    if (0 > buttonEvent.pos.y || height <= buttonEvent.pos.y)
       return;
 
-   if (GLFW_MOUSE_BUTTON_LEFT == buttonEvent.button && GLFW_PRESS == buttonEvent.action)
+   if (GLFW_MOUSE_BUTTON_LEFT == buttonEvent.button)
    {
-      buttonEvent.consume(this);
-      controller->clicked(buttonEvent.pos.x, buttonEvent.pos.y);
+      if (GLFW_PRESS == buttonEvent.action)
+      {
+         buttonEvent.consume(this);
+         controller->pressed(buttonEvent.pos.x, buttonEvent.pos.y);
+      }
+      else if (GLFW_RELEASE == buttonEvent.action)
+      {
+         buttonEvent.consume(this);
+         controller->released(buttonEvent.pos.x, buttonEvent.pos.y);
+      }
    }
 }

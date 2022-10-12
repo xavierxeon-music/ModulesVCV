@@ -66,7 +66,6 @@ private:
 
 private:
    inline void setup();
-   void displayClicked(const float& x, const float& y);
 
 private:
    std::string fileName;
