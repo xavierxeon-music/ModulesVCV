@@ -81,6 +81,7 @@ private:
    void updateLaunchpadGrid(const Grooves& grooves);
    void updateLaunchpadHeader();
 
+   void uploadToHub();
    void receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
 
    void load(const Svin::Json::Object& rootObject) override;
@@ -102,7 +103,8 @@ private:
    uint8_t launchpadOffset;
 
    // input
-   Svin::Input contoutPassInput;
+   Svin::Input uploadInput;
+   Svin::Input contoutPassInput;   
    Svin::Input gatePassInput;
    Svin::Switch noOffsetSwitch;
 

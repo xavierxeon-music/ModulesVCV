@@ -95,7 +95,7 @@ void Svin::LaunchpadClient::showColorTest(bool firstPage)
 
 void Svin::LaunchpadClient::disconnect()
 {
-   sendPowerSafe(true);
+   //sendPowerSafe(true);
    //switchToProgramMode(false);
 
    if (Midi::Input::connected())

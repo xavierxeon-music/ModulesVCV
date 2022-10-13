@@ -61,8 +61,9 @@ void GrooveMaestro::readLaunchpad()
             localGrooves.setSegmentLength(0, length);
             launchpad.setAll(0);
          }
-         else if (4 == pad.column)
+         else if (4 == pad.column && OperationMode::Passthrough == operationMode)
          {
+            uploadToHub();
          }
          else if (5 == pad.column)
          {

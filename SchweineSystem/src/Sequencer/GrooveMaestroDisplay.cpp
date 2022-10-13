@@ -3,6 +3,54 @@
 #include <Tools/Text.h>
 #include <Tools/Variable.h>
 
+void GrooveMaestro::updateDisplayPassthrough()
+{
+   controller.setColor(Color::Predefined::Yellow);
+   controller.drawRect(0, 0, 130, 10, true);
+
+   controller.setColor(Color::Predefined::Black);
+   controller.writeText(65, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   if (!displayGroove(localGrooves))
+      return;
+
+   displayContours();
+   readLaunchpad();
+   updateLaunchpadGrid(localGrooves);
+}
+
+void GrooveMaestro::updateDisplayRemote()
+{
+   controller.setColor(Color::Predefined::Cyan);
+   controller.drawRect(0, 0, 130, 10, true);
+
+   controller.setColor(Color::Predefined::Black);
+   controller.writeText(65, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   if (!displayGroove(localGrooves))
+      return;
+
+   displayContours();
+   readLaunchpad();
+   updateLaunchpadGrid(localGrooves);
+}
+
+void GrooveMaestro::updateDisplayPlay()
+{
+   controller.setColor(Color::Predefined::Green);
+   controller.drawRect(0, 0, 130, 10, true);
+
+   controller.setColor(Color::Predefined::Black);
+   controller.writeText(65, 0, "Play", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+
+   if (!displayGroove(conductor))
+      return;
+
+   displayContours();
+   readLaunchpad();
+   updateLaunchpadGrid(conductor);
+}
+
 void GrooveMaestro::displayStoped()
 {
    const uint32_t segmentCount = conductor.getSegmentCount();

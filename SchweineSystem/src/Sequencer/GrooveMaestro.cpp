@@ -20,6 +20,7 @@ GrooveMaestro::GrooveMaestro()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , launchpadOffset(0)
    // input
+   , uploadInput(this, Panel::Upload)
    , contoutPassInput(this, Panel::ContourPass)
    , gatePassInput(this, Panel::GatePass)
    , noOffsetSwitch(this, Panel::NoOffset)
@@ -39,8 +40,8 @@ GrooveMaestro::GrooveMaestro()
    setup();
    registerHubClient("GrooveMaestro");
 
-   localGrooves.update(14, 1);
-   Grooves::Beat beat(14, BoolField8(0));
+   localGrooves.update(16, 1);
+   Grooves::Beat beat(16, BoolField8(0));
    localGrooves.setBeat(0, beat);
    localGrooves.setGates(0, BoolField8(0));
    localGrooves.setLooping(true);
@@ -156,6 +157,9 @@ void GrooveMaestro::process(const ProcessArgs& args)
             triggers.set(index + 8, (voltage > 3.0));
          }
       }
+
+      if (uploadInput.isTriggered())
+         uploadToHub();
 
       return applyValues();
    }
@@ -346,52 +350,39 @@ void GrooveMaestro::updateDisplays()
    sendDocumentToHub(1, object);
 }
 
-void GrooveMaestro::updateDisplayPassthrough()
+void GrooveMaestro::uploadToHub()
 {
-   controller.setColor(Color::Predefined::Yellow);
-   controller.drawRect(0, 0, 130, 10, true);
+   Svin::Json::Array stateArray;
+   for (uint8_t laneIndex = 0; laneIndex < conductor.getContourCount(); laneIndex++)
+   {
+      const float voltage = contourOutput.getVoltage(laneIndex);
+      const uint8_t value = voltageToValue(voltage);
 
-   controller.setColor(Color::Predefined::Black);
-   controller.writeText(65, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+      stateArray.append(value);
+   }
 
-   if (!displayGroove(localGrooves))
-      return;
+   const uint8_t gateValue = localGrooves.getGates(0);
 
-   displayContours();
-   readLaunchpad();
-   updateLaunchpadGrid(localGrooves);
-}
+   const Grooves::Beat beat = localGrooves.getBeat(0);
+   const uint8_t length = localGrooves.getSegmentLength(0);
 
-void GrooveMaestro::updateDisplayRemote()
-{
-   controller.setColor(Color::Predefined::Cyan);
-   controller.drawRect(0, 0, 130, 10, true);
+   Svin::Json::Array beatArray;
+   for (uint8_t index = 0; index < length; index++)
+   {
+      const uint8_t triggers = beat.at(index);
+      beatArray.append(triggers);
+   }
 
-   controller.setColor(Color::Predefined::Black);
-   controller.writeText(65, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
+   Svin::Json::Object object;
+   object.set("_Application", "GrooveMaestro");
+   object.set("_Type", "State");
+   object.set("deviceId", deviceId);
+   object.set("state", stateArray);
+   object.set("gates", gateValue);
+   object.set("length", length);
+   object.set("beat", beatArray);
 
-   if (!displayGroove(localGrooves))
-      return;
-
-   displayContours();
-   readLaunchpad();
-   updateLaunchpadGrid(localGrooves);
-}
-
-void GrooveMaestro::updateDisplayPlay()
-{
-   controller.setColor(Color::Predefined::Green);
-   controller.drawRect(0, 0, 130, 10, true);
-
-   controller.setColor(Color::Predefined::Black);
-   controller.writeText(65, 0, "Play", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
-
-   if (!displayGroove(conductor))
-      return;
-
-   displayContours();
-   readLaunchpad();
-   updateLaunchpadGrid(conductor);
+   sendDocumentToHub(1, object);
 }
 
 void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
