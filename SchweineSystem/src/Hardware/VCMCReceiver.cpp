@@ -100,10 +100,10 @@ void VCMCReceiver::process(const ProcessArgs& args)
    for (uint8_t index = 0; index < 8; index++)
    {
       gateLights[index]->setActive(gates[index]);
-      gateOutput.setActive(index, gates[index]);
+      gateOutput.setActive(gates[index], index);
 
       latchLights[index]->setActive(latches[index]);
-      gateOutput.setActive(index + 8, latches[index]);
+      gateOutput.setActive(latches[index], index + 8);
    }
 
    for (uint8_t index = 0; index < 16; index++)

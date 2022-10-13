@@ -179,7 +179,6 @@
 ./src/_MusicTools/RememberDummy/RememberList.hpp
 ./src/_MusicTools/RememberDummy/Remember.hpp
 ./src/_MusicTools/RememberDummy/RememberArray.hpp
-./src/_MusicTools/AbstractSegmentCrawler.hpp
 ./src/_MusicTools/BioFeedbackDummy.hpp
 ./src/_MusicTools/Counter.hpp
 ./src/_MusicTools/MidiInterfaceInput.hpp
@@ -253,10 +252,12 @@
 ./src/Utilities/PythonScript.cpp
 ./src/Utilities/Extract.cpp
 ./src/Utilities/HubConnect.cpp
+./src/Sequencer/GrooveMaestroDisplay.cpp
 ./src/Sequencer/GrooveMaestro.cpp
 ./src/Sequencer/NosferatuVampyre.cpp
 ./src/Sequencer/MidiCV.cpp
 ./src/Sequencer/NosferatuAcolyte.cpp
+./src/Sequencer/GrooveMaestroLaunchpad.cpp
 ./src/Sequencer/MidiReplay.cpp
 ./src/Sequencer/MidiMize.cpp
 ./src/BitBus/BitBusRandomWalk.cpp
@@ -286,3 +287,4 @@
 ./src/_MusicTools/AbstractOscilator.cpp
 ./src/_MusicTools/Maths.cpp
 ./src/_MusicTools/Note.cpp
+./src/_MusicTools/AbstractSegmentCrawler.cpp

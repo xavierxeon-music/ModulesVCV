@@ -42,6 +42,7 @@ GrooveMaestro::GrooveMaestro()
    localGrooves.update(14, 1);
    Grooves::Beat beat(14, BoolField8(0));
    localGrooves.setBeat(0, beat);
+   localGrooves.setGates(0, BoolField8(0));
    localGrooves.setLooping(true);
 
    deviceIdDisplay.setColor(Color::Predefined::Yellow);
@@ -74,6 +75,8 @@ void GrooveMaestro::process(const ProcessArgs& args)
       static const std::vector<OperationMode> order = {OperationMode::Passthrough, OperationMode::Remote, OperationMode::Play};
       Variable::Enum<OperationMode> variable(operationMode, order, true);
       variable.increment();
+
+      updateLaunchpadHeader();
    }
 
    contourOutput.setNumberOfChannels(16);
@@ -341,17 +344,6 @@ void GrooveMaestro::updateDisplays()
    object.set("mode", static_cast<uint8_t>(operationMode));
 
    sendDocumentToHub(1, object);
-
-   if (false)
-   {
-      static Counter counter(60);
-      static bool firstPage = true;
-
-      if (counter.nextAndIsMaxValue())
-         firstPage ^= true;
-
-      launchpad.showColorTest(firstPage);
-   }
 }
 
 void GrooveMaestro::updateDisplayPassthrough()
@@ -362,84 +354,12 @@ void GrooveMaestro::updateDisplayPassthrough()
    controller.setColor(Color::Predefined::Black);
    controller.writeText(65, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   for (const Svin::LaunchpadClient::Pad& pad : launchpad.triggeredPads())
-   {
-      const bool pressed = (Svin::LaunchpadClient::Button::Off != pad.button);
-      if (!pressed)
-         continue;
-
-      if (8 == pad.column)
-      {
-         Grooves::Gates gates = localGrooves.getGates(0);
-         const uint8_t index = 7 - pad.row;
-
-         gates.flip(index);
-
-         localGrooves.setGates(0, gates);
-      }
-      else if (8 == pad.row)
-      {
-         if (1 == pad.column)
-         {
-            launchpadOffset += 4;
-            launchpad.setAll(0);
-         }
-         else if (0 == pad.column)
-         {
-            if (4 < launchpadOffset)
-               launchpadOffset -= 4;
-            else
-               launchpadOffset = 0;
-            launchpad.setAll(0);
-         }
-         else if (2 == pad.column)
-         {
-            uint8_t length = localGrooves.getSegmentLength(0);
-            const uint8_t tick = localGrooves.getCurrentSegmentTick();
-            if (1 < length && tick + 1 < length)
-            {
-               length--;
-               localGrooves.setSegmentLength(0, length);
-               launchpad.setAll(0);
-            }
-         }
-         else if (3 == pad.column)
-         {
-            uint8_t length = localGrooves.getSegmentLength(0);
-            length++;
-            localGrooves.setSegmentLength(0, length);
-            launchpad.setAll(0);
-         }
-      }
-      else
-      {
-         const uint8_t index = launchpadOffset + (7 - pad.row);
-
-         const uint8_t length = localGrooves.getSegmentLength(0);
-
-         Grooves::Beat beat = localGrooves.getBeat(0);
-
-         const uint8_t lastFullRow = length - (length % 8);
-         const uint8_t fullRows = lastFullRow / 8;
-         const uint8_t numberOfRows = (length == lastFullRow) ? fullRows : 1 + fullRows;
-
-         const uint8_t laneOffset = index % numberOfRows;
-         const uint8_t laneIndex = (index - laneOffset) / numberOfRows;
-
-         const uint8_t tick = pad.column + (laneOffset * 8);
-         if (tick >= length)
-            continue;
-
-         beat.at(tick).flip(laneIndex);
-         localGrooves.setBeat(0, beat);
-      }
-   }
-
    if (!displayGroove(localGrooves))
       return;
 
    displayContours();
-   updateLaunchpad(localGrooves);
+   readLaunchpad();
+   updateLaunchpadGrid(localGrooves);
 }
 
 void GrooveMaestro::updateDisplayRemote()
@@ -454,9 +374,8 @@ void GrooveMaestro::updateDisplayRemote()
       return;
 
    displayContours();
-
-   launchpad.triggeredPads(); // clear buffer
-   updateLaunchpad(localGrooves);
+   readLaunchpad();
+   updateLaunchpadGrid(localGrooves);
 }
 
 void GrooveMaestro::updateDisplayPlay()
@@ -471,216 +390,8 @@ void GrooveMaestro::updateDisplayPlay()
       return;
 
    displayContours();
-   launchpad.triggeredPads(); // clear buffer
-   updateLaunchpad(conductor);
-}
-
-void GrooveMaestro::displayStoped()
-{
-   const uint32_t segmentCount = conductor.getSegmentCount();
-   const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
-
-   controller.setColor(Color::Predefined::White);
-   controller.writeText(5, 12, Text::pad(std::to_string(segmentCount), digitCount), Svin::DisplayOLED::Font::Large);
-   controller.writeText(7 + 12 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
-
-   const uint8_t noOfLines = 10;
-   const uint8_t noOfLetters = 15;
-
-   const uint8_t x = 20;
-   for (uint8_t counter = 0; counter < noOfLines; counter++)
-   {
-      const uint8_t row = noOfLines - (counter + 1);
-      const uint8_t y = 30 + 10 * row;
-      const int8_t index = fileName.length() - ((noOfLines - row) * noOfLetters);
-      if (index >= 0)
-      {
-         const std::string text = fileName.substr(index, noOfLetters);
-         controller.writeText(x, y, text, 10);
-      }
-      else
-      {
-         const std::string text = fileName.substr(0, noOfLetters + index);
-         controller.writeText(x, y, Text::pad(text, noOfLetters, " "), 10);
-         break;
-      }
-   }
-}
-
-bool GrooveMaestro::displayGroove(const Grooves& grooves)
-{
-   const Tempo tempo = getTempo();
-   const bool on = tempo.isRunningOrFirstTick();
-   const uint32_t segmentCount = grooves.getSegmentCount();
-
-   if (0 == segmentCount || !on)
-   {
-      displayStoped();
-      return false;
-   }
-
-   // top row
-   const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
-   const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
-
-   controller.setColor(Color::Predefined::White);
-   controller.writeText(5, 12, Text::pad(std::to_string(segmentIndex), digitCount), Svin::DisplayOLED::Font::Large);
-
-   const std::string eventName = grooves.getSegmentName(segmentIndex);
-   const std::string eventText = eventName.empty() ? "--" : eventName;
-   controller.writeText(7 + 12 * digitCount, 17, eventText, Svin::DisplayOLED::Font::Normal);
-
-   // the grid
-   const Grooves::Gates& gates = grooves.getGates(segmentIndex);
-   const bool hasGates = grooves.hasGates(segmentIndex);
-
-   const Grooves::Beat& beat = grooves.getBeat(segmentIndex);
-   const bool hasBeat = grooves.hasBeat(segmentIndex);
-   const uint8_t currentTick = grooves.getCurrentSegmentTick();
-   const uint8_t length = grooves.getSegmentLength(segmentIndex);
-
-   const uint8_t offset = (currentTick - (currentTick % 8));
-
-   for (uint8_t col = 0; col < 8; col++)
-   {
-      const uint tick = offset + col;
-
-      if (tick != currentTick)
-         continue;
-
-      controller.setColor(Color::Predefined::Green);
-
-      const uint8_t x = 5 + col * 12;
-      const uint8_t y = 30;
-      controller.drawRect(x, y, x + 8, y + 4, true);
-
-      break;
-   }
-
-   for (uint8_t row = 0; row < 8; row++)
-   {
-      const uint8_t y = 37 + row * 12;
-
-      if (hasGates)
-         controller.setColor(Color::Predefined::White);
-      else
-         controller.setColor(Color(155, 155, 200));
-
-      if (gates.get(row))
-         controller.drawRect(115, y, 125, y + 8, true);
-      else
-         controller.drawRect(115, y, 125, y + 8, false);
-
-      if (hasBeat)
-         controller.setColor(Color::Predefined::White);
-      else
-         controller.setColor(Color(155, 155, 200));
-
-      for (uint8_t col = 0; col < 8; col++)
-      {
-         const uint tick = offset + col;
-         const uint8_t x = 5 + col * 12;
-
-         if (tick >= length)
-            break;
-
-         if (beat[tick].get(row))
-            controller.drawRect(x, y, x + 8, y + 8, true);
-      }
-   }
-
-   return true;
-}
-
-void GrooveMaestro::displayContours()
-{
-   for (uint8_t laneIndex = 0; laneIndex < conductor.getContourCount(); laneIndex++)
-   {
-      const Contour& contour = conductor.getContour(laneIndex);
-      controller.setColor(Color(155, 155, 155));
-
-      const uint8_t column = (laneIndex < 8) ? 0 : 1;
-      const uint8_t row = (laneIndex < 8) ? laneIndex : laneIndex - 8;
-
-      const uint8_t y = 133 + 14 * row;
-
-      std::string name = contour.getName();
-      if (name.length() > 4)
-         name = name.substr(0, 4);
-      const uint8_t xName = 5 + (column * 64);
-      controller.writeText(xName, y + 3, name, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Left);
-
-      controller.setColor(Color::Predefined::White);
-
-      const float voltage = contourOutput.getVoltage(laneIndex);
-      const uint8_t value = voltageToValue(voltage);
-      const std::string valueText = Text::convert(value);
-      const uint8_t xVoltage = 55 + (column * 64);
-
-      controller.writeText(xVoltage, y, valueText, 14, Svin::DisplayOLED::Alignment::Right);
-   }
-}
-
-void GrooveMaestro::connectToLaunchpad()
-{
-   launchpad.connect(deviceId);
-   if (!launchpad.isConnected())
-      return;
-
-   launchpad.setAll(0, false);
-
-   for (uint8_t col = 0; col < 8; col++)
-      launchpad.setPad(8, col, Svin::LaunchpadClient::Mode::Steady, Color::Predefined::White);
-}
-
-void GrooveMaestro::updateLaunchpad(const Grooves& grooves)
-{
-   const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
-   const uint8_t currentTick = grooves.getCurrentSegmentTick();
-   const uint8_t length = grooves.getSegmentLength(segmentIndex);
-
-   static const std::vector<uint8_t> laneActiveColorList = {12, 20, 36, 44, 52, 4, 28, 73};
-   static const std::vector<uint8_t> laneInactiveColorList = {15, 23, 39, 47, 55, 7, 31, 63};
-
-   Grooves::Gates gates = grooves.getGates(segmentIndex);
-   for (uint8_t row = 0; row < 8; row++)
-   {
-      const uint8_t index = 7 - row;
-      const Color color = gates.get(index) ? Color::Predefined::Yellow : Color::Predefined::Blue;
-      launchpad.setPad(row, 8, Svin::LaunchpadClient::Mode::Steady, color);
-   }
-
-   Grooves::Beat beat = grooves.getBeat(segmentIndex);
-
-   const uint8_t lastFullRow = length - (length % 8);
-   const uint8_t fullRows = lastFullRow / 8;
-   const uint8_t numberOfRows = (length == lastFullRow) ? fullRows : 1 + fullRows;
-
-   const uint8_t maxOffset = 8 * (numberOfRows - 1);
-   if (maxOffset < launchpadOffset)
-      launchpadOffset = maxOffset;
-
-   for (uint8_t laneIndex = 0; laneIndex < 8; laneIndex++)
-   {
-      const uint8_t rowOffset = laneIndex * numberOfRows;
-
-      for (uint8_t index = 0; index < length; index++)
-      {
-         const uint8_t col = (index % 8);
-         const uint8_t row = rowOffset + ((index - col) / 8);
-         if (row < launchpadOffset)
-            continue;
-         if (row >= launchpadOffset + 8)
-            break;
-
-         if (index == currentTick)
-            launchpad.setPad(launchpadOffset + 7 - row, col, Svin::LaunchpadClient::Mode::Steady, Color::Predefined::White);
-         else if (beat.at(index).get(laneIndex))
-            launchpad.setPad(launchpadOffset + 7 - row, col, Svin::LaunchpadClient::Mode::Pulse, laneActiveColorList[laneIndex]);
-         else
-            launchpad.setPad(launchpadOffset + 7 - row, col, Svin::LaunchpadClient::Mode::Steady, laneInactiveColorList[laneIndex]);
-      }
-   }
+   readLaunchpad();
+   updateLaunchpadGrid(conductor);
 }
 
 void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)

@@ -11,10 +11,10 @@ namespace Svin
    public:
       enum class Mode : uint8_t //
       {
-         Off = 0,
          Steady = 0,
          Flash = 1,
-         Pulse = 2
+         Pulse = 2,
+         Off = 4,
       };
 
       enum class Button : uint8_t //

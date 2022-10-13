@@ -77,7 +77,9 @@ private:
    void displayContours();
 
    void connectToLaunchpad();
-   void updateLaunchpad(const Grooves& grooves);
+   void readLaunchpad();
+   void updateLaunchpadGrid(const Grooves& grooves);
+   void updateLaunchpadHeader();
 
    void receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
 

@@ -96,7 +96,7 @@ void Svin::LaunchpadClient::showColorTest(bool firstPage)
 void Svin::LaunchpadClient::disconnect()
 {
    sendPowerSafe(true);
-   switchToProgramMode(false);
+   //switchToProgramMode(false);
 
    if (Midi::Input::connected())
       Midi::Input::close();
@@ -172,9 +172,9 @@ void Svin::LaunchpadClient::setPad(const uint8_t& row, const uint8_t& column, co
 
 void Svin::LaunchpadClient::setPad(const uint8_t& row, const uint8_t& column, const Mode& mode, const uint8_t& paletteIndex)
 {
-   const uint8_t channel = static_cast<uint8_t>(mode);
+   const uint8_t channel = (Mode::Off == mode) ? 0 : static_cast<uint8_t>(mode);
    const uint8_t midiNote = (10 * (row + 1)) + (column + 1);
-   const uint8_t velocity = paletteIndex;
+   const uint8_t velocity = (Mode::Off == mode) ? 0 : paletteIndex;
 
    const uint16_t test = (channel * 256) + velocity;
    auto sendColor = [&]()
@@ -211,9 +211,7 @@ void Svin::LaunchpadClient::switchToProgramMode(bool on)
 {
    //F0h 00h 20h 29h 02h 0Dh 0Eh 1 F7h // program mode
    //F0h 00h 20h 29h 02h 0Dh 0Eh 0 F7h // =live mode
-
    sendSysEx(0x0E, on ? 0x01 : 0x00);
-   return;
 }
 
 
