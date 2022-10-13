@@ -42,7 +42,6 @@ Svin::LaunchpadClient::LaunchpadClient()
 
 Svin::LaunchpadClient::~LaunchpadClient()
 {
-   switchToProgramMode(false);
    disconnect();
 }
 
@@ -96,13 +95,14 @@ void Svin::LaunchpadClient::showColorTest(bool firstPage)
 
 void Svin::LaunchpadClient::disconnect()
 {
+   sendPowerSafe(true);
+   switchToProgramMode(false);
+
    if (Midi::Input::connected())
       Midi::Input::close();
 
    if (Midi::Output::connected())
       Midi::Output::close();
-
-   switchToProgramMode(false);
 }
 
 void Svin::LaunchpadClient::connect(const uint8_t& deviceId)
@@ -128,12 +128,40 @@ void Svin::LaunchpadClient::connect(const uint8_t& deviceId)
 
    first = false;
 
+   sendPowerSafe(false);
    switchToProgramMode(true);
 }
 
 bool Svin::LaunchpadClient::isConnected()
 {
    return (Midi::Input::connected() && Midi::Output::connected());
+}
+
+void Svin::LaunchpadClient::setAll(const uint8_t& paletteIndex, bool gridOnly)
+{
+   // F0h 00h 20h 29h 02h 0Dh 03h <colourspec>  F7h
+
+   const uint8_t numberOfPads = gridOnly ? 8 : 9;
+   MidiMessage payload(3 * numberOfPads * numberOfPads);
+
+   uint8_t messageIndex = 0;
+   for (uint8_t row = 0; row < numberOfPads; row++)
+   {
+      for (uint8_t column = 0; column < numberOfPads; column++)
+      {
+         const uint8_t midiNote = (10 * (row + 1)) + (column + 1);
+         payload[messageIndex] = 0; // static light
+         messageIndex++;
+         payload[messageIndex] = midiNote;
+         messageIndex++;
+         payload[messageIndex] = paletteIndex;
+         messageIndex++;
+      }
+   }
+
+   sendSysEx(0x03, payload);
+
+   outChangeMap.clear();
 }
 
 void Svin::LaunchpadClient::setPad(const uint8_t& row, const uint8_t& column, const Mode& mode, const Color& color)
@@ -149,16 +177,29 @@ void Svin::LaunchpadClient::setPad(const uint8_t& row, const uint8_t& column, co
    const uint8_t velocity = paletteIndex;
 
    const uint16_t test = (channel * 256) + velocity;
-   if (outChangeMap.find(midiNote) != outChangeMap.end() && outChangeMap.at(midiNote) == test)
-      return;
+   auto sendColor = [&]()
+   {
+      MidiMessage colorMessage(3);
+      colorMessage[0] = (::Midi::Event::NoteOn | channel);
+      colorMessage[1] = midiNote;
+      colorMessage[2] = velocity;
 
-   std::vector<unsigned char> onMessage(3);
-   onMessage[0] = (::Midi::Event::NoteOn | channel);
-   onMessage[1] = midiNote;
-   onMessage[2] = velocity;
-   sendMessage(onMessage);
+      sendMessage(colorMessage);
+      outChangeMap[midiNote] = test;
+   };
 
-   outChangeMap[midiNote] = test;
+   if (outChangeMap.find(midiNote) == outChangeMap.end())
+      sendColor();
+
+   if (outChangeMap.at(midiNote) != test)
+      sendColor();
+}
+
+void Svin::LaunchpadClient::sendPowerSafe(bool enabled)
+{
+   // F0h 00h 20h 29h 02h 0Dh 09h 0 F7h // on
+   // F0h 00h 20h 29h 02h 0Dh 09h 1 F7h // off
+   sendSysEx(0x09, enabled ? 0x00 : 0x01);
 }
 
 const std::vector<Color>& Svin::LaunchpadClient::getPalette()
@@ -171,20 +212,8 @@ void Svin::LaunchpadClient::switchToProgramMode(bool on)
    //F0h 00h 20h 29h 02h 0Dh 0Eh 1 F7h // program mode
    //F0h 00h 20h 29h 02h 0Dh 0Eh 0 F7h // =live mode
 
-   std::vector<uint8_t> sysExMessage(9);
-
-   sysExMessage[0] = static_cast<uint8_t>(::Midi::Event::System); // Exclusive Status
-   sysExMessage[1] = 0x00;
-   sysExMessage[2] = 0x20;
-   sysExMessage[3] = 0x29;
-   sysExMessage[4] = 0x02;
-   sysExMessage[5] = 0x0D;
-   sysExMessage[6] = 0x0E;
-
-   sysExMessage[7] = on ? 0x01 : 0x00;
-   sysExMessage[8] = static_cast<uint8_t>(::Midi::Event::SysExEnd); // End of Exclusive
-
-   sendMessage(sysExMessage);
+   sendSysEx(0x0E, on ? 0x01 : 0x00);
+   return;
 }
 
 
@@ -223,6 +252,38 @@ void Svin::LaunchpadClient::buttonActive(const uint8_t& midiNote, bool down)
       else if (Button::On == pad.button)
          pad.button = Button::Triggerd;
    }
+}
+
+void Svin::LaunchpadClient::sendSysEx(const uint8_t mode, const uint8_t& payload)
+{
+   MidiMessage msg(1);
+   msg[0] = payload;
+
+   sendSysEx(mode, msg);
+}
+
+void Svin::LaunchpadClient::sendSysEx(const uint8_t mode, const MidiMessage& payload)
+{
+   std::vector<uint8_t> sysExMessage(8 + payload.size());
+
+   sysExMessage[0] = static_cast<uint8_t>(::Midi::Event::System); // Exclusive Status
+   sysExMessage[1] = 0x00;
+   sysExMessage[2] = 0x20;
+   sysExMessage[3] = 0x29;
+   sysExMessage[4] = 0x02;
+   sysExMessage[5] = 0x0D;
+
+   sysExMessage[6] = mode;
+
+   uint8_t messageIndex = 7;
+   for (const uint8_t& byte : payload)
+   {
+      sysExMessage[messageIndex] = byte;
+      messageIndex++;
+   }
+
+   sysExMessage[messageIndex] = static_cast<uint8_t>(::Midi::Event::SysExEnd); // End of Exclusive
+   sendMessage(sysExMessage);
 }
 
 uint8_t Svin::LaunchpadClient::getClosestPaletteIndex(const Color& color) const

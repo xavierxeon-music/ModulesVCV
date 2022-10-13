@@ -20,7 +20,7 @@ ColorPicker::ColorPicker(QWidget* parent)
       QLabel* label = new QLabel(this);
 
       QPixmap pixmap(12, 12);
-      pixmap.fill(QColor(color.red, color.green, color.blue));
+      pixmap.fill(QColor(color.red(), color.green(), color.blue()));
       label->setPixmap(pixmap);
 
       label->installEventFilter(this);
@@ -45,12 +45,7 @@ ColorPicker::ColorPicker(QWidget* parent)
       for (uint8_t y = 0; y < shadeList.size(); y++)
       {
          const float shade = shadeList[y];
-
-         const uint8_t red = static_cast<uint8_t>(colorList[index].red * shade);
-         const uint8_t green = static_cast<uint8_t>(colorList[index].green * shade);
-         const uint8_t blue = static_cast<uint8_t>(colorList[index].blue * shade);
-
-         addLabel(Color{red, green, blue}, y, index + 1);
+         addLabel(colorList[index].dim(shade), y, index + 1);
       }
    }
 }
