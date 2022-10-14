@@ -64,6 +64,13 @@ private:
       Play = 2
    };
 
+   struct PadFunction
+   {
+      bool blank = true;
+      uint8_t trackIndex = 0;
+      uint8_t tick = 0;
+   };
+
 private:
    inline void setup();
 
@@ -73,13 +80,14 @@ private:
    void updateDisplayPlay();
 
    void displayStoped();
-   bool displayGroove(const Grooves& grooves);
+   bool displayGroove();
    void displayContours();
 
    void connectToLaunchpad();
    void readLaunchpad();
-   void updateLaunchpadGrid(const Grooves& grooves);
+   void updateLaunchpadGrid();
    void updateLaunchpadHeader();
+   PadFunction getPadFunction(const uint8_t row, const uint8_t column) const;
 
    void uploadToHub();
    void receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;

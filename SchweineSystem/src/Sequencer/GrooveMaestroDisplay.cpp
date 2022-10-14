@@ -11,12 +11,12 @@ void GrooveMaestro::updateDisplayPassthrough()
    controller.setColor(Color::Predefined::Black);
    controller.writeText(65, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   if (!displayGroove(localGrooves))
+   if (!displayGroove())
       return;
 
    displayContours();
    readLaunchpad();
-   updateLaunchpadGrid(localGrooves);
+   updateLaunchpadGrid();
 }
 
 void GrooveMaestro::updateDisplayRemote()
@@ -27,12 +27,12 @@ void GrooveMaestro::updateDisplayRemote()
    controller.setColor(Color::Predefined::Black);
    controller.writeText(65, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   if (!displayGroove(localGrooves))
+   if (!displayGroove())
       return;
 
    displayContours();
    readLaunchpad();
-   updateLaunchpadGrid(localGrooves);
+   updateLaunchpadGrid();
 }
 
 void GrooveMaestro::updateDisplayPlay()
@@ -43,12 +43,12 @@ void GrooveMaestro::updateDisplayPlay()
    controller.setColor(Color::Predefined::Black);
    controller.writeText(65, 0, "Play", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   if (!displayGroove(conductor))
+   if (!displayGroove())
       return;
 
    displayContours();
    readLaunchpad();
-   updateLaunchpadGrid(conductor);
+   updateLaunchpadGrid();
 }
 
 void GrooveMaestro::displayStoped()
@@ -83,8 +83,10 @@ void GrooveMaestro::displayStoped()
    }
 }
 
-bool GrooveMaestro::displayGroove(const Grooves& grooves)
+bool GrooveMaestro::displayGroove()
 {
+   const Grooves& grooves = (OperationMode::Play == operationMode) ? conductor : localGrooves;
+
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
    const uint32_t segmentCount = grooves.getSegmentCount();
