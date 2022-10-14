@@ -50,7 +50,7 @@ namespace Svin
       bool isConnected();
 
       void setAll(const uint8_t& paletteIndex = 0, bool gridOnly = true);
-      void setPad(const uint8_t& row, const uint8_t& column, const Mode& mode = Mode::Off, const Color& color = Color());
+      void setPad(const uint8_t& row, const uint8_t& column, const Mode& mode, const Color& color);
       void setPad(const uint8_t& row, const uint8_t& column, const Mode& mode = Mode::Off, const uint8_t& paletteIndex = 0);
       void sendPowerSafe(bool enabled);
 

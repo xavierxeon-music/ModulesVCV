@@ -9,7 +9,7 @@ LaunchpadImposter::LaunchpadImposter()
    : Svin::Module()
    , Svin::Midi::Input(true)
    , Svin::Midi::Output(true)
-   , deviceId(0)
+   , deviceId(1)
    , deviceIdDisplay(this, Panel::Text_DeviceId)
    , deviceIdUpButton(this, Panel::DeviceIdUp)
    , deviceIdDownButton(this, Panel::DeviceIdDown)
@@ -129,7 +129,7 @@ LaunchpadImposter::LaunchpadImposter()
 void LaunchpadImposter::process(const ProcessArgs& args)
 {
    uint8_t tmpDeviceId = deviceId;
-   Variable::Integer<uint8_t> varBank(tmpDeviceId, 0, 15, true);
+   Variable::Integer<uint8_t> varBank(tmpDeviceId, 1, 15, true);
    if (deviceIdUpButton.isTriggered())
       varBank.increment();
    else if (deviceIdDownButton.isTriggered())
@@ -236,7 +236,7 @@ void LaunchpadImposter::save(Svin::Json::Object& rootObject)
 // widget
 
 LaunchpadImposterWidget::LaunchpadImposterWidget(LaunchpadImposter* module)
-: Svin::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }

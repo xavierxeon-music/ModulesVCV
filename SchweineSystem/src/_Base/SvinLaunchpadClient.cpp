@@ -1,5 +1,7 @@
 #include "SvinLaunchpadClient.h"
 
+#include <algorithm>
+
 const std::vector<Color> Svin::LaunchpadClient::paletteList = []
 {
    // from http://launchpaddr.com/mk2palette/
@@ -213,7 +215,6 @@ void Svin::LaunchpadClient::switchToProgramMode(bool on)
    //F0h 00h 20h 29h 02h 0Dh 0Eh 0 F7h // =live mode
    sendSysEx(0x0E, on ? 0x01 : 0x00);
 }
-
 
 void Svin::LaunchpadClient::noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity)
 {
