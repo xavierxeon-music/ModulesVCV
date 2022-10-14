@@ -23,6 +23,13 @@ public:
    }
 };
 
+enum class OperationMode
+{
+   Passthrough = 0,
+   Remote = 1,
+   Play = 2
+};
+
 #endif // NOT GrooveMaestroConductorH
 
 #ifndef GrooveMaestroH
@@ -55,14 +62,6 @@ public:
 public:
    void process(const ProcessArgs& args) override;
    void loadProject(const std::string& newFileName);
-
-private:
-   enum class OperationMode
-   {
-      Passthrough = 0,
-      Remote = 1,
-      Play = 2
-   };
 
 private:
    inline void setup();

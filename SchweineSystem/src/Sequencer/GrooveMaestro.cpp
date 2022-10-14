@@ -341,7 +341,7 @@ void GrooveMaestro::updateDisplays()
    const uint32_t index = conductor.getCurrentSegmentIndex();
 
    Svin::Json::Object object;
-   object.set("_Application", "GateKeeper");
+   object.set("_Application", "GrooveMaestro");
    object.set("_Type", "Index");
    object.set("index", index);
    object.set("deviceId", deviceId);

@@ -16,9 +16,6 @@ MaxPatch::MaxPatch()
 
    displayController.onPressedOpenFileFunction(this, &MaxPatch::setPatchFileName, "Max:maxpat");
    connectedLight.setDefaultColor(Color::Predefined::Green);
-
-   if (hubConnected())
-      sendStart();
 }
 
 MaxPatch::~MaxPatch()
@@ -68,8 +65,11 @@ void MaxPatch::updateDisplays()
 
 void MaxPatch::load(const Svin::Json::Object& rootObject)
 {
-   fileName = rootObject.get("fileName").toString();
+   const std::string tmpFileName = rootObject.get("fileName").toString();
+   if (!File::exists(tmpFileName))
+      return;
 
+   fileName = tmpFileName;
    sendStart();
 }
 

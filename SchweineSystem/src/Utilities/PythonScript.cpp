@@ -17,8 +17,6 @@ PythonScript::PythonScript()
    displayController.onPressedOpenFileFunction(this, &PythonScript::setScriptFileName, "Python:py");
    connectedLight.setDefaultColor(Color::Predefined::Green);
 
-   if (hubConnected())
-      sendStart();
 }
 
 PythonScript::~PythonScript()
@@ -68,8 +66,11 @@ void PythonScript::updateDisplays()
 
 void PythonScript::load(const Svin::Json::Object& rootObject)
 {
-   fileName = rootObject.get("fileName").toString();
+   const std::string tmpFileName = rootObject.get("fileName").toString();
+   if (!File::exists(tmpFileName))
+      return;
 
+   fileName = tmpFileName;
    sendStart();
 }
 
