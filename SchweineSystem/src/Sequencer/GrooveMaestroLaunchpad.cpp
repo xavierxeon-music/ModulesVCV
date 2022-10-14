@@ -119,8 +119,10 @@ void GrooveMaestro::updateLaunchpadGrid()
    for (uint8_t row = 0; row < 8; row++)
    {
       const uint8_t index = 7 - row;
-      const Color color = gates.get(index) ? Color::Predefined::Yellow : Color::Predefined::Blue;
-      launchpad.setPad(row, 8, Svin::LaunchpadClient::Mode::Steady, color);
+      if (gates.get(index))
+         launchpad.setPad(row, 8, Svin::LaunchpadClient::Mode::Flash, 3);
+      else
+         launchpad.setPad(row, 8, Svin::LaunchpadClient::Mode::Steady, trackInactiveColorList[row]);
    }
 
    Grooves::Beat beat = grooves.getBeat(segmentIndex);
@@ -145,37 +147,14 @@ void GrooveMaestro::updateLaunchpadGrid()
 
          if (tick >= length)
             launchpad.setPad(row, column, Svin::LaunchpadClient::Mode::Off);
-         else if (index == currentTick)
+         else if (tick == currentTick)
             launchpad.setPad(row, column, Svin::LaunchpadClient::Mode::Steady, Color::Predefined::White);
-         else if (beat.at(index).get(trackIndex))
+         else if (beat.at(tick).get(trackIndex))
             launchpad.setPad(row, column, Svin::LaunchpadClient::Mode::Pulse, trackActiveColorList[trackIndex]);
          else
             launchpad.setPad(row, column, Svin::LaunchpadClient::Mode::Steady, trackInactiveColorList[trackIndex]);
       }
    }
-   /*
-   for (uint8_t trackIndex = 0; trackIndex < 8; trackIndex++)
-   {
-      const uint8_t rowOffset = trackIndex * numberOfRows;
-
-      for (uint8_t index = 0; index < length; index++)
-      {
-         const uint8_t col = (index % 8);
-         const uint8_t row = rowOffset + ((index - col) / 8);
-         if (row < launchpadOffset)
-            continue;
-         if (row >= launchpadOffset + 8)
-            break;
-
-         if (index == currentTick)
-            launchpad.setPad(launchpadOffset + 7 - row, col, Svin::LaunchpadClient::Mode::Steady, Color::Predefined::White);
-         else if (beat.at(index).get(trackIndex))
-            launchpad.setPad(launchpadOffset + 7 - row, col, Svin::LaunchpadClient::Mode::Pulse, trackActiveColorList[trackIndex]);
-         else
-            launchpad.setPad(launchpadOffset + 7 - row, col, Svin::LaunchpadClient::Mode::Steady, trackInactiveColorList[trackIndex]);
-      }
-   }
-   */
 }
 
 void GrooveMaestro::updateLaunchpadHeader()
@@ -220,24 +199,3 @@ void GrooveMaestro::updateLaunchpadHeader()
    }
 }
 
-GrooveMaestro::PadFunction GrooveMaestro::getPadFunction(const uint8_t row, const uint8_t column) const
-{
-   PadFunction padFunction;
-
-   const Grooves& grooves = (OperationMode::Play == operationMode) ? conductor : localGrooves;
-   const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
-   const uint8_t length = grooves.getSegmentLength(segmentIndex);
-
-   const uint8_t lastFullRow = length - (length % 8);
-   const uint8_t fullRows = lastFullRow / 8;
-   const uint8_t numberOfRows = (length == lastFullRow) ? fullRows : 1 + fullRows;
-
-   const uint8_t index = launchpadOffset + (7 - row);
-   const uint8_t trackOffset = index % numberOfRows;
-   padFunction.trackIndex = (index - trackOffset) / numberOfRows;
-
-   padFunction.tick = column + (trackOffset * 8);
-   padFunction.blank = (padFunction.tick >= length);
-
-   return padFunction;
-}
