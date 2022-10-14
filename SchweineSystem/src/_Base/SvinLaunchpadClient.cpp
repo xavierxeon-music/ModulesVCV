@@ -38,7 +38,7 @@ Svin::LaunchpadClient::LaunchpadClient()
    , Midi::Output(false)
    , MasterClock::Client()
    , padCache()
-   , outChangeMap()
+   , colorMap()
 {
 }
 
@@ -97,6 +97,8 @@ void Svin::LaunchpadClient::showColorTest(bool firstPage)
 
 void Svin::LaunchpadClient::disconnect()
 {
+   colorMap.clear();
+
    //sendPowerSafe(true);
    //switchToProgramMode(false);
 
@@ -163,7 +165,7 @@ void Svin::LaunchpadClient::setAll(const uint8_t& paletteIndex, bool gridOnly)
 
    sendSysEx(0x03, payload);
 
-   outChangeMap.clear();
+   colorMap.clear();
 }
 
 void Svin::LaunchpadClient::setPad(const uint8_t& row, const uint8_t& column, const Mode& mode, const Color& color)
@@ -187,13 +189,13 @@ void Svin::LaunchpadClient::setPad(const uint8_t& row, const uint8_t& column, co
       colorMessage[2] = velocity;
 
       sendMessage(colorMessage);
-      outChangeMap[midiNote] = test;
+      colorMap[midiNote] = test;
    };
 
-   if (outChangeMap.find(midiNote) == outChangeMap.end())
+   if (colorMap.find(midiNote) == colorMap.end())
       sendColor();
 
-   if (outChangeMap.at(midiNote) != test)
+   if (colorMap.at(midiNote) != test)
       sendColor();
 }
 
