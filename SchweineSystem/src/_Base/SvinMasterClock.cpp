@@ -16,11 +16,15 @@ Svin::MasterClock::Client::~Client()
    MasterClock::clientList.remove(this);
 }
 
-bool Svin::MasterClock::Client::hasTick()
+bool Svin::MasterClock::Client::hasTick(bool* isFirstTick)
 {
    std::lock_guard<std::mutex> guard(mutex);
    if (0 == tickCount)
       return false;
+
+   if (isFirstTick)
+      *isFirstTick = firstTick;
+   firstTick = false;
 
    tickCount--;
    return true;
@@ -98,6 +102,9 @@ void Svin::MasterClock::tick()
    {
       std::lock_guard<std::mutex> guard(client->mutex);
       client->tickCount++;
+
+      if (Tempo::FirstTick == tempo.getRunState())
+         client->firstTick = true;
    }
 }
 
@@ -118,6 +125,7 @@ void Svin::MasterClock::reset()
    for (Client* client : clientList)
    {
       std::lock_guard<std::mutex> guard(client->mutex);
+      client->firstTick = false;
       client->reset = true;
    }
 }

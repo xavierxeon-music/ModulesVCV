@@ -111,12 +111,15 @@ void GrooveMaestro::process(const ProcessArgs& args)
 
    auto fillTriggers = [&](Grooves& grooves)
    {
-      while (hasTick())
+      const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
+      bool isFirstTick = false;
+      while (hasTick(&isFirstTick))
       {
-         grooves.clockTick();
+         if (!isFirstTick)
+            grooves.clockTick();
 
-         const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
          const uint32_t currentTick = grooves.getCurrentSegmentTick();
+         debug() << currentTick;
          tickTriggers = on ? grooves.getTriggers(segmentIndex, currentTick) : BoolField8(0);
          segmentGates = on ? grooves.getGates(segmentIndex) : BoolField8(0);
 
@@ -150,7 +153,7 @@ void GrooveMaestro::process(const ProcessArgs& args)
 
       fillTriggers(localGrooves);
 
-      if (gatePassInput.isConnected())
+      if (gatePassInput.isConnected()) // may override gates!
       {
          for (uint8_t index = 0; index < 8; index++)
          {

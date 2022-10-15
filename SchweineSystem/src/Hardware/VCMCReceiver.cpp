@@ -170,6 +170,10 @@ void VCMCReceiver::load(const Svin::Json::Object& rootObject)
    Svin::Json::Array latchesArray = rootObject.get("latches").toArray();
    for (uint8_t index = 0; index < 8; index++)
       latches[index] = latchesArray.at(index).toBool();
+
+   Svin::Json::Array cvValueArray = rootObject.get("cvValues").toArray();
+   for (uint8_t index = 0; index < 18; index++)
+      cvValues[index] = cvValueArray.at(index).toInt();
 }
 
 void VCMCReceiver::save(Svin::Json::Object& rootObject)
@@ -178,7 +182,12 @@ void VCMCReceiver::save(Svin::Json::Object& rootObject)
    for (uint8_t index = 0; index < 8; index++)
       latchesArray.append(latches[index]);
 
+   Svin::Json::Array cvValueArray;
+   for (uint8_t index = 0; index < 18; index++)
+      cvValueArray.append(cvValues[index]);
+
    rootObject.set("latches", latchesArray);
+   rootObject.set("cvValues", cvValueArray);
 }
 
 // widget

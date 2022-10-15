@@ -87,9 +87,10 @@ void MidiReplay::process(const ProcessArgs& args)
    }
    else
    {
-      while (hasTick())
+      bool isFirstTick = false;
+      while (hasTick(&isFirstTick))
       {
-         if (isPlay && !atEnd)
+         if (!isFirstTick && isPlay && !atEnd)
             duration++;
       }
    }

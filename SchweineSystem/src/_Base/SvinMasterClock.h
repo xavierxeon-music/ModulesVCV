@@ -22,7 +22,7 @@ namespace Svin
          ~Client();
 
       protected:
-         bool hasTick();
+         bool hasTick(bool* isFirstTick);
          bool hasMidiClock();
          bool hasReset();
          Tempo getTempo() const;
@@ -33,6 +33,7 @@ namespace Svin
 
       private:
          mutable std::mutex mutex;
+         bool firstTick;
          uint8_t tickCount;
          uint8_t midiClock;
          bool reset;

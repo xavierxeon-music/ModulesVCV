@@ -237,9 +237,10 @@ void Nosferatu::Vampyre::process(const ProcessArgs& args)
       gateOutput.setOff();
 
    // advance
-   while (hasTick())
+   bool isFirstTick = false;
+   while (hasTick(&isFirstTick))
    {
-      if (tempo.getRunState() == Tempo::FirstTick)
+      if (isFirstTick)
          continue;
 
       tickCounter++;
