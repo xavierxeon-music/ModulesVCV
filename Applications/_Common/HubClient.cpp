@@ -1,5 +1,6 @@
 #include "HubClient.h"
 
+#include <AppSettings.h>
 #include <JSONTools.h>
 
 static const quint16 port = 2357;
@@ -13,7 +14,12 @@ Hub::Client::Client(QObject* parent, const QString& appName)
 
    connect(socket, &QTcpSocket::readyRead, this, &Client::slotReadyRead);
    connect(socket, &QTcpSocket::stateChanged, this, &Client::slotStateChanged);
-   socket->connectToHost(QHostAddress::LocalHost, port);
+
+   AppSettings settings;
+   settings.write("host", QString("127.0.0.1"), true);
+
+   const QString hostName = settings.string("host");
+   socket->connectToHost(hostName, port);
 }
 
 void Hub::Client::sendDocument(const QJsonObject& object) const
