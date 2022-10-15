@@ -228,10 +228,10 @@
             </g>
         </g>
         <g transform="matrix(1,0,0,1,-64.3931,-72.8604)">
-            <g id="Connect-ledbutton" serif:id="Connect#ledbutton" transform="matrix(1,0,0,1,145.08,-3.0897)">
+            <g id="Connect-ledbutton" serif:id="Connect#ledbutton" transform="matrix(1,0,0,1,145.08,8.9103)">
                 <circle cx="101.308" cy="310.24" r="9.898" style="fill:rgb(115,115,115);"/>
             </g>
-            <g id="DeviceId-lcd-2x10" serif:id="DeviceId#lcd$2x10" transform="matrix(0.342993,0,0,0.564444,175.881,110.288)">
+            <g id="DeviceId-lcd-2" serif:id="DeviceId#lcd$2" transform="matrix(0.53008,0,0,0.846667,137.094,30.6877)">
                 <rect x="173.071" y="291.218" width="64.141" height="28.346" style="fill:rgb(13,13,13);"/>
             </g>
             <g transform="matrix(1,0,0,1,146.789,149.29)">

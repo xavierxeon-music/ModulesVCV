@@ -119,8 +119,6 @@ void Svin::LaunchpadClient::connect(const uint8_t& deviceId)
    if (0 == deviceId)
       deviceName = "Launchpad Mini MK3 LPMiniMK3 MIDI Out";
 
-   debug() << __FUNCTION__ << deviceId << isConnected() << deviceName;
-
    Midi::Input::setTargetDeviceName(deviceName);
    Midi::Input::open(first);
 

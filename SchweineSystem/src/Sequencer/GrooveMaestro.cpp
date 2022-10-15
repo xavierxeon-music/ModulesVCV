@@ -46,6 +46,8 @@ GrooveMaestro::GrooveMaestro()
    localGrooves.setGates(0, BoolField8(0));
    localGrooves.setLooping(true);
 
+   voltages = std::vector<float>(16, 0.0);
+
    deviceIdDisplay.setColor(Color::Predefined::Yellow);
    controller.onPressedOpenFileFunction(this, &GrooveMaestro::loadProject, "Projects:grm");
 
@@ -84,7 +86,6 @@ void GrooveMaestro::process(const ProcessArgs& args)
    gateOutput.setNumberOfChannels(16);
 
    // do stuff
-   voltages = std::vector<float>(16, 0.0);
    BoolField16 triggers(0);
 
    auto applyValues = [&]()
@@ -135,6 +136,8 @@ void GrooveMaestro::process(const ProcessArgs& args)
 
    if (OperationMode::Passthrough == operationMode)
    {
+      voltages = std::vector<float>(16, 0.0);
+
       if (contoutPassInput.isConnected())
       {
          for (uint8_t index = 0; index < 16; index++)
@@ -165,6 +168,7 @@ void GrooveMaestro::process(const ProcessArgs& args)
    }
    else if (OperationMode::Remote == operationMode)
    {
+      fillTriggers(localGrooves);
       return applyValues();
    }
    else if (OperationMode::Play == operationMode)
@@ -390,7 +394,8 @@ void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, cons
    if (1 != channel || 0 != docIndex)
       return;
 
-   if ("Reload" == object.get("_Type").toString())
+   const std::string type = object.get("_Type").toString();
+   if ("Reload" == type)
    {
       const uint8_t objectDeviceId = object.get("deviceId").toInt();
       if (objectDeviceId != deviceId)
@@ -398,6 +403,42 @@ void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, cons
 
       const std::string fileName = object.get("fileName").toString();
       loadProject(fileName);
+   }
+   else if ("Remote" == type)
+   {
+      const uint8_t objectDeviceId = object.get("deviceId").toInt();
+      if (objectDeviceId != deviceId)
+         return;
+
+      if (OperationMode::Play == operationMode)
+      {
+         const uint32_t segmentIndex = object.get("index").toInt();
+         conductor.setCurrentSegmentIndex(segmentIndex);
+      }
+      else if (OperationMode::Remote == operationMode)
+      {
+         Svin::Json::Array stateArray = object.get("state").toArray();
+         for (uint8_t laneIndex = 0; laneIndex < conductor.getContourCount(); laneIndex++)
+         {
+            const uint8_t value = stateArray.at(laneIndex).toInt();
+            voltages[laneIndex] = valueToVoltage(value);
+         }
+
+         const BoolField8 gates = object.get("gates").toInt();
+         localGrooves.setGates(0, gates);
+
+         const uint8_t length = object.get("length").toInt();
+         localGrooves.setSegmentLength(0, length);
+
+         Grooves::Beat beat(length, BoolField8(0));
+         Svin::Json::Array beatArray = object.get("beat").toArray();
+         for (uint8_t tick = 0; tick < length; tick++)
+         {
+            const BoolField8 triggers = beatArray.at(tick).toInt();
+            beat[tick] = triggers;
+         }
+         localGrooves.setBeat(0, beat);
+      }
    }
 }
 

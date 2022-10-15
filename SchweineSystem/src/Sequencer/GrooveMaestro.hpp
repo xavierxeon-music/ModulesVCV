@@ -90,7 +90,7 @@ void GrooveMaestroWidget::setup()
    makeSwitch(this, Vec(121.40, 355.83), GrooveMaestro::Panel::NoOffset, false);
 
    makeLEDButton(this, Vec(27.32, 267.06), GrooveMaestro::Panel::Loop, GrooveMaestro::Panel::RGB_Loop);
-   makeLEDButton(this, Vec(27.55, 165.57), GrooveMaestro::Panel::Connect, GrooveMaestro::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(27.55, 177.57), GrooveMaestro::Panel::Connect, GrooveMaestro::Panel::RGB_Connect);
 
    makeInput(this, Vec(96.01, 355.83),  GrooveMaestro::Panel::GatePass, true);
    makeInput(this, Vec(96.01, 310.33),  GrooveMaestro::Panel::ContourPass, true);
@@ -99,7 +99,7 @@ void GrooveMaestroWidget::setup()
    makeOutput(this, Vec(170.49, 355.83), GrooveMaestro::Panel::GateOutput, true);
    makeOutput(this, Vec(170.49, 310.33), GrooveMaestro::Panel::ContourOutput, true);
 
-   makeLCD(this, Vec(16.41, 133.09), 2, GrooveMaestro::Panel::Text_DeviceId, 10);
+   makeLCD(this, Vec(10.00, 135.68), 2, GrooveMaestro::Panel::Text_DeviceId, 18);
 
    makeOLED(this, Vec(53.00, 31.79), GrooveMaestro::Panel::Pixels_Display, 130, 250);
 }

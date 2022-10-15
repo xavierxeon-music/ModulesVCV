@@ -60,6 +60,10 @@ void GrooveMaestro::displayStoped()
    controller.writeText(5, 12, Text::pad(std::to_string(segmentCount), digitCount), Svin::DisplayOLED::Font::Large);
    controller.writeText(7 + 12 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
 
+   const uint32_t segmentIndex = conductor.getCurrentSegmentIndex();
+   controller.writeText(5, 32, Text::pad(std::to_string(segmentIndex), digitCount), Svin::DisplayOLED::Font::Large);
+   controller.writeText(7 + 12 * digitCount, 37, "current", Svin::DisplayOLED::Font::Normal);
+
    const uint8_t noOfLines = 10;
    const uint8_t noOfLetters = 15;
 
