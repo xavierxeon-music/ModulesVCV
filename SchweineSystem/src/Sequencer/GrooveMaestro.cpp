@@ -457,6 +457,22 @@ void GrooveMaestro::load(const Svin::Json::Object& rootObject)
 
    const std::string newFileName = rootObject.get("fileName").toString();
    loadProject(newFileName);
+
+   Svin::Json::Array voltageArray = rootObject.get("voltages").toArray();
+   for (uint8_t index = 0; index < 16; index++)
+      voltages[index] = voltageArray.at(index).toReal();
+
+   const BoolField8 gates = rootObject.get("gates").toInt();
+   localGrooves.setGates(0, gates);
+
+   const uint8_t length = rootObject.get("length").toInt();
+   localGrooves.setSegmentLength(0, length);
+
+   Grooves::Beat beat(length, BoolField8(0));
+   Svin::Json::Array beatArray = rootObject.get("beat").toArray();
+   for (uint8_t tick = 0; tick < length; tick++)
+      beat[tick] = beatArray.at(tick).toInt();
+   localGrooves.setBeat(0, beat);
 }
 
 void GrooveMaestro::save(Svin::Json::Object& rootObject)
@@ -466,6 +482,27 @@ void GrooveMaestro::save(Svin::Json::Object& rootObject)
    rootObject.set("no_offset", noOffsetSwitch.isOn());
 
    rootObject.set("fileName", fileName);
+
+   Svin::Json::Array voltageArray;
+   for (uint8_t index = 0; index < 16; index++)
+      voltageArray.append(voltages.at(index));
+   rootObject.set("voltages", voltageArray);
+
+   const uint8_t gates = localGrooves.getGates(0);
+   rootObject.set("gates", gates);
+
+   const uint8_t length = localGrooves.getSegmentLength(0);
+   rootObject.set("length", length);
+
+   const Grooves::Beat beat = localGrooves.getBeat(0);
+   Svin::Json::Array beatArray;
+   for (uint8_t tick = 0; tick < length; tick++)
+   {
+      const uint8_t triggers = beat.at(tick);
+      beatArray.append(triggers);
+   }
+
+   rootObject.set("beat", beatArray);
 }
 
 // widget
