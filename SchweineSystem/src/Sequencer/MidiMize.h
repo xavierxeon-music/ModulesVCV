@@ -49,6 +49,7 @@ private:
 
 private:
    inline void setup();
+   void updateDisplays() override;
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;

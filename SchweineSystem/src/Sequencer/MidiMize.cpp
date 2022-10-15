@@ -134,8 +134,6 @@ void MidiMize::process(const ProcessArgs& args)
    for (uint8_t voice = 0; voice < 4; voice++)
    {
       const Midi::Channel channel = selectKnobList[voice]->getValue();
-      const std::string channelText = Text::pad(std::to_string(channel), 2);
-      channelDisplayList[voice]->setText(channelText);
 
       const Note note = Note::fromVoltage(pitchInputList[voice]->getVoltage());
       const bool gate = gateInputList[voice]->isOn();
@@ -145,15 +143,55 @@ void MidiMize::process(const ProcessArgs& args)
       if (state == voiceState[voice])
          continue;
 
+      busMessage.channels[voice].isMonophoic = true;
       busMessage.hasEvents = true;
-      if (voiceState[voice].gate) // turn off
+
+      if (voiceState[voice].gate) // used to be on,  turn off
       {
+         Sequencer::Track::NoteEvent oldNoteEvent;
+         oldNoteEvent.channel = channel;
+         oldNoteEvent.key = voiceState[voice].midiValue;
+         oldNoteEvent.velocity = voiceState[voice].velocity;
+         oldNoteEvent.on = false;
+
+         busMessage.channels[voice].noteOffEventMap[0].push_back(oldNoteEvent);
+      }
+
+      if (state.gate)
+      {
+         Sequencer::Track::NoteEvent noteEvent;
+         noteEvent.channel = channel;
+         noteEvent.key = state.midiValue;
+         noteEvent.velocity = state.velocity;
+         noteEvent.on = true;
+
+         busMessage.channels[voice].noteOffEventMap[0].push_back(noteEvent);
+      }
+      else
+      {
+         Sequencer::Track::NoteEvent noteEvent;
+         noteEvent.channel = channel;
+         noteEvent.key = state.midiValue;
+         noteEvent.velocity = state.velocity;
+         noteEvent.on = false;
+
+         busMessage.channels[voice].noteOnEventMap[0].push_back(noteEvent);
       }
 
       voiceState[voice] = state;
    }
 
    sendBusData<MidiBus>(Side::Right, busMessage);
+}
+
+void MidiMize::updateDisplays()
+{
+   for (uint8_t voice = 0; voice < 4; voice++)
+   {
+      const Midi::Channel channel = selectKnobList[voice]->getValue();
+      const std::string channelText = Text::pad(std::to_string(channel), 2);
+      channelDisplayList[voice]->setText(channelText);
+   }
 }
 
 void MidiMize::load(const Svin::Json::Object& rootObject)
