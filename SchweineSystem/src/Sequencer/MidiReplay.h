@@ -25,8 +25,8 @@ struct MidiBus
 {
    struct Channel
    {
-      Sequencer::Track::NoteEvent::TimeMap noteOffEventMap;
-      Sequencer::Track::NoteEvent::TimeMap noteOnEventMap;
+      Sequencer::NoteEvent::TimeMap noteOffEventMap;
+      Sequencer::NoteEvent::TimeMap noteOnEventMap;
       bool isMonophoic = false;
    };
 

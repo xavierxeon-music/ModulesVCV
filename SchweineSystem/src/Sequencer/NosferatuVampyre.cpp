@@ -278,8 +278,8 @@ void Nosferatu::Vampyre::updateDisplays()
 
    static const uint8_t noteBaseValue = Note::availableNotes.at(1).midiValue;
 
-   // updatede bank 0and lights
-   Bank& currentBank = playBanks[0];
+   // updatede bank and lights
+   Bank& currentBank = banks[state.bankIndex];
    for (uint8_t index = 0; index < 8; index++)
    {
       const uint8_t pitch = pitchSliderList[index]->getValue();
@@ -324,6 +324,8 @@ void Nosferatu::Vampyre::updateDisplays()
       currentBank.pitchOffset = pitchOffset;
       setDisplay(DisplayType::Offset, pitchOffset);
    }
+
+   playBanks[0] = currentBank;
 
    if (DisplayType::Bank == displayType)
    {

@@ -4,58 +4,6 @@
 
 #include "MidiReplay.h"
 
-MidiMize::VoiceState::VoiceState()
-   : midiValue(0)
-   , gate(false)
-   , velocity(0)
-{
-}
-
-MidiMize::VoiceState::VoiceState(const Note& note, bool gate, uint8_t velocity)
-   : midiValue(note.midiValue)
-   , gate(gate)
-   , velocity(velocity)
-{
-}
-
-MidiMize::VoiceState::VoiceState(const VoiceState& other)
-   : VoiceState()
-{
-}
-
-MidiMize::VoiceState& MidiMize::VoiceState::operator=(const VoiceState& other)
-{
-   midiValue = other.midiValue;
-   gate = other.gate;
-   velocity = other.velocity;
-
-   return *this;
-}
-
-bool MidiMize::VoiceState::operator==(const VoiceState& other) const
-{
-   if (midiValue != other.midiValue)
-      return false;
-   if (gate != other.gate)
-      return false;
-   if (velocity != other.velocity)
-      return false;
-
-   return true;
-}
-
-bool MidiMize::VoiceState::operator!=(const VoiceState& other) const
-{
-   if (midiValue != other.midiValue)
-      return true;
-   if (gate != other.gate)
-      return true;
-   if (velocity != other.velocity)
-      return true;
-
-   return false;
-}
-
 bool MidiMize::DrumState::operator!=(const DrumState& other) const
 {
    if (active != other.active)
@@ -73,7 +21,7 @@ MidiMize::MidiMize()
    , pitchInputList(this)
    , gateInputList(this)
    , velocityInputList(this)
-   , voiceState{}
+   , prevNoteEvent{}
    , velocityMapper(0.0, 10.0, 0.0, 127.0)
    , drumTriggerList(this)
    , drumState{}
@@ -127,7 +75,6 @@ MidiMize::MidiMize()
 void MidiMize::process(const ProcessArgs& args)
 {
    MidiBus busMessage;
-   busMessage.noOfChannels = 4;
    busMessage.runState = Tempo::Running;
    busMessage.endTick = 1;
 
@@ -139,48 +86,44 @@ void MidiMize::process(const ProcessArgs& args)
       const bool gate = gateInputList[voice]->isOn();
       const uint8_t velocity = velocityMapper(velocityInputList[voice]->getVoltage());
 
-      const VoiceState state(note, gate, velocity);
-      if (state == voiceState[voice])
+      const Sequencer::NoteEvent currentNoteEvent(channel, note.midiValue, gate, velocity);
+      if (currentNoteEvent == prevNoteEvent[voice])
          continue;
 
-      busMessage.channels[voice].isMonophoic = true;
+      Sequencer::NoteEvent::List offList;
+      Sequencer::NoteEvent::List onList;
+
+      debug() << "P" << prevNoteEvent[voice].midiNote << prevNoteEvent[voice].velocity << prevNoteEvent[voice].on;
+      debug() << "C" << currentNoteEvent.midiNote << currentNoteEvent.velocity << currentNoteEvent.on;
+
+      if (prevNoteEvent[voice].on && !currentNoteEvent.on) // used to be on,  turn off
+      {
+         debug() << "on ->off";
+         prevNoteEvent[voice].on = false; // only used to turn off things
+         offList.push_back(prevNoteEvent[voice]);
+      }
+      else if (!prevNoteEvent[voice].on && currentNoteEvent.on) // used to be off, turn on
+      {
+         debug() << "off ->on";
+         onList.push_back(currentNoteEvent);
+      }
+      else if ((prevNoteEvent[voice].midiNote != currentNoteEvent.midiNote) || (prevNoteEvent[voice].velocity != currentNoteEvent.velocity))
+      {
+         debug() << "change";
+         prevNoteEvent[voice].on = false; // only used to turn off things
+         offList.push_back(prevNoteEvent[voice]);
+         onList.push_back(currentNoteEvent);
+      }
+
+      prevNoteEvent[voice] = currentNoteEvent;
+
       busMessage.hasEvents = true;
-
-      if (voiceState[voice].gate) // used to be on,  turn off
-      {
-         Sequencer::Track::NoteEvent oldNoteEvent;
-         oldNoteEvent.channel = channel;
-         oldNoteEvent.key = voiceState[voice].midiValue;
-         oldNoteEvent.velocity = voiceState[voice].velocity;
-         oldNoteEvent.on = false;
-
-         busMessage.channels[voice].noteOffEventMap[0].push_back(oldNoteEvent);
-      }
-
-      if (state.gate)
-      {
-         Sequencer::Track::NoteEvent noteEvent;
-         noteEvent.channel = channel;
-         noteEvent.key = state.midiValue;
-         noteEvent.velocity = state.velocity;
-         noteEvent.on = true;
-
-         busMessage.channels[voice].noteOffEventMap[0].push_back(noteEvent);
-      }
-      else
-      {
-         Sequencer::Track::NoteEvent noteEvent;
-         noteEvent.channel = channel;
-         noteEvent.key = state.midiValue;
-         noteEvent.velocity = state.velocity;
-         noteEvent.on = false;
-
-         busMessage.channels[voice].noteOnEventMap[0].push_back(noteEvent);
-      }
-
-      voiceState[voice] = state;
+      busMessage.channels[voice].isMonophoic = true;
+      busMessage.channels[voice].noteOffEventMap[1] = offList;
+      busMessage.channels[voice].noteOnEventMap[1] = onList;
    }
 
+   busMessage.noOfChannels = 4;
    sendBusData<MidiBus>(Side::Right, busMessage);
 }
 

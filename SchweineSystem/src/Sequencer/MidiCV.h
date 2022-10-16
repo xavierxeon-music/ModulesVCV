@@ -23,6 +23,11 @@ public:
 
 private:
    inline void setup();
+
+private:
+   Svin::Output pitchOutput;
+   Svin::Output gateOutput;
+   Svin::Output velocityOutput;
 };
 
 // widget

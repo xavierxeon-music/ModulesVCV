@@ -127,13 +127,13 @@ void MidiReplay::process(const ProcessArgs& args)
          {
             if (track.noteOffEventMap.find(tick) != track.noteOffEventMap.end())
             {
-               const Sequencer::Track::NoteEvent::List& eventList = track.noteOffEventMap.at(tick);
+               const Sequencer::NoteEvent::List& eventList = track.noteOffEventMap.at(tick);
                busChannel.noteOffEventMap[tick] = eventList;
                busMessage.hasEvents = true;
             }
             if (track.noteOnEventMap.find(tick) != track.noteOnEventMap.end())
             {
-               const Sequencer::Track::NoteEvent::List& eventList = track.noteOnEventMap.at(tick);
+               const Sequencer::NoteEvent::List& eventList = track.noteOnEventMap.at(tick);
                busChannel.noteOnEventMap[tick] = eventList;
                busMessage.hasEvents = true;
             }
