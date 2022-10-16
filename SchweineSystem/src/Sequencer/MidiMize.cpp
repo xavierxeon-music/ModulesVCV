@@ -93,23 +93,23 @@ void MidiMize::process(const ProcessArgs& args)
       Sequencer::NoteEvent::List offList;
       Sequencer::NoteEvent::List onList;
 
-      debug() << "P" << prevNoteEvent[voice].midiNote << prevNoteEvent[voice].velocity << prevNoteEvent[voice].on;
-      debug() << "C" << currentNoteEvent.midiNote << currentNoteEvent.velocity << currentNoteEvent.on;
-
-      if (prevNoteEvent[voice].on && !currentNoteEvent.on) // used to be on,  turn off
+      if (prevNoteEvent[voice].channel != currentNoteEvent.channel)
       {
-         debug() << "on ->off";
+         prevNoteEvent[voice].on = false; // only used to turn off things
+         offList.push_back(prevNoteEvent[voice]);
+         onList.push_back(currentNoteEvent);
+      }
+      else if (prevNoteEvent[voice].on && !currentNoteEvent.on) // used to be on,  turn off
+      {
          prevNoteEvent[voice].on = false; // only used to turn off things
          offList.push_back(prevNoteEvent[voice]);
       }
       else if (!prevNoteEvent[voice].on && currentNoteEvent.on) // used to be off, turn on
       {
-         debug() << "off ->on";
          onList.push_back(currentNoteEvent);
       }
       else if ((prevNoteEvent[voice].midiNote != currentNoteEvent.midiNote) || (prevNoteEvent[voice].velocity != currentNoteEvent.velocity))
       {
-         debug() << "change";
          prevNoteEvent[voice].on = false; // only used to turn off things
          offList.push_back(prevNoteEvent[voice]);
          onList.push_back(currentNoteEvent);
