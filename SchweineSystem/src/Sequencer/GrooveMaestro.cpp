@@ -119,7 +119,6 @@ void GrooveMaestro::process(const ProcessArgs& args)
             grooves.clockTick();
 
          const uint32_t currentTick = grooves.getCurrentSegmentTick();
-         debug() << currentTick;
          tickTriggers = on ? grooves.getTriggers(segmentIndex, currentTick) : BoolField8(0);
          segmentGates = on ? grooves.getGates(segmentIndex) : BoolField8(0);
 
@@ -494,11 +493,10 @@ void GrooveMaestro::save(Svin::Json::Object& rootObject)
    const uint8_t length = localGrooves.getSegmentLength(0);
    rootObject.set("length", length);
 
-   const Grooves::Beat beat = localGrooves.getBeat(0);
    Svin::Json::Array beatArray;
    for (uint8_t tick = 0; tick < length; tick++)
    {
-      const uint8_t triggers = beat.at(tick);
+      const uint8_t triggers = localGrooves.getTriggers(0, tick);
       beatArray.append(triggers);
    }
 

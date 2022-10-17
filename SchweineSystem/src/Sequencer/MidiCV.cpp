@@ -57,7 +57,6 @@ void MidiCV::process(const ProcessArgs& args)
          {
             lastEvent = eventList.at(0);
             foundEvent = true;
-            debug() << "off";
          }
       }
       ConstIterator itOn = busChannel.noteOnEventMap.find(busMessage.endTick);
@@ -68,14 +67,11 @@ void MidiCV::process(const ProcessArgs& args)
          {
             lastEvent = eventList.at(0);
             foundEvent = true;
-            debug() << "on";
          }
       }
 
       if (!foundEvent)
          continue;
-
-      debug() << "event" << lastEvent.on;
 
       if (lastEvent.on && busChannel.isMonophoic)
       {

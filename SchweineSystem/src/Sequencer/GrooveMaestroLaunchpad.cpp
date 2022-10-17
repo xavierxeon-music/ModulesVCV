@@ -125,8 +125,6 @@ void GrooveMaestro::updateLaunchpadGrid()
          launchpad.setPad(row, 8, Svin::LaunchpadClient::Mode::Steady, trackInactiveColorList[row]);
    }
 
-   Grooves::Beat beat = grooves.getBeat(segmentIndex);
-
    const uint8_t lastFullRow = length - (length % 8);
    const uint8_t fullRows = lastFullRow / 8;
    const uint8_t numberOfRows = (length == lastFullRow) ? fullRows : 1 + fullRows;
@@ -149,7 +147,7 @@ void GrooveMaestro::updateLaunchpadGrid()
             launchpad.setPad(row, column, Svin::LaunchpadClient::Mode::Off);
          else if (tick == currentTick)
             launchpad.setPad(row, column, Svin::LaunchpadClient::Mode::Steady, Color::Predefined::White);
-         else if (beat.at(tick).get(trackIndex))
+         else if (grooves.getTriggers(segmentIndex, tick).get(trackIndex))
             launchpad.setPad(row, column, Svin::LaunchpadClient::Mode::Pulse, trackActiveColorList[trackIndex]);
          else
             launchpad.setPad(row, column, Svin::LaunchpadClient::Mode::Steady, trackInactiveColorList[trackIndex]);
