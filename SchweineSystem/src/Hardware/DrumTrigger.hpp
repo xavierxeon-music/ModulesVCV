@@ -10,12 +10,13 @@ struct DrumTrigger::Panel
    enum ParamId
    {
       // buttons
+      Device = 0,
       // switches
       // ledbuttons
-      Connect = 0,
+      Connect = 1,
       // knobs
       // sliders
-      PARAMS_LEN = 1
+      PARAMS_LEN = 2
    };
 
    enum DisplayId
@@ -44,10 +45,13 @@ struct DrumTrigger::Panel
    enum LightId
    {
       // leds
+      RGB_BitBoxMini = 0,
+      RGB_BitBox2 = 3,
+      RGB_Erika = 6,
       // ledbuttons
-      RGB_Connect = 0,
+      RGB_Connect = 9,
       // sliders
-      LIGHTS_LEN = 3
+      LIGHTS_LEN = 12
    };
 
 };
@@ -55,6 +59,8 @@ struct DrumTrigger::Panel
 void DrumTrigger::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
+
+   configButton(Panel::Device, "Device");
 
    configButton(Panel::Connect, "Connect");
 
@@ -65,9 +71,15 @@ void DrumTriggerWidget::setup()
 {
    makePanel("res/Hardware/DrumTrigger.svg");
 
+   makeButton(this, Vec(30.12, 104.59), DrumTrigger::Panel::Device);
+
    makeLEDButton(this, Vec(30.00, 349.57), DrumTrigger::Panel::Connect, DrumTrigger::Panel::RGB_Connect);
 
    makeInput(this, Vec(30.00, 263.12),  DrumTrigger::Panel::Input, true);
+
+   makeLED(this, Vec(15.45, 145.14), DrumTrigger::Panel::RGB_BitBoxMini);
+   makeLED(this, Vec(15.45, 133.14), DrumTrigger::Panel::RGB_BitBox2);
+   makeLED(this, Vec(15.45, 121.14), DrumTrigger::Panel::RGB_Erika);
 }
 
 #endif // NOT DrumTriggerHPP
