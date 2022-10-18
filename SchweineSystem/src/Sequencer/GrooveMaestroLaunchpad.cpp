@@ -122,7 +122,7 @@ void GrooveMaestro::updateLaunchpadGrid()
       if (gates.get(index))
          launchpad.setPad(row, 8, Svin::LaunchpadClient::Mode::Flash, 3);
       else
-         launchpad.setPad(row, 8, Svin::LaunchpadClient::Mode::Steady, trackInactiveColorList[row]);
+         launchpad.setPad(row, 8, Svin::LaunchpadClient::Mode::Steady, trackInactiveColorList[index]);
    }
 
    const uint8_t lastFullRow = length - (length % 8);

@@ -97,17 +97,26 @@ void GrooveMaestro::process(const ProcessArgs& args)
       }
    };
 
+   auto applyZero = [&]()
+   {
+      for (uint8_t index = 0; index < 16; index++)
+      {
+         contourOutput.setVoltage(0.0, index);
+         gateOutput.setActive(false, index);
+      }
+   };
+
    if (hasReset())
    {
       conductor.clockReset();
       localGrooves.clockReset();
-      return applyValues();
+      return applyZero();
    }
 
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
    if (!on)
-      return applyValues();
+      applyZero();
 
    auto fillTriggers = [&](Grooves& grooves)
    {

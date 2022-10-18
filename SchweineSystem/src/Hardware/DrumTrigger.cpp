@@ -87,10 +87,15 @@ void DrumTrigger::connectToMidiDevice()
 
 void DrumTrigger::load(const Svin::Json::Object& rootObject)
 {
+   deviceId = static_cast<DeviceId::Value>(rootObject.get("deviceId").toInt());
+
+   close();
+   connectToMidiDevice();
 }
 
 void DrumTrigger::save(Svin::Json::Object& rootObject)
 {
+   rootObject.set("deviceId", static_cast<uint8_t>(deviceId));
 }
 
 // widget
