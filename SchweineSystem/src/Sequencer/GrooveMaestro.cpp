@@ -458,7 +458,9 @@ void GrooveMaestro::load(const Svin::Json::Object& rootObject)
    loadProject(newFileName);
 
    Svin::Json::Array voltageArray = rootObject.get("voltages").toArray();
-   for (uint8_t index = 0; index < 16; index++)
+   if (voltages.size() < 16)
+      voltages = std::vector<float>(16, 0.0);
+   for (uint8_t index = 0; index < voltageArray.size(); index++)
       voltages[index] = voltageArray.at(index).toReal();
 
    const BoolField8 gates = rootObject.get("gates").toInt();
@@ -483,7 +485,7 @@ void GrooveMaestro::save(Svin::Json::Object& rootObject)
    rootObject.set("fileName", fileName);
 
    Svin::Json::Array voltageArray;
-   for (uint8_t index = 0; index < 16; index++)
+   for (uint8_t index = 0; index < voltages.size(); index++)
       voltageArray.append(voltages.at(index));
    rootObject.set("voltages", voltageArray);
 
