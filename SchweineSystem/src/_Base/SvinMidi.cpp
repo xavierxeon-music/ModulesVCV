@@ -22,7 +22,7 @@ const Svin::Midi::Common::InterfaceMap Svin::Midi::Common::interfaceMap = {
    {::Midi::Device::FlameCC, "ESI M4U eX Port 7"},
    {::Midi::Device::BitBox, "ESI M4U eX Port 4"},
    {::Midi::Device::BitBoxMicro, "ESI M4U eX Port 4"},
-   {::Midi::Device::Unused, ""},
+   {::Midi::Device::NerdSEQ, "ESI M4U eX Port 7"},
 };
 
 Svin::Midi::Common::Common(bool isVirtual)
