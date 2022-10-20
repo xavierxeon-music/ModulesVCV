@@ -86,16 +86,6 @@ void GrooveMaestro::process(const ProcessArgs& args)
    gateOutput.setNumberOfChannels(16);
 
    // do stuff
-   BoolField16 triggers(0);
-
-   auto applyValues = [&]()
-   {
-      for (uint8_t index = 0; index < 16; index++)
-      {
-         contourOutput.setVoltage(voltages[index], index);
-         gateOutput.setActive(triggers.get(index), index);
-      }
-   };
 
    auto applyZero = [&]()
    {
@@ -116,7 +106,18 @@ void GrooveMaestro::process(const ProcessArgs& args)
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
    if (!on)
-      applyZero();
+      return applyZero();
+
+   BoolField16 triggers(0);
+
+   auto applyValues = [&]()
+   {
+      for (uint8_t index = 0; index < 16; index++)
+      {
+         contourOutput.setVoltage(voltages[index], index);
+         gateOutput.setActive(triggers.get(index), index);
+      }
+   };
 
    auto fillTriggers = [&](Grooves& grooves)
    {
