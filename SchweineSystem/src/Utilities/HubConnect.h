@@ -8,6 +8,7 @@ using namespace rack;
 #include <SvinModuleWidget.h>
 
 #include <SvinButtonLED.h>
+#include <SvinLED.h>
 
 class HubConnect : public Svin::Module
 {
@@ -24,6 +25,7 @@ private:
    inline void setup();
 
 private:
+   Svin::LED::List noteList;
    Svin::ButtonLED connectionButton;
 };
 
