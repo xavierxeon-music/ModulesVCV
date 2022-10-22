@@ -74,20 +74,20 @@ void HubConnectWidget::setup()
 {
    makePanel("res/Utilities/HubConnect.svg");
 
-   makeLEDButton(this, Vec(30.00, 350.06), HubConnect::Panel::Connect, HubConnect::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(30.00, 360.06), HubConnect::Panel::Connect, HubConnect::Panel::RGB_Connect);
 
-   makeLED(this, Vec(19.03, 290.67), HubConnect::Panel::RGB_NoteC);
-   makeLED(this, Vec(24.93, 279.04), HubConnect::Panel::RGB_NoteCs);
-   makeLED(this, Vec(19.03, 267.40), HubConnect::Panel::RGB_NoteD);
-   makeLED(this, Vec(24.93, 255.77), HubConnect::Panel::RGB_NoteDs);
-   makeLED(this, Vec(19.03, 244.13), HubConnect::Panel::RGB_NoteE);
-   makeLED(this, Vec(19.03, 232.49), HubConnect::Panel::RGB_NoteF);
-   makeLED(this, Vec(24.93, 220.86), HubConnect::Panel::RGB_NoteFs);
-   makeLED(this, Vec(19.03, 209.22), HubConnect::Panel::RGB_NoteG);
-   makeLED(this, Vec(24.93, 197.58), HubConnect::Panel::RGB_NoteGs);
-   makeLED(this, Vec(19.03, 185.95), HubConnect::Panel::RGB_NoteA);
-   makeLED(this, Vec(24.93, 174.31), HubConnect::Panel::RGB_NoteAs);
-   makeLED(this, Vec(19.03, 162.68), HubConnect::Panel::RGB_NoteB);
+   makeLED(this, Vec(19.03, 320.67), HubConnect::Panel::RGB_NoteC);
+   makeLED(this, Vec(24.93, 303.96), HubConnect::Panel::RGB_NoteCs);
+   makeLED(this, Vec(19.03, 287.09), HubConnect::Panel::RGB_NoteD);
+   makeLED(this, Vec(24.93, 270.38), HubConnect::Panel::RGB_NoteDs);
+   makeLED(this, Vec(19.03, 253.51), HubConnect::Panel::RGB_NoteE);
+   makeLED(this, Vec(19.03, 238.43), HubConnect::Panel::RGB_NoteF);
+   makeLED(this, Vec(24.93, 221.71), HubConnect::Panel::RGB_NoteFs);
+   makeLED(this, Vec(19.03, 204.84), HubConnect::Panel::RGB_NoteG);
+   makeLED(this, Vec(24.93, 188.13), HubConnect::Panel::RGB_NoteGs);
+   makeLED(this, Vec(19.03, 171.26), HubConnect::Panel::RGB_NoteA);
+   makeLED(this, Vec(24.93, 154.55), HubConnect::Panel::RGB_NoteAs);
+   makeLED(this, Vec(19.03, 137.68), HubConnect::Panel::RGB_NoteB);
 }
 
 #endif // NOT HubConnectHPP
