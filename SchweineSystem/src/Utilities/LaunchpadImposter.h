@@ -32,7 +32,7 @@ private:
    void updateDisplays() override;
    void createLaunchpad();
 
-   void clockTick() override;
+   void midiClockTick() override;
    void noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity) override;
    void controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
 

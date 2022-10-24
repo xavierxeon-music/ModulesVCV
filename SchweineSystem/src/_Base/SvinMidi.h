@@ -74,7 +74,7 @@ namespace Svin
          void close();
          bool connected();
 
-         virtual void clockTick();
+         virtual void midiClockTick();
          virtual void songPosition(const uint16_t position);
 
          virtual void noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity);

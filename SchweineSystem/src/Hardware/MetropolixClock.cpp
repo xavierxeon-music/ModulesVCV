@@ -11,7 +11,7 @@ MetropolixClock::MetropolixClock()
    , Svin::MasterClock()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , midiTickCounter(6)
-   , advanceTempo(true)
+   , blockAdvanceTempo(false)
    , resetOutput(this, Panel::Reset)
    , clockInput(this, Panel::Override_Clock)
    , resetInput(this, Panel::Override_Reset)
@@ -28,27 +28,44 @@ void MetropolixClock::process(const ProcessArgs& args)
    if (connectionButton.isTriggered())
       connectToMidiDevice();
 
-   if (clockInput.isConnected()) // override
+   if (clockInput.isConnected()) // override midi clock
    {
       if (resetInput.isTriggered())
       {
          reset();
-         advanceTempo = false;
+         blockAdvanceTempo = true;
          midiTickCounter.reset();
          resetOutput.trigger();
       }
       else if (clockInput.isTriggered())
       {
          tick();
-         advanceTempo = false;
+         blockAdvanceTempo = true;
+      }
+
+      if (!blockAdvanceTempo)
+      {
+         const float percentage = getTempo().getPercentage();
+         const float target = (1 + midiTickCounter.getCurrentValue()) / 6.0;
+         if (percentage >= target)
+         {
+            midiClock();
+            midiTickCounter.nextAndIsMaxValue();
+         }
+         else
+         {
+            advance(args.sampleRate);
+         }
       }
    }
-
-   if (advanceTempo)
-      advance(args.sampleRate);
+   else // use midi clock
+   {
+      if (!blockAdvanceTempo)
+         advance(args.sampleRate);
+   }
 
    resetOutput.animateTriggers(args);
-   advanceTempo = true;
+   blockAdvanceTempo = false;
 }
 
 void MetropolixClock::updateDisplays()
@@ -109,23 +126,30 @@ void MetropolixClock::connectToMidiDevice()
    connectionButton.setOn();
 }
 
-void MetropolixClock::clockTick()
+void MetropolixClock::midiClockTick()
 {
+   if (clockInput.isConnected())
+      return;
+
    midiClock();
    if (0 != midiTickCounter.valueAndNext())
       return;
 
    tick();
-   advanceTempo = false;
+   blockAdvanceTempo = true;
 }
 
 void MetropolixClock::songPosition(const uint16_t position)
 {
+   if (clockInput.isConnected())
+      return;
+
    if (0 != position)
       return;
 
    reset();
-   advanceTempo = false;
+   blockAdvanceTempo = true;
+
    midiTickCounter.reset();
    resetOutput.trigger();
 }

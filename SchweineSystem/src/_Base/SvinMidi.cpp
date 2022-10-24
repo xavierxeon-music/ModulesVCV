@@ -251,7 +251,7 @@ bool Svin::Midi::Input::connected()
    return midiInput.isPortOpen();
 }
 
-void Svin::Midi::Input::clockTick()
+void Svin::Midi::Input::midiClockTick()
 {
    // do nothing
 }
@@ -344,7 +344,7 @@ void Svin::Midi::Input::prcocess(const Bytes& buffer)
       const ::Midi::Event event = static_cast<::Midi::Event>(buffer[0]);
       if (::Midi::Event::Clock == event)
       {
-         clockTick();
+         midiClockTick();
       }
       else if (::Midi::Event::SongPositionPointer == event)
       {

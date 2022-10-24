@@ -33,14 +33,14 @@ private:
    inline void setup();
    void connectToMidiDevice();
 
-   void clockTick() override;
+   void midiClockTick() override;
    void songPosition(const uint16_t position) override;
 
 private:
    // midi
    Svin::ButtonLED connectionButton;
    Counter midiTickCounter;
-   bool advanceTempo;
+   bool blockAdvanceTempo;
 
    // manual
    Svin::Output resetOutput;

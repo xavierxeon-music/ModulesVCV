@@ -183,7 +183,7 @@ void LaunchpadImposter::createLaunchpad()
    Svin::Midi::Output::open();
 }
 
-void LaunchpadImposter::clockTick()
+void LaunchpadImposter::midiClockTick()
 {
 }
 
