@@ -41,7 +41,8 @@ struct MetropolixClock::Panel
    enum OutputId
    {
       Reset = 0,
-      OUTPUTS_LEN = 1
+      Clock = 1,
+      OUTPUTS_LEN = 2
    };
 
    enum LightId
@@ -65,6 +66,7 @@ void MetropolixClock::setup()
    configInput(Panel::Override_Clock, "Override_Clock");
 
    configOutput(Panel::Reset, "Reset");
+   configOutput(Panel::Clock, "Clock");
 }
 
 void MetropolixClockWidget::setup()
@@ -77,6 +79,7 @@ void MetropolixClockWidget::setup()
    makeInput(this, Vec(41.08, 308.57),  MetropolixClock::Panel::Override_Clock, false);
 
    makeOutput(this, Vec(80.83, 355.83), MetropolixClock::Panel::Reset, false);
+   makeOutput(this, Vec(40.85, 355.83), MetropolixClock::Panel::Clock, false);
 
    makeOLED(this, Vec(10.00, 61.98), MetropolixClock::Panel::Pixels_Display, 83, 170);
 }

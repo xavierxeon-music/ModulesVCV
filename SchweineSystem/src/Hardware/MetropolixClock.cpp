@@ -12,6 +12,7 @@ MetropolixClock::MetropolixClock()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , midiTickCounter(6)
    , blockAdvanceTempo(false)
+   , clockOutput(this, Panel::Clock)
    , resetOutput(this, Panel::Reset)
    , clockInput(this, Panel::Override_Clock)
    , resetInput(this, Panel::Override_Reset)
@@ -40,6 +41,7 @@ void MetropolixClock::process(const ProcessArgs& args)
       else if (clockInput.isTriggered())
       {
          tick();
+         clockOutput.trigger();
          blockAdvanceTempo = true;
       }
 
@@ -61,7 +63,9 @@ void MetropolixClock::process(const ProcessArgs& args)
          advance(args.sampleRate);
    }
 
+   clockOutput.animateTriggers(args);
    resetOutput.animateTriggers(args);
+
    blockAdvanceTempo = false;
 }
 
@@ -134,6 +138,8 @@ void MetropolixClock::midiClockTick()
 
    tick();
    blockAdvanceTempo = true;
+
+   clockOutput.trigger();
 }
 
 void MetropolixClock::songPosition(const uint16_t position)

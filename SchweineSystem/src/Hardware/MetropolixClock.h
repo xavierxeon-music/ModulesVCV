@@ -43,6 +43,7 @@ private:
    bool blockAdvanceTempo;
 
    // manual
+   Svin::Output clockOutput;
    Svin::Output resetOutput;
 
    // override

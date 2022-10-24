@@ -25,6 +25,7 @@
 ./src/Utilities/PythonScript.h
 ./src/Utilities/HubConnect.h
 ./src/Utilities/Mapper.h
+./src/Utilities/Remote.h
 ./src/Utilities/Extract.h
 ./src/Utilities/GateLatch.h
 ./src/Utilities/Cutoff.h
@@ -141,6 +142,7 @@
 ./src/Utilities/GateLatch.hpp
 ./src/Utilities/MaxPatch.hpp
 ./src/Utilities/PythonScript.hpp
+./src/Utilities/Remote.hpp
 ./src/Utilities/Cutoff.hpp
 ./src/Utilities/LaunchpadImposter.hpp
 ./src/Utilities/Mapper.hpp
@@ -250,6 +252,7 @@
 ./src/Utilities/GateLatch.cpp
 ./src/Utilities/MaxPatch.cpp
 ./src/Utilities/PythonScript.cpp
+./src/Utilities/Remote.cpp
 ./src/Utilities/Extract.cpp
 ./src/Utilities/HubConnect.cpp
 ./src/Sequencer/GrooveMaestroDisplay.cpp
