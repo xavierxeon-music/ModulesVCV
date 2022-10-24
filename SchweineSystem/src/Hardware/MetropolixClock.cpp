@@ -52,10 +52,7 @@ void MetropolixClock::process(const ProcessArgs& args)
             midiClock();
             midiTickCounter.nextAndIsMaxValue();
          }
-         else
-         {
-            advance(args.sampleRate);
-         }
+         advance(args.sampleRate);
       }
    }
    else // use midi clock
