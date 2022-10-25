@@ -22,13 +22,12 @@
 ./src/_Gui/SvinDisplayLCD.h
 ./src/_Gui/SvinLED.h
 ./src/Utilities/LaunchpadImposter.h
-./src/Utilities/PythonScript.h
 ./src/Utilities/HubConnect.h
 ./src/Utilities/Mapper.h
+./src/Utilities/AppPortal.h
 ./src/Utilities/Extract.h
 ./src/Utilities/GateLatch.h
 ./src/Utilities/Cutoff.h
-./src/Utilities/MaxPatch.h
 ./src/Sequencer/NosferatuAcolyte.h
 ./src/Sequencer/MidiMize.h
 ./src/Sequencer/GrooveMaestro.h
@@ -139,9 +138,8 @@
 ./src/Utilities/Extract.hpp
 ./src/Utilities/HubConnect.hpp
 ./src/Utilities/GateLatch.hpp
-./src/Utilities/MaxPatch.hpp
-./src/Utilities/PythonScript.hpp
 ./src/Utilities/Cutoff.hpp
+./src/Utilities/AppPortal.hpp
 ./src/Utilities/LaunchpadImposter.hpp
 ./src/Utilities/Mapper.hpp
 ./src/Sequencer/MidiReplay.hpp
@@ -247,9 +245,8 @@
 ./src/Utilities/LaunchpadImposter.cpp
 ./src/Utilities/Mapper.cpp
 ./src/Utilities/Cutoff.cpp
+./src/Utilities/AppPortal.cpp
 ./src/Utilities/GateLatch.cpp
-./src/Utilities/MaxPatch.cpp
-./src/Utilities/PythonScript.cpp
 ./src/Utilities/Extract.cpp
 ./src/Utilities/HubConnect.cpp
 ./src/Sequencer/GrooveMaestroDisplay.cpp

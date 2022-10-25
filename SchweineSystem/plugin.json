@@ -264,22 +264,6 @@
          ]
       },
       {
-         "slug": "PythonScript",
-         "name": " Python Script",
-         "description": "Execute a python script on this computer (need running HubVCV)",
-         "tags": [
-            "Utility"
-         ]
-      },
-      {
-         "slug": "MaxPatch",
-         "name": "MaxP atch",
-         "description": "Run a max patch on this computer (needs running HubVCV)",
-         "tags": [
-            "Utility"
-         ]
-      },
-      {
          "slug": "BefacoACDC",
          "name": "Befaco ACDC",
          "description": "The midi component of the Befaco ACDC",
@@ -310,6 +294,14 @@
          "description": "The drum trigger",
          "tags": [
             "Midi"
+         ]
+      },
+      {
+         "slug": "AppPortal",
+         "name": "AppPortal",
+         "description": "Run a max patch or execute a python script on this computer (needs running HubVCV)",
+         "tags": [
+            "Utility"
          ]
       }
    ]
