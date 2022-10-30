@@ -1,7 +1,6 @@
 ./src/Hardware/DrumTrigger.h
 ./src/Hardware/AturiaStep.h
 ./src/Hardware/DoepferQuad.h
-./src/Hardware/MetropolixClock.h
 ./src/Hardware/BefacoACDC.h
 ./src/Hardware/MidiBusModule.h
 ./src/Hardware/FlameCCSender.h
@@ -24,6 +23,7 @@
 ./src/Utilities/LaunchpadImposter.h
 ./src/Utilities/HubConnect.h
 ./src/Utilities/Mapper.h
+./src/Utilities/ClockAndBarCounter.h
 ./src/Utilities/AppPortal.h
 ./src/Utilities/Extract.h
 ./src/Utilities/GateLatch.h
@@ -130,7 +130,6 @@
 ./src/Hardware/AturiaStep.hpp
 ./src/Hardware/BefacoACDC.hpp
 ./src/Hardware/FlameCCSender.hpp
-./src/Hardware/MetropolixClock.hpp
 ./src/Synths/SixPack.hpp
 ./src/Synths/WavPlayer.hpp
 ./src/Synths/Boilerplate.hpp
@@ -140,6 +139,7 @@
 ./src/Utilities/GateLatch.hpp
 ./src/Utilities/Cutoff.hpp
 ./src/Utilities/AppPortal.hpp
+./src/Utilities/ClockAndBarCounter.hpp
 ./src/Utilities/LaunchpadImposter.hpp
 ./src/Utilities/Mapper.hpp
 ./src/Sequencer/MidiReplay.hpp
@@ -219,7 +219,6 @@
 ./src/_MusicTools/CvSwitch.hpp
 ./src/_MusicTools/WaveTable.hpp
 ./src/_MusicTools/StandardTable.hpp
-./src/Hardware/MetropolixClock.cpp
 ./src/Hardware/AturiaStep.cpp
 ./src/Hardware/BefacoACDC.cpp
 ./src/Hardware/FlameCCSender.cpp
@@ -246,6 +245,7 @@
 ./src/Utilities/Mapper.cpp
 ./src/Utilities/Cutoff.cpp
 ./src/Utilities/AppPortal.cpp
+./src/Utilities/ClockAndBarCounter.cpp
 ./src/Utilities/GateLatch.cpp
 ./src/Utilities/Extract.cpp
 ./src/Utilities/HubConnect.cpp

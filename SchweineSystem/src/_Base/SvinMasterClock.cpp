@@ -53,10 +53,10 @@ bool Svin::MasterClock::Client::hasReset()
 Tempo Svin::MasterClock::Client::getTempo() const
 {
    std::lock_guard<std::mutex> guard(mutex);
-   if (!MasterClock::me)
+   if (!MasterClock::masterInstance)
       return Tempo();
 
-   const Tempo tempo = MasterClock::me->tempo;
+   const Tempo tempo = MasterClock::masterInstance->tempo;
    //debug() << __FUNCTION__ << tempo.getRunState();
    return tempo;
 }
@@ -64,39 +64,62 @@ Tempo Svin::MasterClock::Client::getTempo() const
 TimeCode::Duration Svin::MasterClock::Client::getDuration() const
 {
    std::lock_guard<std::mutex> guard(mutex);
-   if (!MasterClock::me)
+   if (!MasterClock::masterInstance)
       return 0;
 
-   return MasterClock::me->duration;
+   return MasterClock::masterInstance->duration;
 }
 
 // master clock
-
-Svin::MasterClock* Svin::MasterClock::me = nullptr;
+std::list<Svin::MasterClock*> Svin::MasterClock::instanceList = std::list<Svin::MasterClock*>();
+Svin::MasterClock* Svin::MasterClock::masterInstance = nullptr;
 Svin::MasterClock::Client::List Svin::MasterClock::clientList = Client::List();
 
 Svin::MasterClock::MasterClock()
-   : mutex()
+   : Svin::Midi::Output(true)
+   , mutex()
    , tempo()
    , duration(0)
+   , oldRunState(Tempo::Off)
 {
-   me = this;
+   if (instanceList.empty())
+   {
+      masterInstance = this;
+
+      setTargetDeviceName("ClockVCV");
+      open();
+   }
+
+   instanceList.push_back(this);
 }
 
 Svin::MasterClock::~MasterClock()
 {
-   me = nullptr;
+   instanceList.remove(this);
+
+   if (instanceList.empty())
+   {
+      masterInstance = nullptr;
+      close();
+   }
+   else if (iAmMasterClock())
+   {
+      masterInstance = instanceList.front();
+   }
 }
 
 bool Svin::MasterClock::iAmMasterClock() const
 {
-   return (this == me);
+   return (this == masterInstance);
 }
 
 void Svin::MasterClock::tick()
 {
    duration++;
    tempo.clockTick();
+
+   if (!iAmMasterClock())
+      return;
 
    for (Client* client : clientList)
    {
@@ -110,6 +133,13 @@ void Svin::MasterClock::tick()
 
 void Svin::MasterClock::midiClock()
 {
+   if (!iAmMasterClock())
+      return;
+
+   std::vector<unsigned char> clockMessage(1);
+   clockMessage[0] = ::Midi::Event::Clock;
+   sendMessage(clockMessage);
+
    for (Client* client : clientList)
    {
       std::lock_guard<std::mutex> guard(client->mutex);
@@ -122,6 +152,17 @@ void Svin::MasterClock::reset()
    duration = 0;
    tempo.clockReset();
 
+   if (!iAmMasterClock())
+      return;
+
+   oldRunState = Tempo::Off;
+
+   std::vector<unsigned char> songPosMessage(3);
+   songPosMessage[0] = ::Midi::Event::SongPositionPointer;
+   songPosMessage[1] = 0;
+   songPosMessage[2] = 0;
+   sendMessage(songPosMessage);
+
    for (Client* client : clientList)
    {
       std::lock_guard<std::mutex> guard(client->mutex);
@@ -133,6 +174,22 @@ void Svin::MasterClock::reset()
 void Svin::MasterClock::advance(const float& sampleRate)
 {
    tempo.advance(sampleRate, 3.0);
+
+   if (!iAmMasterClock())
+      return;
+
+   const Tempo::RunState runState = tempo.getRunState();
+   if (runState == oldRunState)
+      return;
+
+   std::vector<unsigned char> clockMessage(1);
+   if (Tempo::Off == runState)
+      clockMessage[0] = ::Midi::Event::Stop;
+   else if (Tempo::FirstTick == runState || Tempo::Running == runState)
+      clockMessage[0] = ::Midi::Event::Continue;
+
+   sendMessage(clockMessage);
+   oldRunState = runState;
 }
 
 Tempo Svin::MasterClock::getTempo() const

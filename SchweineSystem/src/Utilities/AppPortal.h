@@ -40,27 +40,6 @@ private:
    void save(Svin::Json::Object& rootObject) override;
 
 private:
-   class MidiProvider : public Svin::Midi::Input, public Svin::Midi::Output, public Svin::MasterClock::Client
-   {
-   public:
-      static void hello(AppPortal* portal);
-      static void goobye(AppPortal* portal);
-      static void proccess(const AppPortal* portal);
-
-   private:
-      MidiProvider(const AppPortal* creator);
-      ~MidiProvider();
-
-   private:
-      void update();
-
-   private:
-      static MidiProvider* me;
-      std::list<AppPortal*> portalList;
-      const AppPortal* creator;
-   };
-
-private:
    Svin::DisplayOLED::Controller displayController;
    // id
    uint8_t deviceId;
@@ -74,10 +53,6 @@ private:
    // mode
    bool modePython;
    Svin::Switch modeSwitch;
-   // io
-   Svin::Input pitchInput;
-   Svin::Input gateInput;
-   Svin::Output gateOutput;
 };
 
 // widget

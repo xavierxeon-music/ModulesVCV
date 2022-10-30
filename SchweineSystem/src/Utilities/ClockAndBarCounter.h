@@ -1,5 +1,5 @@
-#ifndef MetropolixClockH
-#define MetropolixClockH
+#ifndef ClockAndBarCounterH
+#define ClockAndBarCounterH
 
 #include <rack.hpp>
 using namespace rack;
@@ -17,13 +17,14 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinOutput.h>
 
-class MetropolixClock : public Svin::Module, public Svin::Midi::Input, public Svin::MasterClock
+class ClockAndBarCounter : public Svin::Module, public Svin::Midi::Input, public Svin::MasterClock
 {
 public:
    struct Panel;
 
 public:
-   MetropolixClock();
+   ClockAndBarCounter();
+   ~ClockAndBarCounter();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -43,6 +44,7 @@ private:
    bool blockAdvanceTempo;
 
    // manual
+   Svin::Output runOutput;
    Svin::Output clockOutput;
    Svin::Output resetOutput;
 
@@ -56,17 +58,17 @@ private:
 
 // widget
 
-class MetropolixClockWidget : public Svin::ModuleWidget
+class ClockAndBarCounterWidget : public Svin::ModuleWidget
 {
 public:
-   MetropolixClockWidget(MetropolixClock* module);
+   ClockAndBarCounterWidget(ClockAndBarCounter* module);
 
 private:
    inline void setup();
 };
 
-#ifndef MetropolixClockHPP
-#include "MetropolixClock.hpp"
-#endif // NOT MetropolixClockHPP
+#ifndef ClockAndBarCounterHPP
+#include "ClockAndBarCounter.hpp"
+#endif // NOT ClockAndBarCounterHPP
 
-#endif // NOT MetropolixClockH
+#endif // NOT ClockAndBarCounterH

@@ -14,8 +14,8 @@
    "changelogUrl": "",
    "modules": [
       {
-         "slug": "MetropolixClock",
-         "name": "MetropolixClock",
+         "slug": "ClockAndBarCounter",
+         "name": "ClockAndBarCounter",
          "description": "",
          "tags": [
             "Utility",

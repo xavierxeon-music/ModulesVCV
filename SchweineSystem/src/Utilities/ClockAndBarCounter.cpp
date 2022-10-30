@@ -1,17 +1,18 @@
-#include "MetropolixClock.h"
+#include "ClockAndBarCounter.h"
 
 #include <SvinOrigin.h>
 
 #include <Midi/MidiCommon.h>
 #include <SvinMidi.h>
 
-MetropolixClock::MetropolixClock()
+ClockAndBarCounter::ClockAndBarCounter()
    : Svin::Module()
    , Svin::Midi::Input(Midi::Device::Metropolix)
    , Svin::MasterClock()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , midiTickCounter(6)
    , blockAdvanceTempo(false)
+   , runOutput(this, Panel::Running)
    , clockOutput(this, Panel::Clock)
    , resetOutput(this, Panel::Reset)
    , clockInput(this, Panel::Override_Clock)
@@ -24,7 +25,11 @@ MetropolixClock::MetropolixClock()
    connectToMidiDevice();
 }
 
-void MetropolixClock::process(const ProcessArgs& args)
+ClockAndBarCounter::~ClockAndBarCounter()
+{
+}
+
+void ClockAndBarCounter::process(const ProcessArgs& args)
 {
    if (connectionButton.isTriggered())
       connectToMidiDevice();
@@ -63,13 +68,14 @@ void MetropolixClock::process(const ProcessArgs& args)
          advance(args.sampleRate);
    }
 
+   runOutput.setActive(getTempo().isRunningOrFirstTick());
    clockOutput.animateTriggers(args);
    resetOutput.animateTriggers(args);
 
    blockAdvanceTempo = false;
 }
 
-void MetropolixClock::updateDisplays()
+void ClockAndBarCounter::updateDisplays()
 {
    displayController.fill();
 
@@ -112,22 +118,22 @@ void MetropolixClock::updateDisplays()
    displayController.writeText(41, 150, timeText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 }
 
-void MetropolixClock::connectToMidiDevice()
+void ClockAndBarCounter::connectToMidiDevice()
 {
-   if (connected())
+   if (Svin::Midi::Input::connected())
    {
       connectionButton.setOn();
       return;
    }
 
    connectionButton.setOff();
-   if (!open())
+   if (!Svin::Midi::Input::open())
       return;
 
    connectionButton.setOn();
 }
 
-void MetropolixClock::midiClockTick()
+void ClockAndBarCounter::midiClockTick()
 {
    if (clockInput.isConnected())
       return;
@@ -142,7 +148,7 @@ void MetropolixClock::midiClockTick()
    clockOutput.trigger();
 }
 
-void MetropolixClock::songPosition(const uint16_t position)
+void ClockAndBarCounter::songPosition(const uint16_t position)
 {
    if (clockInput.isConnected())
       return;
@@ -159,11 +165,10 @@ void MetropolixClock::songPosition(const uint16_t position)
 
 // widget
 
-MetropolixClockWidget::MetropolixClockWidget(MetropolixClock* module)
+ClockAndBarCounterWidget::ClockAndBarCounterWidget(ClockAndBarCounter* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 // create module
-Model* modelMetropolixClock = Svin::Origin::the()->addModule<MetropolixClock, MetropolixClockWidget>("MetropolixClock");
-
+Model* modelClockAndBarCounter = Svin::Origin::the()->addModule<ClockAndBarCounter, ClockAndBarCounterWidget>("ClockAndBarCounter");

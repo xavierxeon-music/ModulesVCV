@@ -5,81 +5,6 @@
 #include <Tools/Variable.h>
 
 
-// midi provider
-
-AppPortal::MidiProvider* AppPortal::MidiProvider::me = nullptr;
-
-void AppPortal::MidiProvider::hello(AppPortal* portal)
-{
-   if (!me)
-      me = new MidiProvider(portal);
-
-   me->portalList.push_back(portal);
-}
-
-void AppPortal::MidiProvider::goobye(AppPortal* portal)
-{
-   if (!me)
-      return;
-
-   me->portalList.remove(portal);
-   if (me->portalList.empty())
-   {
-      delete me;
-      me = nullptr;
-   }
-   else if (me->creator == portal)
-   {
-      me->creator = me->portalList.front();
-   }
-}
-
-void AppPortal::MidiProvider::proccess(const AppPortal* portal)
-{
-   if (!me || me->creator != portal)
-      return;
-
-   me->update();
-}
-
-AppPortal::MidiProvider::MidiProvider(const AppPortal* creator)
-   : Svin::Midi::Input("AppPortalVCV", true)
-   , Svin::Midi::Output("AppPortalVCV", true)
-   , Svin::MasterClock::Client()
-   , creator(creator)
-{
-   // will open automatically
-}
-
-AppPortal::MidiProvider::~MidiProvider()
-{
-   Svin::Midi::Input::close();
-   Svin::Midi::Output::close();
-}
-
-void AppPortal::MidiProvider::update()
-{
-   if (hasReset())
-   {
-      std::vector<unsigned char> songPosMessage(3);
-      songPosMessage[0] = ::Midi::Event::SongPositionPointer;
-      songPosMessage[1] = 0;
-      songPosMessage[2] = 0;
-      sendMessage(songPosMessage);
-   }
-   else
-   {
-      while (hasMidiClock())
-      {
-         std::vector<unsigned char> clockMessage(1);
-         clockMessage[0] = ::Midi::Event::Clock;
-         sendMessage(clockMessage);
-      }
-   }
-}
-
-// main class
-
 AppPortal::AppPortal()
    : Svin::Module()
    , displayController(this, Panel::Pixels_Display)
@@ -92,14 +17,9 @@ AppPortal::AppPortal()
    , killButton(this, Panel::Kill)
    , modePython(false)
    , modeSwitch(this, Panel::Mode)
-   , pitchInput(this, Panel::PitchInput)
-   , gateInput(this, Panel::GateInput)
-   , gateOutput(this, Panel::GateOutput)
 {
    setup();
    registerHubClient("AppPortal");
-
-   MidiProvider::hello(this);
 
    displayController.onPressed(this, &AppPortal::displayClicked);
    connectedLight.setDefaultColor(Color::Predefined::Green);
@@ -110,8 +30,6 @@ AppPortal::AppPortal()
 AppPortal::~AppPortal()
 {
    sendKill();
-
-   MidiProvider::goobye(this);
 }
 
 void AppPortal::process(const ProcessArgs& args)
