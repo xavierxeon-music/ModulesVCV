@@ -1,8 +1,6 @@
 #ifndef SvinMasterClockH
 #define SvinMasterClockH
 
-#include <SvinMidi.h>
-
 #include <list>
 #include <mutex>
 
@@ -11,7 +9,7 @@
 
 namespace Svin
 {
-   class MasterClock : public Svin::Midi::Output
+   class MasterClock
    {
    public:
       class Client
@@ -63,7 +61,6 @@ namespace Svin
 
       TempoControl tempo;
       TimeCode::Duration duration;
-      Tempo::RunState oldRunState;
    };
 
 } // namespace Svin

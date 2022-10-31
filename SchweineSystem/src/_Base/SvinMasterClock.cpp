@@ -76,18 +76,13 @@ Svin::MasterClock* Svin::MasterClock::masterInstance = nullptr;
 Svin::MasterClock::Client::List Svin::MasterClock::clientList = Client::List();
 
 Svin::MasterClock::MasterClock()
-   : Svin::Midi::Output(true)
-   , mutex()
+   : mutex()
    , tempo()
    , duration(0)
-   , oldRunState(Tempo::Off)
 {
    if (instanceList.empty())
    {
       masterInstance = this;
-
-      setTargetDeviceName("ClockVCV");
-      open();
    }
 
    instanceList.push_back(this);
@@ -100,7 +95,6 @@ Svin::MasterClock::~MasterClock()
    if (instanceList.empty())
    {
       masterInstance = nullptr;
-      close();
    }
    else if (iAmMasterClock())
    {
@@ -136,10 +130,6 @@ void Svin::MasterClock::midiClock()
    if (!iAmMasterClock())
       return;
 
-   std::vector<unsigned char> clockMessage(1);
-   clockMessage[0] = ::Midi::Event::Clock;
-   sendMessage(clockMessage);
-
    for (Client* client : clientList)
    {
       std::lock_guard<std::mutex> guard(client->mutex);
@@ -155,14 +145,6 @@ void Svin::MasterClock::reset()
    if (!iAmMasterClock())
       return;
 
-   oldRunState = Tempo::Off;
-
-   std::vector<unsigned char> songPosMessage(3);
-   songPosMessage[0] = ::Midi::Event::SongPositionPointer;
-   songPosMessage[1] = 0;
-   songPosMessage[2] = 0;
-   sendMessage(songPosMessage);
-
    for (Client* client : clientList)
    {
       std::lock_guard<std::mutex> guard(client->mutex);
@@ -174,22 +156,6 @@ void Svin::MasterClock::reset()
 void Svin::MasterClock::advance(const float& sampleRate)
 {
    tempo.advance(sampleRate, 3.0);
-
-   if (!iAmMasterClock())
-      return;
-
-   const Tempo::RunState runState = tempo.getRunState();
-   if (runState == oldRunState)
-      return;
-
-   std::vector<unsigned char> clockMessage(1);
-   if (Tempo::Off == runState)
-      clockMessage[0] = ::Midi::Event::Stop;
-   else if (Tempo::FirstTick == runState || Tempo::Running == runState)
-      clockMessage[0] = ::Midi::Event::Continue;
-
-   sendMessage(clockMessage);
-   oldRunState = runState;
 }
 
 Tempo Svin::MasterClock::getTempo() const
