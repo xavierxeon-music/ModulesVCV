@@ -31,3 +31,6 @@
 [submodule "Applications/GrooveMaestro"]
 	path = Applications/GrooveMaestro
 	url = https://github.com/xavierxeon-music/GrooveMaestro.git
+[submodule "Applications/MetroClock"]
+	path = Applications/MetroClock
+	url = https://github.com/xavierxeon-music/MetroClock.git
