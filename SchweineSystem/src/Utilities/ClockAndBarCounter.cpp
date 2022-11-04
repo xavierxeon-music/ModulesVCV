@@ -94,10 +94,10 @@ void ClockAndBarCounter::updateDisplays()
 
    // counter
    displayController.writeText(1, 15, "bar", Svin::DisplayOLED::Font::Normal);
-   displayController.writeText(41, 30, std::to_string(timeCode.bar), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
+   displayController.writeText(41, 30, std::to_string(timeCode.bar + 1), Svin::DisplayOLED::Font::Huge, Svin::DisplayOLED::Alignment::Center);
 
    displayController.writeText(1, 65, "rest", Svin::DisplayOLED::Font::Small);
-   const std::string rest = std::to_string(timeCode.quarter) + '.' + std::to_string(timeCode.tick);
+   const std::string rest = std::to_string(timeCode.quarter + 1) + '.' + std::to_string(timeCode.tick + 1);
    displayController.writeText(41, 75, rest, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    // tempo
