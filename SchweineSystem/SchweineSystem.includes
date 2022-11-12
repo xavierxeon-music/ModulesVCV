@@ -2,5 +2,6 @@ src/_Base
 src/_Gui
 src/_MusicTools/Include
 src/_MusicTools/RememberDummy
+src/_MusicTools/Memory
 ../Rack/include
 ../Rack/dep/include

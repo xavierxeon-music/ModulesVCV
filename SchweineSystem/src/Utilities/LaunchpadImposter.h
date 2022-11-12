@@ -27,6 +27,9 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
+   using TextMap = std::map<uint8_t, std::string>; // midiNote to text
+
+private:
    inline void setup();
 
    void updateDisplays() override;
@@ -34,7 +37,6 @@ private:
 
    void midiClockTick() override;
    void noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity) override;
-   void controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
 
    void buttonPressed(const uint8_t index, const float& x, const float& y);
    void buttonReleased(const uint8_t index, const float& x, const float& y);
@@ -53,6 +55,9 @@ private:
    Svin::LED statusLED;
    std::map<uint8_t, uint8_t> indexToMidiNote;
    std::map<uint8_t, uint8_t> midiNoteToIndex;
+
+   static const TextMap textMap;
+   static const std::vector<Color> palette;
 };
 
 // widget

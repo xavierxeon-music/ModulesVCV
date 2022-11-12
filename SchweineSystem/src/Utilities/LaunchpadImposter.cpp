@@ -5,6 +5,44 @@
 
 #include <SvinLaunchpadClient.h>
 
+const LaunchpadImposter::TextMap LaunchpadImposter::textMap = {{19, u8"\u2022"},
+                                                               {29, ">"},
+                                                               {39, ">"},
+                                                               {49, ">"},
+                                                               {59, ">"},
+                                                               {69, ">"},
+                                                               {79, ">"},
+                                                               {89, ">"},
+                                                               {91, u8"\u25b2"},
+                                                               {92, u8"\u25bc"},
+                                                               {93, u8"\u25c0"},
+                                                               {94, u8"\u25b6"},
+                                                               {95, "S"},
+                                                               {96, "D"},
+                                                               {97, "K"},
+                                                               {98, "U"}};
+
+const std::vector<Color> LaunchpadImposter::palette = []()
+{
+   const std::vector<Color>& sysPalette = Svin::LaunchpadClient::getPalette();
+
+   std::vector<Color> palette(sysPalette.size());
+   palette[0] = sysPalette[0];
+
+   for (uint8_t index = 1; index < sysPalette.size(); index++)
+   {
+      Color color = sysPalette[index];
+      float dist = color.distance(Color::Predefined::Black);
+      while (dist < 6000)
+      {
+         color = color.dim(1.1);
+         dist = color.distance(Color::Predefined::Black);
+      }
+      palette[index] = color;
+   }
+   return palette;
+}();
+
 LaunchpadImposter::LaunchpadImposter()
    : Svin::Module()
    , Svin::Midi::Input(true)
@@ -148,8 +186,6 @@ void LaunchpadImposter::updateDisplays()
 
    deviceIdDisplay.setText(Text::pad(std::to_string(deviceId + 1), 2));
 
-   using TextMap = std::map<uint8_t, std::string>; // midiNote to text
-   static const TextMap textMap = {{19, u8"\u2022"}, {29, ">"}, {39, ">"}, {49, ">"}, {59, ">"}, {69, ">"}, {79, ">"}, {89, ">"}, {91, u8"\u25b2"}, {92, u8"\u25bc"}, {93, u8"\u25c0"}, {94, u8"\u25b6"}, {95, "S"}, {96, "D"}, {97, "K"}, {98, "U"}};
 
    for (uint8_t index = 0; index < buttonList.size(); index++)
    {
@@ -189,9 +225,13 @@ void LaunchpadImposter::midiClockTick()
 
 void LaunchpadImposter::noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity)
 {
-   const Svin::LaunchpadClient::Mode mode = static_cast<Svin::LaunchpadClient::Mode>(channel - 1);
-   static const std::vector<Color>& palette = Svin::LaunchpadClient::getPalette();
-   const Color color = palette.at(velocity);
+   using Mode = Svin::LaunchpadClient::Mode;
+
+   const Mode mode = static_cast<Mode>(channel - 1);
+   Color color = palette.at(velocity);
+
+   if (Mode::Off == mode)
+      color = Color::Predefined::Black;
 
    if (99 == midiNote)
    {
@@ -202,10 +242,6 @@ void LaunchpadImposter::noteOn(const ::Midi::Channel& channel, const uint8_t& mi
       const uint8_t index = midiNoteToIndex[midiNote];
       buttonList[index]->setColor(color);
    }
-}
-
-void LaunchpadImposter::controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value)
-{
 }
 
 void LaunchpadImposter::buttonPressed(const uint8_t index, const float& x, const float& y)
