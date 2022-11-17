@@ -8,10 +8,13 @@ using namespace rack;
 #include <SvinModuleWidget.h>
 
 #include <SvinInput.h>
+#include <SvinKnob.h>
 #include <SvinOutput.h>
 
 #include <Effect/DelayLine.h>
 #include <Effect/StateVariableFilter.h>
+#include <Sound/StandardTable.h>
+#include <Sound/WaveTableOscilator.h>
 
 class Spacer : public Svin::Module
 {
@@ -29,6 +32,7 @@ private:
    {
       DelayLineOne delay;
       StateVariableFilter filter;
+      WaveTable::Oscilator lfo;
    };
 
 private:
@@ -39,7 +43,12 @@ private:
    Svin::Output leftOutput;
    Svin::Output rightOutput;
 
+   Svin::Knob cutoffKnob;
+   Svin::Knob feedbackKnob;
+   Svin::Knob delayKnob;
+
    static constexpr uint8_t lineCount = 64;
+   Standard::Table sineTable;
    Line lines[lineCount];
 };
 

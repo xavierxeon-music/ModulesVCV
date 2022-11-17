@@ -13,8 +13,11 @@ struct Spacer::Panel
       // switches
       // ledbuttons
       // knobs
+      Delay = 0,
+      Feedback = 1,
+      Cutoff = 2,
       // sliders
-      PARAMS_LEN = 0
+      PARAMS_LEN = 3
    };
 
    enum DisplayId
@@ -56,6 +59,10 @@ void Spacer::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
+   configParam(Panel::Delay, -1.f, 1.f, 0.f, "Delay");
+   configParam(Panel::Feedback, -1.f, 1.f, 0.f, "Feedback");
+   configParam(Panel::Cutoff, -1.f, 1.f, 0.f, "Cutoff");
+
    configInput(Panel::In, "In");
 
    configOutput(Panel::RightOut, "RightOut");
@@ -65,6 +72,10 @@ void Spacer::setup()
 void SpacerWidget::setup()
 {
    makePanel("res/Effects/Spacer.svg");
+
+   makeKnob(this, Vec(45.24, 213.16), Spacer::Panel::Delay, 3);
+   makeKnob(this, Vec(45.00, 143.62), Spacer::Panel::Feedback, 3);
+   makeKnob(this, Vec(45.00, 74.09), Spacer::Panel::Cutoff, 3);
 
    makeInput(this, Vec(51.09, 285.55),  Spacer::Panel::In, false);
 
