@@ -100,6 +100,7 @@ private:
    Svin::LaunchpadClient launchpad;
    Svin::ButtonLED connectionButton;
    uint8_t launchpadOffset;
+   bool tryConnectToLaucnhpad;
 
    // input
    Svin::Input uploadInput;

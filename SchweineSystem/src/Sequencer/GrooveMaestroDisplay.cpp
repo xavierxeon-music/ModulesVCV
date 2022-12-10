@@ -187,8 +187,8 @@ void GrooveMaestro::displayContours()
       const uint8_t y = 133 + 14 * row;
 
       std::string name = contour.getName();
-      if (name.length() > 4)
-         name = name.substr(0, 4);
+      if (name.length() > 6)
+         name = name.substr(0, 6);
       const uint8_t xName = 5 + (column * 64);
       controller.writeText(xName, y + 3, name, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Left);
 

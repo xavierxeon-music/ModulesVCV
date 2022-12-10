@@ -102,11 +102,11 @@ void Svin::LaunchpadClient::disconnect()
    //sendPowerSafe(true);
    //switchToProgramMode(false);
 
-   if (Midi::Input::connected())
-      Midi::Input::close();
-
    if (Midi::Output::connected())
       Midi::Output::close();
+
+   if (Midi::Input::connected())
+      Midi::Input::close();
 }
 
 void Svin::LaunchpadClient::connect(const uint8_t& deviceId)
