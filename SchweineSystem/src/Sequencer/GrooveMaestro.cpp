@@ -19,7 +19,7 @@ GrooveMaestro::GrooveMaestro()
    , launchpad()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , launchpadOffset(0)
-   , tryConnectToLaucnhpad(false)
+   , connectionPrompt()
    // input
    , uploadInput(this, Panel::Upload)
    , contoutPassInput(this, Panel::ContourPass)
@@ -55,7 +55,7 @@ GrooveMaestro::GrooveMaestro()
    loopButton.setDefaultColor(Color::Predefined::Green);
 
    connectionButton.setDefaultColor(Color::Predefined::Green);
-   tryConnectToLaucnhpad = true;
+   connectionPrompt.arm();
 }
 
 void GrooveMaestro::process(const ProcessArgs& args)
@@ -71,13 +71,10 @@ void GrooveMaestro::process(const ProcessArgs& args)
    loopButton.setActive(conductor.isLooping());
 
    if (connectionButton.isTriggered() && !launchpad.isConnected())
-      tryConnectToLaucnhpad = true;
+      connectionPrompt.arm();
 
-   if (tryConnectToLaucnhpad)
-   {
-      tryConnectToLaucnhpad = false;
+   if (connectionPrompt.reset())
       connectToLaunchpad();
-   }
 
    // operation mode
    if (operationModeButton.isTriggered())
@@ -421,7 +418,7 @@ void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, cons
 
       const std::string fileName = object.get("fileName").toString();
       loadProject(fileName);
-      tryConnectToLaucnhpad = true;
+      connectionPrompt.arm();
    }
    else if ("Remote" == type)
    {

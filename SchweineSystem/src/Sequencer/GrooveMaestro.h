@@ -51,6 +51,8 @@ using namespace rack;
 #include <SvinOutput.h>
 #include <SvinSwitch.h>
 
+#include <Tools/Prompt.h>
+
 class GrooveMaestro : public Svin::Module, private Svin::MasterClock::Client
 {
 public:
@@ -100,11 +102,11 @@ private:
    Svin::LaunchpadClient launchpad;
    Svin::ButtonLED connectionButton;
    uint8_t launchpadOffset;
-   bool tryConnectToLaucnhpad;
+   Prompt connectionPrompt;
 
    // input
    Svin::Input uploadInput;
-   Svin::Input contoutPassInput;   
+   Svin::Input contoutPassInput;
    Svin::Input gatePassInput;
    Svin::Switch noOffsetSwitch;
 
