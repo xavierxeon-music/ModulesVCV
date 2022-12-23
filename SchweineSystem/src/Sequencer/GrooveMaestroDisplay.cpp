@@ -12,7 +12,7 @@ void GrooveMaestro::updateDisplayPassthrough()
    controller.writeText(65, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    if (!displayGroove())
-      return;
+      return readLaunchpadStopped();
 
    displayContours();
    readLaunchpad();
@@ -28,7 +28,7 @@ void GrooveMaestro::updateDisplayRemote()
    controller.writeText(65, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    if (!displayGroove())
-      return;
+      return readLaunchpadStopped();
 
    displayContours();
    readLaunchpad();
@@ -44,7 +44,7 @@ void GrooveMaestro::updateDisplayPlay()
    controller.writeText(65, 0, "Play", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    if (!displayGroove())
-      return;
+      return readLaunchpadStopped();
 
    displayContours();
    readLaunchpad();
@@ -58,11 +58,11 @@ void GrooveMaestro::displayStoped()
 
    controller.setColor(Color::Predefined::White);
    controller.writeText(5, 12, Text::pad(std::to_string(segmentCount), digitCount), Svin::DisplayOLED::Font::Large);
-   controller.writeText(7 + 12 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
+   controller.writeText(7 + 20 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
 
    const uint32_t segmentIndex = conductor.getCurrentSegmentIndex();
    controller.writeText(5, 32, Text::pad(std::to_string(segmentIndex), digitCount), Svin::DisplayOLED::Font::Large);
-   controller.writeText(7 + 12 * digitCount, 37, "current", Svin::DisplayOLED::Font::Normal);
+   controller.writeText(7 + 20 * digitCount, 37, "current", Svin::DisplayOLED::Font::Normal);
 
    const uint8_t noOfLines = 10;
    const uint8_t noOfLetters = 15;
@@ -187,10 +187,10 @@ void GrooveMaestro::displayContours()
       const uint8_t y = 133 + 14 * row;
 
       std::string name = contour.getName();
-      if (name.length() > 6)
-         name = name.substr(0, 6);
+      if (name.length() > 5)
+         name = name.substr(0, 5);
       const uint8_t xName = 5 + (column * 64);
-      controller.writeText(xName, y + 3, name, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Left);
+      controller.writeText(xName, y + 5, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
       controller.setColor(Color::Predefined::White);
 

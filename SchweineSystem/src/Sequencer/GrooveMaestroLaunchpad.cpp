@@ -104,6 +104,35 @@ void GrooveMaestro::readLaunchpad()
    }
 }
 
+void GrooveMaestro::readLaunchpadStopped()
+{
+   for (const Svin::LaunchpadClient::Pad& pad : launchpad.triggeredPads())
+   {
+      const bool pressed = (Svin::LaunchpadClient::Button::Off != pad.button);
+      if (!pressed)
+         continue;
+
+      if (8 == pad.row)
+      {
+         if (5 == pad.column)
+         {
+            operationMode = OperationMode::Passthrough;
+            updateLaunchpadHeader();
+         }
+         else if (6 == pad.column)
+         {
+            operationMode = OperationMode::Remote;
+            updateLaunchpadHeader();
+         }
+         else if (7 == pad.column)
+         {
+            operationMode = OperationMode::Play;
+            updateLaunchpadHeader();
+         }
+      }
+   }
+}
+
 void GrooveMaestro::updateLaunchpadGrid()
 {
    const Grooves& grooves = (OperationMode::Play == operationMode) ? conductor : localGrooves;

@@ -79,6 +79,7 @@ private:
 
    void connectToLaunchpad();
    void readLaunchpad();
+   void readLaunchpadStopped();
    void updateLaunchpadGrid();
    void updateLaunchpadHeader();
 
