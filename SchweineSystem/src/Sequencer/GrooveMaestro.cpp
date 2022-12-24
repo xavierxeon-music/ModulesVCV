@@ -107,6 +107,9 @@ void GrooveMaestro::process(const ProcessArgs& args)
       return applyZero();
    }
 
+   if (conductor.isPastLoop())
+      return applyZero();
+
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
    if (!on)
