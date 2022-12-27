@@ -10,12 +10,14 @@ struct HubConnect::Panel
    enum ParamId
    {
       // buttons
+      Reset = 0,
+      Stop = 1,
+      Play = 2,
       // switches
       // ledbuttons
-      Connect = 0,
       // knobs
       // sliders
-      PARAMS_LEN = 1
+      PARAMS_LEN = 3
    };
 
    enum DisplayId
@@ -43,20 +45,20 @@ struct HubConnect::Panel
    enum LightId
    {
       // leds
-      RGB_NoteC = 0,
-      RGB_NoteCs = 3,
-      RGB_NoteD = 6,
-      RGB_NoteDs = 9,
-      RGB_NoteE = 12,
-      RGB_NoteF = 15,
-      RGB_NoteFs = 18,
-      RGB_NoteG = 21,
-      RGB_NoteGs = 24,
-      RGB_NoteA = 27,
-      RGB_NoteAs = 30,
-      RGB_NoteB = 33,
+      RGB_Connected = 0,
+      RGB_NoteC = 3,
+      RGB_NoteCs = 6,
+      RGB_NoteD = 9,
+      RGB_NoteDs = 12,
+      RGB_NoteE = 15,
+      RGB_NoteF = 18,
+      RGB_NoteFs = 21,
+      RGB_NoteG = 24,
+      RGB_NoteGs = 27,
+      RGB_NoteA = 30,
+      RGB_NoteAs = 33,
+      RGB_NoteB = 36,
       // ledbuttons
-      RGB_Connect = 36,
       // sliders
       LIGHTS_LEN = 39
    };
@@ -67,15 +69,20 @@ void HubConnect::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configButton(Panel::Connect, "Connect");
+   configButton(Panel::Reset, "Reset");
+   configButton(Panel::Stop, "Stop");
+   configButton(Panel::Play, "Play");
 }
 
 void HubConnectWidget::setup()
 {
    makePanel("res/Utilities/HubConnect.svg");
 
-   makeLEDButton(this, Vec(30.00, 360.06), HubConnect::Panel::Connect, HubConnect::Panel::RGB_Connect);
+   makeButton(this, Vec(29.80, 103.68), HubConnect::Panel::Reset);
+   makeButton(this, Vec(41.72, 73.20), HubConnect::Panel::Stop);
+   makeButton(this, Vec(19.48, 73.20), HubConnect::Panel::Play);
 
+   makeLED(this, Vec(30.00, 360.06), HubConnect::Panel::RGB_Connected);
    makeLED(this, Vec(19.03, 320.67), HubConnect::Panel::RGB_NoteC);
    makeLED(this, Vec(24.93, 303.96), HubConnect::Panel::RGB_NoteCs);
    makeLED(this, Vec(19.03, 287.09), HubConnect::Panel::RGB_NoteD);

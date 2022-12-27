@@ -7,9 +7,13 @@
 HubConnect::HubConnect()
    : Svin::Module()
    , noteList(this)
-   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
+   , playButton(this, Panel::Play)
+   , stopButton(this, Panel::Stop)
+   , resetButton(this, Panel::Reset)
+   , connectedLight(this, Panel::RGB_Connected)
 {
    setup();
+   registerHubClient("Clock");
 
    noteList.append({Panel::RGB_NoteC, Panel::RGB_NoteCs,
                     Panel::RGB_NoteD, Panel::RGB_NoteDs,
@@ -26,15 +30,35 @@ HubConnect::HubConnect()
       noteList[index]->setOn();
    }
 
-   connectionButton.setDefaultColor(Color::Predefined::Green);
+   connectedLight.setDefaultColor(Color::Predefined::Green);
 }
 
 void HubConnect::process(const ProcessArgs& args)
 {
-   if (connectionButton.isTriggered())
-      connectToHub();
+   if (playButton.isTriggered())
+      sendStateToClock(State::Play);
+   else if (stopButton.isTriggered())
+      sendStateToClock(State::Stop);
+   else if (resetButton.isTriggered())
+      sendStateToClock(State::Reset);
 
-   connectionButton.setActive(hubConnected());
+   connectedLight.setActive(hubConnected());
+}
+
+void HubConnect::sendStateToClock(const State& state)
+{
+   Svin::Json::Object object;
+   object.set("_Application", "Clock");
+   object.set("_Type", "Action");
+
+   if (State::Play == state)
+      object.set("action", "start");
+   else if (State::Stop == state)
+      object.set("action", "stop");
+   else if (State::Reset == state)
+      object.set("action", "reset");
+
+   sendDocumentToHub(1, object);
 }
 
 // widget

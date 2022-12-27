@@ -7,7 +7,7 @@ using namespace rack;
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
-#include <SvinButtonLED.h>
+#include <SvinButton.h>
 #include <SvinLED.h>
 
 class HubConnect : public Svin::Module
@@ -22,11 +22,23 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
+   enum class State
+   {
+      Play,
+      Stop,
+      Reset
+   };
+
+private:
    inline void setup();
+   void sendStateToClock(const State& state);
 
 private:
    Svin::LED::List noteList;
-   Svin::ButtonLED connectionButton;
+   Svin::Button playButton;
+   Svin::Button stopButton;
+   Svin::Button resetButton;
+   Svin::LED connectedLight;
 };
 
 // widget
