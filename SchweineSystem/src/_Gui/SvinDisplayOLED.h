@@ -48,7 +48,7 @@ namespace Svin
 
          void drawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2);
          void drawRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool fill);
-         void writeText(const uint8_t x, const uint8_t y, const std::string& text, const uint8_t& fontHeigth, const Alignment& alignment = Alignment::Left);
+         void writeText(const uint8_t x, const int16_t y, const std::string& text, const uint8_t& fontHeigth, const Alignment& alignment = Alignment::Left);
 
          void onPressed(ClickedFunction clickedFunction);
          void onReleased(ClickedFunction clickedFunction);

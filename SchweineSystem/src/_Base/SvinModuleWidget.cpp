@@ -5,6 +5,8 @@
 
 namespace Svin
 {
+   const Color ModuleWidget::BackGroundColor = Color(230, 232, 240);
+
    struct ModuleWidget::PanelBackground : rack::widget::TransparentWidget
    {
       PanelBackground(Vec _size)
@@ -15,7 +17,7 @@ namespace Svin
 
       void draw(const DrawArgs& args) override
       {
-         NVGcolor baseColor = nvgRGB(230, 232, 240);
+         const NVGcolor baseColor = nvgRGB(BackGroundColor.red(), BackGroundColor.green(), BackGroundColor.blue());
 
          nvgBeginPath(args.vg);
          nvgFillColor(args.vg, baseColor);

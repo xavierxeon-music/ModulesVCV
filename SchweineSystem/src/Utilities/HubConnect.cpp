@@ -6,10 +6,11 @@
 
 HubConnect::HubConnect()
    : Svin::Module()
+   , Svin::MasterClock::Client()
+   , playPauseController(this, Panel::Pixels_PlayPause)
+   , isRunning(false)
+   , resetController(this, Panel::Pixels_Reset)
    , noteList(this)
-   , playButton(this, Panel::Play)
-   , stopButton(this, Panel::Stop)
-   , resetButton(this, Panel::Reset)
    , connectedLight(this, Panel::RGB_Connected)
 {
    setup();
@@ -31,18 +32,42 @@ HubConnect::HubConnect()
    }
 
    connectedLight.setDefaultColor(Color::Predefined::Green);
+
+   using ClickedFunction = Svin::DisplayOLED::Controller::ClickedFunction;
+
+   ClickedFunction playPausePressedFunction = std::bind(&HubConnect::playPausePressed, this, std::placeholders::_1, std::placeholders::_2);
+   playPauseController.onPressed(playPausePressedFunction);
+
+   ClickedFunction resetPressedFunction = std::bind(&HubConnect::resetPressed, this, std::placeholders::_1, std::placeholders::_2);
+   resetController.onPressed(resetPressedFunction);
 }
 
 void HubConnect::process(const ProcessArgs& args)
 {
-   if (playButton.isTriggered())
-      sendStateToClock(State::Play);
-   else if (stopButton.isTriggered())
-      sendStateToClock(State::Stop);
-   else if (resetButton.isTriggered())
-      sendStateToClock(State::Reset);
-
    connectedLight.setActive(hubConnected());
+   isRunning = getTempo().isRunningOrFirstTick();
+}
+
+void HubConnect::updateDisplays()
+{
+   //playPauseController.writeText(5, 0, u8"\u23ef", 20); // ⏯ , does not work
+   //resetController.writeText(5, 0, u8"\u23ee", 20); // ⏮  , does not work
+
+   playPauseController.fill(Svin::ModuleWidget::BackGroundColor);
+   if (isRunning)
+   {
+      playPauseController.setColor(Color::Predefined::Yellow);
+      playPauseController.writeText(2, -8, u8"\u25eb", 30); // pause
+   }
+   else
+   {
+      playPauseController.setColor(Color::Predefined::Green);
+      playPauseController.writeText(2, -8, u8"\u25b6", 30); // play
+   }
+
+   resetController.fill(Svin::ModuleWidget::BackGroundColor);
+   resetController.setColor(Color::Predefined::Magenta);
+   resetController.writeText(2, -8, u8"\u2302", 30); // home
 }
 
 void HubConnect::sendStateToClock(const State& state)
@@ -59,6 +84,25 @@ void HubConnect::sendStateToClock(const State& state)
       object.set("action", "reset");
 
    sendDocumentToHub(1, object);
+}
+
+void HubConnect::playPausePressed(const float& x, const float& y)
+{
+   (void)x;
+   (void)y;
+
+   if (isRunning)
+      sendStateToClock(State::Stop);
+   else
+      sendStateToClock(State::Play);
+}
+
+void HubConnect::resetPressed(const float& x, const float& y)
+{
+   (void)x;
+   (void)y;
+
+   sendStateToClock(State::Reset);
 }
 
 // widget

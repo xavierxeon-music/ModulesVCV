@@ -3,12 +3,17 @@
 
 #include <rack.hpp>
 
+#include <Colour.h>
+
 namespace Svin
 {
    class Module;
 
    class ModuleWidget : public rack::ModuleWidget
    {
+   public:
+      static const Color BackGroundColor;
+
    public:
       ModuleWidget(Module* schweineModule);
       virtual ~ModuleWidget();

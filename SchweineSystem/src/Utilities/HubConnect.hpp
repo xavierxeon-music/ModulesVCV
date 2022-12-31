@@ -10,21 +10,20 @@ struct HubConnect::Panel
    enum ParamId
    {
       // buttons
-      Reset = 0,
-      Stop = 1,
-      Play = 2,
       // switches
       // ledbuttons
       // knobs
       // sliders
-      PARAMS_LEN = 3
+      PARAMS_LEN = 0
    };
 
    enum DisplayId
    {
       // lcd
       // oled
-      DISPLAYS_LEN = 0
+      Pixels_Reset = 0,
+      Pixels_PlayPause = 1,
+      DISPLAYS_LEN = 2
    };
 
    enum MeterId
@@ -68,19 +67,11 @@ struct HubConnect::Panel
 void HubConnect::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
-
-   configButton(Panel::Reset, "Reset");
-   configButton(Panel::Stop, "Stop");
-   configButton(Panel::Play, "Play");
 }
 
 void HubConnectWidget::setup()
 {
    makePanel("res/Utilities/HubConnect.svg");
-
-   makeButton(this, Vec(29.80, 103.68), HubConnect::Panel::Reset);
-   makeButton(this, Vec(41.72, 73.20), HubConnect::Panel::Stop);
-   makeButton(this, Vec(19.48, 73.20), HubConnect::Panel::Play);
 
    makeLED(this, Vec(30.00, 360.06), HubConnect::Panel::RGB_Connected);
    makeLED(this, Vec(19.03, 320.67), HubConnect::Panel::RGB_NoteC);
@@ -95,6 +86,9 @@ void HubConnectWidget::setup()
    makeLED(this, Vec(19.03, 171.26), HubConnect::Panel::RGB_NoteA);
    makeLED(this, Vec(24.93, 154.55), HubConnect::Panel::RGB_NoteAs);
    makeLED(this, Vec(19.03, 137.68), HubConnect::Panel::RGB_NoteB);
+
+   makeOLED(this, Vec(19.00, 93.64), HubConnect::Panel::Pixels_Reset, 20, 20);
+   makeOLED(this, Vec(19.00, 64.47), HubConnect::Panel::Pixels_PlayPause, 20, 20);
 }
 
 #endif // NOT HubConnectHPP

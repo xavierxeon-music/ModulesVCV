@@ -104,7 +104,8 @@
          "name": "Gate To Latch",
          "description": "Turn gates or triggers into latches",
          "tags": [
-            "Utility"
+            "Utility",
+            "Clock modulator"
          ]
       },
       {

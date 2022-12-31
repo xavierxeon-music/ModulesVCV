@@ -120,14 +120,14 @@ void Svin::DisplayOLED::Controller::Instruction::Rect::draw(NVGcontext* context)
 class Svin::DisplayOLED::Controller::Instruction::Text : public Instruction
 {
 public:
-   Text(const NVGcolor& color, const uint8_t x, const uint8_t y, const std::string& text, const uint8_t fontHeigth);
+   Text(const NVGcolor& color, const uint8_t x, const int16_t y, const std::string& text, const uint8_t fontHeigth);
 
 private:
    void draw(NVGcontext* context) override;
 
 private:
    const uint8_t x;
-   const uint8_t y;
+   const int16_t y;
    const std::string text;
    const uint8_t fontHeigth;
 
@@ -137,7 +137,7 @@ private:
 
 std::string Svin::DisplayOLED::Controller::Instruction::Text::fontPath;
 
-Svin::DisplayOLED::Controller::Instruction::Text::Text(const NVGcolor& color, const uint8_t x, const uint8_t y, const std::string& text, const uint8_t fontHeigth)
+Svin::DisplayOLED::Controller::Instruction::Text::Text(const NVGcolor& color, const uint8_t x, const int16_t y, const std::string& text, const uint8_t fontHeigth)
    : Instruction(color)
    , x(x)
    , y(y)
@@ -224,15 +224,15 @@ void Svin::DisplayOLED::Controller::drawRect(uint8_t x1, uint8_t y1, uint8_t x2,
    }
 }
 
-void Svin::DisplayOLED::Controller::writeText(const uint8_t x, const uint8_t y, const std::string& text, const uint8_t& fontHeigth, const Alignment& alignment)
+void Svin::DisplayOLED::Controller::writeText(const uint8_t x, const int16_t y, const std::string& text, const uint8_t& fontHeigth, const Alignment& alignment)
 {
-   const float offset = 0.5 * text.length() * fontHeigth;
+   const float offsetX = 0.5 * text.length() * fontHeigth;
 
    uint8_t textX = x;
    if (Alignment::Center == alignment)
-      textX = x - (0.5 * offset);
+      textX = x - (0.5 * offsetX);
    else if (Alignment::Right == alignment)
-      textX = x - offset;
+      textX = x - offsetX;
 
    Instruction::Text* instruction = new Instruction::Text(currentColor, textX, y, text, fontHeigth);
    renderInstructions.push_back(instruction);
