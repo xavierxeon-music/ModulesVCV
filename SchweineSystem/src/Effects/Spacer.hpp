@@ -73,14 +73,14 @@ void SpacerWidget::setup()
 {
    makePanel("res/Effects/Spacer.svg");
 
-   makeKnob(this, Vec(45.24, 213.16), Spacer::Panel::Delay, 3);
-   makeKnob(this, Vec(45.00, 143.62), Spacer::Panel::Feedback, 3);
-   makeKnob(this, Vec(45.00, 74.09), Spacer::Panel::Cutoff, 3);
+   makeKnob(this, Vec(30.47, 205.79), Spacer::Panel::Delay, 3);
+   makeKnob(this, Vec(30.24, 144.25), Spacer::Panel::Feedback, 3);
+   makeKnob(this, Vec(30.24, 82.71), Spacer::Panel::Cutoff, 3);
 
-   makeInput(this, Vec(51.09, 285.55),  Spacer::Panel::In, false);
+   makeInput(this, Vec(30.16, 258.16),  Spacer::Panel::In, false);
 
-   makeOutput(this, Vec(51.09, 355.83), Spacer::Panel::RightOut, false);
-   makeOutput(this, Vec(51.09, 323.07), Spacer::Panel::LeftOut, false);
+   makeOutput(this, Vec(30.00, 355.83), Spacer::Panel::RightOut, false);
+   makeOutput(this, Vec(30.00, 309.04), Spacer::Panel::LeftOut, false);
 }
 
 #endif // NOT SpacerHPP

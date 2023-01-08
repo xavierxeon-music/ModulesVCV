@@ -308,8 +308,18 @@
       {
          "slug": "Spacer",
          "name": "Spacer",
-         "description": "",
-         "tags": []
+         "description": "A messed up reverb",
+         "tags": [
+            "Effect"
+         ]
+      },
+      {
+         "slug": "Mingle",
+         "name": "Mingle",
+         "description": "A sequential switch",
+         "tags": [
+            "Utility"
+         ]
       }
    ]
 }
