@@ -16,7 +16,7 @@ public:
    }
 
 public:
-   void update(const uint8_t& newDefaultDivision, const uint32_t newSegmentCount) override
+   void update(const Tempo::Tick& newDefaultDivision, const uint32_t newSegmentCount) override
    {
       Contour::Poly::update(newDefaultDivision, newSegmentCount);
       Grooves::update(newDefaultDivision, newSegmentCount);
