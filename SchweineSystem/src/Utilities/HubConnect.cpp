@@ -53,7 +53,7 @@ void HubConnect::updateDisplays()
    //playPauseController.writeText(5, 0, u8"\u23ef", 20); // ⏯ , does not work
    //resetController.writeText(5, 0, u8"\u23ee", 20); // ⏮  , does not work
 
-   playPauseController.fill(Svin::ModuleWidget::BackGroundColor);
+   playPauseController.fill(Color::Predefined::Black);
    if (isRunning)
    {
       playPauseController.setColor(Color::Predefined::Yellow);
@@ -65,7 +65,7 @@ void HubConnect::updateDisplays()
       playPauseController.writeText(2, -8, u8"\u25b6", 30); // play
    }
 
-   resetController.fill(Svin::ModuleWidget::BackGroundColor);
+   resetController.fill(Color::Predefined::Black);
    resetController.setColor(Color::Predefined::Magenta);
    resetController.writeText(2, -8, u8"\u2302", 30); // home
 }
