@@ -56,18 +56,18 @@ void HubConnect::updateDisplays()
    playPauseController.fill(Color::Predefined::Black);
    if (isRunning)
    {
-      playPauseController.setColor(Color::Predefined::Yellow);
-      playPauseController.writeText(2, -8, u8"\u25eb", 30); // pause
+      playPauseController.setColor(Color::Predefined::Cyan);
+      playPauseController.writeText(3, -4, u8"\u25eb", 25); // pause
    }
    else
    {
       playPauseController.setColor(Color::Predefined::Green);
-      playPauseController.writeText(2, -8, u8"\u25b6", 30); // play
+      playPauseController.writeText(4, -3, u8"\u25b6", 24); // play
    }
 
    resetController.fill(Color::Predefined::Black);
    resetController.setColor(Color::Predefined::Magenta);
-   resetController.writeText(2, -8, u8"\u2302", 30); // home
+   resetController.writeText(3, -4, u8"\u2302", 25); // home
 }
 
 void HubConnect::sendStateToClock(const State& state)
