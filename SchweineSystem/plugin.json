@@ -324,8 +324,11 @@
       {
          "slug": "NerdSeq",
          "name": "NerdSeq",
-         "description": "",
-         "tags": []
+         "description": "Receive MIDI from NerdSeq",
+         "tags": [
+            "Sequencer",
+            "Midi"
+         ]
       }
    ]
 }
