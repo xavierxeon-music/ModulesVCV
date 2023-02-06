@@ -88,6 +88,7 @@
 ./src/_MusicTools/Include/Tools/DoubleBuffer.h
 ./src/_MusicTools/Include/Tools/Prompt.h
 ./src/_MusicTools/Include/Tools/RingBuffer.h
+./src/_MusicTools/Include/Midi/MidiParser.h
 ./src/_MusicTools/Include/Midi/MidiFile.h
 ./src/_MusicTools/Include/Midi/MidiFileWriter.h
 ./src/_MusicTools/Include/Midi/MidiToolGate.h
@@ -183,6 +184,7 @@
 ./src/_MusicTools/RememberDummy/RememberList.hpp
 ./src/_MusicTools/RememberDummy/Remember.hpp
 ./src/_MusicTools/RememberDummy/RememberArray.hpp
+./src/_MusicTools/MidiParser.hpp
 ./src/_MusicTools/Prompt.hpp
 ./src/_MusicTools/BioFeedbackDummy.hpp
 ./src/_MusicTools/ChainOnOff.hpp

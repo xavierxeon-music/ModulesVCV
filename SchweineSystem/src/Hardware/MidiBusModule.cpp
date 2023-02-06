@@ -61,35 +61,4 @@ void MidiBusModule::processBusMessage(const MidiBus& busMessage)
    if (!busMessage.hasEvents)
       return;
 
-   for (Sequencer::Tick tick = busMessage.startTick; tick <= busMessage.endTick; tick++)
-   {
-      for (uint8_t index = 0; index < 16; index++)
-      {
-         const MidiBus::Channel& busChannel = busMessage.channels[index];
-
-         if (busChannel.noteOffEventMap.find(tick) != busChannel.noteOffEventMap.end())
-         {
-            const Sequencer::NoteEvent::List& eventList = busChannel.noteOffEventMap.at(tick);
-            for (const Sequencer::NoteEvent& noteEvent : eventList)
-            {
-               NoteBuffer buffer(noteEvent.channel, noteEvent.midiNote);
-               sendNoteOff(noteEvent.channel, noteEvent.midiNote);
-
-               bufferList.remove(buffer);
-            }
-         }
-
-         if (busChannel.noteOnEventMap.find(tick) != busChannel.noteOnEventMap.end())
-         {
-            const Sequencer::NoteEvent::List& eventList = busChannel.noteOnEventMap.at(tick);
-            for (const Sequencer::NoteEvent& noteEvent : eventList)
-            {
-               NoteBuffer buffer(noteEvent.channel, noteEvent.midiNote);
-               sendNoteOn(noteEvent.channel, noteEvent.midiNote, noteEvent.velocity);
-
-               bufferList.push_back(buffer);
-            }
-         }
-      }
-   }
 }

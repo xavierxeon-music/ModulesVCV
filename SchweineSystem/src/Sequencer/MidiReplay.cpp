@@ -1,5 +1,6 @@
 #include "MidiReplay.h"
 
+#include <Midi/MidiFileReader.h>
 #include <Music/Note.h>
 #include <Tools/File.h>
 #include <Tools/Variable.h>
@@ -107,8 +108,6 @@ void MidiReplay::process(const ProcessArgs& args)
    // play
    currentTick = midiReplay.toTick(duration, tempo.getPercentage());
 
-   busMessage.startTick = lastTick;
-   busMessage.endTick = currentTick;
    busMessage.hasEvents = false;
 
    const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
@@ -120,22 +119,12 @@ void MidiReplay::process(const ProcessArgs& args)
       for (uint8_t index = 0; index < noOfChannels; index++)
       {
          MidiBus::Channel& busChannel = busMessage.channels[index];
-         const Sequencer::Track& track = midiReplay.getTrackList().at(index);
-         busChannel.isMonophoic = track.isMonophonic;
+         const Midi::Sequence::Track& track = midiReplay.getTrackList().at(index);
 
-         for (Sequencer::Tick tick = lastTick; tick <= currentTick; tick++)
+         for (Midi::Sequence::Tick tick = lastTick; tick <= currentTick; tick++)
          {
-            if (track.noteOffEventMap.find(tick) != track.noteOffEventMap.end())
+            if (track.messageMap.find(tick) != track.messageMap.end())
             {
-               const Sequencer::NoteEvent::List& eventList = track.noteOffEventMap.at(tick);
-               busChannel.noteOffEventMap[tick] = eventList;
-               busMessage.hasEvents = true;
-            }
-            if (track.noteOnEventMap.find(tick) != track.noteOnEventMap.end())
-            {
-               const Sequencer::NoteEvent::List& eventList = track.noteOnEventMap.at(tick);
-               busChannel.noteOnEventMap[tick] = eventList;
-               busMessage.hasEvents = true;
             }
          }
       }
@@ -217,7 +206,7 @@ void MidiReplay::updateDisplays()
       const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
       for (uint8_t index = 0; index < noOfSequencerChannels; index++)
       {
-         const Sequencer::Track& track = midiReplay.getTrackList().at(index);
+         const Midi::Sequence::Track& track = midiReplay.getTrackList().at(index);
          const uint8_t y = 10 + index * 10;
          const std::string polyMarker = track.isMonophonic ? "o" : "+";
          displayController.writeText(1, y, polyMarker + ' ' + track.name, Svin::DisplayOLED::Font::Normal);
@@ -245,7 +234,7 @@ void MidiReplay::loadMidiFile(const std::string& newFileName)
 
    std::cout << fileName << std::endl;
 
-   midiReplay = Midi::File::load(data);
+   midiReplay = Midi::File::Reader(data);
    info = midiReplay.compileInfo();
 }
 

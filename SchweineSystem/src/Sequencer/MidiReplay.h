@@ -8,7 +8,6 @@ using namespace rack;
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
-#include <Blocks/Sequencer.h>
 #include <Midi/MidiCommon.h>
 #include <Midi/MidiFile.h>
 #include <Music/Tempo.h>
@@ -25,13 +24,8 @@ struct MidiBus
 {
    struct Channel
    {
-      Sequencer::NoteEvent::TimeMap noteOffEventMap;
-      Sequencer::NoteEvent::TimeMap noteOnEventMap;
-      bool isMonophoic = false;
    };
 
-   Sequencer::Tick startTick = 0;
-   Sequencer::Tick endTick = 0;
    Tempo::RunState runState = Tempo::Reset;
    bool hasEvents = false;
 
@@ -69,8 +63,8 @@ private:
 
 private:
    std::string fileName;
-   Sequencer midiReplay;
-   Sequencer::Info info;
+   Midi::Sequence midiReplay;
+   Midi::Sequence::Info info;
 
    // display
    DisplayMode displayMode;
@@ -88,8 +82,8 @@ private:
 
    // current position
    TimeCode::Duration duration;
-   Sequencer::Tick currentTick;
-   Sequencer::Tick lastTick;
+   Midi::Sequence::Tick currentTick;
+   Midi::Sequence::Tick lastTick;
 };
 
 // widget

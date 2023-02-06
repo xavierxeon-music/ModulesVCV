@@ -34,63 +34,6 @@ void MidiCV::process(const ProcessArgs& args)
       }
       return;
    }
-
-   if (busMessage.startTick >= busMessage.endTick)
-      return;
-
-   if (!busMessage.hasEvents)
-      return;
-
-   for (uint8_t index = 0; index < busMessage.noOfChannels; index++)
-   {
-      Sequencer::NoteEvent lastEvent;
-      bool foundEvent = false;
-
-      const MidiBus::Channel& busChannel = busMessage.channels[index];
-      using ConstIterator = Sequencer::NoteEvent::TimeMap::const_iterator;
-
-      ConstIterator itOff = busChannel.noteOffEventMap.find(busMessage.endTick);
-      if (itOff != busChannel.noteOffEventMap.cend())
-      {
-         const Sequencer::NoteEvent::List& eventList = itOff->second;
-         if (!eventList.empty())
-         {
-            lastEvent = eventList.at(0);
-            foundEvent = true;
-         }
-      }
-      ConstIterator itOn = busChannel.noteOnEventMap.find(busMessage.endTick);
-      if (itOn != busChannel.noteOnEventMap.cend())
-      {
-         const Sequencer::NoteEvent::List& eventList = itOn->second;
-         if (!eventList.empty())
-         {
-            lastEvent = eventList.at(0);
-            foundEvent = true;
-         }
-      }
-
-      if (!foundEvent)
-         continue;
-
-      if (lastEvent.on && busChannel.isMonophoic)
-      {
-         const float voltage = Note::fromMidi(lastEvent.midiNote).voltage;
-         pitchOutput.setVoltage(voltage, index);
-
-         gateOutput.setOn(index);
-
-         const float velocity = 5.0;
-         velocityOutput.setVoltage(velocity, index);
-      }
-      else
-      {
-         pitchOutput.setVoltage(0.0, index);
-         gateOutput.setOff(index);
-
-         velocityOutput.setVoltage(0.0, index);
-      }
-   }
 }
 
 // widget

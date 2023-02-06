@@ -7,7 +7,6 @@ using namespace rack;
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
-#include <Blocks/Sequencer.h>
 #include <Tools/Range.h>
 
 #include <SvinDisplayLCD.h>
@@ -47,7 +46,6 @@ private:
    Svin::Input::List pitchInputList;
    Svin::Input::List gateInputList;
    Svin::Input::List velocityInputList;
-   Sequencer::NoteEvent prevNoteEvent[4];
 
    Range::Mapper velocityMapper;
 

@@ -21,7 +21,6 @@ MidiMize::MidiMize()
    , pitchInputList(this)
    , gateInputList(this)
    , velocityInputList(this)
-   , prevNoteEvent{}
    , velocityMapper(0.0, 10.0, 0.0, 127.0)
    , drumTriggerList(this)
    , drumState{}
@@ -76,52 +75,6 @@ void MidiMize::process(const ProcessArgs& args)
 {
    MidiBus busMessage;
    busMessage.runState = Tempo::Running;
-   busMessage.endTick = 1;
-
-   for (uint8_t voice = 0; voice < 4; voice++)
-   {
-      const Midi::Channel channel = selectKnobList[voice]->getValue();
-
-      const Note note = Note::fromVoltage(pitchInputList[voice]->getVoltage());
-      const bool gate = gateInputList[voice]->isOn();
-      const uint8_t velocity = velocityMapper(velocityInputList[voice]->getVoltage());
-
-      const Sequencer::NoteEvent currentNoteEvent(channel, note.midiValue, gate, velocity);
-      if (currentNoteEvent == prevNoteEvent[voice])
-         continue;
-
-      Sequencer::NoteEvent::List offList;
-      Sequencer::NoteEvent::List onList;
-
-      if (prevNoteEvent[voice].channel != currentNoteEvent.channel)
-      {
-         prevNoteEvent[voice].on = false; // only used to turn off things
-         offList.push_back(prevNoteEvent[voice]);
-         onList.push_back(currentNoteEvent);
-      }
-      else if (prevNoteEvent[voice].on && !currentNoteEvent.on) // used to be on,  turn off
-      {
-         prevNoteEvent[voice].on = false; // only used to turn off things
-         offList.push_back(prevNoteEvent[voice]);
-      }
-      else if (!prevNoteEvent[voice].on && currentNoteEvent.on) // used to be off, turn on
-      {
-         onList.push_back(currentNoteEvent);
-      }
-      else if ((prevNoteEvent[voice].midiNote != currentNoteEvent.midiNote) || (prevNoteEvent[voice].velocity != currentNoteEvent.velocity))
-      {
-         prevNoteEvent[voice].on = false; // only used to turn off things
-         offList.push_back(prevNoteEvent[voice]);
-         onList.push_back(currentNoteEvent);
-      }
-
-      prevNoteEvent[voice] = currentNoteEvent;
-
-      busMessage.hasEvents = true;
-      busMessage.channels[voice].isMonophoic = true;
-      busMessage.channels[voice].noteOffEventMap[1] = offList;
-      busMessage.channels[voice].noteOnEventMap[1] = onList;
-   }
 
    busMessage.noOfChannels = 4;
    sendBusData<MidiBus>(Side::Right, busMessage);
