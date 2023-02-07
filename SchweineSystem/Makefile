@@ -29,6 +29,7 @@ SOURCES += \
 	$(wildcard src/Effects/*.cpp) \
 	$(wildcard src/Hardware/*.cpp) \
 	$(wildcard src/Morpher/*.cpp) \
+	$(wildcard src/Midi/*.cpp) \
 	$(wildcard src/Sequencer/*.cpp) \
 	$(wildcard src/Synths/*.cpp) \
 	$(wildcard src/Utilities/*.cpp) \

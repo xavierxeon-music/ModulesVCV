@@ -24,6 +24,7 @@ struct MidiBus
 {
    struct Channel
    {
+      Midi::Sequence::TimeMessageMap messageMap;
    };
 
    Tempo::RunState runState = Tempo::Reset;
@@ -72,7 +73,9 @@ private:
    Svin::DisplayOLED::Controller displayController;
 
    // manual
+   Svin::Input playInput;
    Svin::Input manualResetInput;
+   Svin::Output endOutput;
 
    // cycle
    Svin::ButtonLED loopButton;

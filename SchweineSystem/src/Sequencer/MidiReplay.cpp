@@ -1,6 +1,6 @@
 #include "MidiReplay.h"
 
-#include <Midi/MidiFileReader.h>
+#include <Midi/MidiFile.h>
 #include <Music/Note.h>
 #include <Tools/File.h>
 #include <Tools/Variable.h>
@@ -20,7 +20,9 @@ MidiReplay::MidiReplay()
    , pageButton(this, Panel::Page)
    , displayController(this, Panel::Pixels_Display)
    // manual
+   , playInput(this, Panel::Play)
    , manualResetInput(this, Panel::Reset)
+   , endOutput(this, Panel::End)
    // cycle
    , loopButton(this, Panel::Loop, Panel::RGB_Loop)
    , isLooping(false)
@@ -42,7 +44,7 @@ MidiReplay::MidiReplay()
 void MidiReplay::process(const ProcessArgs& args)
 {
    // clock
-   const bool isPlay = inputs[Panel::Play].isConnected() ? (inputs[Panel::Play].getVoltage() > 3.0) : true;
+   const bool isPlay = playInput.isConnected() ? (playInput.getVoltage() > 3.0) : true;
    atEnd = (lastTick > info.maxTick);
 
    // screen mode
@@ -67,9 +69,9 @@ void MidiReplay::process(const ProcessArgs& args)
       endPulse.trigger();
 
    if (endPulse.process(args.sampleTime))
-      outputs[Panel::End].setVoltage(5.0);
+      endOutput.setVoltage(5.0);
    else
-      outputs[Panel::End].setVoltage(0.0);
+      endOutput.setVoltage(0.0);
 
    if (atEnd && isLooping)
    {
@@ -107,7 +109,6 @@ void MidiReplay::process(const ProcessArgs& args)
 
    // play
    currentTick = midiReplay.toTick(duration, tempo.getPercentage());
-
    busMessage.hasEvents = false;
 
    const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
@@ -125,6 +126,8 @@ void MidiReplay::process(const ProcessArgs& args)
          {
             if (track.messageMap.find(tick) != track.messageMap.end())
             {
+               busChannel.messageMap[tick] = track.messageMap.at(tick);
+               busMessage.hasEvents = true;
             }
          }
       }

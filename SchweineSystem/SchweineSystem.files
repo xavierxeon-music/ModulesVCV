@@ -64,7 +64,6 @@
 ./src/_MusicTools/Include/Blocks/BioFeedbackDummy.h
 ./src/_MusicTools/Include/Blocks/Contour.h
 ./src/_MusicTools/Include/Blocks/Grooves.h
-./src/_MusicTools/Include/Blocks/Sequencer.h
 ./src/_MusicTools/Include/Blocks/ChainOnOff.h
 ./src/_MusicTools/Include/Abstract/AbstractEffect.h
 ./src/_MusicTools/Include/Abstract/AbstractOscilator.h
@@ -223,7 +222,6 @@
 ./src/_MusicTools/Glide.hpp
 ./src/_MusicTools/MidiToolGate.hpp
 ./src/_MusicTools/Range.hpp
-./src/_MusicTools/Sequencer.hpp
 ./src/_MusicTools/MidiFileReader.hpp
 ./src/_MusicTools/Text.hpp
 ./src/_MusicTools/CvSwitch.hpp
@@ -289,6 +287,7 @@
 ./src/_Base/SvinRenderInstruction.cpp
 ./src/_Base/SvinMidi.cpp
 ./src/_Base/SvinOrigin.cpp
+./src/_MusicTools/MidiCommon.cpp
 ./src/_MusicTools/AbstractSoundSource.cpp
 ./src/_MusicTools/Spectrum.cpp
 ./src/_MusicTools/AbstractEffect.cpp
