@@ -3,8 +3,6 @@
 
 #include <rack.hpp>
 
-#include <rtmidi/RtMidi.h>
-
 #include <MusicTools.h>
 
 #include <SvinJson.h>

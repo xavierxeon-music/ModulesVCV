@@ -96,7 +96,7 @@ void Svin::Module::Bus<DataType>::removeModule(Module* module)
 template <typename DataType>
 Svin::Module* Svin::Module::busModule(const Side& side) const
 {
-   rack::Module* expanderModule = (Side::Left == side) ? expanderModule = leftExpander.module : expanderModule = rightExpander.module;
+   rack::Module* expanderModule = (Side::Left == side) ? leftExpander.module : rightExpander.module;
    if (!expanderModule)
       return nullptr;
 
@@ -109,7 +109,6 @@ Svin::Module* Svin::Module::busModule(const Side& side) const
 
    return module;
 }
-
 
 template <typename DataType>
 void Svin::Module::registerAsBusModule()

@@ -5,7 +5,10 @@
 
 #include <map>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-override"
 #include <rtmidi/RtMidi.h>
+#pragma GCC diagnostic pop
 
 #include <Midi/MidiCommon.h>
 #include <Music/Note.h>
