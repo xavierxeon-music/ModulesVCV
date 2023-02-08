@@ -7,7 +7,6 @@ using namespace rack;
 #include <Blocks/CvSwitch.h>
 
 #include <SvinMasterClock.h>
-#include <SvinMidiBus.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
@@ -17,7 +16,7 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinSwitch.h>
 
-class AturiaStep : public Svin::Module, public Svin::MidiBus::Module, private Svin::MasterClock::Client
+class AturiaStep : public Svin::Module, public Svin::Midi::Output, private Svin::MasterClock::Client
 {
 public:
    struct Panel;

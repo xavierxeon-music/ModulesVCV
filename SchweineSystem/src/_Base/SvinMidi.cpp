@@ -170,7 +170,7 @@ void Svin::Midi::Output::sendDocument(const ::Midi::Channel& channel, const Json
    sendControllerChange(channel, ::Midi::ControllerMessage::DataApply, docIndex);
 }
 
-void Svin::Midi::Output::sendMessage(const std::vector<uint8_t>& message)
+void Svin::Midi::Output::sendMessage(const Bytes &message)
 {
    if (!connected())
       return;

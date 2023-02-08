@@ -9,8 +9,6 @@
 #include <SvinMasterClock.h>
 #include <SvinOrigin.h>
 
-#include <SvinMidiBus.h>
-
 MidiReplay::MidiReplay()
    : Svin::Module()
    , Svin::MasterClock::Client()
@@ -36,7 +34,7 @@ MidiReplay::MidiReplay()
    , lastTick(0)
 {
    setup();
-   registerAsBusModule<Svin::MidiBus::Message>();
+   registerAsBusModule<Svin::Midi::Bus>();
 
    displayController.onPressedOpenFileFunction(this, &MidiReplay::loadMidiFile, "MIDI:mid");
 
@@ -100,12 +98,12 @@ void MidiReplay::process(const ProcessArgs& args)
       }
    }
 
-   Svin::MidiBus::Message busMessage;
+   Svin::Midi::Bus busMessage;
    const Tempo tempo = getTempo();
    busMessage.runState = tempo.getRunState();
    if (!tempo.isRunningOrFirstTick())
    {
-      sendBusData<Svin::MidiBus::Message>(Side::Right, busMessage);
+      sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
       return;
    }
 
@@ -120,7 +118,7 @@ void MidiReplay::process(const ProcessArgs& args)
    {
       for (uint8_t index = 0; index < noOfChannels; index++)
       {
-         Svin::MidiBus::Message::Channel& busChannel = busMessage.channels[index];
+         Svin::Midi::Bus::Channel& busChannel = busMessage.channels[index];
          busChannel.hasEvents = false;
 
          const Midi::Sequence::Track& track = midiReplay.getTrackList().at(index);
@@ -128,7 +126,7 @@ void MidiReplay::process(const ProcessArgs& args)
          {
             if (track.messageMap.find(tick) != track.messageMap.end())
             {
-               const Midi::Sequence::MessageList messageList = track.messageMap.at(tick);
+               const Midi::MessageList messageList = track.messageMap.at(tick);
                mergeVectors(busChannel.messageList, messageList);
                busChannel.hasEvents = true;
             }
@@ -137,7 +135,7 @@ void MidiReplay::process(const ProcessArgs& args)
 
       lastTick = currentTick;
    }
-   sendBusData<Svin::MidiBus::Message>(Side::Right, busMessage);
+   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
 }
 
 void MidiReplay::updateDisplays()

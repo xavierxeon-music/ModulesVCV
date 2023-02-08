@@ -4,8 +4,6 @@
 
 #include <SvinOrigin.h>
 
-#include <SvinMidiBus.h>
-
 MidiCV::MidiCV()
    : Svin::Module()
    , Midi::Parser()
@@ -17,13 +15,13 @@ MidiCV::MidiCV()
    , velocityBuffer{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 {
    setup();
-   registerAsBusModule<Svin::MidiBus::Message>();
+   registerAsBusModule<Svin::Midi::Bus>();
 }
 
 void MidiCV::process(const ProcessArgs& args)
 {
-   Svin::MidiBus::Message busMessage = getBusData<Svin::MidiBus::Message>(Side::Left);
-   sendBusData<Svin::MidiBus::Message>(Side::Right, busMessage);
+   Svin::Midi::Bus busMessage = getBusData<Svin::Midi::Bus>(Side::Left);
+   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
 
    pitchOutput.setNumberOfChannels(busMessage.noOfChannels);
    gateOutput.setNumberOfChannels(busMessage.noOfChannels);
@@ -41,7 +39,7 @@ void MidiCV::process(const ProcessArgs& args)
          if (!busMessage.channels[channel].hasEvents)
             continue;
 
-         const Midi::Sequence::MessageList& messageList = busMessage.channels[channel].messageList;
+         const Midi::MessageList& messageList = busMessage.channels[channel].messageList;
          for (const Bytes& message : messageList)
             prcocessMessage(message);
       }
@@ -95,4 +93,3 @@ MidiCVWidget::MidiCVWidget(MidiCV* module)
 
 // create module
 Model* modelMidiCV = Svin::Origin::the()->addModule<MidiCV, MidiCVWidget>("MidiCV");
-

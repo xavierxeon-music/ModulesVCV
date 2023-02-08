@@ -2,8 +2,6 @@
 
 #include <Tools/Text.h>
 
-#include <SvinMidiBus.h>
-
 bool MidiMize::DrumState::operator!=(const DrumState& other) const
 {
    if (active != other.active)
@@ -26,7 +24,7 @@ MidiMize::MidiMize()
    , drumState{}
 {
    setup();
-   registerAsBusModule<Svin::MidiBus::Message>();
+   registerAsBusModule<Svin::Midi::Bus>();
 
    selectKnobList.append({Panel::MeloA_Select,
                           Panel::MeloB_Select,
@@ -73,11 +71,11 @@ MidiMize::MidiMize()
 
 void MidiMize::process(const ProcessArgs& args)
 {
-   Svin::MidiBus::Message busMessage;
+   Svin::Midi::Bus busMessage;
    busMessage.runState = Tempo::Running;
 
    busMessage.noOfChannels = 4;
-   sendBusData<Svin::MidiBus::Message>(Side::Right, busMessage);
+   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
 }
 
 void MidiMize::updateDisplays()
@@ -109,11 +107,10 @@ void MidiMize::save(Svin::Json::Object& rootObject)
 // widget
 
 MidiMizeWidget::MidiMizeWidget(MidiMize* module)
-: Svin::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // create module
 Model* modelMidiMize = Svin::Origin::the()->addModule<MidiMize, MidiMizeWidget>("MidiMize");
-

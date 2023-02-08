@@ -4,11 +4,11 @@
 
 DoepferQuad::DoepferQuad()
    : Svin::Module()
-   , Svin::MidiBus::Module(Midi::Device::DopeferQuad1, this)
+   , Svin::Midi::Output(Midi::Device::DopeferQuad1)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
 {
    setup();
-   registerAsBusModule<Svin::MidiBus::Message>();
+   registerAsBusModule<Svin::Midi::Bus>();
 
    connectionButton.setDefaultColor(Color::Predefined::Green);
    connectToMidiDevice();
@@ -16,8 +16,8 @@ DoepferQuad::DoepferQuad()
 
 void DoepferQuad::process(const ProcessArgs& args)
 {
-   Svin::MidiBus::Message busMessage = getBusData<Svin::MidiBus::Message>(Side::Left);
-   sendBusData<Svin::MidiBus::Message>(Side::Right, busMessage);
+   Svin::Midi::Bus busMessage = getBusData<Svin::Midi::Bus>(Side::Left);
+   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
 
    if (connectionButton.isTriggered())
       connectToMidiDevice();
@@ -25,7 +25,15 @@ void DoepferQuad::process(const ProcessArgs& args)
    if (!connected())
       return;
 
-   processBusMessage(busMessage);
+   for (uint8_t channel = 0; channel < busMessage.noOfChannels; channel++)
+   {
+      if (!busMessage.channels[channel].hasEvents)
+         continue;
+
+      const ::Midi::MessageList& messageList = busMessage.channels[channel].messageList;
+      for (const Bytes& message : messageList)
+         sendMessage(message);
+   }
 }
 
 void DoepferQuad::connectToMidiDevice()
@@ -53,4 +61,3 @@ DoepferQuadWidget::DoepferQuadWidget(DoepferQuad* module)
 
 // create module
 Model* modelDoepferQuad = Svin::Origin::the()->addModule<DoepferQuad, DoepferQuadWidget>("DoepferQuad");
-

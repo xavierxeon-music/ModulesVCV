@@ -12,6 +12,7 @@
 
 #include <Midi/MidiCommon.h>
 #include <Music/Note.h>
+#include <Music/Tempo.h>
 #include <MusicTools.h>
 
 #include <SvinJson.h>
@@ -22,6 +23,20 @@ namespace Svin
    // midi channels range from 1 -16
    namespace Midi
    {
+
+      struct Bus
+      {
+         struct Channel
+         {
+            ::Midi::MessageList messageList;
+            bool hasEvents = false;
+         };
+
+         Tempo::RunState runState = Tempo::Reset;
+         uint8_t noOfChannels = 0;
+         Channel channels[16];
+      };
+
       class Common
       {
       public:
@@ -60,7 +75,7 @@ namespace Svin
          void sendDocument(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex = 0);
 
       protected:
-         void sendMessage(const std::vector<uint8_t>& message);
+         void sendMessage(const Bytes& message);
 
       private:
          RtMidiOut midiOutput;

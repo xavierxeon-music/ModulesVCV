@@ -6,7 +6,7 @@
 
 AturiaStep::AturiaStep()
    : Svin::Module()
-   , Svin::MidiBus::Module(Midi::Device::KeyStep1, this)
+   , Svin::Midi::Output(Midi::Device::KeyStep1)
    , Svin::MasterClock::Client()
    , useDrumChannel(false)
    , drumButon(this, Panel::Drums, Panel::RGB_Drums)
@@ -56,14 +56,24 @@ AturiaStep::AturiaStep()
 
 void AturiaStep::process(const ProcessArgs& args)
 {
-   Svin::MidiBus::Message busMessage = getBusData<Svin::MidiBus::Message>(Side::Left);
-   sendBusData<Svin::MidiBus::Message>(Side::Right, busMessage);
+   Svin::Midi::Bus busMessage = getBusData<Svin::Midi::Bus>(Side::Left);
+   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
 
    if (connectionButton.isTriggered())
       connectToMidiDevice();
 
    if (connected())
-      processBusMessage(busMessage);
+   {
+      for (uint8_t channel = 0; channel < busMessage.noOfChannels; channel++)
+      {
+         if (!busMessage.channels[channel].hasEvents)
+            continue;
+
+         const ::Midi::MessageList& messageList = busMessage.channels[channel].messageList;
+         for (const Bytes& message : messageList)
+            sendMessage(message);
+      }
+   }
 
    updateClockState();
    if (hasReset())
@@ -221,4 +231,3 @@ AturiaStepWidget::AturiaStepWidget(AturiaStep* module)
 
 // create module
 Model* modelAturiaStep = Svin::Origin::the()->addModule<AturiaStep, AturiaStepWidget>("AturiaStep");
-
