@@ -34,8 +34,8 @@ private:
    inline void setup();
    void connectToMidiDevice();
 
-   void midiClockTick() override;
-   void songPosition(const uint16_t position) override;
+   void clockTick() override;
+   void songPosition(const uint16_t& position) override;
 
 private:
    // midi

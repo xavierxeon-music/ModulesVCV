@@ -133,7 +133,7 @@ void ClockAndBarCounter::connectToMidiDevice()
    connectionButton.setOn();
 }
 
-void ClockAndBarCounter::midiClockTick()
+void ClockAndBarCounter::clockTick()
 {
    if (clockInput.isConnected())
       return;
@@ -148,7 +148,7 @@ void ClockAndBarCounter::midiClockTick()
    clockOutput.trigger();
 }
 
-void ClockAndBarCounter::songPosition(const uint16_t position)
+void ClockAndBarCounter::songPosition(const uint16_t& position)
 {
    if (clockInput.isConnected())
       return;

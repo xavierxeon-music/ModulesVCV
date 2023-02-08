@@ -1,6 +1,8 @@
 #ifndef SvinMidiH
 #define SvinMidiH
 
+#include <Midi/MidiParser.h>
+
 #include <map>
 
 #include <rtmidi/RtMidi.h>
@@ -61,7 +63,7 @@ namespace Svin
          RtMidiOut midiOutput;
       };
 
-      class Input : public Common
+      class Input : public Common, public ::Midi::Parser
       {
       public:
          Input(bool isVirtual);
@@ -74,12 +76,7 @@ namespace Svin
          void close();
          bool connected();
 
-         virtual void midiClockTick();
-         virtual void songPosition(const uint16_t position);
-
-         virtual void noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity);
-         virtual void noteOff(const ::Midi::Channel& channel, const uint8_t& midiNote);
-         virtual void controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value);
+         virtual void controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
          virtual void document(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex);
 
       private:
@@ -87,7 +84,6 @@ namespace Svin
 
       private:
          static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
-         void prcocess(const Bytes& buffer);
 
       private:
          RtMidiIn midiInput;

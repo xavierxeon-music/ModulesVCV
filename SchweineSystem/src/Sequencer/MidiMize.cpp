@@ -2,7 +2,7 @@
 
 #include <Tools/Text.h>
 
-#include "MidiReplay.h"
+#include <SvinMidiBus.h>
 
 bool MidiMize::DrumState::operator!=(const DrumState& other) const
 {
@@ -26,7 +26,7 @@ MidiMize::MidiMize()
    , drumState{}
 {
    setup();
-   registerAsBusModule<MidiBus>();
+   registerAsBusModule<Svin::MidiBus::Message>();
 
    selectKnobList.append({Panel::MeloA_Select,
                           Panel::MeloB_Select,
@@ -73,11 +73,11 @@ MidiMize::MidiMize()
 
 void MidiMize::process(const ProcessArgs& args)
 {
-   MidiBus busMessage;
+   Svin::MidiBus::Message busMessage;
    busMessage.runState = Tempo::Running;
 
    busMessage.noOfChannels = 4;
-   sendBusData<MidiBus>(Side::Right, busMessage);
+   sendBusData<Svin::MidiBus::Message>(Side::Right, busMessage);
 }
 
 void MidiMize::updateDisplays()

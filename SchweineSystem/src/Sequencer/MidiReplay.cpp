@@ -9,6 +9,8 @@
 #include <SvinMasterClock.h>
 #include <SvinOrigin.h>
 
+#include <SvinMidiBus.h>
+
 MidiReplay::MidiReplay()
    : Svin::Module()
    , Svin::MasterClock::Client()
@@ -34,7 +36,7 @@ MidiReplay::MidiReplay()
    , lastTick(0)
 {
    setup();
-   registerAsBusModule<MidiBus>();
+   registerAsBusModule<Svin::MidiBus::Message>();
 
    displayController.onPressedOpenFileFunction(this, &MidiReplay::loadMidiFile, "MIDI:mid");
 
@@ -98,18 +100,17 @@ void MidiReplay::process(const ProcessArgs& args)
       }
    }
 
-   MidiBus busMessage;
+   Svin::MidiBus::Message busMessage;
    const Tempo tempo = getTempo();
    busMessage.runState = tempo.getRunState();
    if (!tempo.isRunningOrFirstTick())
    {
-      sendBusData<MidiBus>(Side::Right, busMessage);
+      sendBusData<Svin::MidiBus::Message>(Side::Right, busMessage);
       return;
    }
 
    // play
    currentTick = midiReplay.toTick(duration, tempo.getPercentage());
-   busMessage.hasEvents = false;
 
    const uint64_t noOfSequencerChannels = midiReplay.getTrackList().size();
    const uint8_t noOfChannels = (noOfSequencerChannels > 16) ? 16 : noOfSequencerChannels;
@@ -119,22 +120,24 @@ void MidiReplay::process(const ProcessArgs& args)
    {
       for (uint8_t index = 0; index < noOfChannels; index++)
       {
-         MidiBus::Channel& busChannel = busMessage.channels[index];
-         const Midi::Sequence::Track& track = midiReplay.getTrackList().at(index);
+         Svin::MidiBus::Message::Channel& busChannel = busMessage.channels[index];
+         busChannel.hasEvents = false;
 
+         const Midi::Sequence::Track& track = midiReplay.getTrackList().at(index);
          for (Midi::Sequence::Tick tick = lastTick; tick <= currentTick; tick++)
          {
             if (track.messageMap.find(tick) != track.messageMap.end())
             {
-               busChannel.messageMap[tick] = track.messageMap.at(tick);
-               busMessage.hasEvents = true;
+               const Midi::Sequence::MessageList messageList = track.messageMap.at(tick);
+               mergeVectors(busChannel.messageList, messageList);
+               busChannel.hasEvents = true;
             }
          }
       }
 
       lastTick = currentTick;
    }
-   sendBusData<MidiBus>(Side::Right, busMessage);
+   sendBusData<Svin::MidiBus::Message>(Side::Right, busMessage);
 }
 
 void MidiReplay::updateDisplays()

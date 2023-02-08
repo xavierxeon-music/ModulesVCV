@@ -182,6 +182,7 @@ void Svin::Midi::Output::sendMessage(const std::vector<uint8_t>& message)
 
 Svin::Midi::Input::Input(bool isVirtual)
    : Common(isVirtual)
+   , ::Midi::Parser()
    , midiInput()
    , docBufferMap()
 {
@@ -251,34 +252,10 @@ bool Svin::Midi::Input::connected()
    return midiInput.isPortOpen();
 }
 
-void Svin::Midi::Input::midiClockTick()
-{
-   // do nothing
-}
-
-void Svin::Midi::Input::songPosition(const uint16_t position)
-{
-   (void)position;
-   // do nothing
-}
-
-void Svin::Midi::Input::noteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity)
-{
-   (void)channel;
-   (void)midiNote;
-   (void)velocity;
-   // do nothing
-}
-
-void Svin::Midi::Input::noteOff(const ::Midi::Channel& channel, const uint8_t& midiNote)
-{
-   (void)channel;
-   (void)midiNote;
-   // do nothing
-}
-
 void Svin::Midi::Input::controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value)
 {
+   ::Midi::Parser::controllerChange(channel, controllerMessage, value);
+
    if (controllerMessage == ::Midi::ControllerMessage::DataInit)
    {
       docBufferMap[channel].clear();
@@ -320,7 +297,7 @@ void Svin::Midi::Input::midiReceive(double timeStamp, std::vector<unsigned char>
       if (0 == buffer.size())
          return;
 
-      me->prcocess(buffer);
+      me->prcocessMessage(buffer);
       buffer.clear();
    };
 
@@ -334,51 +311,4 @@ void Svin::Midi::Input::midiReceive(double timeStamp, std::vector<unsigned char>
       buffer.push_back(byte);
    }
    maybeProcessBuffer();
-}
-
-void Svin::Midi::Input::prcocess(const Bytes& buffer)
-{
-   const bool isSystemEvent = (0xF0 == (buffer[0] & 0xF0));
-   if (isSystemEvent)
-   {
-      const ::Midi::Event event = static_cast<::Midi::Event>(buffer[0]);
-      if (::Midi::Event::Clock == event)
-      {
-         midiClockTick();
-      }
-      else if (::Midi::Event::SongPositionPointer == event)
-      {
-         const uint8_t frontByte = buffer[1];
-         const uint8_t backByte = buffer[2];
-         const uint16_t position = frontByte * 128 + backByte;
-
-         songPosition(position);
-      }
-   }
-   else
-   {
-      const ::Midi::Event event = static_cast<::Midi::Event>(buffer[0] & 0xF0);
-      const ::Midi::Channel channel = 1 + (buffer[0] & 0x0F);
-
-      if (::Midi::Event::NoteOn == event)
-      {
-         const uint8_t midiNote = buffer[1];
-         const ::Midi::Velocity velocity = buffer[2];
-
-         noteOn(channel, midiNote, velocity);
-      }
-      else if (::Midi::Event::NoteOff == event)
-      {
-         const uint8_t midiNote = buffer[1];
-
-         noteOff(channel, midiNote);
-      }
-      else if (::Midi::Event::ControlChange == event)
-      {
-         const ::Midi::ControllerMessage message = static_cast<::Midi::ControllerMessage>(buffer[1]);
-         const uint8_t value = buffer[2];
-
-         controllerChange(channel, message, value);
-      }
-   }
 }

@@ -10,9 +10,7 @@ using namespace rack;
 
 #include <Midi/MidiCommon.h>
 #include <Midi/MidiFile.h>
-#include <Music/Tempo.h>
 #include <Music/TimeCode.h>
-
 
 #include <SvinButton.h>
 #include <SvinButtonLED.h>
@@ -20,19 +18,6 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinOutput.h>
 
-struct MidiBus
-{
-   struct Channel
-   {
-      Midi::Sequence::TimeMessageMap messageMap;
-   };
-
-   Tempo::RunState runState = Tempo::Reset;
-   bool hasEvents = false;
-
-   uint8_t noOfChannels = 0;
-   Channel channels[16];
-};
 
 class MidiReplay : public Svin::Module, public Svin::MasterClock::Client
 {

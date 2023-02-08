@@ -1,12 +1,12 @@
-#include "MidiBusModule.h"
+#include "SvinMidiBus.h"
 
-MidiBusModule::NoteBuffer::NoteBuffer(uint8_t channel, uint8_t key)
+Svin::MidiBus::Module::NoteBuffer::NoteBuffer(uint8_t channel, uint8_t key)
    : channel(channel)
    , key(key)
 {
 }
 
-bool MidiBusModule::NoteBuffer::operator==(const NoteBuffer& other) const
+bool Svin::MidiBus::Module::NoteBuffer::operator==(const NoteBuffer& other) const
 {
    if (channel != other.channel)
       return false;
@@ -16,22 +16,16 @@ bool MidiBusModule::NoteBuffer::operator==(const NoteBuffer& other) const
    return true;
 }
 
-std::ostream& operator<<(std::ostream& os, const MidiBusModule::NoteBuffer& buffer)
-{
-   os << "ch = " << (uint16_t)buffer.channel << " @ " << Note::fromMidi(buffer.key).name;
-   return os;
-}
-
 // class
 
-MidiBusModule::MidiBusModule(const Midi::Device::Channel& deviceChannel, Svin::Module* module)
+Svin::MidiBus::Module::Module(const ::Midi::Device::Channel& deviceChannel, Svin::Module* module)
    : Svin::Midi::Output(deviceChannel)
    , bufferList()
    , wasRunning(false)
 {
 }
 
-void MidiBusModule::processBusMessage(const MidiBus& busMessage)
+void Svin::MidiBus::Module::processBusMessage(const Message& busMessage)
 {
    const bool isRunning = (Tempo::Running == busMessage.runState) || (Tempo::FirstTick == busMessage.runState);
 
@@ -58,7 +52,5 @@ void MidiBusModule::processBusMessage(const MidiBus& busMessage)
    if (Tempo::Reset == busMessage.runState)
       bufferList.clear();
 
-   if (!busMessage.hasEvents)
-      return;
 
 }

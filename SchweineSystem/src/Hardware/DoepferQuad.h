@@ -9,9 +9,9 @@ using namespace rack;
 
 #include <SvinButtonLED.h>
 
-#include "MidiBusModule.h"
+#include <SvinMidiBus.h>
 
-class DoepferQuad : public Svin::Module, public MidiBusModule
+class DoepferQuad : public Svin::Module, public Svin::MidiBus::Module
 {
 public:
    struct Panel;
