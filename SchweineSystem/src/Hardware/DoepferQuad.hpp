@@ -62,7 +62,7 @@ void DoepferQuadWidget::setup()
 {
    makePanel("res/Hardware/DoepferQuad.svg");
 
-   makeLEDButton(this, Vec(30.00, 340.14), DoepferQuad::Panel::Connect, DoepferQuad::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(29.95, 350.00), DoepferQuad::Panel::Connect, DoepferQuad::Panel::RGB_Connect);
 }
 
 #endif // NOT DoepferQuadHPP

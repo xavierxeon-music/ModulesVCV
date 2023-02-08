@@ -75,7 +75,7 @@ void BefacoACDCWidget::setup()
 {
    makePanel("res/Hardware/BefacoACDC.svg");
 
-   makeLEDButton(this, Vec(30.00, 339.33), BefacoACDC::Panel::Connect, BefacoACDC::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(30.00, 350.00), BefacoACDC::Panel::Connect, BefacoACDC::Panel::RGB_Connect);
 
    makeOutput(this, Vec(25.59, 256.64), BefacoACDC::Panel::D, false);
    makeOutput(this, Vec(25.59, 205.31), BefacoACDC::Panel::C, false);

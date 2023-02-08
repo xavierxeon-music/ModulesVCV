@@ -144,6 +144,9 @@ DataType Svin::Module::getBusData(const Side& side)
    Module::Expander& source = (Side::Left == side) ? leftExpander : rightExpander;
    DataType* busData = reinterpret_cast<DataType*>(source.consumerMessage);
 
+   if (!busData)
+      return DataType{};
+
    return *busData;
 }
 

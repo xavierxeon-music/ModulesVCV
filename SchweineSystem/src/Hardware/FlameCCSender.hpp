@@ -70,7 +70,7 @@ void FlameCCSenderWidget::setup()
 
    makeSwitch(this, Vec(37.78, 194.76), FlameCCSender::Panel::Half, false);
 
-   makeLEDButton(this, Vec(30.00, 350.06), FlameCCSender::Panel::Connect, FlameCCSender::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(30.00, 350.00), FlameCCSender::Panel::Connect, FlameCCSender::Panel::RGB_Connect);
 
    makeInput(this, Vec(30.00, 261.36),  FlameCCSender::Panel::Voltages, true);
 }

@@ -65,7 +65,7 @@ void NerdSeqWidget::setup()
 {
    makePanel("res/Hardware/NerdSeq.svg");
 
-   makeLEDButton(this, Vec(30.00, 336.44), NerdSeq::Panel::Connect, NerdSeq::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(30.00, 350.00), NerdSeq::Panel::Connect, NerdSeq::Panel::RGB_Connect);
 
    makeOutput(this, Vec(30.00, 266.78), NerdSeq::Panel::Gate, true);
 }

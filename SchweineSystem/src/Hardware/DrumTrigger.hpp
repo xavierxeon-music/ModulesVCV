@@ -73,7 +73,7 @@ void DrumTriggerWidget::setup()
 
    makeButton(this, Vec(30.12, 104.59), DrumTrigger::Panel::Device);
 
-   makeLEDButton(this, Vec(30.00, 349.57), DrumTrigger::Panel::Connect, DrumTrigger::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(30.00, 350.00), DrumTrigger::Panel::Connect, DrumTrigger::Panel::RGB_Connect);
 
    makeInput(this, Vec(30.00, 275.12),  DrumTrigger::Panel::Input, true);
 

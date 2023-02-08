@@ -5,7 +5,8 @@
 
 namespace Svin
 {
-   const Color ModuleWidget::BackGroundColor = Color(230, 232, 240);
+   //const Color ModuleWidget::BackGroundColor = Color(230, 232, 240);
+   const Color ModuleWidget::BackGroundColor = Color(230, 232, 255);
 
    struct ModuleWidget::PanelBackground : rack::widget::TransparentWidget
    {

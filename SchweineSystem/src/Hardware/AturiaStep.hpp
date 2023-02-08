@@ -104,7 +104,7 @@ void AturiaStepWidget::setup()
    makeButton(this, Vec(78.00, 53.77), AturiaStep::Panel::Channel1_Up);
    makeButton(this, Vec(78.00, 98.28), AturiaStep::Panel::Channel1_Down);
 
-   makeLEDButton(this, Vec(50.98, 349.24), AturiaStep::Panel::Connect, AturiaStep::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(52.50, 350.04), AturiaStep::Panel::Connect, AturiaStep::Panel::RGB_Connect);
    makeLEDButton(this, Vec(45.01, 42.78), AturiaStep::Panel::Drums, AturiaStep::Panel::RGB_Drums);
 
    makeInput(this, Vec(42.38, 283.65),  AturiaStep::Panel::Channel4_Select, false);
