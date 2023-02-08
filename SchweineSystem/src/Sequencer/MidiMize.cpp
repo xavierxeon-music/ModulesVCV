@@ -1,72 +1,43 @@
 #include "MidiMize.h"
 
-#include <Tools/Text.h>
+// state
 
-bool MidiMize::DrumState::operator!=(const DrumState& other) const
+MidiMize::State::State()
+   : State(24, false, 0)
 {
-   if (active != other.active)
-      return true;
+}
 
-   return false;
+MidiMize::State::State(const uint8_t midiNote, const bool gate, const uint8_t velocity)
+   : midiNote(midiNote)
+   , gate(gate)
+   , velocity(velocity)
+{
+}
+
+bool MidiMize::State::operator==(const State& other) const
+{
+   if (midiNote != other.midiNote)
+      return false;
+   if (gate != other.gate)
+      return false;
+   if (velocity != other.velocity)
+      return false;
+
+   return true;
 }
 
 // midi mize
 
 MidiMize::MidiMize()
    : Svin::Module()
-   , selectKnobList(this)
-   , channelDisplayList(this)
-   , pitchInputList(this)
-   , gateInputList(this)
-   , velocityInputList(this)
+   , pitchInput(this, Panel::Pitch)
+   , gateInput(this, Panel::Gate)
+   , velocityInput(this, Panel::Velocity)
    , velocityMapper(0.0, 10.0, 0.0, 127.0)
-   , drumTriggerList(this)
-   , drumState{}
+   , lastState{}
 {
    setup();
    registerAsBusModule<Svin::Midi::Bus>();
-
-   selectKnobList.append({Panel::MeloA_Select,
-                          Panel::MeloB_Select,
-                          Panel::MeloC_Select,
-                          Panel::MeloD_Select});
-
-   channelDisplayList.append({Panel::Text_MeloA_Channel,
-                              Panel::Text_MeloB_Channel,
-                              Panel::Text_MeloC_Channel,
-                              Panel::Text_MeloD_Channel});
-
-   pitchInputList.append({Panel::MeloA_Pitch,
-                          Panel::MeloB_Pitch,
-                          Panel::MeloC_Pitch,
-                          Panel::MeloD_Pitch});
-
-   gateInputList.append({Panel::MeloA_Gate,
-                         Panel::MeloB_Gate,
-                         Panel::MeloC_Gate,
-                         Panel::MeloD_Gate});
-
-   velocityInputList.append({Panel::MeloA_Velocity,
-                             Panel::MeloB_Velocity,
-                             Panel::MeloC_Velocity,
-                             Panel::MeloD_Velocity});
-
-   drumTriggerList.append({Panel::Drums_One_Trigger,
-                           Panel::Drums_Two_Trigger,
-                           Panel::Drums_Three_Trigger,
-                           Panel::Drums_Four_Trigger,
-                           Panel::Drums_Five_Trigger,
-                           Panel::Drums_Six_Trigger,
-                           Panel::Drums_Seven_Trigger,
-                           Panel::Drums_Eight_Trigger});
-
-   for (uint8_t voice = 0; voice < 4; voice++)
-   {
-      selectKnobList[voice]->setRange(1.0, 16.0, voice + 1);
-      selectKnobList[voice]->enableSteps(true);
-
-      channelDisplayList[voice]->setColor(Color::Predefined::Yellow);
-   }
 }
 
 void MidiMize::process(const ProcessArgs& args)
@@ -74,34 +45,74 @@ void MidiMize::process(const ProcessArgs& args)
    Svin::Midi::Bus busMessage;
    busMessage.runState = Tempo::Running;
 
-   busMessage.noOfChannels = 4;
+   const uint8_t noOfChannels = pitchInput.isConnected() ? pitchInput.getNumberOfChannels() : 0;
+   busMessage.noOfChannels = noOfChannels;
+
+   for (uint8_t channel = 0; channel < noOfChannels; channel++)
+   {
+      const float& voltage = pitchInput.getVoltage(channel);
+      const uint8_t midiNote = Note::fromVoltage(voltage).midiValue;
+      const bool gate = gateInput.isOn(channel);
+      const uint8_t velocity = velocityInput.isConnected() ? velocityMapper(velocityInput.getVoltage(channel)) : 127;
+
+      const State state(midiNote, gate, velocity);
+      if (state == lastState[channel])
+         continue;
+
+      Svin::Midi::Bus::Channel& busChannel = busMessage.channels[channel];
+      if (!state.gate && !lastState[channel].gate) // both off therfore no change
+      {
+         continue;
+      }
+      else if (state.gate && !lastState[channel].gate) // from on to off
+      {
+         busChannel.hasEvents = true;
+
+         const Bytes offMessage = noteOff(channel, lastState[channel].midiNote);
+         busChannel.messageList.push_back(offMessage);
+      }
+      else if (!state.gate && lastState[channel].gate) // from off to on
+      {
+         busChannel.hasEvents = true;
+
+         const Bytes onMessage = noteOn(channel, state.midiNote, state.velocity);
+         busChannel.messageList.push_back(onMessage);
+      }
+      else // both on therefore pitch or velocity change
+      {
+         busChannel.hasEvents = true;
+
+         const Bytes offMessage = noteOff(channel, lastState[channel].midiNote);
+         busChannel.messageList.push_back(offMessage);
+
+         const Bytes onMessage = noteOn(channel, state.midiNote, state.velocity);
+         busChannel.messageList.push_back(onMessage);
+      }
+
+      lastState[channel] = state;
+   }
+
    sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
 }
 
-void MidiMize::updateDisplays()
+Bytes MidiMize::noteOn(const uint8_t& channel, const uint8_t& midiNote, const uint8_t& velocity)
 {
-   for (uint8_t voice = 0; voice < 4; voice++)
-   {
-      const Midi::Channel channel = selectKnobList[voice]->getValue();
-      const std::string channelText = Text::pad(std::to_string(channel), 2);
-      channelDisplayList[voice]->setText(channelText);
-   }
+   Bytes onMessage(3);
+   onMessage[0] = (Midi::Event::NoteOn | channel);
+   onMessage[1] = midiNote;
+   onMessage[2] = velocity;
+
+   return onMessage;
 }
 
-void MidiMize::load(const Svin::Json::Object& rootObject)
+Bytes MidiMize::noteOff(const uint8_t& channel, const uint8_t& midiNote)
 {
-   Svin::Json::Array channelArray = rootObject.get("channel").toArray();
-   for (uint8_t voice = 0; voice < 4; voice++)
-      selectKnobList[voice]->setValue(channelArray.at(voice).toReal());
-}
+   Bytes offMessage(3);
+   offMessage[0] = (Midi::Event::NoteOff | channel);
+   offMessage[1] = midiNote;
+   offMessage[2] = 64;
 
-void MidiMize::save(Svin::Json::Object& rootObject)
-{
-   Svin::Json::Array channelArray;
-   for (uint8_t voice = 0; voice < 4; voice++)
-      channelArray.append(selectKnobList[voice]->getValue());
-
-   rootObject.set("channel", channelArray);
+   return offMessage;
 }
 
 // widget

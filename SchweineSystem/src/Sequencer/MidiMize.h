@@ -9,9 +9,7 @@ using namespace rack;
 
 #include <Tools/Range.h>
 
-#include <SvinDisplayLCD.h>
 #include <SvinInput.h>
-#include <SvinKnob.h>
 
 class MidiMize : public Svin::Module
 {
@@ -25,32 +23,29 @@ public:
    void process(const ProcessArgs& args) override;
 
 private:
-   struct DrumState
+   struct State
    {
-      bool active = false;
-      dsp::PulseGenerator pulse;
+      uint8_t midiNote;
+      bool gate;
+      uint8_t velocity;
 
-      bool operator!=(const DrumState& other) const;
+      State();
+      State(const uint8_t midiNote, const bool gate, const uint8_t velocity);
+      bool operator==(const State& other) const;
    };
 
 private:
    inline void setup();
-   void updateDisplays() override;
-
-   void load(const Svin::Json::Object& rootObject) override;
-   void save(Svin::Json::Object& rootObject) override;
+   Bytes noteOn(const uint8_t& channel, const uint8_t& midiNote, const uint8_t& velocity);
+   Bytes noteOff(const uint8_t& channel, const uint8_t& midiNote);
 
 private:
-   Svin::Knob::List selectKnobList;
-   Svin::DisplayLCD::Controller::List channelDisplayList;
-   Svin::Input::List pitchInputList;
-   Svin::Input::List gateInputList;
-   Svin::Input::List velocityInputList;
+   Svin::Input pitchInput;
+   Svin::Input gateInput;
+   Svin::Input velocityInput;
 
    Range::Mapper velocityMapper;
-
-   Svin::Input::List drumTriggerList;
-   DrumState drumState[8];
+   State lastState[16];
 };
 
 // widget
