@@ -40,8 +40,7 @@ private:
    enum class DisplayMode
    {
       Overview,
-      Tracks,
-      Current
+      Tracks
    };
 
 private:

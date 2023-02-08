@@ -52,7 +52,7 @@ void MidiReplay::process(const ProcessArgs& args)
    // screen mode
    if (pageButton.isTriggered())
    {
-      static const std::vector<DisplayMode> order = {DisplayMode::Overview, DisplayMode::Tracks, DisplayMode::Current};
+      static const std::vector<DisplayMode> order = {DisplayMode::Overview, DisplayMode::Tracks};
       Variable::Enum<DisplayMode> variable(displayMode, order, true);
       variable.increment();
    }
@@ -148,16 +148,17 @@ void MidiReplay::updateDisplays()
    {
       displayController.setColor(Color::Predefined::White);
       displayController.drawRect(0, 0, 99, 10, true);
-      displayController.drawRect(0, 34, 99, 43, true);
-      displayController.drawRect(0, 84, 99, 93, true);
+      displayController.drawRect(0, 34, 99, 44, true);
+      displayController.drawRect(0, 84, 99, 94, true);
 
       displayController.setColor(Color::Predefined::Black);
-      const std::size_t posSlash = fileName.rfind("/");
+      std::size_t posSlash = fileName.rfind("/");
       const std::string fileNameEnd = fileName.substr(1 + posSlash);
-      displayController.writeText(1, 1, fileNameEnd, Svin::DisplayOLED::Font::Normal);
+      const std::string fileNameText = fileNameEnd.size() > 15 ? fileNameEnd.substr(0, 15) : fileNameEnd;
+      displayController.writeText(1, 1, fileNameText, Svin::DisplayOLED::Font::Normal);
 
-      displayController.writeText(1, 35, " b a r s", Svin::DisplayOLED::Font::Normal);
-      displayController.writeText(1, 85, " t i m e", Svin::DisplayOLED::Font::Normal);
+      displayController.writeText(1, 35, "bars", Svin::DisplayOLED::Font::Normal);
+      displayController.writeText(1, 85, "time", Svin::DisplayOLED::Font::Normal);
 
       displayController.setColor(Color::Predefined::White);
 
@@ -172,13 +173,13 @@ void MidiReplay::updateDisplays()
       const TimeCode timeCodeReplay(duration);
       displayController.writeText(50, 45, std::to_string(timeCodeReplay.bar), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Right);
       const std::string replayRest = "." + std::to_string(timeCodeReplay.quarter) + "." + std::to_string(timeCodeReplay.tick);
-      displayController.writeText(50, 45 + 8, replayRest, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Left);
+      displayController.writeText(55, 45 + 7, replayRest, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Left);
 
       const TimeCode::Duration durationSequence = midiReplay.fromTick(info.maxTick);
       const TimeCode timeCodeSequence(durationSequence);
       displayController.writeText(50, 65, std::to_string(timeCodeSequence.bar), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Right);
       const std::string sequyenceRest = "." + std::to_string(timeCodeSequence.quarter) + "." + std::to_string(timeCodeSequence.tick);
-      displayController.writeText(50, 65 + 8, sequyenceRest, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Left);
+      displayController.writeText(55, 65 + 7, sequyenceRest, Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Left);
 
       auto timeDisplay = [&](const TimeCode::Duration duration)
       {
@@ -196,8 +197,8 @@ void MidiReplay::updateDisplays()
          return std::to_string(minutes) + ":" + secondsText;
       };
 
-      displayController.writeText(50, 95, timeDisplay(duration), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
-      displayController.writeText(50, 115, timeDisplay(durationSequence), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+      displayController.writeText(50, 96, timeDisplay(duration), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+      displayController.writeText(50, 117, timeDisplay(durationSequence), Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
    }
    else if (DisplayMode::Tracks == displayMode)
    {
@@ -205,7 +206,7 @@ void MidiReplay::updateDisplays()
       displayController.drawRect(0, 0, 99, 10, true);
 
       displayController.setColor(Color::Predefined::Black);
-      displayController.writeText(1, 1, "Tracks", Svin::DisplayOLED::Font::Normal);
+      displayController.writeText(1, 1, "Track Names", Svin::DisplayOLED::Font::Normal);
 
       displayController.setColor(Color::Predefined::White);
 
@@ -217,16 +218,6 @@ void MidiReplay::updateDisplays()
          const std::string polyMarker = track.isMonophonic ? "o" : "+";
          displayController.writeText(1, y, polyMarker + ' ' + track.name, Svin::DisplayOLED::Font::Normal);
       }
-   }
-   else if (DisplayMode::Current == displayMode)
-   {
-      displayController.setColor(Color::Predefined::White);
-      displayController.drawRect(0, 0, 99, 10, true);
-
-      displayController.setColor(Color::Predefined::Black);
-      displayController.writeText(1, 1, "Current", Svin::DisplayOLED::Font::Normal);
-
-      displayController.setColor(Color::Predefined::White);
    }
 }
 
