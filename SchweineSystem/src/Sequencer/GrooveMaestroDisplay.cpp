@@ -3,7 +3,30 @@
 #include <Tools/Text.h>
 #include <Tools/Variable.h>
 
-void GrooveMaestro::updateDisplayPassthrough()
+GrooveMaestro::Display::Display(GrooveMaestro* gm)
+   : gm(gm)
+   , deviceIdDisplay(gm, Panel::Text_DeviceId)
+   , controller(gm, Panel::Pixels_Display)
+{
+   deviceIdDisplay.setColor(Color::Predefined::Yellow);
+   controller.onPressedOpenFileFunction(gm, &GrooveMaestro::loadProject, "Projects:grm");
+}
+
+void GrooveMaestro::Display::update()
+{
+   deviceIdDisplay.setText(Text::pad(std::to_string(gm->deviceId + 1), 2));
+
+   controller.fill();
+
+   if (OperationMode::Passthrough == gm->operationMode)
+      updatePassthrough();
+   else if (OperationMode::Remote == gm->operationMode)
+      updateRemote();
+   else if (OperationMode::Play == gm->operationMode)
+      updatePlay();
+}
+
+void GrooveMaestro::Display::updatePassthrough()
 {
    controller.setColor(Color::Predefined::Yellow);
    controller.drawRect(0, 0, 130, 10, true);
@@ -12,14 +35,14 @@ void GrooveMaestro::updateDisplayPassthrough()
    controller.writeText(65, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    if (!displayGroove())
-      return readLaunchpadStopped();
+      return gm->launchpad.readStopped();
 
    displayContours();
-   readLaunchpad();
-   updateLaunchpadGrid();
+   gm->launchpad.read();
+   gm->launchpad.updateGrid();
 }
 
-void GrooveMaestro::updateDisplayRemote()
+void GrooveMaestro::Display::updateRemote()
 {
    controller.setColor(Color::Predefined::Cyan);
    controller.drawRect(0, 0, 130, 10, true);
@@ -28,14 +51,14 @@ void GrooveMaestro::updateDisplayRemote()
    controller.writeText(65, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    if (!displayGroove())
-      return readLaunchpadStopped();
+      return gm->launchpad.readStopped();
 
    displayContours();
-   readLaunchpad();
-   updateLaunchpadGrid();
+   gm->launchpad.read();
+   gm->launchpad.updateGrid();
 }
 
-void GrooveMaestro::updateDisplayPlay()
+void GrooveMaestro::Display::updatePlay()
 {
    controller.setColor(Color::Predefined::Green);
    controller.drawRect(0, 0, 130, 10, true);
@@ -44,23 +67,23 @@ void GrooveMaestro::updateDisplayPlay()
    controller.writeText(65, 0, "Play", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
    if (!displayGroove())
-      return readLaunchpadStopped();
+      return gm->launchpad.readStopped();
 
    displayContours();
-   readLaunchpad();
-   updateLaunchpadGrid();
+   gm->launchpad.read();
+   gm->launchpad.updateGrid();
 }
 
-void GrooveMaestro::displayStoped()
+void GrooveMaestro::Display::displayStoped()
 {
-   const uint32_t segmentCount = conductor.getSegmentCount();
+   const uint32_t segmentCount = gm->conductor.getSegmentCount();
    const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
 
    controller.setColor(Color::Predefined::White);
    controller.writeText(5, 12, Text::pad(std::to_string(segmentCount), digitCount), Svin::DisplayOLED::Font::Large);
    controller.writeText(7 + 20 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
 
-   const uint32_t segmentIndex = conductor.getCurrentSegmentIndex();
+   const uint32_t segmentIndex = gm->conductor.getCurrentSegmentIndex();
    controller.writeText(5, 32, Text::pad(std::to_string(segmentIndex), digitCount), Svin::DisplayOLED::Font::Large);
    controller.writeText(7 + 20 * digitCount, 37, "current", Svin::DisplayOLED::Font::Normal);
 
@@ -72,26 +95,26 @@ void GrooveMaestro::displayStoped()
    {
       const uint8_t row = noOfLines - (counter + 1);
       const uint8_t y = 30 + 10 * row;
-      const int8_t index = fileName.length() - ((noOfLines - row) * noOfLetters);
+      const int8_t index = gm->fileName.length() - ((noOfLines - row) * noOfLetters);
       if (index >= 0)
       {
-         const std::string text = fileName.substr(index, noOfLetters);
+         const std::string text = gm->fileName.substr(index, noOfLetters);
          controller.writeText(x, y, text, 10);
       }
       else
       {
-         const std::string text = fileName.substr(0, noOfLetters + index);
+         const std::string text = gm->fileName.substr(0, noOfLetters + index);
          controller.writeText(x, y, Text::pad(text, noOfLetters, " "), 10);
          break;
       }
    }
 }
 
-bool GrooveMaestro::displayGroove()
+bool GrooveMaestro::Display::displayGroove()
 {
-   const Grooves& grooves = (OperationMode::Play == operationMode) ? conductor : localGrooves;
+   const Grooves& grooves = (OperationMode::Play == gm->operationMode) ? gm->conductor : gm->localGrooves;
 
-   const Tempo tempo = getTempo();
+   const Tempo tempo = gm->getTempo();
    const bool on = tempo.isRunningOrFirstTick();
    const uint32_t segmentCount = grooves.getSegmentCount();
 
@@ -174,11 +197,11 @@ bool GrooveMaestro::displayGroove()
    return true;
 }
 
-void GrooveMaestro::displayContours()
+void GrooveMaestro::Display::displayContours()
 {
-   for (uint8_t laneIndex = 0; laneIndex < conductor.getContourCount(); laneIndex++)
+   for (uint8_t laneIndex = 0; laneIndex < gm->conductor.getContourCount(); laneIndex++)
    {
-      const Contour& contour = conductor.getContour(laneIndex);
+      const Contour& contour = gm->conductor.getContour(laneIndex);
       controller.setColor(Color(155, 155, 155));
 
       const uint8_t column = (laneIndex < 8) ? 0 : 1;
@@ -194,8 +217,8 @@ void GrooveMaestro::displayContours()
 
       controller.setColor(Color::Predefined::White);
 
-      const float voltage = contourOutput.getVoltage(laneIndex);
-      const uint8_t value = voltageToValue(voltage);
+      const float voltage = gm->contourOutput.getVoltage(laneIndex);
+      const uint8_t value = gm->voltageToValue(voltage);
       const std::string valueText = Text::convert(value);
       const uint8_t xVoltage = 55 + (column * 64);
 

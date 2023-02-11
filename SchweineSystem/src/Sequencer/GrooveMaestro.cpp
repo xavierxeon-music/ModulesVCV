@@ -13,13 +13,11 @@ GrooveMaestro::GrooveMaestro()
    , voltages()
    , tickTriggers(0)
    , segmentGates(0)
-   // remote
+   // control
    , deviceId(0)
-   , deviceIdDisplay(this, Panel::Text_DeviceId)
-   , launchpad()
-   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
-   , launchpadOffset(0)
-   , connectionPrompt()
+   , display(this)
+
+   , launchpad(this)
    // input
    , uploadInput(this, Panel::Upload)
    , contoutPassInput(this, Panel::ContourPass)
@@ -34,8 +32,8 @@ GrooveMaestro::GrooveMaestro()
    , loopButton(this, Panel::Loop, Panel::RGB_Loop)
    , operationMode(OperationMode::Passthrough)
    , operationModeButton(this, Panel::Mode)
-   // display
-   , controller(this, Panel::Pixels_Display)
+   // other
+
    , voltageToValue(0.0, 10.0, 0.0, 255.0)
 {
    setup();
@@ -49,18 +47,12 @@ GrooveMaestro::GrooveMaestro()
 
    voltages = std::vector<float>(16, 0.0);
 
-   deviceIdDisplay.setColor(Color::Predefined::Yellow);
-   controller.onPressedOpenFileFunction(this, &GrooveMaestro::loadProject, "Projects:grm");
-
    loopButton.setDefaultColor(Color::Predefined::Green);
-
-   connectionButton.setDefaultColor(Color::Predefined::Green);
-   connectionPrompt.arm();
 }
 
 void GrooveMaestro::process(const ProcessArgs& args)
 {
-   launchpad.update();
+   launchpad.client.update();
 
    if (loopButton.isTriggered())
    {
@@ -70,11 +62,7 @@ void GrooveMaestro::process(const ProcessArgs& args)
    }
    loopButton.setActive(conductor.isLooping());
 
-   if (connectionButton.isTriggered() && !launchpad.isConnected())
-      connectionPrompt.arm();
-
-   if (connectionPrompt.reset())
-      connectToLaunchpad();
+   launchpad.process();
 
    // operation mode
    if (operationModeButton.isTriggered())
@@ -83,7 +71,7 @@ void GrooveMaestro::process(const ProcessArgs& args)
       Variable::Enum<OperationMode> variable(operationMode, order, true);
       variable.increment();
 
-      updateLaunchpadHeader();
+      launchpad.updateHeader();
    }
 
    contourOutput.setNumberOfChannels(16);
@@ -348,17 +336,8 @@ void GrooveMaestro::loadProject(const std::string& newFileName)
 
 void GrooveMaestro::updateDisplays()
 {
-   controller.fill();
-
-   connectionButton.setActive(launchpad.isConnected());
-   deviceIdDisplay.setText(Text::pad(std::to_string(deviceId + 1), 2));
-
-   if (OperationMode::Passthrough == operationMode)
-      updateDisplayPassthrough();
-   else if (OperationMode::Remote == operationMode)
-      updateDisplayRemote();
-   else if (OperationMode::Play == operationMode)
-      updateDisplayPlay();
+   launchpad.updateButton();
+   display.update();
 
    const uint32_t index = conductor.getCurrentSegmentIndex();
 
@@ -421,7 +400,6 @@ void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, cons
 
       const std::string fileName = object.get("fileName").toString();
       loadProject(fileName);
-      connectionPrompt.arm();
    }
    else if ("Remote" == type)
    {
@@ -464,6 +442,9 @@ void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, cons
 void GrooveMaestro::load(const Svin::Json::Object& rootObject)
 {
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
+   launchpad.wantConnection = static_cast<Launchpad::WantConnection>(rootObject.get("launchpad").toInt());
+   if (Launchpad::WantConnection::Yes == launchpad.wantConnection)
+      launchpad.connectionPrompt.arm();
 
    const bool loop = rootObject.get("loop").toBool();
    conductor.setLooping(loop);
@@ -496,6 +477,7 @@ void GrooveMaestro::load(const Svin::Json::Object& rootObject)
 void GrooveMaestro::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
+   rootObject.set("launchpad", static_cast<uint8_t>(launchpad.wantConnection));
    rootObject.set("loop", conductor.isLooping());
    rootObject.set("no_offset", noOffsetSwitch.isOn());
 

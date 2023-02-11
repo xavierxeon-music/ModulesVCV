@@ -66,22 +66,68 @@ public:
    void loadProject(const std::string& newFileName);
 
 private:
+   class Display
+   {
+   public:
+      Display(GrooveMaestro* gm);
+
+   public:
+      void update();
+
+   private:
+      void updatePassthrough();
+      void updateRemote();
+      void updatePlay();
+
+      void displayStoped();
+      bool displayGroove();
+      void displayContours();
+
+   private:
+      GrooveMaestro* gm;
+      Svin::DisplayLCD::Controller deviceIdDisplay;
+      Svin::DisplayOLED::Controller controller;
+   };
+
+   class Launchpad
+   {
+   public:
+      enum class WantConnection
+      {
+         Maybe,
+         Yes,
+         No
+      };
+
+   public:
+      Launchpad(GrooveMaestro* gm);
+
+   public:
+      void process();
+      void updateButton();
+      void read();
+      void readStopped();
+      void updateGrid();
+      void updateHeader();
+
+   private:
+      void toggleConnection();
+
+   public:
+      Svin::LaunchpadClient client;
+      WantConnection wantConnection;
+      Prompt connectionPrompt;
+
+   private:
+      GrooveMaestro* gm;
+      uint8_t offset;
+      Svin::ButtonLED connectionButton;
+   };
+
+private:
    inline void setup();
 
    void updateDisplays() override;
-   void updateDisplayPassthrough();
-   void updateDisplayRemote();
-   void updateDisplayPlay();
-
-   void displayStoped();
-   bool displayGroove();
-   void displayContours();
-
-   void connectToLaunchpad();
-   void readLaunchpad();
-   void readLaunchpadStopped();
-   void updateLaunchpadGrid();
-   void updateLaunchpadHeader();
 
    void uploadToHub();
    void receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex) override;
@@ -97,13 +143,10 @@ private:
    BoolField8 tickTriggers;
    BoolField8 segmentGates;
 
-   // remote
+   // control
    uint8_t deviceId;
-   Svin::DisplayLCD::Controller deviceIdDisplay;
-   Svin::LaunchpadClient launchpad;
-   Svin::ButtonLED connectionButton;
-   uint8_t launchpadOffset;
-   Prompt connectionPrompt;
+   Display display;
+   Launchpad launchpad;
 
    // input
    Svin::Input uploadInput;
@@ -123,8 +166,7 @@ private:
    OperationMode operationMode;
    Svin::Button operationModeButton;
 
-   // display
-   Svin::DisplayOLED::Controller controller;
+   // other
    Range::Mapper voltageToValue;
 };
 
