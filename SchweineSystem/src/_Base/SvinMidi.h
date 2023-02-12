@@ -35,6 +35,8 @@ namespace Svin
          Tempo::RunState runState = Tempo::Reset;
          uint8_t noOfChannels = 0;
          Channel channels[16];
+
+         ::Midi::MessageList otherMessageList;
       };
 
       class Common

@@ -4,13 +4,13 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
 #include <SvinButtonLED.h>
-#include <SvinOutput.h>
 
-class NerdSeq : public Svin::Module
+class NerdSeq : public Svin::Module, public Svin::Midi::Input
 {
 public:
    struct Panel;
@@ -23,6 +23,12 @@ public:
 
 private:
    inline void setup();
+   void connectToMidiDevice();
+   void prcocessMessage(const Bytes& message) override;
+
+private:
+   Svin::ButtonLED connectionButton;
+   Svin::Midi::Bus busMessage;
 };
 
 // widget
