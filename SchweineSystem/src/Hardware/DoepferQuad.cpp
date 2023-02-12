@@ -52,7 +52,6 @@ void DoepferQuad::connectToMidiDevice()
 }
 
 // widget
-
 DoepferQuadWidget::DoepferQuadWidget(DoepferQuad* module)
    : Svin::ModuleWidget(module)
 {

@@ -71,15 +71,15 @@ void DrumTriggerWidget::setup()
 {
    makePanel("res/Hardware/DrumTrigger.svg");
 
-   makeButton(this, Vec(30.12, 104.59), DrumTrigger::Panel::Device);
+   makeButton(this, Vec(30.12, 93.59), DrumTrigger::Panel::Device);
 
    makeLEDButton(this, Vec(30.00, 350.00), DrumTrigger::Panel::Connect, DrumTrigger::Panel::RGB_Connect);
 
-   makeInput(this, Vec(30.00, 275.12),  DrumTrigger::Panel::Input, true);
+   makeInput(this, Vec(30.00, 238.69),  DrumTrigger::Panel::Input, true);
 
-   makeLED(this, Vec(15.45, 145.14), DrumTrigger::Panel::RGB_BitBoxMini);
-   makeLED(this, Vec(15.45, 133.14), DrumTrigger::Panel::RGB_BitBox2);
-   makeLED(this, Vec(15.45, 121.14), DrumTrigger::Panel::RGB_Erika);
+   makeLED(this, Vec(15.45, 134.14), DrumTrigger::Panel::RGB_BitBoxMini);
+   makeLED(this, Vec(15.45, 122.14), DrumTrigger::Panel::RGB_BitBox2);
+   makeLED(this, Vec(15.45, 110.14), DrumTrigger::Panel::RGB_Erika);
 }
 
 #endif // NOT DrumTriggerHPP

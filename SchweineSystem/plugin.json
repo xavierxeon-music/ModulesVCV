@@ -127,6 +127,15 @@
          ]
       },
       {
+         "slug": "NerdSeq",
+         "name": "NerdSeq",
+         "description": "Receive MIDI from NerdSeq",
+         "tags": [
+            "Sequencer",
+            "Midi"
+         ]
+      },
+      {
          "slug": "MidiReplay",
          "name": " Midi Replay",
          "description": "Playback Midi files",
@@ -164,6 +173,14 @@
             "Midi",
             "Expander",
             "External"
+         ]
+      },
+      {
+         "slug": "DrumTrigger",
+         "name": "Drum Trigger",
+         "description": "The drum trigger",
+         "tags": [
+            "Midi"
          ]
       },
       {
@@ -290,14 +307,6 @@
          ]
       },
       {
-         "slug": "DrumTrigger",
-         "name": "Drum Trigger",
-         "description": "The drum trigger",
-         "tags": [
-            "Midi"
-         ]
-      },
-      {
          "slug": "AppPortal",
          "name": "AppPortal",
          "description": "Run a max patch or execute a python script on this computer (needs running HubVCV)",
@@ -319,15 +328,6 @@
          "description": "A sequential switch",
          "tags": [
             "Utility"
-         ]
-      },
-      {
-         "slug": "NerdSeq",
-         "name": "NerdSeq",
-         "description": "Receive MIDI from NerdSeq",
-         "tags": [
-            "Sequencer",
-            "Midi"
          ]
       }
    ]

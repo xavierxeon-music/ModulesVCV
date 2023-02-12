@@ -18,6 +18,7 @@ DrumTrigger::DrumTrigger()
    , flank{}
 {
    setup();
+   registerAsBusModule<Svin::Midi::Bus>();
 
    deviceLightList.append({Panel::RGB_Erika, Panel::RGB_BitBox2, Panel::RGB_BitBoxMini});
 
@@ -28,6 +29,9 @@ DrumTrigger::DrumTrigger()
 
 void DrumTrigger::process(const ProcessArgs& args)
 {
+   Svin::Midi::Bus busMessage = getBusData<Svin::Midi::Bus>(Side::Left);
+   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
+
    if (deviceButton.isTriggered())
    {
       Variable::Enum<DeviceId::Value> var(deviceId, deviceOrder, true);
@@ -39,6 +43,9 @@ void DrumTrigger::process(const ProcessArgs& args)
 
    if (connectionButton.isTriggered())
       connectToMidiDevice();
+
+   if (!connected())
+      return;
 
    static const uint8_t midiBaseNote = Note::availableNotes.at(1).midiValue + 12;
    const Midi::Channel channel = deviceMap.at(deviceId);
@@ -53,6 +60,16 @@ void DrumTrigger::process(const ProcessArgs& args)
          sendNoteOn(channel, midiBaseNote + index, 127);
       else if (Flank::State::Falling == state)
          sendNoteOff(channel, midiBaseNote + index);
+   }
+
+   for (uint8_t channel = 0; channel < busMessage.noOfChannels; channel++)
+   {
+      if (!busMessage.channels[channel].hasEvents)
+         continue;
+
+      const ::Midi::MessageList& messageList = busMessage.channels[channel].messageList;
+      for (const Bytes& message : messageList)
+         sendMessage(message);
    }
 }
 

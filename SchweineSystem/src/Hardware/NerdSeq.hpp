@@ -37,8 +37,7 @@ struct NerdSeq::Panel
 
    enum OutputId
    {
-      Gate = 0,
-      OUTPUTS_LEN = 1
+      OUTPUTS_LEN = 0
    };
 
    enum LightId
@@ -57,8 +56,6 @@ void NerdSeq::setup()
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
    configButton(Panel::Connect, "Connect");
-
-   configOutput(Panel::Gate, "Gate");
 }
 
 void NerdSeqWidget::setup()
@@ -66,8 +63,6 @@ void NerdSeqWidget::setup()
    makePanel("res/Hardware/NerdSeq.svg");
 
    makeLEDButton(this, Vec(30.00, 350.00), NerdSeq::Panel::Connect, NerdSeq::Panel::RGB_Connect);
-
-   makeOutput(this, Vec(30.00, 266.78), NerdSeq::Panel::Gate, true);
 }
 
 #endif // NOT NerdSeqHPP
