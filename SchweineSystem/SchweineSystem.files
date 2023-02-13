@@ -50,7 +50,6 @@
 ./src/_Base/SvinRenderInstruction.h
 ./src/_Base/SvinCommon.h
 ./src/_Base/SvinModuleWidget.h
-./src/_Base/SvinMidiBus.h
 ./src/_Base/SvinJson.h
 ./src/_Base/SvinMasterClock.h
 ./src/_Base/SvinMidi.h
@@ -280,7 +279,6 @@
 ./src/_Base/SvinMasterClock.cpp
 ./src/_Base/SvinModuleWidget.cpp
 ./src/_Base/SvinRenderInstruction.cpp
-./src/_Base/SvinMidiBus.cpp
 ./src/_Base/SvinMidi.cpp
 ./src/_Base/SvinOrigin.cpp
 ./src/_MusicTools/MidiCommon.cpp
