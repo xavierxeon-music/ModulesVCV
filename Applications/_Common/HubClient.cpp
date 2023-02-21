@@ -3,10 +3,12 @@
 #include <AppSettings.h>
 #include <JSONTools.h>
 
+#include "MainWidget.h"
+
 static const quint16 port = 2357;
 
-Hub::Client::Client(QObject* parent, const QString& appName)
-   : QObject(parent)
+Hub::Client::Client(MainWidget* mainWidget, const QString& appName)
+   : QObject(mainWidget)
    , socket(nullptr)
    , appName(appName)
 {

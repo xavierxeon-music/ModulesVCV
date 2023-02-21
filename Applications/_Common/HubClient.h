@@ -5,13 +5,15 @@
 
 #include <QTcpSocket>
 
+class MainWidget;
+
 namespace Hub
 {
    class Client : public QObject
    {
       Q_OBJECT
    public:
-      Client(QObject* parent, const QString& appName);
+      Client(MainWidget* mainWidget, const QString& appName);
 
    protected:
       void sendDocument(const QJsonObject& object) const;
