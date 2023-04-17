@@ -1,6 +1,6 @@
-#include "GrooveMaestro.h"
+#include "Maestro.h"
 
-GrooveMaestro::Launchpad::Launchpad(GrooveMaestro* gm)
+Maestro::Launchpad::Launchpad(Maestro* gm)
    : client()
    , wantConnection(WantConnection::Maybe)
    , connectionPrompt()
@@ -10,7 +10,7 @@ GrooveMaestro::Launchpad::Launchpad(GrooveMaestro* gm)
 {
 }
 
-void GrooveMaestro::Launchpad::process()
+void Maestro::Launchpad::process()
 {
    if (connectionButton.isTriggered())
       connectionPrompt.arm();
@@ -19,7 +19,7 @@ void GrooveMaestro::Launchpad::process()
       toggleConnection();
 }
 
-void GrooveMaestro::Launchpad::updateButton()
+void Maestro::Launchpad::updateButton()
 {
    if (WantConnection::No == wantConnection)
       connectionButton.setColor(Color::Predefined::Blue);
@@ -29,7 +29,7 @@ void GrooveMaestro::Launchpad::updateButton()
       connectionButton.setColor(Color::Predefined::Black);
 }
 
-void GrooveMaestro::Launchpad::read()
+void Maestro::Launchpad::read()
 {
    Grooves& localGrooves = gm->localGrooves;
    for (const Svin::LaunchpadClient::Pad& pad : client.triggeredPads())
@@ -123,7 +123,7 @@ void GrooveMaestro::Launchpad::read()
    }
 }
 
-void GrooveMaestro::Launchpad::readStopped()
+void Maestro::Launchpad::readStopped()
 {
    for (const Svin::LaunchpadClient::Pad& pad : client.triggeredPads())
    {
@@ -152,7 +152,7 @@ void GrooveMaestro::Launchpad::readStopped()
    }
 }
 
-void GrooveMaestro::Launchpad::updateGrid()
+void Maestro::Launchpad::updateGrid()
 {
    const Grooves& grooves = (OperationMode::Play == gm->operationMode) ? gm->conductor : gm->localGrooves;
 
@@ -203,7 +203,7 @@ void GrooveMaestro::Launchpad::updateGrid()
    }
 }
 
-void GrooveMaestro::Launchpad::updateHeader()
+void Maestro::Launchpad::updateHeader()
 {
    client.setAll(0, true);
 
@@ -245,7 +245,7 @@ void GrooveMaestro::Launchpad::updateHeader()
    }
 }
 
-void GrooveMaestro::Launchpad::toggleConnection()
+void Maestro::Launchpad::toggleConnection()
 {
    if (client.isConnected())
    {

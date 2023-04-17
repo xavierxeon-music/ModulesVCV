@@ -1,18 +1,18 @@
-#include "GrooveMaestro.h"
+#include "Maestro.h"
 
 #include <Tools/Text.h>
 #include <Tools/Variable.h>
 
-GrooveMaestro::Display::Display(GrooveMaestro* gm)
+Maestro::Display::Display(Maestro* gm)
    : gm(gm)
    , deviceIdDisplay(gm, Panel::Text_DeviceId)
    , controller(gm, Panel::Pixels_Display)
 {
    deviceIdDisplay.setColor(Color::Predefined::Yellow);
-   controller.onPressedOpenFileFunction(gm, &GrooveMaestro::loadProject, "Projects:grm");
+   controller.onPressedOpenFileFunction(gm, &Maestro::loadProject, "Projects:grm");
 }
 
-void GrooveMaestro::Display::update()
+void Maestro::Display::update()
 {
    deviceIdDisplay.setText(Text::pad(std::to_string(gm->deviceId + 1), 2));
 
@@ -26,7 +26,7 @@ void GrooveMaestro::Display::update()
       updatePlay();
 }
 
-void GrooveMaestro::Display::updatePassthrough()
+void Maestro::Display::updatePassthrough()
 {
    controller.setColor(Color::Predefined::Yellow);
    controller.drawRect(0, 0, 130, 10, true);
@@ -42,7 +42,7 @@ void GrooveMaestro::Display::updatePassthrough()
    gm->launchpad.updateGrid();
 }
 
-void GrooveMaestro::Display::updateRemote()
+void Maestro::Display::updateRemote()
 {
    controller.setColor(Color::Predefined::Cyan);
    controller.drawRect(0, 0, 130, 10, true);
@@ -58,7 +58,7 @@ void GrooveMaestro::Display::updateRemote()
    gm->launchpad.updateGrid();
 }
 
-void GrooveMaestro::Display::updatePlay()
+void Maestro::Display::updatePlay()
 {
    controller.setColor(Color::Predefined::Green);
    controller.drawRect(0, 0, 130, 10, true);
@@ -74,7 +74,7 @@ void GrooveMaestro::Display::updatePlay()
    gm->launchpad.updateGrid();
 }
 
-void GrooveMaestro::Display::displayStoped()
+void Maestro::Display::displayStoped()
 {
    const uint32_t segmentCount = gm->conductor.getSegmentCount();
    const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
@@ -110,7 +110,7 @@ void GrooveMaestro::Display::displayStoped()
    }
 }
 
-bool GrooveMaestro::Display::displayGroove()
+bool Maestro::Display::displayGroove()
 {
    const Grooves& grooves = (OperationMode::Play == gm->operationMode) ? gm->conductor : gm->localGrooves;
 
@@ -197,7 +197,7 @@ bool GrooveMaestro::Display::displayGroove()
    return true;
 }
 
-void GrooveMaestro::Display::displayContours()
+void Maestro::Display::displayContours()
 {
    for (uint8_t laneIndex = 0; laneIndex < gm->conductor.getContourCount(); laneIndex++)
    {

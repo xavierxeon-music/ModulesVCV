@@ -299,7 +299,7 @@
          ]
       },
       {
-         "slug": "GrooveMaestro",
+         "slug": "Maestro",
          "name": "Groove Maestro",
          "description": "The worker module of the CV and gate trigger (needs running HubVCV)",
          "tags": [

@@ -31,7 +31,7 @@
 ./src/Utilities/Cutoff.h
 ./src/Sequencer/NosferatuAcolyte.h
 ./src/Sequencer/MidiMize.h
-./src/Sequencer/GrooveMaestro.h
+./src/Sequencer/Maestro.h
 ./src/Sequencer/NosferatuVampyre.h
 ./src/Sequencer/MidiCV.h
 ./src/Sequencer/MidiReplay.h
@@ -149,7 +149,7 @@
 ./src/Sequencer/MidiMize.hpp
 ./src/Sequencer/MidiCV.hpp
 ./src/Sequencer/NosferatuAcolyte.hpp
-./src/Sequencer/GrooveMaestro.hpp
+./src/Sequencer/Maestro.hpp
 ./src/Sequencer/NosferatuVampyre.hpp
 ./src/BitBus/BitBusBitOut.hpp
 ./src/BitBus/BitBusCVOut.hpp
@@ -253,12 +253,12 @@
 ./src/Utilities/GateLatch.cpp
 ./src/Utilities/Extract.cpp
 ./src/Utilities/HubConnect.cpp
-./src/Sequencer/GrooveMaestroDisplay.cpp
-./src/Sequencer/GrooveMaestro.cpp
+./src/Sequencer/MaestroDisplay.cpp
+./src/Sequencer/Maestro.cpp
 ./src/Sequencer/NosferatuVampyre.cpp
 ./src/Sequencer/MidiCV.cpp
 ./src/Sequencer/NosferatuAcolyte.cpp
-./src/Sequencer/GrooveMaestroLaunchpad.cpp
+./src/Sequencer/MaestroLaunchpad.cpp
 ./src/Sequencer/MidiReplay.cpp
 ./src/Sequencer/MidiMize.cpp
 ./src/BitBus/BitBusRandomWalk.cpp

@@ -1,5 +1,5 @@
-#ifndef GrooveMaestroConductorH
-#define GrooveMaestroConductorH
+#ifndef MaestroConductorH
+#define MaestroConductorH
 
 #include <Blocks/Contour.h>
 #include <Blocks/Grooves.h>
@@ -30,10 +30,10 @@ enum class OperationMode
    Play = 2
 };
 
-#endif // NOT GrooveMaestroConductorH
+#endif // NOT MaestroConductorH
 
-#ifndef GrooveMaestroH
-#define GrooveMaestroH
+#ifndef MaestroH
+#define MaestroH
 
 #include <rack.hpp>
 using namespace rack;
@@ -53,13 +53,13 @@ using namespace rack;
 
 #include <Tools/Prompt.h>
 
-class GrooveMaestro : public Svin::Module, private Svin::MasterClock::Client
+class Maestro : public Svin::Module, private Svin::MasterClock::Client
 {
 public:
    struct Panel;
 
 public:
-   GrooveMaestro();
+   Maestro();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -69,7 +69,7 @@ private:
    class Display
    {
    public:
-      Display(GrooveMaestro* gm);
+      Display(Maestro* gm);
 
    public:
       void update();
@@ -84,7 +84,7 @@ private:
       void displayContours();
 
    private:
-      GrooveMaestro* gm;
+      Maestro* gm;
       Svin::DisplayLCD::Controller deviceIdDisplay;
       Svin::DisplayOLED::Controller controller;
    };
@@ -100,7 +100,7 @@ private:
       };
 
    public:
-      Launchpad(GrooveMaestro* gm);
+      Launchpad(Maestro* gm);
 
    public:
       void process();
@@ -119,7 +119,7 @@ private:
       Prompt connectionPrompt;
 
    private:
-      GrooveMaestro* gm;
+      Maestro* gm;
       uint8_t offset;
       Svin::ButtonLED connectionButton;
    };
@@ -172,17 +172,17 @@ private:
 
 // widget
 
-class GrooveMaestroWidget : public Svin::ModuleWidget
+class MaestroWidget : public Svin::ModuleWidget
 {
 public:
-   GrooveMaestroWidget(GrooveMaestro* module);
+   MaestroWidget(Maestro* module);
 
 private:
    inline void setup();
 };
 
-#ifndef GrooveMaestroHPP
-#include "GrooveMaestro.hpp"
-#endif // NOT GrooveMaestroHPP
+#ifndef MaestroHPP
+#include "Maestro.hpp"
+#endif // NOT MaestroHPP
 
-#endif // NOT GrooveMaestroH
+#endif // NOT MaestroH

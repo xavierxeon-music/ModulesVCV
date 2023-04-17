@@ -1,11 +1,11 @@
-#ifndef GrooveMaestroHPP
-#define GrooveMaestroHPP
+#ifndef MaestroHPP
+#define MaestroHPP
 
-#include "GrooveMaestro.h"
+#include "Maestro.h"
 
 #include <SvinOrigin.h>
 
-struct GrooveMaestro::Panel
+struct Maestro::Panel
 {
    enum ParamId
    {
@@ -59,10 +59,9 @@ struct GrooveMaestro::Panel
       // sliders
       LIGHTS_LEN = 6
    };
-
 };
 
-void GrooveMaestro::setup()
+void Maestro::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
@@ -81,27 +80,27 @@ void GrooveMaestro::setup()
    configOutput(Panel::ContourOutput, "ContourOutput");
 }
 
-void GrooveMaestroWidget::setup()
+void MaestroWidget::setup()
 {
-   makePanel("res/Sequencer/GrooveMaestro.svg");
+   makePanel("res/Sequencer/Maestro.svg");
 
-   makeButton(this, Vec(27.55, 68.92), GrooveMaestro::Panel::Mode);
+   makeButton(this, Vec(27.55, 68.92), Maestro::Panel::Mode);
 
-   makeSwitch(this, Vec(121.40, 355.83), GrooveMaestro::Panel::NoOffset, false);
+   makeSwitch(this, Vec(121.40, 355.83), Maestro::Panel::NoOffset, false);
 
-   makeLEDButton(this, Vec(27.32, 267.06), GrooveMaestro::Panel::Loop, GrooveMaestro::Panel::RGB_Loop);
-   makeLEDButton(this, Vec(27.55, 177.57), GrooveMaestro::Panel::Connect, GrooveMaestro::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(27.32, 267.06), Maestro::Panel::Loop, Maestro::Panel::RGB_Loop);
+   makeLEDButton(this, Vec(27.55, 177.57), Maestro::Panel::Connect, Maestro::Panel::RGB_Connect);
 
-   makeInput(this, Vec(96.01, 355.83),  GrooveMaestro::Panel::GatePass, true);
-   makeInput(this, Vec(96.01, 310.33),  GrooveMaestro::Panel::ContourPass, true);
-   makeInput(this, Vec(24.17, 355.83),  GrooveMaestro::Panel::Upload, false);
+   makeInput(this, Vec(96.01, 355.83), Maestro::Panel::GatePass, true);
+   makeInput(this, Vec(96.01, 310.33), Maestro::Panel::ContourPass, true);
+   makeInput(this, Vec(24.17, 355.83), Maestro::Panel::Upload, false);
 
-   makeOutput(this, Vec(170.49, 355.83), GrooveMaestro::Panel::GateOutput, true);
-   makeOutput(this, Vec(170.49, 310.33), GrooveMaestro::Panel::ContourOutput, true);
+   makeOutput(this, Vec(170.49, 355.83), Maestro::Panel::GateOutput, true);
+   makeOutput(this, Vec(170.49, 310.33), Maestro::Panel::ContourOutput, true);
 
-   makeLCD(this, Vec(10.00, 135.68), 2, GrooveMaestro::Panel::Text_DeviceId, 18);
+   makeLCD(this, Vec(10.00, 135.68), 2, Maestro::Panel::Text_DeviceId, 18);
 
-   makeOLED(this, Vec(53.00, 31.79), GrooveMaestro::Panel::Pixels_Display, 130, 250);
+   makeOLED(this, Vec(53.00, 31.79), Maestro::Panel::Pixels_Display, 130, 250);
 }
 
-#endif // NOT GrooveMaestroHPP
+#endif // NOT MaestroHPP

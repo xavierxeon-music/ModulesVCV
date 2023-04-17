@@ -1,10 +1,10 @@
-#include "GrooveMaestro.h"
+#include "Maestro.h"
 
 #include <Tools/File.h>
 #include <Tools/Text.h>
 #include <Tools/Variable.h>
 
-GrooveMaestro::GrooveMaestro()
+Maestro::Maestro()
    : Svin::Module()
    , Svin::MasterClock::Client()
    , fileName()
@@ -37,7 +37,7 @@ GrooveMaestro::GrooveMaestro()
    , voltageToValue(0.0, 10.0, 0.0, 255.0)
 {
    setup();
-   registerHubClient("GrooveMaestro");
+   registerHubClient("Maestro");
 
    localGrooves.update(16, 1);
    Grooves::Beat beat(16, BoolField8(0));
@@ -50,7 +50,7 @@ GrooveMaestro::GrooveMaestro()
    loopButton.setDefaultColor(Color::Predefined::Green);
 }
 
-void GrooveMaestro::process(const ProcessArgs& args)
+void Maestro::process(const ProcessArgs& args)
 {
    launchpad.client.update();
 
@@ -198,7 +198,7 @@ void GrooveMaestro::process(const ProcessArgs& args)
    }
 }
 
-void GrooveMaestro::loadProject(const std::string& newFileName)
+void Maestro::loadProject(const std::string& newFileName)
 {
    fileName = newFileName;
 
@@ -334,7 +334,7 @@ void GrooveMaestro::loadProject(const std::string& newFileName)
    deviceId = rootObject.get("deviceId").toInt();
 }
 
-void GrooveMaestro::updateDisplays()
+void Maestro::updateDisplays()
 {
    launchpad.updateButton();
    display.update();
@@ -342,7 +342,7 @@ void GrooveMaestro::updateDisplays()
    const uint32_t index = conductor.getCurrentSegmentIndex();
 
    Svin::Json::Object object;
-   object.set("_Application", "GrooveMaestro");
+   object.set("_Application", "Maestro");
    object.set("_Type", "Index");
    object.set("index", index);
    object.set("deviceId", deviceId);
@@ -351,7 +351,7 @@ void GrooveMaestro::updateDisplays()
    sendDocumentToHub(1, object);
 }
 
-void GrooveMaestro::uploadToHub()
+void Maestro::uploadToHub()
 {
    Svin::Json::Array stateArray;
    for (uint8_t laneIndex = 0; laneIndex < conductor.getContourCount(); laneIndex++)
@@ -375,7 +375,7 @@ void GrooveMaestro::uploadToHub()
    }
 
    Svin::Json::Object object;
-   object.set("_Application", "GrooveMaestro");
+   object.set("_Application", "Maestro");
    object.set("_Type", "State");
    object.set("deviceId", deviceId);
    object.set("state", stateArray);
@@ -386,7 +386,7 @@ void GrooveMaestro::uploadToHub()
    sendDocumentToHub(1, object);
 }
 
-void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
+void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin::Json::Object& object, const uint8_t docIndex)
 {
    if (1 != channel || 0 != docIndex)
       return;
@@ -439,7 +439,7 @@ void GrooveMaestro::receivedDocumentFromHub(const ::Midi::Channel& channel, cons
    }
 }
 
-void GrooveMaestro::load(const Svin::Json::Object& rootObject)
+void Maestro::load(const Svin::Json::Object& rootObject)
 {
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
    launchpad.wantConnection = static_cast<Launchpad::WantConnection>(rootObject.get("launchpad").toInt());
@@ -474,7 +474,7 @@ void GrooveMaestro::load(const Svin::Json::Object& rootObject)
    localGrooves.setBeat(0, beat);
 }
 
-void GrooveMaestro::save(Svin::Json::Object& rootObject)
+void Maestro::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
    rootObject.set("launchpad", static_cast<uint8_t>(launchpad.wantConnection));
@@ -506,11 +506,11 @@ void GrooveMaestro::save(Svin::Json::Object& rootObject)
 
 // widget
 
-GrooveMaestroWidget::GrooveMaestroWidget(GrooveMaestro* module)
+MaestroWidget::MaestroWidget(Maestro* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // create module
-Model* modelGrooveMaestro = Svin::Origin::the()->addModule<GrooveMaestro, GrooveMaestroWidget>("GrooveMaestro");
+Model* modelMaestro = Svin::Origin::the()->addModule<Maestro, MaestroWidget>("Maestro");
