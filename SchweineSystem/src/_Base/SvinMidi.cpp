@@ -298,7 +298,7 @@ void Svin::Midi::Input::midiReceive(double timeStamp, std::vector<unsigned char>
       if (0 == buffer.size())
          return;
 
-      me->prcocessMessage(buffer);
+      me->processMessage(buffer);
       buffer.clear();
    };
 

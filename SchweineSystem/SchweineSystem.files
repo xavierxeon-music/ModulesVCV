@@ -29,9 +29,9 @@
 ./src/Utilities/Mingle.h
 ./src/Utilities/GateLatch.h
 ./src/Utilities/Cutoff.h
+./src/Sequencer/Maestro.h
 ./src/Sequencer/NosferatuAcolyte.h
 ./src/Sequencer/MidiMize.h
-./src/Sequencer/Maestro.h
 ./src/Sequencer/NosferatuVampyre.h
 ./src/Sequencer/MidiCV.h
 ./src/Sequencer/MidiReplay.h
@@ -63,6 +63,7 @@
 ./src/_MusicTools/Include/Blocks/BioFeedbackDummy.h
 ./src/_MusicTools/Include/Blocks/Contour.h
 ./src/_MusicTools/Include/Blocks/Grooves.h
+./src/_MusicTools/Include/Blocks/Melodies.h
 ./src/_MusicTools/Include/Blocks/ChainOnOff.h
 ./src/_MusicTools/Include/Abstract/AbstractEffect.h
 ./src/_MusicTools/Include/Abstract/AbstractOscilator.h
@@ -147,9 +148,9 @@
 ./src/Utilities/Mingle.hpp
 ./src/Sequencer/MidiReplay.hpp
 ./src/Sequencer/MidiMize.hpp
+./src/Sequencer/Maestro.hpp
 ./src/Sequencer/MidiCV.hpp
 ./src/Sequencer/NosferatuAcolyte.hpp
-./src/Sequencer/Maestro.hpp
 ./src/Sequencer/NosferatuVampyre.hpp
 ./src/BitBus/BitBusBitOut.hpp
 ./src/BitBus/BitBusCVOut.hpp
@@ -215,6 +216,7 @@
 ./src/_MusicTools/MusicTools.hpp
 ./src/_MusicTools/Compressor.hpp
 ./src/_MusicTools/StateVariableFilter.hpp
+./src/_MusicTools/Melodies.hpp
 ./src/_MusicTools/Glide.hpp
 ./src/_MusicTools/MidiToolGate.hpp
 ./src/_MusicTools/Range.hpp
@@ -253,13 +255,13 @@
 ./src/Utilities/GateLatch.cpp
 ./src/Utilities/Extract.cpp
 ./src/Utilities/HubConnect.cpp
-./src/Sequencer/MaestroDisplay.cpp
-./src/Sequencer/Maestro.cpp
 ./src/Sequencer/NosferatuVampyre.cpp
+./src/Sequencer/MaestroDisplay.cpp
 ./src/Sequencer/MidiCV.cpp
 ./src/Sequencer/NosferatuAcolyte.cpp
-./src/Sequencer/MaestroLaunchpad.cpp
+./src/Sequencer/Maestro.cpp
 ./src/Sequencer/MidiReplay.cpp
+./src/Sequencer/MaestroLaunchpad.cpp
 ./src/Sequencer/MidiMize.cpp
 ./src/BitBus/BitBusRandomWalk.cpp
 ./src/BitBus/BitBusBitIn.cpp

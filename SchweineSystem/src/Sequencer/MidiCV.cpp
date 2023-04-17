@@ -41,7 +41,7 @@ void MidiCV::process(const ProcessArgs& args)
 
          const Midi::MessageList& messageList = busMessage.channels[channel].messageList;
          for (const Bytes& message : messageList)
-            prcocessMessage(message);
+            processMessage(message);
       }
    }
 

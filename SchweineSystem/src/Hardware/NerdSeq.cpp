@@ -38,7 +38,7 @@ void NerdSeq::connectToMidiDevice()
    connectionButton.setOn();
 }
 
-void NerdSeq::prcocessMessage(const Bytes& message)
+void NerdSeq::processMessage(const Bytes& message)
 {
    const bool isSystemEvent = (0xF0 == (message[0] & 0xF0));
    if (!isSystemEvent)

@@ -24,7 +24,7 @@ public:
 private:
    inline void setup();
    void connectToMidiDevice();
-   void prcocessMessage(const Bytes& message) override;
+   void processMessage(const Bytes& message) override;
 
 private:
    Svin::ButtonLED connectionButton;

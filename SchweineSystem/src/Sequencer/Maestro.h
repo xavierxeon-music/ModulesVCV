@@ -3,8 +3,9 @@
 
 #include <Blocks/Contour.h>
 #include <Blocks/Grooves.h>
+#include <Blocks/Melodies.h>.h>
 
-class Conductor : public Contour::Poly, public Grooves
+class Conductor : public Contour::Poly, public Grooves, public Melodies
 
 {
 public:
@@ -12,6 +13,7 @@ public:
       : Abstract::SegmentCrawler()
       , Contour::Poly()
       , Grooves()
+      , Melodies()
    {
    }
 
@@ -20,6 +22,14 @@ public:
    {
       Contour::Poly::update(newDefaultDivision, newSegmentCount);
       Grooves::update(newDefaultDivision, newSegmentCount);
+      Melodies::update(newDefaultDivision, newSegmentCount);
+   }
+
+   void setSegmentLength(const uint32_t segmentIndex, const Tempo::Tick& length) override
+   {
+      Contour::Poly::setSegmentLength(segmentIndex, length);
+      Grooves::setSegmentLength(segmentIndex, length);
+      Melodies::setSegmentLength(segmentIndex, length);
    }
 };
 
