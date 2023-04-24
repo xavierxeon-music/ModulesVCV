@@ -21,9 +21,7 @@ struct HubConnect::Panel
    {
       // lcd
       // oled
-      Pixels_Reset = 0,
-      Pixels_PlayPause = 1,
-      DISPLAYS_LEN = 2
+      DISPLAYS_LEN = 0
    };
 
    enum MeterId
@@ -74,21 +72,18 @@ void HubConnectWidget::setup()
    makePanel("res/Utilities/HubConnect.svg");
 
    makeLED(this, Vec(30.00, 360.06), HubConnect::Panel::RGB_Connected);
-   makeLED(this, Vec(19.03, 320.67), HubConnect::Panel::RGB_NoteC);
-   makeLED(this, Vec(24.93, 303.96), HubConnect::Panel::RGB_NoteCs);
-   makeLED(this, Vec(19.03, 287.09), HubConnect::Panel::RGB_NoteD);
-   makeLED(this, Vec(24.93, 270.38), HubConnect::Panel::RGB_NoteDs);
-   makeLED(this, Vec(19.03, 253.51), HubConnect::Panel::RGB_NoteE);
-   makeLED(this, Vec(19.03, 238.43), HubConnect::Panel::RGB_NoteF);
-   makeLED(this, Vec(24.93, 221.71), HubConnect::Panel::RGB_NoteFs);
-   makeLED(this, Vec(19.03, 204.84), HubConnect::Panel::RGB_NoteG);
-   makeLED(this, Vec(24.93, 188.13), HubConnect::Panel::RGB_NoteGs);
-   makeLED(this, Vec(19.03, 171.26), HubConnect::Panel::RGB_NoteA);
-   makeLED(this, Vec(24.93, 154.55), HubConnect::Panel::RGB_NoteAs);
-   makeLED(this, Vec(19.03, 137.68), HubConnect::Panel::RGB_NoteB);
-
-   makeOLED(this, Vec(19.00, 93.64), HubConnect::Panel::Pixels_Reset, 20, 20);
-   makeOLED(this, Vec(19.00, 64.47), HubConnect::Panel::Pixels_PlayPause, 20, 20);
+   makeLED(this, Vec(19.03, 280.65), HubConnect::Panel::RGB_NoteC);
+   makeLED(this, Vec(24.93, 263.94), HubConnect::Panel::RGB_NoteCs);
+   makeLED(this, Vec(19.03, 247.07), HubConnect::Panel::RGB_NoteD);
+   makeLED(this, Vec(24.93, 230.36), HubConnect::Panel::RGB_NoteDs);
+   makeLED(this, Vec(19.03, 213.49), HubConnect::Panel::RGB_NoteE);
+   makeLED(this, Vec(19.03, 198.40), HubConnect::Panel::RGB_NoteF);
+   makeLED(this, Vec(24.93, 181.69), HubConnect::Panel::RGB_NoteFs);
+   makeLED(this, Vec(19.03, 164.82), HubConnect::Panel::RGB_NoteG);
+   makeLED(this, Vec(24.93, 148.11), HubConnect::Panel::RGB_NoteGs);
+   makeLED(this, Vec(19.03, 131.24), HubConnect::Panel::RGB_NoteA);
+   makeLED(this, Vec(24.93, 114.52), HubConnect::Panel::RGB_NoteAs);
+   makeLED(this, Vec(19.03, 97.65), HubConnect::Panel::RGB_NoteB);
 }
 
 #endif // NOT HubConnectHPP

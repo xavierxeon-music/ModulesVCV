@@ -1,37 +1,47 @@
-#ifndef MaestroConductorH
-#define MaestroConductorH
+#ifndef MaestroH
+#define MaestroH
 
-#include <Blocks/Contour.h>
+#include <Blocks/Contours.h>
 #include <Blocks/Grooves.h>
-#include <Blocks/Melodies.h>.h>
+#include <Blocks/Stages.h>
 
-class Conductor : public Contour::Poly, public Grooves, public Melodies
-
+namespace Conductor
 {
-public:
-   Conductor()
-      : Abstract::SegmentCrawler()
-      , Contour::Poly()
-      , Grooves()
-      , Melodies()
-   {
-   }
+   class Core : public Contours, public Grooves, public Stages
 
-public:
-   void update(const Tempo::Tick& newDefaultDivision, const uint32_t newSegmentCount) override
    {
-      Contour::Poly::update(newDefaultDivision, newSegmentCount);
-      Grooves::update(newDefaultDivision, newSegmentCount);
-      Melodies::update(newDefaultDivision, newSegmentCount);
-   }
+   public:
+      Core()
+         : Abstract::SegmentCrawler()
+         , Contours()
+         , Grooves()
+         , Stages()
+      {
+      }
 
-   void setSegmentLength(const uint32_t segmentIndex, const Tempo::Tick& length) override
-   {
-      Contour::Poly::setSegmentLength(segmentIndex, length);
-      Grooves::setSegmentLength(segmentIndex, length);
-      Melodies::setSegmentLength(segmentIndex, length);
-   }
-};
+   public:
+      void update(const Tempo::Tick& newDefaultDivision, const uint32_t newSegmentCount) override
+      {
+         Contours::update(newDefaultDivision, newSegmentCount);
+         Grooves::update(newDefaultDivision, newSegmentCount);
+         Stages::update(newDefaultDivision, newSegmentCount);
+      }
+
+      void setSegmentLength(const uint32_t segmentIndex, const Tempo::Tick& length) override
+      {
+         Contours::setSegmentLength(segmentIndex, length);
+         Grooves::setSegmentLength(segmentIndex, length);
+         Stages::setSegmentLength(segmentIndex, length);
+      }
+
+      void updateProxies() override
+      {
+         Contours::updateProxies();
+         Grooves::updateProxies();
+         Stages::updateProxies();
+      }
+   };
+} // namespace Conductor
 
 enum class OperationMode
 {
@@ -39,11 +49,6 @@ enum class OperationMode
    Remote = 1,
    Play = 2
 };
-
-#endif // NOT MaestroConductorH
-
-#ifndef MaestroH
-#define MaestroH
 
 #include <rack.hpp>
 using namespace rack;
@@ -147,7 +152,7 @@ private:
 
 private:
    std::string fileName;
-   Conductor conductor;
+   Conductor::Core conductor;
    Grooves localGrooves;
    std::vector<float> voltages;
    BoolField8 tickTriggers;

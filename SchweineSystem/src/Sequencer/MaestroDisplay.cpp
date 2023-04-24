@@ -199,6 +199,7 @@ bool Maestro::Display::displayGroove()
 
 void Maestro::Display::displayContours()
 {
+   /*
    for (uint8_t laneIndex = 0; laneIndex < gm->conductor.getContourCount(); laneIndex++)
    {
       const Contour& contour = gm->conductor.getContour(laneIndex);
@@ -224,4 +225,5 @@ void Maestro::Display::displayContours()
 
       controller.writeText(xVoltage, y, valueText, 14, Svin::DisplayOLED::Alignment::Right);
    }
+   */
 }

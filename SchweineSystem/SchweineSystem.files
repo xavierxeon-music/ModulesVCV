@@ -22,6 +22,7 @@
 ./src/_Gui/SvinLED.h
 ./src/Utilities/LaunchpadImposter.h
 ./src/Utilities/HubConnect.h
+./src/Utilities/MetroControl.h
 ./src/Utilities/Mapper.h
 ./src/Utilities/ClockAndBarCounter.h
 ./src/Utilities/AppPortal.h
@@ -60,10 +61,10 @@
 ./src/_MusicTools/RememberDummy/RememberList.h
 ./src/_MusicTools/Include/Blocks/ChainRandom.h
 ./src/_MusicTools/Include/Blocks/CvSwitch.h
+./src/_MusicTools/Include/Blocks/Stages.h
 ./src/_MusicTools/Include/Blocks/BioFeedbackDummy.h
-./src/_MusicTools/Include/Blocks/Contour.h
+./src/_MusicTools/Include/Blocks/Contours.h
 ./src/_MusicTools/Include/Blocks/Grooves.h
-./src/_MusicTools/Include/Blocks/Melodies.h
 ./src/_MusicTools/Include/Blocks/ChainOnOff.h
 ./src/_MusicTools/Include/Abstract/AbstractEffect.h
 ./src/_MusicTools/Include/Abstract/AbstractOscilator.h
@@ -140,6 +141,7 @@
 ./src/Utilities/Extract.hpp
 ./src/Utilities/HubConnect.hpp
 ./src/Utilities/GateLatch.hpp
+./src/Utilities/MetroControl.hpp
 ./src/Utilities/Cutoff.hpp
 ./src/Utilities/AppPortal.hpp
 ./src/Utilities/ClockAndBarCounter.hpp
@@ -167,6 +169,7 @@
 ./src/_Base/SvinUiElement.hpp
 ./src/_Base/SvinModule.hpp
 ./src/_MusicTools/Variable.hpp
+./src/_MusicTools/Contours.hpp
 ./src/_MusicTools/BoolField.hpp
 ./src/_MusicTools/RingBuffer.hpp
 ./src/_MusicTools/DoubleBuffer.hpp
@@ -190,7 +193,6 @@
 ./src/_MusicTools/Tempo.hpp
 ./src/_MusicTools/File.hpp
 ./src/_MusicTools/Grooves.hpp
-./src/_MusicTools/Contour.hpp
 ./src/_MusicTools/Debug.hpp
 ./src/_MusicTools/WaveTableOscilator.hpp
 ./src/_MusicTools/WaveTableMorpher.hpp
@@ -216,13 +218,13 @@
 ./src/_MusicTools/MusicTools.hpp
 ./src/_MusicTools/Compressor.hpp
 ./src/_MusicTools/StateVariableFilter.hpp
-./src/_MusicTools/Melodies.hpp
 ./src/_MusicTools/Glide.hpp
 ./src/_MusicTools/MidiToolGate.hpp
 ./src/_MusicTools/Range.hpp
 ./src/_MusicTools/Text.hpp
 ./src/_MusicTools/CvSwitch.hpp
 ./src/_MusicTools/WaveTable.hpp
+./src/_MusicTools/Stages.hpp
 ./src/_MusicTools/StandardTable.hpp
 ./src/Hardware/NerdSeq.cpp
 ./src/Hardware/AturiaStep.cpp
@@ -253,6 +255,7 @@
 ./src/Utilities/AppPortal.cpp
 ./src/Utilities/ClockAndBarCounter.cpp
 ./src/Utilities/GateLatch.cpp
+./src/Utilities/MetroControl.cpp
 ./src/Utilities/Extract.cpp
 ./src/Utilities/HubConnect.cpp
 ./src/Sequencer/NosferatuVampyre.cpp

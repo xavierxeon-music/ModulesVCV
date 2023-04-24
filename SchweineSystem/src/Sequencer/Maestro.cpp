@@ -182,6 +182,7 @@ void Maestro::process(const ProcessArgs& args)
    {
       fillTriggers(conductor);
 
+      /*§
       const float tickPercentage = tempo.getPercentage();
       const uint32_t segmentIndex = conductor.getCurrentSegmentIndex();
       const float segmentPercentage = conductor.getCurrentSegmentPrecentage(tickPercentage);
@@ -193,6 +194,7 @@ void Maestro::process(const ProcessArgs& args)
          const float voltage = valueToVoltage(value);
          voltages[laneIndex] = voltage;
       }
+*/
 
       return applyValues();
    }
@@ -249,13 +251,13 @@ void Maestro::loadProject(const std::string& newFileName)
          if (segmentObject.hasKey("fgColor"))
          {
             const Svin::Json::Array colorArray = segmentObject.get("fgColor").toArray();
-            conductor.setSegmentForegroundColor(segmentIndex, compileColor(colorArray));
+            //§conductor.setSegmentForegroundColor(segmentIndex, compileColor(colorArray));
          }
 
          if (segmentObject.hasKey("bgColor"))
          {
             const Svin::Json::Array colorArray = segmentObject.get("bgColor").toArray();
-            conductor.setSegmentBackgroundColor(segmentIndex, compileColor(colorArray));
+            //§conductor.setSegmentBackgroundColor(segmentIndex, compileColor(colorArray));
          }
       }
    }
@@ -301,6 +303,7 @@ void Maestro::loadProject(const std::string& newFileName)
 
    // lanes
    {
+      /*
       Svin::Json::Array contourArray = projectObject.get("contours").toArray();
       if (conductor.getContourCount() != contourArray.size())
       {
@@ -329,6 +332,7 @@ void Maestro::loadProject(const std::string& newFileName)
                contour.setSegmentEndValue(segmentIndex, segmentObject.get("end").toInt());
          }
       }
+      */
    }
 
    deviceId = rootObject.get("deviceId").toInt();
@@ -354,6 +358,7 @@ void Maestro::updateDisplays()
 void Maestro::uploadToHub()
 {
    Svin::Json::Array stateArray;
+   /*
    for (uint8_t laneIndex = 0; laneIndex < conductor.getContourCount(); laneIndex++)
    {
       const float voltage = contourOutput.getVoltage(laneIndex);
@@ -361,6 +366,7 @@ void Maestro::uploadToHub()
 
       stateArray.append(value);
    }
+   */
 
    const uint8_t gateValue = localGrooves.getGates(0);
 
@@ -414,6 +420,7 @@ void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin
       }
       else if (OperationMode::Remote == operationMode)
       {
+         /*
          Svin::Json::Array stateArray = object.get("state").toArray();
          for (uint8_t laneIndex = 0; laneIndex < conductor.getContourCount(); laneIndex++)
          {
@@ -435,6 +442,7 @@ void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin
             beat[tick] = triggers;
          }
          localGrooves.setBeat(0, beat);
+         */
       }
    }
 }

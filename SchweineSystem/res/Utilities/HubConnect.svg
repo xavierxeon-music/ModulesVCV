@@ -35,7 +35,7 @@
             </g>
         </g>
     </g>
-    <g transform="matrix(1,0,0,1,1.42837,-13.4957)">
+    <g transform="matrix(1,0,0,1,1.42837,-53.5175)">
         <g transform="matrix(1,0,0,1.15064,-1.42837,-21.651)">
             <rect x="10" y="141.163" width="40" height="178.58" style="fill:rgb(242,242,242);stroke:black;stroke-width:0.93px;"/>
         </g>
@@ -224,14 +224,6 @@
             <g id="NoteB-led" serif:id="NoteB#led" transform="matrix(1,0,0,1,-24.0991,-38.0991)">
                 <circle cx="42.167" cy="335.861" r="3.82" style="fill:rgb(230,230,230);"/>
             </g>
-        </g>
-    </g>
-    <g transform="matrix(1,0,0,1,0.0352801,7.9907)">
-        <g id="Reset-oled-20x20" serif:id="Reset#oled$20x20" transform="matrix(0.458373,0,0,0.935715,-20.9762,20.129)">
-            <rect x="87.136" y="70.02" width="47.996" height="23.511" style="fill:rgb(19,19,19);"/>
-        </g>
-        <g id="PlayPause-oled-20x20" serif:id="PlayPause#oled$20x20" transform="matrix(0.458373,0,0,0.935715,-20.9762,-9.04178)">
-            <rect x="87.136" y="70.02" width="47.996" height="23.511" style="fill:rgb(19,19,19);"/>
         </g>
     </g>
     <g transform="matrix(0.816456,0,0,0.816456,31.4849,-226.739)">
