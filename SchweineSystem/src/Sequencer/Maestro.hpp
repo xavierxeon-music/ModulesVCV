@@ -10,24 +10,29 @@ struct Maestro::Panel
    enum ParamId
    {
       // buttons
-      Mode = 0,
+      ModeReplay = 0,
+      ModeRemote = 1,
+      ModePass = 2,
+      DisplayContour = 3,
+      DisplayMelody = 4,
+      DisplayGroove = 5,
+      DisplayOverview = 6,
       // switches
-      NoOffset = 1,
+      NoOffset = 7,
       // ledbuttons
-      Loop = 2,
-      Connect = 3,
+      Connect = 8,
+      Loop = 9,
       // knobs
       // sliders
-      PARAMS_LEN = 4
+      PARAMS_LEN = 10
    };
 
    enum DisplayId
    {
       // lcd
-      Text_DeviceId = 0,
       // oled
-      Pixels_Display = 1,
-      DISPLAYS_LEN = 2
+      Pixels_Display = 0,
+      DISPLAYS_LEN = 1
    };
 
    enum MeterId
@@ -54,23 +59,30 @@ struct Maestro::Panel
    {
       // leds
       // ledbuttons
-      RGB_Loop = 0,
-      RGB_Connect = 3,
+      RGB_Connect = 0,
+      RGB_Loop = 3,
       // sliders
       LIGHTS_LEN = 6
    };
+
 };
 
 void Maestro::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configButton(Panel::Mode, "Mode");
+   configButton(Panel::ModeReplay, "ModeReplay");
+   configButton(Panel::ModeRemote, "ModeRemote");
+   configButton(Panel::ModePass, "ModePass");
+   configButton(Panel::DisplayContour, "DisplayContour");
+   configButton(Panel::DisplayMelody, "DisplayMelody");
+   configButton(Panel::DisplayGroove, "DisplayGroove");
+   configButton(Panel::DisplayOverview, "DisplayOverview");
 
    configSwitch(Panel::NoOffset, 0.0f, 1.0f, 0.0f, "NoOffset");
 
-   configButton(Panel::Loop, "Loop");
    configButton(Panel::Connect, "Connect");
+   configButton(Panel::Loop, "Loop");
 
    configInput(Panel::GatePass, "GatePass");
    configInput(Panel::ContourPass, "ContourPass");
@@ -84,23 +96,27 @@ void MaestroWidget::setup()
 {
    makePanel("res/Sequencer/Maestro.svg");
 
-   makeButton(this, Vec(27.55, 68.92), Maestro::Panel::Mode);
+   makeButton(this, Vec(23.96, 182.17), Maestro::Panel::ModeReplay);
+   makeButton(this, Vec(23.96, 147.08), Maestro::Panel::ModeRemote);
+   makeButton(this, Vec(23.96, 112.51), Maestro::Panel::ModePass);
+   makeButton(this, Vec(156.48, 60.58), Maestro::Panel::DisplayContour);
+   makeButton(this, Vec(121.51, 60.98), Maestro::Panel::DisplayMelody);
+   makeButton(this, Vec(86.53, 60.58), Maestro::Panel::DisplayGroove);
+   makeButton(this, Vec(51.56, 60.58), Maestro::Panel::DisplayOverview);
 
-   makeSwitch(this, Vec(121.40, 355.83), Maestro::Panel::NoOffset, false);
+   makeSwitch(this, Vec(98.67, 300.80), Maestro::Panel::NoOffset, false);
 
-   makeLEDButton(this, Vec(27.32, 267.06), Maestro::Panel::Loop, Maestro::Panel::RGB_Loop);
-   makeLEDButton(this, Vec(27.55, 177.57), Maestro::Panel::Connect, Maestro::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(76.11, 250.63), Maestro::Panel::Connect, Maestro::Panel::RGB_Connect);
+   makeLEDButton(this, Vec(143.07, 249.87), Maestro::Panel::Loop, Maestro::Panel::RGB_Loop);
 
-   makeInput(this, Vec(96.01, 355.83), Maestro::Panel::GatePass, true);
-   makeInput(this, Vec(96.01, 310.33), Maestro::Panel::ContourPass, true);
-   makeInput(this, Vec(24.17, 355.83), Maestro::Panel::Upload, false);
+   makeInput(this, Vec(56.91, 300.94),  Maestro::Panel::GatePass, true);
+   makeInput(this, Vec(57.26, 344.87),  Maestro::Panel::ContourPass, true);
+   makeInput(this, Vec(104.17, 345.35),  Maestro::Panel::Upload, false);
 
-   makeOutput(this, Vec(170.49, 355.83), Maestro::Panel::GateOutput, true);
-   makeOutput(this, Vec(170.49, 310.33), Maestro::Panel::ContourOutput, true);
+   makeOutput(this, Vec(155.48, 301.44), Maestro::Panel::GateOutput, true);
+   makeOutput(this, Vec(155.83, 344.86), Maestro::Panel::ContourOutput, true);
 
-   makeLCD(this, Vec(10.00, 135.68), 2, Maestro::Panel::Text_DeviceId, 18);
-
-   makeOLED(this, Vec(53.00, 31.79), Maestro::Panel::Pixels_Display, 130, 250);
+   makeOLED(this, Vec(38.00, 70.78), Maestro::Panel::Pixels_Display, 130, 150);
 }
 
 #endif // NOT MaestroHPP

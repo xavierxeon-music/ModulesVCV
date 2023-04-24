@@ -32,6 +32,7 @@ HubConnect::HubConnect()
 
 void HubConnect::process(const ProcessArgs& args)
 {
+   connectedLight.setActive(hubConnected());
 }
 
 // widget

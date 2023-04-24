@@ -84,24 +84,41 @@ private:
    class Display
    {
    public:
+      enum class Mode
+      {
+         Overview,
+         Groove,
+         Melody,
+         Contour
+      };
+
+   public:
       Display(Maestro* gm);
 
    public:
+      void process();
       void update();
 
-   private:
-      void updatePassthrough();
-      void updateRemote();
-      void updatePlay();
+   public:
+      Mode mode;
 
-      void displayStoped();
-      bool displayGroove();
+   private:
+      void headerPassthrough();
+      void headerRemote();
+      void headerPlay();
+
+      void displayOverview();
+      void displayGroove();
+      void displayMelody();
       void displayContours();
 
    private:
       Maestro* gm;
-      Svin::DisplayLCD::Controller deviceIdDisplay;
       Svin::DisplayOLED::Controller controller;
+      Svin::Button modeButtonOverivew;
+      Svin::Button modeButtonGroove;
+      Svin::Button modeButtonMelody;
+      Svin::Button modeButtonContour;
    };
 
    class Launchpad
@@ -159,7 +176,6 @@ private:
    BoolField8 segmentGates;
 
    // control
-   uint8_t deviceId;
    Display display;
    Launchpad launchpad;
 
@@ -179,7 +195,9 @@ private:
    Svin::ButtonLED loopButton;
 
    OperationMode operationMode;
-   Svin::Button operationModeButton;
+   Svin::Button modeButtonPass;
+   Svin::Button modeButtonRemote;
+   Svin::Button modeButtonReplay;
 
    // other
    Range::Mapper voltageToValue;

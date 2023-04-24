@@ -4,29 +4,78 @@
 #include <Tools/Variable.h>
 
 Maestro::Display::Display(Maestro* gm)
-   : gm(gm)
-   , deviceIdDisplay(gm, Panel::Text_DeviceId)
+   : mode(Mode::Overview)
+   , gm(gm)
    , controller(gm, Panel::Pixels_Display)
+   , modeButtonOverivew(gm, Panel::DisplayOverview)
+   , modeButtonGroove(gm, Panel::DisplayGroove)
+   , modeButtonMelody(gm, Panel::DisplayMelody)
+   , modeButtonContour(gm, Panel::DisplayContour)
 {
-   deviceIdDisplay.setColor(Color::Predefined::Yellow);
    controller.onPressedOpenFileFunction(gm, &Maestro::loadProject, "Projects:grm");
+}
+
+void Maestro::Display::process()
+{
+   if (modeButtonOverivew.isTriggered())
+   {
+      mode = Mode::Overview;
+   }
+   if (modeButtonGroove.isTriggered())
+   {
+      mode = Mode::Groove;
+   }
+   if (modeButtonMelody.isTriggered())
+   {
+      mode = Mode::Melody;
+   }
+   if (modeButtonContour.isTriggered())
+   {
+      mode = Mode::Contour;
+   }
 }
 
 void Maestro::Display::update()
 {
-   deviceIdDisplay.setText(Text::pad(std::to_string(gm->deviceId + 1), 2));
-
    controller.fill();
 
    if (OperationMode::Passthrough == gm->operationMode)
-      updatePassthrough();
+      headerPassthrough();
    else if (OperationMode::Remote == gm->operationMode)
-      updateRemote();
+      headerRemote();
    else if (OperationMode::Play == gm->operationMode)
-      updatePlay();
+      headerPlay();
+
+   // top row
+   {
+      const Grooves& grooves = (OperationMode::Play == gm->operationMode) ? gm->conductor : gm->localGrooves;
+
+      const uint32_t segmentCount = gm->conductor.getSegmentCount();
+      const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
+      const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
+
+      controller.setColor(Color::Predefined::White);
+      controller.writeText(5, 12, Text::pad(std::to_string(segmentIndex), digitCount), Svin::DisplayOLED::Font::Large);
+
+      const std::string eventName = grooves.getSegmentName(segmentIndex);
+      const std::string eventText = eventName.empty() ? "--" : eventName;
+      controller.writeText(7 + 12 * digitCount, 17, eventText, Svin::DisplayOLED::Font::Normal);
+   }
+
+   if (Mode::Overview == mode)
+      displayOverview();
+   else if (Mode::Groove == mode)
+      displayGroove();
+   else if (Mode::Melody == mode)
+      displayMelody();
+   else if (Mode::Contour == mode)
+      displayContours();
+
+   gm->launchpad.read();
+   gm->launchpad.updateGrid();
 }
 
-void Maestro::Display::updatePassthrough()
+void Maestro::Display::headerPassthrough()
 {
    controller.setColor(Color::Predefined::Yellow);
    controller.drawRect(0, 0, 130, 10, true);
@@ -34,15 +83,9 @@ void Maestro::Display::updatePassthrough()
    controller.setColor(Color::Predefined::Black);
    controller.writeText(65, 0, "Passthrough", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   if (!displayGroove())
-      return gm->launchpad.readStopped();
-
-   displayContours();
-   gm->launchpad.read();
-   gm->launchpad.updateGrid();
 }
 
-void Maestro::Display::updateRemote()
+void Maestro::Display::headerRemote()
 {
    controller.setColor(Color::Predefined::Cyan);
    controller.drawRect(0, 0, 130, 10, true);
@@ -50,42 +93,21 @@ void Maestro::Display::updateRemote()
    controller.setColor(Color::Predefined::Black);
    controller.writeText(65, 0, "Remote", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
 
-   if (!displayGroove())
-      return gm->launchpad.readStopped();
-
-   displayContours();
-   gm->launchpad.read();
-   gm->launchpad.updateGrid();
 }
 
-void Maestro::Display::updatePlay()
+void Maestro::Display::headerPlay()
 {
    controller.setColor(Color::Predefined::Green);
    controller.drawRect(0, 0, 130, 10, true);
 
    controller.setColor(Color::Predefined::Black);
    controller.writeText(65, 0, "Play", Svin::DisplayOLED::Font::Normal, Svin::DisplayOLED::Alignment::Center);
-
-   if (!displayGroove())
-      return gm->launchpad.readStopped();
-
-   displayContours();
-   gm->launchpad.read();
-   gm->launchpad.updateGrid();
 }
 
-void Maestro::Display::displayStoped()
+void Maestro::Display::displayOverview()
 {
    const uint32_t segmentCount = gm->conductor.getSegmentCount();
    const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
-
-   controller.setColor(Color::Predefined::White);
-   controller.writeText(5, 12, Text::pad(std::to_string(segmentCount), digitCount), Svin::DisplayOLED::Font::Large);
-   controller.writeText(7 + 20 * digitCount, 17, "segmemnts", Svin::DisplayOLED::Font::Normal);
-
-   const uint32_t segmentIndex = gm->conductor.getCurrentSegmentIndex();
-   controller.writeText(5, 32, Text::pad(std::to_string(segmentIndex), digitCount), Svin::DisplayOLED::Font::Large);
-   controller.writeText(7 + 20 * digitCount, 37, "current", Svin::DisplayOLED::Font::Normal);
 
    const uint8_t noOfLines = 10;
    const uint8_t noOfLetters = 15;
@@ -94,7 +116,7 @@ void Maestro::Display::displayStoped()
    for (uint8_t counter = 0; counter < noOfLines; counter++)
    {
       const uint8_t row = noOfLines - (counter + 1);
-      const uint8_t y = 30 + 10 * row;
+      const uint8_t y = 10 * row;
       const int8_t index = gm->fileName.length() - ((noOfLines - row) * noOfLetters);
       if (index >= 0)
       {
@@ -108,9 +130,13 @@ void Maestro::Display::displayStoped()
          break;
       }
    }
+
+   controller.setColor(Color::Predefined::White);
+   controller.writeText(5, 132, Text::pad(std::to_string(segmentCount), digitCount), Svin::DisplayOLED::Font::Large);
+   controller.writeText(7 + 12 * digitCount, 137, "segmemnts", Svin::DisplayOLED::Font::Normal);
 }
 
-bool Maestro::Display::displayGroove()
+void Maestro::Display::displayGroove()
 {
    const Grooves& grooves = (OperationMode::Play == gm->operationMode) ? gm->conductor : gm->localGrooves;
 
@@ -118,24 +144,12 @@ bool Maestro::Display::displayGroove()
    const bool on = tempo.isRunningOrFirstTick();
    const uint32_t segmentCount = grooves.getSegmentCount();
 
-   if (0 == segmentCount || !on)
-   {
-      displayStoped();
-      return false;
-   }
-
-   // top row
-   const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
-   const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
-
-   controller.setColor(Color::Predefined::White);
-   controller.writeText(5, 12, Text::pad(std::to_string(segmentIndex), digitCount), Svin::DisplayOLED::Font::Large);
-
-   const std::string eventName = grooves.getSegmentName(segmentIndex);
-   const std::string eventText = eventName.empty() ? "--" : eventName;
-   controller.writeText(7 + 12 * digitCount, 17, eventText, Svin::DisplayOLED::Font::Normal);
+   if (0 == segmentCount)
+      return;
 
    // the grid
+   const uint32_t segmentIndex = gm->conductor.getCurrentSegmentIndex();
+
    const Grooves::Gates& gates = grooves.getGates(segmentIndex);
    const bool hasGates = grooves.hasGates(segmentIndex);
 
@@ -156,7 +170,7 @@ bool Maestro::Display::displayGroove()
       controller.setColor(Color::Predefined::Green);
 
       const uint8_t x = 5 + col * 12;
-      const uint8_t y = 30;
+      const uint8_t y = 35;
       controller.drawRect(x, y, x + 8, y + 4, true);
 
       break;
@@ -164,7 +178,7 @@ bool Maestro::Display::displayGroove()
 
    for (uint8_t row = 0; row < 8; row++)
    {
-      const uint8_t y = 37 + row * 12;
+      const uint8_t y = 42 + row * 12;
 
       if (hasGates)
          controller.setColor(Color::Predefined::White);
@@ -193,24 +207,24 @@ bool Maestro::Display::displayGroove()
             controller.drawRect(x, y, x + 8, y + 8, true);
       }
    }
+}
 
-   return true;
+void Maestro::Display::displayMelody()
+{
 }
 
 void Maestro::Display::displayContours()
 {
-   /*
-   for (uint8_t laneIndex = 0; laneIndex < gm->conductor.getContourCount(); laneIndex++)
+   for (uint8_t laneIndex = 0; laneIndex < Contours::laneCount; laneIndex++)
    {
-      const Contour& contour = gm->conductor.getContour(laneIndex);
       controller.setColor(Color(155, 155, 155));
 
       const uint8_t column = (laneIndex < 8) ? 0 : 1;
       const uint8_t row = (laneIndex < 8) ? laneIndex : laneIndex - 8;
 
-      const uint8_t y = 133 + 14 * row;
+      const uint8_t y = 30 + 14 * row;
 
-      std::string name = contour.getName();
+      std::string name = gm->conductor.Contours::getName(laneIndex);
       if (name.length() > 5)
          name = name.substr(0, 5);
       const uint8_t xName = 5 + (column * 64);
@@ -225,5 +239,4 @@ void Maestro::Display::displayContours()
 
       controller.writeText(xVoltage, y, valueText, 14, Svin::DisplayOLED::Alignment::Right);
    }
-   */
 }

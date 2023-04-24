@@ -14,7 +14,6 @@ Maestro::Maestro()
    , tickTriggers(0)
    , segmentGates(0)
    // control
-   , deviceId(0)
    , display(this)
 
    , launchpad(this)
@@ -31,7 +30,10 @@ Maestro::Maestro()
    // mode
    , loopButton(this, Panel::Loop, Panel::RGB_Loop)
    , operationMode(OperationMode::Passthrough)
-   , operationModeButton(this, Panel::Mode)
+   , modeButtonPass(this, Panel::ModePass)
+   , modeButtonRemote(this, Panel::ModeRemote)
+   , modeButtonReplay(this, Panel::ModeReplay)
+
    // other
 
    , voltageToValue(0.0, 10.0, 0.0, 255.0)
@@ -62,15 +64,23 @@ void Maestro::process(const ProcessArgs& args)
    }
    loopButton.setActive(conductor.isLooping());
 
+   display.process();
    launchpad.process();
 
    // operation mode
-   if (operationModeButton.isTriggered())
+   if (modeButtonPass.isTriggered())
    {
-      static const std::vector<OperationMode> order = {OperationMode::Passthrough, OperationMode::Remote, OperationMode::Play};
-      Variable::Enum<OperationMode> variable(operationMode, order, true);
-      variable.increment();
-
+      operationMode = OperationMode::Passthrough;
+      launchpad.updateHeader();
+   }
+   if (modeButtonRemote.isTriggered())
+   {
+      operationMode = OperationMode::Remote;
+      launchpad.updateHeader();
+   }
+   if (modeButtonReplay.isTriggered())
+   {
+      operationMode = OperationMode::Play;
       launchpad.updateHeader();
    }
 
@@ -182,19 +192,15 @@ void Maestro::process(const ProcessArgs& args)
    {
       fillTriggers(conductor);
 
-      /*§
       const float tickPercentage = tempo.getPercentage();
       const uint32_t segmentIndex = conductor.getCurrentSegmentIndex();
       const float segmentPercentage = conductor.getCurrentSegmentPrecentage(tickPercentage);
-      for (uint8_t laneIndex = 0; laneIndex < conductor.getContourCount(); laneIndex++)
+      for (uint8_t laneIndex = 0; laneIndex < Contours::laneCount; laneIndex++)
       {
-         const Contour& contour = conductor.getContour(laneIndex);
-
-         const uint8_t value = on ? contour.getSegmentValue(segmentIndex, segmentPercentage) : 0.0;
+         const uint8_t value = on ? conductor.getSegmentValue(laneIndex, segmentIndex, segmentPercentage) : 0.0;
          const float voltage = valueToVoltage(value);
          voltages[laneIndex] = voltage;
       }
-*/
 
       return applyValues();
    }
@@ -215,18 +221,14 @@ void Maestro::loadProject(const std::string& newFileName)
    const uint16_t digitCount = Variable::compileDigitCount(segmentCount);
    const uint8_t division = projectObject.get("division").toInt();
 
-   auto compileSegmentKey = [&](const uint32_t segmentIndex)
+   auto compileSegmentKey = [&](const uint32_t segmentIndex) -> std::string
    {
       return Text::pad(std::to_string(segmentIndex), digitCount);
    };
 
-   auto compileColor = [](const Svin::Json::Array& array)
+   auto compileLaneKy = [](const uint8_t& laneIndex) -> std::string
    {
-      uint8_t red = array.at(0).toInt();
-      uint8_t green = array.at(1).toInt();
-      uint8_t blue = array.at(2).toInt();
-
-      return Color(red, green, blue);
+      return "lane" + Text::pad(std::to_string(laneIndex), 2);
    };
 
    conductor.clear();
@@ -248,23 +250,12 @@ void Maestro::loadProject(const std::string& newFileName)
          {
             conductor.setSegmentLength(segmentIndex, segmentObject.get("length").toInt());
          }
-         if (segmentObject.hasKey("fgColor"))
-         {
-            const Svin::Json::Array colorArray = segmentObject.get("fgColor").toArray();
-            //§conductor.setSegmentForegroundColor(segmentIndex, compileColor(colorArray));
-         }
-
-         if (segmentObject.hasKey("bgColor"))
-         {
-            const Svin::Json::Array colorArray = segmentObject.get("bgColor").toArray();
-            //§conductor.setSegmentBackgroundColor(segmentIndex, compileColor(colorArray));
-         }
       }
    }
 
    // gates
    {
-      Svin::Json::Object gatesObject = projectObject.get("gates").toObject();
+      Svin::Json::Object gatesObject = rootObject.get("gates").toObject();
       for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
       {
          const std::string segmentKey = compileSegmentKey(segmentIndex);
@@ -278,7 +269,7 @@ void Maestro::loadProject(const std::string& newFileName)
 
    // beats
    {
-      Svin::Json::Object beatsObject = projectObject.get("beats").toObject();
+      Svin::Json::Object beatsObject = rootObject.get("beats").toObject();
       for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
       {
          const std::string segmentKey = compileSegmentKey(segmentIndex);
@@ -301,41 +292,32 @@ void Maestro::loadProject(const std::string& newFileName)
       }
    }
 
-   // lanes
+   // stages
    {
-      /*
-      Svin::Json::Array contourArray = projectObject.get("contours").toArray();
-      if (conductor.getContourCount() != contourArray.size())
-      {
-         std::cout << newFileName << " " << (uint16_t)conductor.getContourCount() << " " << contourArray.size() << std::endl;
-         return;
-      }
 
-      for (uint8_t contourIndex = 0; contourIndex < conductor.getContourCount(); contourIndex++)
-      {
-         Contour& contour = conductor.getContour(contourIndex);
-         Svin::Json::Object contourObject = contourArray.at(contourIndex).toObject();
-         contour.setName(contourObject.get("name").toString());
-
-         for (uint32_t segmentIndex = 0; segmentIndex < segmentCount; segmentIndex++)
-         {
-            const std::string segmentKey = compileSegmentKey(segmentIndex);
-            if (!contourObject.hasKey(segmentKey))
-               continue;
-
-            Svin::Json::Object segmentObject = contourObject.get(segmentKey).toObject();
-            contour.setSegmentSteady(segmentIndex, segmentObject.get("steady").toBool());
-
-            if (segmentObject.hasKey("start"))
-               contour.setSegmentStartValue(segmentIndex, segmentObject.get("start").toInt());
-            if (segmentObject.hasKey("end"))
-               contour.setSegmentEndValue(segmentIndex, segmentObject.get("end").toInt());
-         }
-      }
-      */
    }
 
-   deviceId = rootObject.get("deviceId").toInt();
+   // lanes
+   {
+      Svin::Json::Object contoursObject = rootObject.get("contours").toObject();
+      for (uint8_t laneIndex = 0; laneIndex < Contours::laneCount; laneIndex++)
+      {
+         const std::string key = compileLaneKy(laneIndex);
+         Svin::Json::Object laneObject = contoursObject.get(key).toObject();
+
+         const std::string name = laneObject.get("name").toString();
+         conductor.Contours::setName(laneIndex, name);
+
+         for (uint32_t segmentIndex = 0; segmentIndex < conductor.getSegmentCount(); segmentIndex++)
+         {
+            const std::string segmentKey = compileSegmentKey(segmentIndex);
+
+            Contours::Segment segment;
+            segment.value = laneObject.get(segmentKey).toInt();
+            conductor.Contours::setSegment(laneIndex, segmentIndex, segment);
+         }
+      }
+   }
 }
 
 void Maestro::updateDisplays()
@@ -349,7 +331,6 @@ void Maestro::updateDisplays()
    object.set("_Application", "Maestro");
    object.set("_Type", "Index");
    object.set("index", index);
-   object.set("deviceId", deviceId);
    object.set("mode", static_cast<uint8_t>(operationMode));
 
    sendDocumentToHub(1, object);
@@ -383,7 +364,6 @@ void Maestro::uploadToHub()
    Svin::Json::Object object;
    object.set("_Application", "Maestro");
    object.set("_Type", "State");
-   object.set("deviceId", deviceId);
    object.set("state", stateArray);
    object.set("gates", gateValue);
    object.set("length", length);
@@ -400,19 +380,11 @@ void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin
    const std::string type = object.get("_Type").toString();
    if ("Reload" == type)
    {
-      const uint8_t objectDeviceId = object.get("deviceId").toInt();
-      if (objectDeviceId != deviceId)
-         return;
-
       const std::string fileName = object.get("fileName").toString();
       loadProject(fileName);
    }
    else if ("Remote" == type)
    {
-      const uint8_t objectDeviceId = object.get("deviceId").toInt();
-      if (objectDeviceId != deviceId)
-         return;
-
       if (OperationMode::Play == operationMode)
       {
          const uint32_t segmentIndex = object.get("index").toInt();

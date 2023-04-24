@@ -256,7 +256,7 @@ void Maestro::Launchpad::toggleConnection()
    }
    else
    {
-      client.connect(gm->deviceId);
+      client.connect(0);
       if (!client.isConnected())
          return;
 

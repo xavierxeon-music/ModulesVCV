@@ -11,7 +11,7 @@ using namespace rack;
 #include <SvinLED.h>
 #include <SvinDisplayOLED.h>
 
-class MetroControl : public Svin::Module, public Svin::MasterClock::Client
+class MetroControl : public Svin::Module, public Svin::MasterClock::Client, public Svin::Midi::Output
 {
 public:
    struct Panel;
@@ -43,6 +43,8 @@ private:
    bool isRunning;
 
    Svin::DisplayOLED::Controller resetController;
+
+   Svin::LED connectedLight;
 };
 
 // widget

@@ -20,7 +20,6 @@
 ./src/_Gui/SvinOutput.h
 ./src/_Gui/SvinDisplayLCD.h
 ./src/_Gui/SvinLED.h
-./src/Utilities/LaunchpadImposter.h
 ./src/Utilities/HubConnect.h
 ./src/Utilities/MetroControl.h
 ./src/Utilities/Mapper.h
@@ -145,7 +144,6 @@
 ./src/Utilities/Cutoff.hpp
 ./src/Utilities/AppPortal.hpp
 ./src/Utilities/ClockAndBarCounter.hpp
-./src/Utilities/LaunchpadImposter.hpp
 ./src/Utilities/Mapper.hpp
 ./src/Utilities/Mingle.hpp
 ./src/Sequencer/MidiReplay.hpp
@@ -248,7 +246,6 @@
 ./src/_Gui/SvinLightMeter.cpp
 ./src/_Gui/SvinDisplayOLED.cpp
 ./src/_Gui/SvinDisplayLCD.cpp
-./src/Utilities/LaunchpadImposter.cpp
 ./src/Utilities/Mapper.cpp
 ./src/Utilities/Mingle.cpp
 ./src/Utilities/Cutoff.cpp

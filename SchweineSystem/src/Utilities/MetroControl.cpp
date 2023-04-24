@@ -3,12 +3,15 @@
 MetroControl::MetroControl()
    : Svin::Module()
    , Svin::MasterClock::Client()
+   , Svin::Midi::Output("MetropolixControl", false)
    , playPauseController(this, Panel::Pixels_PlayPause)
    , isRunning(false)
    , resetController(this, Panel::Pixels_Reset)
+   , connectedLight(this, Panel::RGB_Connected)
 {
    setup();
    registerHubClient("Clock");
+   open();
 
    using ClickedFunction = Svin::DisplayOLED::Controller::ClickedFunction;
 
@@ -17,11 +20,13 @@ MetroControl::MetroControl()
 
    ClickedFunction resetPressedFunction = std::bind(&MetroControl::resetPressed, this, std::placeholders::_1, std::placeholders::_2);
    resetController.onPressed(resetPressedFunction);
+
+   connectedLight.setDefaultColor(Color::Predefined::Green);
 }
 
 void MetroControl::process(const ProcessArgs& args)
 {
-   //connectedLight.setActive(hubConnected());
+   connectedLight.setActive(connected());
    isRunning = getTempo().isRunningOrFirstTick();
 }
 
@@ -69,9 +74,9 @@ void MetroControl::playPausePressed(const float& x, const float& y)
    (void)y;
 
    if (isRunning)
-      sendStateToClock(State::Stop);
+      sendControllerChange(1, Midi::User01, 0);
    else
-      sendStateToClock(State::Play);
+      sendControllerChange(1, Midi::User01, 1);
 }
 
 void MetroControl::resetPressed(const float& x, const float& y)
@@ -79,7 +84,7 @@ void MetroControl::resetPressed(const float& x, const float& y)
    (void)x;
    (void)y;
 
-   sendStateToClock(State::Reset);
+   sendControllerChange(1, Midi::User02, 0);
 }
 
 // widget
