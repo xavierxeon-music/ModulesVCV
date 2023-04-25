@@ -31,7 +31,7 @@ then
    if [ "$OS_TEST" == "Darwin" ]
    then
       echo 'install brew packages'
-      brew install git wget cmake autoconf automake libtool jq python zstd glfw
+      brew install git wget cmake autoconf automake libtool jq python zstd pkg-config
    else
       echo 'install apt packages'
       sudo apt install unzip git gdb curl cmake libx11-dev libglu1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev zlib1g-dev libasound2-dev libgtk2.0-dev libgtk-3-dev libjack-jackd2-dev jq zstd libpulse-dev
