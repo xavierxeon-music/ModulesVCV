@@ -169,6 +169,7 @@ private:
 
 private:
    std::string fileName;
+   long timeStamp;
    Conductor::Core conductor;
    Grooves localGrooves;
    std::vector<float> voltages;

@@ -8,6 +8,7 @@ Maestro::Maestro()
    : Svin::Module()
    , Svin::MasterClock::Client()
    , fileName()
+   , timeStamp(-1)
    , conductor()
    , localGrooves()
    , voltages()
@@ -209,6 +210,7 @@ void Maestro::process(const ProcessArgs& args)
 void Maestro::loadProject(const std::string& newFileName)
 {
    fileName = newFileName;
+   timeStamp = File::getLasModifiedTimeStamp(fileName);
 
    const Bytes data = File::load(fileName);
    if (data.empty())
@@ -322,6 +324,14 @@ void Maestro::loadProject(const std::string& newFileName)
 
 void Maestro::updateDisplays()
 {
+   // relaod if file has changed
+   if (-1 != timeStamp)
+   {
+      long currentTimeStamp = File::getLasModifiedTimeStamp(fileName);
+      if (currentTimeStamp != timeStamp)
+         return loadProject(fileName);
+   }
+
    launchpad.updateButton();
    display.update();
 
