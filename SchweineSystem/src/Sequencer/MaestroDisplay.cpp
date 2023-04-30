@@ -177,16 +177,8 @@ void Maestro::Display::displayGroove()
 
    const uint8_t offset = (currentTick - (currentTick % 8));
 
-   {
-      const uint col = currentTick - offset;
-
-      controller.setColor(Color::Predefined::Green);
-
-      const uint8_t x = 5 + col * 12;
-      const uint8_t y = 35;
-      controller.drawRect(x, y, x + 8, y + 4, true);
-   }
-
+   const uint8_t yMarkerA = 35;
+   const uint8_t yMarkerB = 137;
    for (uint8_t row = 0; row < 8; row++)
    {
       const uint8_t y = 42 + row * 12;
@@ -201,11 +193,6 @@ void Maestro::Display::displayGroove()
       else
          controller.drawRect(115, y, 125, y + 8, false);
 
-      if (hasBeat)
-         controller.setColor(Color::Predefined::White);
-      else
-         controller.setColor(Color(155, 155, 200));
-
       for (uint8_t col = 0; col < 8; col++)
       {
          const uint tick = offset + col;
@@ -213,6 +200,18 @@ void Maestro::Display::displayGroove()
 
          if (tick >= length)
             break;
+
+         if (tick == currentTick)
+         {
+            controller.setColor(Color::Predefined::Green);
+            controller.drawRect(x, yMarkerA, x + 8, yMarkerA + 4, true);
+            controller.drawRect(x, yMarkerB, x + 8, yMarkerB + 4, true);
+         }
+
+         if (hasBeat)
+            controller.setColor(Color::Predefined::White);
+         else
+            controller.setColor(Color(155, 155, 200));
 
          if (beat[tick].get(row))
             controller.drawRect(x, y, x + 8, y + 8, true);
@@ -222,36 +221,54 @@ void Maestro::Display::displayGroove()
 
 void Maestro::Display::displayMelody()
 {
-   const Stages& stages = (OperationMode::Play == gm->operationMode) ? gm->conductor : gm->localStages;
+   const Stages& stage = (OperationMode::Play == gm->operationMode) ? gm->conductor : gm->localStages;
 
-   const uint8_t currentTick = stages.getCurrentSegmentTick();
+   const uint8_t currentTick = stage.getCurrentSegmentTick();
    const uint8_t offset = (currentTick - (currentTick % 16));
 
-   const uint8_t yMarker = 35;
+   const uint32_t segmentIndex = gm->conductor.getCurrentSegmentIndex();
+   const uint8_t length = stage.getSegmentLength(segmentIndex);
 
-   controller.setColor(Color(155, 155, 155));
+   const uint8_t yMarkerA = 35;
+   const uint8_t yMarkerB = 144;
    for (uint8_t laneIndex = 0; laneIndex < Stages::laneCount; laneIndex++)
    {
-      const Stages::Segment& segment = stages.getSegment(laneIndex, stages.getCurrentSegmentIndex());
+      const Stages::Segment& segment = stage.getSegment(laneIndex, segmentIndex);
+      const bool hasSegment = stage.hasSegment(laneIndex, segmentIndex);
 
-      const uint8_t y = 45 + laneIndex * 13;
+      const uint8_t y = 40 + laneIndex * 13;
+
+      controller.setColor(Color(155, 155, 155));
+      std::string name = gm->conductor.Stages::getName(laneIndex);
+      if (name.length() > 5)
+         name = name.substr(0, 5);
+      controller.writeText(2, y + 3, name, Svin::DisplayOLED::Font::Small, Svin::DisplayOLED::Alignment::Left);
 
       for (uint8_t col = 0; col < 16; col++)
       {
-         const uint8_t x = 2 + col * 8;
+         const uint8_t x = 30 + col * 6;
 
          const uint tick = offset + col;
+         if (tick >= length)
+            break;
+
          if (tick == currentTick)
          {
             controller.setColor(Color::Predefined::Green);
-            controller.drawRect(x, yMarker, x + 6, yMarker + 6, true);
-            controller.setColor(Color(155, 155, 155));
+            controller.drawRect(x, yMarkerA, x + 4, yMarkerA + 2, true);
+            controller.drawRect(x, yMarkerB, x + 4, yMarkerB + 2, true);
          }
+
+         if (hasSegment)
+            controller.setColor(Color::Predefined::White);
+         else
+            controller.setColor(Color(155, 155, 200));
 
          const Stages::Unit& unit = segment.at(tick);
          const uint8_t height = static_cast<uint8_t>(10.0 * unit.value1 / 255.0);
+         const uint8_t width = static_cast<uint8_t>(4.0 * unit.length / 255.0);
 
-         controller.drawRect(x, y, x + 6, y + height, true);
+         controller.drawRect(x, y + (10 - height), x + width, y + 10, true);
       }
    }
 }

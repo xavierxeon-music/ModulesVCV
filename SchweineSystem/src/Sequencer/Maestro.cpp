@@ -312,7 +312,35 @@ void Maestro::loadProject(const std::string& newFileName)
 
    // stages
    {
+      Svin::Json::Object staggesObject = rootObject.get("stages").toObject();
+      for (uint8_t laneIndex = 0; laneIndex < Stages::laneCount; laneIndex++)
+      {
+         const std::string key = compileLaneKy(laneIndex);
+         Svin::Json::Object laneObject = staggesObject.get(key).toObject();
 
+         const std::string name = laneObject.get("name").toString();
+         conductor.Stages::setName(laneIndex, name);
+
+         for (uint32_t segmentIndex = 0; segmentIndex < conductor.getSegmentCount(); segmentIndex++)
+         {
+            const std::string segmentKey = compileSegmentKey(segmentIndex);
+            if (!laneObject.hasKey(segmentKey))
+               continue;
+
+            Svin::Json::Array unitArray = laneObject.get(segmentKey).toArray();
+            const uint8_t length = unitArray.size();
+            if (length != conductor.getSegmentLength(segmentIndex))
+               continue;
+
+            Stages::Segment segment(length, Stages::Unit());
+            for (uint8_t tick = 0; tick < length; tick++)
+            {
+               segment[tick].store = unitArray.at(tick).toInt();
+            }
+
+            conductor.Stages::setSegment(laneIndex, segmentIndex, segment);
+         }
+      }
    }
 
    // lanes
@@ -329,6 +357,8 @@ void Maestro::loadProject(const std::string& newFileName)
          for (uint32_t segmentIndex = 0; segmentIndex < conductor.getSegmentCount(); segmentIndex++)
          {
             const std::string segmentKey = compileSegmentKey(segmentIndex);
+            if (!laneObject.hasKey(segmentKey))
+               continue;
 
             Contours::Segment segment;
             segment.store = laneObject.get(segmentKey).toInt();
