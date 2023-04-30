@@ -7,12 +7,25 @@ Maestro::Display::Display(Maestro* gm)
    : mode(Mode::Overview)
    , gm(gm)
    , controller(gm, Panel::Pixels_Display)
-   , modeButtonOverivew(gm, Panel::DisplayOverview)
-   , modeButtonGroove(gm, Panel::DisplayGroove)
-   , modeButtonMelody(gm, Panel::DisplayMelody)
-   , modeButtonContour(gm, Panel::DisplayContour)
+   , modeButtonOverivew(gm, Panel::DisplayOverview, Panel::RGB_DisplayOverview)
+   , modeButtonGroove(gm, Panel::DisplayGroove, Panel::RGB_DisplayGroove)
+   , modeButtonMelody(gm, Panel::DisplayMelody, Panel::RGB_DisplayMelody)
+   , modeButtonContour(gm, Panel::DisplayContour, Panel::RGB_DisplayContour)
+   , modeMap()
 {
    controller.onPressedOpenFileFunction(gm, &Maestro::loadProject, "Projects:grm");
+
+   modeButtonOverivew.setDefaultColor(Color::Predefined::White);
+   modeMap[Mode::Overview] = &modeButtonOverivew;
+
+   modeButtonGroove.setDefaultColor(Color::Predefined::White);
+   modeMap[Mode::Groove] = &modeButtonGroove;
+
+   modeButtonMelody.setDefaultColor(Color::Predefined::White);
+   modeMap[Mode::Melody] = &modeButtonMelody;
+
+   modeButtonContour.setDefaultColor(Color::Predefined::White);
+   modeMap[Mode::Contour] = &modeButtonContour;
 }
 
 void Maestro::Display::process()
@@ -37,6 +50,12 @@ void Maestro::Display::process()
 
 void Maestro::Display::update()
 {
+   for (ModeMap::const_iterator it = modeMap.cbegin(); it != modeMap.cend(); it++)
+   {
+      const bool on = (it->first == mode);
+      it->second->setActive(on);
+   }
+
    controller.fill();
 
    if (OperationMode::Passthrough == gm->operationMode)
@@ -140,8 +159,6 @@ void Maestro::Display::displayGroove()
 {
    const Grooves& grooves = (OperationMode::Play == gm->operationMode) ? gm->conductor : gm->localGrooves;
 
-   const Tempo tempo = gm->getTempo();
-   const bool on = tempo.isRunningOrFirstTick();
    const uint32_t segmentCount = grooves.getSegmentCount();
 
    if (0 == segmentCount)
@@ -160,20 +177,14 @@ void Maestro::Display::displayGroove()
 
    const uint8_t offset = (currentTick - (currentTick % 8));
 
-   for (uint8_t col = 0; col < 8; col++)
    {
-      const uint tick = offset + col;
-
-      if (tick != currentTick)
-         continue;
+      const uint col = currentTick - offset;
 
       controller.setColor(Color::Predefined::Green);
 
       const uint8_t x = 5 + col * 12;
       const uint8_t y = 35;
       controller.drawRect(x, y, x + 8, y + 4, true);
-
-      break;
    }
 
    for (uint8_t row = 0; row < 8; row++)
@@ -211,6 +222,38 @@ void Maestro::Display::displayGroove()
 
 void Maestro::Display::displayMelody()
 {
+   const Stages& stages = (OperationMode::Play == gm->operationMode) ? gm->conductor : gm->localStages;
+
+   const uint8_t currentTick = stages.getCurrentSegmentTick();
+   const uint8_t offset = (currentTick - (currentTick % 16));
+
+   const uint8_t yMarker = 35;
+
+   controller.setColor(Color(155, 155, 155));
+   for (uint8_t laneIndex = 0; laneIndex < Stages::laneCount; laneIndex++)
+   {
+      const Stages::Segment& segment = stages.getSegment(laneIndex, stages.getCurrentSegmentIndex());
+
+      const uint8_t y = 45 + laneIndex * 13;
+
+      for (uint8_t col = 0; col < 16; col++)
+      {
+         const uint8_t x = 2 + col * 8;
+
+         const uint tick = offset + col;
+         if (tick == currentTick)
+         {
+            controller.setColor(Color::Predefined::Green);
+            controller.drawRect(x, yMarker, x + 6, yMarker + 6, true);
+            controller.setColor(Color(155, 155, 155));
+         }
+
+         const Stages::Unit& unit = segment.at(tick);
+         const uint8_t height = static_cast<uint8_t>(10.0 * unit.value1 / 255.0);
+
+         controller.drawRect(x, y, x + 6, y + height, true);
+      }
+   }
 }
 
 void Maestro::Display::displayContours()

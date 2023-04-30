@@ -11,12 +11,12 @@ Maestro::Maestro()
    , timeStamp(-1)
    , conductor()
    , localGrooves()
+   , localStages()
    , voltages()
    , tickTriggers(0)
    , segmentGates(0)
    // control
    , display(this)
-
    , launchpad(this)
    // input
    , uploadInput(this, Panel::Upload)
@@ -31,9 +31,10 @@ Maestro::Maestro()
    // mode
    , loopButton(this, Panel::Loop, Panel::RGB_Loop)
    , operationMode(OperationMode::Passthrough)
-   , modeButtonPass(this, Panel::ModePass)
-   , modeButtonRemote(this, Panel::ModeRemote)
-   , modeButtonReplay(this, Panel::ModeReplay)
+   , modeButtonPass(this, Panel::ModePass, Panel::RGB_ModePass)
+   , modeButtonRemote(this, Panel::ModeRemote, Panel::RGB_ModeRemote)
+   , modeButtonReplay(this, Panel::ModeReplay, Panel::RGB_ModeReplay)
+   , operationModeMap()
 
    // other
 
@@ -48,9 +49,23 @@ Maestro::Maestro()
    localGrooves.setGates(0, BoolField8(0));
    localGrooves.setLooping(true);
 
+   localStages.update(16, 1);
+   Stages::Segment segment(16, Stages::Unit());
+   localStages.setSegment(0, 0, segment);
+   localStages.setLooping(true);
+
    voltages = std::vector<float>(16, 0.0);
 
    loopButton.setDefaultColor(Color::Predefined::Green);
+
+   modeButtonPass.setDefaultColor(Color::Predefined::Yellow);
+   operationModeMap[OperationMode::Passthrough] = &modeButtonPass;
+
+   modeButtonRemote.setDefaultColor(Color::Predefined::Cyan);
+   operationModeMap[OperationMode::Remote] = &modeButtonRemote;
+
+   modeButtonReplay.setDefaultColor(Color::Predefined::Green);
+   operationModeMap[OperationMode::Play] = &modeButtonReplay;
 }
 
 void Maestro::process(const ProcessArgs& args)
@@ -103,6 +118,7 @@ void Maestro::process(const ProcessArgs& args)
    {
       conductor.clockReset();
       localGrooves.clockReset();
+      localStages.clockReset();
       return applyZero();
    }
 
@@ -315,7 +331,7 @@ void Maestro::loadProject(const std::string& newFileName)
             const std::string segmentKey = compileSegmentKey(segmentIndex);
 
             Contours::Segment segment;
-            segment.value = laneObject.get(segmentKey).toInt();
+            segment.store = laneObject.get(segmentKey).toInt();
             conductor.Contours::setSegment(laneIndex, segmentIndex, segment);
          }
       }
@@ -324,6 +340,12 @@ void Maestro::loadProject(const std::string& newFileName)
 
 void Maestro::updateDisplays()
 {
+   for (OperationModeMap::const_iterator it = operationModeMap.cbegin(); it != operationModeMap.cend(); it++)
+   {
+      const bool on = (it->first == operationMode);
+      it->second->setActive(on);
+   }
+
    // relaod if file has changed
    if (-1 != timeStamp)
    {
@@ -432,6 +454,8 @@ void Maestro::receivedDocumentFromHub(const ::Midi::Channel& channel, const Svin
 void Maestro::load(const Svin::Json::Object& rootObject)
 {
    operationMode = static_cast<OperationMode>(rootObject.get("operation").toInt());
+   display.mode = static_cast<Display::Mode>(rootObject.get("display").toInt());
+
    launchpad.wantConnection = static_cast<Launchpad::WantConnection>(rootObject.get("launchpad").toInt());
    if (Launchpad::WantConnection::Yes == launchpad.wantConnection)
       launchpad.connectionPrompt.arm();
@@ -462,11 +486,14 @@ void Maestro::load(const Svin::Json::Object& rootObject)
    for (uint8_t tick = 0; tick < length; tick++)
       beat[tick] = beatArray.at(tick).toInt();
    localGrooves.setBeat(0, beat);
+
+   // TODO localStages
 }
 
 void Maestro::save(Svin::Json::Object& rootObject)
 {
    rootObject.set("operation", static_cast<uint8_t>(operationMode));
+   rootObject.set("display", static_cast<uint8_t>(display.mode));
    rootObject.set("launchpad", static_cast<uint8_t>(launchpad.wantConnection));
    rootObject.set("loop", conductor.isLooping());
    rootObject.set("no_offset", noOffsetSwitch.isOn());
@@ -492,6 +519,8 @@ void Maestro::save(Svin::Json::Object& rootObject)
    }
 
    rootObject.set("beat", beatArray);
+
+   // TODO localStages
 }
 
 // widget

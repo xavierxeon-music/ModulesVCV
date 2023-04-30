@@ -103,6 +103,9 @@ private:
       Mode mode;
 
    private:
+      using ModeMap = std::map<Mode, Svin::ButtonLED*>;
+
+   private:
       void headerPassthrough();
       void headerRemote();
       void headerPlay();
@@ -115,10 +118,11 @@ private:
    private:
       Maestro* gm;
       Svin::DisplayOLED::Controller controller;
-      Svin::Button modeButtonOverivew;
-      Svin::Button modeButtonGroove;
-      Svin::Button modeButtonMelody;
-      Svin::Button modeButtonContour;
+      Svin::ButtonLED modeButtonOverivew;
+      Svin::ButtonLED modeButtonGroove;
+      Svin::ButtonLED modeButtonMelody;
+      Svin::ButtonLED modeButtonContour;
+      ModeMap modeMap;
    };
 
    class Launchpad
@@ -156,6 +160,8 @@ private:
       Svin::ButtonLED connectionButton;
    };
 
+   using OperationModeMap = std::map<OperationMode, Svin::ButtonLED*>;
+
 private:
    inline void setup();
 
@@ -172,6 +178,7 @@ private:
    long timeStamp;
    Conductor::Core conductor;
    Grooves localGrooves;
+   Stages localStages;
    std::vector<float> voltages;
    BoolField8 tickTriggers;
    BoolField8 segmentGates;
@@ -196,9 +203,10 @@ private:
    Svin::ButtonLED loopButton;
 
    OperationMode operationMode;
-   Svin::Button modeButtonPass;
-   Svin::Button modeButtonRemote;
-   Svin::Button modeButtonReplay;
+   Svin::ButtonLED modeButtonPass;
+   Svin::ButtonLED modeButtonRemote;
+   Svin::ButtonLED modeButtonReplay;
+   OperationModeMap operationModeMap;
 
    // other
    Range::Mapper voltageToValue;

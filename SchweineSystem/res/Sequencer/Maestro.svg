@@ -270,10 +270,10 @@
             </g>
         </g>
     </g>
-    <g transform="matrix(1,0,0,1,-222.428,-184.52)">
+    <g transform="matrix(1,0,0,1,-223.428,-184.52)">
         <g transform="matrix(1,0,0,1,0,13)">
-            <g id="ModeReplay-button" serif:id="ModeReplay#button" transform="matrix(0.758898,0,0,0.758898,204.147,119.558)">
-                <circle cx="55.661" cy="308.513" r="7.929"/>
+            <g id="ModeReplay-ledbutton" serif:id="ModeReplay#ledbutton" transform="matrix(1.26113,0,0,1.26113,175.232,-30.8665)">
+                <circle cx="55.661" cy="308.513" r="7.929" style="fill:rgb(140,140,140);"/>
             </g>
             <g transform="matrix(1,0,0,1,145.915,223.751)">
                 <g transform="matrix(10,0,0,10,90.5929,118.306)">
@@ -297,8 +297,8 @@
             </g>
         </g>
         <g transform="matrix(1,0,0,1,0,6.245)">
-            <g id="ModeRemote-button" serif:id="ModeRemote#button" transform="matrix(0.758898,0,0,0.758898,204.147,91.2265)">
-                <circle cx="55.661" cy="308.513" r="7.929"/>
+            <g id="ModeRemote-ledbutton" serif:id="ModeRemote#ledbutton" transform="matrix(1.26113,0,0,1.26113,175.232,-59.1976)">
+                <circle cx="55.661" cy="308.513" r="7.929" style="fill:rgb(140,140,140);"/>
             </g>
             <g transform="matrix(1,0,0,1,145.915,195.42)">
                 <g transform="matrix(10,0,0,10,89.3379,118.306)">
@@ -322,8 +322,8 @@
             </g>
         </g>
         <g>
-            <g id="ModePass-button" serif:id="ModePass#button" transform="matrix(0.758898,0,0,0.758898,204.147,62.8953)">
-                <circle cx="55.661" cy="308.513" r="7.929"/>
+            <g id="ModePass-ledbutton" serif:id="ModePass#ledbutton" transform="matrix(1.26113,0,0,1.26113,175.232,-87.5288)">
+                <circle cx="55.661" cy="308.513" r="7.929" style="fill:rgb(140,140,140);"/>
             </g>
             <g transform="matrix(1,0,0,1,145.915,167.088)">
                 <g transform="matrix(10,0,0,10,92.9429,118.306)">
@@ -341,7 +341,7 @@
             </g>
         </g>
     </g>
-    <g transform="matrix(0.288745,0,0,0.290113,14.5499,70.0366)">
+    <g transform="matrix(0.288745,0,0,0.290113,13.5499,70.0366)">
         <g transform="matrix(1,0,0,1.52796,0,-25.7261)">
             <path d="M32,19.635C48.456,19.635 61.817,25.176 61.817,32C61.817,38.824 48.456,44.365 32,44.365C15.544,44.365 2.183,38.824 2.183,32C2.183,25.176 15.544,19.635 32,19.635ZM32,23.625C43.146,23.625 52.196,27.378 52.196,32C52.196,36.622 43.146,40.375 32,40.375C20.854,40.375 11.804,36.622 11.804,32C11.804,27.378 20.854,23.625 32,23.625Z"/>
         </g>
@@ -355,10 +355,10 @@
     <g id="Display-oled-130x150" serif:id="Display#oled$130x150" transform="matrix(2.75024,0,0,6.46494,-201.645,-381.892)">
         <rect x="87.136" y="70.02" width="47.996" height="23.511" style="fill:rgb(19,19,19);"/>
     </g>
-    <g transform="matrix(1,0,0,1,-184.608,-236.233)">
+    <g transform="matrix(1,0,0,1,-184.608,-242.233)">
         <g transform="matrix(1,0,0,1,35.2991,0.74)">
-            <g id="DisplayContour-button" serif:id="DisplayContour#button" transform="matrix(0.758898,0,0,0.758898,263.551,61.9387)">
-                <circle cx="55.661" cy="308.513" r="7.929"/>
+            <g id="DisplayContour-ledbutton" serif:id="DisplayContour#ledbutton" transform="matrix(1.26113,0,0,1.26113,235.579,-92.0242)">
+                <circle cx="55.661" cy="308.513" r="7.929" style="fill:rgb(140,140,140);"/>
             </g>
             <g transform="matrix(1,0,0,1,205.385,165.132)">
                 <g transform="matrix(10,0,0,10,88.4079,118.306)">
@@ -385,8 +385,8 @@
             </g>
         </g>
         <g transform="matrix(1,0,0,1,26.6509,1.83389)">
-            <g id="DisplayMelody-button" serif:id="DisplayMelody#button" transform="matrix(0.758898,0,0,0.758898,237.224,61.246)">
-                <circle cx="55.661" cy="308.513" r="7.929"/>
+            <g id="DisplayMelody-ledbutton" serif:id="DisplayMelody#ledbutton" transform="matrix(1.26113,0,0,1.26113,209.252,-92.7169)">
+                <circle cx="55.661" cy="308.513" r="7.929" style="fill:rgb(140,140,140);"/>
             </g>
             <g transform="matrix(1,0,0,1,178.635,164.038)">
                 <g transform="matrix(10,0,0,10,88.9629,118.306)">
@@ -410,8 +410,8 @@
             </g>
         </g>
         <g transform="matrix(1,0,0,1,22.1165,1.34389)">
-            <g id="DisplayGroove-button" serif:id="DisplayGroove#button" transform="matrix(0.758898,0,0,0.758898,206.783,61.3348)">
-                <circle cx="55.661" cy="308.513" r="7.929"/>
+            <g id="DisplayGroove-ledbutton" serif:id="DisplayGroove#ledbutton" transform="matrix(1.26113,0,0,1.26113,178.811,-92.6281)">
+                <circle cx="55.661" cy="308.513" r="7.929" style="fill:rgb(140,140,140);"/>
             </g>
             <g transform="matrix(1,0,0,1,148.258,164.528)">
                 <g transform="matrix(10,0,0,10,89.7029,118.306)">
@@ -435,8 +435,8 @@
             </g>
         </g>
         <g transform="matrix(1,0,0,1,-69.6376,1.25)">
-            <g id="DisplayOverview-button" serif:id="DisplayOverview#button" transform="matrix(0.758898,0,0,0.758898,263.562,61.4287)">
-                <circle cx="55.661" cy="308.513" r="7.929"/>
+            <g id="DisplayOverview-ledbutton" serif:id="DisplayOverview#ledbutton" transform="matrix(1.26113,0,0,1.26113,235.59,-92.5342)">
+                <circle cx="55.661" cy="308.513" r="7.929" style="fill:rgb(140,140,140);"/>
             </g>
             <g transform="matrix(1,0,0,1,205.758,164.622)">
                 <g transform="matrix(10,0,0,10,86.1579,118.306)">
