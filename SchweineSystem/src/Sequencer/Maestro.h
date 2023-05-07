@@ -160,6 +160,12 @@ private:
       Svin::ButtonLED connectionButton;
    };
 
+   struct UnitGuard
+   {
+      Stages::Unit unit;
+      Midi::Event event = Midi::Event::Unknown;
+   };
+
    using OperationModeMap = std::map<OperationMode, Svin::ButtonLED*>;
 
 private:
@@ -182,6 +188,7 @@ private:
    std::vector<float> voltages;
    BoolField8 tickTriggers;
    BoolField8 segmentGates;
+   UnitGuard unitGuards[Stages::laneCount];
 
    // control
    Display display;
@@ -198,6 +205,7 @@ private:
    Svin::Output gateOutput;
    Range::Mapper valueToVoltage;
    dsp::PulseGenerator triggerGenerator;
+   Svin::Midi::Bus busMessage;
 
    // mode
    Svin::ButtonLED loopButton;

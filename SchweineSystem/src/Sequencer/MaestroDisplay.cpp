@@ -152,7 +152,7 @@ void Maestro::Display::displayOverview()
 
    controller.setColor(Color::Predefined::White);
    controller.writeText(5, 132, Text::pad(std::to_string(segmentCount), digitCount), Svin::DisplayOLED::Font::Large);
-   controller.writeText(7 + 12 * digitCount, 137, "segmemnts", Svin::DisplayOLED::Font::Normal);
+   controller.writeText(15 + 18 * digitCount, 137, "segmemnts", Svin::DisplayOLED::Font::Normal);
 }
 
 void Maestro::Display::displayGroove()
@@ -265,10 +265,14 @@ void Maestro::Display::displayMelody()
             controller.setColor(Color(155, 155, 200));
 
          const Stages::Unit& unit = segment.at(tick);
-         const uint8_t height = static_cast<uint8_t>(10.0 * unit.value1 / 255.0);
+         uint8_t height = static_cast<uint8_t>(10.0 * unit.value1 / 255.0);
+         if (0 == height)
+            height = 1;
+
          const uint8_t width = static_cast<uint8_t>(4.0 * unit.length / 255.0);
 
-         controller.drawRect(x, y + (10 - height), x + width, y + 10, true);
+         if (0 != width)
+            controller.drawRect(x, y + (10 - height), x + width, y + 10, true);
       }
    }
 }

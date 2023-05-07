@@ -4,6 +4,7 @@ NerdSeq::NerdSeq()
    : Svin::Module()
    , Svin::Midi::Input(Midi::Device::FromNerdSEQ)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
+   , busMessage()
 {
    setup();
    registerAsBusModule<Svin::Midi::Bus>();

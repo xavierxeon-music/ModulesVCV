@@ -10,7 +10,7 @@ cd ~/Documents/Rack2/plugins/SchweineSystem
 if [ ! -f .fsync ]
 then
    echo 'no sync info'
-   return 
+   exit 1 
 fi
 
 REMOTE=$(cat .fsync)
