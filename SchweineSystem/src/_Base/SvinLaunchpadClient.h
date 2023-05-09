@@ -40,7 +40,7 @@ namespace Svin
       ~LaunchpadClient();
 
    public:
-      void update();             // send clock
+      void sendClock();
       Pad::List triggeredPads(); // return triggerd pads
 
       void showColorTest(bool firstPage);

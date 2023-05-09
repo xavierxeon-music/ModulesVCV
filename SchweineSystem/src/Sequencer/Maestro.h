@@ -168,7 +168,7 @@ private:
          Midi::Event event = Midi::Event::NoteOff;
       };
       Lane lanes[Stages::laneCount];
-      uint8_t tick = 0;
+      uint8_t tick = 255;
    };
 
    using OperationModeMap = std::map<OperationMode, Svin::ButtonLED*>;
@@ -183,8 +183,6 @@ private:
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
-
-   void fillTriggers(const Grooves& grooves);
 
 private:
    std::string fileName;
@@ -213,7 +211,6 @@ private:
    Range::Mapper valueToVoltage;
    dsp::PulseGenerator triggerGenerator;
    Svin::Midi::Bus busMessage;
-   Svin::Output stageOutput;
 
    // mode
    Svin::ButtonLED loopButton;

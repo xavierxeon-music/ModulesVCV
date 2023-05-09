@@ -47,7 +47,7 @@ Svin::LaunchpadClient::~LaunchpadClient()
    disconnect();
 }
 
-void Svin::LaunchpadClient::update()
+void Svin::LaunchpadClient::sendClock()
 {
    if (hasReset())
    {

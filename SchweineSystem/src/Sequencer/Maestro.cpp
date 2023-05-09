@@ -30,7 +30,6 @@ Maestro::Maestro()
    , valueToVoltage(0.0, 255.0, 0.0, 10.0)
    , triggerGenerator()
    , busMessage()
-   , stageOutput(this, Panel::StageOutput)
    // mode
    , loopButton(this, Panel::Loop, Panel::RGB_Loop)
    , operationMode(OperationMode::Passthrough)
@@ -74,7 +73,7 @@ Maestro::Maestro()
 
 void Maestro::process(const ProcessArgs& args)
 {
-   launchpad.client.update();
+   launchpad.client.sendClock();
 
    if (loopButton.isTriggered())
    {
@@ -106,7 +105,6 @@ void Maestro::process(const ProcessArgs& args)
 
    contourOutput.setNumberOfChannels(16);
    gateOutput.setNumberOfChannels(16);
-   stageOutput.setNumberOfChannels(16);
 
    // do stuff
 
@@ -116,7 +114,6 @@ void Maestro::process(const ProcessArgs& args)
       {
          contourOutput.setVoltage(0.0, index);
          gateOutput.setActive(false, index);
-         stageOutput.setVoltage(0.0, index);
       }
    };
 
@@ -125,6 +122,8 @@ void Maestro::process(const ProcessArgs& args)
       conductor.clockReset();
       localGrooves.clockReset();
       localStages.clockReset();
+
+      unitGuard.tick = 255;
       return applyZero();
    }
 
@@ -133,6 +132,7 @@ void Maestro::process(const ProcessArgs& args)
 
    const Tempo tempo = getTempo();
    const bool on = tempo.isRunningOrFirstTick();
+
    if (!on)
       return applyZero();
 
@@ -144,23 +144,9 @@ void Maestro::process(const ProcessArgs& args)
       {
          contourOutput.setVoltage(voltages[index], index);
          gateOutput.setActive(triggers.get(index), index);
-         if (index < 8)
-         {
-            if (unitGuard.lanes[index].event != Midi::Event::NoteOn)
-            {
-               stageOutput.setVoltage(0.0, index);
-               stageOutput.setActive(false, index + 8);
-            }
-            else
-            {
-               const Note note = Note::fromMidi(unitGuard.lanes[index].unit.value1);
-               stageOutput.setVoltage(note.voltage, index);
-               stageOutput.setActive(true, index + 8);
-            }
-         }
       }
    };
-   /*
+
    auto fillTriggers = [&](Grooves& grooves)
    {
       const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
@@ -186,11 +172,6 @@ void Maestro::process(const ProcessArgs& args)
 
          triggers.set(index + 8, segmentGates.get(index));
       }
-   };
-   */
-
-   auto fillMidi = [&]() {
-
    };
 
    if (OperationMode::Passthrough == operationMode)
@@ -255,8 +236,6 @@ void Maestro::process(const ProcessArgs& args)
 
             channelRef.messageList.push_back(message);
             channelRef.hasEvents = true;
-
-            debug() << "NOTE ON " << segmentIndex << tick << midiNote << velocity;
          };
 
          auto addNoteOff = [&](const uint8_t midiNote)
@@ -268,8 +247,6 @@ void Maestro::process(const ProcessArgs& args)
 
             channelRef.messageList.push_back(message);
             channelRef.hasEvents = true;
-
-            debug() << "NOTE OFF " << segmentIndex << tick << midiNote;
          };
 
          const Stages::Unit& unit = conductor.getUnit(laneIndex, segmentIndex, tick);
@@ -279,15 +256,19 @@ void Maestro::process(const ProcessArgs& args)
 
          if (unitGuard.tick == tick)
          {
-            /*
+            if (lane.event == Midi::Event::NoteOff)
+               continue;
+
             const float unitLength = (unit.length / 255.0);
-            if (tickPercentage >= unitLength && lane.event != Midi::Event::NoteOff)
-            {
-               addNoteOff(unit.value1);
-               lane.event = Midi::Event::NoteOff;
-            }
-            */
-            continue;
+            if (tickPercentage < unitLength)
+               continue;
+
+            const float overshoot = tickPercentage - unitLength;
+            if (overshoot > 0.01) // sometimes tick Percentage is way to high, resulting in click sound
+               continue;
+
+            addNoteOff(unit.value1);
+            lane.event = Midi::Event::NoteOff;
          }
          else
          {
@@ -655,33 +636,6 @@ void Maestro::save(Svin::Json::Object& rootObject)
    rootObject.set("beat", beatArray);
 
    // TODO localStages
-}
-
-void Maestro::fillTriggers(const Grooves& grooves)
-{
-   const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
-   bool isFirstTick = false;
-   while (hasTick(&isFirstTick))
-   {
-      if (!isFirstTick)
-         grooves.clockTick();
-
-      const uint32_t currentTick = grooves.getCurrentSegmentTick();
-      tickTriggers = on ? grooves.getTriggers(segmentIndex, currentTick) : BoolField8(0);
-      segmentGates = on ? grooves.getGates(segmentIndex) : BoolField8(0);
-
-      triggerGenerator.trigger();
-   }
-
-   const bool pulse = triggerGenerator.process(args.sampleTime);
-
-   for (uint8_t index = 0; index < 8; index++)
-   {
-      if (tickTriggers.get(index))
-         triggers.set(index + 0, pulse);
-
-      triggers.set(index + 8, segmentGates.get(index));
-   }
 }
 
 // widget
