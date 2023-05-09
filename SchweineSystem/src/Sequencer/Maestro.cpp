@@ -143,7 +143,7 @@ void Maestro::process(const ProcessArgs& args)
          gateOutput.setActive(triggers.get(index), index);
       }
    };
-
+   /*
    auto fillTriggers = [&](Grooves& grooves)
    {
       const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
@@ -170,6 +170,7 @@ void Maestro::process(const ProcessArgs& args)
          triggers.set(index + 8, segmentGates.get(index));
       }
    };
+   */
 
    if (OperationMode::Passthrough == operationMode)
    {
@@ -619,6 +620,33 @@ void Maestro::save(Svin::Json::Object& rootObject)
    rootObject.set("beat", beatArray);
 
    // TODO localStages
+}
+
+void Maestro::fillTriggers(const Grooves& grooves)
+{
+   const uint32_t segmentIndex = grooves.getCurrentSegmentIndex();
+   bool isFirstTick = false;
+   while (hasTick(&isFirstTick))
+   {
+      if (!isFirstTick)
+         grooves.clockTick();
+
+      const uint32_t currentTick = grooves.getCurrentSegmentTick();
+      tickTriggers = on ? grooves.getTriggers(segmentIndex, currentTick) : BoolField8(0);
+      segmentGates = on ? grooves.getGates(segmentIndex) : BoolField8(0);
+
+      triggerGenerator.trigger();
+   }
+
+   const bool pulse = triggerGenerator.process(args.sampleTime);
+
+   for (uint8_t index = 0; index < 8; index++)
+   {
+      if (tickTriggers.get(index))
+         triggers.set(index + 0, pulse);
+
+      triggers.set(index + 8, segmentGates.get(index));
+   }
 }
 
 // widget

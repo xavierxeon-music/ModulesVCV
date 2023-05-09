@@ -44,6 +44,3 @@ DISTRIBUTABLES += $(wildcard presets)
 # Include the Rack plugin Makefile framework
 include $(RACK_DIR)/plugin.mk
 
-# force intel build on mac
-CFLAGS += -arch x86_64 
-CXXFLAGS += -arch x86_64

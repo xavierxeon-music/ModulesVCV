@@ -179,6 +179,8 @@ private:
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
 
+   void fillTriggers(const Grooves& grooves);
+
 private:
    std::string fileName;
    long timeStamp;
