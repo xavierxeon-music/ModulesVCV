@@ -162,8 +162,13 @@ private:
 
    struct UnitGuard
    {
-      Stages::Unit unit;
-      Midi::Event event = Midi::Event::Unknown;
+      struct Lane
+      {
+         Stages::Unit unit;
+         Midi::Event event = Midi::Event::NoteOff;
+      };
+      Lane lanes[Stages::laneCount];
+      uint8_t tick = 0;
    };
 
    using OperationModeMap = std::map<OperationMode, Svin::ButtonLED*>;
@@ -188,7 +193,7 @@ private:
    std::vector<float> voltages;
    BoolField8 tickTriggers;
    BoolField8 segmentGates;
-   UnitGuard unitGuards[Stages::laneCount];
+   UnitGuard unitGuard;
 
    // control
    Display display;
@@ -206,6 +211,7 @@ private:
    Range::Mapper valueToVoltage;
    dsp::PulseGenerator triggerGenerator;
    Svin::Midi::Bus busMessage;
+   Svin::Output stageOutput;
 
    // mode
    Svin::ButtonLED loopButton;

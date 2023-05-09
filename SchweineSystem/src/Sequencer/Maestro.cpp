@@ -15,7 +15,7 @@ Maestro::Maestro()
    , voltages()
    , tickTriggers(0)
    , segmentGates(0)
-   , unitGuards{}
+   , unitGuard{}
    // control
    , display(this)
    , launchpad(this)
@@ -30,6 +30,7 @@ Maestro::Maestro()
    , valueToVoltage(0.0, 255.0, 0.0, 10.0)
    , triggerGenerator()
    , busMessage()
+   , stageOutput(this, Panel::StageOutput)
    // mode
    , loopButton(this, Panel::Loop, Panel::RGB_Loop)
    , operationMode(OperationMode::Passthrough)
@@ -105,6 +106,7 @@ void Maestro::process(const ProcessArgs& args)
 
    contourOutput.setNumberOfChannels(16);
    gateOutput.setNumberOfChannels(16);
+   stageOutput.setNumberOfChannels(16);
 
    // do stuff
 
@@ -114,6 +116,7 @@ void Maestro::process(const ProcessArgs& args)
       {
          contourOutput.setVoltage(0.0, index);
          gateOutput.setActive(false, index);
+         stageOutput.setVoltage(0.0, index);
       }
    };
 
@@ -141,6 +144,20 @@ void Maestro::process(const ProcessArgs& args)
       {
          contourOutput.setVoltage(voltages[index], index);
          gateOutput.setActive(triggers.get(index), index);
+         if (index < 8)
+         {
+            if (unitGuard.lanes[index].event != Midi::Event::NoteOn)
+            {
+               stageOutput.setVoltage(0.0, index);
+               stageOutput.setActive(false, index + 8);
+            }
+            else
+            {
+               const Note note = Note::fromMidi(unitGuard.lanes[index].unit.value1);
+               stageOutput.setVoltage(note.voltage, index);
+               stageOutput.setActive(true, index + 8);
+            }
+         }
       }
    };
 
@@ -169,6 +186,10 @@ void Maestro::process(const ProcessArgs& args)
 
          triggers.set(index + 8, segmentGates.get(index));
       }
+   };
+
+   auto fillMidi = [&]() {
+
    };
 
    if (OperationMode::Passthrough == operationMode)
@@ -219,6 +240,7 @@ void Maestro::process(const ProcessArgs& args)
       const uint8_t tick = conductor.getCurrentSegmentTick();
       busMessage = Svin::Midi::Bus{}; // reset
       busMessage.noOfChannels = Stages::laneCount;
+
       for (uint8_t laneIndex = 0; laneIndex < Stages::laneCount; laneIndex++)
       {
          Svin::Midi::Bus::Channel& channelRef = busMessage.channels[laneIndex];
@@ -232,6 +254,8 @@ void Maestro::process(const ProcessArgs& args)
 
             channelRef.messageList.push_back(message);
             channelRef.hasEvents = true;
+
+            debug() << "NOTE ON " << segmentIndex << tick << midiNote << velocity;
          };
 
          auto addNoteOff = [&](const uint8_t midiNote)
@@ -243,37 +267,48 @@ void Maestro::process(const ProcessArgs& args)
 
             channelRef.messageList.push_back(message);
             channelRef.hasEvents = true;
+
+            debug() << "NOTE OFF " << segmentIndex << tick << midiNote;
          };
 
          const Stages::Unit& unit = conductor.getUnit(laneIndex, segmentIndex, tick);
-         const Stages::Unit& lastUnit = unitGuards[laneIndex].unit;
 
-         if (unit.store == lastUnit.store)
+         UnitGuard::Lane& lane = unitGuard.lanes[laneIndex];
+         const Stages::Unit& lastUnit = lane.unit;
+
+         if (unitGuard.tick == tick)
          {
+            /*
             const float unitLength = (unit.length / 255.0);
-            if (tickPercentage >= unitLength && unitGuards[laneIndex].event != Midi::Event::NoteOff)
+            if (tickPercentage >= unitLength && lane.event != Midi::Event::NoteOff)
             {
                addNoteOff(unit.value1);
-               unitGuards[laneIndex].event = Midi::Event::NoteOff;
+               lane.event = Midi::Event::NoteOff;
             }
+            */
             continue;
          }
-
-         if (unitGuards[laneIndex].event != Midi::Event::NoteOff)
+         else
          {
-            addNoteOff(lastUnit.value1);
-            unitGuards[laneIndex].event = Midi::Event::NoteOff;
-         }
+            if (lane.event != Midi::Event::NoteOff)
+            {
+               addNoteOff(lastUnit.value1);
+               lane.event = Midi::Event::NoteOff;
+            }
 
-         if (unit.length > 0.0)
-         {
-            if (true) // propablilty
-               addNoteOn(unit.value1, unit.value2);
-            unitGuards[laneIndex].event = Midi::Event::NoteOn;
-         }
+            if (unit.length > 0.0)
+            {
+               if (true) // propablilty
+                  addNoteOn(unit.value1, unit.value2);
+               lane.event = Midi::Event::NoteOn;
+            }
 
-         unitGuards[laneIndex].unit.store = unit.store;
+            lane.unit.store = unit.store;
+         }
       }
+
+      if (unitGuard.tick != tick)
+         unitGuard.tick = tick;
 
       busMessage.runState = Tempo::Running;
       sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
