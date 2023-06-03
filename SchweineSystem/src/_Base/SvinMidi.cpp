@@ -4,6 +4,7 @@
 
 // common
 
+/*
 const Svin::Midi::Common::InterfaceMap Svin::Midi::Common::interfaceMap = {
    {::Midi::Device::Splitter, "ESI M4U eX Port 4"},
    {::Midi::Device::DopeferQuad1, "ESI M4U eX Port 1"},
@@ -15,7 +16,7 @@ const Svin::Midi::Common::InterfaceMap Svin::Midi::Common::interfaceMap = {
    {::Midi::Device::KeyStep3, "ESI M4U eX Port 5"},
    {::Midi::Device::KeyStep4, "ESI M4U eX Port 5"},
    {::Midi::Device::Daisy, "ESI M4U eX Port 4"},
-   {::Midi::Device::DrumTrigger, "ESI M4U eX Port 8"},
+   {::Midi::Device::DrumTrigger, "ESI M4U eX Port 8"},  
    {::Midi::Device::VCMC, "ESI M4U eX Port 6"},
    {::Midi::Device::ACDC, "OWL-ACDC"},
    {::Midi::Device::Metropolix, "Metropolix"},
@@ -24,6 +25,29 @@ const Svin::Midi::Common::InterfaceMap Svin::Midi::Common::interfaceMap = {
    {::Midi::Device::BitBoxMicro, "ESI M4U eX Port 4"},
    {::Midi::Device::ToNerdSEQ, "ESI M4U eX Port 7"},
    {::Midi::Device::FromNerdSEQ, "ESI M4U eX Port 3"},
+};
+*/
+
+const Svin::Midi::Common::InterfaceMap Svin::Midi::Common::interfaceMap = {
+   {::Midi::Device::Splitter,     "SWITCH"           },
+   {::Midi::Device::DopeferQuad1, "DoepferQuad"      },
+   {::Midi::Device::DopeferQuad2, "DoepferQuad"      },
+   {::Midi::Device::DopeferQuad3, "DoepferQuad"      },
+   {::Midi::Device::DopeferQuad4, "DoepferQuad"      },
+   {::Midi::Device::KeyStep1,     "KeyStep Pro"      },
+   {::Midi::Device::KeyStep2,     "KeyStep Pro"      },
+   {::Midi::Device::KeyStep3,     "KeyStep Pro"      },
+   {::Midi::Device::KeyStep4,     "KeyStep Pro"      },
+   {::Midi::Device::Daisy,        "SWITCH"           },
+   {::Midi::Device::DrumTrigger,  "DrumTrigger"      },
+   {::Midi::Device::VCMC,         "ESI M4U eX Port 6"},
+   {::Midi::Device::ACDC,         "OWL-ACDC"         },
+   {::Midi::Device::Metropolix,   "Metropolix"       },
+   {::Midi::Device::FlameCC,      "FlameCc"          },
+   {::Midi::Device::BitBox,       "SWITCH"           },
+   {::Midi::Device::BitBoxMicro,  "SWITCH"           },
+   {::Midi::Device::ToNerdSEQ,    "ESI M4U eX Port 7"},
+   {::Midi::Device::FromNerdSEQ,  "ESI M4U eX Port 3"},
 };
 
 Svin::Midi::Common::Common(bool isVirtual)
