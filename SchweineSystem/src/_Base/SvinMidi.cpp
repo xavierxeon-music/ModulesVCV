@@ -43,7 +43,7 @@ const Svin::Midi::Common::InterfaceMap Svin::Midi::Common::interfaceMap = {
    {::Midi::Device::VCMC,         "ESI M4U eX Port 6"},
    {::Midi::Device::ACDC,         "OWL-ACDC"         },
    {::Midi::Device::Metropolix,   "Metropolix"       },
-   {::Midi::Device::FlameCC,      "FlameCc"          },
+   {::Midi::Device::FlameCC,      "FlameCC"          },
    {::Midi::Device::BitBox,       "SWITCH"           },
    {::Midi::Device::BitBoxMicro,  "SWITCH"           },
    {::Midi::Device::ToNerdSEQ,    "ESI M4U eX Port 7"},
