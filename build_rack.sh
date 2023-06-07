@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=2.1.0
+VERSION=2.3.0
 
 #####################################################3
 
@@ -60,8 +60,8 @@ else
    MAXCORES=$(nproc)
 fi
 
-arch -x86_64 make dep -j $MAXCORES || exit
-arch -x86_64 make -j $MAXCORES || exit
+make dep -j $MAXCORES || exit
+make -j $MAXCORES || exit
 
 ln -s $SCRIPT_DIR/3rdParty/Fundamental $SCRIPT_DIR/Rack/plugins/Fundamental   
 ln -s $SCRIPT_DIR/3rdParty/ImpromptuModular $SCRIPT_DIR/Rack/plugins/ImpromptuModular      
@@ -70,14 +70,14 @@ ln -s $SCRIPT_DIR/SchweineSystem $SCRIPT_DIR/Rack/plugins/SchweineSystem
 
 cd $SCRIPT_DIR/3rdParty/Fundamental
 git switch v2
-arch -x86_64 make -j $MAXCORES || exit
+make -j $MAXCORES || exit
 
 cd $SCRIPT_DIR/3rdParty/ImpromptuModular
 git switch master
-arch -x86_64 make -j $MAXCORES || exit
+make -j $MAXCORES || exit
 
 cd $SCRIPT_DIR/3rdParty/BogaudioModules
 git switch master
-arch -x86_64 make -j $MAXCORES || exit
+make -j $MAXCORES || exit
 
 cd $CURRENT_DIR
