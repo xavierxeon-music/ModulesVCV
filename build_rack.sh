@@ -45,6 +45,7 @@ if [ -z "$BRANCH_EXIST_TEST" ]
 then
    echo "new branch"
    git checkout tags/v$VERSION -b $VERSION
+   git submodule update --init --recursive
 fi
 
 BRANCH_CURRENT_TEST=$(git branch --show-current)
