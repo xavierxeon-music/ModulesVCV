@@ -8,7 +8,7 @@ GateLatch::GateLatch()
    , inputList(this)
    , outputList(this)
    , lightList(this)
-   , triggers{}
+   //, triggers{}
    , activity{}
    , latches{false, false, false, false, false, false, false, false}
    , resetTrigger()
@@ -117,4 +117,3 @@ GateLatchWidget::GateLatchWidget(GateLatch* module)
 
 // create module
 Model* modelGateLatch = Svin::Origin::the()->addModule<GateLatch, GateLatchWidget>("GateLatch");
-

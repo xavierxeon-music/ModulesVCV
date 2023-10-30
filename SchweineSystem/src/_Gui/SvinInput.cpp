@@ -6,7 +6,7 @@ Svin::Input::Input(Module* module, const uint16_t& inputIndex)
    : module(module)
    , inputIndex(inputIndex)
    , triggerThreshold(3.0)
-   , triggers{}
+//, triggers{}
 {
 }
 
