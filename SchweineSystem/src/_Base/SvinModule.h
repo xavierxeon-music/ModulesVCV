@@ -88,7 +88,7 @@ namespace Svin
    private:
       using Map = std::map<std::string, Module*>;
 
-      class Majordomo : public Svin::Midi::Input, public Svin::Midi::Output
+      class Majordomo : public Svin::MidiInput, public Svin::MidiOutput
       {
       public:
          Majordomo();

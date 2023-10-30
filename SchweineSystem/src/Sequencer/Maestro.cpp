@@ -44,7 +44,7 @@ Maestro::Maestro()
 {
    setup();
    registerHubClient("Maestro");
-   registerAsBusModule<Svin::Midi::Bus>();
+   registerAsBusModule<Svin::MidiBus>();
 
    localGrooves.update(16, 1);
    Grooves::Beat beat(16, BoolField8(0));
@@ -220,12 +220,12 @@ void Maestro::process(const ProcessArgs& args)
 
       // stages
       const uint8_t tick = conductor.getCurrentSegmentTick();
-      busMessage = Svin::Midi::Bus{}; // reset
+      busMessage = Svin::MidiBus{}; // reset
       busMessage.noOfChannels = Stages::laneCount;
 
       for (uint8_t laneIndex = 0; laneIndex < Stages::laneCount; laneIndex++)
       {
-         Svin::Midi::Bus::Channel& channelRef = busMessage.channels[laneIndex];
+         Svin::MidiBus::Channel& channelRef = busMessage.channels[laneIndex];
 
          auto addNoteOn = [&](const uint8_t midiNote, const uint8_t velocity)
          {
@@ -293,7 +293,7 @@ void Maestro::process(const ProcessArgs& args)
          unitGuard.tick = tick;
 
       busMessage.runState = Tempo::Running;
-      sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
+      sendBusData<Svin::MidiBus>(Side::Right, busMessage);
 
       // contours
       const float segmentPercentage = conductor.getCurrentSegmentPrecentage(tickPercentage);

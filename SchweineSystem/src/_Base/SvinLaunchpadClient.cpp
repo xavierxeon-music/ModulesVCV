@@ -34,8 +34,8 @@ const std::vector<Color> Svin::LaunchpadClient::paletteList = []
 }();
 
 Svin::LaunchpadClient::LaunchpadClient()
-   : Midi::Input(false)
-   , Midi::Output(false)
+   : MidiInput(false)
+   , MidiOutput(false)
    , MasterClock::Client()
    , padCache()
    , colorMap()
@@ -102,11 +102,11 @@ void Svin::LaunchpadClient::disconnect()
    //sendPowerSafe(true);
    //switchToProgramMode(false);
 
-   if (Midi::Output::connected())
-      Midi::Output::close();
+   if (MidiOutput::connected())
+      MidiOutput::close();
 
-   if (Midi::Input::connected())
-      Midi::Input::close();
+   if (MidiInput::connected())
+      MidiInput::close();
 }
 
 void Svin::LaunchpadClient::connect(const uint8_t& deviceId)
@@ -119,14 +119,14 @@ void Svin::LaunchpadClient::connect(const uint8_t& deviceId)
    if (0 == deviceId)
       deviceName = "Launchpad Mini MK3 LPMiniMK3 MIDI Out";
 
-   Midi::Input::setTargetDeviceName(deviceName);
-   Midi::Input::open(first);
+   MidiInput::setTargetDeviceName(deviceName);
+   MidiInput::open(first);
 
    if (0 == deviceId)
       deviceName = "Launchpad Mini MK3 LPMiniMK3 MIDI In";
 
-   Midi::Output::setTargetDeviceName(deviceName);
-   Midi::Output::open(first);
+   MidiOutput::setTargetDeviceName(deviceName);
+   MidiOutput::open(first);
 
    first = false;
 
@@ -136,7 +136,7 @@ void Svin::LaunchpadClient::connect(const uint8_t& deviceId)
 
 bool Svin::LaunchpadClient::isConnected()
 {
-   return (Midi::Input::connected() && Midi::Output::connected());
+   return (MidiInput::connected() && MidiOutput::connected());
 }
 
 void Svin::LaunchpadClient::setAll(const uint8_t& paletteIndex, bool gridOnly)

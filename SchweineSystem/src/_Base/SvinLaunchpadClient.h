@@ -6,7 +6,7 @@
 
 namespace Svin
 {
-   class LaunchpadClient : private Midi::Input, private Midi::Output, private MasterClock::Client
+   class LaunchpadClient : private MidiInput, private MidiOutput, private MasterClock::Client
    {
    public:
       enum class Mode : uint8_t //

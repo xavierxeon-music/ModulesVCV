@@ -3,7 +3,7 @@
 MetroControl::MetroControl()
    : Svin::Module()
    , Svin::MasterClock::Client()
-   , Svin::Midi::Output("MetropolixControl", false)
+   , Svin::MidiOutput("MetropolixControl", false)
    , playPauseController(this, Panel::Pixels_PlayPause)
    , isRunning(false)
    , resetController(this, Panel::Pixels_Reset)

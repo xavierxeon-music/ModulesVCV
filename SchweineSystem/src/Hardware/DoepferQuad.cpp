@@ -4,11 +4,11 @@
 
 DoepferQuad::DoepferQuad()
    : Svin::Module()
-   , Svin::Midi::Output(Midi::Device::DopeferQuad1)
+   , Svin::MidiOutput(Midi::Device::DopeferQuad1)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
 {
    setup();
-   registerAsBusModule<Svin::Midi::Bus>();
+   registerAsBusModule<Svin::MidiBus>();
 
    connectionButton.setDefaultColor(Color::Predefined::Green);
    connectToMidiDevice();
@@ -16,8 +16,8 @@ DoepferQuad::DoepferQuad()
 
 void DoepferQuad::process(const ProcessArgs& args)
 {
-   Svin::Midi::Bus busMessage = getBusData<Svin::Midi::Bus>(Side::Left);
-   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
+   Svin::MidiBus busMessage = getBusData<Svin::MidiBus>(Side::Left);
+   sendBusData<Svin::MidiBus>(Side::Right, busMessage);
 
    if (connectionButton.isTriggered())
       connectToMidiDevice();

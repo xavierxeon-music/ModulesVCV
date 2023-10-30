@@ -21,95 +21,93 @@ namespace Svin
 {
 
    // midi channels range from 1 -16
-   namespace Midi
+
+   struct MidiBus
    {
-
-      struct Bus
+      struct Channel
       {
-         struct Channel
-         {
-            ::Midi::MessageList messageList;
-            bool hasEvents = false;
-         };
-
-         Tempo::RunState runState = Tempo::Reset;
-         uint8_t noOfChannels = 0;
-         Channel channels[16];
-
-         ::Midi::MessageList otherMessageList;
+         Midi::MessageList messageList;
+         bool hasEvents = false;
       };
 
-      class Common
-      {
-      public:
-         using InterfaceMap = std::map<::Midi::Device::Channel, std::string>;
-         static const InterfaceMap interfaceMap;
+      Tempo::RunState runState = Tempo::Reset;
+      uint8_t noOfChannels = 0;
+      Channel channels[16];
 
-      protected:
-         Common(bool isVirtual);
+      Midi::MessageList otherMessageList;
+   };
 
-      protected:
-         static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
-         void setTargetDeviceName(const std::string& newTargetDeviceName);
+   class MidiCommon
+   {
+   public:
+      using InterfaceMap = std::map<Midi::Device::Channel, std::string>;
+      static const InterfaceMap interfaceMap;
 
-      protected:
-         bool isVirtual;
-         bool virtualOpen;
-         std::string targetDeviceName;
-      };
+   protected:
+      MidiCommon(bool isVirtual);
 
-      class Output : public Common
-      {
-      public:
-         Output(bool isVirtual);
-         Output(const std::string& targetDeviceName, bool isVirtual = false);
-         Output(const ::Midi::Device::Channel& deviceChannel);
-         virtual ~Output();
+   protected:
+      static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
+      void setTargetDeviceName(const std::string& newTargetDeviceName);
 
-      public:
-         bool open(bool verbose = false);
-         void close();
-         bool connected();
+   protected:
+      bool isVirtual;
+      bool virtualOpen;
+      std::string targetDeviceName;
+   };
 
-         void sendNoteOn(const ::Midi::Channel& channel, const uint8_t& midiNote, const ::Midi::Velocity& velocity);
-         void sendNoteOff(const ::Midi::Channel& channel, const uint8_t& midiNote);
-         void sendControllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value);
-         void sendDocument(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex = 0);
+   class MidiOutput : public MidiCommon
+   {
+   public:
+      MidiOutput(bool isVirtual);
+      MidiOutput(const std::string& targetDeviceName, bool isVirtual = false);
+      MidiOutput(const Midi::Device::Channel& deviceChannel);
+      virtual ~MidiOutput();
 
-      protected:
-         void sendMessage(const Bytes& message);
+   public:
+      bool open(bool verbose = false);
+      void close();
+      bool connected();
 
-      private:
-         RtMidiOut midiOutput;
-      };
+      void sendNoteOn(const Midi::Channel& channel, const uint8_t& midiNote, const Midi::Velocity& velocity);
+      void sendNoteOff(const Midi::Channel& channel, const uint8_t& midiNote);
+      void sendControllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value);
+      void sendDocument(const Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex = 0);
 
-      class Input : public Common, public ::Midi::Parser
-      {
-      public:
-         Input(bool isVirtual);
-         Input(const std::string& targetDeviceName, bool isVirtual = false);
-         Input(const ::Midi::Device::Channel& deviceChannel);
-         virtual ~Input();
+   protected:
+      void sendMessage(const Bytes& message);
 
-      public:
-         bool open(bool verbose = false);
-         void close();
-         bool connected();
+   private:
+      RtMidiOut midiOutput;
+   };
 
-         virtual void controllerChange(const ::Midi::Channel& channel, const ::Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
-         virtual void document(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex);
+   class MidiInput : public MidiCommon, public Midi::Parser
+   {
+   public:
+      MidiInput(bool isVirtual);
+      MidiInput(const std::string& targetDeviceName, bool isVirtual = false);
+      MidiInput(const Midi::Device::Channel& deviceChannel);
+      virtual ~MidiInput();
 
-      private:
-         using BufferMap = std::map<::Midi::Channel, std::string>;
+   public:
+      bool open(bool verbose = false);
+      void close();
+      bool connected();
 
-      private:
-         static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
+      virtual void controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value) override;
+      virtual void document(const Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex);
 
-      private:
-         RtMidiIn midiInput;
-         BufferMap docBufferMap;
-      };
-   } // namespace Midi
+   private:
+      using BufferMap = std::map<Midi::Channel, std::string>;
+
+   private:
+      static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
+
+   private:
+      RtMidiIn midiInput;
+      BufferMap docBufferMap;
+   };
+
 } // namespace Svin
 
 #endif // NOT SvinMidiH

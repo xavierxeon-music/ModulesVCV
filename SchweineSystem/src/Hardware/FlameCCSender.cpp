@@ -4,7 +4,7 @@
 
 FlameCCSender::FlameCCSender()
    : Svin::Module()
-   , Svin::Midi::Output(Midi::Device::FlameCC)
+   , Svin::MidiOutput(Midi::Device::FlameCC)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , voltageToCcValue(0.0, 5.0, 0.0, 127.0)
    , input(this, Panel::Voltages)

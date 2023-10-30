@@ -27,7 +27,7 @@ or make your own custom cable
  Shield | |     Shield | |
 */
 
-class FlameCCSender : public Svin::Module, private Svin::Midi::Output
+class FlameCCSender : public Svin::Module, private Svin::MidiOutput
 {
 public:
    struct Panel;

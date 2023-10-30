@@ -6,7 +6,7 @@
 
 AturiaStep::AturiaStep()
    : Svin::Module()
-   , Svin::Midi::Output(Midi::Device::KeyStep1)
+   , Svin::MidiOutput(Midi::Device::KeyStep1)
    , Svin::MasterClock::Client()
    , useDrumChannel(false)
    , drumButon(this, Panel::Drums, Panel::RGB_Drums)
@@ -56,8 +56,8 @@ AturiaStep::AturiaStep()
 
 void AturiaStep::process(const ProcessArgs& args)
 {
-   Svin::Midi::Bus busMessage = getBusData<Svin::Midi::Bus>(Side::Left);
-   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
+   Svin::MidiBus busMessage = getBusData<Svin::MidiBus>(Side::Left);
+   sendBusData<Svin::MidiBus>(Side::Right, busMessage);
 
    if (connectionButton.isTriggered())
       connectToMidiDevice();

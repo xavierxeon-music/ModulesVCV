@@ -16,7 +16,7 @@ using namespace rack;
 #include <SvinLightMeter.h>
 #include <SvinOutput.h>
 
-class VCMCReceiver : public Svin::Module, public Svin::Midi::Input
+class VCMCReceiver : public Svin::Module, public Svin::MidiInput
 {
 public:
    struct Panel;

@@ -37,12 +37,12 @@ MidiMize::MidiMize()
    , lastState{}
 {
    setup();
-   registerAsBusModule<Svin::Midi::Bus>();
+   registerAsBusModule<Svin::MidiBus>();
 }
 
 void MidiMize::process(const ProcessArgs& args)
 {
-   Svin::Midi::Bus busMessage;
+   Svin::MidiBus busMessage;
    busMessage.runState = Tempo::Running;
 
    const uint8_t noOfChannels = pitchInput.isConnected() ? pitchInput.getNumberOfChannels() : 0;
@@ -59,7 +59,7 @@ void MidiMize::process(const ProcessArgs& args)
       if (state == lastState[channel])
          continue;
 
-      Svin::Midi::Bus::Channel& busChannel = busMessage.channels[channel];
+      Svin::MidiBus::Channel& busChannel = busMessage.channels[channel];
       if (!state.gate && !lastState[channel].gate) // both off therfore no change
       {
          continue;
@@ -92,7 +92,7 @@ void MidiMize::process(const ProcessArgs& args)
       lastState[channel] = state;
    }
 
-   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
+   sendBusData<Svin::MidiBus>(Side::Right, busMessage);
 }
 
 Bytes MidiMize::noteOn(const uint8_t& channel, const uint8_t& midiNote, const uint8_t& velocity)

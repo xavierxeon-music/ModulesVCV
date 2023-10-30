@@ -5,8 +5,8 @@
 // majordomo
 
 Svin::Module::Majordomo::Majordomo()
-   : Svin::Midi::Input("HubVCV", false)
-   , Svin::Midi::Output("HubVCV", false)
+   : Svin::MidiInput("HubVCV", false)
+   , Svin::MidiOutput("HubVCV", false)
    , moduleMap()
 {
    tryConnect();
@@ -14,8 +14,8 @@ Svin::Module::Majordomo::Majordomo()
 
 Svin::Module::Majordomo::~Majordomo()
 {
-   Midi::Input::close();
-   Midi::Output::close();
+   MidiInput::close();
+   MidiOutput::close();
 }
 
 bool Svin::Module::Majordomo::add(Module* module, const std::string& name)
@@ -43,16 +43,16 @@ bool Svin::Module::Majordomo::remove(Module* module)
 
 bool Svin::Module::Majordomo::connected()
 {
-   return (Midi::Input::connected() && Midi::Output::connected());
+   return (MidiInput::connected() && MidiOutput::connected());
 }
 
 void Svin::Module::Majordomo::tryConnect()
 {
-   if (!Midi::Input::connected())
-      Midi::Input::open();
+   if (!MidiInput::connected())
+      MidiInput::open();
 
-   if (!Midi::Output::connected())
-      Midi::Output::open();
+   if (!MidiOutput::connected())
+      MidiOutput::open();
 }
 
 void Svin::Module::Majordomo::document(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex)

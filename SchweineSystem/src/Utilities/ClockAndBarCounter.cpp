@@ -7,7 +7,7 @@
 
 ClockAndBarCounter::ClockAndBarCounter()
    : Svin::Module()
-   , Svin::Midi::Input(Midi::Device::Metropolix)
+   , Svin::MidiInput(Midi::Device::Metropolix)
    , Svin::MasterClock()
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , midiTickCounter(6)
@@ -120,14 +120,14 @@ void ClockAndBarCounter::updateDisplays()
 
 void ClockAndBarCounter::connectToMidiDevice()
 {
-   if (Svin::Midi::Input::connected())
+   if (Svin::MidiInput::connected())
    {
       connectionButton.setOn();
       return;
    }
 
    connectionButton.setOff();
-   if (!Svin::Midi::Input::open())
+   if (!Svin::MidiInput::open())
       return;
 
    connectionButton.setOn();

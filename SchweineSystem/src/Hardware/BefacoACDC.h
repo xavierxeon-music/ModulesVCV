@@ -14,7 +14,7 @@ using namespace rack;
 #include <SvinLightMeter.h>
 #include <SvinOutput.h>
 
-class BefacoACDC : public Svin::Module, private Svin::Midi::Input
+class BefacoACDC : public Svin::Module, private Svin::MidiInput
 {
 public:
    struct Panel;

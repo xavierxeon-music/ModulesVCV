@@ -7,7 +7,7 @@
 
 VCMCReceiver::VCMCReceiver()
    : Svin::Module()
-   , Svin::Midi::Input(Midi::Device::VCMC)
+   , Svin::MidiInput(Midi::Device::VCMC)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , ccValueToVoltage(0.0, 127, 0, 10.0)
    , gates{false, false, false, false, false, false, false, false}

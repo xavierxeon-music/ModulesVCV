@@ -15,13 +15,13 @@ MidiCV::MidiCV()
    , velocityBuffer{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}
 {
    setup();
-   registerAsBusModule<Svin::Midi::Bus>();
+   registerAsBusModule<Svin::MidiBus>();
 }
 
 void MidiCV::process(const ProcessArgs& args)
 {
-   Svin::Midi::Bus busMessage = getBusData<Svin::Midi::Bus>(Side::Left);
-   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
+   Svin::MidiBus busMessage = getBusData<Svin::MidiBus>(Side::Left);
+   sendBusData<Svin::MidiBus>(Side::Right, busMessage);
 
    pitchOutput.setNumberOfChannels(busMessage.noOfChannels);
    gateOutput.setNumberOfChannels(busMessage.noOfChannels);

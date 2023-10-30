@@ -17,7 +17,7 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinOutput.h>
 
-class ClockAndBarCounter : public Svin::Module, public Svin::Midi::Input, public Svin::MasterClock
+class ClockAndBarCounter : public Svin::Module, public Svin::MidiInput, public Svin::MasterClock
 {
 public:
    struct Panel;

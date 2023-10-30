@@ -10,7 +10,7 @@ using namespace rack;
 
 #include <SvinButtonLED.h>
 
-class NerdSeq : public Svin::Module, public Svin::Midi::Input
+class NerdSeq : public Svin::Module, public Svin::MidiInput
 {
 public:
    struct Panel;
@@ -28,7 +28,7 @@ private:
 
 private:
    Svin::ButtonLED connectionButton;
-   Svin::Midi::Bus busMessage;
+   Svin::MidiBus busMessage;
 };
 
 // widget

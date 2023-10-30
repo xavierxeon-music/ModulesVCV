@@ -15,7 +15,7 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinLED.h>
 
-class DrumTrigger : public Svin::Module, public Svin::Midi::Output
+class DrumTrigger : public Svin::Module, public Svin::MidiOutput
 {
 public:
    struct Panel;

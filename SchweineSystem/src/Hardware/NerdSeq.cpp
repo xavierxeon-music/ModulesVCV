@@ -2,12 +2,12 @@
 
 NerdSeq::NerdSeq()
    : Svin::Module()
-   , Svin::Midi::Input(Midi::Device::FromNerdSEQ)
+   , Svin::MidiInput(Midi::Device::FromNerdSEQ)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , busMessage()
 {
    setup();
-   registerAsBusModule<Svin::Midi::Bus>();
+   registerAsBusModule<Svin::MidiBus>();
 
    connectionButton.setDefaultColor(Color::Predefined::Green);
    connectToMidiDevice();
@@ -19,9 +19,9 @@ void NerdSeq::process(const ProcessArgs& args)
       connectToMidiDevice();
 
    busMessage.runState = Tempo::Running;
-   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
+   sendBusData<Svin::MidiBus>(Side::Right, busMessage);
 
-   busMessage = Svin::Midi::Bus{}; // reset
+   busMessage = Svin::MidiBus{}; // reset
 }
 
 void NerdSeq::connectToMidiDevice()
@@ -48,7 +48,7 @@ void NerdSeq::processMessage(const Bytes& message)
 
       busMessage.noOfChannels = 16;
       const uint8_t channelNo = (message[0] & 0x0F);
-      Svin::Midi::Bus::Channel& channelRef = busMessage.channels[channelNo];
+      Svin::MidiBus::Channel& channelRef = busMessage.channels[channelNo];
 
       switch (event)
       {

@@ -2,7 +2,7 @@
 
 BefacoACDC::BefacoACDC()
    : Svin::Module()
-   , Svin::Midi::Input(Midi::Device::ACDC)
+   , Svin::MidiInput(Midi::Device::ACDC)
    , cvOutList(this)
    , cvMeterList(this)
    , ccValues{0, 0, 0, 0}

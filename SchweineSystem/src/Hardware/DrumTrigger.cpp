@@ -9,7 +9,7 @@ const DrumTrigger::DeviceOrder DrumTrigger::deviceOrder = {DeviceId::Erika, Devi
 
 DrumTrigger::DrumTrigger()
    : Svin::Module()
-   , Svin::Midi::Output(false)
+   , Svin::MidiOutput(false)
    , deviceButton(this, Panel::Device)
    , deviceLightList(this)
    , deviceId(DeviceId::Erika)
@@ -18,7 +18,7 @@ DrumTrigger::DrumTrigger()
    , flank{}
 {
    setup();
-   registerAsBusModule<Svin::Midi::Bus>();
+   registerAsBusModule<Svin::MidiBus>();
 
    deviceLightList.append({Panel::RGB_Erika, Panel::RGB_BitBox2, Panel::RGB_BitBoxMini});
 
@@ -29,8 +29,8 @@ DrumTrigger::DrumTrigger()
 
 void DrumTrigger::process(const ProcessArgs& args)
 {
-   Svin::Midi::Bus busMessage = getBusData<Svin::Midi::Bus>(Side::Left);
-   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
+   Svin::MidiBus busMessage = getBusData<Svin::MidiBus>(Side::Left);
+   sendBusData<Svin::MidiBus>(Side::Right, busMessage);
 
    if (deviceButton.isTriggered())
    {
@@ -92,7 +92,7 @@ void DrumTrigger::connectToMidiDevice()
    connectionButton.setOff();
 
    const Midi::Device::Channel deviceChannel = deviceMap.at(deviceId);
-   const std::string targetDeviceName = Svin::Midi::Common::interfaceMap.at(deviceChannel);
+   const std::string targetDeviceName = Svin::MidiCommon::interfaceMap.at(deviceChannel);
 
    setTargetDeviceName(targetDeviceName);
 

@@ -210,7 +210,7 @@ private:
    Svin::Output gateOutput;
    Range::Mapper valueToVoltage;
    dsp::PulseGenerator triggerGenerator;
-   Svin::Midi::Bus busMessage;
+   Svin::MidiBus busMessage;
 
    // mode
    Svin::ButtonLED loopButton;

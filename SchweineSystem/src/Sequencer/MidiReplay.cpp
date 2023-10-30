@@ -34,7 +34,7 @@ MidiReplay::MidiReplay()
    , lastTick(0)
 {
    setup();
-   registerAsBusModule<Svin::Midi::Bus>();
+   registerAsBusModule<Svin::MidiBus>();
 
    displayController.onPressedOpenFileFunction(this, &MidiReplay::loadMidiFile, "MIDI:mid");
 
@@ -98,12 +98,12 @@ void MidiReplay::process(const ProcessArgs& args)
       }
    }
 
-   Svin::Midi::Bus busMessage;
+   Svin::MidiBus busMessage;
    const Tempo tempo = getTempo();
    busMessage.runState = tempo.getRunState();
    if (!tempo.isRunningOrFirstTick())
    {
-      sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
+      sendBusData<Svin::MidiBus>(Side::Right, busMessage);
       return;
    }
 
@@ -118,7 +118,7 @@ void MidiReplay::process(const ProcessArgs& args)
    {
       for (uint8_t index = 0; index < noOfChannels; index++)
       {
-         Svin::Midi::Bus::Channel& busChannel = busMessage.channels[index];
+         Svin::MidiBus::Channel& busChannel = busMessage.channels[index];
          busChannel.hasEvents = false;
 
          const Midi::Sequence::Track& track = midiReplay.getTrackList().at(index);
@@ -135,7 +135,7 @@ void MidiReplay::process(const ProcessArgs& args)
 
       lastTick = currentTick;
    }
-   sendBusData<Svin::Midi::Bus>(Side::Right, busMessage);
+   sendBusData<Svin::MidiBus>(Side::Right, busMessage);
 }
 
 void MidiReplay::updateDisplays()

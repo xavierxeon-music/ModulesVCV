@@ -11,7 +11,7 @@ using namespace rack;
 #include <SvinLED.h>
 #include <SvinDisplayOLED.h>
 
-class MetroControl : public Svin::Module, public Svin::MasterClock::Client, public Svin::Midi::Output
+class MetroControl : public Svin::Module, public Svin::MasterClock::Client, public Svin::MidiOutput
 {
 public:
    struct Panel;
