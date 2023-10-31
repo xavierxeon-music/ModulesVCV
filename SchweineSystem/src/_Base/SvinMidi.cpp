@@ -26,10 +26,8 @@ const Svin::MidiCommon::InterfaceMap Svin::MidiCommon::interfaceMap = {
    {Midi::Device::FromNerdSEQ, "ESI M4U eX Port 3"},
 };
 
-Svin::MidiCommon::MidiCommon(bool isVirtual)
-   : isVirtual(isVirtual)
-   , virtualOpen(false)
-   , targetDeviceName()
+Svin::MidiCommon::MidiCommon()
+   : targetDeviceName()
 {
 }
 
@@ -38,22 +36,38 @@ void Svin::MidiCommon::setTargetDeviceName(const std::string& newTargetDeviceNam
    targetDeviceName = newTargetDeviceName;
 }
 
+int Svin::MidiCommon::getDeviceId(rack::midi::Port* port, bool verbose) const
+{
+   for (int id : port->getDeviceIds())
+   {
+      const std::string deviceName = port->getDeviceName(id);
+      if (verbose)
+         std::cout << id << " " << deviceName << std::endl;
+
+      if (targetDeviceName == deviceName)
+         return id;
+   }
+
+   return -1;
+}
+
 // output
 
-Svin::MidiOutput::MidiOutput(bool isVirtual)
-   : MidiCommon(isVirtual)
+Svin::MidiOutput::MidiOutput()
+   : MidiCommon()
+   , output()
 {
 }
 
-Svin::MidiOutput::MidiOutput(const std::string& targetDeviceName, bool isVirtual)
-   : MidiOutput(isVirtual)
+Svin::MidiOutput::MidiOutput(const std::string& targetDeviceName)
+   : MidiOutput()
 {
    setTargetDeviceName(targetDeviceName);
    open();
 }
 
 Svin::MidiOutput::MidiOutput(const Midi::Device::Channel& deviceChannel)
-   : MidiOutput(MidiCommon::interfaceMap.at(deviceChannel), false)
+   : MidiOutput(MidiCommon::interfaceMap.at(deviceChannel))
 {
 }
 
@@ -64,51 +78,22 @@ Svin::MidiOutput::~MidiOutput()
 
 bool Svin::MidiOutput::open(bool verbose)
 {
-   return false;
-   /*
-   if (!isVirtual)
-   {
-      for (unsigned int port = 0; port < midiOutput.getPortCount(); port++)
-      {
-         const std::string deviceName = midiOutput.getPortName(port);
-         if (verbose)
-            std::cout << deviceName << std::endl;
-
-         if (targetDeviceName == deviceName)
-         {
-            std::cout << "connected to " << deviceName << " @ " << port << std::endl;
-            midiOutput.openPort(port);
-            return true;
-         }
-      }
-
+   const int id = getDeviceId(&output, verbose);
+   if (id < 0)
       return false;
-   }
 
-   midiOutput.openVirtualPort(targetDeviceName);
-   virtualOpen = true;
+   output.setDeviceId(id);
    return true;
-   */
 }
 
 void Svin::MidiOutput::close()
 {
-   /*
-   if (!isVirtual && !midiOutput.isPortOpen())
-      return;
-
-   midiOutput.closePort();
-   */
-   virtualOpen = false;
+   output.setDeviceId(-1);
 }
 
 bool Svin::MidiOutput::connected()
 {
-   if (isVirtual)
-      return virtualOpen;
-
-   // return midiOutput.isPortOpen();
-   return false;
+   return (-1 == output.getDeviceId());
 }
 
 void Svin::MidiOutput::sendNoteOn(const Midi::Channel& channel, const uint8_t& midiNote, const Midi::Velocity& velocity)
@@ -173,27 +158,31 @@ void Svin::MidiOutput::sendMessage(const Bytes& message)
    if (!connected())
       return;
 
-   //midiOutput.sendMessage(message.data(), message.size());
+   rack::midi::Message internal;
+   internal.bytes = message;
+
+   output.sendMessage(internal);
 }
 
 // input
 
-Svin::MidiInput::MidiInput(bool isVirtual)
-   : MidiCommon(isVirtual)
+Svin::MidiInput::MidiInput()
+   : MidiCommon()
    , Midi::Parser()
+   , input()
    , docBufferMap()
 {
 }
 
-Svin::MidiInput::MidiInput(const std::string& targetDeviceName, bool isVirtual)
-   : MidiInput(isVirtual)
+Svin::MidiInput::MidiInput(const std::string& targetDeviceNamel)
+   : MidiInput()
 {
    setTargetDeviceName(targetDeviceName);
    open();
 }
 
 Svin::MidiInput::MidiInput(const Midi::Device::Channel& deviceChannel)
-   : MidiInput(MidiCommon::interfaceMap.at(deviceChannel), false)
+   : MidiInput(MidiCommon::interfaceMap.at(deviceChannel))
 {
 }
 
@@ -204,51 +193,22 @@ Svin::MidiInput::~MidiInput()
 
 bool Svin::MidiInput::open(bool verbose)
 {
-   return false;
-   /*
-   if (!isVirtual)
-   {
-      for (unsigned int port = 0; port < midiInput.getPortCount(); port++)
-      {
-         const std::string deviceName = midiInput.getPortName(port);
-         if (verbose)
-            std::cout << deviceName << std::endl;
-
-         if (targetDeviceName == deviceName)
-         {
-            std::cout << "connected to " << deviceName << " @ " << port << std::endl;
-            midiInput.openPort(port);
-            return true;
-         }
-      }
-
+   const int id = getDeviceId(&input, verbose);
+   if (id < 0)
       return false;
-   }
 
-   midiInput.openVirtualPort(targetDeviceName);
-   virtualOpen = true;
+   input.setDeviceId(id);
    return true;
-   */
 }
 
 void Svin::MidiInput::close()
 {
-   /*
-   if (!isVirtual && !midiInput.isPortOpen())
-      return;
-
-   midiInput.closePort();
-   */
-   virtualOpen = false;
+   input.setDeviceId(-1);
 }
 
 bool Svin::MidiInput::connected()
 {
-   if (isVirtual)
-      return virtualOpen;
-
-   //return midiInput.isPortOpen();
-   return false;
+   return (-1 == input.getDeviceId());
 }
 
 void Svin::MidiInput::controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)

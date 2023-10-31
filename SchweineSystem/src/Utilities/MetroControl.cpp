@@ -3,7 +3,7 @@
 MetroControl::MetroControl()
    : Svin::Module()
    , Svin::MasterClock::Client()
-   , Svin::MidiOutput("MetropolixControl", false)
+   , Svin::MidiOutput("MetropolixControl")
    , playPauseController(this, Panel::Pixels_PlayPause)
    , isRunning(false)
    , resetController(this, Panel::Pixels_Reset)
@@ -90,11 +90,10 @@ void MetroControl::resetPressed(const float& x, const float& y)
 // widget
 
 MetroControlWidget::MetroControlWidget(MetroControl* module)
-: Svin::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // create module
 Model* modelMetroControl = Svin::Origin::the()->addModule<MetroControl, MetroControlWidget>("MetroControl");
-

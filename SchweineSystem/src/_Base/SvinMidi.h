@@ -3,6 +3,8 @@
 
 #include <Midi/MidiParser.h>
 
+#include <rack.hpp>
+
 #include <map>
 
 #include <Midi/MidiCommon.h>
@@ -39,22 +41,21 @@ namespace Svin
       static const InterfaceMap interfaceMap;
 
    protected:
-      MidiCommon(bool isVirtual);
+      MidiCommon();
 
    protected:
       void setTargetDeviceName(const std::string& newTargetDeviceName);
+      int getDeviceId(rack::midi::Port* port, bool verbose) const;
 
    protected:
-      bool isVirtual;
-      bool virtualOpen;
       std::string targetDeviceName;
    };
 
    class MidiOutput : public MidiCommon
    {
    public:
-      MidiOutput(bool isVirtual);
-      MidiOutput(const std::string& targetDeviceName, bool isVirtual = false);
+      MidiOutput();
+      MidiOutput(const std::string& targetDeviceName);
       MidiOutput(const Midi::Device::Channel& deviceChannel);
       virtual ~MidiOutput();
 
@@ -72,13 +73,14 @@ namespace Svin
       void sendMessage(const Bytes& message);
 
    private:
+      rack::midi::Output output;
    };
 
    class MidiInput : public MidiCommon, public Midi::Parser
    {
    public:
-      MidiInput(bool isVirtual);
-      MidiInput(const std::string& targetDeviceName, bool isVirtual = false);
+      MidiInput();
+      MidiInput(const std::string& targetDeviceName);
       MidiInput(const Midi::Device::Channel& deviceChannel);
       virtual ~MidiInput();
 
@@ -97,6 +99,7 @@ namespace Svin
       static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
 
    private:
+      rack::midi::Input input;
       BufferMap docBufferMap;
    };
 

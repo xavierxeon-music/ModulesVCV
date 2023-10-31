@@ -34,8 +34,8 @@ const std::vector<Color> Svin::LaunchpadClient::paletteList = []
 }();
 
 Svin::LaunchpadClient::LaunchpadClient()
-   : MidiInput(false)
-   , MidiOutput(false)
+   : MidiInput()
+   , MidiOutput()
    , MasterClock::Client()
    , padCache()
    , colorMap()

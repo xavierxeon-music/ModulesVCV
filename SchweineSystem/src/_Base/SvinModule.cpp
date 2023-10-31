@@ -5,8 +5,8 @@
 // majordomo
 
 Svin::Module::Majordomo::Majordomo()
-   : Svin::MidiInput("HubVCV", false)
-   , Svin::MidiOutput("HubVCV", false)
+   : Svin::MidiInput("HubVCV")
+   , Svin::MidiOutput("HubVCV")
    , moduleMap()
 {
    tryConnect();

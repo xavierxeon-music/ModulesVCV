@@ -9,7 +9,7 @@ const DrumTrigger::DeviceOrder DrumTrigger::deviceOrder = {DeviceId::Erika, Devi
 
 DrumTrigger::DrumTrigger()
    : Svin::Module()
-   , Svin::MidiOutput(false)
+   , Svin::MidiOutput()
    , deviceButton(this, Panel::Device)
    , deviceLightList(this)
    , deviceId(DeviceId::Erika)
@@ -25,7 +25,6 @@ DrumTrigger::DrumTrigger()
    connectionButton.setDefaultColor(Color::Predefined::Green);
    connectToMidiDevice();
 }
-
 
 void DrumTrigger::process(const ProcessArgs& args)
 {
