@@ -45,13 +45,13 @@ namespace Svin
 
    protected:
       void setTargetDeviceName(const std::string& newTargetDeviceName);
-      int getDeviceId(rack::midi::Port* port, bool verbose) const;
+      int findDeviceId(rack::midi::Port* port, bool verbose) const;
 
    protected:
       std::string targetDeviceName;
    };
 
-   class MidiOutput : public MidiCommon
+   class MidiOutput : public MidiCommon, private rack::midi::Output
    {
    public:
       MidiOutput();
@@ -71,12 +71,9 @@ namespace Svin
 
    protected:
       void sendMessage(const Bytes& message);
-
-   private:
-      rack::midi::Output output;
    };
 
-   class MidiInput : public MidiCommon, public Midi::Parser
+   class MidiInput : public MidiCommon, public Midi::Parser, private rack::midi::Input
    {
    public:
       MidiInput();
@@ -96,10 +93,9 @@ namespace Svin
       using BufferMap = std::map<Midi::Channel, std::string>;
 
    private:
-      static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
+      void onMessage(const rack::midi::Message& message) override;
 
    private:
-      rack::midi::Input input;
       BufferMap docBufferMap;
    };
 

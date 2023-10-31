@@ -110,4 +110,3 @@ FlameCCSenderWidget::FlameCCSenderWidget(FlameCCSender* module)
 }
 // create module
 Model* modelFlameCCSender = Svin::Origin::the()->addModule<FlameCCSender, FlameCCSenderWidget>("FlameCCSender");
-

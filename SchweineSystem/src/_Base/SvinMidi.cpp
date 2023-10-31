@@ -36,7 +36,7 @@ void Svin::MidiCommon::setTargetDeviceName(const std::string& newTargetDeviceNam
    targetDeviceName = newTargetDeviceName;
 }
 
-int Svin::MidiCommon::getDeviceId(rack::midi::Port* port, bool verbose) const
+int Svin::MidiCommon::findDeviceId(rack::midi::Port* port, bool verbose) const
 {
    for (int id : port->getDeviceIds())
    {
@@ -55,7 +55,7 @@ int Svin::MidiCommon::getDeviceId(rack::midi::Port* port, bool verbose) const
 
 Svin::MidiOutput::MidiOutput()
    : MidiCommon()
-   , output()
+   , rack::midi::Output()
 {
 }
 
@@ -78,22 +78,22 @@ Svin::MidiOutput::~MidiOutput()
 
 bool Svin::MidiOutput::open(bool verbose)
 {
-   const int id = getDeviceId(&output, verbose);
+   const int id = findDeviceId(this, verbose);
    if (id < 0)
       return false;
 
-   output.setDeviceId(id);
+   setDeviceId(id);
    return true;
 }
 
 void Svin::MidiOutput::close()
 {
-   output.setDeviceId(-1);
+   setDeviceId(-1);
 }
 
 bool Svin::MidiOutput::connected()
 {
-   return (-1 == output.getDeviceId());
+   return (-1 == getDeviceId());
 }
 
 void Svin::MidiOutput::sendNoteOn(const Midi::Channel& channel, const uint8_t& midiNote, const Midi::Velocity& velocity)
@@ -161,7 +161,7 @@ void Svin::MidiOutput::sendMessage(const Bytes& message)
    rack::midi::Message internal;
    internal.bytes = message;
 
-   output.sendMessage(internal);
+   rack::midi::Output::sendMessage(internal);
 }
 
 // input
@@ -169,7 +169,7 @@ void Svin::MidiOutput::sendMessage(const Bytes& message)
 Svin::MidiInput::MidiInput()
    : MidiCommon()
    , Midi::Parser()
-   , input()
+   , rack::midi::Input()
    , docBufferMap()
 {
 }
@@ -193,22 +193,22 @@ Svin::MidiInput::~MidiInput()
 
 bool Svin::MidiInput::open(bool verbose)
 {
-   const int id = getDeviceId(&input, verbose);
+   const int id = findDeviceId(this, verbose);
    if (id < 0)
       return false;
 
-   input.setDeviceId(id);
+   setDeviceId(id);
    return true;
 }
 
 void Svin::MidiInput::close()
 {
-   input.setDeviceId(-1);
+   setDeviceId(-1);
 }
 
 bool Svin::MidiInput::connected()
 {
-   return (-1 == input.getDeviceId());
+   return (-1 == getDeviceId());
 }
 
 void Svin::MidiInput::controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
@@ -239,35 +239,6 @@ void Svin::MidiInput::document(const Midi::Channel& channel, const Json::Object&
    // do nothing
 }
 
-void Svin::MidiInput::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
+void Svin::MidiInput::onMessage(const rack::midi::Message& message)
 {
-   (void)timeStamp;
-
-   if (!message)
-      return;
-
-   MidiInput* me = static_cast<MidiInput*>(userData);
-   if (!me)
-      return;
-
-   static Bytes buffer;
-   auto maybeProcessBuffer = [&]()
-   {
-      if (0 == buffer.size())
-         return;
-
-      me->processMessage(buffer);
-      buffer.clear();
-   };
-
-   static const uint8_t mask = 0x80;
-   for (const uint8_t byte : *message)
-   {
-      const uint8_t test = byte & mask;
-      if (test == mask) // new message start
-         maybeProcessBuffer();
-
-      buffer.push_back(byte);
-   }
-   maybeProcessBuffer();
 }

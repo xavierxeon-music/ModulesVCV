@@ -38,7 +38,7 @@ void ClockAndBarCounter::process(const ProcessArgs& args)
    {
       if (resetInput.isTriggered())
       {
-         reset();
+         Svin::MasterClock::reset();
          blockAdvanceTempo = true;
          midiTickCounter.reset();
          resetOutput.trigger();
@@ -156,7 +156,7 @@ void ClockAndBarCounter::songPosition(const uint16_t& position)
    if (0 != position)
       return;
 
-   reset();
+   Svin::MasterClock::reset();
    blockAdvanceTempo = true;
 
    midiTickCounter.reset();
