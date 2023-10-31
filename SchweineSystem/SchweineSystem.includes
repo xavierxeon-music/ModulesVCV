@@ -5,3 +5,7 @@ src/_MusicTools/RememberDummy
 src/_MusicTools/Memory
 ../Rack/include
 ../Rack/dep/include
+
+/usr/include
+/usr/include/x86_64-linux-gnu
+/usr/include/c++/11
