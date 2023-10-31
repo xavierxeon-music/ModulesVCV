@@ -33,13 +33,6 @@ Svin::MidiCommon::MidiCommon(bool isVirtual)
 {
 }
 
-void Svin::MidiCommon::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
-{
-   (void)userData;
-
-   std::cout << "MIDI ERROR: " << type << ",  " << errorText << std::endl;
-}
-
 void Svin::MidiCommon::setTargetDeviceName(const std::string& newTargetDeviceName)
 {
    targetDeviceName = newTargetDeviceName;
@@ -49,9 +42,7 @@ void Svin::MidiCommon::setTargetDeviceName(const std::string& newTargetDeviceNam
 
 Svin::MidiOutput::MidiOutput(bool isVirtual)
    : MidiCommon(isVirtual)
-   , midiOutput()
 {
-   midiOutput.setErrorCallback(&MidiCommon::midiError);
 }
 
 Svin::MidiOutput::MidiOutput(const std::string& targetDeviceName, bool isVirtual)
@@ -73,6 +64,8 @@ Svin::MidiOutput::~MidiOutput()
 
 bool Svin::MidiOutput::open(bool verbose)
 {
+   return false;
+   /*
    if (!isVirtual)
    {
       for (unsigned int port = 0; port < midiOutput.getPortCount(); port++)
@@ -95,14 +88,17 @@ bool Svin::MidiOutput::open(bool verbose)
    midiOutput.openVirtualPort(targetDeviceName);
    virtualOpen = true;
    return true;
+   */
 }
 
 void Svin::MidiOutput::close()
 {
+   /*
    if (!isVirtual && !midiOutput.isPortOpen())
       return;
 
    midiOutput.closePort();
+   */
    virtualOpen = false;
 }
 
@@ -111,7 +107,8 @@ bool Svin::MidiOutput::connected()
    if (isVirtual)
       return virtualOpen;
 
-   return midiOutput.isPortOpen();
+   // return midiOutput.isPortOpen();
+   return false;
 }
 
 void Svin::MidiOutput::sendNoteOn(const Midi::Channel& channel, const uint8_t& midiNote, const Midi::Velocity& velocity)
@@ -176,7 +173,7 @@ void Svin::MidiOutput::sendMessage(const Bytes& message)
    if (!connected())
       return;
 
-   midiOutput.sendMessage(message.data(), message.size());
+   //midiOutput.sendMessage(message.data(), message.size());
 }
 
 // input
@@ -184,12 +181,8 @@ void Svin::MidiOutput::sendMessage(const Bytes& message)
 Svin::MidiInput::MidiInput(bool isVirtual)
    : MidiCommon(isVirtual)
    , Midi::Parser()
-   , midiInput()
    , docBufferMap()
 {
-   midiInput.setErrorCallback(&MidiCommon::midiError);
-   midiInput.setCallback(&MidiInput::midiReceive, this);
-   midiInput.ignoreTypes(false, false, false); // do not ignore anything
 }
 
 Svin::MidiInput::MidiInput(const std::string& targetDeviceName, bool isVirtual)
@@ -211,6 +204,8 @@ Svin::MidiInput::~MidiInput()
 
 bool Svin::MidiInput::open(bool verbose)
 {
+   return false;
+   /*
    if (!isVirtual)
    {
       for (unsigned int port = 0; port < midiInput.getPortCount(); port++)
@@ -231,17 +226,19 @@ bool Svin::MidiInput::open(bool verbose)
    }
 
    midiInput.openVirtualPort(targetDeviceName);
-
    virtualOpen = true;
    return true;
+   */
 }
 
 void Svin::MidiInput::close()
 {
+   /*
    if (!isVirtual && !midiInput.isPortOpen())
       return;
 
    midiInput.closePort();
+   */
    virtualOpen = false;
 }
 
@@ -250,7 +247,8 @@ bool Svin::MidiInput::connected()
    if (isVirtual)
       return virtualOpen;
 
-   return midiInput.isPortOpen();
+   //return midiInput.isPortOpen();
+   return false;
 }
 
 void Svin::MidiInput::controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)

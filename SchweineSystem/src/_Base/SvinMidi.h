@@ -5,11 +5,6 @@
 
 #include <map>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsuggest-override"
-#include <rtmidi/RtMidi.h>
-#pragma GCC diagnostic pop
-
 #include <Midi/MidiCommon.h>
 #include <Music/Note.h>
 #include <Music/Tempo.h>
@@ -47,7 +42,6 @@ namespace Svin
       MidiCommon(bool isVirtual);
 
    protected:
-      static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
       void setTargetDeviceName(const std::string& newTargetDeviceName);
 
    protected:
@@ -78,7 +72,6 @@ namespace Svin
       void sendMessage(const Bytes& message);
 
    private:
-      RtMidiOut midiOutput;
    };
 
    class MidiInput : public MidiCommon, public Midi::Parser
@@ -104,7 +97,6 @@ namespace Svin
       static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
 
    private:
-      RtMidiIn midiInput;
       BufferMap docBufferMap;
    };
 
