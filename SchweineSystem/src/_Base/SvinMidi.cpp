@@ -241,4 +241,5 @@ void Svin::MidiInput::document(const Midi::Channel& channel, const Json::Object&
 
 void Svin::MidiInput::onMessage(const rack::midi::Message& message)
 {
+   processMessage(message.bytes);
 }
