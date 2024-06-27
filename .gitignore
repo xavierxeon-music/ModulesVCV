@@ -3,3 +3,4 @@
 **/*.creator.user
 **/.vscode
 **/null.d
+**/link_build
