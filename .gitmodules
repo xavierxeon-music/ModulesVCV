@@ -13,3 +13,6 @@
 [submodule "3rdParty/BogaudioModules"]
 	path = 3rdParty/BogaudioModules
 	url = https://github.com/bogaudio/BogaudioModules
+[submodule "SchweineSystem/src/Utilities/link"]
+	path = SchweineSystem/src/Utilities/link
+	url = https://github.com/Ableton/link.git
