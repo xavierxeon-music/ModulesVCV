@@ -1,10 +1,10 @@
-#include "HubConnect.h"
+#include "LinkControl.h"
 
 #include <Music/Note.h>
 
 #include <SvinOrigin.h>
 
-HubConnect::HubConnect()
+LinkControl::LinkControl()
    : Svin::Module()
    , noteList(this)
    , connectedLight(this, Panel::RGB_Connected)
@@ -30,19 +30,19 @@ HubConnect::HubConnect()
 
 }
 
-void HubConnect::process(const ProcessArgs& args)
+void LinkControl::process(const ProcessArgs& args)
 {
-   connectedLight.setActive(hubConnected());
+   connectedLight.setActive(LinkControled());
 }
 
 // widget
 
-HubConnectWidget::HubConnectWidget(HubConnect* module)
+LinkControlWidget::LinkControlWidget(LinkControl* module)
 : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // create module
-Model* modelHubConnect = Svin::Origin::the()->addModule<HubConnect, HubConnectWidget>("HubConnect");
+Model* modelLinkControl = Svin::Origin::the()->addModule<LinkControl, LinkControlWidget>("LinkControl");
 

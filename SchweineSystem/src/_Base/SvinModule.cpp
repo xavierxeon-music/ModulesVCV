@@ -134,7 +134,7 @@ float Svin::Module::getSampleRate() const
    return APP->engine->getSampleRate();
 }
 
-bool Svin::Module::hubConnected()
+bool Svin::Module::LinkControled()
 {
    if (!majordomo)
       return false;

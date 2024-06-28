@@ -51,7 +51,7 @@ void AppPortal::process(const ProcessArgs& args)
 
 void AppPortal::updateDisplays()
 {
-   connectedLight.setActive(hubConnected());
+   connectedLight.setActive(LinkControled());
 
    displayController.fill();
 

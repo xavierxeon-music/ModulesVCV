@@ -1,11 +1,11 @@
-#ifndef HubConnectHPP
-#define HubConnectHPP
+#ifndef LinkControlHPP
+#define LinkControlHPP
 
-#include "HubConnect.h"
+#include "LinkControl.h"
 
 #include <SvinOrigin.h>
 
-struct HubConnect::Panel
+struct LinkControl::Panel
 {
    enum ParamId
    {
@@ -62,28 +62,28 @@ struct HubConnect::Panel
 
 };
 
-void HubConnect::setup()
+void LinkControl::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 }
 
-void HubConnectWidget::setup()
+void LinkControlWidget::setup()
 {
-   makePanel("res/Utilities/HubConnect.svg");
+   makePanel("res/Utilities/LinkControl.svg");
 
-   makeLED(this, Vec(30.00, 360.06), HubConnect::Panel::RGB_Connected);
-   makeLED(this, Vec(19.03, 280.65), HubConnect::Panel::RGB_NoteC);
-   makeLED(this, Vec(24.93, 263.94), HubConnect::Panel::RGB_NoteCs);
-   makeLED(this, Vec(19.03, 247.07), HubConnect::Panel::RGB_NoteD);
-   makeLED(this, Vec(24.93, 230.36), HubConnect::Panel::RGB_NoteDs);
-   makeLED(this, Vec(19.03, 213.49), HubConnect::Panel::RGB_NoteE);
-   makeLED(this, Vec(19.03, 198.40), HubConnect::Panel::RGB_NoteF);
-   makeLED(this, Vec(24.93, 181.69), HubConnect::Panel::RGB_NoteFs);
-   makeLED(this, Vec(19.03, 164.82), HubConnect::Panel::RGB_NoteG);
-   makeLED(this, Vec(24.93, 148.11), HubConnect::Panel::RGB_NoteGs);
-   makeLED(this, Vec(19.03, 131.24), HubConnect::Panel::RGB_NoteA);
-   makeLED(this, Vec(24.93, 114.52), HubConnect::Panel::RGB_NoteAs);
-   makeLED(this, Vec(19.03, 97.65), HubConnect::Panel::RGB_NoteB);
+   makeLED(this, Vec(30.00, 360.06), LinkControl::Panel::RGB_Connected);
+   makeLED(this, Vec(19.03, 280.65), LinkControl::Panel::RGB_NoteC);
+   makeLED(this, Vec(24.93, 263.94), LinkControl::Panel::RGB_NoteCs);
+   makeLED(this, Vec(19.03, 247.07), LinkControl::Panel::RGB_NoteD);
+   makeLED(this, Vec(24.93, 230.36), LinkControl::Panel::RGB_NoteDs);
+   makeLED(this, Vec(19.03, 213.49), LinkControl::Panel::RGB_NoteE);
+   makeLED(this, Vec(19.03, 198.40), LinkControl::Panel::RGB_NoteF);
+   makeLED(this, Vec(24.93, 181.69), LinkControl::Panel::RGB_NoteFs);
+   makeLED(this, Vec(19.03, 164.82), LinkControl::Panel::RGB_NoteG);
+   makeLED(this, Vec(24.93, 148.11), LinkControl::Panel::RGB_NoteGs);
+   makeLED(this, Vec(19.03, 131.24), LinkControl::Panel::RGB_NoteA);
+   makeLED(this, Vec(24.93, 114.52), LinkControl::Panel::RGB_NoteAs);
+   makeLED(this, Vec(19.03, 97.65), LinkControl::Panel::RGB_NoteB);
 }
 
-#endif // NOT HubConnectHPP
+#endif // NOT LinkControlHPP

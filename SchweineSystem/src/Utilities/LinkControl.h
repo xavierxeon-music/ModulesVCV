@@ -1,5 +1,5 @@
-#ifndef HubConnectH
-#define HubConnectH
+#ifndef LinkControlH
+#define LinkControlH
 
 #include <rack.hpp>
 using namespace rack;
@@ -9,13 +9,13 @@ using namespace rack;
 
 #include <SvinLED.h>
 
-class HubConnect : public Svin::Module
+class LinkControl : public Svin::Module
 {
 public:
    struct Panel;
 
 public:
-   HubConnect();
+   LinkControl();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -30,17 +30,17 @@ private:
 
 // widget
 
-class HubConnectWidget : public Svin::ModuleWidget
+class LinkControlWidget : public Svin::ModuleWidget
 {
 public:
-   HubConnectWidget(HubConnect* module);
+   LinkControlWidget(LinkControl* module);
 
 private:
    inline void setup();
 };
 
-#ifndef HubConnectHPP
-#include "HubConnect.hpp"
-#endif // NOT HubConnectHPP
+#ifndef LinkControlHPP
+#include "LinkControl.hpp"
+#endif // NOT LinkControlHPP
 
-#endif // NOT HubConnectH
+#endif // NOT LinkControlH

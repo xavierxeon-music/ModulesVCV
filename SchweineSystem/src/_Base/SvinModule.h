@@ -49,7 +49,7 @@ namespace Svin
       float getSampleRate() const;
 
       // hub client
-      bool hubConnected();
+      bool LinkControled();
       void connectToHub();
       bool registerHubClient(const std::string& name);
       void sendDocumentToHub(const ::Midi::Channel& channel, const Json::Object& object, const uint8_t docIndex = 0);
