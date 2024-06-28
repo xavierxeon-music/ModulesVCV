@@ -204,9 +204,9 @@
          ]
       },
       {
-         "slug": "HubConnect",
-         "name": "HubConnect",
-         "description": "Manually connect to HubVCV",
+         "slug": "LinkControl",
+         "name": "LinkControl",
+         "description": "Manually control Ableton Link",
          "tags": [
             "External",
             "Utility"
