@@ -10,18 +10,22 @@ struct LinkControl::Panel
    enum ParamId
    {
       // buttons
+      Down = 0,
+      Up = 1,
       // switches
       // ledbuttons
+      Active = 2,
       // knobs
       // sliders
-      PARAMS_LEN = 0
+      PARAMS_LEN = 3
    };
 
    enum DisplayId
    {
       // lcd
+      Text_Tempo = 0,
       // oled
-      DISPLAYS_LEN = 0
+      DISPLAYS_LEN = 1
    };
 
    enum MeterId
@@ -56,8 +60,9 @@ struct LinkControl::Panel
       RGB_NoteAs = 33,
       RGB_NoteB = 36,
       // ledbuttons
+      RGB_Active = 39,
       // sliders
-      LIGHTS_LEN = 39
+      LIGHTS_LEN = 42
    };
 
 };
@@ -65,25 +70,37 @@ struct LinkControl::Panel
 void LinkControl::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
+
+   configButton(Panel::Down, "Down");
+   configButton(Panel::Up, "Up");
+
+   configButton(Panel::Active, "Active");
 }
 
 void LinkControlWidget::setup()
 {
    makePanel("res/Utilities/LinkControl.svg");
 
-   makeLED(this, Vec(30.00, 360.06), LinkControl::Panel::RGB_Connected);
-   makeLED(this, Vec(19.03, 280.65), LinkControl::Panel::RGB_NoteC);
-   makeLED(this, Vec(24.93, 263.94), LinkControl::Panel::RGB_NoteCs);
-   makeLED(this, Vec(19.03, 247.07), LinkControl::Panel::RGB_NoteD);
-   makeLED(this, Vec(24.93, 230.36), LinkControl::Panel::RGB_NoteDs);
-   makeLED(this, Vec(19.03, 213.49), LinkControl::Panel::RGB_NoteE);
-   makeLED(this, Vec(19.03, 198.40), LinkControl::Panel::RGB_NoteF);
-   makeLED(this, Vec(24.93, 181.69), LinkControl::Panel::RGB_NoteFs);
-   makeLED(this, Vec(19.03, 164.82), LinkControl::Panel::RGB_NoteG);
-   makeLED(this, Vec(24.93, 148.11), LinkControl::Panel::RGB_NoteGs);
-   makeLED(this, Vec(19.03, 131.24), LinkControl::Panel::RGB_NoteA);
-   makeLED(this, Vec(24.93, 114.52), LinkControl::Panel::RGB_NoteAs);
-   makeLED(this, Vec(19.03, 97.65), LinkControl::Panel::RGB_NoteB);
+   makeButton(this, Vec(51.93, 336.85), LinkControl::Panel::Down);
+   makeButton(this, Vec(51.93, 320.02), LinkControl::Panel::Up);
+
+   makeLEDButton(this, Vec(27.60, 326.95), LinkControl::Panel::Active, LinkControl::Panel::RGB_Active);
+
+   makeLED(this, Vec(37.50, 366.18), LinkControl::Panel::RGB_Connected);
+   makeLED(this, Vec(26.53, 252.12), LinkControl::Panel::RGB_NoteC);
+   makeLED(this, Vec(32.43, 235.40), LinkControl::Panel::RGB_NoteCs);
+   makeLED(this, Vec(26.53, 218.53), LinkControl::Panel::RGB_NoteD);
+   makeLED(this, Vec(32.43, 201.82), LinkControl::Panel::RGB_NoteDs);
+   makeLED(this, Vec(26.53, 184.95), LinkControl::Panel::RGB_NoteE);
+   makeLED(this, Vec(26.53, 169.87), LinkControl::Panel::RGB_NoteF);
+   makeLED(this, Vec(32.43, 153.15), LinkControl::Panel::RGB_NoteFs);
+   makeLED(this, Vec(26.53, 136.28), LinkControl::Panel::RGB_NoteG);
+   makeLED(this, Vec(32.43, 119.57), LinkControl::Panel::RGB_NoteGs);
+   makeLED(this, Vec(26.53, 102.70), LinkControl::Panel::RGB_NoteA);
+   makeLED(this, Vec(32.43, 85.99), LinkControl::Panel::RGB_NoteAs);
+   makeLED(this, Vec(26.53, 69.12), LinkControl::Panel::RGB_NoteB);
+
+   makeLCD(this, Vec(12.50, 284.48), 3, LinkControl::Panel::Text_Tempo, 18);
 }
 
 #endif // NOT LinkControlHPP

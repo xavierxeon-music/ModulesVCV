@@ -4,10 +4,17 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <SvinButton.h>
+#include <SvinButtonLED.h>
+#include <SvinDisplayLCD.h>
+#include <SvinLED.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
 
-#include <SvinLED.h>
+namespace ableton
+{
+   class Link;
+}
 
 class LinkControl : public Svin::Module
 {
@@ -26,6 +33,8 @@ private:
 private:
    Svin::LED::List noteList;
    Svin::LED connectedLight;
+
+   ableton::Link* link;
 };
 
 // widget

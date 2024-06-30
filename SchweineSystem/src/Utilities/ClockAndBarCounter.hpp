@@ -54,6 +54,7 @@ struct ClockAndBarCounter::Panel
       // sliders
       LIGHTS_LEN = 3
    };
+
 };
 
 void ClockAndBarCounter::setup()
@@ -76,8 +77,8 @@ void ClockAndBarCounterWidget::setup()
 
    makeLEDButton(this, Vec(60.00, 255.46), ClockAndBarCounter::Panel::Connect, ClockAndBarCounter::Panel::RGB_Connect);
 
-   makeInput(this, Vec(95.83, 303.81), ClockAndBarCounter::Panel::Override_Reset, false);
-   makeInput(this, Vec(60.00, 303.57), ClockAndBarCounter::Panel::Override_Clock, false);
+   makeInput(this, Vec(95.83, 303.81),  ClockAndBarCounter::Panel::Override_Reset, false);
+   makeInput(this, Vec(60.00, 303.57),  ClockAndBarCounter::Panel::Override_Clock, false);
 
    makeOutput(this, Vec(95.83, 355.83), ClockAndBarCounter::Panel::Reset, false);
    makeOutput(this, Vec(60.00, 355.83), ClockAndBarCounter::Panel::Clock, false);

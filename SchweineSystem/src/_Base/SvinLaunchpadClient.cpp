@@ -28,7 +28,7 @@ const std::vector<Color> Svin::LaunchpadClient::paletteList = []
       const Color color(hexColorsMk2.at(index));
       paletteList.push_back(color);
 
-      //debug() << index << hexColorsMk2.at(index) << color.red() << color.green() << color.blue();
+      //mtDebug() << index << hexColorsMk2.at(index) << color.red() << color.green() << color.blue();
    }
    return paletteList;
 }();

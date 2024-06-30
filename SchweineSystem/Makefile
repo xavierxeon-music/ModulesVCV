@@ -1,6 +1,8 @@
 # If RACK_DIR is not defined when calling the Makefile, default to two directories above
 RACK_DIR ?= ../Rack
 
+include $(RACK_DIR)/arch.mk
+
 # FLAGS will be passed to both the C and C++ compiler
 FLAGS += 
 CFLAGS += 
@@ -9,8 +11,20 @@ CXXFLAGS += -D NON_DAISY_DEVICE -std=c++11
 # ableton link
 FLAGS += \
 	-Isrc/_link/include \
-	-Isrc/_link/modules/asio-standalone/asio/include \
-		
+	-Isrc/_link/modules/asio-standalone/asio/include
+
+ifdef ARCH_LIN
+	CXXFLAGS += -D LINK_PLATFORM_LINUX=1
+endif
+
+ifdef ARCH_MAC
+	CXXFLAGS += -D LINK_PLATFORM_MACOSX=1
+endif
+
+ifdef ARCH_WIN
+	CXXFLAGS += -D LINK_PLATFORM_WINDOWS=1
+	
+endif
 
 # Careful about linking to shared libraries, since you can't assume much about the user's environment and library search path.
 # Static libraries are fine, but they should be added to this plugin's build system.
@@ -51,14 +65,3 @@ DISTRIBUTABLES += $(wildcard presets)
 # Include the Rack plugin Makefile framework
 include $(RACK_DIR)/plugin.mk
 
-ifdef ARCH_LIN
-	CXXFLAGS += -D LINK_PLATFORM_LINUX=1
-endif
-
-ifdef ARCH_MAC
-	CXXFLAGS += -D LINK_PLATFORM_MACOSX=1
-endif
-
-ifdef ARCH_WIN
-	CXXFLAGS += -D LINK_PLATFORM_WINDOWS=1
-endif

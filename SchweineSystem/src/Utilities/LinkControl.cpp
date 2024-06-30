@@ -4,12 +4,17 @@
 
 #include <SvinOrigin.h>
 
+#include <ableton/Link.hpp>
+
 LinkControl::LinkControl()
    : Svin::Module()
    , noteList(this)
    , connectedLight(this, Panel::RGB_Connected)
+   , link(nullptr)
 {
    setup();
+
+   //link = new ableton::Link(120);
 
    noteList.append({Panel::RGB_NoteC, Panel::RGB_NoteCs,
                     Panel::RGB_NoteD, Panel::RGB_NoteDs,
@@ -27,22 +32,20 @@ LinkControl::LinkControl()
    }
 
    connectedLight.setDefaultColor(Color::Predefined::Green);
-
 }
 
 void LinkControl::process(const ProcessArgs& args)
 {
-   connectedLight.setActive(LinkControled());
+   connectedLight.setActive(hubConnected());
 }
 
 // widget
 
 LinkControlWidget::LinkControlWidget(LinkControl* module)
-: Svin::ModuleWidget(module)
+   : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // create module
 Model* modelLinkControl = Svin::Origin::the()->addModule<LinkControl, LinkControlWidget>("LinkControl");
-

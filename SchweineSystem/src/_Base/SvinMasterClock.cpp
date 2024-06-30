@@ -57,7 +57,7 @@ Tempo Svin::MasterClock::Client::getTempo() const
       return Tempo();
 
    const Tempo tempo = MasterClock::masterInstance->tempo;
-   //debug() << __FUNCTION__ << tempo.getRunState();
+   //mtDebug() << __FUNCTION__ << tempo.getRunState();
    return tempo;
 }
 

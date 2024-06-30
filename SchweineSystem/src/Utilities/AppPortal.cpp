@@ -4,7 +4,6 @@
 #include <Tools/Text.h>
 #include <Tools/Variable.h>
 
-
 AppPortal::AppPortal()
    : Svin::Module()
    , displayController(this, Panel::Pixels_Display)
@@ -51,7 +50,7 @@ void AppPortal::process(const ProcessArgs& args)
 
 void AppPortal::updateDisplays()
 {
-   connectedLight.setActive(LinkControled());
+   connectedLight.setActive(hubConnected());
 
    displayController.fill();
 
