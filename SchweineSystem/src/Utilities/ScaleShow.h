@@ -1,5 +1,5 @@
-#ifndef MetroControlH
-#define MetroControlH
+#ifndef ScaleShowH
+#define ScaleShowH
 
 #include <rack.hpp>
 using namespace rack;
@@ -11,13 +11,13 @@ using namespace rack;
 #include <SvinLED.h>
 #include <SvinDisplayOLED.h>
 
-class MetroControl : public Svin::Module, public Svin::MasterClock::Client, public Svin::MidiOutput
+class ScaleShow : public Svin::Module, public Svin::MasterClock::Client, public Svin::MidiOutput
 {
 public:
    struct Panel;
 
 public:
-   MetroControl();
+   ScaleShow();
 
 public:
    void process(const ProcessArgs& args) override;
@@ -49,17 +49,17 @@ private:
 
 // widget
 
-class MetroControlWidget : public Svin::ModuleWidget
+class ScaleShowWidget : public Svin::ModuleWidget
 {
 public:
-   MetroControlWidget(MetroControl* module);
+   ScaleShowWidget(ScaleShow* module);
 
 private:
    inline void setup();
 };
 
-#ifndef MetroControlHPP
-#include "MetroControl.hpp"
-#endif // NOT MetroControlHPP
+#ifndef ScaleShowHPP
+#include "ScaleShow.hpp"
+#endif // NOT ScaleShowHPP
 
-#endif // NOT MetroControlH
+#endif // NOT ScaleShowH

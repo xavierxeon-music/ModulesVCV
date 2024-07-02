@@ -1,6 +1,6 @@
-#include "MetroControl.h"
+#include "ScaleShow.h"
 
-MetroControl::MetroControl()
+ScaleShow::ScaleShow()
    : Svin::Module()
    , Svin::MasterClock::Client()
    , Svin::MidiOutput("MetropolixControl")
@@ -15,22 +15,22 @@ MetroControl::MetroControl()
 
    using ClickedFunction = Svin::DisplayOLED::Controller::ClickedFunction;
 
-   ClickedFunction playPausePressedFunction = std::bind(&MetroControl::playPausePressed, this, std::placeholders::_1, std::placeholders::_2);
+   ClickedFunction playPausePressedFunction = std::bind(&ScaleShow::playPausePressed, this, std::placeholders::_1, std::placeholders::_2);
    playPauseController.onPressed(playPausePressedFunction);
 
-   ClickedFunction resetPressedFunction = std::bind(&MetroControl::resetPressed, this, std::placeholders::_1, std::placeholders::_2);
+   ClickedFunction resetPressedFunction = std::bind(&ScaleShow::resetPressed, this, std::placeholders::_1, std::placeholders::_2);
    resetController.onPressed(resetPressedFunction);
 
    connectedLight.setDefaultColor(Color::Predefined::Green);
 }
 
-void MetroControl::process(const ProcessArgs& args)
+void ScaleShow::process(const ProcessArgs& args)
 {
    connectedLight.setActive(connected());
    isRunning = getTempo().isRunningOrFirstTick();
 }
 
-void MetroControl::updateDisplays()
+void ScaleShow::updateDisplays()
 {
    //playPauseController.writeText(5, 0, u8"\u23ef", 20); // ⏯ , does not work
    //resetController.writeText(5, 0, u8"\u23ee", 20); // ⏮  , does not work
@@ -52,7 +52,7 @@ void MetroControl::updateDisplays()
    resetController.writeText(3, -4, u8"\u2302", 25); // home
 }
 
-void MetroControl::sendStateToClock(const State& state)
+void ScaleShow::sendStateToClock(const State& state)
 {
    Svin::Json::Object object;
    object.set("_Application", "Clock");
@@ -68,7 +68,7 @@ void MetroControl::sendStateToClock(const State& state)
    sendDocumentToHub(1, object);
 }
 
-void MetroControl::playPausePressed(const float& x, const float& y)
+void ScaleShow::playPausePressed(const float& x, const float& y)
 {
    (void)x;
    (void)y;
@@ -79,7 +79,7 @@ void MetroControl::playPausePressed(const float& x, const float& y)
       sendControllerChange(1, Midi::User01, 1);
 }
 
-void MetroControl::resetPressed(const float& x, const float& y)
+void ScaleShow::resetPressed(const float& x, const float& y)
 {
    (void)x;
    (void)y;
@@ -89,11 +89,11 @@ void MetroControl::resetPressed(const float& x, const float& y)
 
 // widget
 
-MetroControlWidget::MetroControlWidget(MetroControl* module)
+ScaleShowWidget::ScaleShowWidget(ScaleShow* module)
    : Svin::ModuleWidget(module)
 {
    setup();
 }
 
 // create module
-Model* modelMetroControl = Svin::Origin::the()->addModule<MetroControl, MetroControlWidget>("MetroControl");
+Model* modelScaleShow = Svin::Origin::the()->addModule<ScaleShow, ScaleShowWidget>("ScaleShow");

@@ -20,7 +20,7 @@
 ./src/_Gui/SvinOutput.h
 ./src/_Gui/SvinDisplayLCD.h
 ./src/_Gui/SvinLED.h
-./src/Utilities/MetroControl.h
+./src/Utilities/ScaleShow.h
 ./src/Utilities/Mapper.h
 ./src/Utilities/ClockAndBarCounter.h
 ./src/Utilities/LinkControl.h
@@ -141,7 +141,7 @@
 ./src/Utilities/LinkControl.hpp
 ./src/Utilities/Extract.hpp
 ./src/Utilities/GateLatch.hpp
-./src/Utilities/MetroControl.hpp
+./src/Utilities/ScaleShow.hpp
 ./src/Utilities/Cutoff.hpp
 ./src/Utilities/AppPortal.hpp
 ./src/Utilities/ClockAndBarCounter.hpp
@@ -952,7 +952,7 @@
 ./src/Utilities/AppPortal.cpp
 ./src/Utilities/ClockAndBarCounter.cpp
 ./src/Utilities/GateLatch.cpp
-./src/Utilities/MetroControl.cpp
+./src/Utilities/ScaleShow.cpp
 ./src/Utilities/LinkControl.cpp
 ./src/Utilities/Extract.cpp
 ./src/_link/extensions/abl_link/src/abl_link.cpp
