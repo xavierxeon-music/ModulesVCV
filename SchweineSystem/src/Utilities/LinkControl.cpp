@@ -8,31 +8,19 @@
 
 LinkControl::LinkControl()
    : Svin::Module()
-   , noteList(this)
-   , connectedLight(this, Panel::RGB_Connected)
+   , displayController(this, Panel::Pixels_Display)
+   , playButton(this, Panel::Active, Panel::RGB_Active)
+   , tempoUpButton(this, Panel::Up)
+   , tempoDownButton(this, Panel::Down)
    , link(nullptr)
 {
    setup();
 
+   playButton.setDefaultColor(Color::Predefined::Green);
+
    link = new ableton::Link(120);
    link->enable(true);
-
-   noteList.append({Panel::RGB_NoteC, Panel::RGB_NoteCs,
-                    Panel::RGB_NoteD, Panel::RGB_NoteDs,
-                    Panel::RGB_NoteE,
-                    Panel::RGB_NoteF, Panel::RGB_NoteFs,
-                    Panel::RGB_NoteG, Panel::RGB_NoteGs,
-                    Panel::RGB_NoteA, Panel::RGB_NoteAs,
-                    Panel::RGB_NoteB});
-
-   for (uint8_t index = 0; index < noteList.size(); index++)
-   {
-      const Note::Value noteValue = static_cast<Note::Value>(index);
-      noteList[index]->setDefaultColor(Note::colorMap.at(noteValue));
-      noteList[index]->setOn();
-   }
-
-   connectedLight.setDefaultColor(Color::Predefined::Green);
+   link->enableStartStopSync(true);
 }
 
 LinkControl::~LinkControl()
@@ -44,8 +32,28 @@ LinkControl::~LinkControl()
 }
 
 void LinkControl::process(const ProcessArgs& args)
+
 {
-   connectedLight.setActive(hubConnected());
+}
+
+void LinkControl::updateDisplays()
+{
+   ableton::Link::SessionState state = link->captureAppSessionState();
+   playButton.setActive(state.isPlaying());
+
+   displayController.fill();
+   const double dPhase = state.phaseAtTime(state.timeForIsPlaying(), 53);
+
+   displayController.drawRect(0, 12, static_cast<int>(dPhase), 14, true);
+
+   displayController.setColor(Color::Predefined::White);
+
+   std::string peerMessage = std::to_string(link->numPeers()) + " peers";
+   displayController.writeText(1, 1, peerMessage, Svin::DisplayOLED::Font::Small);
+
+   const int tempo = static_cast<int>(state.tempo());
+   std::string tempoMessage = std::to_string(tempo) + " bpm";
+   displayController.writeText(1, 20, tempoMessage, Svin::DisplayOLED::Font::Small);
 }
 
 // widget

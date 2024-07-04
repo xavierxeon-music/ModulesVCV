@@ -6,7 +6,7 @@ using namespace rack;
 
 #include <SvinButton.h>
 #include <SvinButtonLED.h>
-#include <SvinDisplayLCD.h>
+#include <SvinDisplayOLED.h>
 #include <SvinLED.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
@@ -27,13 +27,16 @@ public:
 
 public:
    void process(const ProcessArgs& args) override;
+   void updateDisplays() override;
 
 private:
    inline void setup();
 
 private:
-   Svin::LED::List noteList;
-   Svin::LED connectedLight;
+   Svin::DisplayOLED::Controller displayController;
+   Svin::ButtonLED playButton;
+   Svin::Button tempoUpButton;
+   Svin::Button tempoDownButton;
 
    ableton::Link* link;
 };
