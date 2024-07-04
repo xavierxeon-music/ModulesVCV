@@ -1,14 +1,1 @@
-src/_Base
-src/_Gui
-src/_MusicTools/Include
-src/_MusicTools/RememberDummy
-src/_MusicTools/Memory
-src/_link/include
-src/_link/modules/asio-standalone/asio/include
-../Rack/include
-../Rack/dep/include
-
-/usr/include
-/usr/include/x86_64-linux-gnu
-/usr/include/c++/11
-/opt/homebrew/include
+src/_link/extensions/abl_link/include
