@@ -23,6 +23,7 @@ public:
 
 public:
    LinkControl();
+   ~LinkControl();
 
 public:
    void process(const ProcessArgs& args) override;

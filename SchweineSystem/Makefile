@@ -6,7 +6,7 @@ include $(RACK_DIR)/arch.mk
 # FLAGS will be passed to both the C and C++ compiler
 FLAGS += 
 CFLAGS += 
-CXXFLAGS += -D NON_DAISY_DEVICE -std=c++11
+CXXFLAGS += -D NON_DAISY_DEVICE
 
 # ableton link
 FLAGS += \

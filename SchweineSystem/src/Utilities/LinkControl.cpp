@@ -14,7 +14,8 @@ LinkControl::LinkControl()
 {
    setup();
 
-   //link = new ableton::Link(120);
+   link = new ableton::Link(120);
+   link->enable(true);
 
    noteList.append({Panel::RGB_NoteC, Panel::RGB_NoteCs,
                     Panel::RGB_NoteD, Panel::RGB_NoteDs,
@@ -32,6 +33,14 @@ LinkControl::LinkControl()
    }
 
    connectedLight.setDefaultColor(Color::Predefined::Green);
+}
+
+LinkControl::~LinkControl()
+{
+   link->enable(false);
+
+   delete link;
+   link = nullptr;
 }
 
 void LinkControl::process(const ProcessArgs& args)
