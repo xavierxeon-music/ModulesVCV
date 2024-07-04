@@ -4,3 +4,5 @@
 **/.vscode
 **/null.d
 **/link_build
+**/plugin*.dylib
+**/plugin*.so

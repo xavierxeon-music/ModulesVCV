@@ -1,11 +1,11 @@
-#ifndef MetroControlHPP
-#define MetroControlHPP
+#ifndef ScaleShowHPP
+#define ScaleShowHPP
 
-#include "MetroControl.h"
+#include "ScaleShow.h"
 
 #include <SvinOrigin.h>
 
-struct MetroControl::Panel
+struct ScaleShow::Panel
 {
    enum ParamId
    {
@@ -52,19 +52,19 @@ struct MetroControl::Panel
 
 };
 
-void MetroControl::setup()
+void ScaleShow::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 }
 
-void MetroControlWidget::setup()
+void ScaleShowWidget::setup()
 {
-   makePanel("res/Utilities/MetroControl.svg");
+   makePanel("res/Utilities/ScaleShow.svg");
 
-   makeLED(this, Vec(30.00, 360.06), MetroControl::Panel::RGB_Connected);
+   makeLED(this, Vec(30.00, 360.06), ScaleShow::Panel::RGB_Connected);
 
-   makeOLED(this, Vec(19.00, 219.17), MetroControl::Panel::Pixels_Reset, 20, 20);
-   makeOLED(this, Vec(19.00, 190.00), MetroControl::Panel::Pixels_PlayPause, 20, 20);
+   makeOLED(this, Vec(19.00, 219.17), ScaleShow::Panel::Pixels_Reset, 20, 20);
+   makeOLED(this, Vec(19.00, 190.00), ScaleShow::Panel::Pixels_PlayPause, 20, 20);
 }
 
-#endif // NOT MetroControlHPP
+#endif // NOT ScaleShowHPP
