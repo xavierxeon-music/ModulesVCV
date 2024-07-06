@@ -4,17 +4,14 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <ableton/Link.hpp>
+
 #include <SvinButton.h>
 #include <SvinButtonLED.h>
-#include <SvinDisplayOLED.h>
-#include <SvinLED.h>
+#include <SvinDisplayLCD.h>
+#include <SvinLightMeter.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
-
-namespace ableton
-{
-   class Link;
-}
 
 class LinkControl : public Svin::Module
 {
@@ -33,12 +30,18 @@ private:
    inline void setup();
 
 private:
-   Svin::DisplayOLED::Controller displayController;
-   Svin::ButtonLED playButton;
-   Svin::Button tempoUpButton;
-   Svin::Button tempoDownButton;
+   ableton::Link link;
 
-   ableton::Link* link;
+   Svin::DisplayLCD::Controller tempoDisplay;
+   Svin::Button tempoUpHundredButton;
+   Svin::Button tempoDownHundredButton;
+   Svin::Button tempoUpTenButton;
+   Svin::Button tempoDownTenButton;
+   Svin::Button tempoUpOneButton;
+   Svin::Button tempoDownOneButton;
+
+   Svin::ButtonLED playButton;
+   Svin::LightMeter::Controller syncMeter;
 };
 
 // widget

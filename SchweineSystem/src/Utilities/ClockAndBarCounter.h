@@ -4,6 +4,8 @@
 #include <rack.hpp>
 using namespace rack;
 
+#include <ableton/Link.hpp>
+
 #include <Music/Tempo.h>
 #include <Music/TimeCode.h>
 
@@ -17,7 +19,7 @@ using namespace rack;
 #include <SvinInput.h>
 #include <SvinOutput.h>
 
-class ClockAndBarCounter : public Svin::Module, public Svin::MidiInput, public Svin::MasterClock
+class ClockAndBarCounter : public Svin::Module, public Svin::MasterClock
 {
 public:
    struct Panel;
@@ -32,14 +34,14 @@ public:
 
 private:
    inline void setup();
-   void connectToMidiDevice();
 
-   void clockTick() override;
-   void songPosition(const uint16_t& position) override;
+   void clockTick();                            // MIDI
+   void songPosition(const uint16_t& position); // MIDI
 
 private:
+   ableton::Link link;
+
    // midi
-   Svin::ButtonLED connectionButton;
    Counter midiTickCounter;
    bool blockAdvanceTempo;
 

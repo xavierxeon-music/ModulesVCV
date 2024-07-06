@@ -7,9 +7,8 @@
 
 ClockAndBarCounter::ClockAndBarCounter()
    : Svin::Module()
-   , Svin::MidiInput(Midi::Device::Metropolix)
    , Svin::MasterClock()
-   , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
+   , link(120)
    , midiTickCounter(6)
    , blockAdvanceTempo(false)
    , runOutput(this, Panel::Running)
@@ -21,8 +20,8 @@ ClockAndBarCounter::ClockAndBarCounter()
 {
    setup();
 
-   connectionButton.setDefaultColor(Color::Predefined::Green);
-   connectToMidiDevice();
+   link.enable(true);
+   link.enableStartStopSync(true);
 }
 
 ClockAndBarCounter::~ClockAndBarCounter()
@@ -31,9 +30,6 @@ ClockAndBarCounter::~ClockAndBarCounter()
 
 void ClockAndBarCounter::process(const ProcessArgs& args)
 {
-   if (connectionButton.isTriggered())
-      connectToMidiDevice();
-
    if (clockInput.isConnected()) // override midi clock
    {
       if (resetInput.isTriggered())
@@ -116,21 +112,6 @@ void ClockAndBarCounter::updateDisplays()
 
    const std::string timeText = std::to_string(minutes) + ":" + secondText;
    displayController.writeText(41, 150, timeText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
-}
-
-void ClockAndBarCounter::connectToMidiDevice()
-{
-   if (Svin::MidiInput::connected())
-   {
-      connectionButton.setOn();
-      return;
-   }
-
-   connectionButton.setOff();
-   if (!Svin::MidiInput::open())
-      return;
-
-   connectionButton.setOn();
 }
 
 void ClockAndBarCounter::clockTick()
