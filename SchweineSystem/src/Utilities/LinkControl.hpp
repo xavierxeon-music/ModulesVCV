@@ -77,12 +77,12 @@ void LinkControlWidget::setup()
 {
    makePanel("res/Utilities/LinkControl.svg");
 
-   makeButton(this, Vec(53.70, 183.98), LinkControl::Panel::One_Down);
-   makeButton(this, Vec(53.70, 167.16), LinkControl::Panel::One_Up);
+   makeButton(this, Vec(56.34, 183.98), LinkControl::Panel::One_Down);
+   makeButton(this, Vec(56.34, 167.16), LinkControl::Panel::One_Up);
    makeButton(this, Vec(37.50, 183.98), LinkControl::Panel::Ten_Down);
    makeButton(this, Vec(37.50, 167.16), LinkControl::Panel::Ten_Up);
-   makeButton(this, Vec(21.30, 183.98), LinkControl::Panel::Hundred_Down);
-   makeButton(this, Vec(21.30, 167.16), LinkControl::Panel::Hundred_Up);
+   makeButton(this, Vec(18.66, 183.98), LinkControl::Panel::Hundred_Down);
+   makeButton(this, Vec(18.66, 167.16), LinkControl::Panel::Hundred_Up);
 
    makeLEDButton(this, Vec(37.50, 283.88), LinkControl::Panel::Active, LinkControl::Panel::RGB_Active);
 
