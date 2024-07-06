@@ -77,18 +77,18 @@ void LinkControlWidget::setup()
 {
    makePanel("res/Utilities/LinkControl.svg");
 
-   makeButton(this, Vec(56.34, 183.98), LinkControl::Panel::One_Down);
-   makeButton(this, Vec(56.34, 167.16), LinkControl::Panel::One_Up);
-   makeButton(this, Vec(37.50, 183.98), LinkControl::Panel::Ten_Down);
-   makeButton(this, Vec(37.50, 167.16), LinkControl::Panel::Ten_Up);
-   makeButton(this, Vec(18.66, 183.98), LinkControl::Panel::Hundred_Down);
-   makeButton(this, Vec(18.66, 167.16), LinkControl::Panel::Hundred_Up);
+   makeButton(this, Vec(56.34, 200.09), LinkControl::Panel::One_Down);
+   makeButton(this, Vec(56.34, 183.26), LinkControl::Panel::One_Up);
+   makeButton(this, Vec(37.50, 200.09), LinkControl::Panel::Ten_Down);
+   makeButton(this, Vec(37.50, 183.26), LinkControl::Panel::Ten_Up);
+   makeButton(this, Vec(18.66, 200.09), LinkControl::Panel::Hundred_Down);
+   makeButton(this, Vec(18.66, 183.26), LinkControl::Panel::Hundred_Up);
 
-   makeLEDButton(this, Vec(37.50, 283.88), LinkControl::Panel::Active, LinkControl::Panel::RGB_Active);
+   makeLEDButton(this, Vec(37.50, 266.76), LinkControl::Panel::Active, LinkControl::Panel::RGB_Active);
 
-   makeLCD(this, Vec(12.50, 128.21), 3, LinkControl::Panel::Text_Tempo, 18);
+   makeLCD(this, Vec(12.50, 144.31), 3, LinkControl::Panel::Text_Tempo, 18);
 
-   makeMeter(this, Vec(33.32, 305.07), 10, LinkControl::Panel::Value_Sync);
+   makeMeter(this, Vec(34.50, 284.07), 10, LinkControl::Panel::Value_Sync);
 }
 
 #endif // NOT LinkControlHPP
