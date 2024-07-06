@@ -10,8 +10,8 @@ struct LinkControl::Panel
    enum ParamId
    {
       // buttons
-      Down = 0,
-      Up = 1,
+      Hundred_Down = 0,
+      Hundred_Up = 1,
       // switches
       // ledbuttons
       Active = 2,
@@ -23,14 +23,15 @@ struct LinkControl::Panel
    enum DisplayId
    {
       // lcd
+      Text_Number = 0,
       // oled
-      Pixels_Display = 0,
       DISPLAYS_LEN = 1
    };
 
    enum MeterId
    {
-      METERS_LEN = 0
+      Value_Channel1 = 0,
+      METERS_LEN = 1
    };
 
    enum InputId
@@ -58,8 +59,8 @@ void LinkControl::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
-   configButton(Panel::Down, "Down");
-   configButton(Panel::Up, "Up");
+   configButton(Panel::Hundred_Down, "Hundred_Down");
+   configButton(Panel::Hundred_Up, "Hundred_Up");
 
    configButton(Panel::Active, "Active");
 }
@@ -68,12 +69,14 @@ void LinkControlWidget::setup()
 {
    makePanel("res/Utilities/LinkControl.svg");
 
-   makeButton(this, Vec(36.71, 270.45), LinkControl::Panel::Down);
-   makeButton(this, Vec(36.71, 253.63), LinkControl::Panel::Up);
+   makeButton(this, Vec(21.98, 183.98), LinkControl::Panel::Hundred_Down);
+   makeButton(this, Vec(21.98, 167.16), LinkControl::Panel::Hundred_Up);
 
-   makeLEDButton(this, Vec(37.50, 202.33), LinkControl::Panel::Active, LinkControl::Panel::RGB_Active);
+   makeLEDButton(this, Vec(37.50, 283.88), LinkControl::Panel::Active, LinkControl::Panel::RGB_Active);
 
-   makeOLED(this, Vec(10.00, 95.00), LinkControl::Panel::Pixels_Display, 53, 60);
+   makeLCD(this, Vec(12.50, 128.21), 3, LinkControl::Panel::Text_Number, 18);
+
+   makeMeter(this, Vec(33.32, 305.07), 5, LinkControl::Panel::Value_Channel1);
 }
 
 #endif // NOT LinkControlHPP
