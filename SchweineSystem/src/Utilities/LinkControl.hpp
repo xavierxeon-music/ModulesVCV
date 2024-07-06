@@ -10,14 +10,18 @@ struct LinkControl::Panel
    enum ParamId
    {
       // buttons
-      Hundred_Down = 0,
-      Hundred_Up = 1,
+      One_Down = 0,
+      One_Up = 1,
+      Ten_Down = 2,
+      Ten_Up = 3,
+      Hundred_Down = 4,
+      Hundred_Up = 5,
       // switches
       // ledbuttons
-      Active = 2,
+      Active = 6,
       // knobs
       // sliders
-      PARAMS_LEN = 3
+      PARAMS_LEN = 7
    };
 
    enum DisplayId
@@ -59,6 +63,10 @@ void LinkControl::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
+   configButton(Panel::One_Down, "One_Down");
+   configButton(Panel::One_Up, "One_Up");
+   configButton(Panel::Ten_Down, "Ten_Down");
+   configButton(Panel::Ten_Up, "Ten_Up");
    configButton(Panel::Hundred_Down, "Hundred_Down");
    configButton(Panel::Hundred_Up, "Hundred_Up");
 
@@ -69,8 +77,12 @@ void LinkControlWidget::setup()
 {
    makePanel("res/Utilities/LinkControl.svg");
 
-   makeButton(this, Vec(21.98, 183.98), LinkControl::Panel::Hundred_Down);
-   makeButton(this, Vec(21.98, 167.16), LinkControl::Panel::Hundred_Up);
+   makeButton(this, Vec(53.70, 183.98), LinkControl::Panel::One_Down);
+   makeButton(this, Vec(53.70, 167.16), LinkControl::Panel::One_Up);
+   makeButton(this, Vec(37.50, 183.98), LinkControl::Panel::Ten_Down);
+   makeButton(this, Vec(37.50, 167.16), LinkControl::Panel::Ten_Up);
+   makeButton(this, Vec(21.30, 183.98), LinkControl::Panel::Hundred_Down);
+   makeButton(this, Vec(21.30, 167.16), LinkControl::Panel::Hundred_Up);
 
    makeLEDButton(this, Vec(37.50, 283.88), LinkControl::Panel::Active, LinkControl::Panel::RGB_Active);
 
