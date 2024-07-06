@@ -2,7 +2,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 75 380" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
     <g transform="matrix(1,0,0,1,2.5,19.3298)">
-        <g id="Sync-meter-10" serif:id="Sync#meter$10" transform="matrix(0.0370421,-4.06519e-32,1.15556e-33,0.345726,28.8228,248.773)">
+        <g id="Sync-meter-10" serif:id="Sync#meter$10" transform="matrix(0.0370421,-3.77482e-32,1.15556e-33,0.321031,28.8228,251.413)">
             <rect x="53.94" y="106.916" width="161.978" height="161.978"/>
         </g>
         <g id="Active-ledbutton" serif:id="Active#ledbutton" transform="matrix(1,0,0,1,-66.3078,-45.6864)">
