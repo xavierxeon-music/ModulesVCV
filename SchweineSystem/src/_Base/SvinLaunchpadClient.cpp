@@ -59,7 +59,7 @@ void Svin::LaunchpadClient::sendClock()
    }
    else
    {
-      while (hasMidiClock())
+      while (hasMidiSubTick())
       {
          std::vector<unsigned char> clockMessage(1);
          clockMessage[0] = ::Midi::Event::Clock;

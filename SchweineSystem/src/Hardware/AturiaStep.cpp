@@ -82,7 +82,7 @@ void AturiaStep::process(const ProcessArgs& args)
    }
    else
    {
-      while (hasMidiClock())
+      while (hasMidiSubTick())
       {
          sendClock();
       }

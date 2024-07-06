@@ -23,7 +23,7 @@ namespace Svin
 
       protected:
          bool hasTick(bool* isFirstTick);
-         bool hasMidiClock();
+         bool hasMidiSubTick();
          bool hasReset();
          Tempo getTempo() const;
          TimeCode::Duration getDuration() const;
@@ -35,7 +35,7 @@ namespace Svin
          mutable std::mutex mutex;
          bool firstTick;
          uint8_t tickCount;
-         uint8_t midiClock;
+         uint8_t midiSubTicks;
          bool reset;
       };
 
@@ -46,7 +46,7 @@ namespace Svin
    protected:
       bool iAmMasterClock() const;
       void tick();
-      void midiClock();
+      void addMidiSubTicks();
       void reset();
       void advance(const float& sampleRate);
 

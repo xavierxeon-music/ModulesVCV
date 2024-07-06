@@ -52,13 +52,13 @@ void ClockAndBarCounter::process(const ProcessArgs& args)
          const float target = (1 + midiTickCounter.getCurrentValue()) / 6.0;
          if (percentage >= target)
          {
-            midiClock();
+            addMidiSubTicks();
             midiTickCounter.nextAndIsMaxValue();
          }
          advance(args.sampleRate);
       }
    }
-   else // use midi clock
+   else // use link clock
    {
       if (!blockAdvanceTempo)
          advance(args.sampleRate);
@@ -119,7 +119,7 @@ void ClockAndBarCounter::clockTick()
    if (clockInput.isConnected())
       return;
 
-   midiClock();
+   addMidiSubTicks();
    if (0 != midiTickCounter.valueAndNext())
       return;
 
