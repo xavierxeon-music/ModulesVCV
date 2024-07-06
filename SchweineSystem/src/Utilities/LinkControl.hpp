@@ -23,14 +23,14 @@ struct LinkControl::Panel
    enum DisplayId
    {
       // lcd
-      Text_Number = 0,
+      Text_Tempo = 0,
       // oled
       DISPLAYS_LEN = 1
    };
 
    enum MeterId
    {
-      Value_Channel1 = 0,
+      Value_Sync = 0,
       METERS_LEN = 1
    };
 
@@ -74,9 +74,9 @@ void LinkControlWidget::setup()
 
    makeLEDButton(this, Vec(37.50, 283.88), LinkControl::Panel::Active, LinkControl::Panel::RGB_Active);
 
-   makeLCD(this, Vec(12.50, 128.21), 3, LinkControl::Panel::Text_Number, 18);
+   makeLCD(this, Vec(12.50, 128.21), 3, LinkControl::Panel::Text_Tempo, 18);
 
-   makeMeter(this, Vec(33.32, 305.07), 5, LinkControl::Panel::Value_Channel1);
+   makeMeter(this, Vec(33.32, 305.07), 10, LinkControl::Panel::Value_Sync);
 }
 
 #endif // NOT LinkControlHPP
