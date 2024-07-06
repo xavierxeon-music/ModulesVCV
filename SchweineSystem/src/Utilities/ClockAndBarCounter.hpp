@@ -12,10 +12,9 @@ struct ClockAndBarCounter::Panel
       // buttons
       // switches
       // ledbuttons
-      Connect = 0,
       // knobs
       // sliders
-      PARAMS_LEN = 1
+      PARAMS_LEN = 0
    };
 
    enum DisplayId
@@ -50,9 +49,8 @@ struct ClockAndBarCounter::Panel
    {
       // leds
       // ledbuttons
-      RGB_Connect = 0,
       // sliders
-      LIGHTS_LEN = 3
+      LIGHTS_LEN = 0
    };
 
 };
@@ -60,8 +58,6 @@ struct ClockAndBarCounter::Panel
 void ClockAndBarCounter::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
-
-   configButton(Panel::Connect, "Connect");
 
    configInput(Panel::Override_Reset, "Override_Reset");
    configInput(Panel::Override_Clock, "Override_Clock");
@@ -75,10 +71,8 @@ void ClockAndBarCounterWidget::setup()
 {
    makePanel("res/Utilities/ClockAndBarCounter.svg");
 
-   makeLEDButton(this, Vec(60.00, 255.46), ClockAndBarCounter::Panel::Connect, ClockAndBarCounter::Panel::RGB_Connect);
-
-   makeInput(this, Vec(95.83, 303.81),  ClockAndBarCounter::Panel::Override_Reset, false);
-   makeInput(this, Vec(60.00, 303.57),  ClockAndBarCounter::Panel::Override_Clock, false);
+   makeInput(this, Vec(95.83, 288.90),  ClockAndBarCounter::Panel::Override_Reset, false);
+   makeInput(this, Vec(60.00, 288.65),  ClockAndBarCounter::Panel::Override_Clock, false);
 
    makeOutput(this, Vec(95.83, 355.83), ClockAndBarCounter::Panel::Reset, false);
    makeOutput(this, Vec(60.00, 355.83), ClockAndBarCounter::Panel::Clock, false);
