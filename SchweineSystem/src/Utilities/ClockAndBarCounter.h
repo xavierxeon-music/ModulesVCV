@@ -35,16 +35,23 @@ public:
 private:
    inline void setup();
 
+   void resetAll();
+   void processExternal(const ProcessArgs& args);
+   void processLink(const ProcessArgs& args);
+
    void emulateMidiTick(); // MIDI
 
 private:
    ableton::Link link;
 
+   // play state
+   bool runInternal;
+   bool resetInternal;
+
    // midi
    Counter midiTickCounter;
    Counter ppq24Counter;
    bool blockAdvanceTempo;
-   bool lastRunning;
 
    // manual
    Svin::Output runOutput;

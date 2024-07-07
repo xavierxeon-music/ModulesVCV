@@ -9,10 +9,11 @@ ClockAndBarCounter::ClockAndBarCounter()
    : Svin::Module()
    , Svin::MasterClock()
    , link(120)
+   , runInternal(false)
+   , resetInternal(false)
    , midiTickCounter(6)
    , ppq24Counter(24 * 4)
    , blockAdvanceTempo(false)
-   , lastRunning(false)
    , runOutput(this, Panel::Running)
    , clockOutput(this, Panel::Clock)
    , resetOutput(this, Panel::Reset)
@@ -33,68 +34,10 @@ ClockAndBarCounter::~ClockAndBarCounter()
 
 void ClockAndBarCounter::process(const ProcessArgs& args)
 {
-   auto resetInternal = [&]()
-   {
-      Svin::MasterClock::reset();
-      blockAdvanceTempo = true;
-      midiTickCounter.reset();
-      ppq24Counter.reset();
-      resetOutput.trigger();
-   };
-
-   if (clockInput.isConnected()) // override midi clock
-   {
-      if (resetInput.isTriggered())
-      {
-         resetInternal();
-      }
-      else if (clockInput.isTriggered())
-      {
-         tick();
-         clockOutput.trigger();
-         blockAdvanceTempo = true;
-      }
-
-      if (!blockAdvanceTempo)
-      {
-         const float percentage = getTempo().getPercentage();
-         const float target = (1 + midiTickCounter.getCurrentValue()) / 6.0;
-         if (percentage >= target)
-         {
-            //emulateMidiTick();
-            midiTickCounter.nextAndIsMaxValue();
-         }
-         advance(args.sampleRate);
-      }
-   }
-   else // use link clock
-   {
-      ableton::Link::SessionState state = link.captureAudioSessionState();
-      const bool linkRunning = state.isPlaying();
-      if (linkRunning)
-      {
-         if (!lastRunning)
-         {
-            resetInternal();
-         }
-         else
-         {
-            const std::chrono::microseconds timeNow = link.clock().micros();
-            const double phase = state.phaseAtTime(timeNow, 4.0); // 4 beats per bar
-
-            const int ppq24Tick = static_cast<int>(std::floor(phase * 24));
-            while (ppq24Tick != ppq24Counter.getCurrentValue())
-            {
-               const bool canStartRun = ppq24Counter.nextAndIsMaxValue();
-               emulateMidiTick();
-            }
-         }
-      }
-      lastRunning = linkRunning;
-
-      if (!blockAdvanceTempo)
-         advance(args.sampleRate);
-   }
+   if (clockInput.isConnected())
+      processExternal(args);
+   else
+      processLink(args);
 
    runOutput.setActive(getTempo().isRunningOrFirstTick());
    clockOutput.animateTriggers(args);
@@ -144,6 +87,79 @@ void ClockAndBarCounter::updateDisplays()
 
    const std::string timeText = std::to_string(minutes) + ":" + secondText;
    displayController.writeText(41, 150, timeText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
+}
+
+void ClockAndBarCounter::resetAll()
+{
+   Svin::MasterClock::reset();
+   blockAdvanceTempo = true;
+   resetInternal = false;
+
+   midiTickCounter.reset();
+   ppq24Counter.reset();
+
+   resetOutput.trigger();
+}
+
+void ClockAndBarCounter::processExternal(const ProcessArgs& args)
+{
+   if (resetInput.isTriggered())
+   {
+      resetAll();
+   }
+   else if (clockInput.isTriggered())
+   {
+      tick();
+      clockOutput.trigger();
+      blockAdvanceTempo = true;
+   }
+
+   if (!blockAdvanceTempo)
+   {
+      const float percentage = getTempo().getPercentage();
+      const float target = (1 + midiTickCounter.getCurrentValue()) / 6.0;
+      if (percentage >= target)
+      {
+         //emulateMidiTick();
+         midiTickCounter.nextAndIsMaxValue();
+      }
+      advance(args.sampleRate);
+   }
+}
+
+void ClockAndBarCounter::processLink(const ProcessArgs& args)
+{
+   ableton::Link::SessionState state = link.captureAudioSessionState();
+   const bool linkRunning = state.isPlaying();
+   if (linkRunning)
+   {
+      const std::chrono::microseconds timeNow = link.clock().micros();
+      const double phase = state.phaseAtTime(timeNow, 4.0); // 4 beats per bar
+
+      const int ppq24Tick = static_cast<int>(std::floor(phase * 24));
+      while (ppq24Tick != ppq24Counter.getCurrentValue())
+      {
+         const bool canStartRun = ppq24Counter.nextAndIsMaxValue();
+         if (canStartRun)
+            runInternal = true;
+
+         if (runInternal)
+         {
+            if (resetInternal)
+               resetAll();
+            else
+               emulateMidiTick();
+         }
+      }
+
+      if (!blockAdvanceTempo)
+         advance(args.sampleRate);
+   }
+   else
+   {
+      runInternal = false;
+      resetInternal = true;
+   }
 }
 
 void ClockAndBarCounter::emulateMidiTick()
