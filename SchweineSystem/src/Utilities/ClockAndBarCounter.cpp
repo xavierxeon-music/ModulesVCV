@@ -33,14 +33,20 @@ ClockAndBarCounter::~ClockAndBarCounter()
 
 void ClockAndBarCounter::process(const ProcessArgs& args)
 {
+   auto resetInternal = [&]()
+   {
+      Svin::MasterClock::reset();
+      blockAdvanceTempo = true;
+      midiTickCounter.reset();
+      ppq24Counter.reset();
+      resetOutput.trigger();
+   };
+
    if (clockInput.isConnected()) // override midi clock
    {
       if (resetInput.isTriggered())
       {
-         Svin::MasterClock::reset();
-         blockAdvanceTempo = true;
-         midiTickCounter.reset();
-         resetOutput.trigger();
+         resetInternal();
       }
       else if (clockInput.isTriggered())
       {
@@ -64,16 +70,12 @@ void ClockAndBarCounter::process(const ProcessArgs& args)
    else // use link clock
    {
       ableton::Link::SessionState state = link.captureAudioSessionState();
-      const bool running = state.isPlaying();
-      if (running)
+      const bool linkRunning = state.isPlaying();
+      if (linkRunning)
       {
          if (!lastRunning)
          {
-            Svin::MasterClock::reset();
-            blockAdvanceTempo = true;
-
-            midiTickCounter.reset();
-            resetOutput.trigger();
+            resetInternal();
          }
          else
          {
@@ -83,12 +85,12 @@ void ClockAndBarCounter::process(const ProcessArgs& args)
             const int ppq24Tick = static_cast<int>(std::floor(phase * 24));
             while (ppq24Tick != ppq24Counter.getCurrentValue())
             {
+               const bool canStartRun = ppq24Counter.nextAndIsMaxValue();
                emulateMidiTick();
-               ppq24Counter.valueAndNext();
             }
          }
       }
-      lastRunning = running;
+      lastRunning = linkRunning;
 
       if (!blockAdvanceTempo)
          advance(args.sampleRate);
