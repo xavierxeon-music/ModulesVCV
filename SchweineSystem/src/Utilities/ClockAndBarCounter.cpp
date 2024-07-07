@@ -10,7 +10,9 @@ ClockAndBarCounter::ClockAndBarCounter()
    , Svin::MasterClock()
    , link(120)
    , midiTickCounter(6)
+   , ppq24Counter(24 * 4)
    , blockAdvanceTempo(false)
+   , lastRunning(false)
    , runOutput(this, Panel::Running)
    , clockOutput(this, Panel::Clock)
    , resetOutput(this, Panel::Reset)
@@ -26,6 +28,7 @@ ClockAndBarCounter::ClockAndBarCounter()
 
 ClockAndBarCounter::~ClockAndBarCounter()
 {
+   link.enable(false);
 }
 
 void ClockAndBarCounter::process(const ProcessArgs& args)
@@ -52,7 +55,7 @@ void ClockAndBarCounter::process(const ProcessArgs& args)
          const float target = (1 + midiTickCounter.getCurrentValue()) / 6.0;
          if (percentage >= target)
          {
-            addMidiSubTicks();
+            //emulateMidiTick();
             midiTickCounter.nextAndIsMaxValue();
          }
          advance(args.sampleRate);
@@ -60,6 +63,33 @@ void ClockAndBarCounter::process(const ProcessArgs& args)
    }
    else // use link clock
    {
+      ableton::Link::SessionState state = link.captureAudioSessionState();
+      const bool running = state.isPlaying();
+      if (running)
+      {
+         if (!lastRunning)
+         {
+            Svin::MasterClock::reset();
+            blockAdvanceTempo = true;
+
+            midiTickCounter.reset();
+            resetOutput.trigger();
+         }
+         else
+         {
+            const std::chrono::microseconds timeNow = link.clock().micros();
+            const double phase = state.phaseAtTime(timeNow, 4.0); // 4 beats per bar
+
+            const int ppq24Tick = static_cast<int>(std::floor(phase * 24));
+            while (ppq24Tick != ppq24Counter.getCurrentValue())
+            {
+               emulateMidiTick();
+               ppq24Counter.valueAndNext();
+            }
+         }
+      }
+      lastRunning = running;
+
       if (!blockAdvanceTempo)
          advance(args.sampleRate);
    }
@@ -114,34 +144,16 @@ void ClockAndBarCounter::updateDisplays()
    displayController.writeText(41, 150, timeText, Svin::DisplayOLED::Font::Large, Svin::DisplayOLED::Alignment::Center);
 }
 
-void ClockAndBarCounter::clockTick()
+void ClockAndBarCounter::emulateMidiTick()
 {
-   if (clockInput.isConnected())
-      return;
-
    addMidiSubTicks();
-   if (0 != midiTickCounter.valueAndNext())
-      return;
+   if (0 == midiTickCounter.valueAndNext())
+   {
+      tick();
+      blockAdvanceTempo = true;
 
-   tick();
-   blockAdvanceTempo = true;
-
-   clockOutput.trigger();
-}
-
-void ClockAndBarCounter::songPosition(const uint16_t& position)
-{
-   if (clockInput.isConnected())
-      return;
-
-   if (0 != position)
-      return;
-
-   Svin::MasterClock::reset();
-   blockAdvanceTempo = true;
-
-   midiTickCounter.reset();
-   resetOutput.trigger();
+      clockOutput.trigger();
+   }
 }
 
 // widget

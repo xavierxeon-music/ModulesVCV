@@ -35,15 +35,16 @@ public:
 private:
    inline void setup();
 
-   void clockTick();                            // MIDI
-   void songPosition(const uint16_t& position); // MIDI
+   void emulateMidiTick(); // MIDI
 
 private:
    ableton::Link link;
 
    // midi
    Counter midiTickCounter;
+   Counter ppq24Counter;
    bool blockAdvanceTempo;
+   bool lastRunning;
 
    // manual
    Svin::Output runOutput;
