@@ -16,10 +16,10 @@ const Svin::MidiCommon::InterfaceMap Svin::MidiCommon::interfaceMap = {
    {Midi::Device::KeyStep4, "KeyStep Pro"},
    {Midi::Device::Daisy, "SWITCH"},
    {Midi::Device::DrumTrigger, "DrumTrigger"},
-   {Midi::Device::VCMC, "ESI M4U eX Port 6"},
+   {Midi::Device::VCMC, "VCMC"},
    {Midi::Device::ACDC, "OWL-ACDC"},
    {Midi::Device::Metropolix, "Metropolix"},
-   {Midi::Device::FlameCC, "FlameCC"},
+   {Midi::Device::FlameCC, "SWITCH"},
    {Midi::Device::BitBox, "SWITCH"},
    {Midi::Device::BitBoxMicro, "SWITCH"},
    {Midi::Device::ToNerdSEQ, "ESI M4U eX Port 7"},
@@ -38,6 +38,9 @@ void Svin::MidiCommon::setTargetDeviceName(const std::string& newTargetDeviceNam
 
 int Svin::MidiCommon::findDeviceId(rack::midi::Port* port, bool verbose) const
 {
+   if (verbose)
+      std::cout << "TARGET: " << targetDeviceName << std::endl;
+
    for (int id : port->getDeviceIds())
    {
       const std::string deviceName = port->getDeviceName(id);
@@ -63,7 +66,7 @@ Svin::MidiOutput::MidiOutput(const std::string& targetDeviceName)
    : MidiOutput()
 {
    setTargetDeviceName(targetDeviceName);
-   open();
+   //open();
 }
 
 Svin::MidiOutput::MidiOutput(const Midi::Device::Channel& deviceChannel)
@@ -93,7 +96,7 @@ void Svin::MidiOutput::close()
 
 bool Svin::MidiOutput::connected()
 {
-   return (-1 == getDeviceId());
+   return (-1 != getDeviceId());
 }
 
 void Svin::MidiOutput::sendNoteOn(const Midi::Channel& channel, const uint8_t& midiNote, const Midi::Velocity& velocity)
@@ -174,16 +177,19 @@ Svin::MidiInput::MidiInput()
 {
 }
 
-Svin::MidiInput::MidiInput(const std::string& targetDeviceNamel)
+Svin::MidiInput::MidiInput(const std::string& targetDeviceName)
    : MidiInput()
 {
    setTargetDeviceName(targetDeviceName);
    open();
+
+   std::cout << "TARGET: " << targetDeviceName << " -> " << this->targetDeviceName << std::endl;
 }
 
 Svin::MidiInput::MidiInput(const Midi::Device::Channel& deviceChannel)
    : MidiInput(MidiCommon::interfaceMap.at(deviceChannel))
 {
+   std::cout << deviceChannel << " " << MidiCommon::interfaceMap.at(deviceChannel) << std::endl;
 }
 
 Svin::MidiInput::~MidiInput()
@@ -208,7 +214,7 @@ void Svin::MidiInput::close()
 
 bool Svin::MidiInput::connected()
 {
-   return (-1 == getDeviceId());
+   return (-1 != getDeviceId());
 }
 
 void Svin::MidiInput::controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)

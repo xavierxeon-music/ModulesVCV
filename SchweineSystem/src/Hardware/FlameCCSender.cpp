@@ -50,12 +50,12 @@ void FlameCCSender::connectToMidiDevice()
    }
 
    connectionButton.setOff();
-   if (!open())
+   if (!open(true))
       return;
 
    connectionButton.setOn();
 
-   //sendSysEx();
+   sendSysEx();
 
    for (uint8_t output = 0; output < 16; output++)
    {
@@ -78,9 +78,13 @@ void FlameCCSender::sendSysEx()
    for (uint8_t index = 0; index < 16; index++)
    {
       // MIDI channels for CV 16 outputs (range: 00=channel 1 .. 0F=channel 16)
-      sysExMessage[5 + index] = (Midi::Device::FlameCC - 1);
+      const uint8_t channel = (Midi::Device::FlameCC - 1);
+      sysExMessage[5 + index] = channel;
+   }
 
-      // control change numbers for 15 outputs
+   for (uint8_t index = 0; index < 16; index++)
+   {
+      // control change numbers for 16 outputs
       const uint8_t message = static_cast<uint8_t>(Midi::ControllerMessage::User01) + index;
       sysExMessage[21 + index] = message;
    }
