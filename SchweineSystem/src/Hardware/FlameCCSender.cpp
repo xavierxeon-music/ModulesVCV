@@ -5,6 +5,7 @@
 FlameCCSender::FlameCCSender()
    : Svin::Module()
    , Svin::MidiOutput(Midi::Device::FlameCC)
+   , learnButton(this, Panel::Learn)
    , connectionButton(this, Panel::Connect, Panel::RGB_Connect)
    , voltageToCcValue(0.0, 5.0, 0.0, 127.0)
    , input(this, Panel::Voltages)
@@ -24,6 +25,9 @@ void FlameCCSender::process(const ProcessArgs& args)
 
    if (!connected())
       return;
+
+   if (learnButton.isTriggered())
+      feedLearn();
 
    for (uint8_t index = 0; index < 16; index++)
    {
@@ -55,8 +59,6 @@ void FlameCCSender::connectToMidiDevice()
 
    connectionButton.setOn();
 
-   sendSysEx();
-
    for (uint8_t output = 0; output < 16; output++)
    {
       const uint8_t midiNote = 41 + output; // note F2
@@ -64,6 +66,19 @@ void FlameCCSender::connectToMidiDevice()
    }
 }
 
+void FlameCCSender::feedLearn()
+{
+   for (uint8_t index = 0; index < 16; index++)
+   {
+      const uint8_t midiNote = 41 + index; // note F2
+      sendNoteOn(Midi::Device::FlameCC, midiNote, 127);
+
+      const Midi::ControllerMessage message = static_cast<Midi::ControllerMessage>(Midi::ControllerMessage::User01 + index);
+      sendControllerChange(Midi::Device::FlameCC, message, 127);
+   }
+}
+
+/*
 void FlameCCSender::sendSysEx()
 {
    std::vector<uint8_t> sysExMessage(38);
@@ -92,6 +107,7 @@ void FlameCCSender::sendSysEx()
    sysExMessage[37] = static_cast<uint8_t>(Midi::Event::SysExEnd); // End of Exclusive
    sendMessage(sysExMessage);
 }
+*/
 
 void FlameCCSender::load(const Svin::Json::Object& rootObject)
 {

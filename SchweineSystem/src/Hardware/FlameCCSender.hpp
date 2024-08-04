@@ -10,13 +10,14 @@ struct FlameCCSender::Panel
    enum ParamId
    {
       // buttons
+      Learn = 0,
       // switches
-      Half = 0,
+      Half = 1,
       // ledbuttons
-      Connect = 1,
+      Connect = 2,
       // knobs
       // sliders
-      PARAMS_LEN = 2
+      PARAMS_LEN = 3
    };
 
    enum DisplayId
@@ -57,6 +58,8 @@ void FlameCCSender::setup()
 {
    config(Panel::PARAMS_LEN, Panel::INPUTS_LEN, Panel::OUTPUTS_LEN, Panel::LIGHTS_LEN);
 
+   configButton(Panel::Learn, "Learn");
+
    configSwitch(Panel::Half, 0.0f, 1.0f, 0.0f, "Half");
 
    configButton(Panel::Connect, "Connect");
@@ -67,6 +70,8 @@ void FlameCCSender::setup()
 void FlameCCSenderWidget::setup()
 {
    makePanel("res/Hardware/FlameCCSender.svg");
+
+   makeButton(this, Vec(30.00, 306.87), FlameCCSender::Panel::Learn);
 
    makeSwitch(this, Vec(37.78, 194.76), FlameCCSender::Panel::Half, false);
 

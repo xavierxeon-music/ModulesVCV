@@ -6,12 +6,12 @@ using namespace rack;
 
 #include <Tools/Range.h>
 
+#include <SvinButton.h>
+#include <SvinButtonLED.h>
+#include <SvinInput.h>
 #include <SvinMidi.h>
 #include <SvinModule.h>
 #include <SvinModuleWidget.h>
-
-#include <SvinButtonLED.h>
-#include <SvinInput.h>
 #include <SvinSwitch.h>
 
 /* --------- !! IMPORTANT !! ---------
@@ -41,13 +41,15 @@ public:
 private:
    inline void setup();
    void connectToMidiDevice();
-   void sendSysEx();
+   void feedLearn();
+   //void sendSysEx();
 
    void load(const Svin::Json::Object& rootObject) override;
    void save(Svin::Json::Object& rootObject) override;
 
 private:
    // midi
+   Svin::Button learnButton;
    Svin::ButtonLED connectionButton;
    Range::Mapper voltageToCcValue;
    // outputs
