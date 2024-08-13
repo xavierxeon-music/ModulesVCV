@@ -5,8 +5,8 @@
 
 namespace Svin
 {
-   //const Color ModuleWidget::BackGroundColor = Color(230, 232, 240);
-   const Color ModuleWidget::BackGroundColor = Color(230, 232, 255);
+   static const NVGcolor topColor = nvgRGB(220, 230, 230);
+   static const NVGcolor bottomColor = nvgRGB(180, 180, 190);
 
    struct ModuleWidget::PanelBackground : rack::widget::TransparentWidget
    {
@@ -18,10 +18,10 @@ namespace Svin
 
       void draw(const DrawArgs& args) override
       {
-         const NVGcolor baseColor = nvgRGB(BackGroundColor.red(), BackGroundColor.green(), BackGroundColor.blue());
+         NVGpaint paint = nvgLinearGradient(args.vg, 0.0, 0.0, box.size.x, box.size.y, topColor, bottomColor);
 
          nvgBeginPath(args.vg);
-         nvgFillColor(args.vg, baseColor);
+         nvgFillPaint(args.vg, paint);
          nvgRect(args.vg, 0, 0, box.size.x, box.size.y);
          nvgFill(args.vg);
          TransparentWidget::draw(args);
@@ -38,12 +38,15 @@ namespace Svin
 
       void draw(const DrawArgs& args) override
       {
-         nvgBeginPath(args.vg);
-         NVGcolor frameColor = nvgRGB(150, 150, 170);
+         static const float colorScale = 0.98;
+         const NVGcolor frameTopColor = nvgRGBAf(colorScale * topColor.r, colorScale * topColor.g, colorScale * topColor.b, topColor.a);
+         const NVGcolor frameBottompColor = nvgRGBAf(colorScale * bottomColor.r, colorScale * bottomColor.g, colorScale * bottomColor.b, bottomColor.a);
 
+         NVGpaint paint = nvgLinearGradient(args.vg, 0.0, 0.0, box.size.x, box.size.y, frameTopColor, frameBottompColor);
          static const uint8_t padding = 2;
 
-         nvgFillColor(args.vg, frameColor);
+         nvgBeginPath(args.vg);
+         nvgFillPaint(args.vg, paint);
          nvgRect(args.vg, 0, 0, padding, box.size.y);
          nvgRect(args.vg, box.size.x - padding, 0, padding, box.size.y);
          nvgRect(args.vg, 0, 0, box.size.x, padding);
